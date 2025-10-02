@@ -71,7 +71,7 @@ non_functional:
     - 'Schema validation prevents prototype pollution'
     - 'ULID generation uses crypto-secure random'
     - 'No eval() or Function() in schema code'
-    - 'Validation errors don't leak sensitive data'
+    - "Validation errors don't leak sensitive data"
 contracts:
   - type: graphql
     path: packages/canvas-schema/schemas/canvas-0.1.json

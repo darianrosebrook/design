@@ -9,13 +9,15 @@
 import type {
   CanvasDocumentType,
   NodeType,
-  ULIDType} from "@paths-design/canvas-schema";
+  ULIDType,
+} from "@paths-design/canvas-schema";
 import {
   CanvasDocument,
   Node,
   Artboard,
-  ArtboardType
- generateNodeId } from "@paths-design/canvas-schema";
+  ArtboardType,
+  generateNodeId,
+} from "@paths-design/canvas-schema";
 import {
   NodePath,
   OperationResult,
@@ -328,7 +330,9 @@ function getValueAtPath(obj: any, path: string): any {
   let current = obj;
 
   for (const key of keys) {
-    if (current == null) {return undefined;}
+    if (current == null) {
+      return undefined;
+    }
 
     if (key === "-") {
       // Last array element

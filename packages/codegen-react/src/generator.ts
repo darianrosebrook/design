@@ -8,13 +8,10 @@ import type {
   NodeType,
   FrameNodeType,
   TextNodeType,
-  ComponentInstanceNodeType} from "@paths-design/canvas-schema";
-import {
-  CanvasDocument,
-  ULIDType,
+  ComponentInstanceNodeType,
 } from "@paths-design/canvas-schema";
-import type {
-  CodeGenOptions} from "./determinism.js";
+import { CanvasDocument, ULIDType } from "@paths-design/canvas-schema";
+import type { CodeGenOptions } from "./determinism.js";
 import {
   Clock,
   CanonicalSorter,
@@ -213,7 +210,11 @@ export class ReactGenerator {
       const jsxContent = this.generateJSX(pattern.nodes, 1);
 
       // Generate component file
-      const tsxContent = this.generateTSXContent(componentName, jsxContent, true);
+      const tsxContent = this.generateTSXContent(
+        componentName,
+        jsxContent,
+        true
+      );
       const cssContent = this.generateCSS(pattern.nodes);
 
       // Add component file
@@ -551,7 +552,9 @@ export class ReactGenerator {
    * Generate style object from node style
    */
   private generateStyleObject(node: NodeType): Record<string, string> | null {
-    if (!node.style) {return null;}
+    if (!node.style) {
+      return null;
+    }
 
     const style: Record<string, string> = {};
 
@@ -566,7 +569,9 @@ export class ReactGenerator {
    * Generate props object for component instances
    */
   private generatePropsObject(props: Record<string, any>): string | null {
-    if (!props || Object.keys(props).length === 0) {return null;}
+    if (!props || Object.keys(props).length === 0) {
+      return null;
+    }
 
     const { sorter } = this.options;
     const sortedProps = sorter.sortObjectKeys(props);
@@ -722,7 +727,9 @@ export class ReactGenerator {
       this.pascalCase(artboard.name)
     );
 
-    if (componentNames.length === 0) {return null;}
+    if (componentNames.length === 0) {
+      return null;
+    }
 
     const exports = componentNames
       .map((name) => `export { default as ${name} } from './${name}';`)
@@ -819,7 +826,8 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
     const normalized = {
       type: node.type,
       name: node.name,
-      hasChildren: "children" in node && node.children && node.children.length > 0,
+      hasChildren:
+        "children" in node && node.children && node.children.length > 0,
       childCount: "children" in node ? node.children?.length || 0 : 0,
       layout: "layout" in node ? node.layout : undefined,
       text: "text" in node ? node.text : undefined,
@@ -847,7 +855,7 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
       const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
+      hash = (hash << 5) - hash + char;
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash).toString(36);
@@ -863,7 +871,9 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
     // 3. Has semantic meaning (non-generic naming)
 
     const totalNodes = this.countNodesInArray(nodes);
-    const hasChildren = nodes.some(node => "children" in node && node.children && node.children.length > 0);
+    const hasChildren = nodes.some(
+      (node) => "children" in node && node.children && node.children.length > 0
+    );
 
     return totalNodes > 1 && hasChildren;
   }
@@ -878,9 +888,10 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
     }
 
     // Otherwise generate from structure
-    const childTypes = "children" in node && node.children
-      ? node.children.map(child => child.type).join("")
-      : node.type;
+    const childTypes =
+      "children" in node && node.children
+        ? node.children.map((child) => child.type).join("")
+        : node.type;
 
     return this.pascalCase(`${node.type}_${childTypes}_component`);
   }

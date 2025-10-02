@@ -71,7 +71,7 @@ non_functional:
     - 'No arbitrary code execution in operations'
     - 'JSON Patch operations validate against schema'
     - 'Operations cannot escape document boundaries'
-  contracts:
+contracts:
   - type: graphql
     path: packages/canvas-engine/src/types.ts
   - type: graphql

@@ -23,6 +23,12 @@ export default tseslint.config(
       "**/examples/**",
       "**/prototypes/**",
       "apps/tools/caws/**", // CAWS tools have their own rules
+      "docs/**", // Documentation and experiments
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      "**/tests/**",
+      "**/*.config.ts",
+      "**/*.config.js",
     ],
   },
 
@@ -32,6 +38,13 @@ export default tseslint.config(
   // Base configuration for all TypeScript files
   {
     files: ["**/*.ts", "**/*.tsx"],
+    ignores: [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      "**/*.config.ts",
+      "**/tests/**",
+      "**/docs/**",
+    ],
     plugins: {
       import: importPlugin,
     },
@@ -90,10 +103,7 @@ export default tseslint.config(
 
   // Node.js library packages (canvas-schema, canvas-engine)
   {
-    files: [
-      "packages/canvas-schema/**/*.ts",
-      "packages/canvas-engine/**/*.ts",
-    ],
+    files: ["packages/canvas-schema/**/*.ts", "packages/canvas-engine/**/*.ts"],
     rules: {
       // Stricter rules for core libraries
       "@typescript-eslint/no-explicit-any": "error",
