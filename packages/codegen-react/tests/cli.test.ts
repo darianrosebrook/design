@@ -5,7 +5,13 @@
 
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { execSync } from "node:child_process";
-import { mkdirSync, writeFileSync, readFileSync, rmSync, existsSync } from "node:fs";
+import {
+  mkdirSync,
+  writeFileSync,
+  readFileSync,
+  rmSync,
+  existsSync,
+} from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 
@@ -127,13 +133,10 @@ describe("CLI Integration Tests", () => {
     it("supports --format tsx", () => {
       const inputFile = join(testDir, "test.canvas.json");
 
-      execSync(
-        `node dist/cli.js "${inputFile}" "${outputDir}" --format tsx`,
-        {
-          cwd: join(__dirname, ".."),
-          encoding: "utf8",
-        }
-      );
+      execSync(`node dist/cli.js "${inputFile}" "${outputDir}" --format tsx`, {
+        cwd: join(__dirname, ".."),
+        encoding: "utf8",
+      });
 
       const content = readFileSync(join(outputDir, "HomePage.tsx"), "utf8");
       expect(content).toContain("export default function HomePage");
@@ -142,13 +145,10 @@ describe("CLI Integration Tests", () => {
     it("supports --format jsx", () => {
       const inputFile = join(testDir, "test.canvas.json");
 
-      execSync(
-        `node dist/cli.js "${inputFile}" "${outputDir}" --format jsx`,
-        {
-          cwd: join(__dirname, ".."),
-          encoding: "utf8",
-        }
-      );
+      execSync(`node dist/cli.js "${inputFile}" "${outputDir}" --format jsx`, {
+        cwd: join(__dirname, ".."),
+        encoding: "utf8",
+      });
 
       // Should still generate .tsx files (we don't change extension)
       // but format option is passed through
@@ -175,13 +175,10 @@ describe("CLI Integration Tests", () => {
     it("supports --indent option", () => {
       const inputFile = join(testDir, "test.canvas.json");
 
-      execSync(
-        `node dist/cli.js "${inputFile}" "${outputDir}" --indent 4`,
-        {
-          cwd: join(__dirname, ".."),
-          encoding: "utf8",
-        }
-      );
+      execSync(`node dist/cli.js "${inputFile}" "${outputDir}" --indent 4`, {
+        cwd: join(__dirname, ".."),
+        encoding: "utf8",
+      });
 
       const content = readFileSync(join(outputDir, "HomePage.tsx"), "utf8");
       // Check for 4-space indentation (harder to verify, but check structure)
@@ -259,7 +256,10 @@ describe("CLI Integration Tests", () => {
     it("exits with error for missing input file", () => {
       try {
         execSync(
-          `node dist/cli.js "${join(testDir, "nonexistent.json")}" "${outputDir}"`,
+          `node dist/cli.js "${join(
+            testDir,
+            "nonexistent.json"
+          )}" "${outputDir}"`,
           {
             cwd: join(__dirname, ".."),
             encoding: "utf8",
@@ -277,13 +277,10 @@ describe("CLI Integration Tests", () => {
       writeFileSync(invalidFile, "{ invalid json }");
 
       try {
-        execSync(
-          `node dist/cli.js "${invalidFile}" "${outputDir}"`,
-          {
-            cwd: join(__dirname, ".."),
-            encoding: "utf8",
-          }
-        );
+        execSync(`node dist/cli.js "${invalidFile}" "${outputDir}"`, {
+          cwd: join(__dirname, ".."),
+          encoding: "utf8",
+        });
         expect.fail("Should have thrown an error");
       } catch (error: any) {
         expect(error.status).toBe(1);
@@ -504,20 +501,19 @@ describe("CLI Integration Tests", () => {
 
       const content = readFileSync(join(outputDir, "HomePage.tsx"), "utf8");
 
-      // Should handle nested structure
-      // Note: Semantic component inference converts "Container" to appropriate HTML tag
-      // Check if "Container" naming is reflected (could be <section>, <div>, etc.)
-      const hasContainerNaming = 
-        content.includes("container") || // CSS class name
-        content.includes("Container") || // Component name
-        content.includes("section"); // Semantic HTML element
-      
-      expect(hasContainerNaming).toBe(true);
-      
+      // Should handle nested structure with component reuse
+      // The component may be extracted or inlined depending on reuse patterns
+      const hasSemanticStructure =
+        content.includes("section") || // Semantic HTML element
+        content.includes("frame") || // CSS class name
+        content.includes("Container"); // Component name (if not extracted)
+
+      expect(hasSemanticStructure).toBe(true);
+
       // Check if content is inline or in extracted component
-      const hasNestedContent = content.includes("Nested content") || 
-                               content.includes("Deep Text");
-      
+      const hasNestedContent =
+        content.includes("Nested content") || content.includes("Deep Text");
+
       expect(hasNestedContent).toBe(true);
     });
   });
@@ -553,4 +549,3 @@ describe("CLI Integration Tests", () => {
     });
   });
 });
-

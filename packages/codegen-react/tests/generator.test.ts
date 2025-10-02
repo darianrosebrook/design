@@ -65,8 +65,9 @@ describe("React Component Generation", () => {
       // Check that generated TSX is valid TypeScript
       for (const file of tsxFiles) {
         // May be default export or named export (for extracted components)
-        const hasExport = file.content.includes("export default function") || 
-                         file.content.includes("export function");
+        const hasExport =
+          file.content.includes("export default function") ||
+          file.content.includes("export function");
         expect(hasExport).toBe(true);
         expect(file.content).toContain("import s from");
       }
@@ -149,8 +150,9 @@ describe("React Component Generation", () => {
       for (const file of componentFiles) {
         expect(file.content).toContain("import s from");
         // May be default export or named export (for extracted components)
-        const hasExport = file.content.includes("export default function") || 
-                         file.content.includes("export function");
+        const hasExport =
+          file.content.includes("export default function") ||
+          file.content.includes("export function");
         expect(hasExport).toBe(true);
       }
     });
@@ -218,8 +220,9 @@ describe("React Component Generation", () => {
         // Should have proper JSX structure with semantic components
         expect(file.content).toContain("return (");
         // May be default export or named export (for extracted components)
-        const hasExport = file.content.includes("export default function") || 
-                         file.content.includes("export function");
+        const hasExport =
+          file.content.includes("export default function") ||
+          file.content.includes("export function");
         expect(hasExport).toBe(true);
         // Should contain semantic HTML elements based on naming
         expect(file.content).toMatch(

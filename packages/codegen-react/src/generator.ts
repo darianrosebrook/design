@@ -10,12 +10,15 @@ import type {
   TextNodeType,
   ComponentInstanceNodeType,
 } from "@paths-design/canvas-schema";
-import { CanvasDocument, ULIDType } from "@paths-design/canvas-schema";
+import {
+  CanvasDocument as _CanvasDocument,
+  ULIDType as _ULIDType,
+} from "@paths-design/canvas-schema";
 import type { CodeGenOptions } from "./determinism.js";
 import {
-  Clock,
-  CanonicalSorter,
-  PrecisionNormalizer,
+  Clock as _Clock,
+  CanonicalSorter as _CanonicalSorter,
+  PrecisionNormalizer as _PrecisionNormalizer,
   mergeCodeGenOptions,
 } from "./determinism.js";
 
@@ -81,7 +84,11 @@ export class ReactGenerator {
    */
   generate(document: CanvasDocumentType): GenerationResult {
     const files: GeneratedFile[] = [];
-    const { clock, sorter, normalizer } = this.options;
+    const {
+      clock: _clock,
+      sorter: _sorter,
+      normalizer: _normalizer,
+    } = this.options;
 
     // Clear previous patterns
     this.componentPatterns.clear();
@@ -113,8 +120,8 @@ export class ReactGenerator {
     return {
       files,
       metadata: {
-        timestamp: clock.now(),
-        componentId: clock.uuid(),
+        timestamp: _clock.now(),
+        componentId: _clock.uuid(),
         nodeCount: this.countNodes(document),
         artboardCount: document.artboards.length,
         extractedComponents: this.extractedComponents.size,
@@ -127,7 +134,11 @@ export class ReactGenerator {
    */
   private generateComponentForArtboard(artboard: any): GeneratedFile[] {
     const files: GeneratedFile[] = [];
-    const { clock, sorter, normalizer } = this.options;
+    const {
+      clock: _clock,
+      sorter: _sorter,
+      normalizer: _normalizer,
+    } = this.options;
 
     // Generate main component
     const componentName = this.pascalCase(artboard.name);
@@ -206,7 +217,7 @@ export class ReactGenerator {
    * Extract reusable components from detected patterns
    */
   private extractReusableComponents(): void {
-    for (const [patternId, pattern] of this.componentPatterns) {
+    for (const [_patternId, pattern] of this.componentPatterns) {
       const componentName = pattern.name;
       const jsxContent = this.generateJSX(pattern.nodes, 1);
 
@@ -255,7 +266,7 @@ export class ReactGenerator {
     const name = node.name.toLowerCase();
     const hasChildren =
       "children" in node && node.children && node.children.length > 0;
-    const style = node.style || {};
+    const _style = node.style || {};
 
     // Pattern-based inference
     if (name.includes("button") || name.includes("btn")) {
@@ -382,7 +393,7 @@ export class ReactGenerator {
     semanticInfo: SemanticComponentInfo,
     depth: number
   ): string {
-    const { sorter, normalizer } = this.options;
+    const { sorter: _sorter, normalizer: _normalizer } = this.options;
     const indent = "  ".repeat(depth);
 
     const className = `${semanticInfo.className} ${
@@ -413,7 +424,7 @@ export class ReactGenerator {
     semanticInfo: SemanticComponentInfo,
     depth: number
   ): string {
-    const { sorter, normalizer } = this.options;
+    const { sorter: _sorter, normalizer: _normalizer } = this.options;
     const indent = "  ".repeat(depth);
 
     const className = `${semanticInfo.className} ${
@@ -518,7 +529,7 @@ export class ReactGenerator {
     node: ComponentInstanceNodeType,
     depth: number
   ): string {
-    const { sorter, normalizer } = this.options;
+    const { sorter: _sorter, normalizer: _normalizer } = this.options;
     const indent = "  ".repeat(depth);
 
     const componentName = this.pascalCase(node.componentKey);
@@ -592,13 +603,13 @@ export class ReactGenerator {
         const frame = node.frame;
         cssRules.push(`.${cssClassName} {`);
         cssRules.push(`  position: absolute;`);
-        cssRules.push(`  left: ${normalizer.normalizeCoordinate(frame.x)}px;`);
-        cssRules.push(`  top: ${normalizer.normalizeCoordinate(frame.y)}px;`);
+        cssRules.push(`  left: ${_normalizer.normalizeCoordinate(frame.x)}px;`);
+        cssRules.push(`  top: ${_normalizer.normalizeCoordinate(frame.y)}px;`);
         cssRules.push(
-          `  width: ${normalizer.normalizeDimension(frame.width)}px;`
+          `  width: ${_normalizer.normalizeDimension(frame.width)}px;`
         );
         cssRules.push(
-          `  height: ${normalizer.normalizeDimension(frame.height)}px;`
+          `  height: ${_normalizer.normalizeDimension(frame.height)}px;`
         );
 
         // Add semantic styling based on component type
@@ -624,12 +635,12 @@ export class ReactGenerator {
             );
             if (node.layout.gap) {
               cssRules.push(
-                `  gap: ${normalizer.normalizeDimension(node.layout.gap)}px;`
+                `  gap: ${_normalizer.normalizeDimension(node.layout.gap)}px;`
               );
             }
             if (node.layout.padding) {
               cssRules.push(
-                `  padding: ${normalizer.normalizeDimension(
+                `  padding: ${_normalizer.normalizeDimension(
                   node.layout.padding
                 )}px;`
               );
@@ -675,7 +686,7 @@ export class ReactGenerator {
           }
           if (node.textStyle.size) {
             cssRules.push(
-              `  font-size: ${normalizer.normalizeDimension(
+              `  font-size: ${_normalizer.normalizeDimension(
                 node.textStyle.size
               )}px;`
             );
