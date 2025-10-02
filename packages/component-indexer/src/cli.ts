@@ -24,8 +24,12 @@ async function main() {
     console.log("  --tsconfig <path>        Path to tsconfig.json");
     console.log("  --include <patterns>     Comma-separated include patterns");
     console.log("  --exclude <patterns>     Comma-separated exclude patterns");
-    console.log("  --watch, -w              Watch for changes and rebuild automatically");
-    console.log("  --debounce <ms>          Debounce delay for watch mode (default: 500)");
+    console.log(
+      "  --watch, -w              Watch for changes and rebuild automatically"
+    );
+    console.log(
+      "  --debounce <ms>          Debounce delay for watch mode (default: 500)"
+    );
     console.log("  --help, -h               Show this help message");
     console.log("");
     console.log("Examples:");

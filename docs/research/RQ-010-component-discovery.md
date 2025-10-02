@@ -2,7 +2,7 @@
 
 **Author**: @darianrosebrook  
 **Date**: October 2, 2025  
-**Status**: ✅ Resolved
+**Status**: ✅ Resolved & Enhanced
 
 ## Problem Statement
 
@@ -76,10 +76,13 @@ packages/component-indexer/
 ├── src/
 │   ├── types.ts        # Zod schemas for index format
 │   ├── scanner.ts      # TS Compiler API-based scanner
+│   ├── watcher.ts      # File watcher for real-time updates
 │   ├── index.ts        # Index generation + I/O
 │   └── cli.ts          # CLI tool (designer-index)
 ├── tests/
 │   ├── scanner.test.ts # Scanner unit tests
+│   ├── jsdoc.test.ts   # JSDoc extraction tests
+│   ├── watcher.test.ts # Watcher tests
 │   └── index.test.ts   # Index generation tests
 └── package.json
 ```
@@ -104,6 +107,11 @@ packages/component-indexer/
       export: "Button",
       category: "ui",
       tags: ["interactive", "form"],
+      variants: [
+        { name: "primary" },
+        { name: "secondary" }
+      ],
+      examples: ["<Button variant=\"primary\">Click me</Button>"],
       props: [
         {
           name: "variant",
@@ -128,6 +136,57 @@ packages/component-indexer/
 2. **Design Metadata**: `design.control` hints for UI generation
 3. **Type Preservation**: Full TypeScript types stored as strings for display
 4. **Git-Friendly**: Canonical JSON serialization, sorted keys
+5. **JSDoc Extraction**: Component and prop-level documentation
+6. **Watch Mode**: Real-time updates during development
+
+---
+
+## JSDoc Design Metadata
+
+### Component-Level Tags
+
+```typescript
+/**
+ * A customizable button component
+ * @category ui
+ * @tags interactive, form, clickable
+ * @example <Button variant="primary">Click me</Button>
+ * @variant primary, secondary, danger
+ */
+export function Button(props: ButtonProps): JSX.Element {
+  return <button>{props.children}</button>;
+}
+```
+
+**Supported Tags**:
+- `@category` - Component category for organization
+- `@tags` - Comma-separated tags for filtering
+- `@example` - Usage example (JSX snippet)
+- `@variant` - Component variants (simple list or JSON)
+
+### Prop-Level Tags
+
+```typescript
+interface ButtonProps {
+  /**
+   * Visual style variant
+   * @designControl select
+   * @designOptions primary, secondary, danger
+   */
+  variant: "primary" | "secondary" | "danger";
+  
+  /**
+   * Button background color
+   * @designControl color
+   */
+  backgroundColor?: string;
+}
+```
+
+**Supported Tags**:
+- `@designControl` - UI control type (select, color, number, boolean, text)
+- `@designOptions` - Comma-separated options for select controls
+- Description text - Automatically extracted from JSDoc comment
 
 ---
 
@@ -163,31 +222,20 @@ private isReactComponent(node: ts.Node): boolean {
 }
 ```
 
-### Prop Extraction
+### JSDoc Extraction
+
+The scanner extracts JSDoc from both component nodes and associated interfaces:
 
 ```typescript
-private extractPropsFromType(typeNode: ts.TypeNode): ComponentProp[] {
-  if (!this.checker) return [];
+// Extract from component
+const jsDoc = (node as any).jsDoc;
 
-  // Handle inline type literals: (props: { name: string }) => {}
-  if (ts.isTypeLiteralNode(typeNode)) {
-    return this.extractFromTypeLiteral(typeNode);
-  }
-
-  // Handle type references: (props: ButtonProps) => {}
-  if (ts.isTypeReferenceNode(typeNode)) {
-    const type = this.checker.getTypeAtLocation(typeNode);
-    const properties = this.checker.getPropertiesOfType(type);
-    return properties.map(prop => ({
-      name: prop.name,
-      type: this.checker.typeToString(
-        this.checker.getTypeOfSymbolAtLocation(prop, typeNode)
-      ),
-      required: !(prop.flags & ts.SymbolFlags.Optional),
-    }));
-  }
-
-  return [];
+// Also extract from interface (for separated props interface)
+if (firstParam?.type && ts.isTypeReferenceNode(firstParam.type)) {
+  const type = this.checker.getTypeAtLocation(firstParam.type);
+  const symbol = type.getSymbol();
+  const interfaceJsDoc = symbol?.declarations?.[0]?.jsDoc;
+  // Merge interface tags with component tags
 }
 ```
 
@@ -198,6 +246,9 @@ private extractPropsFromType(typeNode: ts.TypeNode): ComponentProp[] {
 ```bash
 # Generate component index
 designer-index src/components --output design/component-index.json
+
+# Watch mode (real-time updates)
+designer-index src/components --watch --debounce 500
 
 # With tsconfig
 designer-index src --tsconfig tsconfig.json
@@ -212,22 +263,32 @@ designer-index src --include 'ui/**,forms/**' --exclude '**/*.test.tsx'
 
 ### Test Coverage
 
-- ✅ 18 unit tests (100% pass rate)
-- ✅ Function component detection
-- ✅ Arrow function component detection
-- ✅ Class component detection
+- ✅ **39 unit tests** (100% pass rate)
+- ✅ Function, arrow, class component detection
 - ✅ Required vs optional props
 - ✅ Multiple components per file
 - ✅ Nested directory scanning
 - ✅ Include/exclude pattern filtering
 - ✅ Stable ULID generation
 - ✅ Index save/load validation
+- ✅ **JSDoc extraction** (12 tests)
+  - Component-level tags (@category, @tags, @example, @variant)
+  - Prop-level tags (@designControl, @designOptions)
+  - Description extraction
+  - Inline type literals
+  - Interface JSDoc inheritance
+- ✅ **Watch mode** (9 tests)
+  - File change detection
+  - Debouncing
+  - Callback hooks
+  - Graceful shutdown
 
 ### Performance
 
 - **Small project (10 components)**: ~500ms
 - **Medium project (50 components)**: ~1.5s
 - **Large project (200+ components)**: ~5s
+- **Watch mode debounce**: 500ms (default, configurable)
 
 Meets the target of < 5s for 100 components ✅
 
@@ -238,12 +299,24 @@ Meets the target of < 5s for 100 components ✅
 The component index integrates with the canvas system via:
 
 1. **Component Palette**: UI reads `design/component-index.json` to populate component library
+   - Components grouped by `category`
+   - Filtered by `tags`
+   - Previewed with `examples`
+   - Variants shown as options
+
 2. **Instance Creation**: When dropping a component, canvas engine creates a `ComponentInstanceNode` with:
    - `componentKey`: Maps to `components[].name` in index
    - `props`: Initial values from `components[].props[].defaultValue`
    - `modulePath`: Stored for code generation
 
-3. **Code Generation**: codegen-react uses the index to:
+3. **Property Panel**: Uses `design.control` metadata to render appropriate UI controls:
+   - `select` → Dropdown with `design.options`
+   - `color` → Color picker
+   - `number` → Number input
+   - `boolean` → Checkbox
+   - `text` → Text input
+
+4. **Code Generation**: codegen-react uses the index to:
    - Resolve import paths: `import { Button } from './components/ui/Button'`
    - Generate JSX: `<Button variant="primary" onClick={handleClick} />`
    - Type-check prop values against extracted types
@@ -257,18 +330,34 @@ Committed example at: `design/component-index.example.json`
 This file demonstrates:
 - Standard component structure (Button, Input, Card)
 - Prop type variants (union types, booleans, strings)
-- Design control hints
+- Design control hints with options
 - Category/tag organization
+- Component variants
+- Usage examples
 
 ---
 
-## Future Enhancements
+## Enhancements Implemented
 
-1. **Variant Detection**: Extract Storybook stories or similar variant definitions
-2. **Responsive Props**: Detect props that change based on viewport
-3. **Composition Patterns**: Identify compound components (e.g., `Card.Header`, `Card.Body`)
-4. **Live Reload**: Watch mode for real-time index updates during development
-5. **Third-Party Libraries**: Support for indexing external component libraries (MUI, Chakra, etc.)
+### 1. Watch Mode ✅
+- Real-time index updates on file changes
+- Debouncing with configurable delay
+- Callback hooks: onChange, onRebuild, onError
+- Graceful shutdown handling
+
+### 2. JSDoc Design Metadata ✅
+- Component-level: @category, @tags, @example, @variant
+- Prop-level: @designControl, @designOptions
+- Interface JSDoc inheritance
+- Description extraction
+
+### 3. Future Enhancements
+
+1. **Default Value Extraction**: Parse actual default values from implementations
+2. **Compound Component Detection**: Identify patterns like `Card.Header`, `Menu.Item`
+3. **Responsive Props**: Detect props that change based on viewport
+4. **Third-Party Libraries**: Support for indexing external component libraries (MUI, Chakra, etc.)
+5. **Storybook Integration**: Extract variants from Storybook stories
 
 ---
 
@@ -278,7 +367,9 @@ This file demonstrates:
 ✅ **Type Fidelity**: Complex prop types (generics, unions) correctly extracted  
 ✅ **Performance**: Sub-5s for 100 components  
 ✅ **Stability**: Deterministic ULIDs, canonical JSON  
-✅ **Test Coverage**: 18 tests, 100% pass rate  
+✅ **Test Coverage**: 39 tests, 100% pass rate  
+✅ **JSDoc Extraction**: Component and prop-level metadata  
+✅ **Watch Mode**: Real-time updates with debouncing  
 
 ---
 
@@ -292,7 +383,8 @@ This file demonstrates:
 
 ## Conclusion
 
-The TypeScript Compiler API-based approach provides the flexibility and accuracy needed for a production-grade component discovery system. The `@paths-design/component-indexer` package successfully implements this design with comprehensive test coverage and meets all performance targets.
+The TypeScript Compiler API-based approach with JSDoc metadata extraction provides the flexibility and accuracy needed for a production-grade component discovery system. The `@paths-design/component-indexer` package successfully implements this design with comprehensive test coverage, watch mode for development, and rich metadata extraction for design tooling.
 
-**Status**: ✅ **Resolved and Implemented**
-
+**Status**: ✅ **Resolved, Implemented, and Enhanced**  
+**Test Coverage**: 39 tests, 100% pass rate  
+**Features**: Discovery, JSDoc extraction, watch mode, CLI tool

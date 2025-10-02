@@ -155,8 +155,7 @@ export class ComponentIndexWatcher {
       this.options.onRebuild(index);
       this.changedFiles.clear();
     } catch (error) {
-      const err =
-        error instanceof Error ? error : new Error(String(error));
+      const err = error instanceof Error ? error : new Error(String(error));
       console.error(`❌ Error rebuilding index: ${err.message}`);
       this.options.onError(err);
     } finally {
@@ -214,4 +213,3 @@ export async function watchComponents(
   await watcher.start();
   return watcher;
 }
-

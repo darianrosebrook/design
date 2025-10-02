@@ -15,6 +15,11 @@
       "export": "Button",
       "category": "ui",
       "tags": ["interactive", "form"],
+      "variants": [
+        { "name": "primary" },
+        { "name": "secondary" },
+        { "name": "danger" }
+      ],
       "props": [
         {
           "name": "variant",

@@ -11,6 +11,7 @@ import type {
   DiscoveryOptions,
   DiscoveryResult,
   ComponentEntry,
+  ComponentProp,
   RawComponentMetadata,
 } from "./types.js";
 
@@ -310,14 +311,60 @@ export class ComponentScanner {
 
     if (!name) return null;
 
-    // Extract JSDoc comments
+    // Extract JSDoc comments from the component node
     const jsDoc = (node as any).jsDoc;
     if (jsDoc && jsDoc.length > 0) {
       const tags = jsDoc[0].tags;
       if (tags) {
         for (const tag of tags) {
           if (tag.tagName) {
-            jsDocTags[tag.tagName.text] = tag.comment ?? "";
+            const tagName = tag.tagName.text;
+            const comment = this.getJSDocComment(tag);
+            jsDocTags[tagName] = comment;
+          }
+        }
+      }
+    }
+
+    // Also try to extract JSDoc from related interface (for function components with separate interface)
+    if (
+      (ts.isFunctionDeclaration(node) ||
+        ts.isArrowFunction(node) ||
+        ts.isFunctionExpression(node) ||
+        ts.isVariableStatement(node)) &&
+      this.checker
+    ) {
+      const firstParam =
+        ts.isFunctionDeclaration(node) ||
+        ts.isArrowFunction(node) ||
+        ts.isFunctionExpression(node)
+          ? node.parameters[0]
+          : ts.isVariableStatement(node) &&
+            node.declarationList.declarations[0]?.initializer &&
+            (ts.isArrowFunction(node.declarationList.declarations[0].initializer) ||
+              ts.isFunctionExpression(node.declarationList.declarations[0].initializer))
+          ? node.declarationList.declarations[0].initializer.parameters[0]
+          : undefined;
+
+      if (firstParam?.type && ts.isTypeReferenceNode(firstParam.type)) {
+        const type = this.checker.getTypeAtLocation(firstParam.type);
+        const symbol = type.getSymbol();
+        if (symbol && symbol.declarations && symbol.declarations.length > 0) {
+          const interfaceDecl = symbol.declarations[0];
+          const interfaceJsDoc = (interfaceDecl as any).jsDoc;
+          if (interfaceJsDoc && interfaceJsDoc.length > 0) {
+            const interfaceTags = interfaceJsDoc[0].tags;
+            if (interfaceTags) {
+              for (const tag of interfaceTags) {
+                if (tag.tagName) {
+                  const tagName = tag.tagName.text;
+                  // Only add if not already present from component JSDoc
+                  if (!jsDocTags[tagName]) {
+                    jsDocTags[tagName] = this.getJSDocComment(tag);
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -386,10 +433,38 @@ export class ComponentScanner {
           const propType = member.type ? member.type.getText() : "unknown";
           const required = !member.questionToken;
 
+          // Extract JSDoc for this property
+          const jsDoc = (member as any).jsDoc;
+          let description: string | undefined;
+          const designTags: Record<string, string> = {};
+
+          if (jsDoc && jsDoc.length > 0) {
+            // Get description from JSDoc comment
+            description = this.getJSDocComment(jsDoc[0]);
+
+            // Get design-specific tags
+            const tags = jsDoc[0].tags;
+            if (tags) {
+              for (const tag of tags) {
+                if (tag.tagName) {
+                  const tagName = tag.tagName.text;
+                  if (
+                    tagName === "designControl" ||
+                    tagName === "designOptions"
+                  ) {
+                    designTags[tagName] = this.getJSDocComment(tag);
+                  }
+                }
+              }
+            }
+          }
+
           props.push({
             name: propName,
             type: propType,
             required,
+            description,
+            designTags: Object.keys(designTags).length > 0 ? designTags : undefined,
           });
         }
       }
@@ -402,15 +477,65 @@ export class ComponentScanner {
         const propType = this.checker.getTypeOfSymbolAtLocation(prop, typeNode);
         const required = !(prop.flags & ts.SymbolFlags.Optional);
 
+        // Try to get JSDoc from the property declaration
+        const declaration = prop.valueDeclaration;
+        let description: string | undefined;
+        const designTags: Record<string, string> = {};
+
+        if (declaration) {
+          const jsDoc = (declaration as any).jsDoc;
+          if (jsDoc && jsDoc.length > 0) {
+            description = this.getJSDocComment(jsDoc[0]);
+
+            const tags = jsDoc[0].tags;
+            if (tags) {
+              for (const tag of tags) {
+                if (tag.tagName) {
+                  const tagName = tag.tagName.text;
+                  if (
+                    tagName === "designControl" ||
+                    tagName === "designOptions"
+                  ) {
+                    designTags[tagName] = this.getJSDocComment(tag);
+                  }
+                }
+              }
+            }
+          }
+        }
+
         props.push({
           name: prop.name,
           type: this.checker.typeToString(propType),
           required,
+          description,
+          designTags: Object.keys(designTags).length > 0 ? designTags : undefined,
         });
       }
     }
 
     return props;
+  }
+
+  /**
+   * Get JSDoc comment text from a JSDoc node or tag
+   */
+  private getJSDocComment(jsDocNode: any): string {
+    if (!jsDocNode) return "";
+
+    // Handle string comments
+    if (typeof jsDocNode.comment === "string") {
+      return jsDocNode.comment;
+    }
+
+    // Handle comment arrays (multi-line comments)
+    if (Array.isArray(jsDocNode.comment)) {
+      return jsDocNode.comment
+        .map((c: any) => (typeof c === "string" ? c : c.text || ""))
+        .join("\n");
+    }
+
+    return "";
   }
 
   /**
@@ -424,22 +549,87 @@ export class ComponentScanner {
       export: metadata.exportName,
       category: metadata.jsDocTags?.category,
       tags: metadata.jsDocTags?.tags?.split(",").map((t) => t.trim()),
-      props: metadata.props.map((prop) => ({
-        name: prop.name,
-        type: prop.type,
-        required: prop.required,
-        defaultValue:
-          prop.defaultValue !== undefined
-            ? (prop.defaultValue as
-                | string
-                | number
-                | boolean
-                | Record<string, unknown>
-                | null)
-            : undefined,
-        description: prop.description,
-      })),
+      props: metadata.props.map((prop) => {
+        const propEntry: ComponentProp = {
+          name: prop.name,
+          type: prop.type,
+          required: prop.required,
+          defaultValue:
+            prop.defaultValue !== undefined
+              ? (prop.defaultValue as
+                  | string
+                  | number
+                  | boolean
+                  | Record<string, unknown>
+                  | null)
+              : undefined,
+          description: prop.description,
+        };
+
+        // Parse design tags if present
+        if (prop.designTags) {
+          // Handle @designControl tag
+          if (prop.designTags.designControl) {
+            const control = prop.designTags.designControl.trim();
+            if (
+              control === "text" ||
+              control === "select" ||
+              control === "color" ||
+              control === "number" ||
+              control === "boolean"
+            ) {
+              propEntry.design = {
+                ...propEntry.design,
+                control,
+              };
+            }
+          }
+
+          // Handle @designOptions tag
+          if (prop.designTags.designOptions) {
+            const optionsStr = prop.designTags.designOptions.trim();
+            // Parse options (comma-separated values)
+            const options = optionsStr
+              .split(",")
+              .map((o) => o.trim())
+              .filter((o) => o.length > 0);
+            if (options.length > 0) {
+              propEntry.design = {
+                ...propEntry.design,
+                options,
+              };
+            }
+          }
+        }
+
+        return propEntry;
+      }),
+      // Add examples and variants from JSDoc
+      examples: metadata.jsDocTags?.example
+        ? [metadata.jsDocTags.example]
+        : undefined,
+      variants: metadata.jsDocTags?.variant
+        ? this.parseVariants(metadata.jsDocTags.variant)
+        : undefined,
     };
+  }
+
+  /**
+   * Parse variant information from JSDoc
+   */
+  private parseVariants(variantStr: string): Array<Record<string, unknown>> | undefined {
+    try {
+      // Try to parse as JSON
+      const parsed = JSON.parse(variantStr);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+      return [parsed];
+    } catch {
+      // If not JSON, treat as comma-separated variant names
+      const names = variantStr.split(",").map((v) => v.trim());
+      return names.map((name) => ({ name }));
+    }
   }
 }
 

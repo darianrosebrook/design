@@ -113,6 +113,7 @@ export interface RawComponentMetadata {
     required: boolean;
     defaultValue?: unknown;
     description?: string;
+    designTags?: Record<string, string>;
   }>;
   jsDocTags?: Record<string, string>;
 }

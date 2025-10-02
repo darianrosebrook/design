@@ -256,7 +256,7 @@ test('renders button with text', () => {});
   describe("error handling", () => {
     it("handles invalid directory path gracefully", async () => {
       const onError = vi.fn();
-      
+
       // Don't try to watch a nonexistent directory (fs.watch throws immediately)
       // Instead, test error handling with a valid directory but bad tsconfig
       const componentFile = path.join(tempDir, "Button.tsx");
@@ -361,4 +361,3 @@ export function Button(): JSX.Element { return <button>Click ${i}</button>; }
     });
   });
 });
-
