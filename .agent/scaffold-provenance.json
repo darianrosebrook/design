@@ -1,0 +1,30 @@
+{
+  "agent": "caws-cli",
+  "model": "cli-scaffold",
+  "modelHash": "3.0.0",
+  "toolAllowlist": [
+    "node",
+    "fs-extra"
+  ],
+  "prompts": [
+    "scaffold",
+    "normal"
+  ],
+  "commit": null,
+  "artifacts": [
+    "apps/tools/caws",
+    "codemod",
+    "COMMIT_CONVENTIONS.md",
+    "OIDC_SETUP.md"
+  ],
+  "results": {
+    "operation": "scaffold",
+    "target_directory": "/Users/darianrosebrook/Desktop/Projects/designer",
+    "files_added": 4,
+    "files_skipped": 0
+  },
+  "approvals": [],
+  "timestamp": "2025-10-02T00:12:11.653Z",
+  "version": "3.0.0",
+  "hash": "f9e9ab39f669fa0fdf07f531629c18cfb5387ed939d0d8dce9077f0a917c3365"
+}

@@ -1,0 +1,106 @@
+{
+  "$schema": "../schemas/tier-policy.schema.json",
+  "description": "Risk tier policy configuration for Designer project",
+  "tiers": {
+    "1": {
+      "name": "Critical Path",
+      "description": "Core engine, schema validation, code generation - highest rigor required",
+      "min_branch": 0.9,
+      "min_mutation": 0.7,
+      "requires_contracts": true,
+      "requires_manual_review": true,
+      "max_files": 40,
+      "max_loc": 1500,
+      "allowed_modes": ["feature", "refactor", "fix"],
+      "packages": [
+        "packages/canvas-schema",
+        "packages/canvas-engine",
+        "packages/codegen-react"
+      ],
+      "additional_gates": {
+        "determinism_check": true,
+        "golden_frame_tests": true,
+        "property_based_tests": true
+      }
+    },
+    "2": {
+      "name": "Core Features",
+      "description": "Rendering, tokens, VS Code extension - high rigor",
+      "min_branch": 0.8,
+      "min_mutation": 0.5,
+      "requires_contracts": true,
+      "requires_manual_review": false,
+      "max_files": 25,
+      "max_loc": 1000,
+      "allowed_modes": ["feature", "refactor", "fix"],
+      "packages": [
+        "packages/canvas-renderer-dom",
+        "packages/tokens",
+        "apps/vscode-ext"
+      ],
+      "additional_gates": {
+        "integration_tests": true,
+        "a11y_audit": true,
+        "performance_budgets": true
+      }
+    },
+    "3": {
+      "name": "Quality of Life",
+      "description": "CLI tools, docs, examples - standard rigor",
+      "min_branch": 0.7,
+      "min_mutation": 0.3,
+      "requires_contracts": false,
+      "requires_manual_review": false,
+      "max_files": 15,
+      "max_loc": 600,
+      "allowed_modes": ["feature", "refactor", "fix", "doc", "chore"],
+      "packages": [
+        "apps/cli",
+        "docs",
+        "examples"
+      ],
+      "additional_gates": {
+        "smoke_tests": true
+      }
+    }
+  },
+  "budgets": {
+    "performance": {
+      "canvas_render_ms": {
+        "p50": 8,
+        "p95": 16,
+        "p99": 32
+      },
+      "codegen_duration_ms": {
+        "p50": 250,
+        "p95": 500,
+        "p99": 1000
+      },
+      "token_reflection_ms": {
+        "p50": 8,
+        "p95": 16,
+        "p99": 32
+      },
+      "extension_activation_ms": {
+        "p50": 500,
+        "p95": 1000,
+        "p99": 2000
+      }
+    },
+    "accessibility": {
+      "wcag_level": "AA",
+      "min_contrast_ratio": 4.5,
+      "keyboard_navigation": "mandatory",
+      "screen_reader_support": "mandatory",
+      "reduced_motion_support": "mandatory"
+    },
+    "security": {
+      "csp_enforcement": "strict",
+      "filesystem_access": "workspace_only",
+      "no_eval": true,
+      "secret_scan": "mandatory",
+      "dependency_audit": "high_severity_block"
+    }
+  }
+}
+

@@ -1,0 +1,41 @@
+{
+  "agent": "caws-cli",
+  "model": "cli-interactive",
+  "modelHash": "1.0.0",
+  "toolAllowlist": [
+    "node",
+    "npm",
+    "git",
+    "fs-extra",
+    "inquirer",
+    "commander",
+    "js-yaml",
+    "ajv",
+    "chalk"
+  ],
+  "artifacts": [
+    ".caws/working-spec.yaml"
+  ],
+  "results": {
+    "project_id": "DESIGNER-001",
+    "project_title": "Designer",
+    "risk_tier": 2,
+    "mode": "feature",
+    "change_budget": {
+      "max_files": 25,
+      "max_loc": 1000
+    },
+    "blast_radius": {
+      "modules": [
+        "core",
+        "ui"
+      ],
+      "data_migration": false
+    },
+    "operational_rollback_slo": "5m"
+  },
+  "approvals": [],
+  "timestamp": "2025-10-02T00:11:46.540Z",
+  "version": "1.0.0",
+  "hash": "ef76c9fa1a537a8021db0a21f240ef78892fbe88f6fd15d145f2d0cfa4023808"
+}
