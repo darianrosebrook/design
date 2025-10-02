@@ -222,12 +222,14 @@ function applyMove(
   document: CanvasDocumentType,
   patch: JsonPatch
 ): CanvasDocumentType {
+  console.log("applyMove called with:", patch);
   if (!patch.path || !patch.from) {
     throw new Error("Move operation requires path and from");
   }
 
   // Get the value to move
   const value = getValueAtPath(document, patch.from);
+  console.log("Value to move:", value);
   if (value === undefined) {
     throw new Error(`Source path not found: ${patch.from}`);
   }
@@ -244,20 +246,82 @@ function applyMove(
     const fromIndex = parseInt(fromPath[fromPath.length - 1]);
     const toIndex = parseInt(toPath[toPath.length - 1]);
 
+    console.log("Path adjustment: fromIndex:", fromIndex, "toIndex:", toIndex);
     if (fromIndex < toIndex) {
       // Adjust destination index since we're removing from before the destination
       toPath[toPath.length - 1] = (toIndex - 1).toString();
       patch.path = "/" + toPath.join("/");
+      console.log("Adjusted path:", patch.path);
     }
   }
 
-  // Remove from source location
-  const removePatch: JsonPatch = { op: "remove", path: patch.from };
-  let result = applyPatch(document, removePatch);
+  // Remove from source location (direct implementation to avoid recursion)
+  const { parent: fromParent, key: fromKey } = getParentAndKey(
+    document,
+    patch.from
+  );
+  console.log("From parent:", fromParent, "From key:", fromKey);
+  if (fromParent === null || fromKey === null) {
+    throw new Error(`Source path not found: ${patch.from}`);
+  }
 
-  // Add to destination location
-  const addPatch: JsonPatch = { op: "add", path: patch.path, value };
-  result = applyPatch(result, addPatch);
+  let result = { ...document };
+  if (typeof fromKey === "number") {
+    // Removing from array
+    const newArray = [
+      ...(fromParent as any[]).slice(0, fromKey),
+      ...(fromParent as any[]).slice(fromKey + 1),
+    ];
+    const parentPath = "/" + fromPath.slice(0, -1).join("/");
+    console.log(
+      "Removing from array, parentPath:",
+      parentPath,
+      "newArray:",
+      newArray.map((c) => c.name)
+    );
+    result = setValueAtPath(result, parentPath, newArray);
+  } else {
+    // Removing from object
+    const newObj = { ...fromParent };
+    delete newObj[fromKey];
+    const parentPath = "/" + fromPath.slice(0, -1).join("/");
+    console.log(
+      "Removing from object, parentPath:",
+      parentPath,
+      "newObj:",
+      newObj
+    );
+    result = setValueAtPath(result, parentPath, newObj);
+  }
+
+  // Add to destination location (direct implementation to avoid recursion)
+  const { parent: toParent, key: toKey } = getParentAndKey(result, patch.path);
+  if (toParent === null || toKey === null) {
+    throw new Error(`Destination path not found: ${patch.path}`);
+  }
+
+  if (typeof toKey === "number") {
+    // Adding to array
+    const newArray = [
+      ...(toParent as any[]).slice(0, toKey),
+      value,
+      ...(toParent as any[]).slice(toKey),
+    ];
+    const parentPath = "/" + toPath.slice(0, -1).join("/");
+    console.log(
+      "Adding to array, parentPath:",
+      parentPath,
+      "newArray:",
+      newArray.map((c) => c.name)
+    );
+    result = setValueAtPath(result, parentPath, newArray);
+  } else {
+    // Adding to object
+    const newObj = { ...toParent, [toKey]: value };
+    const parentPath = "/" + toPath.slice(0, -1).join("/");
+    console.log("Adding to object, parentPath:", parentPath, "newObj:", newObj);
+    result = setValueAtPath(result, parentPath, newObj);
+  }
 
   return result;
 }
@@ -335,6 +399,57 @@ function getParentAndKey(
   } else {
     return { parent: current, key: lastPart };
   }
+}
+
+/**
+ * Set a value at a given path in the document
+ */
+function setValueAtPath(
+  document: CanvasDocumentType,
+  path: string,
+  value: any
+): CanvasDocumentType {
+  console.log("setValueAtPath called with path:", path, "value:", value);
+  if (path === "/" || path === "") {
+    return value;
+  }
+
+  const result = JSON.parse(JSON.stringify(document)); // Deep clone
+  const pathParts = path.substring(1).split("/").filter(Boolean);
+  let current: any = result;
+
+  // Navigate to the parent of the target
+  for (let i = 0; i < pathParts.length - 1; i++) {
+    const part = pathParts[i];
+
+    if (current == null) {
+      throw new Error(`Path not found: ${path}`);
+    }
+
+    if (part === "-") {
+      current = current[current.length - 1];
+    } else if (/^\d+$/.test(part)) {
+      current = current[parseInt(part, 10)];
+    } else {
+      current = current[part];
+    }
+  }
+
+  const lastPart = pathParts[pathParts.length - 1];
+
+  if (current == null) {
+    throw new Error(`Path not found: ${path}`);
+  }
+
+  if (lastPart === "-") {
+    current.push(value);
+  } else if (/^\d+$/.test(lastPart)) {
+    current[parseInt(lastPart, 10)] = value;
+  } else {
+    current[lastPart] = value;
+  }
+
+  return result;
 }
 
 /**

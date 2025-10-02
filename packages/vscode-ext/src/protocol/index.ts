@@ -3,5 +3,4 @@
  * @author @darianrosebrook
  */
 
-export * from './messages.js';
-
+export * from "./messages.js";

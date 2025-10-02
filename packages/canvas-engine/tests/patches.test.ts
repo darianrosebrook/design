@@ -52,7 +52,7 @@ const createTestDocument = () => ({
         {
           id: "01JF2Q0FH2G5C4B5H1IK1A0PWD",
           type: "text",
-          name: "Title",
+          name: "Subtitle",
           visible: true,
           frame: { x: 100, y: 100, width: 200, height: 50 },
           style: {},
@@ -138,8 +138,17 @@ describe("Canvas Engine Patches", () => {
 
       const result = applyPatch(document, patch);
 
+      console.log(
+        "Original:",
+        document.artboards[0].children.map((c) => c.name)
+      );
+      console.log(
+        "Result:",
+        result.artboards[0].children.map((c) => c.name)
+      );
+
       expect(result.artboards[0].children).toHaveLength(2);
-      expect(result.artboards[0].children[0].name).toBe("Title");
+      expect(result.artboards[0].children[0].name).toBe("Subtitle");
       expect(result.artboards[0].children[1].name).toBe("Hero");
     });
 

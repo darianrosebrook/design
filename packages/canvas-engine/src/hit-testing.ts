@@ -55,11 +55,15 @@ export function hitTest(
     const nodes = Array.from(traverseDocument(document));
 
     // Debug: log all nodes being checked
-    if (process.env.NODE_ENV === 'test') {
-      console.log(`Hit-testing point (${point.x}, ${point.y}) against ${nodes.length} nodes:`);
+    if (process.env.NODE_ENV === "test") {
+      console.log(
+        `Hit-testing point (${point.x}, ${point.y}) against ${nodes.length} nodes:`
+      );
       nodes.forEach((node, index) => {
         const frame = getNodeFrame(node.node, node.path);
-        console.log(`  ${index}: ${node.node.name} (${node.node.id}) at (${frame?.x}, ${frame?.y}, ${frame?.width}, ${frame?.height})`);
+        console.log(
+          `  ${index}: ${node.node.name} (${node.node.id}) at (${frame?.x}, ${frame?.y}, ${frame?.width}, ${frame?.height})`
+        );
       });
     }
 
@@ -181,6 +185,7 @@ export function hitTestRect(
         nodeId: result.node.id,
         nodePath: result.path,
         point: { x: rect.x, y: rect.y }, // Use rect origin as point
+        node: result.node,
       });
     }
   }
@@ -232,6 +237,7 @@ export function hitTestProximity(
         nodeId: result.node.id,
         nodePath: result.path,
         point,
+        node: result.node,
       });
     }
   }

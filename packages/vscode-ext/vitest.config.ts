@@ -4,8 +4,14 @@ import path from "node:path";
 export default defineConfig({
   resolve: {
     alias: {
-      "@paths-design/designer/canvas-schema": path.resolve(__dirname, "../canvas-schema/src/index.ts"),
-      "@paths-design/canvas-engine": path.resolve(__dirname, "../canvas-engine/src/index.ts"),
+      "@paths-design/designer/canvas-schema": path.resolve(
+        __dirname,
+        "../canvas-schema/src/index.ts"
+      ),
+      "@paths-design/canvas-engine": path.resolve(
+        __dirname,
+        "../canvas-engine/src/index.ts"
+      ),
     },
   },
   test: {

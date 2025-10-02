@@ -6,6 +6,5 @@
  * Provides secure message protocol and workspace file access.
  */
 
-export * from './protocol/index.js';
-export * from './security/index.js';
-
+export * from "./protocol/index.js";
+export * from "./security/index.js";

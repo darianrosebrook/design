@@ -155,11 +155,7 @@ describe("Canvas Engine Hit Testing", () => {
     it("should respect artboard filtering", () => {
       const document = createTestDocument();
       // This should hit the hero frame since it's on artboard 0
-      const result = hitTest(
-        document,
-        { x: 10, y: 10 },
-        { artboardIndex: 0 }
-      );
+      const result = hitTest(document, { x: 10, y: 10 }, { artboardIndex: 0 });
 
       expect(result).not.toBeNull();
       expect(result?.node.id).toBe("01JF2Q06GTS16EJ3A3F0KK9K3T");

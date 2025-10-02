@@ -3,5 +3,5 @@
  * @author @darianrosebrook
  */
 
-export * from './path-validator.js';
-
+export * from "./path-validator.js";
+export * from "./resource-limits.js";

@@ -6,8 +6,8 @@
  * remains within the workspace boundary.
  */
 
-import * as path from 'node:path';
-import * as fs from 'node:fs/promises';
+import * as path from "node:path";
+import * as fs from "node:fs/promises";
 
 /**
  * Validation result for path checks
@@ -31,14 +31,14 @@ export interface PathValidatorConfig {
 /**
  * Default configuration for Designer workspace
  */
-export const defaultConfig: Omit<PathValidatorConfig, 'workspaceRoot'> = {
+export const defaultConfig: Omit<PathValidatorConfig, "workspaceRoot"> = {
   allowedPatterns: [
     /^design\/.*\.canvas\.json$/,
     /^design\/tokens\.json$/,
     /^design\/mappings\..*\.json$/,
     /^design\/components\.index\.json$/,
   ],
-  allowedExtensions: ['.json', '.canvas.json'],
+  allowedExtensions: [".json", ".canvas.json"],
   maxPathLength: 260, // Windows MAX_PATH limit
 };
 
@@ -59,7 +59,9 @@ export class PathValidator {
   constructor(config: PathValidatorConfig) {
     this.config = config;
     // Normalize and resolve workspace root once
-    this.workspaceRootNormalized = path.resolve(path.normalize(config.workspaceRoot));
+    this.workspaceRootNormalized = path.resolve(
+      path.normalize(config.workspaceRoot)
+    );
   }
 
   /**
@@ -93,59 +95,63 @@ export class PathValidator {
     if (path.isAbsolute(normalized)) {
       return {
         valid: false,
-        reason: 'Absolute paths are not allowed for security',
+        reason: "Absolute paths are not allowed for security",
       };
     }
 
     // 4. Check for directory traversal attempts
-    if (normalized.includes('..')) {
+    if (normalized.includes("..")) {
       return {
         valid: false,
-        reason: 'Directory traversal (..) is not allowed for security',
+        reason: "Directory traversal (..) is not allowed for security",
       };
     }
 
     // 5. Check for null bytes (path poisoning)
-    if (normalized.includes('\0')) {
+    if (normalized.includes("\0")) {
       return {
         valid: false,
-        reason: 'Null bytes in path are not allowed',
+        reason: "Null bytes in path are not allowed",
       };
     }
 
     // 6. Resolve to absolute path and verify it's within workspace
     const resolved = path.resolve(this.workspaceRootNormalized, normalized);
-    
-    if (!resolved.startsWith(this.workspaceRootNormalized + path.sep) && 
-        resolved !== this.workspaceRootNormalized) {
+
+    if (
+      !resolved.startsWith(this.workspaceRootNormalized + path.sep) &&
+      resolved !== this.workspaceRootNormalized
+    ) {
       return {
         valid: false,
-        reason: 'Path resolves outside workspace root',
+        reason: "Path resolves outside workspace root",
       };
     }
 
     // 7. Check file extension
     const ext = path.extname(normalized);
-    const hasAllowedExtension = this.config.allowedExtensions.some(allowed => 
+    const hasAllowedExtension = this.config.allowedExtensions.some((allowed) =>
       normalized.endsWith(allowed)
     );
 
     if (!hasAllowedExtension) {
       return {
         valid: false,
-        reason: `File extension must be one of: ${this.config.allowedExtensions.join(', ')}`,
+        reason: `File extension must be one of: ${this.config.allowedExtensions.join(
+          ", "
+        )}`,
       };
     }
 
     // 8. Check against allowed patterns
-    const matchesPattern = this.config.allowedPatterns.some(pattern => 
+    const matchesPattern = this.config.allowedPatterns.some((pattern) =>
       pattern.test(normalized)
     );
 
     if (!matchesPattern) {
       return {
         valid: false,
-        reason: 'Path does not match any allowed pattern',
+        reason: "Path does not match any allowed pattern",
       };
     }
 
@@ -162,9 +168,11 @@ export class PathValidator {
    * @param filePath Path to validate and check
    * @returns Validation result with existence check
    */
-  async validateAndCheckExists(filePath: string): Promise<ValidationResult & { exists?: boolean }> {
+  async validateAndCheckExists(
+    filePath: string
+  ): Promise<ValidationResult & { exists?: boolean }> {
     const validation = this.validate(filePath);
-    
+
     if (!validation.valid) {
       return validation;
     }
@@ -190,7 +198,7 @@ export class PathValidator {
    * @returns Array of validation results
    */
   validateBatch(filePaths: string[]): ValidationResult[] {
-    return filePaths.map(path => this.validate(path));
+    return filePaths.map((path) => this.validate(path));
   }
 
   /**
@@ -206,8 +214,12 @@ export class PathValidator {
    */
   isWithinWorkspace(filePath: string): boolean {
     try {
+      // Check for null bytes first
+      if (filePath.includes("\0")) {
+        return false;
+      }
       const normalized = path.normalize(filePath);
-      if (path.isAbsolute(normalized) || normalized.includes('..')) {
+      if (path.isAbsolute(normalized) || normalized.includes("..")) {
         return false;
       }
       const resolved = path.resolve(this.workspaceRootNormalized, normalized);
@@ -230,4 +242,3 @@ export function createPathValidator(workspaceRoot: string): PathValidator {
     ...defaultConfig,
   });
 }
-
