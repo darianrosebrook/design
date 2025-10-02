@@ -7,11 +7,7 @@
  */
 
 import { z } from "zod";
-import {
-  CanvasDocument,
-  ULID,
-  Patch,
-} from "@paths-design/canvas-schema";
+import { CanvasDocument, ULID, Patch } from "@paths-design/canvas-schema";
 
 /**
  * Protocol version for backwards compatibility

@@ -1,0 +1,151 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2025-10-02T12:00:00.000Z",
+  "source": {
+    "root": "src/components",
+    "resolver": "tsconfig",
+    "include": ["ui/**", "forms/**"],
+    "exclude": ["**/*.test.tsx", "**/*.stories.tsx"]
+  },
+  "components": [
+    {
+      "id": "01jaby1c2d3e4f5g6h",
+      "name": "Button",
+      "modulePath": "src/components/ui/Button.tsx",
+      "export": "Button",
+      "category": "ui",
+      "tags": ["interactive", "form"],
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"primary\" | \"secondary\" | \"danger\"",
+          "required": false,
+          "defaultValue": "primary",
+          "description": "Visual style variant",
+          "design": {
+            "control": "select",
+            "options": ["primary", "secondary", "danger"]
+          }
+        },
+        {
+          "name": "size",
+          "type": "\"small\" | \"medium\" | \"large\"",
+          "required": false,
+          "defaultValue": "medium",
+          "design": {
+            "control": "select",
+            "options": ["small", "medium", "large"]
+          }
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "required": true,
+          "description": "Button text"
+        },
+        {
+          "name": "onClick",
+          "type": "() => void",
+          "required": true,
+          "description": "Click handler"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false,
+          "design": {
+            "control": "boolean"
+          }
+        }
+      ],
+      "examples": [
+        "<Button variant=\"primary\" label=\"Click me\" onClick={() => {}} />",
+        "<Button variant=\"danger\" size=\"large\" label=\"Delete\" onClick={handleDelete} />"
+      ]
+    },
+    {
+      "id": "01jaby7k8m9n0p1q2r",
+      "name": "Input",
+      "modulePath": "src/components/forms/Input.tsx",
+      "export": "Input",
+      "category": "forms",
+      "tags": ["form", "input"],
+      "props": [
+        {
+          "name": "type",
+          "type": "\"text\" | \"email\" | \"password\" | \"number\"",
+          "required": false,
+          "defaultValue": "text",
+          "design": {
+            "control": "select",
+            "options": ["text", "email", "password", "number"]
+          }
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "required": true,
+          "description": "Input value"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "required": false,
+          "description": "Placeholder text"
+        },
+        {
+          "name": "onChange",
+          "type": "(value: string) => void",
+          "required": true,
+          "description": "Change handler"
+        },
+        {
+          "name": "error",
+          "type": "string",
+          "required": false,
+          "description": "Error message to display"
+        }
+      ]
+    },
+    {
+      "id": "01jaby3s4t5u6v7w8x",
+      "name": "Card",
+      "modulePath": "src/components/ui/Card.tsx",
+      "export": "Card",
+      "category": "ui",
+      "tags": ["layout", "container"],
+      "props": [
+        {
+          "name": "title",
+          "type": "string",
+          "required": false,
+          "description": "Card title"
+        },
+        {
+          "name": "subtitle",
+          "type": "string",
+          "required": false,
+          "description": "Card subtitle"
+        },
+        {
+          "name": "children",
+          "type": "React.ReactNode",
+          "required": true,
+          "description": "Card content"
+        },
+        {
+          "name": "elevated",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false,
+          "description": "Apply elevation shadow",
+          "design": {
+            "control": "boolean"
+          }
+        }
+      ]
+    }
+  ]
+}
+

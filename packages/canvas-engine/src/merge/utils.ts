@@ -1,8 +1,9 @@
 /**
  * @fileoverview Helper utilities for merge conflict detection
- @author @darianrosebrook
+ * @author @darianrosebrook
  */
 
+import { ulid } from "ulidx";
 import type {
   CanvasDocumentType,
   NodeSnapshot,
@@ -107,4 +108,11 @@ export function sortConflicts(
     if (a.code > b.code) return 1;
     return a.id.localeCompare(b.id);
   });
+}
+
+/**
+ * Generate unique conflict ID
+ */
+export function generateConflictId(): string {
+  return ulid();
 }

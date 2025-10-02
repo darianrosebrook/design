@@ -42,6 +42,9 @@ importers:
       '@paths-design/canvas-schema':
         specifier: file:../canvas-schema
         version: link:../canvas-schema
+      ulidx:
+        specifier: ^2.3.0
+        version: 2.4.1
     devDependencies:
       '@types/node':
         specifier: ^20.0.0
@@ -100,13 +103,35 @@ importers:
         specifier: ^1.0.0
         version: 1.6.1(@types/node@20.19.19)
 
+  packages/component-indexer:
+    dependencies:
+      typescript:
+        specifier: ^5.3.3
+        version: 5.9.3
+      ulidx:
+        specifier: ^2.3.0
+        version: 2.4.1
+      zod:
+        specifier: ^3.23.8
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^20.10.0
+        version: 20.19.19
+      '@vitest/coverage-v8':
+        specifier: ^1.0.4
+        version: 1.6.1(vitest@1.6.1(@types/node@20.19.19))
+      vitest:
+        specifier: ^1.0.4
+        version: 1.6.1(@types/node@20.19.19)
+
   packages/vscode-ext:
     dependencies:
       '@paths-design/canvas-engine':
-        specifier: workspace:*
+        specifier: file:../canvas-engine
         version: link:../canvas-engine
-      '@paths-design/designer/canvas-schema':
-        specifier: workspace:*
+      '@paths-design/canvas-schema':
+        specifier: file:../canvas-schema
         version: link:../canvas-schema
       zod:
         specifier: ^3.23.8

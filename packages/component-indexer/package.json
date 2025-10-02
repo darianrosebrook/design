@@ -1,10 +1,13 @@
 {
-  "name": "@paths-design/vscode-ext",
+  "name": "@paths-design/component-indexer",
   "version": "0.1.0",
   "type": "module",
-  "description": "VS Code extension for Designer - local-first design tool",
+  "description": "Component discovery and indexing for Designer",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "designer-index": "dist/cli.js"
+  },
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
@@ -15,19 +18,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@paths-design/canvas-schema": "file:../canvas-schema",
-    "@paths-design/canvas-engine": "file:../canvas-engine",
-    "zod": "^3.23.8"
+    "typescript": "^5.3.3",
+    "zod": "^3.23.8",
+    "ulidx": "^2.3.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
-    "@types/vscode": "^1.84.0",
     "@vitest/coverage-v8": "^1.0.4",
-    "typescript": "^5.3.3",
     "vitest": "^1.0.4"
   },
   "engines": {
-    "vscode": "^1.84.0"
+    "node": ">=18.0.0"
   }
 }
 

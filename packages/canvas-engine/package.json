@@ -21,7 +21,8 @@
     "@vitest/coverage-v8": "^1.0.0"
   },
   "dependencies": {
-    "@paths-design/canvas-schema": "file:../canvas-schema"
+    "@paths-design/canvas-schema": "file:../canvas-schema",
+    "ulidx": "^2.3.0"
   },
   "files": [
     "dist"

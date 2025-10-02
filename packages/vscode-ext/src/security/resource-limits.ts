@@ -6,10 +6,7 @@
  * stable extension performance with large documents.
  */
 
-import type {
-  CanvasDocumentType,
-  NodeType,
-} from "@paths-design/designer/canvas-schema";
+import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 import * as fs from "node:fs/promises";
 
 /**
