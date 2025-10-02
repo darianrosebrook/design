@@ -222,7 +222,7 @@ async function verifyDeterminism(output1: string, output2: string): Promise<bool
 
 ---
 
-## Area 002: Merge Conflict Resolution 🟠 25% Complete
+## Area 002: Merge Conflict Resolution 🟠 50% Complete
 
 ### Status: **Implementation Started**
 
@@ -244,14 +244,16 @@ async function verifyDeterminism(output1: string, output2: string): Promise<bool
 
 #### ✅ Property Conflicts (P-*)
 - `P-GEOMETRY`: divergent frame geometry detected when both branches move a node differently
-- Additional property types queued (visibility, layout, style)
+- `P-VISIBILITY`: visibility toggled differently between branches
+- `P-LAYOUT`: layout metadata (gap, config) diverges
+- Additional property types queued (style)
 
 #### 🚧 Content & Metadata (C-*, M-*)
 - Stubs present; detection pending
 
 ### Testing
-- Unit coverage: 4 focused tests in `tests/merge/conflict-detector.test.ts`
-- Scenarios covered: identical docs, S-DEL-MOD, S-ADD-ADD, S-MOVE-MOVE, P-GEOMETRY
+- Unit coverage: 6 focused tests in `tests/merge/conflict-detector.test.ts`
+- Scenarios covered: identical docs, S-DEL-MOD, S-ADD-ADD, S-MOVE-MOVE, P-GEOMETRY, P-VISIBILITY, P-LAYOUT
 - Fixtures planned for scenario matrix (20 cases)
 
 ### Next Steps

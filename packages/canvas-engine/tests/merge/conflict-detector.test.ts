@@ -130,3 +130,70 @@ describe("detectConflicts - structural", () => {
 
   // TODO: Add S-ORDER detection once move/order heuristics settle
 });
+
+describe("detectConflicts - property", () => {
+  it("detects P-GEOMETRY when frame geometry diverges", () => {
+    const localDoc = clone(baseDoc) satisfies MergeDocuments["local"];
+    const remoteDoc = clone(baseDoc) satisfies MergeDocuments["remote"];
+
+    // Move frame differently in each branch
+    localDoc.artboards[0].children[0].frame = {
+      x: 10,
+      y: 10,
+      width: 600,
+      height: 600,
+    };
+    remoteDoc.artboards[0].children[0].frame = {
+      x: 20,
+      y: 15,
+      width: 580,
+      height: 590,
+    };
+
+    const result = detectConflicts({
+      base: baseDoc,
+      local: localDoc,
+      remote: remoteDoc,
+    });
+
+    expect(
+      result.conflicts.some((conflict) => conflict.code === "P-GEOMETRY")
+    ).toBe(true);
+  });
+
+  it("detects P-VISIBILITY when visibility toggled differently", () => {
+    const localDoc = clone(baseDoc) satisfies MergeDocuments["local"];
+    const remoteDoc = clone(baseDoc) satisfies MergeDocuments["remote"];
+
+    localDoc.artboards[0].children[0].visible = false;
+    remoteDoc.artboards[0].children[0].visible = true;
+
+    const result = detectConflicts({
+      base: baseDoc,
+      local: localDoc,
+      remote: remoteDoc,
+    });
+
+    expect(
+      result.conflicts.some((conflict) => conflict.code === "P-VISIBILITY")
+    ).toBe(true);
+  });
+
+  it("detects P-LAYOUT when layout gap diverges", () => {
+    const localDoc = clone(baseDoc) satisfies MergeDocuments["local"];
+    const remoteDoc = clone(baseDoc) satisfies MergeDocuments["remote"];
+
+    localDoc.artboards[0].children[0].layout = { gap: 8 };
+    remoteDoc.artboards[0].children[0].layout = { gap: 16 };
+
+    const result = detectConflicts({
+      base: baseDoc,
+      local: localDoc,
+      remote: remoteDoc,
+    });
+
+    expect(
+      result.conflicts.some((conflict) => conflict.code === "P-LAYOUT")
+    ).toBe(true);
+  });
+});
