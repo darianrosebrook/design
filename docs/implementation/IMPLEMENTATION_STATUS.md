@@ -244,21 +244,19 @@ async function verifyDeterminism(output1: string, output2: string): Promise<bool
 
 #### ✅ Property Conflicts (P-*)
 - `P-GEOMETRY`: divergent frame geometry detected when both branches move a node differently
-- `P-VISIBILITY`: visibility toggled differently between branches
-- `P-LAYOUT`: layout metadata (gap, config) diverges
-- Additional property types queued (style, bindings)
+- Additional property types queued (visibility, layout, style)
 
 #### 🚧 Content & Metadata (C-*, M-*)
 - Stubs present; detection pending
 
 ### Testing
-- Unit coverage: 7 focused tests in `tests/merge/conflict-detector.test.ts`
-- Scenarios covered: identical docs, S-DEL-MOD, S-ADD-ADD, S-MOVE-MOVE, P-GEOMETRY, P-VISIBILITY, P-LAYOUT
+- Unit coverage: 4 focused tests in `tests/merge/conflict-detector.test.ts`
+- Scenarios covered: identical docs, S-DEL-MOD, S-ADD-ADD, S-MOVE-MOVE, P-GEOMETRY
 - Fixtures planned for scenario matrix (20 cases)
 
 ### Next Steps
 1. Complete remaining structural scenarios (S-ORDER reintroduction, complex delete/move combos)
-2. Implement property deep-diff for styles and bindings
+2. Implement property deep-diff (visibility, layout, style)
 3. Add content (text/token/component) and metadata detection
 4. Expand test matrix with fixtures under `tests/fixtures/merge`
 5. Integrate semantic diff (RQ-005)

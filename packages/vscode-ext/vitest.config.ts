@@ -4,7 +4,7 @@ import path from "node:path";
 export default defineConfig({
   resolve: {
     alias: {
-      "@paths-design/designer/canvas-schema": path.resolve(
+      "@paths-design/canvas-schema": path.resolve(
         __dirname,
         "../canvas-schema/src/index.ts"
       ),

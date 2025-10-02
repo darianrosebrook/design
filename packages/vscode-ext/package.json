@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@paths-design/designer/canvas-schema": "workspace:*",
+    "@paths-design/canvas-schema": "workspace:*",
     "@paths-design/canvas-engine": "workspace:*",
     "zod": "^3.23.8"
   },

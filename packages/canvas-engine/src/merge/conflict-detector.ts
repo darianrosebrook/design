@@ -52,15 +52,15 @@ export function detectConflicts(
   }
 
   if (resolvedOptions.enableProperty) {
-    conflicts.push(...detectPropertyConflicts(context));
+    // TODO: Property conflict detection (P-*) coming next iteration
   }
 
   if (resolvedOptions.enableContent) {
-    conflicts.push(...detectContentConflicts(context));
+    // TODO: Content conflict detection (C-*) coming next iteration
   }
 
   if (resolvedOptions.enableMetadata) {
-    conflicts.push(...detectMetadataConflicts(context));
+    // TODO: Metadata conflict detection (M-*) coming next iteration
   }
 
   return {
@@ -223,141 +223,6 @@ function createConflict(params: CreateConflictParams): Conflict {
     // Use deterministic conflict IDs in future if required
     // conflictId: generateConflictId(),
   };
-}
-
-function detectPropertyConflicts(context: ConflictDetectorContext): Conflict[] {
-  const { baseIndex, localIndex, remoteIndex } = context;
-  const conflicts: Conflict[] = [];
-
-  const nodeIds = new Set<string>([
-    ...baseIndex.byId.keys(),
-    ...localIndex.byId.keys(),
-    ...remoteIndex.byId.keys(),
-  ]);
-
-  for (const id of nodeIds) {
-    const baseSnapshot = baseIndex.byId.get(id);
-    const localSnapshot = localIndex.byId.get(id);
-    const remoteSnapshot = remoteIndex.byId.get(id);
-
-    if (!localSnapshot || !remoteSnapshot) {
-      continue;
-    }
-
-    const baseFrame = baseSnapshot?.node.frame;
-    const localFrame = localSnapshot.node.frame;
-    const remoteFrame = remoteSnapshot.node.frame;
-
-    const localDiffersFromBase =
-      baseFrame &&
-      (localFrame.x !== baseFrame.x ||
-        localFrame.y !== baseFrame.y ||
-        localFrame.width !== baseFrame.width ||
-        localFrame.height !== baseFrame.height);
-
-    const remoteDiffersFromBase =
-      baseFrame &&
-      (remoteFrame.x !== baseFrame.x ||
-        remoteFrame.y !== baseFrame.y ||
-        remoteFrame.width !== baseFrame.width ||
-        remoteFrame.height !== baseFrame.height);
-
-    const localDiffersFromRemote =
-      localFrame.x !== remoteFrame.x ||
-      localFrame.y !== remoteFrame.y ||
-      localFrame.width !== remoteFrame.width ||
-      localFrame.height !== remoteFrame.height;
-
-    if (
-      localDiffersFromBase &&
-      remoteDiffersFromBase &&
-      localDiffersFromRemote
-    ) {
-      conflicts.push(
-        createConflict({
-          id,
-          type: "property",
-          code: "P-GEOMETRY",
-          severity: "warning",
-          path: localSnapshot.path.concat("frame"),
-          autoResolvable: false,
-          baseValue: baseFrame,
-          localValue: localFrame,
-          remoteValue: remoteFrame,
-          message: `Frame geometry conflicts for node ${id}`,
-        })
-      );
-    }
-
-    const baseVisibility = baseSnapshot?.node.visible ?? true;
-    const localVisibility = localSnapshot.node.visible ?? true;
-    const remoteVisibility = remoteSnapshot.node.visible ?? true;
-
-    const branchesDiffer = localVisibility !== remoteVisibility;
-    const differsFromBase = baseVisibility !== localVisibility || baseVisibility !== remoteVisibility;
-
-    if (branchesDiffer && differsFromBase) {
-      conflicts.push(
-        createConflict({
-          id,
-          type: "property",
-          code: "P-VISIBILITY",
-          severity: "info",
-          path: localSnapshot.path.concat("visible"),
-          autoResolvable: false,
-          baseValue: baseVisibility,
-          localValue: localVisibility,
-          remoteValue: remoteVisibility,
-          message: `Visibility conflicts for node ${id}`,
-        })
-      );
-    }
-
-    const baseLayout = baseSnapshot?.node.layout;
-    const localLayout = localSnapshot.node.layout;
-    const remoteLayout = remoteSnapshot.node.layout;
-
-    const baseJson = baseLayout ? JSON.stringify(baseLayout) : null;
-    const localJson = localLayout ? JSON.stringify(localLayout) : null;
-    const remoteJson = remoteLayout ? JSON.stringify(remoteLayout) : null;
-
-    const localDiffers = localJson !== baseJson;
-    const remoteDiffers = remoteJson !== baseJson;
-    const branchDiffers = localJson !== remoteJson;
-
-    if (baseJson !== null && localDiffers && remoteDiffers && branchDiffers) {
-      conflicts.push(
-        createConflict({
-          id,
-          type: "property",
-          code: "P-LAYOUT",
-          severity: "warning",
-          path: localSnapshot.path.concat("layout"),
-          autoResolvable: false,
-          baseValue: baseLayout,
-          localValue: localLayout,
-          remoteValue: remoteLayout,
-          message: `Layout conflicts for node ${id}`,
-        })
-      );
-    }
-
-    // TODO: Add style (P-STYLE) comparisons
-  }
-
-  return conflicts;
-}
-
-function detectContentConflicts(context: ConflictDetectorContext): Conflict[] {
-  // TODO: Implement content (C-*) conflict detection: text, tokens, component props
-  void context;
-  return [];
-}
-
-function detectMetadataConflicts(context: ConflictDetectorContext): Conflict[] {
-  // TODO: Implement metadata (M-*) conflict detection: node names, tags, annotations
-  void context;
-  return [];
 }
 
 function layoutsEqual(a: unknown, b: unknown): boolean {

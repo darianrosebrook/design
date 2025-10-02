@@ -11,7 +11,7 @@ import {
   CanvasDocument,
   ULID,
   Patch,
-} from "@paths-design/designer/canvas-schema";
+} from "@paths-design/canvas-schema";
 
 /**
  * Protocol version for backwards compatibility
