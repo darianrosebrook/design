@@ -23,6 +23,7 @@ const baseDoc = {
           name: "Primary Container",
           visible: true,
           frame: { x: 0, y: 0, width: 600, height: 600 },
+          layout: { gap: 12 },
           children: [
             {
               id: "NODE_TEXT",
@@ -48,6 +49,7 @@ const baseDoc = {
           name: "Secondary Container",
           visible: true,
           frame: { x: 800, y: 0, width: 400, height: 400 },
+          layout: { gap: 0 },
           children: [],
         },
       ],
@@ -78,12 +80,117 @@ describe("detectConflicts - structural", () => {
     const remoteDoc = clone(baseDoc) satisfies MergeDocuments["remote"];
     remoteDoc.artboards[0].children[0].children[0].text = "Hello Remote";
 
-    const result = detectConflicts({ base: baseDoc, local: localDoc, remote: remoteDoc });
+    const result = detectConflicts({
+      base: baseDoc,
+      local: localDoc,
+      remote: remoteDoc,
+    });
     expect(result.conflicts).toHaveLength(1);
     const conflict = result.conflicts[0];
     expect(conflict.code).toBe("S-DEL-MOD");
     expect(conflict.type).toBe("structural");
     expect(conflict.autoResolvable).toBe(false);
+  });
+
+  it("detects S-ADD-ADD when same node added differently", () => {
+    const localDoc = clone(baseDoc) satisfies MergeDocuments["local"];
+    const remoteDoc = clone(baseDoc) satisfies MergeDocuments["remote"];
+
+    const newLocalNode = {
+      id: "NODE_NEW",
+      type: "text" as const,
+      name: "Local Node",
+      visible: true,
+      frame: { x: 200, y: 200, width: 120, height: 40 },
+      text: "local",
+    };
+
+    const newRemoteNode = {
+      id: "NODE_NEW",
+      type: "text" as const,
+      name: "Remote Node",
+      visible: true,
+      frame: { x: 220, y: 210, width: 120, height: 40 },
+      text: "remote",
+    };
+
+    localDoc.artboards[0].children[0].children.push(newLocalNode);
+    remoteDoc.artboards[0].children[0].children.push(newRemoteNode);
+
+    const result = detectConflicts({
+      base: baseDoc,
+      local: localDoc,
+      remote: remoteDoc,
+    });
+
+    expect(
+      result.conflicts.some((conflict) => conflict.code === "S-ADD-ADD")
+    ).toBe(true);
+  });
+
+  it("detects P-GEOMETRY when frame geometry diverges", () => {
+    const localDoc = clone(baseDoc) satisfies MergeDocuments["local"];
+    const remoteDoc = clone(baseDoc) satisfies MergeDocuments["remote"];
+
+    // Move frame differently in each branch
+    localDoc.artboards[0].children[0].frame = {
+      x: 10,
+      y: 10,
+      width: 600,
+      height: 600,
+    };
+    remoteDoc.artboards[0].children[0].frame = {
+      x: 20,
+      y: 15,
+      width: 580,
+      height: 590,
+    };
+
+    const result = detectConflicts({
+      base: baseDoc,
+      local: localDoc,
+      remote: remoteDoc,
+    });
+
+    expect(
+      result.conflicts.some((conflict) => conflict.code === "P-GEOMETRY")
+    ).toBe(true);
+  });
+
+  it("detects P-VISIBILITY when visibility toggled differently", () => {
+    const localDoc = clone(baseDoc) satisfies MergeDocuments["local"];
+    const remoteDoc = clone(baseDoc) satisfies MergeDocuments["remote"];
+
+    localDoc.artboards[0].children[0].visible = false;
+    remoteDoc.artboards[0].children[0].visible = true;
+
+    const result = detectConflicts({
+      base: baseDoc,
+      local: localDoc,
+      remote: remoteDoc,
+    });
+
+    expect(
+      result.conflicts.some((conflict) => conflict.code === "P-VISIBILITY")
+    ).toBe(true);
+  });
+
+  it("detects P-LAYOUT when layout gap diverges", () => {
+    const localDoc = clone(baseDoc) satisfies MergeDocuments["local"];
+    const remoteDoc = clone(baseDoc) satisfies MergeDocuments["remote"];
+
+    localDoc.artboards[0].children[0].layout = { gap: 8 };
+    remoteDoc.artboards[0].children[0].layout = { gap: 16 };
+
+    const result = detectConflicts({
+      base: baseDoc,
+      local: localDoc,
+      remote: remoteDoc,
+    });
+
+    expect(
+      result.conflicts.some((conflict) => conflict.code === "P-LAYOUT")
+    ).toBe(true);
   });
 
   it("detects S-MOVE-MOVE when node moved to different parents", () => {
@@ -124,10 +231,15 @@ describe("detectConflicts - structural", () => {
       artboard.children = [primaryFrame, secondaryFrame, tertiaryFrame];
     }
 
-    const result = detectConflicts({ base: baseDoc, local: localDoc, remote: remoteDoc });
-    expect(result.conflicts.some((conflict) => conflict.code === "S-MOVE-MOVE")).toBe(true);
+    const result = detectConflicts({
+      base: baseDoc,
+      local: localDoc,
+      remote: remoteDoc,
+    });
+    expect(
+      result.conflicts.some((conflict) => conflict.code === "S-MOVE-MOVE")
+    ).toBe(true);
   });
 
   // TODO: Add S-ORDER detection once move/order heuristics settle
 });
-

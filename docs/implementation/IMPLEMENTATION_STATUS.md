@@ -222,56 +222,46 @@ async function verifyDeterminism(output1: string, output2: string): Promise<bool
 
 ---
 
-## Area 002: Merge Conflict Resolution 🔴 10% Complete
+## Area 002: Merge Conflict Resolution 🟠 25% Complete
 
-### Status: **Research Phase**
+### Status: **Implementation Started**
 
 ### Research Questions Status
 
 | RQ ID | Title | Status | Implementation Location |
 |-------|-------|--------|------------------------|
-| RQ-004 | Design file conflict taxonomy | ⏳ Research | N/A |
-| RQ-005 | Semantic diff algorithm | ⏳ Research | N/A |
-| RQ-006 | CRDT vs custom merge | ⏳ Research | N/A |
+| RQ-004 | Conflict taxonomy & detection | 🟡 In Progress | `packages/canvas-engine/src/merge/conflict-detector.ts` |
+| RQ-005 | Semantic diff algorithm | ⏳ Pending | N/A |
+| RQ-006 | CRDT vs custom merge | ⏳ Pending | N/A |
 
-### Current State
+### Implementation Details
 
-**Schema Foundation**: ✅ Complete  
-**Location**: `packages/canvas-schema/src/index.ts`
+#### ✅ Structural Conflicts (S-*)
+- `S-DEL-MOD`: delete vs modify
+- `S-ADD-ADD`: concurrent insertions
+- `S-MOVE-MOVE`: conflicting parent moves
+- Implemented in `conflict-detector.ts` with helper utilities (`merge/utils.ts`)
 
-- ✅ ULID-based node IDs (stable identifiers)
-- ✅ Canonical JSON serialization helpers
-- ✅ Zod schema validation
-- ⏳ Patch operations defined but not implemented
+#### ✅ Property Conflicts (P-*)
+- `P-GEOMETRY`: divergent frame geometry detected when both branches move a node differently
+- `P-VISIBILITY`: visibility toggled differently between branches
+- `P-LAYOUT`: layout metadata (gap, config) diverges
+- Additional property types queued (style, bindings)
 
-**What's Missing**:
-1. Conflict detection algorithm
-2. Conflict resolution strategies
-3. Meta.conflicts format
-4. Git merge driver integration
-5. Semantic diff tool
+#### 🚧 Content & Metadata (C-*, M-*)
+- Stubs present; detection pending
 
----
+### Testing
+- Unit coverage: 7 focused tests in `tests/merge/conflict-detector.test.ts`
+- Scenarios covered: identical docs, S-DEL-MOD, S-ADD-ADD, S-MOVE-MOVE, P-GEOMETRY, P-VISIBILITY, P-LAYOUT
+- Fixtures planned for scenario matrix (20 cases)
 
-### Remaining Work
-
-#### High Priority (Blocking)
-- [ ] Create conflict taxonomy document (20 example scenarios)
-- [ ] Design semantic diff algorithm for node trees
-- [ ] Prototype conflict detector with test cases
-- [ ] Define Meta.conflicts JSON structure
-- [ ] Document merge strategy in `docs/merge-strategy.md`
-
-#### Medium Priority
-- [ ] Implement basic 3-way merge for simple conflicts
-- [ ] Build conflict resolution UI mockup
-- [ ] Test Git merge driver API integration
-- [ ] Performance testing with large documents
-
-#### Research Needed
-- [ ] Evaluate Yjs CRDT library for optional use
-- [ ] Compare custom merge vs CRDT tradeoffs
-- [ ] Analyze Figma/Sketch merge strategies
+### Next Steps
+1. Complete remaining structural scenarios (S-ORDER reintroduction, complex delete/move combos)
+2. Implement property deep-diff for styles and bindings
+3. Add content (text/token/component) and metadata detection
+4. Expand test matrix with fixtures under `tests/fixtures/merge`
+5. Integrate semantic diff (RQ-005)
 
 ---
 

@@ -85,7 +85,7 @@ describe("PathValidator", () => {
     it("rejects Windows absolute paths", () => {
       const result = validator.validate("C:\\Windows\\System32\\config\\sam");
       expect(result.valid).toBe(false);
-      // On Unix, this won't be detected as absolute by path.isAbsolute, 
+      // On Unix, this won't be detected as absolute by path.isAbsolute,
       // but will fail pattern/extension validation
       expect(result.reason).toBeDefined();
     });

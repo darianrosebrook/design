@@ -178,7 +178,7 @@ describe("Canvas Engine Observability", () => {
       const document = createTestDocument();
 
       findNodeById(document, "01JF2Q06GTS16EJ3A3F0KK9K3T");
-      countNodes(document); // This updates the node count metric
+      countNodes(document);
 
       const metrics = observability.getMetrics();
       expect(metrics.document_nodes_total).toBeGreaterThan(0);
@@ -278,7 +278,7 @@ describe("Canvas Engine Observability", () => {
 
       const metrics = observability.getMetrics();
       expect(metrics.operations_total.findNodeById).toBe(1);
-      expect(metrics.operations_total.traverseDocument).toBe(3); // Called once directly + twice internally (by countNodes)
+      expect(metrics.operations_total.traverseDocument).toBe(3);
       expect(metrics.operations_total.hitTest).toBe(1);
     });
 

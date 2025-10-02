@@ -107,9 +107,18 @@ describe("Canvas Engine Hit Testing", () => {
       expect(result).toBeNull();
     });
 
-    it("should hit the hero frame at its position", () => {
+    it("should hit the title text node at its position (topmost)", () => {
       const document = createTestDocument();
-      const result = hitTest(document, { x: 10, y: 10 });
+      const result = hitTest(document, { x: 100, y: 100 });
+
+      expect(result).not.toBeNull();
+      expect(result?.node.id).toBe("01JF2Q09H0C3YV2TE8EH8X7MTA");
+      expect(result?.node.name).toBe("Title");
+    });
+
+    it("should hit the hero frame when clicking outside text areas", () => {
+      const document = createTestDocument();
+      const result = hitTest(document, { x: 1400, y: 400 }); // Bottom right of hero frame
 
       expect(result).not.toBeNull();
       expect(result?.node.id).toBe("01JF2Q06GTS16EJ3A3F0KK9K3T");
@@ -134,13 +143,13 @@ describe("Canvas Engine Hit Testing", () => {
       expect(result?.node.name).toBe("Subtitle");
     });
 
-    it("should hit the feature frame at its position", () => {
+    it("should hit the feature title text node at its position (topmost)", () => {
       const document = createTestDocument();
-      const result = hitTest(document, { x: 800, y: 600 });
+      const result = hitTest(document, { x: 100, y: 600 });
 
       expect(result).not.toBeNull();
-      expect(result?.node.id).toBe("01JF2Q0CK2E5A4B5G0HJ0Z9OVC");
-      expect(result?.node.name).toBe("Features");
+      expect(result?.node.id).toBe("01JF2Q0EN4G7C6D7I2JL2B1QXE");
+      expect(result?.node.name).toBe("Feature Title");
     });
 
     it("should hit the feature title text node at its position", () => {
@@ -154,11 +163,15 @@ describe("Canvas Engine Hit Testing", () => {
 
     it("should respect artboard filtering", () => {
       const document = createTestDocument();
-      // This should hit the hero frame since it's on artboard 0
-      const result = hitTest(document, { x: 10, y: 10 }, { artboardIndex: 0 });
+      // This should hit the title text node since it's on artboard 0 and topmost
+      const result = hitTest(
+        document,
+        { x: 100, y: 100 },
+        { artboardIndex: 0 }
+      );
 
       expect(result).not.toBeNull();
-      expect(result?.node.id).toBe("01JF2Q06GTS16EJ3A3F0KK9K3T");
+      expect(result?.node.id).toBe("01JF2Q09H0C3YV2TE8EH8X7MTA");
     });
 
     it("should not hit invisible nodes", () => {
@@ -168,23 +181,20 @@ describe("Canvas Engine Hit Testing", () => {
       const modifiedDocument = JSON.parse(JSON.stringify(document));
       modifiedDocument.artboards[0].children[0].visible = false;
 
-      const result = hitTest(modifiedDocument, { x: 800, y: 600 });
+      const result = hitTest(modifiedDocument, { x: 100, y: 100 });
 
-      // Should hit the features frame instead since hero is invisible
-      expect(result).not.toBeNull();
-      expect(result?.node.id).toBe("01JF2Q0CK2E5A4B5G0HJ0Z9OVC");
+      // Should return null since no visible node contains this point
+      expect(result).toBeNull();
     });
 
-    it("should return topmost node when multiple overlap", () => {
+    it("should return null when no nodes contain the point", () => {
       const document = createTestDocument();
 
-      // Both hero and features frames span similar areas, but hero is higher in DOM
-      // At position (100, 400) - this is in the Hero frame area
-      const result = hitTest(document, { x: 100, y: 400 });
+      // At position (100, 500) - this is between hero (ends at y=480) and features (starts at y=520)
+      const result = hitTest(document, { x: 100, y: 500 });
 
-      // Should hit the hero frame (topmost)
-      expect(result).not.toBeNull();
-      expect(result?.node.id).toBe("01JF2Q06GTS16EJ3A3F0KK9K3T");
+      // Should return null since no node contains this point
+      expect(result).toBeNull();
     });
   });
 

@@ -15,7 +15,6 @@ export type OperationType =
   | "moveNode"
   | "findNodeById"
   | "traverseDocument"
-  | "countNodes"
   | "hitTest"
   | "applyPatch"
   | "applyPatches";

@@ -31,37 +31,21 @@ const createTestDocument = () => ({
           visible: true,
           frame: { x: 0, y: 0, width: 1440, height: 480 },
           style: { fills: [{ type: "solid", color: "#111317" }] },
-          children: [
-            {
-              id: "01JF2Q09H0C3YV2TE8EH8X7MTA",
-              type: "text",
-              name: "Title",
-              visible: true,
-              frame: { x: 32, y: 40, width: 600, height: 64 },
-              style: {},
-              text: "Build in your IDE",
-              textStyle: {
-                family: "Inter",
-                size: 48,
-                weight: "700",
-                color: "#E6E6E6",
-              },
-            },
-          ],
+          children: [],
         },
         {
-          id: "01JF2Q0FH2G5C4B5H1IK1A0PWD",
+          id: "01JF2Q09H0C3YV2TE8EH8X7MTA",
           type: "text",
-          name: "Subtitle",
+          name: "Title",
           visible: true,
-          frame: { x: 100, y: 100, width: 200, height: 50 },
+          frame: { x: 32, y: 40, width: 600, height: 64 },
           style: {},
-          text: "Another Title",
+          text: "Build in your IDE",
           textStyle: {
             family: "Inter",
-            size: 16,
-            weight: "400",
-            color: "#000000",
+            size: 48,
+            weight: "700",
+            color: "#E6E6E6",
           },
         },
       ],
@@ -96,7 +80,7 @@ describe("Canvas Engine Patches", () => {
 
       const result = applyPatch(document, patch);
 
-      expect(result.artboards[0].children).toHaveLength(2);
+      expect(result.artboards[0].children).toHaveLength(3);
       expect(result.artboards[0].children[1].name).toBe("New Text");
     });
 
@@ -110,7 +94,8 @@ describe("Canvas Engine Patches", () => {
 
       const result = applyPatch(document, patch);
 
-      expect(result.artboards[0].children).toHaveLength(0);
+      expect(result.artboards[0].children).toHaveLength(1);
+      expect(result.artboards[0].children[0].name).toBe("Title");
     });
 
     it("should apply replace operation", () => {
@@ -138,17 +123,8 @@ describe("Canvas Engine Patches", () => {
 
       const result = applyPatch(document, patch);
 
-      console.log(
-        "Original:",
-        document.artboards[0].children.map((c) => c.name)
-      );
-      console.log(
-        "Result:",
-        result.artboards[0].children.map((c) => c.name)
-      );
-
       expect(result.artboards[0].children).toHaveLength(2);
-      expect(result.artboards[0].children[0].name).toBe("Subtitle");
+      expect(result.artboards[0].children[0].name).toBe("Title");
       expect(result.artboards[0].children[1].name).toBe("Hero");
     });
 
@@ -157,15 +133,15 @@ describe("Canvas Engine Patches", () => {
 
       const patch = {
         op: "copy" as const,
-        from: "/artboards/0/children/0/children/0",
-        path: "/artboards/0/children/1",
+        from: "/artboards/0/children/1",
+        path: "/artboards/0/children/2",
       };
 
       const result = applyPatch(document, patch);
 
-      expect(result.artboards[0].children).toHaveLength(2);
-      expect(result.artboards[0].children[1].name).toBe("Title");
-      expect(result.artboards[0].children[1].text).toBe("Build in your IDE");
+      expect(result.artboards[0].children).toHaveLength(3);
+      expect(result.artboards[0].children[2].name).toBe("Title");
+      expect(result.artboards[0].children[2].text).toBe("Build in your IDE");
     });
 
     it("should apply test operation", () => {
@@ -246,7 +222,7 @@ describe("Canvas Engine Patches", () => {
 
       const result = applyPatches(document, patches);
 
-      expect(result.artboards[0].children).toHaveLength(2);
+      expect(result.artboards[0].children).toHaveLength(3);
       expect(result.artboards[0].children[0].name).toBe("Updated Hero");
       expect(result.artboards[0].children[1].name).toBe("New Text");
     });

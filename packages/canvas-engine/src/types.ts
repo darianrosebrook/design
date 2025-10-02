@@ -84,6 +84,7 @@ export interface TraversalOptions {
   maxDepth?: number;
   includeRoot?: boolean;
   filter?: (node: NodeType, path: NodePath) => boolean;
+  artboardIndex?: number;
 }
 
 /**

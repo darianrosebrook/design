@@ -422,4 +422,3 @@ describe("ResourceManager", () => {
     });
   });
 });
-

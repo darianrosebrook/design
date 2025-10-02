@@ -6,7 +6,10 @@
  * stable extension performance with large documents.
  */
 
-import type { CanvasDocumentType, NodeType } from "@paths-design/designer/canvas-schema";
+import type {
+  CanvasDocumentType,
+  NodeType,
+} from "@paths-design/designer/canvas-schema";
 import * as fs from "node:fs/promises";
 
 /**
@@ -80,7 +83,11 @@ export class ResourceManager {
       if (stats.size > this.limits.maxFileSizeBytes) {
         return {
           valid: false,
-          reason: `File size ${this.formatBytes(stats.size)} exceeds limit of ${this.formatBytes(this.limits.maxFileSizeBytes)}`,
+          reason: `File size ${this.formatBytes(
+            stats.size
+          )} exceeds limit of ${this.formatBytes(
+            this.limits.maxFileSizeBytes
+          )}`,
           details: {
             fileSize: stats.size,
           },
@@ -96,7 +103,9 @@ export class ResourceManager {
     } catch (error) {
       return {
         valid: false,
-        reason: `Failed to check file size: ${error instanceof Error ? error.message : "Unknown error"}`,
+        reason: `Failed to check file size: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`,
       };
     }
   }
@@ -195,7 +204,9 @@ export class ResourceManager {
     if (estimatedMB > this.limits.maxMemoryMB) {
       return {
         valid: false,
-        reason: `Estimated memory usage ${estimatedMB.toFixed(2)}MB exceeds limit of ${this.limits.maxMemoryMB}MB`,
+        reason: `Estimated memory usage ${estimatedMB.toFixed(
+          2
+        )}MB exceeds limit of ${this.limits.maxMemoryMB}MB`,
         details: {
           memoryUsageMB: estimatedMB,
         },
@@ -293,6 +304,7 @@ export class ResourceManager {
 export function createResourceManager(
   limits?: Partial<ResourceLimits>
 ): ResourceManager {
-  return new ResourceManager(limits ? { ...defaultLimits, ...limits } : defaultLimits);
+  return new ResourceManager(
+    limits ? { ...defaultLimits, ...limits } : defaultLimits
+  );
 }
-

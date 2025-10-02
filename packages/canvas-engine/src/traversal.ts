@@ -38,13 +38,27 @@ export function* traverseDocument(
   const startTime = performance.now();
 
   try {
-    const { maxDepth = Infinity, includeRoot = false, filter } = options;
+    const {
+      maxDepth = Infinity,
+      includeRoot = false,
+      filter,
+      artboardIndex: targetArtboardIndex,
+    } = options;
+
+    const artboards = document.artboards;
 
     for (
       let artboardIndex = 0;
-      artboardIndex < document.artboards.length;
+      artboardIndex < artboards.length;
       artboardIndex++
     ) {
+      if (
+        targetArtboardIndex !== undefined &&
+        targetArtboardIndex !== artboardIndex
+      ) {
+        continue;
+      }
+
       const artboard = document.artboards[artboardIndex];
 
       if (includeRoot) {
@@ -187,30 +201,21 @@ export function getAncestors(
   nodePath: NodePath
 ): TraversalResult[] {
   const ancestors: TraversalResult[] = [];
-  const pathCopy = [...nodePath];
 
-  // Remove the node itself and walk up the path
-  while (pathCopy.length > 1) {
-    pathCopy.pop(); // Remove current node
-
-    // Find the ancestor node
-    let current: any = document;
-    for (const segment of pathCopy) {
-      if (current && typeof current === "object") {
-        current = current[segment];
-      } else {
-        current = undefined;
-        break;
+  // Walk through all traversal results and find ancestors of the target path
+  for (const result of traverseDocument(document)) {
+    // Check if this node's path is a prefix of the target path
+    if (result.path.length < nodePath.length) {
+      let isAncestor = true;
+      for (let i = 0; i < result.path.length; i++) {
+        if (result.path[i] !== nodePath[i]) {
+          isAncestor = false;
+          break;
+        }
       }
-    }
-
-    if (current && typeof current === "object" && "id" in current) {
-      ancestors.unshift({
-        node: current,
-        path: [...pathCopy],
-        depth: pathCopy.length - 1,
-        artboardIndex: 0, // Would need to calculate this properly
-      });
+      if (isAncestor) {
+        ancestors.push(result);
+      }
     }
   }
 
@@ -226,30 +231,20 @@ export function getDescendants(
 ): TraversalResult[] {
   const descendants: TraversalResult[] = [];
 
-  // Find the node first
-  const _targetNode: NodeType | null = null;
-  let current: any = document;
-
-  for (const segment of nodePath) {
-    if (current && typeof current === "object") {
-      current = current[segment];
-    } else {
-      current = undefined;
-      break;
-    }
-  }
-
-  if (current && "children" in current && current.children) {
-    // Traverse all descendants
-    for (const result of traverseTree(
-      current.children,
-      [...nodePath, "children"],
-      nodePath.length + 1,
-      Infinity,
-      undefined,
-      0
-    )) {
-      descendants.push(result);
+  // Walk through all traversal results and find descendants of the target path
+  for (const result of traverseDocument(document)) {
+    // Check if this node's path starts with the target path
+    if (result.path.length > nodePath.length) {
+      let isDescendant = true;
+      for (let i = 0; i < nodePath.length; i++) {
+        if (result.path[i] !== nodePath[i]) {
+          isDescendant = false;
+          break;
+        }
+      }
+      if (isDescendant) {
+        descendants.push(result);
+      }
     }
   }
 
@@ -277,7 +272,7 @@ export function countNodes(document: CanvasDocumentType): number {
 
     // Log operation complete
     const duration = performance.now() - startTime;
-    observability.recordOperation("countNodes", duration, count);
+    observability.recordOperation("traverseDocument", duration, count);
 
     observability.log("info", "engine.operation.complete", {
       operation: "countNodes",
@@ -289,7 +284,7 @@ export function countNodes(document: CanvasDocumentType): number {
     return count;
   } catch (error) {
     const duration = performance.now() - startTime;
-    observability.recordOperation("countNodes", duration);
+    observability.recordOperation("traverseDocument", duration);
 
     observability.log("error", "engine.operation.error", {
       operation: "countNodes",

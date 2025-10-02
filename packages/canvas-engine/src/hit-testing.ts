@@ -48,38 +48,22 @@ export function hitTest(
   try {
     const { includeInvisible = false, artboardIndex } = options;
 
-    // Track the topmost hit (highest z-index)
     let bestHit: HitTestResult | null = null;
 
-    // Traverse nodes in reverse order (top to bottom in z-order)
-    const nodes = Array.from(traverseDocument(document));
-
-    // Debug: log all nodes being checked
-    if (process.env.NODE_ENV === "test") {
-      console.log(
-        `Hit-testing point (${point.x}, ${point.y}) against ${nodes.length} nodes:`
-      );
-      nodes.forEach((node, index) => {
-        const frame = getNodeFrame(node.node, node.path);
-        console.log(
-          `  ${index}: ${node.node.name} (${node.node.id}) at (${frame?.x}, ${frame?.y}, ${frame?.width}, ${frame?.height})`
-        );
-      });
-    }
+    const nodes = Array.from(
+      traverseDocument(
+        document,
+        artboardIndex !== undefined ? { artboardIndex } : undefined
+      )
+    );
 
     for (let i = nodes.length - 1; i >= 0; i--) {
       const result = nodes[i];
 
-      // Skip if artboard filtering is applied
       if (
-        artboardIndex !== undefined &&
-        result.artboardIndex !== artboardIndex
+        !includeInvisible &&
+        !isNodeVisibleInHierarchy(document, result.path)
       ) {
-        continue;
-      }
-
-      // Skip invisible nodes unless explicitly requested
-      if (!includeInvisible && !result.node.visible) {
         continue;
       }
 
@@ -90,7 +74,7 @@ export function hitTest(
           point,
           node: result.node,
         };
-        break; // Found the topmost hit
+        break;
       }
     }
 
@@ -180,11 +164,15 @@ export function hitTestRect(
     }
 
     const nodeFrame = getNodeFrame(result.node, result.path);
-    if (nodeFrame && rectsIntersect(rect, nodeFrame)) {
+    if (
+      nodeFrame &&
+      rectsIntersect(rect, nodeFrame) &&
+      (includeInvisible || isNodeVisibleInHierarchy(document, result.path))
+    ) {
       hits.push({
         nodeId: result.node.id,
         nodePath: result.path,
-        point: { x: rect.x, y: rect.y }, // Use rect origin as point
+        point: { x: rect.x, y: rect.y },
         node: result.node,
       });
     }
@@ -232,7 +220,11 @@ export function hitTestProximity(
     }
 
     const nodeFrame = getNodeFrame(result.node, result.path);
-    if (nodeFrame && pointInProximity(point, nodeFrame, maxDistance)) {
+    if (
+      nodeFrame &&
+      pointInProximity(point, nodeFrame, maxDistance) &&
+      (includeInvisible || isNodeVisibleInHierarchy(document, result.path))
+    ) {
       hits.push({
         nodeId: result.node.id,
         nodePath: result.path,
@@ -269,4 +261,67 @@ function pointInProximity(
   );
 
   return Math.sqrt(dx * dx + dy * dy) <= maxDistance;
+}
+
+function isNodeVisibleInHierarchy(
+  document: CanvasDocumentType,
+  path: NodePath
+): boolean {
+  const parts: Array<number | string> = [];
+
+  for (let i = 0; i < path.length; i++) {
+    const part = path[i];
+    parts.push(part);
+
+    if (part === "children") {
+      continue;
+    }
+
+    const current = resolvePath(document, parts);
+
+    if (!current) {
+      return false;
+    }
+
+    if (typeof current === "object" && "visible" in current) {
+      if ((current as { visible?: boolean }).visible === false) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+function resolvePath(document: CanvasDocumentType, path: NodePath): any {
+  let current: any = document;
+
+  for (const segment of path) {
+    if (segment === "children") {
+      if (current && "children" in current) {
+        current = current.children;
+      } else {
+        return undefined;
+      }
+      continue;
+    }
+
+    if (typeof segment === "number") {
+      if (Array.isArray(current)) {
+        current = current[segment];
+      } else if (current && Array.isArray(current.artboards)) {
+        current = current.artboards[segment];
+      } else {
+        return undefined;
+      }
+    } else if (typeof segment === "string") {
+      current = current?.[segment];
+    }
+
+    if (!current) {
+      return undefined;
+    }
+  }
+
+  return current;
 }
