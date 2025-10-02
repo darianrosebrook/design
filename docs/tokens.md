@@ -17,7 +17,7 @@
 }
 ```
 
-## Token Reflection (tools/pencil-watch.ts, abridged)
+## Token Reflection (tools/designer-watch.ts, abridged)
 
 > Reflect tokens → `:root` CSS vars for the app (and webview preview), and allow code→design feedback.
 

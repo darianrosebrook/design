@@ -25,7 +25,7 @@
 }
 ```
 
-## Codegen CLI (tools/pencil-generate.ts, abridged)
+## Codegen CLI (tools/designer-generate.ts, abridged)
 
 ```ts
 #!/usr/bin/env ts-node
@@ -65,7 +65,7 @@ function generate(canvasPath: string, outDir: string) {
 }
 
 const [,, canvas, out] = process.argv;
-if (!canvas || !out) { console.error('usage: pencil-generate design/home.canvas.json src/ui'); process.exit(1); }
+if (!canvas || !out) { console.error('usage: designer-generate design/home.canvas.json src/ui'); process.exit(1); }
 generate(canvas, out);
 ```
 
@@ -77,7 +77,7 @@ generate(canvas, out);
 
 1. Edit `design/home.canvas.json` with the webview (drag text, edit styles).
 2. Save → schema validated, canonicalized.
-3. Run `ts-node tools/pencil-generate.ts design/home.canvas.json src/ui`.
+3. Run `ts-node tools/designer-generate.ts design/home.canvas.json src/ui`.
 4. Import `src/ui/Hero.tsx` in app, include `src/ui/tokens.css`.
 5. Change `design/tokens.json` → watcher updates CSS vars → live style change.
 

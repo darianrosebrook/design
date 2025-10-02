@@ -33,8 +33,8 @@
 ├─ src/
 │  └─ ui/                     # generated components land here
 └─ tools/
-   ├─ pencil-generate.ts      # codegen CLI
-   └─ pencil-watch.ts         # file watcher + reflect tokens
+   ├─ designer-generate.ts      # codegen CLI
+   └─ designer-watch.ts         # file watcher + reflect tokens
 ```
 
 ## Roadmap Sketch

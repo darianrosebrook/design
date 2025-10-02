@@ -39,8 +39,8 @@
 ├─ src/
 │  └─ ui/                     # generated components land here
 └─ tools/
-   ├─ pencil-generate.ts      # codegen CLI
-   └─ pencil-watch.ts         # file watcher + reflect tokens
+   ├─ designer-generate.ts      # codegen CLI
+   └─ designer-watch.ts         # file watcher + reflect tokens
 ```
 
 ---
@@ -366,7 +366,7 @@
 
 ---
 
-## 6. Codegen CLI (tools/pencil-generate.ts, abridged)
+## 6. Codegen CLI (tools/designer-generate.ts, abridged)
 
 ```ts
 #!/usr/bin/env ts-node
@@ -406,7 +406,7 @@ function generate(canvasPath: string, outDir: string) {
 }
 
 const [,, canvas, out] = process.argv;
-if (!canvas || !out) { console.error('usage: pencil-generate design/home.canvas.json src/ui'); process.exit(1); }
+if (!canvas || !out) { console.error('usage: designer-generate design/home.canvas.json src/ui'); process.exit(1); }
 generate(canvas, out);
 ```
 
@@ -416,7 +416,7 @@ generate(canvas, out);
 
 ---
 
-## 7. Token Reflection (tools/pencil-watch.ts, abridged)
+## 7. Token Reflection (tools/designer-watch.ts, abridged)
 
 > Reflect tokens → `:root` CSS vars for the app (and webview preview), and allow code→design feedback.
 
@@ -462,8 +462,8 @@ media/webview/main.js
   "publisher": "yours",
   "version": "0.1.0",
   "engines": { "vscode": "^1.93.0" },
-  "activationEvents": ["onCommand:localPencil.open"],
-  "contributes": { "commands": [{ "command": "localPencil.open", "title": "Open Designer" }] },
+  "activationEvents": ["onCommand:@paths.design/designer.open"],
+  "contributes": { "commands": [{ "command": "@paths.design/designer.open", "title": "Open Designer" }] },
   "main": "./dist/extension.js"
 }
 ```
@@ -475,8 +475,8 @@ import * as vscode from 'vscode';
 import * as fs from 'node:fs';
 
 export function activate(ctx: vscode.ExtensionContext) {
-  ctx.subscriptions.push(vscode.commands.registerCommand('localPencil.open', ()=>{
-    const panel = vscode.window.createWebviewPanel('localPencil','Designer',{viewColumn:1},{enableScripts:true, retainContextWhenHidden:true});
+  ctx.subscriptions.push(vscode.commands.registerCommand('@paths.design/designer.open', ()=>{
+    const panel = vscode.window.createWebviewPanel('@paths.design/designer','Designer',{viewColumn:1},{enableScripts:true, retainContextWhenHidden:true});
     const html = fs.readFileSync(ctx.asAbsolutePath('media/webview/index.html'),'utf8');
     panel.webview.html = html.replace('{{cspSource}}', panel.webview.cspSource);
 
@@ -553,14 +553,14 @@ function draw(doc){
   "version": 1,
   "tools": {
     "paths-design/designer": {
-      "transport": { "stdio": { "command": "node", "args": ["tools/mcp-pencil.js"] } },
+      "transport": { "stdio": { "command": "node", "args": ["tools/mcp-designer.js"] } },
       "displayName": "Designer"
     }
   }
 }
 ```
 
-**tools/mcp-pencil.js (toy server)**
+**tools/mcp-designer.js (toy server)**
 
 ```js
 #!/usr/bin/env node
@@ -574,16 +574,16 @@ function respond(id, result){
 process.stdin.on('data', chunk=>{
   for (const line of chunk.split(/\n+/)){
     if(!line.trim()) continue; const msg = JSON.parse(line);
-    if (msg.method==='localPencil.getDoc'){
+    if (msg.method==='@paths.design/designer.getDoc'){
       const doc = JSON.parse(fs.readFileSync('design/home.canvas.json','utf8'));
       respond(msg.id, doc);
     }
-    if (msg.method==='localPencil.applyPatch'){
+    if (msg.method==='@paths.design/designer.applyPatch'){
       fs.writeFileSync('design/home.canvas.json', JSON.stringify(msg.params.doc, null, 2));
       respond(msg.id, {ok:true});
     }
-    if (msg.method==='localPencil.generate'){
-      // shell out to tools/pencil-generate.ts in real impl
+    if (msg.method==='@paths.design/designer.generate'){
+      // shell out to tools/designer-generate.ts in real impl
       respond(msg.id, {ok:true, files:['src/ui/Hero.tsx']});
     }
   }
@@ -604,7 +604,7 @@ process.stdin.on('data', chunk=>{
 
 * **Stable IDs** via ULID; new nodes get ULID at creation in webview, never regenerated.
 * **Canonical serialization**: sorted keys, newline at EOF; avoids churn.
-* **Design‑aware diff**: provide a `tools/pencil-diff.ts` that emits object‑level diff (add/remove/move/prop‑change) for PR comments.
+* **Design‑aware diff**: provide a `tools/designer-diff.ts` that emits object‑level diff (add/remove/move/prop‑change) for PR comments.
 
 ---
 
@@ -637,7 +637,7 @@ process.stdin.on('data', chunk=>{
 
 1. Edit `design/home.canvas.json` with the webview (drag text, edit styles).
 2. Save → schema validated, canonicalized.
-3. Run `ts-node tools/pencil-generate.ts design/home.canvas.json src/ui`.
+3. Run `ts-node tools/designer-generate.ts design/home.canvas.json src/ui`.
 4. Import `src/ui/Hero.tsx` in app, include `src/ui/tokens.css`.
 5. Change `design/tokens.json` → watcher updates CSS vars → live style change.
 
@@ -702,7 +702,7 @@ process.stdin.on('data', chunk=>{
 │  └─ mcp-adapter/           # optional MCP stdio bridge for Cursor
 ├─ apps/
 │  ├─ vscode-ext/            # the webview host; packs renderer + engine
-│  └─ cli/                   # pencil-generate, pencil-watch, pencil-diff
+│  └─ cli/                   # designer-generate, designer-watch, designer-diff
 ├─ .caws/                    # working specs, risk tiers
 └─ docs/                     # ADRs, non‑functional, test plans
 ```
@@ -746,7 +746,7 @@ process.stdin.on('data', chunk=>{
 
 **TE‑5 — PR visual diff**
 
-* *Change*: `pencil-diff` renders before/after thumbnails for changed nodes.
+* *Change*: `designer-diff` renders before/after thumbnails for changed nodes.
 * *Acceptance*: GitHub comment artifact shows node‑level add/remove/move/prop deltas.
 
 ---
@@ -1141,7 +1141,7 @@ export function tokensToCssVars(jsonPath: string): string {
   "name": "@paths-design/designer/cli",
   "version": "0.1.0",
   "type": "module",
-  "bin": { "pencil-generate": "dist/generate.js", "pencil-watch": "dist/watch.js" },
+  "bin": { "designer-generate": "dist/generate.js", "designer-watch": "dist/watch.js" },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/generate.ts design/home.canvas.json src/ui",
@@ -1204,8 +1204,8 @@ chokidar.watch(tokens).on('change', run);
   "type": "module",
   "main": "./dist/extension.js",
   "engines": { "vscode": "^1.93.0" },
-  "activationEvents": ["onCommand:localPencil.open"],
-  "contributes": { "commands": [{ "command": "localPencil.open", "title": "Open Designer" }] },
+  "activationEvents": ["onCommand:@paths.design/designer.open"],
+  "contributes": { "commands": [{ "command": "@paths.design/designer.open", "title": "Open Designer" }] },
   "scripts": {
     "build": "tsc -p tsconfig.json && esbuild src/webview/main.ts --bundle --outfile=media/main.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -1231,8 +1231,8 @@ chokidar.watch(tokens).on('change', run);
 import * as vscode from 'vscode';
 import * as fs from 'node:fs';
 export function activate(ctx: vscode.ExtensionContext) {
-  ctx.subscriptions.push(vscode.commands.registerCommand('localPencil.open', ()=>{
-    const panel = vscode.window.createWebviewPanel('localPencil','Designer',{viewColumn:1},{enableScripts:true, retainContextWhenHidden:true});
+  ctx.subscriptions.push(vscode.commands.registerCommand('@paths.design/designer.open', ()=>{
+    const panel = vscode.window.createWebviewPanel('@paths.design/designer','Designer',{viewColumn:1},{enableScripts:true, retainContextWhenHidden:true});
     const html = `<!doctype html><html><head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline' ${panel.webview.cspSource}; script-src ${panel.webview.cspSource};"><style>canvas{border:1px solid #333;background:#111}</style></head><body><button id="load">Load</button><canvas id="c" width="1024" height="640"></canvas><script src="${panel.webview.asWebviewUri(vscode.Uri.joinPath(ctx.extensionUri,'media','main.js'))}"></script></body></html>`;
     panel.webview.html = html;
     panel.webview.onDidReceiveMessage(async msg => {

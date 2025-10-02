@@ -20,8 +20,8 @@ media/webview/main.js
   "publisher": "yours",
   "version": "0.1.0",
   "engines": { "vscode": "^1.93.0" },
-  "activationEvents": ["onCommand:localPencil.open"],
-  "contributes": { "commands": [{ "command": "localPencil.open", "title": "Open Designer" }] },
+  "activationEvents": ["onCommand:@paths.design/designer.open"],
+  "contributes": { "commands": [{ "command": "@paths.design/designer.open", "title": "Open Designer" }] },
   "main": "./dist/extension.js"
 }
 ```
@@ -33,8 +33,8 @@ import * as vscode from 'vscode';
 import * as fs from 'node:fs';
 
 export function activate(ctx: vscode.ExtensionContext) {
-  ctx.subscriptions.push(vscode.commands.registerCommand('localPencil.open', ()=>{
-    const panel = vscode.window.createWebviewPanel('localPencil','Designer',{viewColumn:1},{enableScripts:true, retainContextWhenHidden:true});
+  ctx.subscriptions.push(vscode.commands.registerCommand('@paths.design/designer.open', ()=>{
+    const panel = vscode.window.createWebviewPanel('@paths.design/designer','Designer',{viewColumn:1},{enableScripts:true, retainContextWhenHidden:true});
     const html = fs.readFileSync(ctx.asAbsolutePath('media/webview/index.html'),'utf8');
     panel.webview.html = html.replace('{{cspSource}}', panel.webview.cspSource);
 
@@ -109,14 +109,14 @@ function draw(doc){
   "version": 1,
   "tools": {
     "paths-design/designer": {
-      "transport": { "stdio": { "command": "node", "args": ["tools/mcp-pencil.js"] } },
+      "transport": { "stdio": { "command": "node", "args": ["tools/mcp-designer.js"] } },
       "displayName": "Designer"
     }
   }
 }
 ```
 
-**tools/mcp-pencil.js (toy server)**
+**tools/mcp-designer.js (toy server)**
 
 ```js
 #!/usr/bin/env node
@@ -130,16 +130,16 @@ function respond(id, result){
 process.stdin.on('data', chunk=>{
   for (const line of chunk.split(/\n+/)){
     if(!line.trim()) continue; const msg = JSON.parse(line);
-    if (msg.method==='localPencil.getDoc'){
+    if (msg.method==='@paths.design/designer.getDoc'){
       const doc = JSON.parse(fs.readFileSync('design/home.canvas.json','utf8'));
       respond(msg.id, doc);
     }
-    if (msg.method==='localPencil.applyPatch'){
+    if (msg.method==='@paths.design/designer.applyPatch'){
       fs.writeFileSync('design/home.canvas.json', JSON.stringify(msg.params.doc, null, 2));
       respond(msg.id, {ok:true});
     }
-    if (msg.method==='localPencil.generate'){
-      // shell out to tools/pencil-generate.ts in real impl
+    if (msg.method==='@paths.design/designer.generate'){
+      // shell out to tools/designer-generate.ts in real impl
       respond(msg.id, {ok:true, files:['src/ui/Hero.tsx']});
     }
   }

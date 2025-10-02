@@ -1,0 +1,160 @@
+id: DESIGNER-001
+title: 'Design-in-IDE Tool v0.1 - Foundation & Core Architecture'
+risk_tier: 1
+mode: feature
+change_budget:
+  max_files: 40
+  max_loc: 1500
+blast_radius:
+  modules:
+    - packages/canvas-schema
+    - packages/canvas-engine
+    - packages/canvas-mcp-server
+    - packages/canvas-renderer-dom
+    - packages/codegen-react
+    - packages/tokens
+    - apps/vscode-ext
+    - apps/cli
+  data_migration: false
+operational_rollback_slo: 15m
+threats:
+  - 'Non-deterministic code generation breaks reproducibility'
+  - 'Webview security bypass allows arbitrary file system access'
+  - 'Token drift between design files and generated code'
+  - 'Merge conflicts corrupt design documents'
+  - 'Memory leaks in VS Code extension with large documents'
+  - 'MCP server path traversal vulnerability allows access outside workspace'
+scope:
+  in:
+    - packages/canvas-schema/
+    - packages/canvas-engine/
+    - packages/canvas-mcp-server
+    - packages/canvas-renderer-dom/
+    - packages/codegen-react/
+    - packages/tokens/
+    - apps/vscode-ext/
+    - apps/cli/
+    - design/
+    - .caws/
+    - docs/
+  out:
+    - examples/
+    - node_modules/
+    - dist/
+    - .vscode/
+invariants:
+  - 'All canvas documents must validate against canvas-0.1.json schema'
+  - 'Node IDs are stable ULIDs that never regenerate on save'
+  - 'Code generation is deterministic - same input produces identical bytes'
+  - 'Token references resolve consistently between design and generated CSS'
+  - 'Webview only accesses workspace files - no arbitrary filesystem access'
+  - 'All timestamps use injected clock - no Date.now() in core logic'
+  - 'Canonical JSON serialization with sorted keys and fixed spacing'
+  - 'MCP server methods are idempotent - repeated calls produce same results'
+acceptance:
+  - id: A1
+    given: 'A valid home.canvas.json with Hero frame and text nodes'
+    when: 'User opens Designer in VS Code and clicks Load'
+    then: 'Webview renders the frame and text with correct positions and styles'
+  - id: A2
+    given: 'A canvas document with token references (tokens.color.primary)'
+    when: 'Code generation runs via pencil-generate CLI'
+    then: 'Generated React component uses CSS variables (var(--color-primary))'
+  - id: A3
+    given: 'Identical canvas document processed on different machines'
+    when: 'Code generation runs with same version'
+    then: 'Output files have identical SHA-256 hashes'
+  - id: A4
+    given: 'Token values updated in design/tokens.json'
+    when: 'Token watcher detects changes'
+    then: 'CSS variables update in <16ms and preview reflects new values'
+  - id: A5
+    given: 'Canvas document with nested frame hierarchy'
+    when: 'Schema validation runs'
+    then: 'All nodes have unique ULIDs and valid frame/style properties'
+  - id: A6
+    given: 'User edits canvas document in webview'
+    when: 'Save command is triggered'
+    then: 'JSON is canonicalized (sorted keys, newline EOF) before write'
+  - id: A7
+    given: 'MCP server configured in .cursor/mcp.json'
+    when: 'Cursor sends @paths.design/designer.getDoc request'
+    then: 'Server responds with parsed home.canvas.json document'
+  - id: A8
+    given: 'Modified canvas document in Cursor agent context'
+    when: 'Agent calls @paths.design/designer.applyPatch with updated doc'
+    then: 'Server writes canonicalized JSON to workspace and responds success'
+  - id: A9
+    given: 'Canvas document ready for code generation'
+    when: 'Agent calls @paths.design/designer.generate method'
+    then: 'Server executes codegen CLI and returns generated file paths'
+non_functional:
+  a11y:
+    - 'Webview canvas has keyboard navigation for focus management'
+    - 'Generated components include semantic HTML and ARIA labels'
+    - 'Color contrast validation warns when tokens fail WCAG 4.5:1'
+    - 'Extension respects prefers-reduced-motion for animations'
+  perf:
+    api_p95_ms: 50
+    lcp_ms: 800
+    additional:
+      - 'Canvas rendering maintains 60fps for documents up to 1000 nodes'
+      - 'Code generation completes in <500ms for typical components'
+      - 'Token reflection updates CSS in <16ms'
+      - 'Extension webview initialization <1s on M1 Air'
+  security:
+    - 'Webview CSP restricts to workspace files only - no remote content'
+    - 'All file operations use VS Code workspace API with path validation'
+    - 'No eval() or Function() in codegen templates'
+    - 'Token values sanitized before CSS variable emission'
+    - 'Extension package passes vsce publish security scan'
+    - 'MCP server validates all file paths are within workspace root'
+    - 'MCP server rejects requests with invalid JSON-RPC structure'
+    - 'MCP applyPatch validates schema before write to prevent corruption'
+contracts:
+  - type: graphql
+    path: packages/canvas-schema/schemas/canvas-0.1.json
+  - type: openapi
+    path: packages/canvas-schema/schemas/tokens-0.1.json
+  - type: mcp
+    path: .cursor/mcp.json
+    methods:
+      - '@paths.design/designer.getDoc'
+      - '@paths.design/designer.applyPatch'
+      - '@paths.design/designer.generate'
+observability:
+  logs:
+    - 'canvas.load.success with document ID and node count'
+    - 'canvas.load.error with schema validation failures'
+    - 'codegen.run.complete with file paths and generation time'
+    - 'tokens.reflect.update with token count and CSS output size'
+    - 'extension.webview.error with stack traces'
+    - 'mcp.request.received with method name and request ID'
+    - 'mcp.getDoc.success with document path and size'
+    - 'mcp.applyPatch.success with file path and write duration'
+    - 'mcp.generate.complete with generated file count and paths'
+    - 'mcp.error with method name and error details'
+  metrics:
+    - 'canvas_nodes_total by document'
+    - 'codegen_duration_ms histogram'
+    - 'tokens_watch_updates_total counter'
+    - 'extension_activation_duration_ms'
+    - 'mcp_requests_total counter by method'
+    - 'mcp_request_duration_ms histogram by method'
+    - 'mcp_errors_total counter by method and error_type'
+  traces:
+    - 'canvas.render.pipeline from load to paint'
+    - 'codegen.transform from parse to emit'
+    - 'tokens.watch.flow from change to CSS write'
+    - 'mcp.request.flow from stdio receive to JSON-RPC response'
+migrations:
+  - 'Initial release - no migrations required'
+  - 'Schema versioning strategy: schemaVersion field with migration scripts'
+  - 'Breaking changes require new schema version and migration guide'
+rollback:
+  - 'Extension can be disabled in VS Code settings'
+  - 'Generated code can be manually edited if codegen fails'
+  - 'Token watcher can be stopped if CSS output is incorrect'
+  - 'Documents validate backward compatible to allow downgrades'
+  - 'MCP server can be removed from .cursor/mcp.json to disable Cursor integration'
+  - 'Canvas documents are Git-tracked enabling revert of any MCP-applied changes'

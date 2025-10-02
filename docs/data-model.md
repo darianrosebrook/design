@@ -275,7 +275,7 @@
 
 * **Stable IDs** via ULID; new nodes get ULID at creation in webview, never regenerated.
 * **Canonical serialization**: sorted keys, newline at EOF; avoids churn.
-* **Design-aware diff**: provide a `tools/pencil-diff.ts` that emits object-level diff (add/remove/move/prop-change) for PR comments.
+* **Design-aware diff**: provide a `tools/designer-diff.ts` that emits object-level diff (add/remove/move/prop-change) for PR comments.
 
 ## Performance Notes (v0)
 

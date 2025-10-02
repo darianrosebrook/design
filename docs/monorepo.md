@@ -16,7 +16,7 @@
 │  └─ mcp-adapter/           # optional MCP stdio bridge for Cursor
 ├─ apps/
 │  ├─ vscode-ext/            # the webview host; packs renderer + engine
-│  └─ cli/                   # pencil-generate, pencil-watch, pencil-diff
+│  └─ cli/                   # designer-generate, designer-watch, designer-diff
 ├─ .caws/                    # working specs, risk tiers
 └─ docs/                     # ADRs, non-functional, test plans
 ```
@@ -282,7 +282,7 @@ export function tokensToCssVars(jsonPath: string): string {
   "name": "@paths-design/designer/cli",
   "version": "0.1.0",
   "type": "module",
-  "bin": { "pencil-generate": "dist/generate.js", "pencil-watch": "dist/watch.js" },
+  "bin": { "designer-generate": "dist/generate.js", "designer-watch": "dist/watch.js" },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/generate.ts design/home.canvas.json src/ui",
@@ -343,8 +343,8 @@ chokidar.watch(tokens).on('change', run);
   "type": "module",
   "main": "./dist/extension.js",
   "engines": { "vscode": "^1.93.0" },
-  "activationEvents": ["onCommand:localPencil.open"],
-  "contributes": { "commands": [{ "command": "localPencil.open", "title": "Open Designer" }] },
+  "activationEvents": ["onCommand:@paths.design/designer.open"],
+  "contributes": { "commands": [{ "command": "@paths.design/designer.open", "title": "Open Designer" }] },
   "scripts": {
     "build": "tsc -p tsconfig.json && esbuild src/webview/main.ts --bundle --outfile=media/main.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -370,8 +370,8 @@ chokidar.watch(tokens).on('change', run);
 import * as vscode from 'vscode';
 import * as fs from 'node:fs';
 export function activate(ctx: vscode.ExtensionContext) {
-  ctx.subscriptions.push(vscode.commands.registerCommand('localPencil.open', ()=>{
-    const panel = vscode.window.createWebviewPanel('localPencil','Designer',{viewColumn:1},{enableScripts:true, retainContextWhenHidden:true});
+  ctx.subscriptions.push(vscode.commands.registerCommand('@paths.design/designer.open', ()=>{
+    const panel = vscode.window.createWebviewPanel('@paths.design/designer','Designer',{viewColumn:1},{enableScripts:true, retainContextWhenHidden:true});
     const html = `<!doctype html><html><head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline' ${panel.webview.cspSource}; script-src ${panel.webview.cspSource};"><style>canvas{border:1px solid #333;background:#111}</style></head><body><button id="load">Load</button><canvas id="c" width="1024" height="640"></canvas><script src="${panel.webview.asWebviewUri(vscode.Uri.joinPath(ctx.extensionUri,'media','main.js'))}"></script></body></html>`;
     panel.webview.html = html;
     panel.webview.onDidReceiveMessage(async msg => {
