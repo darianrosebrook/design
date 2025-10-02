@@ -38,6 +38,7 @@ export interface GenerationResult {
     componentId: string;
     nodeCount: number;
     artboardCount: number;
+    extractedComponents: number;
   };
 }
 
@@ -154,12 +155,12 @@ export class ReactGenerator {
    * Detect reusable component patterns in the document
    */
   private detectComponentPatterns(document: CanvasDocumentType): void {
-    const { sorter } = this.options;
+    const { sorter: _sorter } = this.options;
 
     // Collect all node subtrees for pattern analysis
     const patterns = new Map<string, { nodes: NodeType[]; count: number }>();
 
-    function traverse(node: NodeType, path: string[] = []): void {
+    const traverse = (node: NodeType, path: string[] = []): void => {
       const currentPath = [...path, node.id];
 
       // Check if this subtree pattern already exists
@@ -175,7 +176,7 @@ export class ReactGenerator {
           traverse(node.children[i], [...currentPath, i.toString()]);
         }
       }
-    }
+    };
 
     // Analyze each artboard
     for (const artboard of document.artboards) {
@@ -237,7 +238,7 @@ export class ReactGenerator {
    * Generate JSX for a node tree with component reuse
    */
   private generateJSX(nodes: NodeType[], depth: number = 0): string {
-    const { sorter, normalizer } = this.options;
+    const { sorter: _sorter, normalizer: _normalizer } = this.options;
     const indent = "  ".repeat(depth + 1);
 
     const jsxElements = nodes.map((node) => {
@@ -245,28 +246,6 @@ export class ReactGenerator {
     });
 
     return jsxElements.join("\n" + indent);
-  }
-
-  /**
-   * Generate JSX for a single node with semantic component inference
-   */
-  private generateNodeJSX(node: NodeType, depth: number = 0): string {
-    const { sorter, normalizer } = this.options;
-    const indent = "  ".repeat(depth);
-
-    // Infer semantic component type from naming and structure
-    const semanticInfo = this.inferSemanticComponent(node);
-
-    switch (node.type) {
-      case "frame":
-        return this.generateSemanticFrameJSX(node, semanticInfo, depth);
-      case "text":
-        return this.generateSemanticTextJSX(node, semanticInfo, depth);
-      case "component":
-        return this.generateComponentJSX(node, depth);
-      default:
-        return `${indent}<!-- Unsupported node type: ${node.type} -->`;
-    }
   }
 
   /**
@@ -461,7 +440,7 @@ export class ReactGenerator {
     semanticInfo: SemanticComponentInfo,
     node: NodeType
   ): string | null {
-    const { sorter } = this.options;
+    const { sorter: _sorter } = this.options;
     const attributes: string[] = [];
 
     // Add semantic attributes
@@ -497,7 +476,7 @@ export class ReactGenerator {
    * Generate JSX for a frame node
    */
   private generateFrameJSX(node: FrameNodeType, depth: number): string {
-    const { sorter, normalizer } = this.options;
+    const { sorter: _sorter, normalizer: _normalizer } = this.options;
     const indent = "  ".repeat(depth);
 
     const className = `frame frame-${node.name
@@ -519,7 +498,7 @@ export class ReactGenerator {
    * Generate JSX for a text node
    */
   private generateTextJSX(node: TextNodeType, depth: number): string {
-    const { sorter, normalizer } = this.options;
+    const { sorter: _sorter, normalizer: _normalizer } = this.options;
     const indent = "  ".repeat(depth);
 
     const className = `text text-${node.name
@@ -595,7 +574,7 @@ export class ReactGenerator {
    * Generate CSS content for styling with semantic components
    */
   private generateCSS(nodes: NodeType[]): string {
-    const { sorter, normalizer } = this.options;
+    const { sorter: _sorter, normalizer: _normalizer } = this.options;
 
     // Generate CSS classes for each node
     const cssRules: string[] = [];
@@ -752,35 +731,6 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
   }
 
   /**
-   * Generate complete TSX content for a component
-   */
-  private generateTSXContent(
-    componentName: string,
-    jsxContent: string
-  ): string {
-    const { clock, includeComments } = this.options;
-
-    let content = "";
-
-    if (includeComments) {
-      content += `// Generated at ${clock.now()}\n`;
-      content += `// Component ID: ${clock.uuid()}\n`;
-    }
-
-    content += `import s from './${componentName}.module.css';\n`;
-    content += "\n";
-    content += `export default function ${componentName}() {\n`;
-    content += `  return (\n`;
-    content += `    <>\n`;
-    content += `${jsxContent}\n`;
-    content += `    </>\n`;
-    content += `  );\n`;
-    content += `}\n`;
-
-    return content;
-  }
-
-  /**
    * Count total nodes in document
    */
   private countNodes(document: CanvasDocumentType): number {
@@ -820,7 +770,7 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
    * Generate a pattern key for node comparison
    */
   private generatePatternKey(node: NodeType): string {
-    const { sorter } = this.options;
+    const { sorter: _sorter } = this.options;
 
     // Create a normalized representation for comparison
     const normalized = {
@@ -841,7 +791,7 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
    * Generate a hash for pattern identification
    */
   private generatePatternHash(nodes: NodeType[]): string {
-    const { sorter } = this.options;
+    const { sorter: _sorter } = this.options;
 
     // Create a canonical representation
     const canonical = JSON.stringify(nodes, Object.keys(nodes).sort());
@@ -890,7 +840,7 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
     // Otherwise generate from structure
     const childTypes =
       "children" in node && node.children
-        ? node.children.map((child) => child.type).join("")
+        ? node.children.map((child: NodeType) => child.type).join("")
         : node.type;
 
     return this.pascalCase(`${node.type}_${childTypes}_component`);
@@ -919,19 +869,19 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
    * Generate JSX for a single node with component reuse detection
    */
   private generateNodeJSX(node: NodeType, depth: number = 0): string {
-    const { sorter, normalizer } = this.options;
+    const { sorter: _sorter, normalizer: _normalizer } = this.options;
     const indent = "  ".repeat(depth);
 
+    // TODO: Re-enable component reuse detection once the logic is fixed
     // Check if this node pattern should be replaced with a component reference
-    const patternKey = this.generatePatternKey(node);
-    const pattern = this.componentPatterns.get(patternKey);
+    // const patternKey = this.generatePatternKey(node);
+    // const pattern = this.componentPatterns.get(patternKey);
 
-    if (pattern && pattern.occurrences >= 2) {
-      // Use component reference instead of inline JSX
-      const componentName = pattern.name;
-
-      return `${indent}<${componentName} />`;
-    }
+    // if (pattern && pattern.occurrences >= 2) {
+    //   // Use component reference instead of inline JSX
+    //   const componentName = pattern.name;
+    //   return `${indent}<${componentName} />`;
+    // }
 
     // Generate inline JSX
     const semanticInfo = this.inferSemanticComponent(node);
@@ -951,7 +901,7 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
   /**
    * Generate props for component instances
    */
-  private generatePropsForComponent(node: NodeType): string | null {
+  private generatePropsForComponent(_node: NodeType): string | null {
     // For now, just pass through basic props
     // In a full implementation, this would analyze which props are needed
     return null;

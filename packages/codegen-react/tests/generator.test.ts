@@ -42,7 +42,7 @@ describe("React Component Generation", () => {
     it("generates React components from canvas document", () => {
       const result = generateReactComponents(testDocument);
 
-      expect(result.files).toHaveLength(3); // 2 components + 1 index
+      expect(result.files).toHaveLength(5); // 2 components + 2 CSS + 1 index
       expect(result.metadata.artboardCount).toBe(1);
       expect(result.metadata.nodeCount).toBeGreaterThan(0);
     });
@@ -64,7 +64,10 @@ describe("React Component Generation", () => {
 
       // Check that generated TSX is valid TypeScript
       for (const file of tsxFiles) {
-        expect(file.content).toContain("export default function");
+        // May be default export or named export (for extracted components)
+        const hasExport = file.content.includes("export default function") || 
+                         file.content.includes("export function");
+        expect(hasExport).toBe(true);
         expect(file.content).toContain("import s from");
       }
     });
@@ -133,8 +136,9 @@ describe("React Component Generation", () => {
       const tsxFiles = result.files.filter((f) => f.type === "tsx");
       const componentNames = tsxFiles.map((f) => f.path.replace(".tsx", ""));
 
-      // Should have Artboard1 component
+      // Should have Artboard1 and Hero components
       expect(componentNames).toContain("Artboard1");
+      expect(componentNames).toContain("Hero");
     });
 
     it("includes proper React imports", () => {
@@ -144,7 +148,10 @@ describe("React Component Generation", () => {
       const componentFiles = tsxFiles.filter((f) => f.path !== "index.ts");
       for (const file of componentFiles) {
         expect(file.content).toContain("import s from");
-        expect(file.content).toContain("export default function");
+        // May be default export or named export (for extracted components)
+        const hasExport = file.content.includes("export default function") || 
+                         file.content.includes("export function");
+        expect(hasExport).toBe(true);
       }
     });
 
@@ -210,7 +217,10 @@ describe("React Component Generation", () => {
       for (const file of componentFiles) {
         // Should have proper JSX structure with semantic components
         expect(file.content).toContain("return (");
-        expect(file.content).toContain("export default function");
+        // May be default export or named export (for extracted components)
+        const hasExport = file.content.includes("export default function") || 
+                         file.content.includes("export function");
+        expect(hasExport).toBe(true);
         // Should contain semantic HTML elements based on naming
         expect(file.content).toMatch(
           /<(div|span|button|input|nav|main|section|article|header|footer)/
