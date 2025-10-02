@@ -1,4 +1,24 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+coverage/
+
+# IDE
+.vscode-test/
+.vscode/.tsbuildinfo
+.DS_Store
+
+# Examples (generated/temporary)
 examples/
-.agent/
-.caws/
-caws/
+
+# CAWS configuration (tracked)
+# Note: .caws/ and .agent/ are tracked for provenance
+# But we exclude temporary/generated files:
+.agent/temp/
+.agent/cache/
+
+# Generated files
+src/ui/*.generated.*
+*.log
