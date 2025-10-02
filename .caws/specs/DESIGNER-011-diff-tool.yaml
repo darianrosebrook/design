@@ -1,0 +1,80 @@
+id: DESIGNER-011
+title: 'Semantic Diff Tool for Canvas Documents'
+risk_tier: 3
+mode: feature
+change_budget:
+  max_files: 15
+  max_loc: 700
+blast_radius:
+  modules:
+    - packages/diff-visualizer
+  data_migration: false
+operational_rollback_slo: 5m
+threats:
+  - 'Diff algorithm misses important changes'
+  - 'Performance poor for large documents'
+  - 'Visual diff output unclear'
+  - 'Merge conflicts not detected'
+scope:
+  in:
+    - packages/diff-visualizer/
+    - packages/diff-visualizer/src/
+    - packages/diff-visualizer/tests/
+  out:
+    - apps/cli/
+invariants:
+  - 'Diff algorithm is deterministic'
+  - 'All node changes detected (add/remove/modify/move)'
+  - 'Diff completes in <1s for typical documents'
+  - 'Output format is Git-diff compatible'
+  - 'Visual diff shows before/after thumbnails'
+acceptance:
+  - id: A1
+    given: 'Two canvas documents with different node positions'
+    when: 'Diff algorithm runs'
+    then: 'Identifies moved nodes with old and new positions'
+  - id: A2
+    given: 'Node property changed in second document'
+    when: 'Diff runs'
+    then: 'Shows property-level change with old and new values'
+  - id: A3
+    given: 'Merge conflict with same node modified in both branches'
+    when: 'Conflict detector runs'
+    then: 'Identifies conflict with both changes shown'
+  - id: A4
+    given: 'Two 500-node documents'
+    when: 'Diff algorithm runs'
+    then: 'Completes in <1s and shows all changes'
+  - id: A5
+    given: 'Diff output piped to Git'
+    when: 'Git processes diff'
+    then: 'Git understands format and shows in PR'
+  - id: A6
+    given: 'Visual diff requested'
+    when: 'Renderer generates thumbnails'
+    then: 'Before/after images show node changes clearly'
+non_functional:
+  a11y: []
+  perf:
+    diff_ms: 1000
+    additional:
+      - 'Memory usage <100MB for large diffs'
+      - 'Algorithm O(n log n) for n nodes'
+  security: []
+contracts:
+  - type: graphql
+    path: packages/diff-visualizer/src/types.ts
+observability:
+  logs:
+    - 'diff.compute.start with document sizes'
+    - 'diff.compute.complete with changes found'
+  metrics:
+    - 'diff_duration_ms histogram'
+    - 'diff_changes_total counter by type'
+  traces:
+    - 'diff.pipeline from inputs to output'
+migrations:
+  - 'Initial release - no migrations required'
+rollback:
+  - 'Can use standard Git diff if semantic diff fails'
+

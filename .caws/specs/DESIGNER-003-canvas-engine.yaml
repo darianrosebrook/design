@@ -1,0 +1,96 @@
+id: DESIGNER-003
+title: 'Canvas Engine - Scene Graph Operations'
+risk_tier: 1
+mode: feature
+change_budget:
+  max_files: 35
+  max_loc: 1500
+blast_radius:
+  modules:
+    - packages/canvas-engine
+  data_migration: false
+operational_rollback_slo: 30m
+threats:
+  - 'Mutation breaks immutability guarantees'
+  - 'Tree operations have O(n²) complexity'
+  - 'Memory leaks with large documents'
+  - 'Hit testing fails for nested/transformed nodes'
+  - 'JSON Patch operations corrupt document structure'
+scope:
+  in:
+    - packages/canvas-engine/
+    - packages/canvas-engine/src/
+    - packages/canvas-engine/tests/
+  out:
+    - packages/canvas-renderer-dom/
+    - packages/codegen-react/
+    - apps/vscode-ext/
+invariants:
+  - 'All operations are pure functions that return new documents'
+  - 'Node IDs remain stable across all operations'
+  - 'Tree structure maintains parent-child consistency'
+  - 'Operations are composable and associative where applicable'
+  - 'No operation modifies input document in-place'
+  - 'findById always returns same node for same ID across operations'
+acceptance:
+  - id: A1
+    given: 'A canvas document with 100 nodes'
+    when: 'findById is called for a leaf node'
+    then: 'Returns node in O(n) time with correct parent reference'
+  - id: A2
+    given: 'A node with children'
+    when: 'deleteNode is called'
+    then: 'Returns new document without node and updates parent children array'
+  - id: A3
+    given: 'A canvas document'
+    when: 'updateNode changes a property'
+    then: 'Returns new document with changed node, original unchanged'
+  - id: A4
+    given: 'Two overlapping frame nodes'
+    when: 'hit test at point inside both'
+    then: 'Returns topmost node based on z-order'
+  - id: A5
+    given: 'A sequence of JSON Patch operations'
+    when: 'Applied via applyPatch'
+    then: 'Results in correct document state, reversible with inverse patches'
+  - id: A6
+    given: '1000 operations on a 500-node document'
+    when: 'Performance profiled'
+    then: 'All operations complete in <1000ms total, no memory leaks'
+non_functional:
+  a11y: []
+  perf:
+    operation_ms: 5
+    traversal_ms: 10
+    additional:
+      - 'findById O(n) worst case for n nodes'
+      - 'updateNode O(1) for property change + O(log n) structural sharing'
+      - 'Hit testing O(n) where n is visible nodes'
+      - 'Memory usage <10MB for 1000-node documents'
+  security:
+    - 'No arbitrary code execution in operations'
+    - 'JSON Patch operations validate against schema'
+    - 'Operations cannot escape document boundaries'
+  contracts:
+  - type: graphql
+    path: packages/canvas-engine/src/types.ts
+  - type: graphql
+    path: packages/canvas-schema/schemas/canvas-0.1.json
+observability:
+  logs:
+    - 'engine.operation.complete with operation type and node count'
+    - 'engine.operation.error with operation details'
+    - 'engine.hit_test.result with coordinates and found node'
+  metrics:
+    - 'engine_operations_total counter by operation type'
+    - 'engine_operation_duration_ms histogram by type'
+    - 'engine_document_nodes_total gauge'
+  traces:
+    - 'engine.operation.pipeline from input to output'
+    - 'engine.traversal.walk for tree operations'
+migrations:
+  - 'Initial release - no migrations required'
+rollback:
+  - 'Engine operations are pure - no side effects to rollback'
+  - 'Can revert to previous document state via undo/redo'
+

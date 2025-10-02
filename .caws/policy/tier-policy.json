@@ -36,6 +36,10 @@
       "packages": [
         "packages/canvas-renderer-dom",
         "packages/tokens",
+        "packages/canvas-mcp-server",
+        "packages/diff-visualizer",
+        "packages/component-discovery",
+        "packages/svg-import",
         "apps/vscode-ext"
       ],
       "additional_gates": {
@@ -85,6 +89,26 @@
         "p50": 500,
         "p95": 1000,
         "p99": 2000
+      },
+      "component_discovery_ms": {
+        "p50": 1000,
+        "p95": 5000,
+        "p99": 10000
+      },
+      "svg_import_ms": {
+        "p50": 100,
+        "p95": 500,
+        "p99": 1000
+      },
+      "mcp_request_duration_ms": {
+        "p50": 50,
+        "p95": 200,
+        "p99": 500
+      },
+      "diff_generation_ms": {
+        "p50": 100,
+        "p95": 500,
+        "p99": 1000
       }
     },
     "accessibility": {

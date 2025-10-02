@@ -1,0 +1,95 @@
+id: DESIGNER-009
+title: 'SVG Import & Conversion to Canvas Nodes'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 20
+  max_loc: 900
+blast_radius:
+  modules:
+    - packages/svg-import
+  data_migration: false
+operational_rollback_slo: 15m
+threats:
+  - 'SVG parsing fails for valid SVG files'
+  - 'Conversion loses fidelity for complex paths'
+  - 'Token matching produces incorrect results'
+  - 'Large SVG files cause performance issues'
+  - 'Malicious SVG causes security issues'
+scope:
+  in:
+    - packages/svg-import/
+    - packages/svg-import/src/
+    - packages/svg-import/tests/
+  out:
+    - packages/canvas-engine/
+    - apps/vscode-ext/
+invariants:
+  - 'SVG parsing validates against security policy'
+  - 'Converted nodes validate against canvas schema'
+  - 'Import completes in <2s for typical SVG files'
+  - 'Token matching is deterministic and reproducible'
+  - 'Unsupported SVG features reported to user'
+acceptance:
+  - id: A1
+    given: 'Simple SVG with paths and fills'
+    when: 'SVG import runs'
+    then: 'Creates VectorNode with correct path data and fills'
+  - id: A2
+    given: 'SVG with fill color matching a design token'
+    when: 'Token matcher runs'
+    then: 'Suggests token binding with confidence score'
+  - id: A3
+    given: 'SVG with unsupported features (filters, masks)'
+    when: 'Import runs'
+    then: 'Imports supported features, warns about unsupported'
+  - id: A4
+    given: 'SVG with nested groups'
+    when: 'Conversion runs'
+    then: 'Creates GroupNode hierarchy preserving structure'
+  - id: A5
+    given: 'Large SVG file (5MB, 10000 paths)'
+    when: 'Import runs with progress tracking'
+    then: 'Completes successfully with user feedback'
+  - id: A6
+    given: 'Malicious SVG with billion laughs attack'
+    when: 'Parser validates'
+    then: 'Rejects SVG with security warning'
+non_functional:
+  a11y: []
+  perf:
+    import_ms: 2000
+    token_match_ms: 100
+    additional:
+      - 'Memory usage <100MB for large SVG files'
+      - 'Parsing uses streaming for large files'
+      - 'Path optimization reduces node count by 30%'
+  security:
+    - 'SVG parser validates against XXE attacks'
+    - 'File size limits enforced (10MB max)'
+    - 'External resource loading disabled'
+    - 'Script elements rejected'
+contracts:
+  - type: graphql
+    path: packages/svg-import/src/types.ts
+  - type: graphql
+    path: packages/canvas-schema/schemas/canvas-0.1.json
+observability:
+  logs:
+    - 'svg.import.start with file size'
+    - 'svg.import.complete with nodes created'
+    - 'svg.import.warning with unsupported features'
+    - 'svg.import.error with parse failure'
+  metrics:
+    - 'svg_import_duration_ms histogram'
+    - 'svg_nodes_created_total counter'
+    - 'svg_unsupported_features_total counter by feature'
+  traces:
+    - 'svg.import.pipeline from file to nodes'
+    - 'svg.tokenMatch for color matching'
+migrations:
+  - 'Initial release - no migrations required'
+rollback:
+  - 'Can manually create vector nodes if import fails'
+  - 'Import can be disabled via feature flag'
+

@@ -1,0 +1,89 @@
+id: DESIGNER-010
+title: 'CLI Tools - Generate, Watch, Validate'
+risk_tier: 3
+mode: feature
+change_budget:
+  max_files: 15
+  max_loc: 600
+blast_radius:
+  modules:
+    - apps/cli
+  data_migration: false
+operational_rollback_slo: 5m
+threats:
+  - 'CLI commands fail with unclear error messages'
+  - 'Watch mode has memory leaks'
+  - 'Generated files overwrite user changes'
+  - 'CLI performance poor for large projects'
+scope:
+  in:
+    - apps/cli/
+    - apps/cli/src/
+    - apps/cli/tests/
+  out:
+    - packages/codegen-react/
+    - packages/tokens/
+invariants:
+  - 'CLI commands exit with appropriate status codes'
+  - 'Error messages are clear and actionable'
+  - 'Watch mode can run for 24+ hours without leaks'
+  - 'Generated files have warnings about auto-generation'
+  - 'CLI arguments validated before execution'
+acceptance:
+  - id: A1
+    given: 'Valid canvas document'
+    when: 'pencil-generate runs'
+    then: 'Generates React component and CSS Module files'
+  - id: A2
+    given: 'Token file is modified'
+    when: 'pencil-watch:tokens is running'
+    then: 'CSS variables update within 16ms'
+  - id: A3
+    given: 'Invalid canvas document'
+    when: 'pencil-validate runs'
+    then: 'Exits with code 1 and clear validation errors'
+  - id: A4
+    given: 'CLI command with missing required argument'
+    when: 'Command runs'
+    then: 'Shows usage help and exits with code 1'
+  - id: A5
+    given: 'Watch mode running for 24 hours'
+    when: 'Memory profiled'
+    then: 'Memory usage stable, no leaks detected'
+  - id: A6
+    given: 'Project with 100 canvas files'
+    when: 'Batch generate runs'
+    then: 'All files processed with progress indicator'
+non_functional:
+  a11y: []
+  perf:
+    cli_startup_ms: 500
+    generate_ms: 1000
+    additional:
+      - 'Watch mode debounces file changes to 100ms'
+      - 'Memory usage <50MB for watch mode'
+      - 'Batch operations parallelized'
+  security:
+    - 'CLI validates all file paths'
+    - 'No arbitrary code execution'
+    - 'Workspace boundary enforced'
+contracts:
+  - type: graphql
+    path: apps/cli/src/types.ts
+observability:
+  logs:
+    - 'cli.command.start with command and args'
+    - 'cli.command.complete with duration'
+    - 'cli.command.error with failure details'
+  metrics:
+    - 'cli_commands_total counter by command'
+    - 'cli_duration_ms histogram by command'
+    - 'cli_errors_total counter by error type'
+  traces:
+    - 'cli.command.pipeline from parse to execute'
+migrations:
+  - 'Initial release - no migrations required'
+rollback:
+  - 'CLI tools can be run manually via npm scripts'
+  - 'Watch mode can be stopped and restarted'
+

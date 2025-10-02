@@ -1,0 +1,89 @@
+id: DESIGNER-012
+title: 'Cursor MCP Integration Adapter'
+risk_tier: 3
+mode: feature
+change_budget:
+  max_files: 15
+  max_loc: 600
+blast_radius:
+  modules:
+    - packages/mcp-adapter
+  data_migration: false
+operational_rollback_slo: 5m
+threats:
+  - 'MCP protocol incompatibility with Cursor'
+  - 'Security vulnerability in MCP server'
+  - 'Performance issues with large messages'
+  - 'MCP conflicts with VS Code extension'
+scope:
+  in:
+    - packages/mcp-adapter/
+    - packages/mcp-adapter/src/
+    - packages/mcp-adapter/tests/
+  out:
+    - apps/vscode-ext/
+invariants:
+  - 'MCP server only accesses workspace files'
+  - 'All messages validated with Zod schemas'
+  - 'MCP operations are idempotent where applicable'
+  - 'Server can handle 100+ requests/second'
+  - 'MCP and extension can coexist without conflicts'
+acceptance:
+  - id: A1
+    given: 'Cursor sends getDoc MCP request'
+    when: 'MCP server receives request'
+    then: 'Returns canvas document from workspace'
+  - id: A2
+    given: 'MCP applyPatch request'
+    when: 'Server validates and applies patch'
+    then: 'Document updated and change saved to file'
+  - id: A3
+    given: 'Invalid MCP message'
+    when: 'Server validates message'
+    then: 'Rejects with error response per JSON-RPC spec'
+  - id: A4
+    given: '100 rapid MCP requests'
+    when: 'Server processes queue'
+    then: 'All requests handled without errors or slowdown'
+  - id: A5
+    given: 'Both MCP and extension running'
+    when: 'File is modified'
+    then: 'Both receive update without conflicts'
+  - id: A6
+    given: 'MCP generate command'
+    when: 'Codegen runs via MCP'
+    then: 'Files generated and paths returned to Cursor'
+non_functional:
+  a11y: []
+  perf:
+    request_ms: 50
+    additional:
+      - 'Message serialization/deserialization <5ms'
+      - 'Memory usage <50MB for MCP server'
+      - 'Server starts in <500ms'
+  security:
+    - 'MCP server validates all request parameters'
+    - 'File operations restricted to workspace'
+    - 'No arbitrary code execution via MCP'
+contracts:
+  - type: graphql
+    path: packages/mcp-adapter/src/protocol.ts
+observability:
+  logs:
+    - 'mcp.server.start with protocol version'
+    - 'mcp.request.received with method'
+    - 'mcp.request.complete with duration'
+    - 'mcp.error with failure details'
+  metrics:
+    - 'mcp_requests_total counter by method'
+    - 'mcp_request_duration_ms histogram'
+    - 'mcp_errors_total counter by error type'
+  traces:
+    - 'mcp.request.pipeline from receive to response'
+migrations:
+  - 'Initial release - no migrations required'
+  - 'Protocol versioning for future changes'
+rollback:
+  - 'MCP adapter can be disabled'
+  - 'Cursor can fall back to file-based workflow'
+

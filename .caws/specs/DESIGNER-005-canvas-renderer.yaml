@@ -1,0 +1,96 @@
+id: DESIGNER-005
+title: 'Canvas Renderer - DOM/2D Rendering Engine'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 25
+  max_loc: 1000
+blast_radius:
+  modules:
+    - packages/canvas-renderer-dom
+  data_migration: false
+operational_rollback_slo: 15m
+threats:
+  - 'Rendering performance degrades with large documents'
+  - 'Memory leaks from unreleased canvas contexts'
+  - 'Incorrect rendering of nested/transformed nodes'
+  - 'Accessibility features missing from rendered output'
+  - 'High-DPI displays render incorrectly'
+scope:
+  in:
+    - packages/canvas-renderer-dom/
+    - packages/canvas-renderer-dom/src/
+    - packages/canvas-renderer-dom/tests/
+  out:
+    - apps/vscode-ext/
+invariants:
+  - 'Rendering maintains 60fps for documents up to 500 nodes'
+  - 'Dirty tracking only re-renders changed subtrees'
+  - 'Canvas context released on unmount'
+  - 'Render output matches design coordinates exactly'
+  - 'High-DPI displays scale correctly with devicePixelRatio'
+acceptance:
+  - id: A1
+    given: 'A canvas document with 100 nodes'
+    when: 'Renderer draws to canvas'
+    then: 'All nodes render in correct positions within 16ms'
+  - id: A2
+    given: 'A node property changes'
+    when: 'Renderer updates'
+    then: 'Only affected node and ancestors re-render (dirty tracking)'
+  - id: A3
+    given: 'Nested frames with relative positioning'
+    when: 'Renderer calculates layout'
+    then: 'Child coordinates relative to parent frame'
+  - id: A4
+    given: 'Text node with custom font and size'
+    when: 'Renderer draws text'
+    then: 'Text appears with correct font, size, and baseline'
+  - id: A5
+    given: 'Renderer on Retina display (2x DPI)'
+    when: 'Canvas is drawn'
+    then: 'Rendering is crisp without blur or pixelation'
+  - id: A6
+    given: '500 rapid pointer move events'
+    when: 'Renderer processes events'
+    then: 'Maintains 60fps with throttling'
+non_functional:
+  a11y:
+    - 'Renderer provides accessibility tree for screen readers'
+    - 'Keyboard focus visible on canvas elements'
+    - 'Text content readable by assistive technology'
+  perf:
+    render_frame_ms: 16
+    initial_render_ms: 100
+    additional:
+      - 'Dirty tracking reduces re-renders by 90% for small changes'
+      - 'Memory usage <50MB for 500-node document'
+      - 'GC pauses <10ms p95'
+  security:
+    - 'Canvas rendering sandboxed in webview'
+    - 'No arbitrary code execution from node data'
+    - 'Image sources validated before rendering'
+contracts:
+  - type: graphql
+    path: packages/canvas-renderer-dom/src/types.ts
+  - type: graphql
+    path: packages/canvas-schema/schemas/canvas-0.1.json
+observability:
+  logs:
+    - 'renderer.render.start with node count'
+    - 'renderer.render.complete with duration and nodes drawn'
+    - 'renderer.render.error with failure reason'
+  metrics:
+    - 'renderer_frame_duration_ms histogram'
+    - 'renderer_nodes_drawn_total counter'
+    - 'renderer_dirty_nodes_total counter'
+    - 'renderer_fps gauge'
+  traces:
+    - 'renderer.frame.pipeline from layout to paint'
+    - 'renderer.hit_test for interaction'
+migrations:
+  - 'Initial release - no migrations required'
+rollback:
+  - 'Can fall back to simple list view if rendering fails'
+  - 'Renderer can be disabled via feature flag'
+

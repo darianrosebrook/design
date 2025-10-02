@@ -1,0 +1,97 @@
+id: DESIGNER-006
+title: 'Design Token System & CSS Variable Reflection'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 20
+  max_loc: 800
+blast_radius:
+  modules:
+    - packages/tokens
+  data_migration: false
+operational_rollback_slo: 15m
+threats:
+  - 'Token drift between design files and generated CSS'
+  - 'Token reference resolution fails for nested tokens'
+  - 'CSS variable naming conflicts'
+  - 'Token watcher performance degrades with large token files'
+  - 'Circular token references cause infinite loops'
+scope:
+  in:
+    - packages/tokens/
+    - packages/tokens/src/
+    - packages/tokens/tests/
+  out:
+    - packages/codegen-react/
+    - apps/cli/
+invariants:
+  - 'Token references resolve consistently to CSS variables'
+  - 'Token values updated in CSS within 16ms of file change'
+  - 'CSS variable names follow --{category}-{name} convention'
+  - 'Token references are validated before code generation'
+  - 'Circular references detected and rejected'
+acceptance:
+  - id: A1
+    given: 'Token file with tokens.color.primary = "#4F46E5"'
+    when: 'CSS variable emitter runs'
+    then: 'Output contains --color-primary: #4F46E5'
+  - id: A2
+    given: 'Token reference tokens.color.button.primary → tokens.color.primary'
+    when: 'Reference resolver runs'
+    then: 'Resolves to final color value transitively'
+  - id: A3
+    given: 'Token file updated with new color value'
+    when: 'File watcher detects change'
+    then: 'CSS variables update within 16ms'
+  - id: A4
+    given: 'Circular reference tokens.a → tokens.b → tokens.a'
+    when: 'Token parser runs'
+    then: 'Throws validation error with cycle path'
+  - id: A5
+    given: 'Token with special characters in name'
+    when: 'CSS variable name generated'
+    then: 'Special characters sanitized to valid CSS'
+  - id: A6
+    given: 'Design uses token.color.primary'
+    when: 'Code generation runs'
+    then: 'Generated CSS uses var(--color-primary)'
+non_functional:
+  a11y: []
+  perf:
+    token_parse_ms: 50
+    css_emit_ms: 16
+    additional:
+      - 'Token watcher debounces updates to 16ms'
+      - 'Reference resolution O(n) for n tokens'
+      - 'Memory usage <5MB for 1000 tokens'
+  security:
+    - 'Token values sanitized before CSS emission'
+    - 'No code injection via token names or values'
+    - 'Token file parsing validates against schema'
+contracts:
+  - type: graphql
+    path: packages/tokens/src/types.ts
+  - type: graphql
+    path: packages/tokens/schemas/tokens-0.1.json
+observability:
+  logs:
+    - 'tokens.parse.complete with token count'
+    - 'tokens.parse.error with validation failures'
+    - 'tokens.emit.complete with CSS output size'
+    - 'tokens.watch.update with changed tokens'
+  metrics:
+    - 'tokens_parse_duration_ms histogram'
+    - 'tokens_total gauge'
+    - 'tokens_watch_updates_total counter'
+    - 'tokens_references_resolved_total counter'
+  traces:
+    - 'tokens.parse.pipeline from file to tokens'
+    - 'tokens.resolve.references for resolution'
+    - 'tokens.emit.css for variable generation'
+migrations:
+  - 'Initial release - no migrations required'
+  - 'Token schema versioned with migration guide'
+rollback:
+  - 'Can disable token watcher if causing issues'
+  - 'Can manually write CSS variables as fallback'
+

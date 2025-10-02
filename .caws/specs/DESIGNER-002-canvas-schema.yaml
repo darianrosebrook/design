@@ -1,0 +1,97 @@
+id: DESIGNER-002
+title: 'Canvas Schema & Validation System'
+risk_tier: 1
+mode: feature
+change_budget:
+  max_files: 20
+  max_loc: 800
+blast_radius:
+  modules:
+    - packages/tokens
+  data_migration: false
+operational_rollback_slo: 15m
+threats:
+  - 'Token drift between design files and generated CSS'
+  - 'Token reference resolution fails for nested tokens'
+  - 'CSS variable naming conflicts'
+  - 'Token watcher performance degrades with large token files'
+  - 'Circular token references cause infinite loops'
+scope:
+  in:
+    - packages/canvas-schema/
+    - packages/canvas-schema/src/
+    - packages/canvas-schema/schemas/
+    - packages/canvas-schema/tests/
+  out:
+    - packages/canvas-engine/
+    - packages/codegen-react/
+    - apps/vscode-ext/
+invariants:
+  - 'All canvas documents must validate against canvas-0.1.json schema'
+  - 'ULIDs are 26 characters, lexicographically sortable, and collision-resistant'
+  - 'Schema validation is deterministic across Node versions and OSes'
+  - 'Canonical JSON serialization produces identical output for identical input'
+  - 'Schema versioning is backward compatible within major version'
+  - 'Node IDs never regenerate on serialization/deserialization'
+acceptance:
+  - id: A1
+    given: 'A valid canvas document with all required fields'
+    when: 'Schema validation runs with Ajv'
+    then: 'Validation passes and returns parsed document'
+  - id: A2
+    given: 'An invalid canvas document missing required fields'
+    when: 'Schema validation runs'
+    then: 'Validation fails with clear error messages for each violation'
+  - id: A3
+    given: 'A new node without an ID'
+    when: 'ULID generator is called'
+    then: 'Returns a unique 26-character ULID that never repeats'
+  - id: A4
+    given: 'A canvas document with unsorted keys'
+    when: 'Canonical serializer runs'
+    then: 'Output has sorted keys, fixed spacing, and newline at EOF'
+  - id: A5
+    given: 'Identical canvas document serialized on macOS and Linux'
+    when: 'Canonical serializer runs on both platforms'
+    then: 'SHA-256 hashes of output files are identical'
+  - id: A6
+    given: 'A 1000-node canvas document'
+    when: 'Schema validation runs'
+    then: 'Validation completes in <100ms'
+non_functional:
+  a11y: []
+  perf:
+    validation_ms: 100
+    serialization_ms: 50
+    additional:
+      - 'Schema validation scales linearly with document size'
+      - 'ULID generation <1ms per call'
+      - 'Canonical serialization preserves all data'
+  security:
+    - 'Schema validation prevents prototype pollution'
+    - 'ULID generation uses crypto-secure random'
+    - 'No eval() or Function() in schema code'
+    - 'Validation errors don't leak sensitive data'
+contracts:
+  - type: graphql
+    path: packages/canvas-schema/schemas/canvas-0.1.json
+observability:
+  logs:
+    - 'schema.validate.success with document ID'
+    - 'schema.validate.error with validation failures'
+    - 'schema.serialize.complete with size in bytes'
+  metrics:
+    - 'schema_validation_duration_ms histogram'
+    - 'schema_validation_errors_total counter by error type'
+    - 'ulid_generation_total counter'
+  traces:
+    - 'schema.validation.pipeline from parse to validate'
+    - 'schema.serialization.pipeline from input to output'
+migrations:
+  - 'Initial release - no migrations required'
+  - 'Future schema versions will provide migration utilities'
+rollback:
+  - 'Schema validation can be disabled with feature flag'
+  - 'Documents store schemaVersion for backward compatibility'
+  - 'Old schema versions can read newer documents (within major version)'
+

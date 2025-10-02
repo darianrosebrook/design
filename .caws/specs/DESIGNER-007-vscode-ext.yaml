@@ -1,0 +1,104 @@
+id: DESIGNER-007
+title: 'VS Code Extension - Designer Webview Host'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 30
+  max_loc: 1200
+blast_radius:
+  modules:
+    - apps/vscode-ext
+  data_migration: false
+operational_rollback_slo: 5m
+threats:
+  - 'Security vulnerability allows arbitrary filesystem access'
+  - 'Extension crashes VS Code'
+  - 'Webview message validation failures'
+  - 'Memory leaks from retained webview contexts'
+  - 'Extension activation time too slow'
+scope:
+  in:
+    - apps/vscode-ext/
+    - apps/vscode-ext/src/
+    - apps/vscode-ext/media/
+    - apps/vscode-ext/tests/
+  out:
+    - packages/canvas-renderer-dom/
+    - packages/canvas-engine/
+invariants:
+  - 'Extension only accesses workspace files via VS Code API'
+  - 'All webview messages validated with Zod schemas'
+  - 'CSP restricts webview to workspace content only'
+  - 'Extension activates in <1000ms'
+  - 'Webview contexts released on panel close'
+acceptance:
+  - id: A1
+    given: 'User opens Designer command'
+    when: 'Extension activates'
+    then: 'Webview panel opens in <1000ms'
+  - id: A2
+    given: 'Webview sends loadDoc message'
+    when: 'Extension receives message'
+    then: 'Validates message, loads file from workspace, sends to webview'
+  - id: A3
+    given: 'Webview requests file outside workspace'
+    when: 'Path validation runs'
+    then: 'Request rejected with security error'
+  - id: A4
+    given: 'Malformed message from webview'
+    when: 'Message validation runs'
+    then: 'Message rejected, error logged, webview notified'
+  - id: A5
+    given: 'User closes webview panel'
+    when: 'Cleanup runs'
+    then: 'All event listeners removed, context released'
+  - id: A6
+    given: 'Large canvas file (5MB)'
+    when: 'Extension loads file'
+    then: 'File loads successfully with progress indicator'
+non_functional:
+  a11y:
+    - 'Extension commands keyboard accessible'
+    - 'Webview content screen reader compatible'
+    - 'Focus management between editor and webview'
+  perf:
+    activation_ms: 1000
+    file_load_ms: 500
+    additional:
+      - 'Message roundtrip <50ms p95'
+      - 'Memory usage <100MB for typical use'
+      - 'No memory leaks over 8-hour session'
+  security:
+    - 'CSP enforces strict content policy'
+    - 'All file paths validated against workspace'
+    - 'No eval() or arbitrary code execution'
+    - 'Webview messages validated with Zod'
+    - 'Extension passes vsce security scan'
+contracts:
+  - type: graphql
+    path: apps/vscode-ext/src/types.ts
+  - type: graphql
+    path: apps/vscode-ext/src/protocol.ts
+observability:
+  logs:
+    - 'extension.activate.complete with duration'
+    - 'extension.command.execute with command name'
+    - 'extension.webview.message with type and validation result'
+    - 'extension.error with error details'
+  metrics:
+    - 'extension_activation_duration_ms histogram'
+    - 'extension_commands_total counter by command'
+    - 'extension_messages_total counter by type'
+    - 'extension_errors_total counter by type'
+  traces:
+    - 'extension.activate.pipeline'
+    - 'extension.message.roundtrip from webview to response'
+    - 'extension.file.operation from request to completion'
+migrations:
+  - 'Initial release - no migrations required'
+  - 'Extension settings versioned'
+rollback:
+  - 'Extension can be disabled in VS Code settings'
+  - 'Can revert to previous version via VSIX'
+  - 'Workspace files unaffected by extension issues'
+

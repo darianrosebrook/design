@@ -1,0 +1,95 @@
+id: DESIGNER-008
+title: 'React Component Discovery & Indexing'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 25
+  max_loc: 1000
+blast_radius:
+  modules:
+    - packages/component-discovery
+  data_migration: false
+operational_rollback_slo: 15m
+threats:
+  - 'Component discovery misses valid components'
+  - 'Prop extraction fails for complex TypeScript types'
+  - 'Component index becomes stale'
+  - 'Performance degrades with large component libraries'
+  - 'Third-party components not discovered'
+scope:
+  in:
+    - packages/component-discovery/
+    - packages/component-discovery/src/
+    - packages/component-discovery/tests/
+  out:
+    - apps/vscode-ext/
+    - packages/codegen-react/
+invariants:
+  - 'Component index stays synchronized with filesystem'
+  - 'Prop schemas extracted match runtime prop types'
+  - 'Component discovery completes in <5s for 1000 components'
+  - 'Index format is versioned and backward compatible'
+  - 'Watcher detects component file changes within 100ms'
+acceptance:
+  - id: A1
+    given: 'Project with 50 React components'
+    when: 'Component scanner runs'
+    then: 'All components discovered and indexed'
+  - id: A2
+    given: 'Component with complex prop types (unions, generics)'
+    when: 'Prop extractor runs'
+    then: 'Prop schema accurately reflects TypeScript types'
+  - id: A3
+    given: 'Component file is modified'
+    when: 'File watcher detects change'
+    then: 'Index updates within 100ms'
+  - id: A4
+    given: 'Third-party component library in node_modules'
+    when: 'Discovery runs with allowlist'
+    then: 'Third-party components included in index'
+  - id: A5
+    given: 'Component with JSDoc annotations'
+    when: 'Metadata extracted'
+    then: 'Annotations included in component index'
+  - id: A6
+    given: '1000 components in monorepo'
+    when: 'Full scan runs'
+    then: 'Completes in <5s, index generated correctly'
+non_functional:
+  a11y: []
+  perf:
+    discovery_ms: 5000
+    extraction_ms: 50
+    additional:
+      - 'Incremental updates O(1) per file change'
+      - 'Full scan parallelized across CPU cores'
+      - 'Memory usage <200MB during full scan'
+  security:
+    - 'Component discovery restricted to workspace'
+    - 'No arbitrary code execution during extraction'
+    - 'Third-party components opt-in only'
+contracts:
+  - type: graphql
+    path: packages/component-discovery/src/types.ts
+  - type: graphql
+    path: design/components.index.json
+observability:
+  logs:
+    - 'discovery.scan.start with component count target'
+    - 'discovery.scan.complete with components found'
+    - 'discovery.extract.error with file and reason'
+    - 'discovery.watch.update with changed components'
+  metrics:
+    - 'discovery_scan_duration_ms histogram'
+    - 'discovery_components_total gauge'
+    - 'discovery_errors_total counter by error type'
+  traces:
+    - 'discovery.scan.pipeline from filesystem to index'
+    - 'discovery.extract.component for metadata extraction'
+migrations:
+  - 'Initial release - no migrations required'
+  - 'Index format versioned for future changes'
+rollback:
+  - 'Can disable discovery and use manual component list'
+  - 'Index can be rebuilt from scratch if corrupted'
+

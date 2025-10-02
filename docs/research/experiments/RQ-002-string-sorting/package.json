@@ -1,0 +1,12 @@
+{
+  "name": "rq-002-string-sorting",
+  "version": "1.0.0",
+  "description": "**Research Question**: What sorting algorithm guarantees cross-platform stability for object keys and ensures deterministic string output?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

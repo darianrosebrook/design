@@ -1,0 +1,15 @@
+{
+  "name": "rq-001-clock-injection",
+  "version": "1.0.0",
+  "description": "**Research Question**: How do we inject a deterministic clock into the code generation system to ensure identical output across runs and machines?",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ulidx": "^2.4.1"
+  }
+}

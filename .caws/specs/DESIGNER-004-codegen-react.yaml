@@ -1,0 +1,93 @@
+id: DESIGNER-004
+title: 'Deterministic React Code Generation'
+risk_tier: 1
+mode: feature
+change_budget:
+  max_files: 40
+  max_loc: 1500
+blast_radius:
+  modules:
+    - packages/codegen-react
+  data_migration: false
+operational_rollback_slo: 15m
+threats:
+  - 'Non-deterministic output breaks reproducibility'
+  - 'Generated code has security vulnerabilities (XSS)'
+  - 'Template injection allows arbitrary code execution'
+  - 'Generated code fails linting or type checking'
+  - 'Memory leaks with large or complex documents'
+scope:
+  in:
+    - packages/codegen-react/
+    - packages/codegen-react/src/
+    - packages/codegen-react/tests/
+    - packages/codegen-react/templates/
+  out:
+    - packages/canvas-renderer-dom/
+    - apps/vscode-ext/
+invariants:
+  - 'Code generation is deterministic - same input produces identical bytes'
+  - 'All timestamps use injected clock - no Date.now() in core logic'
+  - 'Canonical JSON serialization with sorted keys and fixed spacing'
+  - 'Generated React components are valid JSX'
+  - 'CSS variables are properly scoped and named'
+  - 'Template variables are properly escaped'
+acceptance:
+  - id: A1
+    given: 'A canvas document with Hero frame and text nodes'
+    when: 'Code generation runs via designer-generate CLI'
+    then: 'Generates valid React component and CSS module'
+  - id: A2
+    given: 'Canvas document with token references in styles'
+    when: 'Code generation runs'
+    then: 'Generated CSS uses CSS variables (var(--color-primary))'
+  - id: A3
+    given: 'Identical canvas document processed on different machines'
+    when: 'Code generation runs with same version'
+    then: 'Output files have identical SHA-256 hashes'
+  - id: A4
+    given: 'Canvas document with nested frame hierarchy'
+    when: 'Code generation runs'
+    then: 'Generates properly nested React component structure'
+  - id: A5
+    given: 'Canvas document with invalid node structure'
+    when: 'Code generation runs'
+    then: 'Fails gracefully with clear error messages'
+  - id: A6
+    given: 'Large canvas document (100+ nodes)'
+    when: 'Code generation runs'
+    then: 'Completes in <1000ms without memory issues'
+non_functional:
+  a11y: []
+  perf:
+    codegen_ms: 500
+    additional:
+      - 'Code generation completes in <500ms for typical components'
+      - 'Template compilation cached between runs'
+      - 'Memory usage <50MB for complex documents'
+  security:
+    - 'No eval() or Function() in codegen templates'
+    - 'Template variables are properly escaped'
+    - 'Generated code follows security best practices'
+contracts:
+  - type: graphql
+    path: packages/canvas-schema/schemas/canvas-0.1.json
+observability:
+  logs:
+    - 'codegen.run.start with document ID and target'
+    - 'codegen.run.complete with file paths and generation time'
+    - 'codegen.run.error with error details'
+  metrics:
+    - 'codegen_duration_ms histogram'
+    - 'codegen_files_generated_total counter'
+    - 'codegen_errors_total counter by error_type'
+  traces:
+    - 'codegen.transform from parse to emit'
+    - 'codegen.write from generate to file'
+migrations:
+  - 'Initial release - no migrations required'
+  - 'Token schema versioned with migration guide'
+rollback:
+  - 'Can disable token watcher if causing issues'
+  - 'Can manually write CSS variables as fallback'
+

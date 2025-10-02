@@ -1,0 +1,43 @@
+{
+  "name": "@paths-design/codegen-react",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Deterministic React component generation from Designer canvas documents",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "pencil-generate": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:golden": "node dist/test-golden.js",
+    "lint": "eslint src --max-warnings 0",
+    "lint:fix": "eslint src --fix"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "typescript": "^5.6.2",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "@paths-design/canvas-engine": "file:../canvas-engine",
+    "@paths-design/canvas-schema": "file:../canvas-schema",
+    "ulidx": "^2.4.1"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "keywords": [
+    "designer",
+    "codegen",
+    "react",
+    "typescript",
+    "deterministic"
+  ]
+}

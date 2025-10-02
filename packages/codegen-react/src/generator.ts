@@ -1,0 +1,1018 @@
+/**
+ * @fileoverview Core React component generation engine
+ * @author @darianrosebrook
+ */
+
+import type {
+  CanvasDocumentType,
+  NodeType,
+  FrameNodeType,
+  TextNodeType,
+  ComponentInstanceNodeType} from "@paths-design/canvas-schema";
+import {
+  CanvasDocument,
+  ULIDType,
+} from "@paths-design/canvas-schema";
+import type {
+  CodeGenOptions} from "./determinism.js";
+import {
+  Clock,
+  CanonicalSorter,
+  PrecisionNormalizer,
+  mergeCodeGenOptions,
+} from "./determinism.js";
+
+/**
+ * Generated file information
+ */
+export interface GeneratedFile {
+  path: string;
+  content: string;
+  type: "tsx" | "ts" | "css";
+}
+
+/**
+ * Generation result
+ */
+export interface GenerationResult {
+  files: GeneratedFile[];
+  metadata: {
+    timestamp: number;
+    componentId: string;
+    nodeCount: number;
+    artboardCount: number;
+  };
+}
+
+/**
+ * Semantic component inference result
+ */
+interface SemanticComponentInfo {
+  tagName: string;
+  className: string;
+  attributes: Record<string, string>;
+  role?: string;
+  ariaLabel?: string;
+}
+
+/**
+ * Component reuse pattern detection result
+ */
+interface ComponentPattern {
+  id: string;
+  name: string;
+  nodes: NodeType[];
+  occurrences: number;
+  hash: string;
+}
+
+/**
+ * React component generator with deterministic output and component reuse
+ */
+export class ReactGenerator {
+  private options: ReturnType<typeof mergeCodeGenOptions>;
+  private componentPatterns: Map<string, ComponentPattern> = new Map();
+  private extractedComponents: Map<string, GeneratedFile> = new Map();
+
+  constructor(options: CodeGenOptions = {}) {
+    this.options = mergeCodeGenOptions(options);
+  }
+
+  /**
+   * Generate React components from a canvas document with component reuse
+   */
+  generate(document: CanvasDocumentType): GenerationResult {
+    const files: GeneratedFile[] = [];
+    const { clock, sorter, normalizer } = this.options;
+
+    // Clear previous patterns
+    this.componentPatterns.clear();
+    this.extractedComponents.clear();
+
+    // First pass: detect reusable component patterns
+    this.detectComponentPatterns(document);
+
+    // Extract reusable components
+    this.extractReusableComponents();
+
+    // Generate component for each artboard (now using extracted components)
+    for (const artboard of document.artboards) {
+      const componentResult = this.generateComponentForArtboard(artboard);
+      if (componentResult) {
+        files.push(...componentResult);
+      }
+    }
+
+    // Add extracted reusable components
+    files.push(...this.extractedComponents.values());
+
+    // Generate index file
+    const indexFile = this.generateIndexFile(document);
+    if (indexFile) {
+      files.push(indexFile);
+    }
+
+    return {
+      files,
+      metadata: {
+        timestamp: clock.now(),
+        componentId: clock.uuid(),
+        nodeCount: this.countNodes(document),
+        artboardCount: document.artboards.length,
+        extractedComponents: this.extractedComponents.size,
+      },
+    };
+  }
+
+  /**
+   * Generate React component for a single artboard
+   */
+  private generateComponentForArtboard(artboard: any): GeneratedFile[] {
+    const files: GeneratedFile[] = [];
+    const { clock, sorter, normalizer } = this.options;
+
+    // Generate main component
+    const componentName = this.pascalCase(artboard.name);
+    const jsxContent = this.generateJSX(artboard.children);
+    const tsxContent = this.generateTSXContent(componentName, jsxContent);
+
+    files.push({
+      path: `${componentName}.tsx`,
+      content: tsxContent,
+      type: "tsx",
+    });
+
+    // Generate CSS module
+    const cssContent = this.generateCSS(artboard.children);
+    files.push({
+      path: `${componentName}.module.css`,
+      content: cssContent,
+      type: "css",
+    });
+
+    return files;
+  }
+
+  /**
+   * Detect reusable component patterns in the document
+   */
+  private detectComponentPatterns(document: CanvasDocumentType): void {
+    const { sorter } = this.options;
+
+    // Collect all node subtrees for pattern analysis
+    const patterns = new Map<string, { nodes: NodeType[]; count: number }>();
+
+    function traverse(node: NodeType, path: string[] = []): void {
+      const currentPath = [...path, node.id];
+
+      // Check if this subtree pattern already exists
+      const patternKey = this.generatePatternKey(node);
+      if (!patterns.has(patternKey)) {
+        patterns.set(patternKey, { nodes: [node], count: 0 });
+      }
+      patterns.get(patternKey)!.count++;
+
+      // Recurse into children
+      if ("children" in node && node.children) {
+        for (let i = 0; i < node.children.length; i++) {
+          traverse(node.children[i], [...currentPath, i.toString()]);
+        }
+      }
+    }
+
+    // Analyze each artboard
+    for (const artboard of document.artboards) {
+      if (artboard.children) {
+        for (const child of artboard.children) {
+          traverse(child);
+        }
+      }
+    }
+
+    // Filter patterns that appear multiple times (reuse candidates)
+    for (const [key, pattern] of patterns) {
+      if (pattern.count >= 2 && this.isWorthExtracting(pattern.nodes)) {
+        const componentName = this.generateComponentName(pattern.nodes[0]);
+        this.componentPatterns.set(key, {
+          id: key,
+          name: componentName,
+          nodes: pattern.nodes,
+          occurrences: pattern.count,
+          hash: this.generatePatternHash(pattern.nodes),
+        });
+      }
+    }
+  }
+
+  /**
+   * Extract reusable components from detected patterns
+   */
+  private extractReusableComponents(): void {
+    for (const [patternId, pattern] of this.componentPatterns) {
+      const componentName = pattern.name;
+      const jsxContent = this.generateJSX(pattern.nodes, 1);
+
+      // Generate component file
+      const tsxContent = this.generateTSXContent(componentName, jsxContent, true);
+      const cssContent = this.generateCSS(pattern.nodes);
+
+      // Add component file
+      this.extractedComponents.set(`${componentName}.tsx`, {
+        path: `${componentName}.tsx`,
+        content: tsxContent,
+        type: "tsx",
+      });
+
+      // Add CSS file
+      this.extractedComponents.set(`${componentName}.module.css`, {
+        path: `${componentName}.module.css`,
+        content: cssContent,
+        type: "css",
+      });
+    }
+  }
+
+  /**
+   * Generate JSX for a node tree with component reuse
+   */
+  private generateJSX(nodes: NodeType[], depth: number = 0): string {
+    const { sorter, normalizer } = this.options;
+    const indent = "  ".repeat(depth + 1);
+
+    const jsxElements = nodes.map((node) => {
+      return this.generateNodeJSX(node, depth + 1);
+    });
+
+    return jsxElements.join("\n" + indent);
+  }
+
+  /**
+   * Generate JSX for a single node with semantic component inference
+   */
+  private generateNodeJSX(node: NodeType, depth: number = 0): string {
+    const { sorter, normalizer } = this.options;
+    const indent = "  ".repeat(depth);
+
+    // Infer semantic component type from naming and structure
+    const semanticInfo = this.inferSemanticComponent(node);
+
+    switch (node.type) {
+      case "frame":
+        return this.generateSemanticFrameJSX(node, semanticInfo, depth);
+      case "text":
+        return this.generateSemanticTextJSX(node, semanticInfo, depth);
+      case "component":
+        return this.generateComponentJSX(node, depth);
+      default:
+        return `${indent}<!-- Unsupported node type: ${node.type} -->`;
+    }
+  }
+
+  /**
+   * Infer semantic component type from node properties
+   */
+  private inferSemanticComponent(node: NodeType): SemanticComponentInfo {
+    const name = node.name.toLowerCase();
+    const hasChildren =
+      "children" in node && node.children && node.children.length > 0;
+    const style = node.style || {};
+
+    // Pattern-based inference
+    if (name.includes("button") || name.includes("btn")) {
+      return {
+        tagName: "button",
+        className: "button",
+        attributes: { type: "button" },
+        role: "button",
+        ariaLabel: name,
+      };
+    }
+
+    if (
+      name.includes("input") ||
+      name.includes("field") ||
+      name.includes("textbox")
+    ) {
+      return {
+        tagName: "input",
+        className: "input",
+        attributes: { type: "text" },
+        role: "textbox",
+        ariaLabel: name,
+      };
+    }
+
+    if (
+      name.includes("link") ||
+      name.includes("anchor") ||
+      name.includes("url")
+    ) {
+      return {
+        tagName: "a",
+        className: "link",
+        attributes: { href: "#" }, // Default href, should be overridden by props
+        role: "link",
+      };
+    }
+
+    if (name.includes("card") || name.includes("panel")) {
+      return {
+        tagName: "article",
+        className: "card",
+        attributes: {},
+        role: "article",
+      };
+    }
+
+    if (name.includes("nav") || name.includes("menu")) {
+      return {
+        tagName: "nav",
+        className: "navigation",
+        attributes: {},
+        role: "navigation",
+      };
+    }
+
+    if (name.includes("header") || name.includes("banner")) {
+      return {
+        tagName: "header",
+        className: "header",
+        attributes: {},
+        role: "banner",
+      };
+    }
+
+    if (name.includes("footer")) {
+      return {
+        tagName: "footer",
+        className: "footer",
+        attributes: {},
+        role: "contentinfo",
+      };
+    }
+
+    if (name.includes("main") || name.includes("content")) {
+      return {
+        tagName: "main",
+        className: "main",
+        attributes: {},
+        role: "main",
+      };
+    }
+
+    if (name.includes("section") || name.includes("container")) {
+      return {
+        tagName: "section",
+        className: "section",
+        attributes: {},
+      };
+    }
+
+    // Layout-based inference
+    if (node.type === "frame" && hasChildren && node.layout?.mode === "flex") {
+      if (node.layout.direction === "row") {
+        return {
+          tagName: "div",
+          className: "flex-row",
+          attributes: {},
+        };
+      }
+      if (node.layout.direction === "column") {
+        return {
+          tagName: "div",
+          className: "flex-column",
+          attributes: {},
+        };
+      }
+    }
+
+    // Default fallback
+    return {
+      tagName: node.type === "frame" ? "div" : "span",
+      className: node.type === "frame" ? "frame" : "text",
+      attributes: {},
+    };
+  }
+
+  /**
+   * Generate JSX for a frame node with semantic components
+   */
+  private generateSemanticFrameJSX(
+    node: FrameNodeType,
+    semanticInfo: SemanticComponentInfo,
+    depth: number
+  ): string {
+    const { sorter, normalizer } = this.options;
+    const indent = "  ".repeat(depth);
+
+    const className = `${semanticInfo.className} ${
+      semanticInfo.className
+    }-${node.name.toLowerCase().replace(/\s+/g, "-")}`;
+    const style = this.generateStyleObject(node);
+    const attributes = this.generateAttributes(semanticInfo, node);
+
+    const childrenJSX =
+      node.children.length > 0
+        ? "\n" + this.generateJSX(node.children, depth) + "\n" + indent
+        : "";
+
+    const jsxTag = `<${semanticInfo.tagName}${
+      attributes ? ` ${attributes}` : ""
+    }${
+      style ? ` style={${JSON.stringify(style)}}` : ""
+    } className={s.${className.replace(/-/g, "_")}}`;
+
+    return `${indent}${jsxTag}>${childrenJSX}${indent}</${semanticInfo.tagName}>`;
+  }
+
+  /**
+   * Generate JSX for a text node with semantic components
+   */
+  private generateSemanticTextJSX(
+    node: TextNodeType,
+    semanticInfo: SemanticComponentInfo,
+    depth: number
+  ): string {
+    const { sorter, normalizer } = this.options;
+    const indent = "  ".repeat(depth);
+
+    const className = `${semanticInfo.className} ${
+      semanticInfo.className
+    }-${node.name.toLowerCase().replace(/\s+/g, "-")}`;
+    const style = this.generateStyleObject(node);
+    const attributes = this.generateAttributes(semanticInfo, node);
+
+    const jsxTag = `<${semanticInfo.tagName}${
+      attributes ? ` ${attributes}` : ""
+    }${
+      style ? ` style={${JSON.stringify(style)}}` : ""
+    } className={s.${className.replace(/-/g, "_")}}`;
+
+    return `${indent}${jsxTag}>${this.escapeText(node.text)}</${
+      semanticInfo.tagName
+    }>`;
+  }
+
+  /**
+   * Generate HTML attributes from semantic info and node data
+   */
+  private generateAttributes(
+    semanticInfo: SemanticComponentInfo,
+    node: NodeType
+  ): string | null {
+    const { sorter } = this.options;
+    const attributes: string[] = [];
+
+    // Add semantic attributes
+    if (semanticInfo.role) {
+      attributes.push(`role="${semanticInfo.role}"`);
+    }
+    if (semanticInfo.ariaLabel) {
+      attributes.push(`aria-label="${semanticInfo.ariaLabel}"`);
+    }
+
+    // Add node-specific attributes
+    Object.entries(semanticInfo.attributes).forEach(([key, value]) => {
+      attributes.push(`${key}="${value}"`);
+    });
+
+    // Add data attributes for debugging
+    if (node.data) {
+      Object.entries(node.data).forEach(([key, value]) => {
+        if (
+          typeof value === "string" ||
+          typeof value === "number" ||
+          typeof value === "boolean"
+        ) {
+          attributes.push(`data-${key}="${value}"`);
+        }
+      });
+    }
+
+    return attributes.length > 0 ? attributes.join(" ") : null;
+  }
+
+  /**
+   * Generate JSX for a frame node
+   */
+  private generateFrameJSX(node: FrameNodeType, depth: number): string {
+    const { sorter, normalizer } = this.options;
+    const indent = "  ".repeat(depth);
+
+    const className = `frame frame-${node.name
+      .toLowerCase()
+      .replace(/\s+/g, "-")}`;
+    const style = this.generateStyleObject(node);
+
+    const childrenJSX =
+      node.children.length > 0
+        ? "\n" + this.generateJSX(node.children, depth) + "\n" + indent
+        : "";
+
+    return `${indent}<div className={s.${className.replace(/-/g, "_")}}${
+      style ? ` style={${JSON.stringify(style)}}` : ""
+    }>${childrenJSX}${indent}</div>`;
+  }
+
+  /**
+   * Generate JSX for a text node
+   */
+  private generateTextJSX(node: TextNodeType, depth: number): string {
+    const { sorter, normalizer } = this.options;
+    const indent = "  ".repeat(depth);
+
+    const className = `text text-${node.name
+      .toLowerCase()
+      .replace(/\s+/g, "-")}`;
+    const style = this.generateStyleObject(node);
+
+    return `${indent}<span className={s.${className.replace(/-/g, "_")}}${
+      style ? ` style={${JSON.stringify(style)}}` : ""
+    }>${this.escapeText(node.text)}</span>`;
+  }
+
+  /**
+   * Generate JSX for a component instance node
+   */
+  private generateComponentJSX(
+    node: ComponentInstanceNodeType,
+    depth: number
+  ): string {
+    const { sorter, normalizer } = this.options;
+    const indent = "  ".repeat(depth);
+
+    const componentName = this.pascalCase(node.componentKey);
+    const props = this.generatePropsObject(node.props);
+
+    return `${indent}<${componentName}${props ? ` ${props}` : ""} />`;
+  }
+
+  /**
+   * Generate style object from node style
+   */
+  private generateStyleObject(node: NodeType): Record<string, string> | null {
+    if (!node.style) {return null;}
+
+    const style: Record<string, string> = {};
+
+    // Convert design tokens and styles to CSS properties
+    // This is a simplified implementation - a full version would handle
+    // token resolution, gradients, shadows, etc.
+
+    return style;
+  }
+
+  /**
+   * Generate props object for component instances
+   */
+  private generatePropsObject(props: Record<string, any>): string | null {
+    if (!props || Object.keys(props).length === 0) {return null;}
+
+    const { sorter } = this.options;
+    const sortedProps = sorter.sortObjectKeys(props);
+
+    const propStrings = Object.entries(sortedProps)
+      .map(([key, value]) => {
+        if (typeof value === "string") {
+          return `${key}="${value}"`;
+        } else if (typeof value === "boolean") {
+          return value ? key : "";
+        } else {
+          return `${key}={${JSON.stringify(value)}}`;
+        }
+      })
+      .filter(Boolean);
+
+    return propStrings.join(" ");
+  }
+
+  /**
+   * Generate CSS content for styling with semantic components
+   */
+  private generateCSS(nodes: NodeType[]): string {
+    const { sorter, normalizer } = this.options;
+
+    // Generate CSS classes for each node
+    const cssRules: string[] = [];
+
+    for (const node of nodes) {
+      const semanticInfo = this.inferSemanticComponent(node);
+      const baseClassName = semanticInfo.className;
+      const specificClassName = `${baseClassName}-${node.name
+        .toLowerCase()
+        .replace(/\s+/g, "-")}`;
+      const cssClassName = specificClassName.replace(/-/g, "_");
+
+      // Generate CSS for frames
+      if (node.type === "frame" && node.frame) {
+        const frame = node.frame;
+        cssRules.push(`.${cssClassName} {`);
+        cssRules.push(`  position: absolute;`);
+        cssRules.push(`  left: ${normalizer.normalizeCoordinate(frame.x)}px;`);
+        cssRules.push(`  top: ${normalizer.normalizeCoordinate(frame.y)}px;`);
+        cssRules.push(
+          `  width: ${normalizer.normalizeDimension(frame.width)}px;`
+        );
+        cssRules.push(
+          `  height: ${normalizer.normalizeDimension(frame.height)}px;`
+        );
+
+        // Add semantic styling based on component type
+        if (semanticInfo.tagName === "button") {
+          cssRules.push(`  cursor: pointer;`);
+          cssRules.push(`  border: none;`);
+          cssRules.push(`  background: transparent;`);
+          cssRules.push(`  padding: 8px 16px;`);
+          cssRules.push(`  border-radius: 4px;`);
+        }
+
+        if (semanticInfo.tagName === "input") {
+          cssRules.push(`  border: 1px solid #ccc;`);
+          cssRules.push(`  padding: 8px 12px;`);
+          cssRules.push(`  border-radius: 4px;`);
+        }
+
+        if (node.layout) {
+          if (node.layout.mode === "flex") {
+            cssRules.push(`  display: flex;`);
+            cssRules.push(
+              `  flex-direction: ${node.layout.direction || "row"};`
+            );
+            if (node.layout.gap) {
+              cssRules.push(
+                `  gap: ${normalizer.normalizeDimension(node.layout.gap)}px;`
+              );
+            }
+            if (node.layout.padding) {
+              cssRules.push(
+                `  padding: ${normalizer.normalizeDimension(
+                  node.layout.padding
+                )}px;`
+              );
+            }
+          }
+        }
+
+        cssRules.push(`}`);
+
+        // Generate base semantic component styles
+        const baseCssClassName = baseClassName.replace(/-/g, "_");
+        if (!cssRules.some((rule) => rule.includes(`.${baseCssClassName} {`))) {
+          cssRules.push(`.${baseCssClassName} {`);
+          if (semanticInfo.tagName === "button") {
+            cssRules.push(`  cursor: pointer;`);
+            cssRules.push(`  border: none;`);
+            cssRules.push(`  background: transparent;`);
+            cssRules.push(`  padding: 8px 16px;`);
+            cssRules.push(`  border-radius: 4px;`);
+            cssRules.push(`  transition: background-color 0.2s;`);
+          }
+          if (semanticInfo.tagName === "input") {
+            cssRules.push(`  border: 1px solid #ccc;`);
+            cssRules.push(`  padding: 8px 12px;`);
+            cssRules.push(`  border-radius: 4px;`);
+            cssRules.push(`  outline: none;`);
+          }
+          cssRules.push(`}`);
+        }
+      }
+
+      // Generate CSS for text nodes
+      if (node.type === "text") {
+        const textClassName = `text-${node.name
+          .toLowerCase()
+          .replace(/\s+/g, "-")}`;
+        const cssTextClassName = textClassName.replace(/-/g, "_");
+
+        cssRules.push(`.${cssTextClassName} {`);
+        if (node.textStyle) {
+          if (node.textStyle.family) {
+            cssRules.push(`  font-family: ${node.textStyle.family};`);
+          }
+          if (node.textStyle.size) {
+            cssRules.push(
+              `  font-size: ${normalizer.normalizeDimension(
+                node.textStyle.size
+              )}px;`
+            );
+          }
+          if (node.textStyle.weight) {
+            cssRules.push(`  font-weight: ${node.textStyle.weight};`);
+          }
+          if (node.textStyle.color) {
+            cssRules.push(`  color: ${node.textStyle.color};`);
+          }
+        }
+        cssRules.push(`}`);
+      }
+    }
+
+    return cssRules.join("\n");
+  }
+
+  /**
+   * Generate index file that exports all components
+   */
+  private generateIndexFile(
+    document: CanvasDocumentType
+  ): GeneratedFile | null {
+    const { clock } = this.options;
+
+    const componentNames = document.artboards.map((artboard) =>
+      this.pascalCase(artboard.name)
+    );
+
+    if (componentNames.length === 0) {return null;}
+
+    const exports = componentNames
+      .map((name) => `export { default as ${name} } from './${name}';`)
+      .join("\n");
+
+    const content = `// Generated at ${clock.now()}
+// Component exports for ${document.name}
+
+${exports}
+
+export const components = {
+${componentNames.map((name) => `  ${name}`).join(",\n")}
+};`;
+
+    return {
+      path: "index.ts",
+      content,
+      type: "tsx",
+    };
+  }
+
+  /**
+   * Generate complete TSX content for a component
+   */
+  private generateTSXContent(
+    componentName: string,
+    jsxContent: string
+  ): string {
+    const { clock, includeComments } = this.options;
+
+    let content = "";
+
+    if (includeComments) {
+      content += `// Generated at ${clock.now()}\n`;
+      content += `// Component ID: ${clock.uuid()}\n`;
+    }
+
+    content += `import s from './${componentName}.module.css';\n`;
+    content += "\n";
+    content += `export default function ${componentName}() {\n`;
+    content += `  return (\n`;
+    content += `    <>\n`;
+    content += `${jsxContent}\n`;
+    content += `    </>\n`;
+    content += `  );\n`;
+    content += `}\n`;
+
+    return content;
+  }
+
+  /**
+   * Count total nodes in document
+   */
+  private countNodes(document: CanvasDocumentType): number {
+    let count = 0;
+
+    function traverse(node: NodeType) {
+      count++;
+      if ("children" in node && node.children) {
+        for (const child of node.children) {
+          traverse(child);
+        }
+      }
+    }
+
+    for (const artboard of document.artboards) {
+      if (artboard.children) {
+        for (const child of artboard.children) {
+          traverse(child);
+        }
+      }
+    }
+
+    return count;
+  }
+
+  /**
+   * Convert string to PascalCase
+   */
+  private pascalCase(str: string): string {
+    return str
+      .split(/[-_\s]+/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join("");
+  }
+
+  /**
+   * Generate a pattern key for node comparison
+   */
+  private generatePatternKey(node: NodeType): string {
+    const { sorter } = this.options;
+
+    // Create a normalized representation for comparison
+    const normalized = {
+      type: node.type,
+      name: node.name,
+      hasChildren: "children" in node && node.children && node.children.length > 0,
+      childCount: "children" in node ? node.children?.length || 0 : 0,
+      layout: "layout" in node ? node.layout : undefined,
+      text: "text" in node ? node.text : undefined,
+      componentKey: "componentKey" in node ? node.componentKey : undefined,
+    };
+
+    return this.generatePatternHash([normalized]);
+  }
+
+  /**
+   * Generate a hash for pattern identification
+   */
+  private generatePatternHash(nodes: NodeType[]): string {
+    const { sorter } = this.options;
+
+    // Create a canonical representation
+    const canonical = JSON.stringify(nodes, Object.keys(nodes).sort());
+    return this.simpleHash(canonical);
+  }
+
+  /**
+   * Simple hash function for pattern identification
+   */
+  private simpleHash(str: string): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash).toString(36);
+  }
+
+  /**
+   * Determine if a pattern is worth extracting as a component
+   */
+  private isWorthExtracting(nodes: NodeType[]): boolean {
+    // Extract if:
+    // 1. Has meaningful children (> 1 node)
+    // 2. Is not too simple (single text node)
+    // 3. Has semantic meaning (non-generic naming)
+
+    const totalNodes = this.countNodesInArray(nodes);
+    const hasChildren = nodes.some(node => "children" in node && node.children && node.children.length > 0);
+
+    return totalNodes > 1 && hasChildren;
+  }
+
+  /**
+   * Generate a component name from node structure
+   */
+  private generateComponentName(node: NodeType): string {
+    // Use node name if it's descriptive
+    if (node.name && !node.name.match(/^(frame|group|node)\d*$/i)) {
+      return this.pascalCase(node.name);
+    }
+
+    // Otherwise generate from structure
+    const childTypes = "children" in node && node.children
+      ? node.children.map(child => child.type).join("")
+      : node.type;
+
+    return this.pascalCase(`${node.type}_${childTypes}_component`);
+  }
+
+  /**
+   * Count nodes in an array (including children)
+   */
+  private countNodesInArray(nodes: NodeType[]): number {
+    let count = 0;
+
+    function countRecursive(nodeList: NodeType[]) {
+      for (const node of nodeList) {
+        count++;
+        if ("children" in node && node.children) {
+          countRecursive(node.children);
+        }
+      }
+    }
+
+    countRecursive(nodes);
+    return count;
+  }
+
+  /**
+   * Generate JSX for a single node with component reuse detection
+   */
+  private generateNodeJSX(node: NodeType, depth: number = 0): string {
+    const { sorter, normalizer } = this.options;
+    const indent = "  ".repeat(depth);
+
+    // Check if this node pattern should be replaced with a component reference
+    const patternKey = this.generatePatternKey(node);
+    const pattern = this.componentPatterns.get(patternKey);
+
+    if (pattern && pattern.occurrences >= 2) {
+      // Use component reference instead of inline JSX
+      const componentName = pattern.name;
+
+      return `${indent}<${componentName} />`;
+    }
+
+    // Generate inline JSX
+    const semanticInfo = this.inferSemanticComponent(node);
+
+    switch (node.type) {
+      case "frame":
+        return this.generateSemanticFrameJSX(node, semanticInfo, depth);
+      case "text":
+        return this.generateSemanticTextJSX(node, semanticInfo, depth);
+      case "component":
+        return this.generateComponentJSX(node, depth);
+      default:
+        return `${indent}<!-- Unsupported node type: ${node.type} -->`;
+    }
+  }
+
+  /**
+   * Generate props for component instances
+   */
+  private generatePropsForComponent(node: NodeType): string | null {
+    // For now, just pass through basic props
+    // In a full implementation, this would analyze which props are needed
+    return null;
+  }
+
+  /**
+   * Generate complete TSX content for a component (extracted or main)
+   */
+  private generateTSXContent(
+    componentName: string,
+    jsxContent: string,
+    isExtracted: boolean = false
+  ): string {
+    const { clock, includeComments } = this.options;
+
+    let content = "";
+
+    if (includeComments) {
+      content += `// Generated at ${clock.now()}\n`;
+      content += `// Component ID: ${clock.uuid()}\n`;
+      if (isExtracted) {
+        content += `// Extracted reusable component\n`;
+      }
+    }
+
+    content += `import s from './${componentName}.module.css';\n`;
+    content += "\n";
+
+    if (isExtracted) {
+      // Export as named export for reuse
+      content += `export function ${componentName}(props: any = {}) {\n`;
+      content += `  return (\n`;
+      content += `    <>\n`;
+      content += `${jsxContent}\n`;
+      content += `    </>\n`;
+      content += `  );\n`;
+      content += `}\n`;
+    } else {
+      // Default export for main components
+      content += `export default function ${componentName}() {\n`;
+      content += `  return (\n`;
+      content += `    <>\n`;
+      content += `${jsxContent}\n`;
+      content += `    </>\n`;
+      content += `  );\n`;
+      content += `}\n`;
+    }
+
+    return content;
+  }
+
+  /**
+   * Escape text content for JSX
+   */
+  private escapeText(text: string): string {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      .replace(/\//g, "&#x2F;");
+  }
+}
+
+/**
+ * Convenience function for generating React components
+ */
+export function generateReactComponents(
+  document: CanvasDocumentType,
+  options: CodeGenOptions = {}
+): GenerationResult {
+  const generator = new ReactGenerator(options);
+  return generator.generate(document);
+}
