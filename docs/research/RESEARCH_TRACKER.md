@@ -27,9 +27,9 @@
 
 | ID | Title | Priority | Status | Owner | Target Week | Dependencies | Risk |
 |----|-------|----------|--------|-------|-------------|--------------|------|
-| RQ-001 | Clock injection pattern | P0 | ⚪ Not Started | - | Week 1 | - | High |
-| RQ-002 | Canonical string sorting | P0 | ⚪ Not Started | - | Week 1 | - | High |
-| RQ-003 | Floating point precision policy | P0 | ⚪ Not Started | - | Week 1 | - | Medium |
+| RQ-001 | Clock injection pattern | P0 | 🟢 Resolved | @darianrosebrook | Week 1 | - | High |
+| RQ-002 | Canonical string sorting | P0 | 🟢 Resolved | @darianrosebrook | Week 1 | - | High |
+| RQ-003 | Floating point precision policy | P0 | 🟢 Resolved | @darianrosebrook | Week 1 | - | Medium |
 | RQ-004 | Design file conflict taxonomy | P0 | ⚪ Not Started | - | Week 2 | - | High |
 | RQ-005 | Semantic diff algorithm | P0 | ⚪ Not Started | - | Week 2 | RQ-004 | High |
 | RQ-006 | CRDT vs custom merge | P1 | ⚪ Not Started | - | Week 3 | RQ-004, RQ-005 | Medium |
@@ -74,15 +74,15 @@
 - RQ-005: Semantic diff algorithm
 
 **Deliverables:**
-- [ ] Deterministic codegen POC
-- [ ] Merge conflict detector prototype
-- [ ] Documentation: `docs/determinism.md`
-- [ ] Documentation: `docs/merge-strategy.md`
+- [x] Deterministic codegen POC - ✅ `packages/codegen-react/src/determinism.ts`
+- [ ] Merge conflict detector prototype - ⏳ In Progress
+- [ ] Documentation: `docs/determinism.md` - ⏳ Pending
+- [ ] Documentation: `docs/merge-strategy.md` - ⏳ Pending
 
 **Exit Criteria:**
-- Can generate code with verified determinism
-- Can detect and categorize merge conflicts
-- Team agrees on approaches
+- [x] Can generate code with verified determinism - ✅ Implemented with tests
+- [ ] Can detect and categorize merge conflicts - ⏳ Not Started
+- [x] Team agrees on approaches - ✅ RQ-001, RQ-002, RQ-003 resolved
 
 ---
 
@@ -174,38 +174,136 @@
 **References**: [Links to prototypes, research, discussions]
 ```
 
-### Example Entry
+---
 
-## RQ-001: Clock Injection Pattern
+## Resolved Research Questions
+
+### RQ-001: Clock Injection Pattern
 
 **Date**: 2025-10-02  
-**Status**: Resolved  
+**Status**: 🟢 Resolved  
+**Owner**: @darianrosebrook  
 **Decision**: Use dependency injection with optional Clock parameter
 
+**Implementation**:
 ```typescript
 interface Clock {
   now(): number;
+  uuid(): string;
+  random?(): number;
 }
 
-function generate(doc: CanvasDocument, options: { clock?: Clock } = {}) {
-  const clock = options.clock ?? { now: () => Date.now() };
-  // Use clock.now() for any time-based operations
+function generateReactComponent(
+  doc: CanvasDocument,
+  options: CodeGenOptions = {}
+): GeneratedFile {
+  const clock = options.clock ?? defaultClock;
+  // Use clock.now() for timestamps
+  // Use clock.uuid() for IDs
 }
 ```
 
 **Rationale**: 
-- Minimal API surface
+- Minimal API surface - clean and simple
 - Easy to test with fixed clock
-- Opt-in for performance (no overhead in production)
+- No performance overhead in production
+- Flexible for different time/ID sources
 
 **Alternatives Considered**:
-1. Context/ambient injection - Too magical
-2. Global clock singleton - Harder to test
-3. Timestamp as parameter - Not flexible enough
+1. Context/ambient injection - Too magical, harder to test
+2. Global clock singleton - Tightly couples code
+3. Timestamp as parameter - Not flexible for UUIDs
 
-**References**:
-- POC: `packages/codegen-react/src/__tests__/determinism.test.ts`
-- Discussion: [Link to design doc]
+**Implementation**: `packages/codegen-react/src/determinism.ts:14-38`  
+**Tests**: `packages/codegen-react/tests/determinism.test.ts`  
+**Experiment**: `docs/research/experiments/RQ-001-clock-injection/`
+
+---
+
+### RQ-002: Canonical String Sorting
+
+**Date**: 2025-10-02  
+**Status**: 🟢 Resolved  
+**Owner**: @darianrosebrook  
+**Decision**: Use Intl.Collator with en-US locale and numeric sorting
+
+**Implementation**:
+```typescript
+class CanonicalSorter {
+  private collator: Intl.Collator;
+
+  constructor(locale: string = "en-US") {
+    this.collator = new Intl.Collator(locale, {
+      numeric: true,
+      sensitivity: "base",
+      ignorePunctuation: false,
+    });
+  }
+
+  sort(items: string[]): string[] {
+    return [...items].sort(this.collator.compare);
+  }
+}
+```
+
+**Rationale**:
+- Handles Unicode correctly (accents, diacritics)
+- Consistent across platforms (macOS, Linux, Windows)
+- Numeric sorting (item1, item2, item10)
+- Standard JavaScript API
+
+**Alternatives Considered**:
+1. Simple string comparison - Platform differences, Unicode issues
+2. Custom Unicode sorter - Complex, maintenance burden
+3. Decimal.js - Overkill for string sorting
+
+**Implementation**: `packages/codegen-react/src/determinism.ts:42-79`  
+**Tests**: `packages/codegen-react/tests/determinism.test.ts`  
+**Experiment**: `docs/research/experiments/RQ-002-string-sorting/`
+
+---
+
+### RQ-003: Floating Point Precision Policy
+
+**Date**: 2025-10-02  
+**Status**: 🟢 Resolved  
+**Owner**: @darianrosebrook  
+**Decision**: Fixed precision with toFixed(2) for coordinates, Math.round() for dimensions
+
+**Implementation**:
+```typescript
+class PrecisionNormalizer {
+  private coordinatePrecision: number = 2;
+  private dimensionPrecision: number = 0;
+
+  normalizeCoordinate(value: number): string {
+    return value.toFixed(this.coordinatePrecision);
+  }
+
+  normalizeDimension(value: number): number {
+    return Math.round(value);
+  }
+}
+```
+
+**Rationale**:
+- Simple and predictable - 2 decimal places for design coordinates
+- Performance friendly - minimal overhead
+- Design appropriate - 0.01px sufficient precision
+- Cross-platform consistent - toFixed() well-defined in ES spec
+
+**Alternatives Considered**:
+1. Arbitrary precision with Decimal.js - Overkill, performance overhead
+2. Full float preservation - Not deterministic across platforms
+3. Integer-only coordinates - Too restrictive for design work
+
+**Implementation**: `packages/codegen-react/src/determinism.ts:82-120`  
+**Tests**: `packages/codegen-react/tests/determinism.test.ts`  
+**Experiment**: `docs/research/experiments/RQ-003-float-precision/`
+
+---
+
+## Example Entry Template
 
 ---
 
