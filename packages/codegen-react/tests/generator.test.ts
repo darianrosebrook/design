@@ -137,9 +137,12 @@ describe("React Component Generation", () => {
       const tsxFiles = result.files.filter((f) => f.type === "tsx");
       const componentNames = tsxFiles.map((f) => f.path.replace(".tsx", ""));
 
-      // Should have Artboard1 and Hero components
+      // Should have Artboard1 and Hero components (Hero is extracted as reusable component)
       expect(componentNames).toContain("Artboard1");
-      expect(componentNames).toContain("Hero");
+      expect(componentNames).toContain("Hero"); // Hero is now extracted as a separate component
+
+      // Should also have extracted components
+      expect(result.metadata.extractedComponents).toBeGreaterThan(0);
     });
 
     it("includes proper React imports", () => {

@@ -18,6 +18,9 @@ export * from "./hit-testing.js";
 // Export patches
 export * from "./patches.js";
 
+// Export observability
+export * from "./observability.js";
+
 // Re-export commonly used functions from schema
 export {
   generateNodeId,

@@ -5,6 +5,7 @@
 
 import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 import { ArtboardType as _ArtboardType } from "@paths-design/canvas-schema";
+import { observability } from "./observability.js";
 import type { NodePath, TraversalOptions } from "./types.js";
 
 /**
@@ -24,36 +25,72 @@ export function* traverseDocument(
   document: CanvasDocumentType,
   options: TraversalOptions = {}
 ): Generator<TraversalResult> {
-  const { maxDepth = Infinity, includeRoot = false, filter } = options;
+  // Log operation start
+  observability.log("info", "engine.operation.start", {
+    operation: "traverseDocument",
+    documentId: document.id,
+    artboardCount: document.artboards.length,
+    maxDepth: options.maxDepth,
+    includeRoot: options.includeRoot,
+    hasFilter: !!options.filter,
+  });
 
-  for (
-    let artboardIndex = 0;
-    artboardIndex < document.artboards.length;
-    artboardIndex++
-  ) {
-    const artboard = document.artboards[artboardIndex];
+  const startTime = performance.now();
 
-    if (includeRoot) {
-      const rootResult: TraversalResult = {
-        node: artboard,
-        path: [artboardIndex],
-        depth: 0,
-        artboardIndex,
-      };
+  try {
+    const { maxDepth = Infinity, includeRoot = false, filter } = options;
 
-      if (!filter || filter(artboard, [artboardIndex])) {
-        yield rootResult;
+    for (
+      let artboardIndex = 0;
+      artboardIndex < document.artboards.length;
+      artboardIndex++
+    ) {
+      const artboard = document.artboards[artboardIndex];
+
+      if (includeRoot) {
+        const rootResult: TraversalResult = {
+          node: artboard,
+          path: [artboardIndex],
+          depth: 0,
+          artboardIndex,
+        };
+
+        if (!filter || filter(artboard, [artboardIndex])) {
+          yield rootResult;
+        }
       }
+
+      yield* traverseTree(
+        artboard.children,
+        [artboardIndex, "children"],
+        1,
+        maxDepth,
+        filter,
+        artboardIndex
+      );
     }
 
-    yield* traverseTree(
-      artboard.children,
-      [artboardIndex, "children"],
-      1,
-      maxDepth,
-      filter,
-      artboardIndex
-    );
+    // Log operation complete
+    const duration = performance.now() - startTime;
+    observability.recordOperation("traverseDocument", duration);
+
+    observability.log("info", "engine.operation.complete", {
+      operation: "traverseDocument",
+      duration_ms: Math.round(duration),
+      documentId: document.id,
+    });
+  } catch (error) {
+    const duration = performance.now() - startTime;
+    observability.recordOperation("traverseDocument", duration);
+
+    observability.log("error", "engine.operation.error", {
+      operation: "traverseDocument",
+      error: error instanceof Error ? error.message : String(error),
+      duration_ms: Math.round(duration),
+      documentId: document.id,
+    });
+
+    throw error;
   }
 }
 
@@ -159,7 +196,12 @@ export function getAncestors(
     // Find the ancestor node
     let current: any = document;
     for (const segment of pathCopy) {
-      current = current[segment];
+      if (current && typeof current === "object") {
+        current = current[segment];
+      } else {
+        current = undefined;
+        break;
+      }
     }
 
     if (current && typeof current === "object" && "id" in current) {
@@ -189,7 +231,12 @@ export function getDescendants(
   let current: any = document;
 
   for (const segment of nodePath) {
-    current = current[segment];
+    if (current && typeof current === "object") {
+      current = current[segment];
+    } else {
+      current = undefined;
+      break;
+    }
   }
 
   if (current && "children" in current && current.children) {
@@ -213,13 +260,46 @@ export function getDescendants(
  * Calculate the total number of nodes in the document
  */
 export function countNodes(document: CanvasDocumentType): number {
-  let count = 0;
+  // Log operation start
+  observability.log("info", "engine.operation.start", {
+    operation: "countNodes",
+    documentId: document.id,
+  });
 
-  for (const _ of traverseDocument(document)) {
-    count++;
+  const startTime = performance.now();
+
+  try {
+    let count = 0;
+
+    for (const _ of traverseDocument(document)) {
+      count++;
+    }
+
+    // Log operation complete
+    const duration = performance.now() - startTime;
+    observability.recordOperation("countNodes", duration, count);
+
+    observability.log("info", "engine.operation.complete", {
+      operation: "countNodes",
+      duration_ms: Math.round(duration),
+      documentId: document.id,
+      nodeCount: count,
+    });
+
+    return count;
+  } catch (error) {
+    const duration = performance.now() - startTime;
+    observability.recordOperation("countNodes", duration);
+
+    observability.log("error", "engine.operation.error", {
+      operation: "countNodes",
+      error: error instanceof Error ? error.message : String(error),
+      duration_ms: Math.round(duration),
+      documentId: document.id,
+    });
+
+    throw error;
   }
-
-  return count;
 }
 
 /**

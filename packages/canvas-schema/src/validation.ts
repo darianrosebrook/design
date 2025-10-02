@@ -73,12 +73,13 @@ export class CanvasValidator {
       if (!ajvResult.valid) {
         return {
           valid: false,
-          errors: ajvResult.errors?.map((error) => ({
-            instancePath: error.path || "",
-            message: error.message,
-            keyword: "json-schema",
-            params: {},
-          })) || [],
+          errors:
+            ajvResult.errors?.map((error) => ({
+              instancePath: error.path || "",
+              message: error.message,
+              keyword: "json-schema",
+              params: {},
+            })) || [],
         };
       }
 

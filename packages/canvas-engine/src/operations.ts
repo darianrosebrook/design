@@ -18,6 +18,7 @@ import {
   ArtboardType as _ArtboardType,
   generateNodeId,
 } from "@paths-design/canvas-schema";
+import { observability } from "./observability.js";
 import type {
   NodePath,
   OperationResult,
@@ -33,34 +34,82 @@ export function findNodeById(
   document: CanvasDocumentType,
   nodeId: ULIDType
 ): OperationResult<{ node: NodeType; path: NodePath; artboardIndex: number }> {
-  for (
-    let artboardIndex = 0;
-    artboardIndex < document.artboards.length;
-    artboardIndex++
-  ) {
-    const artboard = document.artboards[artboardIndex];
+  // Log operation start
+  observability.log("info", "engine.operation.start", {
+    operation: "findNodeById",
+    nodeId,
+    documentId: document.id,
+  });
 
-    // Search in artboard children
-    const result = findNodeInTree(artboard.children, nodeId, [
-      artboardIndex,
-      "children",
-    ]);
-    if (result) {
-      return {
-        success: true,
-        data: {
-          node: result.node,
-          path: result.path,
-          artboardIndex,
-        },
-      };
+  const startTime = performance.now();
+
+  try {
+    for (
+      let artboardIndex = 0;
+      artboardIndex < document.artboards.length;
+      artboardIndex++
+    ) {
+      const artboard = document.artboards[artboardIndex];
+
+      // Search in artboard children
+      const result = findNodeInTree(artboard.children, nodeId, [
+        artboardIndex,
+        "children",
+      ]);
+      if (result) {
+        // Log operation complete
+        const duration = performance.now() - startTime;
+        observability.recordOperation("findNodeById", duration);
+
+        observability.log("info", "engine.operation.complete", {
+          operation: "findNodeById",
+          duration_ms: Math.round(duration),
+          nodeId,
+          documentId: document.id,
+          found: true,
+        });
+
+        return {
+          success: true,
+          data: {
+            node: result.node,
+            path: result.path,
+            artboardIndex,
+          },
+        };
+      }
     }
-  }
 
-  return {
-    success: false,
-    error: `Node with ID ${nodeId} not found`,
-  };
+    // Log operation complete (not found)
+    const duration = performance.now() - startTime;
+    observability.recordOperation("findNodeById", duration);
+
+    observability.log("info", "engine.operation.complete", {
+      operation: "findNodeById",
+      duration_ms: Math.round(duration),
+      nodeId,
+      documentId: document.id,
+      found: false,
+    });
+
+    return {
+      success: false,
+      error: `Node with ID ${nodeId} not found`,
+    };
+  } catch (error) {
+    const duration = performance.now() - startTime;
+    observability.recordOperation("findNodeById", duration);
+
+    observability.log("error", "engine.operation.error", {
+      operation: "findNodeById",
+      error: error instanceof Error ? error.message : String(error),
+      duration_ms: Math.round(duration),
+      nodeId,
+      documentId: document.id,
+    });
+
+    throw error;
+  }
 }
 
 /**
@@ -102,6 +151,16 @@ export function createNode(
   parentPath: NodePath,
   nodeData: Omit<NodeType, "id">
 ): OperationResult<DocumentPatch> {
+  // Log operation start
+  observability.log("info", "engine.operation.start", {
+    operation: "createNode",
+    nodeType: nodeData.type,
+    parentPath: parentPath.join("."),
+    documentId: document.id,
+  });
+
+  const startTime = performance.now();
+
   try {
     const newNode: NodeType = {
       ...nodeData,
@@ -155,6 +214,18 @@ export function createNode(
     // Apply patches to create new document
     const newDocument = applyPatches(document, patches);
 
+    // Log operation complete
+    const duration = performance.now() - startTime;
+    observability.recordOperation("createNode", duration);
+
+    observability.log("info", "engine.operation.complete", {
+      operation: "createNode",
+      duration_ms: Math.round(duration),
+      nodeType: nodeData.type,
+      parentPath: parentPath.join("."),
+      documentId: document.id,
+    });
+
     return {
       success: true,
       data: {
@@ -164,6 +235,18 @@ export function createNode(
       },
     };
   } catch (error) {
+    const duration = performance.now() - startTime;
+    observability.recordOperation("createNode", duration);
+
+    observability.log("error", "engine.operation.error", {
+      operation: "createNode",
+      error: error instanceof Error ? error.message : String(error),
+      duration_ms: Math.round(duration),
+      nodeType: nodeData.type,
+      parentPath: parentPath.join("."),
+      documentId: document.id,
+    });
+
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
@@ -179,18 +262,28 @@ export function updateNode(
   nodeId: ULIDType,
   updates: Partial<NodeType>
 ): OperationResult<DocumentPatch> {
-  const findResult = findNodeById(document, nodeId);
+  // Log operation start
+  observability.log("info", "engine.operation.start", {
+    operation: "updateNode",
+    nodeId,
+    updateKeys: Object.keys(updates),
+    documentId: document.id,
+  });
 
-  if (!findResult.success || !findResult.data) {
-    return {
-      success: false,
-      error: findResult.error || "Node not found",
-    };
-  }
-
-  const { path } = findResult.data;
+  const startTime = performance.now();
 
   try {
+    const findResult = findNodeById(document, nodeId);
+
+    if (!findResult.success || !findResult.data) {
+      return {
+        success: false,
+        error: findResult.error || "Node not found",
+      };
+    }
+
+    const { path } = findResult.data;
+
     const patches: JsonPatch[] = [];
     const reversePatches: JsonPatch[] = [];
 
@@ -219,6 +312,18 @@ export function updateNode(
 
     const newDocument = applyPatches(document, patches);
 
+    // Log operation complete
+    const duration = performance.now() - startTime;
+    observability.recordOperation("updateNode", duration);
+
+    observability.log("info", "engine.operation.complete", {
+      operation: "updateNode",
+      duration_ms: Math.round(duration),
+      nodeId,
+      updateKeys: Object.keys(updates),
+      documentId: document.id,
+    });
+
     return {
       success: true,
       data: {
@@ -228,6 +333,18 @@ export function updateNode(
       },
     };
   } catch (error) {
+    const duration = performance.now() - startTime;
+    observability.recordOperation("updateNode", duration);
+
+    observability.log("error", "engine.operation.error", {
+      operation: "updateNode",
+      error: error instanceof Error ? error.message : String(error),
+      duration_ms: Math.round(duration),
+      nodeId,
+      updateKeys: Object.keys(updates),
+      documentId: document.id,
+    });
+
     return {
       success: false,
       error: error instanceof Error ? error.message : "Update failed",
@@ -242,18 +359,27 @@ export function deleteNode(
   document: CanvasDocumentType,
   nodeId: ULIDType
 ): OperationResult<DocumentPatch> {
-  const findResult = findNodeById(document, nodeId);
+  // Log operation start
+  observability.log("info", "engine.operation.start", {
+    operation: "deleteNode",
+    nodeId,
+    documentId: document.id,
+  });
 
-  if (!findResult.success || !findResult.data) {
-    return {
-      success: false,
-      error: findResult.error || "Node not found",
-    };
-  }
-
-  const { path } = findResult.data;
+  const startTime = performance.now();
 
   try {
+    const findResult = findNodeById(document, nodeId);
+
+    if (!findResult.success || !findResult.data) {
+      return {
+        success: false,
+        error: findResult.error || "Node not found",
+      };
+    }
+
+    const { node, path } = findResult.data;
+
     // Convert path to JSON Pointer format
     const jsonPointerPath = convertPathToJsonPointer(path);
 
@@ -277,6 +403,18 @@ export function deleteNode(
 
     const newDocument = applyPatches(document, patches);
 
+    // Log operation complete
+    const duration = performance.now() - startTime;
+    observability.recordOperation("deleteNode", duration);
+
+    observability.log("info", "engine.operation.complete", {
+      operation: "deleteNode",
+      duration_ms: Math.round(duration),
+      nodeId,
+      nodeType: node?.type,
+      documentId: document.id,
+    });
+
     return {
       success: true,
       data: {
@@ -286,6 +424,17 @@ export function deleteNode(
       },
     };
   } catch (error) {
+    const duration = performance.now() - startTime;
+    observability.recordOperation("deleteNode", duration);
+
+    observability.log("error", "engine.operation.error", {
+      operation: "deleteNode",
+      error: error instanceof Error ? error.message : String(error),
+      duration_ms: Math.round(duration),
+      nodeId,
+      documentId: document.id,
+    });
+
     return {
       success: false,
       error: error instanceof Error ? error.message : "Delete failed",
@@ -424,18 +573,29 @@ export function moveNode(
   newParentPath: NodePath,
   newIndex?: number
 ): OperationResult<DocumentPatch> {
-  const findResult = findNodeById(document, nodeId);
+  // Log operation start
+  observability.log("info", "engine.operation.start", {
+    operation: "moveNode",
+    nodeId,
+    newParentPath: newParentPath.join("."),
+    newIndex,
+    documentId: document.id,
+  });
 
-  if (!findResult.success || !findResult.data) {
-    return {
-      success: false,
-      error: findResult.error || "Node not found",
-    };
-  }
-
-  const { node, path: oldPath } = findResult.data;
+  const startTime = performance.now();
 
   try {
+    const findResult = findNodeById(document, nodeId);
+
+    if (!findResult.success || !findResult.data) {
+      return {
+        success: false,
+        error: findResult.error || "Node not found",
+      };
+    }
+
+    const { node, path: oldPath } = findResult.data;
+
     // Convert paths to JSON Pointer format
     const oldJsonPointerPath = convertPathToJsonPointer(oldPath);
     const newJsonPointerPath = convertPathToJsonPointer([
@@ -465,6 +625,20 @@ export function moveNode(
       ...addPatches,
     ]);
 
+    // Log operation complete
+    const duration = performance.now() - startTime;
+    observability.recordOperation("moveNode", duration);
+
+    observability.log("info", "engine.operation.complete", {
+      operation: "moveNode",
+      duration_ms: Math.round(duration),
+      nodeId,
+      nodeType: node?.type,
+      oldPath: oldPath.join("."),
+      newParentPath: newParentPath.join("."),
+      documentId: document.id,
+    });
+
     return {
       success: true,
       data: {
@@ -477,6 +651,18 @@ export function moveNode(
       },
     };
   } catch (error) {
+    const duration = performance.now() - startTime;
+    observability.recordOperation("moveNode", duration);
+
+    observability.log("error", "engine.operation.error", {
+      operation: "moveNode",
+      error: error instanceof Error ? error.message : String(error),
+      duration_ms: Math.round(duration),
+      nodeId,
+      newParentPath: newParentPath.join("."),
+      documentId: document.id,
+    });
+
     return {
       success: false,
       error: error instanceof Error ? error.message : "Move failed",

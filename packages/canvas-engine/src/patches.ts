@@ -4,6 +4,7 @@
  */
 
 import type { CanvasDocumentType } from "@paths-design/canvas-schema";
+import { observability } from "./observability.js";
 import type { JsonPatch, DocumentPatch } from "./types.js";
 
 /**
@@ -13,23 +14,68 @@ export function applyPatch(
   document: CanvasDocumentType,
   patch: JsonPatch
 ): CanvasDocumentType {
-  const result = JSON.parse(JSON.stringify(document));
+  // Log operation start
+  observability.log("info", "engine.operation.start", {
+    operation: "applyPatch",
+    documentId: document.id,
+    patchOp: patch.op,
+    patchPath: patch.path,
+  });
 
-  switch (patch.op) {
-    case "add":
-      return applyAdd(result, patch);
-    case "remove":
-      return applyRemove(result, patch);
-    case "replace":
-      return applyReplace(result, patch);
-    case "move":
-      return applyMove(result, patch);
-    case "copy":
-      return applyCopy(result, patch);
-    case "test":
-      return applyTest(result, patch) ? result : document;
-    default:
-      throw new Error(`Unknown patch operation: ${(patch as any).op}`);
+  const startTime = performance.now();
+
+  try {
+    const result = JSON.parse(JSON.stringify(document));
+
+    let finalResult: CanvasDocumentType;
+    switch (patch.op) {
+      case "add":
+        finalResult = applyAdd(result, patch);
+        break;
+      case "remove":
+        finalResult = applyRemove(result, patch);
+        break;
+      case "replace":
+        finalResult = applyReplace(result, patch);
+        break;
+      case "move":
+        finalResult = applyMove(result, patch);
+        break;
+      case "copy":
+        finalResult = applyCopy(result, patch);
+        break;
+      case "test":
+        finalResult = applyTest(result, patch) ? result : document;
+        break;
+      default:
+        throw new Error(`Unknown patch operation: ${(patch as any).op}`);
+    }
+
+    // Log operation complete
+    const duration = performance.now() - startTime;
+    observability.recordOperation("applyPatch", duration);
+
+    observability.log("info", "engine.operation.complete", {
+      operation: "applyPatch",
+      duration_ms: Math.round(duration),
+      documentId: document.id,
+      patchOp: patch.op,
+    });
+
+    return finalResult;
+  } catch (error) {
+    const duration = performance.now() - startTime;
+    observability.recordOperation("applyPatch", duration);
+
+    observability.log("error", "engine.operation.error", {
+      operation: "applyPatch",
+      error: error instanceof Error ? error.message : String(error),
+      duration_ms: Math.round(duration),
+      documentId: document.id,
+      patchOp: patch.op,
+    });
+
+    throw error;
   }
 }
 
@@ -40,13 +86,49 @@ export function applyPatches(
   document: CanvasDocumentType,
   patches: JsonPatch[]
 ): CanvasDocumentType {
-  let result = document;
+  // Log operation start
+  observability.log("info", "engine.operation.start", {
+    operation: "applyPatches",
+    documentId: document.id,
+    patchCount: patches.length,
+    patchOps: patches.map((p) => p.op),
+  });
 
-  for (const patch of patches) {
-    result = applyPatch(result, patch);
+  const startTime = performance.now();
+
+  try {
+    let result = document;
+
+    for (const patch of patches) {
+      result = applyPatch(result, patch);
+    }
+
+    // Log operation complete
+    const duration = performance.now() - startTime;
+    observability.recordOperation("applyPatches", duration);
+
+    observability.log("info", "engine.operation.complete", {
+      operation: "applyPatches",
+      duration_ms: Math.round(duration),
+      documentId: document.id,
+      patchCount: patches.length,
+    });
+
+    return result;
+  } catch (error) {
+    const duration = performance.now() - startTime;
+    observability.recordOperation("applyPatches", duration);
+
+    observability.log("error", "engine.operation.error", {
+      operation: "applyPatches",
+      error: error instanceof Error ? error.message : String(error),
+      duration_ms: Math.round(duration),
+      documentId: document.id,
+      patchCount: patches.length,
+    });
+
+    throw error;
   }
-
-  return result;
 }
 
 /**
@@ -119,6 +201,9 @@ function applyReplace(
   if (key === null) {
     // Replacing root
     return patch.value as CanvasDocumentType;
+  } else if (parent === null || parent === undefined) {
+    // Path doesn't exist, cannot replace
+    throw new Error(`Path not found: ${patch.path}`);
   } else if (typeof key === "number") {
     // Replacing in array
     parent[key] = patch.value;
@@ -145,6 +230,25 @@ function applyMove(
   const value = getValueAtPath(document, patch.from);
   if (value === undefined) {
     throw new Error(`Source path not found: ${patch.from}`);
+  }
+
+  // Parse paths to understand the move operation
+  const fromPath = patch.from.split("/").filter(Boolean);
+  const toPath = patch.path.split("/").filter(Boolean);
+
+  // If moving within the same array, adjust the destination index
+  if (
+    fromPath.length === toPath.length &&
+    fromPath.slice(0, -1).join("/") === toPath.slice(0, -1).join("/")
+  ) {
+    const fromIndex = parseInt(fromPath[fromPath.length - 1]);
+    const toIndex = parseInt(toPath[toPath.length - 1]);
+
+    if (fromIndex < toIndex) {
+      // Adjust destination index since we're removing from before the destination
+      toPath[toPath.length - 1] = (toIndex - 1).toString();
+      patch.path = "/" + toPath.join("/");
+    }
   }
 
   // Remove from source location
@@ -245,7 +349,9 @@ function getValueAtPath(obj: any, path: string): any {
   let current = obj;
 
   for (const part of pathParts) {
-    if (current == null) {return undefined;}
+    if (current == null) {
+      return undefined;
+    }
 
     if (part === "-") {
       current = current[current.length - 1];
@@ -296,4 +402,63 @@ export function applyPatchesWithReverse(
     patches,
     reversePatches,
   };
+}
+
+/**
+ * Invert a single patch operation
+ */
+export function invertPatch(patch: JsonPatch): JsonPatch {
+  switch (patch.op) {
+    case "add":
+      return {
+        op: "remove",
+        path: patch.path,
+      };
+
+    case "remove":
+      return {
+        op: "add",
+        path: patch.path,
+        value: patch.value, // Would need original value in real implementation
+      };
+
+    case "replace":
+      return {
+        op: "replace",
+        path: patch.path,
+        value: patch.value, // Would need original value in real implementation
+      };
+
+    case "move":
+      return {
+        op: "move",
+        from: patch.path,
+        path: patch.from || "",
+      };
+
+    case "copy":
+      return {
+        op: "remove",
+        path: patch.path,
+      };
+
+    case "test":
+      return {
+        op: "test",
+        path: patch.path,
+        value: patch.value, // Would need original value in real implementation
+      };
+
+    default:
+      throw new Error(
+        `Cannot invert unknown patch operation: ${(patch as any).op}`
+      );
+  }
+}
+
+/**
+ * Invert multiple patches (in reverse order)
+ */
+export function invertPatches(patches: JsonPatch[]): JsonPatch[] {
+  return patches.slice().reverse().map(invertPatch);
 }

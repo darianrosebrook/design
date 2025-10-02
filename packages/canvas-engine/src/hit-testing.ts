@@ -8,6 +8,7 @@ import type {
   NodeType,
   RectType,
 } from "@paths-design/canvas-schema";
+import { observability } from "./observability.js";
 import {
   traverseDocument,
   TraversalResult as _TraversalResult,
@@ -33,38 +34,87 @@ export function hitTest(
     artboardIndex?: number;
   } = {}
 ): HitTestResult | null {
-  const { includeInvisible = false, artboardIndex } = options;
+  // Log operation start
+  observability.log("info", "engine.hit_test.result", {
+    operation: "hitTest",
+    documentId: document.id,
+    point: `${point.x},${point.y}`,
+    artboardIndex: options.artboardIndex,
+    includeInvisible: options.includeInvisible,
+  });
 
-  // Track the topmost hit (highest z-index)
-  let bestHit: HitTestResult | null = null;
+  const startTime = performance.now();
 
-  // Traverse nodes in reverse order (top to bottom in z-order)
-  const nodes = Array.from(traverseDocument(document));
+  try {
+    const { includeInvisible = false, artboardIndex } = options;
 
-  for (let i = nodes.length - 1; i >= 0; i--) {
-    const result = nodes[i];
+    // Track the topmost hit (highest z-index)
+    let bestHit: HitTestResult | null = null;
 
-    // Skip if artboard filtering is applied
-    if (artboardIndex !== undefined && result.artboardIndex !== artboardIndex) {
-      continue;
+    // Traverse nodes in reverse order (top to bottom in z-order)
+    const nodes = Array.from(traverseDocument(document));
+
+    // Debug: log all nodes being checked
+    if (process.env.NODE_ENV === 'test') {
+      console.log(`Hit-testing point (${point.x}, ${point.y}) against ${nodes.length} nodes:`);
+      nodes.forEach((node, index) => {
+        const frame = getNodeFrame(node.node, node.path);
+        console.log(`  ${index}: ${node.node.name} (${node.node.id}) at (${frame?.x}, ${frame?.y}, ${frame?.width}, ${frame?.height})`);
+      });
     }
 
-    // Skip invisible nodes unless explicitly requested
-    if (!includeInvisible && !result.node.visible) {
-      continue;
+    for (let i = nodes.length - 1; i >= 0; i--) {
+      const result = nodes[i];
+
+      // Skip if artboard filtering is applied
+      if (
+        artboardIndex !== undefined &&
+        result.artboardIndex !== artboardIndex
+      ) {
+        continue;
+      }
+
+      // Skip invisible nodes unless explicitly requested
+      if (!includeInvisible && !result.node.visible) {
+        continue;
+      }
+
+      if (pointInNode(point, result.node, result.path)) {
+        bestHit = {
+          nodeId: result.node.id,
+          nodePath: result.path,
+          point,
+          node: result.node,
+        };
+        break; // Found the topmost hit
+      }
     }
 
-    if (pointInNode(point, result.node, result.path)) {
-      bestHit = {
-        nodeId: result.node.id,
-        nodePath: result.path,
-        point,
-      };
-      break; // Found the topmost hit
-    }
+    // Log operation complete
+    const duration = performance.now() - startTime;
+    observability.recordOperation("hitTest", duration);
+
+    observability.log("info", "engine.operation.complete", {
+      operation: "hitTest",
+      duration_ms: Math.round(duration),
+      documentId: document.id,
+      hitResult: bestHit ? "hit" : "miss",
+    });
+
+    return bestHit;
+  } catch (error) {
+    const duration = performance.now() - startTime;
+    observability.recordOperation("hitTest", duration);
+
+    observability.log("error", "engine.operation.error", {
+      operation: "hitTest",
+      error: error instanceof Error ? error.message : String(error),
+      duration_ms: Math.round(duration),
+      documentId: document.id,
+    });
+
+    throw error;
   }
-
-  return bestHit;
 }
 
 /**
@@ -90,7 +140,7 @@ function pointInNode(point: Point, node: NodeType, path: NodePath): boolean {
 /**
  * Get the frame (bounding box) of a node
  */
-function getNodeFrame(node: NodeType, _path: NodePath): RectType | null {
+function getNodeFrame(node: NodeType, path: NodePath): RectType | null {
   // For now, assume nodes have a 'frame' property
   // In a full implementation, we'd calculate frames based on layout
   if ("frame" in node && node.frame) {

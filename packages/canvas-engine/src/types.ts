@@ -46,6 +46,7 @@ export interface HitTestResult {
   nodeId: ULIDType;
   nodePath: NodePath;
   point: { x: number; y: number };
+  node: NodeType;
 }
 
 /**

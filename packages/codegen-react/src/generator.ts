@@ -3,6 +3,7 @@
  * @author @darianrosebrook
  */
 
+import { traverseDocument } from "@paths-design/canvas-engine";
 import type {
   CanvasDocumentType,
   NodeType,
@@ -171,8 +172,9 @@ export class ReactGenerator {
     // Collect all node subtrees for pattern analysis
     const patterns = new Map<string, { nodes: NodeType[]; count: number }>();
 
-    const traverse = (node: NodeType, path: string[] = []): void => {
-      const currentPath = [...path, node.id];
+    // Use canvas-engine's traversal for consistency and reliability
+    for (const result of traverseDocument(document)) {
+      const node = result.node;
 
       // Check if this subtree pattern already exists
       const patternKey = this.generatePatternKey(node);
@@ -183,27 +185,11 @@ export class ReactGenerator {
       if (pattern) {
         pattern.count++;
       }
-
-      // Recurse into children
-      if ("children" in node && node.children) {
-        for (let i = 0; i < node.children.length; i++) {
-          traverse(node.children[i], [...currentPath, i.toString()]);
-        }
-      }
-    };
-
-    // Analyze each artboard
-    for (const artboard of document.artboards) {
-      if (artboard.children) {
-        for (const child of artboard.children) {
-          traverse(child);
-        }
-      }
     }
 
-    // Filter patterns that appear multiple times (reuse candidates)
+    // Filter patterns that are worth extracting (appear multiple times or have meaningful structure)
     for (const [key, pattern] of patterns) {
-      if (pattern.count >= 2 && this.isWorthExtracting(pattern.nodes)) {
+      if (pattern.count >= 2 || this.isWorthExtracting(pattern.nodes)) {
         const componentName = this.generateComponentName(pattern.nodes[0]);
         this.componentPatterns.set(key, {
           id: key,
@@ -740,7 +726,7 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
     return {
       path: "index.ts",
       content,
-      type: "tsx",
+      type: "ts",
     };
   }
 
@@ -750,21 +736,9 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
   private countNodes(document: CanvasDocumentType): number {
     let count = 0;
 
-    function traverse(node: NodeType) {
+    // Use canvas-engine's traversal for consistency
+    for (const _ of traverseDocument(document)) {
       count++;
-      if ("children" in node && node.children) {
-        for (const child of node.children) {
-          traverse(child);
-        }
-      }
-    }
-
-    for (const artboard of document.artboards) {
-      if (artboard.children) {
-        for (const child of artboard.children) {
-          traverse(child);
-        }
-      }
     }
 
     return count;
@@ -787,7 +761,7 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
     const { sorter: _sorter } = this.options;
 
     // Create a normalized representation for comparison
-    const normalized = {
+    const _normalized = {
       type: node.type,
       name: node.name,
       hasChildren:
@@ -798,7 +772,7 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
       componentKey: "componentKey" in node ? node.componentKey : undefined,
     };
 
-    return this.generatePatternHash([normalized]);
+    return this.generatePatternHash([node]);
   }
 
   /**
@@ -808,7 +782,22 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
     const { sorter: _sorter } = this.options;
 
     // Create a canonical representation
-    const canonical = JSON.stringify(nodes, Object.keys(nodes).sort());
+    const canonical = JSON.stringify(nodes, (key, value) => {
+      // Sort object keys for deterministic output
+      if (
+        typeof value === "object" &&
+        value !== null &&
+        !Array.isArray(value)
+      ) {
+        return Object.keys(value)
+          .sort()
+          .reduce((result, key) => {
+            result[key] = value[key];
+            return result;
+          }, {} as any);
+      }
+      return value;
+    });
     return this.simpleHash(canonical);
   }
 
@@ -886,16 +875,15 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
     const { sorter: _sorter, normalizer: _normalizer } = this.options;
     const indent = "  ".repeat(depth);
 
-    // TODO: Re-enable component reuse detection once the logic is fixed
     // Check if this node pattern should be replaced with a component reference
-    // const patternKey = this.generatePatternKey(node);
-    // const pattern = this.componentPatterns.get(patternKey);
+    const patternKey = this.generatePatternKey(node);
+    const pattern = this.componentPatterns.get(patternKey);
 
-    // if (pattern && pattern.occurrences >= 2) {
-    //   // Use component reference instead of inline JSX
-    //   const componentName = pattern.name;
-    //   return `${indent}<${componentName} />`;
-    // }
+    if (pattern && pattern.occurrences >= 2) {
+      // Use component reference instead of inline JSX
+      const componentName = pattern.name;
+      return `${indent}<${componentName} />`;
+    }
 
     // Generate inline JSX
     const semanticInfo = this.inferSemanticComponent(node);
