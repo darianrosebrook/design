@@ -47,13 +47,15 @@ export function Body(): JSX.Element {
 
       expect(result.components).toHaveLength(3);
 
-      const cardComponent = result.components.find(c => c.name === "Card");
+      const cardComponent = result.components.find((c) => c.name === "Card");
       expect(cardComponent).toBeDefined();
 
-      const headerComponent = result.components.find(c => c.name === "Header");
+      const headerComponent = result.components.find(
+        (c) => c.name === "Header"
+      );
       expect(headerComponent).toBeDefined();
 
-      const bodyComponent = result.components.find(c => c.name === "Body");
+      const bodyComponent = result.components.find((c) => c.name === "Body");
       expect(bodyComponent).toBeDefined();
     });
 
@@ -79,10 +81,12 @@ export const Header = (): JSX.Element => (
 
       expect(result.components).toHaveLength(2);
 
-      const cardComponent = result.components.find(c => c.name === "Card");
+      const cardComponent = result.components.find((c) => c.name === "Card");
       expect(cardComponent).toBeDefined();
 
-      const headerComponent = result.components.find(c => c.name === "Header");
+      const headerComponent = result.components.find(
+        (c) => c.name === "Header"
+      );
       expect(headerComponent).toBeDefined();
     });
 
@@ -117,10 +121,12 @@ export function Header(): JSX.Element {
 
       expect(result.components).toHaveLength(2);
 
-      const cardComponent = result.components.find(c => c.name === "Card");
+      const cardComponent = result.components.find((c) => c.name === "Card");
       expect(cardComponent?.category).toBe("layout");
 
-      const headerComponent = result.components.find(c => c.name === "Header");
+      const headerComponent = result.components.find(
+        (c) => c.name === "Header"
+      );
       expect(headerComponent?.category).toBe("layout");
       expect(headerComponent?.tags).toEqual(["header"]);
     });
@@ -160,10 +166,9 @@ export function CardBody(): JSX.Element {
 
       // Currently detects the individual components
       expect(result.components).toHaveLength(3);
-      expect(result.components.map(c => c.name)).toEqual(
+      expect(result.components.map((c) => c.name)).toEqual(
         expect.arrayContaining(["Card", "CardHeader", "CardBody"])
       );
     });
   });
 });
-

@@ -282,7 +282,11 @@ export class ComponentScanner {
     let hasJSX = false;
 
     const visitor = (node: ts.Node): void => {
-      if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node) || ts.isJsxFragment(node)) {
+      if (
+        ts.isJsxElement(node) ||
+        ts.isJsxSelfClosingElement(node) ||
+        ts.isJsxFragment(node)
+      ) {
         hasJSX = true;
         return;
       }
@@ -380,7 +384,8 @@ export class ComponentScanner {
           ) {
             // Check if this looks like a React component
             const isComponent =
-              ts.isArrowFunction(rightSide) || ts.isFunctionExpression(rightSide)
+              ts.isArrowFunction(rightSide) ||
+              ts.isFunctionExpression(rightSide)
                 ? this.hasJSXReturnType(rightSide)
                 : this.isReactComponent(rightSide); // If identifier, check if it references a component
 
@@ -723,11 +728,11 @@ export class ComponentScanner {
       const firstParam = parameters[0];
       if (firstParam) {
         // Handle destructuring parameter: ({ variant = "primary" }: Props)
-        if (
-          firstParam.name &&
-          ts.isObjectBindingPattern(firstParam.name)
-        ) {
-          this.extractDefaultsFromBindingPattern(firstParam.name, defaultValues);
+        if (firstParam.name && ts.isObjectBindingPattern(firstParam.name)) {
+          this.extractDefaultsFromBindingPattern(
+            firstParam.name,
+            defaultValues
+          );
         }
         // Handle inline type literal with defaults: ({ variant = "primary" }: { variant?: string })
         else if (firstParam.type && ts.isTypeLiteralNode(firstParam.type)) {
@@ -827,10 +832,7 @@ export class ComponentScanner {
     // Walk the body to find destructuring assignments
     const visitor = (node: ts.Node): void => {
       // Look for: const { variant = "primary" } = props;
-      if (
-        ts.isVariableStatement(node) ||
-        ts.isVariableDeclarationList(node)
-      ) {
+      if (ts.isVariableStatement(node) || ts.isVariableDeclarationList(node)) {
         const declarations = ts.isVariableStatement(node)
           ? node.declarationList.declarations
           : node.declarations;
@@ -887,10 +889,7 @@ export class ComponentScanner {
     defaultValues: Record<string, unknown>
   ): void {
     for (const property of objectLiteral.properties) {
-      if (
-        ts.isPropertyAssignment(property) &&
-        ts.isIdentifier(property.name)
-      ) {
+      if (ts.isPropertyAssignment(property) && ts.isIdentifier(property.name)) {
         const propName = property.name.text;
         const defaultValue = this.evaluateDefaultValue(property.initializer);
         if (defaultValue !== undefined) {
