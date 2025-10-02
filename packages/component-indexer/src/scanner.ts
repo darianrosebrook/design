@@ -192,6 +192,13 @@ export class ComponentScanner {
     };
 
     visit(sourceFile);
+
+    // TODO: Implement compound component detection
+    // const compoundComponents = this.discoverCompoundComponents(sourceFile);
+    // for (const compound of compoundComponents) {
+    //   components.push(this.createComponentEntry(compound));
+    // }
+
     return components;
   }
 
@@ -261,7 +268,35 @@ export class ComponentScanner {
       }
     }
 
-    return false;
+    // As a fallback, check if the function body contains JSX
+    // This is more expensive but catches cases where type inference fails
+    return this.hasJSXInBody(node.body);
+  }
+
+  /**
+   * Check if function body contains JSX elements
+   */
+  private hasJSXInBody(body: ts.ConciseBody | undefined): boolean {
+    if (!body) return false;
+
+    let hasJSX = false;
+
+    const visitor = (node: ts.Node): void => {
+      if (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node) || ts.isJsxFragment(node)) {
+        hasJSX = true;
+        return;
+      }
+      ts.forEachChild(node, visitor);
+    };
+
+    if (ts.isBlock(body)) {
+      ts.forEachChild(body, visitor);
+    } else {
+      // Arrow function expression body
+      visitor(body);
+    }
+
+    return hasJSX;
   }
 
   /**
@@ -288,6 +323,98 @@ export class ComponentScanner {
    * Extract component metadata from AST node
    */
   private extractComponentMetadata(
+    node: ts.Node,
+    sourceFile: ts.SourceFile
+  ): RawComponentMetadata | null {
+    // First extract the component metadata normally
+    const metadata = this.extractComponentMetadataBase(node, sourceFile);
+    if (!metadata) return null;
+
+    // Then try to extract default values from the implementation
+    const defaultValues = this.extractDefaultValues(node, sourceFile);
+    if (defaultValues) {
+      // Merge default values into props
+      metadata.props = metadata.props.map((prop) => {
+        const defaultValue = defaultValues[prop.name];
+        return defaultValue !== undefined ? { ...prop, defaultValue } : prop;
+      });
+    }
+
+    return metadata;
+  }
+
+  /**
+   * Discover compound components (e.g., Card.Header, Menu.Item)
+   */
+  private discoverCompoundComponents(
+    sourceFile: ts.SourceFile
+  ): RawComponentMetadata[] {
+    const compounds: RawComponentMetadata[] = [];
+
+    // Walk the source file to find property assignments like: Component.SubComponent = ...
+    const visitor = (node: ts.Node): void => {
+      if (
+        ts.isPropertyAccessExpression(node) &&
+        ts.isIdentifier(node.expression) &&
+        node.name.text !== "defaultProps" // Skip defaultProps
+      ) {
+        // Check if this is part of an assignment: Component.SubComponent = ...
+        let current: ts.Node = node;
+        while (current && !ts.isBinaryExpression(current)) {
+          current = current.parent;
+        }
+
+        if (
+          ts.isBinaryExpression(current) &&
+          current.operatorToken.kind === ts.SyntaxKind.EqualsToken
+        ) {
+          const baseComponentName = node.expression.text;
+          const subComponentName = node.name.text;
+
+          // Check if the right side is a component function
+          const rightSide = current.right;
+          if (
+            ts.isArrowFunction(rightSide) ||
+            ts.isFunctionExpression(rightSide) ||
+            ts.isIdentifier(rightSide) // Could reference another component
+          ) {
+            // Check if this looks like a React component
+            const isComponent =
+              ts.isArrowFunction(rightSide) || ts.isFunctionExpression(rightSide)
+                ? this.hasJSXReturnType(rightSide)
+                : this.isReactComponent(rightSide); // If identifier, check if it references a component
+
+            if (isComponent) {
+              // Create a compound component entry
+              const compoundName = `${baseComponentName}.${subComponentName}`;
+              const compoundId = `compound-${baseComponentName}-${subComponentName}`;
+
+              compounds.push({
+                name: compoundName,
+                filePath: sourceFile.fileName,
+                exportName: compoundName,
+                props: [], // Compound components typically don't have their own props
+                jsDocTags: {
+                  category: "compound",
+                  parent: baseComponentName,
+                },
+              });
+            }
+          }
+        }
+      }
+
+      ts.forEachChild(node, visitor);
+    };
+
+    ts.forEachChild(sourceFile, visitor);
+    return compounds;
+  }
+
+  /**
+   * Extract component metadata from AST node (base implementation)
+   */
+  private extractComponentMetadataBase(
     node: ts.Node,
     sourceFile: ts.SourceFile
   ): RawComponentMetadata | null {
@@ -341,8 +468,12 @@ export class ComponentScanner {
           ? node.parameters[0]
           : ts.isVariableStatement(node) &&
             node.declarationList.declarations[0]?.initializer &&
-            (ts.isArrowFunction(node.declarationList.declarations[0].initializer) ||
-              ts.isFunctionExpression(node.declarationList.declarations[0].initializer))
+            (ts.isArrowFunction(
+              node.declarationList.declarations[0].initializer
+            ) ||
+              ts.isFunctionExpression(
+                node.declarationList.declarations[0].initializer
+              ))
           ? node.declarationList.declarations[0].initializer.parameters[0]
           : undefined;
 
@@ -464,7 +595,8 @@ export class ComponentScanner {
             type: propType,
             required,
             description,
-            designTags: Object.keys(designTags).length > 0 ? designTags : undefined,
+            designTags:
+              Object.keys(designTags).length > 0 ? designTags : undefined,
           });
         }
       }
@@ -509,7 +641,8 @@ export class ComponentScanner {
           type: this.checker.typeToString(propType),
           required,
           description,
-          designTags: Object.keys(designTags).length > 0 ? designTags : undefined,
+          designTags:
+            Object.keys(designTags).length > 0 ? designTags : undefined,
         });
       }
     }
@@ -536,6 +669,317 @@ export class ComponentScanner {
     }
 
     return "";
+  }
+
+  /**
+   * Extract default values from component implementation
+   */
+  private extractDefaultValues(
+    node: ts.Node,
+    sourceFile: ts.SourceFile
+  ): Record<string, unknown> | null {
+    const defaultValues: Record<string, unknown> = {};
+
+    // 1. Extract from function parameter defaults
+    this.extractFromFunctionParameters(node, defaultValues);
+
+    // 2. Extract from defaultProps assignment
+    this.extractFromDefaultProps(node, sourceFile, defaultValues);
+
+    // 3. Extract from destructuring defaults in function body
+    this.extractFromDestructuringDefaults(node, defaultValues);
+
+    return Object.keys(defaultValues).length > 0 ? defaultValues : null;
+  }
+
+  /**
+   * Extract default values from function parameters (destructuring)
+   */
+  private extractFromFunctionParameters(
+    node: ts.Node,
+    defaultValues: Record<string, unknown>
+  ): void {
+    let parameters: readonly ts.ParameterDeclaration[] | undefined;
+
+    if (ts.isFunctionDeclaration(node)) {
+      parameters = node.parameters;
+    } else if (ts.isArrowFunction(node)) {
+      parameters = node.parameters;
+    } else if (ts.isFunctionExpression(node)) {
+      parameters = node.parameters;
+    } else if (ts.isVariableStatement(node)) {
+      // Handle arrow function assigned to variable
+      const declaration = node.declarationList.declarations[0];
+      if (
+        declaration?.initializer &&
+        (ts.isArrowFunction(declaration.initializer) ||
+          ts.isFunctionExpression(declaration.initializer))
+      ) {
+        parameters = declaration.initializer.parameters;
+      }
+    }
+
+    if (parameters && parameters.length > 0) {
+      const firstParam = parameters[0];
+      if (firstParam) {
+        // Handle destructuring parameter: ({ variant = "primary" }: Props)
+        if (
+          firstParam.name &&
+          ts.isObjectBindingPattern(firstParam.name)
+        ) {
+          this.extractDefaultsFromBindingPattern(firstParam.name, defaultValues);
+        }
+        // Handle inline type literal with defaults: ({ variant = "primary" }: { variant?: string })
+        else if (firstParam.type && ts.isTypeLiteralNode(firstParam.type)) {
+          this.extractDefaultsFromTypeLiteral(firstParam.type, defaultValues);
+        }
+      }
+    }
+  }
+
+  /**
+   * Extract defaults from inline type literal parameters
+   */
+  private extractDefaultsFromTypeLiteral(
+    typeLiteral: ts.TypeLiteralNode,
+    defaultValues: Record<string, unknown>
+  ): void {
+    for (const member of typeLiteral.members) {
+      if (ts.isPropertySignature(member) && member.name) {
+        const propName = member.name.getText();
+
+        // Look for default value in the initializer (if present in destructuring)
+        // Note: TypeScript AST doesn't directly store destructuring defaults in type literals
+        // We need to look at the parameter declaration itself
+        // This is handled in extractFromDestructuringDefaults
+      }
+    }
+  }
+
+  /**
+   * Extract default values from defaultProps assignments
+   */
+  private extractFromDefaultProps(
+    node: ts.Node,
+    sourceFile: ts.SourceFile,
+    defaultValues: Record<string, unknown>
+  ): void {
+    const componentName = this.getComponentName(node);
+    if (!componentName) return;
+
+    // Walk the source file to find defaultProps assignments
+    const visitor = (node: ts.Node): void => {
+      // Look for: ComponentName.defaultProps = { ... }
+      if (
+        ts.isPropertyAccessExpression(node) &&
+        ts.isIdentifier(node.expression) &&
+        node.expression.text === componentName &&
+        node.name.text === "defaultProps"
+      ) {
+        // Find the parent assignment
+        let current: ts.Node = node;
+        while (current && !ts.isBinaryExpression(current)) {
+          current = current.parent;
+        }
+
+        if (
+          ts.isBinaryExpression(current) &&
+          current.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
+          ts.isObjectLiteralExpression(current.right)
+        ) {
+          this.extractDefaultsFromObjectLiteral(current.right, defaultValues);
+        }
+      }
+
+      ts.forEachChild(node, visitor);
+    };
+
+    ts.forEachChild(sourceFile, visitor);
+  }
+
+  /**
+   * Extract default values from destructuring defaults in function body
+   */
+  private extractFromDestructuringDefaults(
+    node: ts.Node,
+    defaultValues: Record<string, unknown>
+  ): void {
+    let body: ts.ConciseBody | undefined;
+
+    if (ts.isFunctionDeclaration(node)) {
+      body = node.body;
+    } else if (ts.isArrowFunction(node)) {
+      body = node.body;
+    } else if (ts.isFunctionExpression(node)) {
+      body = node.body;
+    } else if (ts.isVariableStatement(node)) {
+      const declaration = node.declarationList.declarations[0];
+      if (
+        declaration?.initializer &&
+        ts.isArrowFunction(declaration.initializer)
+      ) {
+        body = declaration.initializer.body;
+      }
+    }
+
+    if (!body) return;
+
+    // Walk the body to find destructuring assignments
+    const visitor = (node: ts.Node): void => {
+      // Look for: const { variant = "primary" } = props;
+      if (
+        ts.isVariableStatement(node) ||
+        ts.isVariableDeclarationList(node)
+      ) {
+        const declarations = ts.isVariableStatement(node)
+          ? node.declarationList.declarations
+          : node.declarations;
+
+        for (const declaration of declarations) {
+          if (
+            declaration.initializer &&
+            ts.isObjectBindingPattern(declaration.name)
+          ) {
+            // Found destructuring: const { prop1 = default1, prop2 = default2 } = props
+            this.extractDefaultsFromBindingPattern(
+              declaration.name,
+              defaultValues
+            );
+          }
+        }
+      }
+
+      ts.forEachChild(node, visitor);
+    };
+
+    if (ts.isBlock(body)) {
+      ts.forEachChild(body, visitor);
+    } else {
+      // Arrow function with expression body - still might have destructuring in a wrapper block
+      visitor(body);
+    }
+  }
+
+  /**
+   * Extract defaults from object binding pattern (destructuring)
+   */
+  private extractDefaultsFromBindingPattern(
+    bindingPattern: ts.ObjectBindingPattern,
+    defaultValues: Record<string, unknown>
+  ): void {
+    for (const element of bindingPattern.elements) {
+      if (ts.isBindingElement(element) && element.initializer) {
+        // Found: prop = defaultValue
+        const propName = element.name.getText();
+        const defaultValue = this.evaluateDefaultValue(element.initializer);
+        if (defaultValue !== undefined) {
+          defaultValues[propName] = defaultValue;
+        }
+      }
+    }
+  }
+
+  /**
+   * Extract defaults from object literal expression
+   */
+  private extractDefaultsFromObjectLiteral(
+    objectLiteral: ts.ObjectLiteralExpression,
+    defaultValues: Record<string, unknown>
+  ): void {
+    for (const property of objectLiteral.properties) {
+      if (
+        ts.isPropertyAssignment(property) &&
+        ts.isIdentifier(property.name)
+      ) {
+        const propName = property.name.text;
+        const defaultValue = this.evaluateDefaultValue(property.initializer);
+        if (defaultValue !== undefined) {
+          defaultValues[propName] = defaultValue;
+        }
+      }
+    }
+  }
+
+  /**
+   * Evaluate a default value expression to a concrete value
+   */
+  private evaluateDefaultValue(initializer: ts.Expression): unknown {
+    // Handle string literals
+    if (ts.isStringLiteral(initializer)) {
+      return initializer.text;
+    }
+
+    // Handle numeric literals
+    if (ts.isNumericLiteral(initializer)) {
+      return Number(initializer.text);
+    }
+
+    // Handle boolean literals
+    if (initializer.kind === ts.SyntaxKind.TrueKeyword) {
+      return true;
+    }
+    if (initializer.kind === ts.SyntaxKind.FalseKeyword) {
+      return false;
+    }
+
+    // Handle null literal
+    if (initializer.kind === ts.SyntaxKind.NullKeyword) {
+      return null;
+    }
+
+    // Handle undefined (void 0 or undefined keyword)
+    if (
+      initializer.kind === ts.SyntaxKind.UndefinedKeyword ||
+      (ts.isVoidExpression(initializer) &&
+        ts.isNumericLiteral(initializer.expression) &&
+        initializer.expression.text === "0")
+    ) {
+      return undefined;
+    }
+
+    // Handle array literals
+    if (ts.isArrayLiteralExpression(initializer)) {
+      return initializer.elements.map((element) =>
+        this.evaluateDefaultValue(element)
+      );
+    }
+
+    // Handle object literals (shallow)
+    if (ts.isObjectLiteralExpression(initializer)) {
+      const obj: Record<string, unknown> = {};
+      for (const property of initializer.properties) {
+        if (
+          ts.isPropertyAssignment(property) &&
+          ts.isIdentifier(property.name)
+        ) {
+          obj[property.name.text] = this.evaluateDefaultValue(
+            property.initializer
+          );
+        }
+      }
+      return obj;
+    }
+
+    // For complex expressions, return undefined (can't evaluate statically)
+    // This includes function calls, identifiers, etc.
+    return undefined;
+  }
+
+  /**
+   * Get component name from AST node
+   */
+  private getComponentName(node: ts.Node): string | undefined {
+    if (ts.isFunctionDeclaration(node) && node.name) {
+      return node.name.text;
+    } else if (ts.isVariableStatement(node)) {
+      const declaration = node.declarationList.declarations[0];
+      if (declaration?.name && ts.isIdentifier(declaration.name)) {
+        return declaration.name.text;
+      }
+    } else if (ts.isClassDeclaration(node) && node.name) {
+      return node.name.text;
+    }
+    return undefined;
   }
 
   /**
@@ -617,7 +1061,9 @@ export class ComponentScanner {
   /**
    * Parse variant information from JSDoc
    */
-  private parseVariants(variantStr: string): Array<Record<string, unknown>> | undefined {
+  private parseVariants(
+    variantStr: string
+  ): Array<Record<string, unknown>> | undefined {
     try {
       // Try to parse as JSON
       const parsed = JSON.parse(variantStr);

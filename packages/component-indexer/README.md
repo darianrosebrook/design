@@ -7,6 +7,7 @@ TypeScript Compiler API-based component scanner for automatic React component di
 - ✅ Automatic React component discovery (function, arrow, class components)
 - ✅ Full TypeScript type extraction (generics, unions, intersections)
 - ✅ JSDoc metadata parsing for categories and tags
+- ✅ **Default value extraction from implementations**
 - ✅ Stable ULID-based component IDs
 - ✅ JSON schema validation with Zod
 - ✅ **Watch mode for real-time updates**

@@ -181,7 +181,7 @@ export function Button(props: ButtonProps): JSX.Element {
 
       expect(result.components).toHaveLength(1);
       const props = result.components[0].props;
-      
+
       const labelProp = props.find((p) => p.name === "label");
       expect(labelProp?.description).toBe("The text label for the button");
 
@@ -461,4 +461,3 @@ export function Button(props: ButtonProps): JSX.Element {
     });
   });
 });
-
