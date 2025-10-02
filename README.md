@@ -164,7 +164,7 @@ Declarative mapping from design nodes to React components:
 
 ### CAWS (Coding Agent Workflow System)
 
-Drawing from the proven patterns of the [Animator project](https://github.com/darianrosebrook/animator), Designer follows the **CAWS** engineering methodology:
+Drawing from the proven patterns of the [Animate project](https://github.com/darianrosebrook/animate), Designer follows the **CAWS** engineering methodology:
 
 #### **Core Principles**
 - **🎯 Plan First**: Every feature begins with a working specification (YAML) defining scope, risks, and acceptance criteria
@@ -281,4 +281,4 @@ This is a working specification for a design tool. The implementation follows st
 
 ---
 
-*Built with the same discipline as [Animator](https://github.com/darianrosebrook/animator) - deterministic, testable, and architecture-first.*
+*Built with the same discipline as [Animate](https://github.com/darianrosebrook/animate) - deterministic, testable, and architecture-first.*

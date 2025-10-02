@@ -15,7 +15,9 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src tests --ext .ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "components:index": "node dist/cli.js",
+    "components:watch": "node dist/cli.js --watch"
   },
   "dependencies": {
     "typescript": "^5.3.3",

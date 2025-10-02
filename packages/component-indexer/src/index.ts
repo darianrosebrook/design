@@ -16,6 +16,7 @@ import { discoverComponents } from "./scanner.js";
 
 export * from "./types.js";
 export * from "./scanner.js";
+export * from "./watcher.js";
 
 /**
  * Generate component index from discovery results
