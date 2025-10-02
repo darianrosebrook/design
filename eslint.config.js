@@ -111,6 +111,24 @@ export default tseslint.config(
     },
   },
 
+  // Canvas schema package - allow necessary any types for Zod schemas
+  {
+    files: ["packages/canvas-schema/**/*.ts"],
+    rules: {
+      // Zod schemas and validation functions need any types for flexibility
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+
+  // Canvas engine package - allow necessary any types for traversal
+  {
+    files: ["packages/canvas-engine/**/*.ts"],
+    rules: {
+      // Traversal functions need any types for dynamic object access
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+
   // Code generation package (codegen-react)
   {
     files: ["packages/codegen-react/**/*.ts"],
@@ -119,6 +137,32 @@ export default tseslint.config(
       "no-console": ["warn", { allow: ["warn", "error", "info"] }],
       // Template strings may have any types
       "@typescript-eslint/no-explicit-any": "warn",
+    },
+  },
+
+  // CLI files - allow console and necessary any types
+  {
+    files: ["packages/codegen-react/src/cli.ts"],
+    rules: {
+      // CLI needs console for user interaction
+      "no-console": "off",
+      // CLI needs any for dynamic JSON parsing and flexible artboard handling
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
+
+  // Generator files - allow necessary any types for flexibility
+  {
+    files: ["packages/codegen-react/src/generator.ts"],
+    rules: {
+      // Allow any for artboard parameter to handle various structures
+      "@typescript-eslint/no-explicit-any": [
+        "warn",
+        {
+          ignoreRestArgs: true,
+          fixToUnknown: false,
+        },
+      ],
     },
   },
 

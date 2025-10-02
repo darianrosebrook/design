@@ -179,7 +179,10 @@ export class ReactGenerator {
       if (!patterns.has(patternKey)) {
         patterns.set(patternKey, { nodes: [node], count: 0 });
       }
-      patterns.get(patternKey)!.count++;
+      const pattern = patterns.get(patternKey);
+      if (pattern) {
+        pattern.count++;
+      }
 
       // Recurse into children
       if ("children" in node && node.children) {
@@ -558,7 +561,7 @@ export class ReactGenerator {
   /**
    * Generate props object for component instances
    */
-  private generatePropsObject(props: Record<string, any>): string | null {
+  private generatePropsObject(props: Record<string, unknown>): string | null {
     if (!props || Object.keys(props).length === 0) {
       return null;
     }
@@ -943,7 +946,7 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
 
     if (isExtracted) {
       // Export as named export for reuse
-      content += `export function ${componentName}(props: any = {}) {\n`;
+      content += `export function ${componentName}(props: Record<string, unknown> = {}) {\n`;
       content += `  return (\n`;
       content += `    <>\n`;
       content += `${jsxContent}\n`;

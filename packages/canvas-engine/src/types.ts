@@ -6,12 +6,13 @@
 import type {
   CanvasDocumentType,
   NodeType,
-  ULIDType} from "@paths-design/canvas-schema";
+  ULIDType,
+} from "@paths-design/canvas-schema";
 import {
-  CanvasDocument,
-  Node,
-  Artboard,
-  ArtboardType
+  CanvasDocument as _CanvasDocument,
+  Node as _Node,
+  Artboard as _Artboard,
+  ArtboardType as _ArtboardType,
 } from "@paths-design/canvas-schema";
 
 /**

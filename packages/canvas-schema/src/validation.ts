@@ -7,6 +7,7 @@ import Ajv from "ajv";
 import addFormats from "ajv-formats";
 import type { CanvasDocumentType } from "./types.js";
 import { CanvasDocument } from "./types.js";
+import { validateCanvasDocument as ajvValidate } from "./validate.js";
 
 /**
  * Validation error details
@@ -28,7 +29,7 @@ export interface ValidationResult {
 }
 
 /**
- * Canvas document validator using Ajv
+ * Canvas document validator using Ajv and Zod
  */
 export class CanvasValidator {
   private ajv: Ajv;
@@ -43,8 +44,7 @@ export class CanvasValidator {
     // Add format validators (URI, etc.)
     addFormats(this.ajv);
 
-    // TODO: Load schema from file once package structure is set up
-    // For now, we'll use a basic validation
+    // Schema is now embedded in validate.ts for reliability
   }
 
   /**
@@ -67,8 +67,20 @@ export class CanvasValidator {
         };
       }
 
-      // TODO: Add Ajv validation against JSON schema
-      // For now, just return success if Zod validation passes
+      // Then, validate with Ajv against JSON schema for deeper validation
+      const ajvResult = ajvValidate(document);
+
+      if (!ajvResult.valid) {
+        return {
+          valid: false,
+          errors: ajvResult.errors?.map((error) => ({
+            instancePath: error.path || "",
+            message: error.message,
+            keyword: "json-schema",
+            params: {},
+          })) || [],
+        };
+      }
 
       return {
         valid: true,

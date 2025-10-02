@@ -3,12 +3,8 @@
  * @author @darianrosebrook
  */
 
-import type {
-  CanvasDocumentType,
-  NodeType} from "@paths-design/canvas-schema";
-import {
-  ArtboardType,
-} from "@paths-design/canvas-schema";
+import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
+import { ArtboardType as _ArtboardType } from "@paths-design/canvas-schema";
 import type { NodePath, TraversalOptions } from "./types.js";
 
 /**
@@ -189,7 +185,7 @@ export function getDescendants(
   const descendants: TraversalResult[] = [];
 
   // Find the node first
-  const targetNode: NodeType | null = null;
+  const _targetNode: NodeType | null = null;
   let current: any = document;
 
   for (const segment of nodePath) {

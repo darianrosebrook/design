@@ -6,7 +6,7 @@
  */
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { generateReactComponents, createFixedClock } from "./index.js";
 
 /**
@@ -167,17 +167,17 @@ async function main(): Promise<void> {
     let inputContent: string;
     try {
       inputContent = readFileSync(options.input, "utf8");
-    } catch (error) {
+    } catch (_error) {
       console.error(`Failed to read input file: ${options.input}`);
       process.exit(1);
     }
 
     // Parse JSON
-    let document: any;
+    let document: Record<string, unknown>;
     try {
       document = JSON.parse(inputContent);
-    } catch (error) {
-      console.error(`Failed to parse JSON: ${error}`);
+    } catch (_error) {
+      console.error(`Failed to parse JSON: ${_error}`);
       process.exit(1);
     }
 
@@ -196,7 +196,7 @@ async function main(): Promise<void> {
     }
 
     // Generate components
-    const result = generateReactComponents(document, {
+    const result = generateReactComponents(document as any, {
       clock,
       format: options.format,
       indent: options.indent,
@@ -205,7 +205,7 @@ async function main(): Promise<void> {
     // Ensure output directory exists
     try {
       mkdirSync(options.output, { recursive: true });
-    } catch (error) {
+    } catch (_error) {
       console.error(`Failed to create output directory: ${options.output}`);
       process.exit(1);
     }
@@ -220,7 +220,7 @@ async function main(): Promise<void> {
           console.log(`Generated: ${outputPath}`);
         }
         filesWritten++;
-      } catch (error) {
+      } catch (_error) {
         console.error(`Failed to write file: ${outputPath}`);
         process.exit(1);
       }

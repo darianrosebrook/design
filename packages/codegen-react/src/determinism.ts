@@ -61,8 +61,8 @@ export class CanonicalSorter {
   /**
    * Sort object keys deterministically
    */
-  sortObjectKeys(obj: Record<string, any>): Record<string, any> {
-    const sorted: Record<string, any> = {};
+  sortObjectKeys(obj: Record<string, unknown>): Record<string, unknown> {
+    const sorted: Record<string, unknown> = {};
     const keys = Object.keys(obj).sort(this.collator.compare);
 
     for (const key of keys) {

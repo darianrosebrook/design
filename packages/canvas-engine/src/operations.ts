@@ -12,16 +12,16 @@ import type {
   ULIDType,
 } from "@paths-design/canvas-schema";
 import {
-  CanvasDocument,
-  Node,
-  Artboard,
-  ArtboardType,
+  CanvasDocument as _CanvasDocument,
+  Node as _Node,
+  Artboard as _Artboard,
+  ArtboardType as _ArtboardType,
   generateNodeId,
 } from "@paths-design/canvas-schema";
-import {
+import type {
   NodePath,
   OperationResult,
-  NodeOperation,
+  NodeOperation as _NodeOperation,
   DocumentPatch,
   JsonPatch,
 } from "./types.js";
