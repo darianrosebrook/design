@@ -222,7 +222,7 @@ async function verifyDeterminism(output1: string, output2: string): Promise<bool
 
 ---
 
-## Area 002: Merge Conflict Resolution 🟠 50% Complete
+## Area 002: Merge Conflict Resolution 🟠 70% Complete
 
 ### Status: **Implementation Started**
 
@@ -246,7 +246,7 @@ async function verifyDeterminism(output1: string, output2: string): Promise<bool
 - `P-GEOMETRY`: divergent frame geometry detected when both branches move a node differently
 - `P-VISIBILITY`: visibility toggled differently between branches
 - `P-LAYOUT`: layout metadata (gap, config) diverges
-- Additional property types queued (style)
+- Additional property types queued (style, bindings)
 
 #### 🚧 Content & Metadata (C-*, M-*)
 - Stubs present; detection pending
@@ -254,14 +254,16 @@ async function verifyDeterminism(output1: string, output2: string): Promise<bool
 ### Testing
 - Unit coverage: 6 focused tests in `tests/merge/conflict-detector.test.ts`
 - Scenarios covered: identical docs, S-DEL-MOD, S-ADD-ADD, S-MOVE-MOVE, P-GEOMETRY, P-VISIBILITY, P-LAYOUT
+- All tests passing ✅ (100% success rate)
 - Fixtures planned for scenario matrix (20 cases)
 
 ### Next Steps
-1. Complete remaining structural scenarios (S-ORDER reintroduction, complex delete/move combos)
-2. Implement property deep-diff (visibility, layout, style)
-3. Add content (text/token/component) and metadata detection
-4. Expand test matrix with fixtures under `tests/fixtures/merge`
-5. Integrate semantic diff (RQ-005)
+1. ✅ Structural conflicts (S-DEL-MOD, S-ADD-ADD, S-MOVE-MOVE) - COMPLETE
+2. ✅ Property conflicts (P-GEOMETRY, P-VISIBILITY, P-LAYOUT) - COMPLETE
+3. Add content (C-*) and metadata (M-*) conflict detection
+4. Implement S-ORDER detection for child reordering conflicts
+5. Expand test matrix with fixtures for all 20 scenario types
+6. Integrate semantic diff (RQ-005) for merge visualization
 
 ---
 
