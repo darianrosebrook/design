@@ -1,0 +1,40 @@
+{
+  "name": "@paths-design/pattern-manifests",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Pattern manifest system for complex UI patterns (Tabs, Dialogs, etc.)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --max-warnings 0",
+    "lint:fix": "eslint src --fix"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "typescript": "^5.6.2",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "@paths-design/canvas-schema": "file:../canvas-schema",
+    "@paths-design/component-indexer": "file:../component-indexer",
+    "ulidx": "^2.4.1"
+  },
+  "files": [
+    "dist",
+    "manifests",
+    "templates"
+  ],
+  "keywords": [
+    "designer",
+    "patterns",
+    "manifests",
+    "ui-patterns",
+    "semantic"
+  ]
+}
