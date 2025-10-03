@@ -17,5 +17,20 @@ export {
   tokensToTypes,
 } from "./utils";
 
+// Export resolver
+export {
+  resolveTokenReferences,
+  validateTokenReferences,
+  isTokenReference,
+  extractReferencePath,
+  getTokenByPath,
+  buildDependencyGraph,
+  detectCircularReferences,
+  getTokenDependents,
+  getTokenDependencies,
+  type ResolveOptions,
+  type ValidationResult,
+} from "./resolver";
+
 // Export CSS generation script
 export * from "./generate-css";

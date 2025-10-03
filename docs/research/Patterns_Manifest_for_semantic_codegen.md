@@ -1,6 +1,6 @@
-# Semantic Patterns — Manifests & Guided Mapping (v0.1)
+# Semantic Patterns — Component Contracts & Semantic Keys (v1.0)
 
-> Purpose: Define **pattern manifests** that encode roles, required children, relationships, keyboard models, and emission rules so the editor can scaffold semantic, accessible UI by construction and the codegen can deterministically emit JSX/HTML.
+> **IMPLEMENTATION COMPLETE**: This document has been updated to reflect the actual implementation approach using **component contracts** and **semantic keys** rather than pure manifest-based patterns. The system enables deterministic, accessible UI generation through semantic key mapping and component contract definitions.
 
 ---
 
