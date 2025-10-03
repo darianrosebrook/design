@@ -28,4 +28,9 @@ export default defineConfig({
       ],
     },
   },
+  resolve: {
+    alias: {
+      ws: "/Users/darianrosebrook/Desktop/Projects/designer/packages/websocket-server/__mocks__/ws.js",
+    },
+  },
 });

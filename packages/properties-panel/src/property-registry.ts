@@ -3,19 +3,32 @@
  * @author @darianrosebrook
  */
 
-import type { PropertySection, PropertyDefinition } from "./types";
+import type {
+  PropertySection,
+  PropertyDefinition,
+  FontMetadata,
+} from "./types";
 
 /**
  * Registry of all available properties for different node types
  */
 export class PropertyRegistry {
   private static sections: Map<string, PropertySection> = new Map();
+  private static fontOptions: Array<{ label: string; value: string }> = [];
 
   /**
    * Register a property section
    */
   static registerSection(section: PropertySection): void {
     this.sections.set(section.id, section);
+  }
+
+  static setFontFamilies(fonts: FontMetadata[]): void {
+    this.fontOptions = fonts.map((font) => ({
+      label: font.family,
+      value: font.family,
+    }));
+    this.initialize();
   }
 
   /**
@@ -117,6 +130,7 @@ export class PropertyRegistry {
           max: 10000,
           step: 1,
           precision: 0,
+          disclosure: "primary",
         },
         {
           key: "frame.y",
@@ -128,6 +142,7 @@ export class PropertyRegistry {
           max: 10000,
           step: 1,
           precision: 0,
+          disclosure: "primary",
         },
         {
           key: "frame.width",
@@ -139,6 +154,7 @@ export class PropertyRegistry {
           max: 10000,
           step: 1,
           precision: 0,
+          disclosure: "primary",
         },
         {
           key: "frame.height",
@@ -150,6 +166,7 @@ export class PropertyRegistry {
           max: 10000,
           step: 1,
           precision: 0,
+          disclosure: "primary",
         },
         {
           key: "rotation",
@@ -161,6 +178,7 @@ export class PropertyRegistry {
           max: 360,
           step: 1,
           precision: 0,
+          disclosure: "advanced",
         },
         {
           key: "constrainProportions",
@@ -168,6 +186,7 @@ export class PropertyRegistry {
           type: "boolean",
           category: "size",
           description: "Maintain aspect ratio when resizing",
+          disclosure: "advanced",
         },
       ],
     });
@@ -191,6 +210,7 @@ export class PropertyRegistry {
             { label: "Center", value: "center" },
             { label: "Right", value: "right" },
           ],
+          disclosure: "primary",
         },
         {
           key: "verticalAlignment",
@@ -203,6 +223,7 @@ export class PropertyRegistry {
             { label: "Middle", value: "middle" },
             { label: "Bottom", value: "bottom" },
           ],
+          disclosure: "primary",
         },
       ],
     });
@@ -228,6 +249,7 @@ export class PropertyRegistry {
             { label: "Center", value: "center" },
             { label: "Scale", value: "scale" },
           ],
+          disclosure: "advanced",
         },
         {
           key: "constraints.right",
@@ -242,6 +264,7 @@ export class PropertyRegistry {
             { label: "Center", value: "center" },
             { label: "Scale", value: "scale" },
           ],
+          disclosure: "advanced",
         },
         {
           key: "constraints.top",
@@ -256,6 +279,7 @@ export class PropertyRegistry {
             { label: "Center", value: "center" },
             { label: "Scale", value: "scale" },
           ],
+          disclosure: "advanced",
         },
         {
           key: "constraints.bottom",
@@ -270,6 +294,7 @@ export class PropertyRegistry {
             { label: "Center", value: "center" },
             { label: "Scale", value: "scale" },
           ],
+          disclosure: "advanced",
         },
       ],
     });
@@ -290,6 +315,7 @@ export class PropertyRegistry {
           max: 1,
           step: 0.01,
           precision: 2,
+          disclosure: "primary",
         },
         {
           key: "radius",
@@ -301,6 +327,7 @@ export class PropertyRegistry {
           max: 1000,
           step: 1,
           precision: 0,
+          disclosure: "primary",
         },
       ],
     });
@@ -318,6 +345,7 @@ export class PropertyRegistry {
           category: "content",
           description: "Text content",
           multiline: true,
+          disclosure: "primary",
         },
         {
           key: "textStyle.family",
@@ -325,12 +353,15 @@ export class PropertyRegistry {
           type: "select",
           category: "typography",
           description: "Font family",
-          options: [
-            { label: "Inter", value: "Inter" },
-            { label: "System", value: "system-ui" },
-            { label: "Arial", value: "Arial" },
-            { label: "Helvetica", value: "Helvetica" },
-          ],
+          options: this.fontOptions.length
+            ? this.fontOptions
+            : [
+                { label: "Inter", value: "Inter" },
+                { label: "System", value: "system-ui" },
+                { label: "Arial", value: "Arial" },
+                { label: "Helvetica", value: "Helvetica" },
+              ],
+          disclosure: "primary",
         },
         {
           key: "textStyle.size",
@@ -342,6 +373,7 @@ export class PropertyRegistry {
           max: 200,
           step: 1,
           precision: 0,
+          disclosure: "primary",
         },
         {
           key: "textStyle.weight",
@@ -356,6 +388,7 @@ export class PropertyRegistry {
             { label: "Semibold", value: "600" },
             { label: "Bold", value: "700" },
           ],
+          disclosure: "advanced",
         },
         {
           key: "textStyle.lineHeight",
@@ -367,6 +400,7 @@ export class PropertyRegistry {
           max: 3,
           step: 0.1,
           precision: 1,
+          disclosure: "advanced",
         },
         {
           key: "textStyle.letterSpacing",
@@ -378,6 +412,7 @@ export class PropertyRegistry {
           max: 20,
           step: 0.5,
           precision: 1,
+          disclosure: "advanced",
         },
         {
           key: "textStyle.color",
@@ -385,6 +420,7 @@ export class PropertyRegistry {
           type: "color",
           category: "typography",
           description: "Text color",
+          disclosure: "primary",
         },
       ],
     });

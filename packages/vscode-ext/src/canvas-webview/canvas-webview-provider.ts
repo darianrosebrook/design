@@ -14,7 +14,7 @@ import type {
 } from "@paths-design/properties-panel";
 import * as vscode from "vscode";
 import { DocumentStore } from "../document-store";
-import { createMessage, validateMessage } from "../protocol/messages";
+import { validateMessage } from "../protocol/messages";
 import { SelectionCoordinator } from "./selection-coordinator";
 
 /**
@@ -895,5 +895,31 @@ export class CanvasWebviewProvider {
 
     // Return first 32 characters for CSP nonce
     return hash.substring(0, 32);
+  }
+
+  /**
+   * Update the document in the canvas webview
+   */
+  updateDocument(document: CanvasDocumentType): void {
+    this._document = document;
+
+    if (this._panel) {
+      this._panel.webview.postMessage({
+        command: "setDocument",
+        document,
+      });
+    }
+  }
+
+  /**
+   * Notify the canvas renderer about a property change
+   */
+  notifyPropertyChange(event: PropertyChangeEvent): void {
+    if (this._panel) {
+      this._panel.webview.postMessage({
+        command: "propertyChangedFromExtension",
+        event,
+      });
+    }
   }
 }

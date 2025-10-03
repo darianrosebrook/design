@@ -23,6 +23,7 @@
   "dependencies": {
     "@paths-design/canvas-schema": "file:../canvas-schema",
     "@paths-design/component-indexer": "file:../component-indexer",
+    "@paths-design/design-tokens": "file:../design-tokens",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

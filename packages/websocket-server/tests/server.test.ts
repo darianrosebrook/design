@@ -8,14 +8,17 @@ import WebSocket from "ws";
 import { CollaborationServer } from "../src/server.js";
 
 // Mock WebSocket
-vi.mock("ws", () => ({
-  default: {
+vi.mock("ws", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("ws")>();
+  return {
+    ...actual,
     Server: vi.fn().mockImplementation(() => ({
       on: vi.fn(),
       close: vi.fn((callback) => callback && callback()),
+      listen: vi.fn(),
     })),
-  },
-}));
+  };
+});
 
 describe("CollaborationServer", () => {
   let server: CollaborationServer;

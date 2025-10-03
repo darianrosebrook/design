@@ -6,9 +6,9 @@
  * selection mode management for the VS Code extension.
  */
 
+import { createHash } from "crypto";
 import type { SelectionState } from "@paths-design/properties-panel";
 import type * as vscode from "vscode";
-import { createHash } from "crypto";
 
 /**
  * Selection mode types
@@ -387,18 +387,6 @@ export class SelectionCoordinator {
       historySize: this.selectionHistory.length,
       currentMode: this.currentMode,
       selectedCount: this.currentSelection.selectedNodeIds.length,
-    };
-  }
-
-  onSelectionChange(
-    listener: (selection: SelectionState, mode: SelectionMode) => void
-  ): { dispose: () => void } {
-    this.listeners.add(listener);
-
-    return {
-      dispose: () => {
-        this.listeners.delete(listener);
-      },
     };
   }
 

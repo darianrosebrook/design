@@ -28,6 +28,7 @@ export class PropertiesPanelWebviewProvider
   private _extensionInstance?: Record<string, unknown>;
   private _propertyValues: Map<string, Map<string, unknown>> = new Map(); // nodeId -> propertyKey -> value
   private _documentFilePath?: vscode.Uri; // Track the original file path
+  private _fonts: Array<{ label: string; value: string }> = []; // Available fonts for typography
 
   constructor(private context: vscode.ExtensionContext) {
     // Get reference to the extension instance for communication
@@ -74,6 +75,46 @@ export class PropertiesPanelWebviewProvider
       this._view.webview.postMessage({
         command: "propertyChangedFromCanvas",
         event,
+      });
+    }
+  }
+
+  /**
+   * Update the document in the properties panel
+   */
+  updateDocument(document: CanvasDocumentType): void {
+    this._document = document;
+    this._cachePropertyValues(document);
+
+    if (this._view) {
+      this._view.webview.postMessage({
+        command: "setDocument",
+        document,
+      });
+    }
+  }
+
+  /**
+   * Acknowledge a successful property change
+   */
+  acknowledgePropertyChange(event: PropertyChangeEvent): void {
+    if (this._view) {
+      this._view.webview.postMessage({
+        command: "propertyChangeAcknowledged",
+        event,
+      });
+    }
+  }
+
+  /**
+   * Show an error for a property change
+   */
+  showPropertyChangeError(event: PropertyChangeEvent, error: string): void {
+    if (this._view) {
+      this._view.webview.postMessage({
+        command: "propertyChangeError",
+        event,
+        error,
       });
     }
   }
@@ -292,63 +333,19 @@ export class PropertiesPanelWebviewProvider
   private async handlePropertyChange(
     event: PropertyChangeEvent
   ): Promise<void> {
-    console.info("Property change received:", event);
+    console.info("Property change received, forwarding to extension:", event);
 
-    try {
-      // Validate the property change
-      if (!this._extensionInstance) {
-        throw new Error("Extension not initialized");
-      }
-
-      const currentDocument = (
-        this._extensionInstance as any
-      ).getCurrentDocument();
-      if (!currentDocument) {
-        throw new Error("No current document loaded");
-      }
-
-      // Apply the property change to the document
-      const updatedDocument = await this._applyPropertyChangeToDocument(
-        currentDocument,
-        event
+    // Forward property change to extension for DocumentStore-based handling
+    if (
+      this._extensionInstance &&
+      (this._extensionInstance as any).handlePropertyChange
+    ) {
+      await (this._extensionInstance as any).handlePropertyChange(event);
+    } else {
+      console.error(
+        "Extension instance not available for property change handling"
       );
-
-      // Update the extension's document
-      (this._extensionInstance as any)._updateDocument(updatedDocument);
-
-      // Save the document to file
-      await this._saveDocument(updatedDocument);
-
-      // Acknowledge the change back to the webview
-      if (this._view) {
-        this._view.webview.postMessage({
-          command: "propertyChangeAcknowledged",
-          event,
-        });
-      }
-
-      // Notify other views about the change
-      this._notifyCanvasRenderer(event);
-
-      vscode.window.showInformationMessage(
-        `Property updated: ${event.propertyKey}`
-      );
-    } catch (error) {
-      console.error("Failed to apply property change:", error);
-
-      // Send error back to webview
-      if (this._view) {
-        this._view.webview.postMessage({
-          command: "showError",
-          error: "Failed to apply property change: " + (error as Error).message,
-        });
-      }
-
-      vscode.window.showErrorMessage(
-        `Failed to update property: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
+      this.showPropertyChangeError(event, "Extension not available");
     }
   }
 
@@ -368,6 +365,9 @@ export class PropertiesPanelWebviewProvider
       }
     });
 
+    // Send available fonts to the webview
+    this._sendFontsToWebview();
+
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
     // Handle messages from the webview with enhanced error handling
@@ -377,6 +377,7 @@ export class PropertiesPanelWebviewProvider
           case "ready":
             this._isReady = true;
             this._sendCurrentState();
+            await this._sendFontsToWebview();
             break;
 
           case "propertyChange":
@@ -396,6 +397,15 @@ export class PropertiesPanelWebviewProvider
             webviewView.webview.postMessage({
               command: "setSelection",
               selection: this._selection,
+            });
+            break;
+
+          case "setFonts":
+            this._fonts = message.fonts || [];
+            // Send fonts to the webview
+            webviewView.webview.postMessage({
+              command: "setFonts",
+              fonts: this._fonts,
             });
             break;
 
@@ -442,8 +452,31 @@ export class PropertiesPanelWebviewProvider
         command: "setSelection",
         selection: this._selection,
       });
+
+      // Send available fonts
+      this._view.webview.postMessage({
+        command: "setFonts",
+        fonts: this._fonts,
+      });
     } catch (error) {
       console.error("Error sending current state:", error);
+    }
+  }
+
+  private async _sendFontsToWebview(): Promise<void> {
+    if (!this._view || !this._isReady) {
+      return;
+    }
+
+    try {
+      // Get fonts from the extension host
+      const fonts = await vscode.commands.executeCommand("designer.getFonts");
+      this._view.webview.postMessage({
+        command: "setFonts",
+        fonts: fonts as Array<{ label: string; value: string }>,
+      });
+    } catch (error) {
+      console.error("Failed to send fonts to properties panel:", error);
     }
   }
 

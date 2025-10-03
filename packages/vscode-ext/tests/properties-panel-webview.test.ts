@@ -56,6 +56,7 @@ vi.mock("vscode", () => ({
 const mockExtensionInstance = {
   getCurrentDocument: vi.fn(),
   _updateDocument: vi.fn(),
+  handlePropertyChange: vi.fn(),
 };
 
 (globalThis as any).designerExtension = mockExtensionInstance;
@@ -148,6 +149,7 @@ describe("PropertiesPanelWebviewProvider", () => {
       };
 
       mockExtensionInstance.getCurrentDocument.mockReturnValue(mockDocument);
+      mockExtensionInstance.handlePropertyChange.mockResolvedValue(undefined);
 
       // Set document with file path to avoid "No file path tracked" error
       const mockFilePath = { fsPath: "/test/path/test.canvas.json" } as any;
@@ -168,25 +170,22 @@ describe("PropertiesPanelWebviewProvider", () => {
 
       await handler({ command: "propertyChange", event: propertyEvent });
 
-      // Should acknowledge the change (after successful save)
-      expect(mockWebviewView.webview.postMessage).toHaveBeenCalledWith({
-        command: "propertyChangeAcknowledged",
-        event: propertyEvent,
-      });
+      // Should forward to extension's handlePropertyChange method
+      expect(mockExtensionInstance.handlePropertyChange).toHaveBeenCalledWith(
+        propertyEvent
+      );
     });
 
-    it("should handle errors gracefully", async () => {
-      // Set up mock to throw error
-      mockExtensionInstance.getCurrentDocument.mockImplementation(() => {
-        throw new Error("Test error");
-      });
+    it("should handle extension unavailability gracefully", async () => {
+      // Set up mock to not have handlePropertyChange method
+      delete (mockExtensionInstance as any).handlePropertyChange;
 
       provider.resolveWebviewView(mockWebviewView);
 
       const messageHandler = mockWebviewView.webview.onDidReceiveMessage;
       const handler = messageHandler.mock.calls[0][0];
 
-      // Simulate property change that will fail
+      // Simulate property change
       const propertyEvent: PropertyChangeEvent = {
         nodeId: "frame-1",
         propertyKey: "frame.x",
@@ -197,10 +196,11 @@ describe("PropertiesPanelWebviewProvider", () => {
 
       await handler({ command: "propertyChange", event: propertyEvent });
 
-      // Should send error message
+      // Should send error message about extension not available
       expect(mockWebviewView.webview.postMessage).toHaveBeenCalledWith({
-        command: "showError",
-        error: expect.stringContaining("Failed to apply property change"),
+        command: "propertyChangeError",
+        event: propertyEvent,
+        error: "Extension not available",
       });
     });
   });

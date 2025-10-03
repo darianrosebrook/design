@@ -7,6 +7,7 @@
  */
 
 import React, { useState, useCallback } from "react";
+import { createMessage } from "../../src/protocol/messages";
 
 // VS Code API type
 interface VSCodeAPI {
@@ -96,13 +97,12 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({
   const handleSelectionModeChange = useCallback(
     (mode: "single" | "rectangle" | "lasso") => {
       setSelectionMode(mode);
-      vscode.postMessage({
-        type: "selectionModeChange",
-        payload: {
+      vscode.postMessage(
+        createMessage("selectionModeChange", {
           mode,
           config: { mode, multiSelect: false, preserveSelection: false },
-        },
-      });
+        })
+      );
     },
     [vscode]
   );
@@ -111,63 +111,53 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({
   const handleZoomIn = useCallback(() => {
     const newZoom = Math.min(zoom * 1.2, 500);
     setZoom(newZoom);
-    vscode.postMessage({
-      type: "zoom",
-      level: newZoom,
-    });
+    vscode.postMessage(
+      createMessage("zoom", {
+        level: newZoom,
+      })
+    );
   }, [zoom, vscode]);
 
   const handleZoomOut = useCallback(() => {
     const newZoom = Math.max(zoom * 0.8, 10);
     setZoom(newZoom);
-    vscode.postMessage({
-      type: "zoom",
-      level: newZoom,
-    });
+    vscode.postMessage(
+      createMessage("zoom", {
+        level: newZoom,
+      })
+    );
   }, [zoom, vscode]);
 
   const handleZoomFit = useCallback(() => {
     setZoom(100);
-    vscode.postMessage({
-      type: "zoomFit",
-    });
+    vscode.postMessage(createMessage("zoomFit", {}));
   }, [vscode]);
 
   // Grid and snap handlers
   const handleToggleGrid = useCallback(() => {
     const newShowGrid = !showGrid;
     setShowGrid(newShowGrid);
-    vscode.postMessage({
-      type: "toggleGrid",
-    });
+    vscode.postMessage(createMessage("toggleGrid", {}));
   }, [showGrid, vscode]);
 
   const handleToggleSnap = useCallback(() => {
     const newSnapToGrid = !snapToGrid;
     setSnapToGrid(newSnapToGrid);
-    vscode.postMessage({
-      type: "toggleSnap",
-    });
+    vscode.postMessage(createMessage("toggleSnap", {}));
   }, [snapToGrid, vscode]);
 
   // History handlers
   const handleUndo = useCallback(() => {
-    vscode.postMessage({
-      type: "undo",
-    });
+    vscode.postMessage(createMessage("undo", {}));
   }, [vscode]);
 
   const handleRedo = useCallback(() => {
-    vscode.postMessage({
-      type: "redo",
-    });
+    vscode.postMessage(createMessage("redo", {}));
   }, [vscode]);
 
   // Save handler
   const handleSave = useCallback(() => {
-    vscode.postMessage({
-      type: "save",
-    });
+    vscode.postMessage(createMessage("save", {}));
   }, [vscode]);
 
   // View mode handlers
@@ -175,10 +165,7 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({
     (mode: "canvas" | "code") => {
       setViewMode(mode);
       onViewModeChange?.(mode);
-      vscode.postMessage({
-        type: "setViewMode",
-        mode,
-      });
+      vscode.postMessage(createMessage("setViewMode", { mode }));
     },
     [onViewModeChange, vscode]
   );

@@ -4,6 +4,27 @@
  */
 
 import type { SemanticKeyType } from "@paths-design/canvas-schema";
+import type { DesignTokens } from "@paths-design/design-tokens";
+
+/**
+ * Font metadata for typography controls
+ */
+export interface FontMetadata {
+  family: string;
+  category?: string;
+  variants: FontVariant[];
+  source: "google" | "local";
+  previewUrl?: string;
+}
+
+/**
+ * Font variant information
+ */
+export interface FontVariant {
+  weight: number;
+  style: "normal" | "italic";
+  url?: string;
+}
 
 /**
  * Selection state for the properties panel
@@ -50,6 +71,7 @@ export interface PropertyDefinition {
   multiline?: boolean;
   semanticKey?: SemanticKeyType;
   componentContract?: ComponentContractProperty;
+  disclosure?: "primary" | "advanced";
 }
 
 /**
@@ -122,6 +144,12 @@ export interface PropertiesPanelProps {
   onSelectionChange: (selection: SelectionState) => void;
   className?: string;
   style?: React.CSSProperties;
+  fonts?: FontMetadata[];
+  propertyError?: {
+    propertyKey: string;
+    error: string;
+  } | null;
+  onDismissError?: () => void;
 }
 
 /**
@@ -129,10 +157,12 @@ export interface PropertiesPanelProps {
  */
 export interface PropertyEditorProps {
   definition: PropertyDefinition;
-  value: PropertyValue;
+  value: PropertyValue | "mixed";
   onChange: (value: PropertyValue) => void;
   disabled?: boolean;
   className?: string;
+  fonts?: FontMetadata[];
+  tokens?: DesignTokens;
 }
 
 /**
@@ -143,4 +173,5 @@ export interface PropertySectionProps {
   selection: SelectionState;
   onPropertyChange: (event: PropertyChangeEvent) => void;
   className?: string;
+  fonts?: FontMetadata[];
 }

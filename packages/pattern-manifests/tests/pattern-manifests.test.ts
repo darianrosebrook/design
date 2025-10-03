@@ -33,7 +33,7 @@ describe("PatternRegistry", () => {
     it("gets patterns by category", () => {
       const navPatterns = registry.getByCategory("navigation");
       expect(navPatterns.length).toBeGreaterThan(0);
-      expect(navPatterns.every(p => p.category === "navigation")).toBe(true);
+      expect(navPatterns.every((p) => p.category === "navigation")).toBe(true);
     });
 
     it("gets patterns by tag", () => {
@@ -44,7 +44,9 @@ describe("PatternRegistry", () => {
     it("searches patterns", () => {
       const results = registry.search("tab");
       expect(results.length).toBeGreaterThan(0);
-      expect(results.some(p => p.name.toLowerCase().includes("tab"))).toBe(true);
+      expect(results.some((p) => p.name.toLowerCase().includes("tab"))).toBe(
+        true
+      );
     });
   });
 
@@ -53,10 +55,10 @@ describe("PatternRegistry", () => {
       const allPatterns = registry.getAll();
       expect(allPatterns.length).toBeGreaterThan(5); // Should have multiple patterns
 
-      const categories = [...new Set(allPatterns.map(p => p.category))];
+      const categories = [...new Set(allPatterns.map((p) => p.category))];
       expect(categories).toContain("navigation");
       expect(categories).toContain("overlay");
-      expect(categories).toContain("form");
+      expect(categories).toContain("forms");
     });
 
     it("has tabs pattern with correct structure", () => {
@@ -136,7 +138,9 @@ describe("PatternDetector", () => {
       };
 
       const instances = detector.detectPatterns(canvasDoc);
-      const tabsInstance = instances.find(i => i.patternId === "pattern.tabs");
+      const tabsInstance = instances.find(
+        (i) => i.patternId === "pattern.tabs"
+      );
 
       expect(tabsInstance).toBeDefined();
       expect(tabsInstance?.isComplete).toBe(false); // Missing some required nodes
@@ -201,7 +205,9 @@ describe("PatternDetector", () => {
       };
 
       const instances = detector.detectPatterns(canvasDoc);
-      const tabsInstance = instances.find(i => i.patternId === "pattern.tabs");
+      const tabsInstance = instances.find(
+        (i) => i.patternId === "pattern.tabs"
+      );
 
       expect(tabsInstance).toBeDefined();
       expect(tabsInstance?.isComplete).toBe(true);
@@ -240,7 +246,7 @@ describe("PatternGenerator", () => {
         generator.generateFromPattern("pattern.nonexistent", {
           name: "Test",
         });
-      }).toThrow("Pattern \"pattern.nonexistent\" not found");
+      }).toThrow('Pattern "pattern.nonexistent" not found');
     });
   });
 });
@@ -357,7 +363,7 @@ describe("PatternValidator", () => {
 
       expect(validation.valid).toBe(false);
       expect(validation.errors.length).toBeGreaterThan(0);
-      expect(validation.errors.some(e => e.includes("tablist"))).toBe(true);
+      expect(validation.errors.some((e) => e.includes("tablist"))).toBe(true);
     });
   });
 });

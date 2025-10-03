@@ -3,8 +3,11 @@
  * @author @darianrosebrook
  */
 
+import type { DesignTokens } from "@paths-design/design-tokens";
 import React, { useState, useCallback } from "react";
 import { formatPropertyValue, validatePropertyValue } from "./property-utils";
+import { TokenPill } from "./TokenPill";
+import { TokenSelector } from "./TokenSelector";
 import type { PropertyEditorProps, PropertyValue } from "./types";
 
 /**
@@ -57,13 +60,46 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
   onChange,
   disabled = false,
   className = "",
+  fonts,
+  tokens,
 }) => {
-  const [inputValue, setInputValue] = useState(value);
+  const isMixed = value === "mixed";
+  const [inputValue, setInputValue] = useState<PropertyValue | undefined>(
+    value === "mixed" ? undefined : value
+  );
   const [error, setError] = useState<string | null>(null);
+  const [showTokenSelector, setShowTokenSelector] = useState(false);
+
+  // Check if current value is a token reference
+  const isTokenReference =
+    typeof inputValue === "string" &&
+    inputValue.startsWith("{") &&
+    inputValue.endsWith("}");
+  const tokenPath = isTokenReference ? inputValue.slice(1, -1) : null;
+
+  // Determine property type for token selection
+  const getPropertyType = ():
+    | "color"
+    | "typography"
+    | "spacing"
+    | "radius"
+    | "shadow" => {
+    if (definition.type === "color") {return "color";}
+    if (definition.key.startsWith("textStyle.")) {return "typography";}
+    if (
+      definition.key.includes("spacing") ||
+      definition.key.includes("padding") ||
+      definition.key.includes("margin")
+    )
+      {return "spacing";}
+    if (definition.key.includes("radius")) {return "radius";}
+    if (definition.key.includes("shadow")) {return "shadow";}
+    return "typography"; // default
+  };
 
   // Update local state when prop value changes
   React.useEffect(() => {
-    setInputValue(value);
+    setInputValue(value === "mixed" ? undefined : value);
   }, [value]);
 
   const handleChange = useCallback(
@@ -101,7 +137,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
             value={(inputValue as string) || ""}
             onChange={(e) => handleChange(e.target.value)}
             placeholder={definition.placeholder}
-            disabled={disabled}
+            disabled={disabled || isMixed}
             className={`property-input ${
               definition.multiline ? "multiline" : ""
             }`}
@@ -123,7 +159,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
               min={definition.min}
               max={definition.max}
               step={definition.step || 1}
-              disabled={disabled}
+              disabled={disabled || isMixed}
               className="property-input number-input"
             />
             {definition.category === "typography" &&
@@ -140,22 +176,29 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
               type="checkbox"
               checked={(inputValue as boolean) || false}
               onChange={(e) => handleChange(e.target.checked)}
-              disabled={disabled}
+              disabled={disabled || isMixed}
             />
             <span className="checkmark"></span>
           </label>
         );
 
       case "select":
+        // Special handling for font family selection
+        const isFontFamily = definition.key === "textStyle.family";
+        const selectOptions =
+          isFontFamily && fonts
+            ? fonts.map((font) => ({ label: font.family, value: font.family }))
+            : definition.options || [];
+
         return (
           <select
             value={(inputValue as string) || ""}
             onChange={(e) => handleChange(e.target.value)}
-            disabled={disabled}
+            disabled={disabled || isMixed}
             className="property-select"
           >
             <option value="">{definition.placeholder || "Select..."}</option>
-            {definition.options?.map((option) => (
+            {selectOptions.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -170,7 +213,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
               type="color"
               value={typeof inputValue === "string" ? inputValue : "#000000"}
               onChange={(e) => handleChange(e.target.value)}
-              disabled={disabled}
+              disabled={disabled || isMixed}
               className="color-input"
             />
             <input
@@ -178,7 +221,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
               value={displayValue}
               onChange={(e) => handleChange(e.target.value)}
               placeholder="#000000"
-              disabled={disabled}
+              disabled={disabled || isMixed}
               className="color-text-input"
             />
           </div>
@@ -191,7 +234,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
             value={displayValue}
             onChange={(e) => handleChange(e.target.value)}
             placeholder={definition.placeholder}
-            disabled={disabled}
+            disabled={disabled || isMixed}
             className="property-input"
           />
         );
@@ -202,15 +245,69 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
     <div className={`property-editor ${className}`}>
       <div className="property-label">
         <label title={definition.description}>{definition.label}</label>
+        {tokenPath && (
+          <TokenPill
+            tokenPath={tokenPath}
+            resolvedValue={
+              typeof inputValue === "string" || typeof inputValue === "number"
+                ? inputValue
+                : String(inputValue)
+            }
+            onUnlink={() => handleChange("")}
+          />
+        )}
+        {tokens && !isTokenReference && !isMixed && (
+          <button
+            type="button"
+            className="link-token-btn"
+            onClick={() => setShowTokenSelector(true)}
+            title="Link to design token"
+            disabled={disabled}
+          >
+            🔗
+          </button>
+        )}
       </div>
       <div className="property-input-container">
-        {renderInput()}
+        {isTokenReference ? (
+          <div className="token-linked-input">
+            <span className="token-reference-display">{inputValue}</span>
+            <button
+              type="button"
+              className="override-token-btn"
+              onClick={() => handleChange("")}
+              title="Override token"
+            >
+              Override
+            </button>
+          </div>
+        ) : (
+          renderInput()
+        )}
         {error && (
           <div className="property-error" title={error}>
             ⚠️
           </div>
         )}
+        {isMixed && !error && (
+          <div className="property-mixed" title="Multiple values selected">
+            —
+          </div>
+        )}
       </div>
+
+      {showTokenSelector && tokens && (
+        <TokenSelector
+          tokens={tokens}
+          propertyType={getPropertyType()}
+          currentValue={typeof inputValue === "string" ? inputValue : undefined}
+          onSelectToken={(tokenRef) => {
+            handleChange(tokenRef);
+            setShowTokenSelector(false);
+          }}
+          onCancel={() => setShowTokenSelector(false)}
+        />
+      )}
     </div>
   );
 };
@@ -395,5 +492,62 @@ export const propertyEditorStyles = `
   .property-input-container {
     width: 100%;
   }
+}
+
+.token-linked-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  background-color: var(--vscode-input-background);
+  border: 1px solid var(--vscode-input-border);
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--vscode-input-foreground);
+}
+
+.token-reference-display {
+  flex: 1;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.override-token-btn {
+  padding: 2px 6px;
+  background-color: var(--vscode-button-background);
+  color: var(--vscode-button-foreground);
+  border: 1px solid var(--vscode-button-border);
+  border-radius: 2px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+
+.override-token-btn:hover {
+  background-color: var(--vscode-button-hoverBackground);
+}
+
+.link-token-btn {
+  background: none;
+  border: none;
+  color: var(--vscode-foreground);
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-size: 12px;
+  opacity: 0.6;
+  transition: opacity 0.1s ease;
+  margin-left: 4px;
+}
+
+.link-token-btn:hover:not(:disabled) {
+  opacity: 1;
+  background-color: var(--vscode-toolbar-hoverBackground);
+}
+
+.link-token-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 `;

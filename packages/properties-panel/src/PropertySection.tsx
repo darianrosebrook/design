@@ -20,6 +20,7 @@ export const PropertySectionComponent: React.FC<
   onPropertyChange,
   getPropertyValue,
   className = "",
+  fonts,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(
     section.defaultCollapsed ?? false
@@ -54,30 +55,54 @@ export const PropertySectionComponent: React.FC<
 
       {!isCollapsed && (
         <div className="section-content">
-          {section.properties.map((property) => (
-            <PropertyEditor
-              key={property.key}
-              definition={property}
-              value={
-                getPropertyValue ? getPropertyValue(property.key) : undefined
-              }
-              onChange={(value) => {
-                // Create a property change event for the first selected node
-                if (selection.selectedNodeIds.length > 0) {
-                  const event = {
-                    nodeId: selection.selectedNodeIds[0],
-                    propertyKey: property.key,
-                    oldValue: getPropertyValue
-                      ? getPropertyValue(property.key)
-                      : undefined,
-                    newValue: value,
-                    sectionId: section.id,
-                  };
-                  onPropertyChange(event);
-                }
-              }}
-            />
-          ))}
+          {section.properties.map((property) => {
+            const propertyValue = getPropertyValue
+              ? getPropertyValue(property.key)
+              : undefined;
+            const isMixed = propertyValue === "mixed";
+
+            return (
+              <div
+                key={property.key}
+                className={`property-row ${
+                  isMixed ? "property-row-mixed" : ""
+                }`}
+              >
+                <PropertyEditor
+                  definition={property}
+                  value={propertyValue === "mixed" ? undefined : propertyValue}
+                  disabled={selection.selectedNodeIds.length === 0}
+                  className={isMixed ? "mixed-value" : undefined}
+                  fonts={fonts}
+                  tokens={(globalThis as any).designTokens}
+                  onChange={(value) => {
+                    if (selection.selectedNodeIds.length === 0) {
+                      return;
+                    }
+
+                    const nodeId = selection.focusedNodeId
+                      ? selection.focusedNodeId
+                      : selection.selectedNodeIds[0];
+
+                    const event = {
+                      nodeId,
+                      propertyKey: property.key,
+                      oldValue:
+                        propertyValue === "mixed" ? undefined : propertyValue,
+                      newValue: value,
+                      sectionId: section.id,
+                    };
+                    onPropertyChange(event);
+                  }}
+                />
+                {isMixed && (
+                  <span className="mixed-indicator" title="Multiple values">
+                    —
+                  </span>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

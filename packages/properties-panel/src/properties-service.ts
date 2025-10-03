@@ -47,6 +47,7 @@ export class PropertiesService {
   };
   private propertyChangeCallbacks: Set<PropertyChangeCallback> = new Set();
   private selectionChangeCallbacks: Set<SelectionChangeCallback> = new Set();
+  private uiState: Map<string, any> = new Map();
 
   /**
    * Get singleton instance
@@ -506,6 +507,20 @@ export class PropertiesService {
   }
 
   /**
+   * Get UI state value
+   */
+  getUIState<T = any>(key: string): T | undefined {
+    return this.uiState.get(key);
+  }
+
+  /**
+   * Set UI state value
+   */
+  setUIState<T = any>(key: string, value: T): void {
+    this.uiState.set(key, value);
+  }
+
+  /**
    * Reset the service state
    */
   reset(): void {
@@ -513,5 +528,6 @@ export class PropertiesService {
     this.selection = { selectedNodeIds: [], focusedNodeId: null };
     this.propertyChangeCallbacks.clear();
     this.selectionChangeCallbacks.clear();
+    this.uiState.clear();
   }
 }

@@ -2393,7 +2393,7 @@ ${
                 typeof source[key] === "object" &&
                 !Array.isArray(source[key])
               ) {
-                if (!target[key]) target[key] = {};
+                if (!target[key]) {target[key] = {};}
                 mergeObject(target[key], source[key]);
               } else {
                 target[key] = source[key];
@@ -2585,7 +2585,7 @@ ${
       } else {
         let matches = 0;
         for (let i = 0; i < Math.min(name1.length, name2.length); i++) {
-          if (name1[i] === name2[i]) matches++;
+          if (name1[i] === name2[i]) {matches++;}
         }
         scores.name = matches / maxLength;
       }

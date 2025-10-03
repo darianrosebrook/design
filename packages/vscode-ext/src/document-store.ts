@@ -7,12 +7,7 @@
  */
 
 import { applyPatch } from "@paths-design/canvas-engine";
-import type {
-  CanvasDocumentType,
-  Patch,
-  PatchType,
-  NodeType,
-} from "@paths-design/canvas-schema";
+import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 import { validateCanvasDocument } from "@paths-design/canvas-schema";
 import * as vscode from "vscode";
 
@@ -90,7 +85,7 @@ class DocumentStoreObservability {
 /**
  * Node lookup index for O(1) node access
  */
-interface NodeIndexEntry {
+export interface NodeIndexEntry {
   node: NodeType;
   artboardId: string;
   parentId: string | null;
@@ -156,6 +151,44 @@ export class DocumentStore {
   }
 
   /**
+   * Apply a JSON patch to a document
+   */
+  applyPatch(
+    documentId: string,
+    patch: any
+  ): { success: boolean; document?: CanvasDocumentType; error?: string } {
+    try {
+      if (!this.currentDocument || this.currentDocument.id !== documentId) {
+        return { success: false, error: "Document not found or ID mismatch" };
+      }
+
+      const newDocument = applyPatch(this.currentDocument, patch);
+
+      // Update the document and rebuild the index
+      this.currentDocument = newDocument;
+      this.buildNodeIndex();
+
+      this.observability?.log(
+        "info",
+        `Applied patch to document ${documentId}`,
+        { patch }
+      );
+
+      return { success: true, document: newDocument };
+    } catch (error) {
+      this.observability?.log(
+        "error",
+        `Failed to apply patch to document ${documentId}`,
+        { patch, error }
+      );
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
+  }
+
+  /**
    * Get a node by ID with O(1) lookup
    *
    * @param nodeId Node ID to find
@@ -165,6 +198,58 @@ export class DocumentStore {
    */
   getNodeById(nodeId: string): NodeIndexEntry | null {
     return this.nodeIndex.get(nodeId) ?? null;
+  }
+
+  /**
+   * Build JSON Pointer path for a node ID
+   *
+   * @param nodeId Node ID to build path for
+   * @returns JSON Pointer path or null if node not found
+   */
+  private buildNodePath(nodeId: string): string | null {
+    const nodeEntry = this.getNodeById(nodeId);
+    if (!nodeEntry) {
+      return null;
+    }
+
+    const pathParts: string[] = [];
+
+    // Walk up the hierarchy from the target node to build the full path
+    let currentEntry = nodeEntry;
+
+    while (currentEntry) {
+      if (currentEntry.parentId) {
+        // Find parent entry
+        const parentEntry = this.getNodeById(currentEntry.parentId);
+        if (!parentEntry) {
+          return null;
+        }
+
+        // Find the index of current node in parent's children
+        const parentNode = parentEntry.node;
+        if (parentNode.type === "frame" && parentNode.children) {
+          const childIndex = parentNode.children.findIndex(
+            (child: NodeType) => child.id === currentEntry!.node.id
+          );
+          if (childIndex >= 0) {
+            pathParts.unshift(childIndex.toString());
+          }
+        }
+
+        currentEntry = parentEntry;
+      } else {
+        // This is an artboard (root level)
+        const artboardIndex = this.currentDocument?.artboards.findIndex(
+          (ab) => ab.id === currentEntry.node.id
+        );
+        if (artboardIndex !== undefined && artboardIndex >= 0) {
+          pathParts.unshift(artboardIndex.toString());
+        }
+        break;
+      }
+    }
+
+    return `/${pathParts.join("/")}`;
   }
 
   /**
@@ -274,15 +359,25 @@ export class DocumentStore {
       return { success: false, error };
     }
 
-    const traceId = this.observability.metric(
-      "document_mutation_duration_ms",
-      0
-    );
+    // Track mutation duration
+    this.observability.metric("document_mutation_duration_ms", 0);
 
     try {
+      // Build JSON Pointer path for the node
+      const nodePath = this.buildNodePath(nodeId);
+      if (!nodePath) {
+        const error = `Node not found: ${nodeId}`;
+        this.observability.log("error", "apply_property_change_failed", {
+          error,
+          nodeId,
+          propertyKey,
+        });
+        return { success: false, error };
+      }
+
       // Create patch for property change
       const patch = {
-        path: `${nodeId}.${propertyKey}`,
+        path: `${nodePath}/${propertyKey}`,
         op: "replace" as const,
         value: newValue,
       };
@@ -367,34 +462,62 @@ export class DocumentStore {
       return { success: false, error: "No document loaded" };
     }
 
-    const traceId = this.observability.metric(
-      "document_mutation_duration_ms",
-      0
-    );
+    // Track mutation duration
+    this.observability.metric("document_mutation_duration_ms", 0);
 
     try {
       let workingDocument = this.currentDocument;
 
       for (const mutation of mutations) {
-        const patch = {
-          path: mutation.propertyKey
-            ? `${mutation.nodeId}.${mutation.propertyKey}`
-            : mutation.nodeId,
-          op: "replace" as const,
-          value: mutation.newValue,
-        };
+        if (mutation.propertyKey) {
+          // Build JSON Pointer path for the node
+          const nodePath = this.buildNodePath(mutation.nodeId);
+          if (!nodePath) {
+            const error = `Node not found: ${mutation.nodeId}`;
+            this.observability.log("error", "apply_mutations_failed", {
+              error,
+              nodeId: mutation.nodeId,
+              propertyKey: mutation.propertyKey,
+            });
+            return { success: false, error };
+          }
 
-        workingDocument = applyPatch(workingDocument, patch);
-
-        // Validate after each mutation
-        const validation = validateCanvasDocument(workingDocument);
-        if (!validation.success) {
-          return {
-            success: false,
-            error: `Validation failed: ${(
-              validation.errors || ["Unknown error"]
-            ).join(", ")}`,
+          const patch = {
+            path: `${nodePath}/${mutation.propertyKey}`,
+            op: "replace" as const,
+            value: mutation.newValue,
           };
+        } else {
+          // Node-level mutation (no property key)
+          const nodePath = this.buildNodePath(mutation.nodeId);
+          if (!nodePath) {
+            const error = `Node not found: ${mutation.nodeId}`;
+            this.observability.log("error", "apply_mutations_failed", {
+              error,
+              nodeId: mutation.nodeId,
+            });
+            return { success: false, error };
+          }
+
+          workingDocument = applyPatch(workingDocument, {
+            path: nodePath,
+            op: "replace" as const,
+            value: mutation.newValue,
+          });
+
+          // Validate after each mutation
+          const validation = validateCanvasDocument(workingDocument);
+          if (!validation.success) {
+            const error = `Document validation failed after mutation: ${(
+              validation.errors || ["Unknown error"]
+            ).join(", ")}`;
+            this.observability.log("error", "document_validation_failed", {
+              error,
+              nodeId: mutation.nodeId,
+              propertyKey: mutation.propertyKey,
+            });
+            return { success: false, error };
+          }
         }
       }
 

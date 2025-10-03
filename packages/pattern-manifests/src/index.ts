@@ -16,16 +16,17 @@ export interface PatternManifest {
   description: string;
   version: string;
   category:
-    | "Actions"
-    | "Containers"
-    | "Display"
-    | "Feedback"
-    | "Forms"
-    | "Inputs"
-    | "Navigation"
-    | "Textual"
-    | "Data Visualization"
-    | "Editing";
+    | "actions"
+    | "containers"
+    | "display"
+    | "feedback"
+    | "forms"
+    | "inputs"
+    | "navigation"
+    | "overlay"
+    | "textual"
+    | "data visualization"
+    | "editing";
   layer: "primitives" | "compounds" | "composers" | "assemblies";
   tags: string[];
 
@@ -235,7 +236,7 @@ export class PatternRegistry {
       name: "Tabs",
       description: "Tab navigation pattern with panels",
       version: "1.0.0",
-      category: "Navigation",
+      category: "navigation",
       layer: "composers",
       tags: ["tabs", "navigation", "panels", "accessibility"],
       structure: [
@@ -344,7 +345,7 @@ export class PatternRegistry {
       name: "Dialog",
       description: "Modal dialog pattern with backdrop and focus management",
       version: "1.0.0",
-      category: "Containers",
+      category: "overlay",
       layer: "composers",
       tags: ["dialog", "modal", "overlay", "accessibility"],
       structure: [
@@ -461,7 +462,7 @@ export class PatternRegistry {
       name: "Accordion",
       description: "Collapsible content sections",
       version: "1.0.0",
-      category: "Containers",
+      category: "containers",
       layer: "compounds",
       tags: ["accordion", "collapsible", "disclosure"],
       structure: [
@@ -546,7 +547,7 @@ export class PatternRegistry {
       name: "Form",
       description: "Form with fields, labels, and validation",
       version: "1.0.0",
-      category: "Forms",
+      category: "forms",
       layer: "composers",
       tags: ["form", "input", "validation"],
       structure: [
@@ -645,7 +646,7 @@ export class PatternRegistry {
       name: "Card",
       description: "Content card with optional header, body, and footer",
       version: "1.0.0",
-      category: "Display",
+      category: "display",
       layer: "compounds",
       tags: ["card", "container", "layout"],
       structure: [
@@ -714,7 +715,7 @@ export class PatternRegistry {
       name: "Navigation",
       description: "Navigation menu with links",
       version: "1.0.0",
-      category: "Navigation",
+      category: "navigation",
       layer: "compounds",
       tags: ["navigation", "menu", "links"],
       structure: [

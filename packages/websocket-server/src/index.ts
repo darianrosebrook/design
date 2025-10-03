@@ -3,7 +3,10 @@
  * @author @darianrosebrook
  */
 
-export { CollaborationServer } from "./server.js";
+import { CollaborationServer } from "./server.js";
+
+export { CollaborationServer };
+
 export type {
   WebSocketMessage,
   WebSocketMessageType,
@@ -24,6 +27,7 @@ export type {
 /**
  * Create and start a collaboration server
  */
+
 export async function createCollaborationServer(
   config?: Partial<import("./types.js").WebSocketServerConfig>
 ): Promise<CollaborationServer> {

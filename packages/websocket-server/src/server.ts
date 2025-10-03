@@ -21,12 +21,12 @@ let WebSocket: any;
  * WebSocket server for real-time collaboration
  */
 export class CollaborationServer {
-  private wss: WebSocket.Server;
   private config: WebSocketServerConfig;
   private connections = new Map<string, ClientConnection>();
   private sessions = new Map<string, DocumentSession>();
   private heartbeatTimer?: NodeJS.Timeout;
   private cleanupTimer?: NodeJS.Timeout;
+  private wss?: any;
 
   constructor(config: Partial<WebSocketServerConfig> = {}) {
     this.config = {
@@ -43,14 +43,12 @@ export class CollaborationServer {
     this.initializeWebSocketServer();
   }
 
-  private wss?: any;
-
   private async initializeWebSocketServer(): Promise<void> {
     try {
       const wsModule = await import("ws");
       const WSClass = wsModule.default;
 
-      this.wss = new WSClass.Server({
+      this.wss = new (WSClass as any).Server({
         port: this.config.port,
         host: this.config.host,
         perMessageDeflate: this.config.enableCompression,
@@ -70,7 +68,7 @@ export class CollaborationServer {
    * Set up WebSocket event handlers
    */
   private setupEventHandlers(): void {
-    if (!this.wss) return;
+    if (!this.wss) {return;}
 
     this.wss.on("connection", (ws: any, request: any) => {
       this.handleConnection(ws, request);
@@ -81,7 +79,9 @@ export class CollaborationServer {
     });
 
     this.wss.on("listening", () => {
-      console.info(`Collaboration server listening on ${this.config.host}:${this.config.port}`);
+      console.info(
+        `Collaboration server listening on ${this.config.host}:${this.config.port}`
+      );
     });
   }
 
@@ -95,7 +95,8 @@ export class CollaborationServer {
     }
 
     const connectionId = ulid();
-    const userId = this.extractUserId(request) || `user_${connectionId.slice(-8)}`;
+    const userId =
+      this.extractUserId(request) || `user_${connectionId.slice(-8)}`;
 
     const connection: ClientConnection = {
       id: connectionId,
@@ -119,7 +120,11 @@ export class CollaborationServer {
 
     ws.on("error", (error: Error) => {
       console.error(`Connection error for ${connectionId}:`, error);
-      this.handleDisconnection(connection, 1006, Buffer.from("Connection error"));
+      this.handleDisconnection(
+        connection,
+        1006,
+        Buffer.from("Connection error")
+      );
     });
 
     // Send welcome message
@@ -197,7 +202,10 @@ export class CollaborationServer {
   /**
    * Handle document load request
    */
-  private handleDocumentLoad(connection: ClientConnection, message: WebSocketMessage): void {
+  private handleDocumentLoad(
+    connection: ClientConnection,
+    message: WebSocketMessage
+  ): void {
     const { documentId } = message.payload;
 
     if (!documentId) {
@@ -229,16 +237,20 @@ export class CollaborationServer {
     connection.documentId = documentId;
 
     // Broadcast user join to other users in session
-    this.broadcastToSession(session, {
-      type: "user_join",
-      timestamp: Date.now(),
-      userId: connection.userId,
-      sessionId: connection.id,
-      payload: {
-        documentId,
-        user,
+    this.broadcastToSession(
+      session,
+      {
+        type: "user_join",
+        timestamp: Date.now(),
+        userId: connection.userId,
+        sessionId: connection.id,
+        payload: {
+          documentId,
+          user,
+        },
       },
-    }, connection.userId);
+      connection.userId
+    );
 
     // Send current session state to new user
     this.sendMessage(connection.ws, {
@@ -252,13 +264,18 @@ export class CollaborationServer {
       },
     });
 
-    console.info(`User ${connection.userId} joined document session ${documentId}`);
+    console.info(
+      `User ${connection.userId} joined document session ${documentId}`
+    );
   }
 
   /**
    * Handle document update
    */
-  private handleDocumentUpdate(connection: ClientConnection, message: WebSocketMessage): void {
+  private handleDocumentUpdate(
+    connection: ClientConnection,
+    message: WebSocketMessage
+  ): void {
     const { documentId, patches, operationId } = message.payload;
 
     if (!connection.documentId || connection.documentId !== documentId) {
@@ -284,18 +301,22 @@ export class CollaborationServer {
     };
 
     // Broadcast update to other users in session
-    this.broadcastToSession(session, {
-      type: "document_update",
-      timestamp: Date.now(),
-      userId: connection.userId,
-      sessionId: connection.id,
-      payload: {
-        documentId,
-        patches,
-        operationId: result.operationId,
+    this.broadcastToSession(
+      session,
+      {
+        type: "document_update",
+        timestamp: Date.now(),
         userId: connection.userId,
+        sessionId: connection.id,
+        payload: {
+          documentId,
+          patches,
+          operationId: result.operationId,
+          userId: connection.userId,
+        },
       },
-    }, connection.userId);
+      connection.userId
+    );
 
     // Send confirmation to sender
     this.sendMessage(connection.ws, {
@@ -314,7 +335,10 @@ export class CollaborationServer {
   /**
    * Handle selection change
    */
-  private handleSelectionChange(connection: ClientConnection, message: WebSocketMessage): void {
+  private handleSelectionChange(
+    connection: ClientConnection,
+    message: WebSocketMessage
+  ): void {
     const { documentId, selection, mode } = message.payload;
 
     if (!connection.documentId || connection.documentId !== documentId) {
@@ -333,24 +357,31 @@ export class CollaborationServer {
     }
 
     // Broadcast selection change to other users
-    this.broadcastToSession(session, {
-      type: "selection_change",
-      timestamp: Date.now(),
-      userId: connection.userId,
-      sessionId: connection.id,
-      payload: {
-        documentId,
-        selection,
-        mode,
+    this.broadcastToSession(
+      session,
+      {
+        type: "selection_change",
+        timestamp: Date.now(),
         userId: connection.userId,
+        sessionId: connection.id,
+        payload: {
+          documentId,
+          selection,
+          mode,
+          userId: connection.userId,
+        },
       },
-    }, connection.userId);
+      connection.userId
+    );
   }
 
   /**
    * Handle cursor movement
    */
-  private handleCursorMove(connection: ClientConnection, message: WebSocketMessage): void {
+  private handleCursorMove(
+    connection: ClientConnection,
+    message: WebSocketMessage
+  ): void {
     const { documentId, position, viewport } = message.payload;
 
     if (!connection.documentId || connection.documentId !== documentId) {
@@ -370,24 +401,31 @@ export class CollaborationServer {
     }
 
     // Broadcast cursor movement to other users
-    this.broadcastToSession(session, {
-      type: "cursor_move",
-      timestamp: Date.now(),
-      userId: connection.userId,
-      sessionId: connection.id,
-      payload: {
-        documentId,
-        position,
-        viewport,
+    this.broadcastToSession(
+      session,
+      {
+        type: "cursor_move",
+        timestamp: Date.now(),
         userId: connection.userId,
+        sessionId: connection.id,
+        payload: {
+          documentId,
+          position,
+          viewport,
+          userId: connection.userId,
+        },
       },
-    }, connection.userId);
+      connection.userId
+    );
   }
 
   /**
    * Handle node operations
    */
-  private handleNodeOperation(connection: ClientConnection, message: WebSocketMessage): void {
+  private handleNodeOperation(
+    connection: ClientConnection,
+    message: WebSocketMessage
+  ): void {
     const { documentId, nodeId, operationId, data } = message.payload;
 
     if (!connection.documentId || connection.documentId !== documentId) {
@@ -402,25 +440,32 @@ export class CollaborationServer {
     }
 
     // Broadcast node operation to other users
-    this.broadcastToSession(session, {
-      type: message.type,
-      timestamp: Date.now(),
-      userId: connection.userId,
-      sessionId: connection.id,
-      payload: {
-        documentId,
-        nodeId,
-        operationId,
-        data,
+    this.broadcastToSession(
+      session,
+      {
+        type: message.type,
+        timestamp: Date.now(),
         userId: connection.userId,
+        sessionId: connection.id,
+        payload: {
+          documentId,
+          nodeId,
+          operationId,
+          data,
+          userId: connection.userId,
+        },
       },
-    }, connection.userId);
+      connection.userId
+    );
   }
 
   /**
    * Handle user join
    */
-  private handleUserJoin(connection: ClientConnection, message: WebSocketMessage): void {
+  private handleUserJoin(
+    connection: ClientConnection,
+    message: WebSocketMessage
+  ): void {
     const { documentId, user } = message.payload;
 
     if (!connection.documentId || connection.documentId !== documentId) {
@@ -440,16 +485,20 @@ export class CollaborationServer {
     }
 
     // Broadcast updated user info
-    this.broadcastToSession(session, {
-      type: "user_join",
-      timestamp: Date.now(),
-      userId: connection.userId,
-      sessionId: connection.id,
-      payload: {
-        documentId,
-        user: activeUser,
+    this.broadcastToSession(
+      session,
+      {
+        type: "user_join",
+        timestamp: Date.now(),
+        userId: connection.userId,
+        sessionId: connection.id,
+        payload: {
+          documentId,
+          user: activeUser,
+        },
       },
-    }, connection.userId);
+      connection.userId
+    );
   }
 
   /**
@@ -460,7 +509,9 @@ export class CollaborationServer {
     code: number,
     reason: Buffer
   ): void {
-    console.info(`Client disconnected: ${connection.id} (${connection.userId})`);
+    console.info(
+      `Client disconnected: ${connection.id} (${connection.userId})`
+    );
 
     // Remove from connections
     this.connections.delete(connection.id);
@@ -490,7 +541,9 @@ export class CollaborationServer {
         // Clean up empty sessions
         if (session.users.size === 0) {
           this.sessions.delete(connection.documentId);
-          console.info(`Cleaned up empty session for document ${connection.documentId}`);
+          console.info(
+            `Cleaned up empty session for document ${connection.documentId}`
+          );
         }
       }
     }
@@ -566,8 +619,16 @@ export class CollaborationServer {
    */
   private generateUserColor(userId: string): string {
     const colors = [
-      "#FF6B6B", "#4ECDC4", "#45B7D1", "#96CEB4", "#FFEAA7",
-      "#DDA0DD", "#98D8C8", "#F7DC6F", "#BB8FCE", "#85C1E9"
+      "#FF6B6B",
+      "#4ECDC4",
+      "#45B7D1",
+      "#96CEB4",
+      "#FFEAA7",
+      "#DDA0DD",
+      "#98D8C8",
+      "#F7DC6F",
+      "#BB8FCE",
+      "#85C1E9",
     ];
 
     let hash = 0;
@@ -587,7 +648,10 @@ export class CollaborationServer {
 
       for (const [connectionId, connection] of this.connections) {
         // Check if client missed heartbeat
-        if (now - connection.lastHeartbeat > this.config.heartbeatInterval * 2) {
+        if (
+          now - connection.lastHeartbeat >
+          this.config.heartbeatInterval * 2
+        ) {
           console.warn(`Terminating inactive connection: ${connectionId}`);
           connection.ws.terminate();
           continue;
@@ -668,11 +732,13 @@ export class CollaborationServer {
     }
 
     // Close WebSocket server
-    await new Promise<void>((resolve) => {
-      this.wss.close(() => {
-        console.info("Collaboration server shut down");
-        resolve();
+    if (this.wss) {
+      await new Promise<void>((resolve) => {
+        this.wss.close(() => {
+          console.info("Collaboration server shut down");
+          resolve();
+        });
       });
-    });
+    }
   }
 }

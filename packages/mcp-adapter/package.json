@@ -25,6 +25,7 @@
     "vitest": "^1.0.0"
   },
   "dependencies": {
+    "@paths-design/canvas-engine": "file:../canvas-engine",
     "@paths-design/canvas-schema": "file:../canvas-schema",
     "@paths-design/codegen-react": "file:../codegen-react",
     "@paths-design/augment": "file:../augment",

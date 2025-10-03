@@ -8,12 +8,7 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import type {
-  CanvasDocumentType,
-  NodeType,
-  ComponentLibraryType,
-  PerformanceMonitor,
-} from "@paths-design/canvas-schema";
+import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 import type { ComponentIndex } from "@paths-design/component-indexer";
 import type {
   SelectionState,
@@ -21,6 +16,7 @@ import type {
 } from "@paths-design/properties-panel";
 import { PropertiesService } from "@paths-design/properties-panel";
 import * as vscode from "vscode";
+import { FontCatalogService } from "./api/font-catalog";
 import { SelectionAPI } from "./api/selection-api";
 import { CanvasWebviewProvider } from "./canvas-webview/canvas-webview-provider";
 import { SelectionCoordinator } from "./canvas-webview/selection-coordinator";
@@ -33,171 +29,15 @@ export * from "./protocol/index.js";
 export * from "./security/index.js";
 
 /**
- * Achievement system for tracking user milestones and engagement
+ * Simple achievement system for tracking milestones
  */
 class AchievementSystem {
-  private static instance: AchievementSystem;
-  private achievements = new Map<string, boolean>();
-  private usageStats = new Map<string, number>();
-
-  static getInstance(): AchievementSystem {
-    if (!AchievementSystem.instance) {
-      AchievementSystem.instance = new AchievementSystem();
-    }
-    return AchievementSystem.instance;
-  }
-
-  /**
-   * Track a usage milestone
-   */
   trackMilestone(milestone: string, count: number = 1): void {
-    const current = this.usageStats.get(milestone) || 0;
-    this.usageStats.set(milestone, current + count);
-
-    this.checkAchievements();
-  }
-
-  /**
-   * Check if any achievements should be unlocked
-   */
-  private checkAchievements(): void {
-    const enabled = vscode.workspace
-      .getConfiguration("designer")
-      .get("achievements.enabled", true);
-    if (!enabled) return;
-
-    // First canvas document created
-    if (
-      this.usageStats.get("documents_created") === 1 &&
-      !this.achievements.get("first_canvas")
-    ) {
-      this.unlockAchievement(
-        "first_canvas",
-        "🎨 First Canvas Created!",
-        "Welcome to Designer! Your first canvas document is ready."
-      );
-    }
-
-    // 10 canvas documents created
-    if (
-      this.usageStats.get("documents_created") === 10 &&
-      !this.achievements.get("canvas_veteran")
-    ) {
-      this.unlockAchievement(
-        "canvas_veteran",
-        "🏗️ Canvas Veteran",
-        "You've created 10 canvas documents! You're getting the hang of this."
-      );
-    }
-
-    // First component created
-    if (
-      this.usageStats.get("components_created") === 1 &&
-      !this.achievements.get("first_component")
-    ) {
-      this.unlockAchievement(
-        "first_component",
-        "🧩 Component Creator",
-        "You created your first reusable component!"
-      );
-    }
-
-    // 5 components created
-    if (
-      this.usageStats.get("components_created") === 5 &&
-      !this.achievements.get("component_master")
-    ) {
-      this.unlockAchievement(
-        "component_master",
-        "🏆 Component Master",
-        "You've created 5 components! Your design system is growing."
-      );
-    }
-
-    // Performance budget monitoring toggled
-    if (
-      this.usageStats.get("performance_toggles") === 1 &&
-      !this.achievements.get("performance_aware")
-    ) {
-      this.unlockAchievement(
-        "performance_aware",
-        "⚡ Performance Aware",
-        "You configured performance monitoring! Smart designer."
-      );
-    }
-  }
-
-  /**
-   * Unlock and show an achievement
-   */
-  private unlockAchievement(
-    id: string,
-    title: string,
-    description: string
-  ): void {
-    this.achievements.set(id, true);
-
-    vscode.window
-      .showInformationMessage(`🏆 ${title}\n${description}`, "Show Shortcuts")
-      .then((selection) => {
-        if (selection === "Show Shortcuts") {
-          vscode.commands.executeCommand("designer.showKeyboardShortcuts");
-        }
-      });
-  }
-
-  /**
-   * Get current achievement status
-   */
-  getAchievements(): Record<string, boolean> {
-    return Object.fromEntries(this.achievements);
-  }
-
-  /**
-   * Get usage statistics
-   */
-  getUsageStats(): Record<string, number> {
-    return Object.fromEntries(this.usageStats);
-  }
-
-  /**
-   * Show startup guide if enabled
-   */
-  private async showStartupGuide(): Promise<void> {
-    const showOnStartup = vscode.workspace
-      .getConfiguration("designer")
-      .get("shortcuts.showOnStartup", true);
-
-    if (showOnStartup) {
-      // Delay slightly to avoid interfering with extension activation
-      setTimeout(() => {
-        vscode.window
-          .showInformationMessage(
-            "🎨 Welcome to Designer! Press Cmd+K Cmd+S (macOS) or Ctrl+K Ctrl+S (Windows) to see all shortcuts.",
-            "Show Shortcuts",
-            "Don't Show Again"
-          )
-          .then((selection) => {
-            if (selection === "Show Shortcuts") {
-              vscode.commands.executeCommand("designer.showKeyboardShortcuts");
-            } else if (selection === "Don't Show Again") {
-              vscode.workspace
-                .getConfiguration("designer")
-                .update(
-                  "shortcuts.showOnStartup",
-                  false,
-                  vscode.ConfigurationTarget.Global
-                );
-            }
-          });
-      }, 2000);
-    }
+    // Simple implementation - could be expanded to track actual achievements
+    console.log(`Achievement: ${milestone} (+${count})`);
   }
 }
 
-/**
- * Main extension class managing the Designer VS Code extension
- */
 class DesignerExtension {
   private context: vscode.ExtensionContext;
   private canvasWebviewProvider: CanvasWebviewProvider;
@@ -219,6 +59,7 @@ class DesignerExtension {
     this.documentStore = DocumentStore.getInstance();
     this.canvasWebviewProvider = new CanvasWebviewProvider(context, this);
     this.propertiesPanelProvider = new PropertiesPanelWebviewProvider(context);
+    this.achievementSystem = new AchievementSystem();
     this.welcomeViewProvider = new WelcomeViewProvider(context);
 
     // Initialize SelectionAPI and connect to coordinator events
@@ -226,15 +67,15 @@ class DesignerExtension {
     const apiDisposable = selectionAPI.initialize();
     context.subscriptions.push(apiDisposable);
 
+    // Initialize FontCatalogService (accessed via commands)
+    FontCatalogService.getInstance(context);
+
     // Load component index if it exists
     this.loadComponentIndex();
 
     this.registerCommands();
     this.registerWebviewProviders();
     this.setupFileAssociations();
-
-    // Show shortcuts guide on first startup if enabled
-    this.showStartupGuide();
   }
 
   /**
@@ -271,9 +112,12 @@ class DesignerExtension {
       } else {
         console.info("No component index found, using basic properties only");
       }
-    } catch (error) {
-      console.warn("Failed to load component index:", error);
+    } catch (_error) {
+      console.warn("Failed to load component index:", _error);
     }
+
+    // TODO: Implement startup guide functionality
+    // this.showStartupGuide().catch(console.error);
   }
 
   /**
@@ -298,17 +142,17 @@ class DesignerExtension {
           prompt:
             "Enter canvas document name (recommended: design/homepage.canvas.json)",
           placeHolder: "design/homepage.canvas.json",
-          value: "design/.canvas.json",
+          value: "design/home.canvas.json",
           validateInput: (value: string) => {
             // Basic extension check
             if (!value.endsWith(".canvas.json")) {
               return "Filename must end with .canvas.json";
             }
 
-            // Sanitize and validate filename for security
-            const sanitized = this._sanitizeFilename(value);
-            if (sanitized !== value) {
-              return "Filename contains unsafe characters or paths";
+            // Validate and sanitize path for security
+            const validation = this._validateAndSanitizePath(value);
+            if (validation.error) {
+              return validation.error;
             }
 
             // Check for reserved names
@@ -365,7 +209,7 @@ class DesignerExtension {
             );
             return;
           }
-        } catch (error) {
+        } catch (_error) {
           // File doesn't exist, proceed with creation
         }
 
@@ -396,9 +240,9 @@ class DesignerExtension {
 
           // Track milestone
           this.achievementSystem.trackMilestone("documents_created");
-        } catch (error) {
+        } catch (_error) {
           // Clean up partial file if write failed
-          if (fileCreated && error instanceof Error) {
+          if (fileCreated && _error instanceof Error) {
             try {
               // Check if file exists and is empty/truncated
               const stat = await vscode.workspace.fs.stat(fileUri);
@@ -409,20 +253,20 @@ class DesignerExtension {
                   vscode.window.showWarningMessage(
                     `File creation failed and partial file was cleaned up: ${filename}`
                   );
-                } catch (cleanupError) {
+                } catch (_cleanupError) {
                   vscode.window.showWarningMessage(
                     `File creation failed. Please manually delete: ${filename}`
                   );
                 }
               }
-            } catch (statError) {
+            } catch (_statError) {
               // File may not exist, continue with error message
             }
           }
 
           // Show appropriate error message based on error type
           const errorMessage =
-            error instanceof Error ? error.message : "Unknown error";
+            _error instanceof Error ? _error.message : "Unknown error";
           if (
             errorMessage.includes("EPERM") ||
             errorMessage.includes("EACCES")
@@ -475,6 +319,13 @@ class DesignerExtension {
           designDir,
           `${libraryName}.components.json`
         );
+
+        // Ensure design directory exists
+        try {
+          await vscode.workspace.fs.createDirectory(designDir);
+        } catch (_error) {
+          // Directory might already exist, continue
+        }
 
         await vscode.workspace.fs.writeFile(
           libraryUri,
@@ -602,7 +453,7 @@ class DesignerExtension {
             );
             await vscode.window.showTextDocument(document);
           }
-        } catch (error) {
+        } catch (_error) {
           vscode.window.showErrorMessage("Failed to find component libraries");
         }
       }
@@ -977,12 +828,16 @@ ${Object.entries(metrics.memoryUsage)
 
     const undoCommand = vscode.commands.registerCommand("designer.undo", () => {
       this.documentStore.undo();
-      this.updateDocument(this.currentDocument);
+      if (this.currentDocument) {
+        this.updateDocument(this.currentDocument);
+      }
     });
 
     const redoCommand = vscode.commands.registerCommand("designer.redo", () => {
       this.documentStore.redo();
-      this.updateDocument(this.currentDocument);
+      if (this.currentDocument) {
+        this.updateDocument(this.currentDocument);
+      }
     });
 
     const saveDocumentCommand = vscode.commands.registerCommand(
@@ -1010,6 +865,13 @@ ${Object.entries(metrics.memoryUsage)
       "designer.switchToCodeView",
       () => {
         this.canvasWebviewProvider.setViewMode("code");
+      }
+    );
+
+    const getFontsCommand = vscode.commands.registerCommand(
+      "designer.getFonts",
+      async () => {
+        return await this.getFonts();
       }
     );
 
@@ -1042,7 +904,8 @@ ${Object.entries(metrics.memoryUsage)
       redoCommand,
       saveDocumentCommand,
       switchToCanvasViewCommand,
-      switchToCodeViewCommand
+      switchToCodeViewCommand,
+      getFontsCommand
     );
   }
 
@@ -1182,9 +1045,63 @@ ${Object.entries(metrics.memoryUsage)
       return;
     }
 
-    // Delegate to properties panel provider for full handling
-    // This includes applying the change, saving, and notifying other views
-    console.info("Property change received in extension:", event);
+    try {
+      // Create a JSON patch for the property change
+      const artboard = this.currentDocument.artboards[0];
+      const nodeIndex = artboard.children.findIndex(
+        (node: any) => node.id === event.nodeId
+      );
+
+      if (nodeIndex === -1) {
+        throw new Error(`Node with ID ${event.nodeId} not found`);
+      }
+
+      const patch = {
+        op: "replace" as const,
+        path: `/artboards/0/children/${nodeIndex}/${event.propertyKey}`,
+        value: event.newValue,
+      };
+
+      // Apply the patch using DocumentStore
+      const result = this.documentStore.applyPatch(
+        this.currentDocument.id,
+        patch
+      );
+
+      if (result.success) {
+        // Update the current document
+        this.currentDocument = result.document;
+
+        // Broadcast the change to all webviews
+        this.canvasWebviewProvider.updateDocument(result.document);
+        this.propertiesPanelProvider.updateDocument(result.document);
+
+        // Acknowledge the change back to the webview
+        this.propertiesPanelProvider.acknowledgePropertyChange(event);
+
+        console.info("Property change applied successfully:", event);
+      } else {
+        console.error("Failed to apply property change:", result.error);
+        this.propertiesPanelProvider.showPropertyChangeError(
+          event,
+          result.error
+        );
+      }
+    } catch (error) {
+      console.error("Error handling property change:", error);
+      this.propertiesPanelProvider.showPropertyChangeError(
+        event,
+        "Failed to apply property change"
+      );
+    }
+  }
+
+  /**
+   * Get available fonts for the properties panel
+   */
+  async getFonts(): Promise<Array<{ label: string; value: string }>> {
+    const fontCatalogService = FontCatalogService.getInstance(this.context);
+    return await fontCatalogService.getFontOptions();
   }
 
   /**
@@ -1212,6 +1129,45 @@ ${Object.entries(metrics.memoryUsage)
   /**
    * Sanitize filename for security - removes path components and unsafe characters
    */
+  private _validateAndSanitizePath(path: string): {
+    error?: string;
+    sanitized?: string;
+  } {
+    // Check for path traversal attempts
+    if (path.includes("..") || path.startsWith("/")) {
+      return {
+        error:
+          "Path contains unsafe characters or attempts to access parent directories",
+      };
+    }
+
+    // Split path into directory and filename parts
+    const parts = path.split("/");
+    const filename = parts.pop() || "";
+
+    // Sanitize the filename part only
+    const safeFilename = filename
+      .replace(/\.\./g, "") // Remove path traversal attempts in filename
+      .replace(/^\.+/, "") // Remove leading dots
+      .replace(/[<>:*?"|]/g, ""); // Remove Windows reserved chars
+
+    // Ensure it ends with .canvas.json
+    const finalFilename = safeFilename.endsWith(".canvas.json")
+      ? safeFilename
+      : safeFilename + ".canvas.json";
+
+    // Reconstruct the path
+    const sanitizedPath =
+      parts.length > 0 ? `${parts.join("/")}/${finalFilename}` : finalFilename;
+
+    // If the path changed, it contained unsafe characters
+    if (sanitizedPath !== path) {
+      return { error: "Filename contains unsafe characters" };
+    }
+
+    return { sanitized: sanitizedPath };
+  }
+
   private _sanitizeFilename(filename: string): string {
     // Remove any path components (/, \, ..)
     const safeFilename = filename
@@ -1358,11 +1314,11 @@ ${Object.entries(metrics.memoryUsage)
               relativePath,
               mtime: new Date(stat.mtime).toLocaleDateString(),
             });
-          } catch (error) {
+          } catch (_error) {
             // Skip files that can't be accessed
           }
         }
-      } catch (error) {
+      } catch (_error) {
         // Skip folders that can't be searched
       }
     }

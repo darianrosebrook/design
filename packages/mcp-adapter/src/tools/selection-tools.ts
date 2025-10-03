@@ -154,11 +154,12 @@ export class SelectionToolsHandler {
     toolName: string,
     args: Record<string, unknown>
   ): Promise<unknown> {
-    if (!selectionAPI) {
-      throw new Error(
-        "SelectionAPI not initialized - call setSelectionAPI() first"
-      );
-    }
+    // TODO: Implement selection API integration
+    // if (!selectionAPI) {
+    //   throw new Error(
+    //     "SelectionAPI not initialized - call setSelectionAPI() first"
+    //   );
+    // }
 
     try {
       switch (toolName) {
@@ -196,34 +197,45 @@ export class SelectionToolsHandler {
   }
 
   private async handleGetSelection() {
-    const info = selectionAPI.getSelectionInfo();
-    if (!info) {
-      return {
-        selectedNodeIds: [],
-        focusedNodeId: null,
-        mode: "single",
-        count: 0,
-        error: "Failed to get selection info",
-      };
-    }
+    // TODO: Implement selection API integration
+    // const info = selectionAPI.getSelectionInfo();
+    // if (!info) {
+    //   return {
+    //     selectedNodeIds: [],
+    //     focusedNodeId: null,
+    //     mode: "single",
+    //     count: 0,
+    //     error: "Failed to get selection info",
+    //   };
+    // }
+
+    // return {
+    //   selectedNodeIds: info.selection.selectedNodeIds,
+    //   focusedNodeId: info.selection.focusedNodeId,
+    //   mode: info.mode,
+    //   count: info.stats.selectedCount,
+    // };
 
     return {
-      selectedNodeIds: info.selection.selectedNodeIds,
-      focusedNodeId: info.selection.focusedNodeId,
-      mode: info.mode,
-      count: info.stats.selectedCount,
+      selectedNodeIds: [],
+      focusedNodeId: null,
+      mode: "single",
+      count: 0,
+      error: "Selection API not implemented",
     };
   }
 
   private async handleGetSelectionDetails(args: Record<string, unknown>) {
     const includeChildren = Boolean(args.includeChildren);
-    const details = selectionAPI.getSelectedNodesDetails();
+    // TODO: Implement selection API integration
+    // const details = selectionAPI.getSelectedNodesDetails();
 
     return {
-      nodes: details,
+      nodes: [],
       includeChildren,
       timestamp: Date.now(),
-      count: details.length,
+      count: 0,
+      error: "Selection API not implemented",
     };
   }
 
@@ -304,21 +316,31 @@ export class SelectionToolsHandler {
   }
 
   private async handleGetSelectionBounds() {
-    const bounds = selectionAPI.getSelectionBounds();
+    // TODO: Implement selection API integration
+    // const bounds = selectionAPI.getSelectionBounds();
 
-    if (!bounds) {
-      return {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        hasSelection: false,
-      };
-    }
+    // if (!bounds) {
+    //   return {
+    //     x: 0,
+    //     y: 0,
+    //     width: 0,
+    //     height: 0,
+    //     hasSelection: false,
+    //   };
+    // }
+
+    // return {
+    //   ...bounds,
+    //   hasSelection: true,
+    // };
 
     return {
-      ...bounds,
-      hasSelection: true,
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0,
+      hasSelection: false,
+      error: "Selection API not implemented",
     };
   }
 
@@ -326,25 +348,34 @@ export class SelectionToolsHandler {
     const includeStyles = args.includeStyles !== false;
     const includeChildren = args.includeChildren !== false;
 
-    const state = selectionAPI.exportSelectionState();
-    if (!state) {
-      return {
-        error: "Failed to export selection state",
-        nodes: [],
-        includeStyles,
-        includeChildren,
-        timestamp: Date.now(),
-      };
-    }
+    // TODO: Implement selection API integration
+    // const state = selectionAPI.exportSelectionState();
+    // if (!state) {
+    //   return {
+    //     error: "Failed to export selection state",
+    //     nodes: [],
+    //     includeStyles,
+    //     includeChildren,
+    //     timestamp: Date.now(),
+    //   };
+    // }
+
+    // return {
+    //   selection: state.selection,
+    //   mode: state.mode,
+    //   stats: state.stats,
+    //   nodes: selectionAPI.getSelectedNodesDetails(),
+    //   includeStyles,
+    //   includeChildren,
+    //   timestamp: state.timestamp,
+    // };
 
     return {
-      selection: state.selection,
-      mode: state.mode,
-      stats: state.stats,
-      nodes: selectionAPI.getSelectedNodesDetails(),
+      error: "Selection API not implemented",
+      nodes: [],
       includeStyles,
       includeChildren,
-      timestamp: state.timestamp,
+      timestamp: Date.now(),
     };
   }
 }

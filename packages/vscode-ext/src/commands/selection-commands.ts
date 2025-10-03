@@ -21,6 +21,11 @@ export function registerSelectionCommands(
       const api = SelectionAPI.getInstance();
       const state = api.exportSelectionState();
 
+      if (!state) {
+        vscode.window.showWarningMessage("No selection state available");
+        return;
+      }
+
       const output = vscode.window.createOutputChannel("Designer Selection");
       output.clear();
       output.appendLine("=== Designer Selection State ===");
@@ -61,6 +66,11 @@ export function registerSelectionCommands(
       const api = SelectionAPI.getInstance();
       const state = api.exportSelectionState();
 
+      if (!state) {
+        vscode.window.showWarningMessage("No selection state available");
+        return;
+      }
+
       const json = JSON.stringify(state, null, 2);
       await vscode.env.clipboard.writeText(json);
 
@@ -76,6 +86,11 @@ export function registerSelectionCommands(
     async () => {
       const api = SelectionAPI.getInstance();
       const info = api.getSelectionInfo();
+
+      if (!info) {
+        vscode.window.showWarningMessage("No selection info available");
+        return;
+      }
 
       if (info.selection.selectedNodeIds.length === 0) {
         vscode.window.showInformationMessage("No nodes selected");
@@ -108,7 +123,8 @@ export function registerSelectionCommands(
     "designer.quickToggleSelectionMode",
     async () => {
       const api = SelectionAPI.getInstance();
-      const currentMode = api.getSelectionInfo().mode;
+      const selectionInfo = api.getSelectionInfo();
+      const currentMode = selectionInfo?.mode || "single";
 
       const modes = [
         {

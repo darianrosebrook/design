@@ -58,6 +58,7 @@ type ExtensionMessage =
   | { command: "toggleSnap" }
   | { command: "setViewMode"; mode: "canvas" | "code" }
   | { command: "propertyChangeAcknowledged"; event: unknown }
+  | { command: "propertyChangeError"; event: unknown; error: string }
   | { command: "showError"; error: string };
 
 /**
@@ -97,6 +98,13 @@ const CanvasWebviewApp: React.FC = () => {
     selectedNodeIds: [],
     focusedNodeId: null,
   });
+  const [fonts, setFonts] = useState<Array<{ label: string; value: string }>>(
+    []
+  );
+  const [propertyError, setPropertyError] = useState<{
+    propertyKey: string;
+    error: string;
+  } | null>(null);
   const selectionModeRef = useRef<SelectionMode>("single");
   const selectionConfigRef = useRef<SelectionModeConfig>({
     mode: "single",
@@ -215,6 +223,13 @@ const CanvasWebviewApp: React.FC = () => {
   }, [selection, renderer]);
 
   /**
+   * Request fonts from extension on mount
+   */
+  useEffect(() => {
+    vscode.postMessage(createMessage("ready", {}));
+  }, [vscode]);
+
+  /**
    * Handle messages from extension
    */
   useEffect(() => {
@@ -300,6 +315,30 @@ const CanvasWebviewApp: React.FC = () => {
 
         case "propertyChangeAcknowledged":
           console.info("Property change acknowledged");
+          break;
+
+        case "propertyChangeError":
+          console.error("Property change error:", message.error);
+          // Could show a toast notification or inline error
+          break;
+
+        case "propertyChangedFromExtension":
+          console.info("Property changed from extension:", message.event);
+          // The canvas renderer should update its visual representation
+          // This is handled by the document update that was already sent
+          break;
+
+        case "propertyChangeError":
+          console.error("Property change error:", message.error, message.event);
+          setPropertyError({
+            propertyKey: message.event.propertyKey,
+            error: message.error,
+          });
+          break;
+
+        case "setFonts":
+          console.info("Received fonts from extension");
+          setFonts(message.fonts || []);
           break;
 
         case "showError":
@@ -388,6 +427,9 @@ const CanvasWebviewApp: React.FC = () => {
                   documentId={document.id}
                   selection={selection}
                   onPropertyChange={handlePropertyChange}
+                  fonts={fonts}
+                  propertyError={propertyError}
+                  onDismissError={() => setPropertyError(null)}
                 />
               )}
             </div>

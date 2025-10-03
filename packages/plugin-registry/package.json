@@ -1,7 +1,7 @@
 {
-  "name": "@paths-design/websocket-server",
+  "name": "@paths-design/plugin-registry",
   "version": "0.1.0",
-  "description": "WebSocket server for real-time collaboration in Designer",
+  "description": "Plugin registry and management system for Designer",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -13,13 +13,12 @@
   "dependencies": {
     "@paths-design/canvas-schema": "workspace:*",
     "@paths-design/canvas-engine": "workspace:*",
-    "ws": "^8.14.2",
-    "ulid": "^2.3.0",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "semver": "^7.5.4"
   },
   "devDependencies": {
     "@types/node": "^20.8.0",
-    "@types/ws": "^8.5.8",
+    "@types/semver": "^7.5.0",
     "typescript": "^5.2.2",
     "vitest": "^3.2.4"
   },
@@ -28,4 +27,5 @@
     "src/**/*"
   ]
 }
+
 

@@ -265,7 +265,7 @@ export function validateDocument(doc: unknown): {
         }
         return { success: false, errors: ["Unknown validation error"] };
       }
-    } catch (parseError) {
+    } catch (_parseError) {
       // Document doesn't match any known schema structure
       if (currentVersionError instanceof z.ZodError) {
         return {
