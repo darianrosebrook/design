@@ -1,0 +1,98 @@
+id: DESIGNER-015
+title: 'Token System - Reference Resolution & Versioning'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 20
+  max_loc: 800
+blast_radius:
+  modules:
+    - packages/design-tokens
+    - design/tokens.json
+  data_migration: true
+operational_rollback_slo: 15m
+threats:
+  - 'Circular token references causing infinite loops'
+  - 'Token migration breaking existing designs'
+  - 'Invalid token references in canvas documents'
+  - 'Performance degradation with deep reference chains'
+  - 'Token drift between definition and usage'
+scope:
+  in:
+    - packages/design-tokens/src/
+    - packages/design-tokens/tests/
+    - design/tokens.json
+  out:
+    - packages/vscode-ext/
+    - packages/canvas-schema/
+invariants:
+  - 'Token references resolve deterministically'
+  - 'Circular references detected and prevented'
+  - 'Reference chain depth limited to 5 levels'
+  - 'Token values type-checked at resolution time'
+  - 'CSS variable generation remains deterministic'
+acceptance:
+  - id: A1
+    given: 'Token references another token (`{color.interactive.primary}`)'
+    when: 'Token resolution runs'
+    then: 'Reference resolves to actual value (`#4F46E5`)'
+  - id: A2
+    given: 'Circular reference (`A` references `B`, `B` references `A`)'
+    when: 'Token validation runs'
+    then: 'Error thrown with circular reference path'
+  - id: A3
+    given: 'Token value changes in tokens.json'
+    when: 'File watcher detects change'
+    then: 'CSS regenerated within 100ms'
+  - id: A4
+    given: 'Token schema version increments (0.1.0 → 0.2.0)'
+    when: 'Migration runs'
+    then: 'Existing tokens transformed to new format'
+  - id: A5
+    given: 'Deep reference chain (A→B→C→D→E)'
+    when: 'Resolver processes tokens'
+    then: 'All references resolve correctly'
+  - id: A6
+    given: 'Invalid token reference (`{nonexistent.token}`)'
+    when: 'Validation runs'
+    then: 'Error with missing token path'
+non_functional:
+  a11y:
+    - 'N/A - internal token system'
+  perf:
+    token_resolution_ms: 50
+    css_generation_ms: 100
+    additional:
+      - 'Token resolution cached for performance'
+      - 'File watcher debounced at 100ms'
+      - 'Reference chains limited to 5 levels'
+  security:
+    - 'Token files validated against schema before load'
+    - 'No arbitrary code execution in token values'
+    - 'Token references sandboxed to same file'
+contracts:
+  - type: schema
+    path: packages/design-tokens/src/tokens.ts
+  - type: json_schema
+    path: design/tokens.json
+observability:
+  logs:
+    - 'tokens.load.start with file path'
+    - 'tokens.resolve.reference with token path'
+    - 'tokens.validate.error with validation failure'
+    - 'tokens.migrate.complete with version change'
+  metrics:
+    - 'tokens_resolved_total counter'
+    - 'tokens_resolution_duration_ms histogram'
+    - 'tokens_validation_failures_total counter'
+    - 'tokens_file_changes_total counter'
+  traces:
+    - 'tokens.load.pipeline from file read to CSS generation'
+    - 'tokens.resolve.chain for reference resolution'
+migrations:
+  - 'v0.1.0 → v0.2.0: Add $ref support for token references'
+  - 'Migration script in packages/design-tokens/migrations/'
+rollback:
+  - 'Can disable token references via feature flag'
+  - 'Fallback to literal values if resolution fails'
+
