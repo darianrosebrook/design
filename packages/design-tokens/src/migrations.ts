@@ -3,7 +3,7 @@
  * @author @darianrosebrook
  */
 
-import { z } from "zod";
+// import { z } from "zod"; // TODO: Remove if not needed
 import type { DesignTokens } from "./tokens";
 
 /**
@@ -55,7 +55,7 @@ export interface MigrationResult {
 /**
  * Migration function signature
  */
-type MigrationFn = (tokens: any) => any;
+type MigrationFn = (tokens: Record<string, unknown>) => Record<string, unknown>;
 
 /**
  * Migration registry
@@ -66,29 +66,24 @@ const MIGRATIONS = new Map<string, MigrationFn>();
 /**
  * Register a migration
  */
-function registerMigration(
-  from: string,
-  to: string,
-  fn: MigrationFn
-): void {
+function registerMigration(from: string, to: string, fn: MigrationFn): void {
   MIGRATIONS.set(`${from}->${to}`, fn);
 }
 
 /**
  * Migration: 0.1.0 -> 1.0.0
- * 
+ *
  * Changes:
  * - Add $schema field
  * - Rename schemaVersion to version
  * - No structural changes to tokens
  */
-registerMigration("0.1.0", "1.0.0", (tokens: any) => {
+registerMigration("0.1.0", "1.0.0", (tokens: Record<string, unknown>) => {
   const migrated = { ...tokens };
 
   // Add $schema if missing
   if (!migrated.$schema) {
-    migrated.$schema =
-      "https://paths.design/schemas/design-tokens/1.0.0.json";
+    migrated.$schema = "https://paths.design/schemas/design-tokens/1.0.0.json";
   }
 
   // Rename schemaVersion to version
@@ -102,14 +97,20 @@ registerMigration("0.1.0", "1.0.0", (tokens: any) => {
 
 /**
  * Detect token schema version from tokens object
- * 
+ *
  * @param tokens - Tokens to check
  * @returns Detected version or undefined
  */
-export function detectVersion(tokens: any): string | undefined {
+export function detectVersion(
+  tokens: Record<string, unknown>
+): string | undefined {
   // Check explicit version fields
-  if (tokens.version) return tokens.version;
-  if (tokens.schemaVersion) return tokens.schemaVersion;
+  if (tokens.version) {
+    return tokens.version;
+  }
+  if (tokens.schemaVersion) {
+    return tokens.schemaVersion;
+  }
 
   // Try to infer from structure
   // 0.1.0 had schemaVersion, no $schema
@@ -122,22 +123,22 @@ export function detectVersion(tokens: any): string | undefined {
 
 /**
  * Check if tokens need migration
- * 
+ *
  * @param tokens - Tokens to check
  * @returns true if migration is needed
  */
-export function needsMigration(tokens: any): boolean {
+export function needsMigration(tokens: Record<string, unknown>): boolean {
   const version = detectVersion(tokens);
   return version !== CURRENT_VERSION;
 }
 
 /**
  * Get migration path from source version to target version
- * 
+ *
  * @param fromVersion - Source version
  * @param toVersion - Target version
  * @returns Array of migration steps, or null if no path exists
- * 
+ *
  * @example
  * ```ts
  * getMigrationPath("0.1.0", "1.0.0") // ["0.1.0->1.0.0"]
@@ -161,11 +162,11 @@ export function getMigrationPath(
 
 /**
  * Migrate tokens to a specific version
- * 
+ *
  * @param tokens - Tokens to migrate
  * @param targetVersion - Target schema version (defaults to latest)
  * @returns Migration result
- * 
+ *
  * @example
  * ```ts
  * const result = migrateTokens(oldTokens, "1.0.0");
@@ -177,7 +178,7 @@ export function getMigrationPath(
  * ```
  */
 export function migrateTokens(
-  tokens: any,
+  tokens: Record<string, unknown>,
   targetVersion: TokenSchemaVersion = CURRENT_VERSION
 ): MigrationResult {
   const fromVersion = detectVersion(tokens);
@@ -240,8 +241,7 @@ export function migrateTokens(
       success: false,
       fromVersion,
       toVersion: targetVersion,
-      error:
-        error instanceof Error ? error.message : "Unknown migration error",
+      error: error instanceof Error ? error.message : "Unknown migration error",
     };
   }
 }
@@ -249,17 +249,17 @@ export function migrateTokens(
 /**
  * Auto-migrate tokens to latest version
  * Convenience wrapper around migrateTokens()
- * 
+ *
  * @param tokens - Tokens to migrate
  * @returns Migration result
  */
-export function autoMigrate(tokens: any): MigrationResult {
+export function autoMigrate(tokens: Record<string, unknown>): MigrationResult {
   return migrateTokens(tokens, CURRENT_VERSION);
 }
 
 /**
  * Check if a version is supported
- * 
+ *
  * @param version - Version to check
  * @returns true if supported
  */
@@ -269,7 +269,7 @@ export function isSupportedVersion(version: string): boolean {
 
 /**
  * Get all supported versions
- * 
+ *
  * @returns Array of supported versions
  */
 export function getSupportedVersions(): readonly TokenSchemaVersion[] {
@@ -278,7 +278,7 @@ export function getSupportedVersions(): readonly TokenSchemaVersion[] {
 
 /**
  * Create a version compatibility report
- * 
+ *
  * @param tokens - Tokens to check
  * @returns Compatibility report
  */
@@ -292,7 +292,9 @@ export interface CompatibilityReport {
   warnings: string[];
 }
 
-export function checkCompatibility(tokens: any): CompatibilityReport {
+export function checkCompatibility(
+  tokens: Record<string, unknown>
+): CompatibilityReport {
   const version = detectVersion(tokens);
   const warnings: string[] = [];
 
@@ -321,7 +323,9 @@ export function checkCompatibility(tokens: any): CompatibilityReport {
   }
 
   if (_needsMigration && !canMigrate) {
-    warnings.push(`No migration path available from ${version} to ${CURRENT_VERSION}`);
+    warnings.push(
+      `No migration path available from ${version} to ${CURRENT_VERSION}`
+    );
   }
 
   return {
@@ -334,4 +338,3 @@ export function checkCompatibility(tokens: any): CompatibilityReport {
     warnings,
   };
 }
-

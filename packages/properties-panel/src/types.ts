@@ -3,12 +3,7 @@
  * @author @darianrosebrook
  */
 
-import type {
-  // NodeType, // TODO: Remove if not needed
-  // BaseNodeType, // TODO: Remove if not needed
-  SemanticKeyType,
-} from "../../canvas-schema/src/index.js";
-// import type { ComponentIndex } from "../../component-indexer/src/index.js"; // TODO: Remove if not needed
+import type { SemanticKeyType } from "@paths-design/canvas-schema";
 
 /**
  * Selection state for the properties panel

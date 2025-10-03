@@ -436,6 +436,143 @@ export class DesignerMCPServer {
           required: ["canvasDocumentPath", "componentIndexPath", "direction"],
         },
       },
+      {
+        name: "detect_patterns",
+        description: "Detect UI patterns in a canvas document",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            componentIndexPath: {
+              type: "string",
+              description:
+                "Optional path to component index for enhanced detection",
+            },
+          },
+          required: ["documentPath"],
+        },
+      },
+      {
+        name: "generate_pattern",
+        description: "Generate a canvas document from a pattern specification",
+        inputSchema: {
+          type: "object",
+          properties: {
+            patternId: {
+              type: "string",
+              description: "Pattern ID to generate (e.g., 'pattern.tabs')",
+            },
+            spec: {
+              type: "object",
+              description: "Pattern specification",
+              properties: {
+                name: { type: "string", description: "Document name" },
+                position: {
+                  type: "object",
+                  description: "Position for the pattern",
+                  properties: {
+                    x: { type: "number" },
+                    y: { type: "number" },
+                  },
+                },
+                properties: {
+                  type: "object",
+                  description: "Pattern properties",
+                },
+              },
+            },
+            outputPath: {
+              type: "string",
+              description: "Path to save the generated canvas document",
+            },
+          },
+          required: ["patternId", "spec", "outputPath"],
+        },
+      },
+      {
+        name: "validate_patterns",
+        description: "Validate UI patterns in a canvas document",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            strict: {
+              type: "boolean",
+              description: "Enable strict validation (fail on warnings)",
+              default: false,
+            },
+          },
+          required: ["documentPath"],
+        },
+      },
+      {
+        name: "discover_components",
+        description: "Discover and analyze components in a canvas document",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            sourceCodePaths: {
+              type: "array",
+              description: "Paths to source code for component analysis",
+              items: { type: "string" },
+            },
+            componentIndexPath: {
+              type: "string",
+              description: "Path to component index for enhanced analysis",
+            },
+          },
+          required: ["documentPath"],
+        },
+      },
+      {
+        name: "analyze_design",
+        description:
+          "Comprehensive analysis of a design including components, patterns, and tokens",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            sourceCodePaths: {
+              type: "array",
+              description: "Paths to source code for component analysis",
+              items: { type: "string" },
+            },
+            componentIndexPath: {
+              type: "string",
+              description: "Path to component index for enhanced analysis",
+            },
+            includePatterns: {
+              type: "boolean",
+              description: "Include pattern analysis",
+              default: true,
+            },
+            includeAccessibility: {
+              type: "boolean",
+              description: "Include accessibility analysis",
+              default: true,
+            },
+            includeTokens: {
+              type: "boolean",
+              description: "Include token analysis",
+              default: true,
+            },
+          },
+          required: ["documentPath"],
+        },
+      },
     ];
   }
 
@@ -482,6 +619,21 @@ export class DesignerMCPServer {
 
       case "sync_design_dev":
         return await this.syncDesignDev(args);
+
+      case "detect_patterns":
+        return await this.detectPatterns(args);
+
+      case "generate_pattern":
+        return await this.generatePattern(args);
+
+      case "validate_patterns":
+        return await this.validatePatterns(args);
+
+      case "discover_components":
+        return await this.discoverComponents(args);
+
+      case "analyze_design":
+        return await this.analyzeDesign(args);
 
       default:
         throw new McpError(
@@ -1269,6 +1421,239 @@ ${
           error instanceof Error ? error.message : "Unknown error"
         }`
       );
+    }
+  }
+
+  /**
+   * Detect patterns in a canvas document
+   */
+  private async detectPatterns(args: {
+    documentPath: string;
+    componentIndexPath?: string;
+  }): Promise<{ instances: any[]; summary: string }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      // Import pattern detection functionality dynamically
+      const { detectPatterns } = await import(
+        "@paths-design/pattern-manifests"
+      );
+
+      const instances = detectPatterns(document);
+
+      const summary = `Detected ${
+        instances.length
+      } pattern instances: ${instances.map((i) => i.patternId).join(", ")}`;
+
+      return { instances, summary };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to detect patterns: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Generate a pattern from specification
+   */
+  private async generatePattern(args: {
+    patternId: string;
+    spec: {
+      name: string;
+      position?: { x: number; y: number };
+      properties?: Record<string, any>;
+    };
+    outputPath: string;
+  }): Promise<{ success: boolean; documentPath: string; message: string }> {
+    try {
+      // Import pattern generation functionality dynamically
+      const { generatePattern } = await import(
+        "@paths-design/pattern-manifests"
+      );
+
+      const document = generatePattern(args.patternId, args.spec);
+
+      fs.writeFileSync(args.outputPath, JSON.stringify(document, null, 2));
+
+      return {
+        success: true,
+        documentPath: args.outputPath,
+        message: `Generated ${args.patternId} pattern as "${args.spec.name}"`,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to generate pattern: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Validate patterns in a canvas document
+   */
+  private async validatePatterns(args: {
+    documentPath: string;
+    strict?: boolean;
+  }): Promise<{
+    valid: boolean;
+    errors: string[];
+    warnings: string[];
+    suggestions: string[];
+  }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      // Import pattern validation functionality dynamically
+      const { detectPatterns } = await import(
+        "@paths-design/pattern-manifests"
+      );
+
+      const instances = detectPatterns(document);
+
+      const errors: string[] = [];
+      const warnings: string[] = [];
+      const suggestions: string[] = [];
+
+      // Analyze each pattern instance
+      for (const instance of instances) {
+        if (!instance.isComplete) {
+          warnings.push(
+            `Incomplete ${instance.patternId} pattern: missing required nodes`
+          );
+          suggestions.push(
+            `Complete ${instance.patternId} by adding missing required nodes`
+          );
+        }
+
+        if (instance.validationErrors.length > 0) {
+          warnings.push(...instance.validationErrors);
+        }
+      }
+
+      const valid = errors.length === 0;
+
+      if (args.strict && (warnings.length > 0 || !valid)) {
+        throw new Error(
+          `Pattern validation failed: ${errors.length} errors, ${warnings.length} warnings`
+        );
+      }
+
+      return { valid, errors, warnings, suggestions };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to validate patterns: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Discover components in a canvas document
+   */
+  private async discoverComponents(args: {
+    documentPath: string;
+    sourceCodePaths?: string[];
+    componentIndexPath?: string;
+  }): Promise<{ components: any[]; analysis: any }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const _document = JSON.parse(content) as CanvasDocumentType;
+
+      // Import component discovery functionality dynamically
+      const { discoverComponents } = await import(
+        "@paths-design/component-discovery"
+      );
+
+      const result = await discoverComponents(args.documentPath, {
+        sourceCodePaths: args.sourceCodePaths,
+        componentIndex: args.componentIndexPath
+          ? await this.loadComponentIndex(args.componentIndexPath)
+          : undefined,
+      });
+
+      return {
+        components: result.discoveredComponents,
+        analysis: {
+          propAnalysis: result.propAnalysis,
+          subcomponentAnalysis: result.subcomponentAnalysis,
+          tokenAnalysis: result.tokenAnalysis,
+          recommendations: result.recommendations,
+          issues: result.issues,
+        },
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to discover components: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Comprehensive design analysis
+   */
+  private async analyzeDesign(args: {
+    documentPath: string;
+    sourceCodePaths?: string[];
+    componentIndexPath?: string;
+    includePatterns?: boolean;
+    includeAccessibility?: boolean;
+    includeTokens?: boolean;
+  }): Promise<{ analysis: any; summary: string }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const _document = JSON.parse(content) as CanvasDocumentType;
+
+      // Import comprehensive analysis functionality
+      const { runAutoDiscovery } = await import(
+        "@paths-design/component-discovery"
+      );
+
+      const result = await runAutoDiscovery(".", {
+        canvasFiles: [args.documentPath],
+        sourceFiles: args.sourceCodePaths,
+        componentIndex: args.componentIndexPath
+          ? await this.loadComponentIndex(args.componentIndexPath)
+          : undefined,
+      });
+
+      const summary = `Analysis complete: ${result.discoveredComponents.length} components, ${result.recommendations.length} recommendations, ${result.issues.length} issues`;
+
+      return {
+        analysis: result,
+        summary,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to analyze design: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Load component index
+   */
+  private async loadComponentIndex(componentIndexPath: string): Promise<any> {
+    try {
+      const content = fs.readFileSync(componentIndexPath, "utf-8");
+      return JSON.parse(content);
+    } catch (error) {
+      console.warn("Failed to load component index:", error);
+      return null;
     }
   }
 }

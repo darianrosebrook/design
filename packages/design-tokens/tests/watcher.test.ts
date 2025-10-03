@@ -192,7 +192,7 @@ describe("Token File Watcher", () => {
       await new Promise((resolve) => setTimeout(resolve, 200));
 
       expect(onRegenerate).toHaveBeenCalledTimes(2);
-      
+
       const css = fs.readFileSync(outputPath, "utf8");
       expect(css).toContain("--color-background-primary: #FFFFFF");
 
@@ -214,7 +214,7 @@ describe("Token File Watcher", () => {
 
       // Make 3 rapid changes
       const tokens = JSON.parse(fs.readFileSync(tokensPath, "utf8"));
-      
+
       tokens.color.background.primary = "#111111";
       fs.writeFileSync(tokensPath, JSON.stringify(tokens, null, 2));
       await new Promise((resolve) => setTimeout(resolve, 30));
@@ -282,7 +282,9 @@ describe("Token File Watcher", () => {
       await new Promise((resolve) => setTimeout(resolve, 200));
 
       expect(onError).toHaveBeenCalled();
-      expect(onError.mock.calls[0][0].message).toContain("Invalid tokens schema");
+      expect(onError.mock.calls[0][0].message).toContain(
+        "Invalid tokens schema"
+      );
 
       watcher.stop();
     });
@@ -348,4 +350,3 @@ describe("Token File Watcher", () => {
     });
   });
 });
-

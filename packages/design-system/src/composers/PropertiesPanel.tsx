@@ -4,16 +4,89 @@
  */
 
 import React, { useMemo } from "react";
-import { PropertyRegistry } from "../../../properties-panel/src/property-registry";
-import type {
-  PropertiesPanelProps,
-  PropertySectionProps,
-  // PropertySection, // TODO: Remove if not needed
-  PropertyValue,
-} from "../../../properties-panel/src/types";
 import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
-// import { TextField } from "../compounds/TextField"; // TODO: Remove if not needed
 import { Button } from "../primitives/Button";
+
+// Local types to avoid circular dependencies
+export interface SelectionState {
+  selectedNodeIds: string[];
+  focusedNodeId: string | null;
+}
+
+export interface PropertyDefinition {
+  key: string;
+  label: string;
+  type: string;
+  value?: unknown;
+  options?: unknown[];
+}
+
+export interface PropertyChangeEvent {
+  nodeId: string;
+  propertyKey: string;
+  oldValue: unknown;
+  newValue: unknown;
+  sectionId: string;
+}
+
+export interface PropertiesPanelProps {
+  selection: SelectionState;
+  onPropertyChange: (event: PropertyChangeEvent) => void;
+  onSelectionChange?: (selection: SelectionState) => void;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+export interface PropertySectionProps {
+  section: PropertySection;
+  selection: SelectionState;
+  onPropertyChange: (event: PropertyChangeEvent) => void;
+  className?: string;
+}
+
+export interface PropertySection {
+  id: string;
+  label: string;
+  icon?: string;
+  properties: PropertyDefinition[];
+  collapsible?: boolean;
+  defaultCollapsed?: boolean;
+}
+
+export type PropertyValue =
+  | string
+  | number
+  | boolean
+  | { x: number; y: number; width: number; height: number }
+  | { r: number; g: number; b: number; a?: number }
+  | string[]
+  | undefined;
+
+// Simple property registry for demo purposes
+class PropertyRegistry {
+  private static sections: Map<string, PropertySection> = new Map();
+
+  static registerSection(section: PropertySection): void {
+    this.sections.set(section.id, section);
+  }
+
+  static getSections(): PropertySection[] {
+    return Array.from(this.sections.values());
+  }
+}
+
+// Initialize with basic sections
+PropertyRegistry.registerSection({
+  id: "layout",
+  label: "Layout",
+  icon: "📐",
+  properties: [
+    { key: "frame.x", label: "X", type: "number", category: "position" },
+    { key: "frame.y", label: "Y", type: "number", category: "position" },
+    { key: "frame.width", label: "Width", type: "number", category: "size" },
+    { key: "frame.height", label: "Height", type: "number", category: "size" },
+  ],
+});
 
 /**
  * PropertiesPanel composer - orchestrates property editing for design elements

@@ -31,10 +31,10 @@ export class ComponentIndexWatcher {
      */
     async start() {
         // Build initial index
-        console.log(`🔍 Building initial component index...`);
+        console.info(`🔍 Building initial component index...`);
         await this.rebuild();
         // Start watching
-        console.log(`👀 Watching for changes in ${this.options.rootDir}...`);
+        console.info(`👀 Watching for changes in ${this.options.rootDir}...`);
         this.watcher = fs.watch(this.options.rootDir, { recursive: true }, (eventType, filename) => {
             if (filename && this.shouldProcessFile(filename)) {
                 const fullPath = path.join(this.options.rootDir, filename);
@@ -56,7 +56,7 @@ export class ComponentIndexWatcher {
             clearTimeout(this.rebuildTimer);
             this.rebuildTimer = null;
         }
-        console.log(`🛑 Stopped watching`);
+        console.info(`🛑 Stopped watching`);
     }
     /**
      * Schedule a rebuild with debouncing
@@ -126,8 +126,9 @@ export class ComponentIndexWatcher {
         // Check exclude patterns
         if (this.options.exclude && this.options.exclude.length > 0) {
             const excluded = this.options.exclude.some((pattern) => filename.includes(pattern));
-            if (excluded)
+            if (excluded) {
                 return false;
+            }
         }
         return true;
     }

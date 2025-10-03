@@ -11,7 +11,6 @@ import { useProperties } from "./use-properties";
  * Main properties panel component
  */
 export const PropertiesPanel = ({
-  _documentId,
   selection: externalSelection,
   onPropertyChange,
   onSelectionChange,

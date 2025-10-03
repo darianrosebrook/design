@@ -90,8 +90,13 @@ function applyFrameStyles(element: HTMLElement, _node: FrameNodeType): void {
 /**
  * Apply fill styles to element
  */
-function applyFills(element: HTMLElement, fills: Array<{ type: string; [key: string]: unknown }>): void {
-  if (!fills || fills.length === 0) {return;}
+function applyFills(
+  element: HTMLElement,
+  fills: Array<{ type: string; [key: string]: unknown }>
+): void {
+  if (!fills || fills.length === 0) {
+    return;
+  }
 
   // For now, handle solid fills (most common case)
   // TODO: Support gradients, images in future
@@ -121,8 +126,13 @@ function applyFills(element: HTMLElement, fills: Array<{ type: string; [key: str
 /**
  * Apply stroke/border styles to element
  */
-function applyStrokes(element: HTMLElement, strokes: Array<{ type: string; [key: string]: unknown }>): void {
-  if (!strokes || strokes.length === 0) {return;}
+function applyStrokes(
+  element: HTMLElement,
+  strokes: Array<{ type: string; [key: string]: unknown }>
+): void {
+  if (!strokes || strokes.length === 0) {
+    return;
+  }
 
   // For now, handle solid strokes (most common case)
   const solidStrokes = strokes.filter((s) => s.type === "solid");
@@ -159,7 +169,9 @@ function applyLayout(
   element: HTMLElement,
   layout: FrameNodeType["layout"]
 ): void {
-  if (!layout) {return;}
+  if (!layout) {
+    return;
+  }
 
   switch (layout.type) {
     case "none":

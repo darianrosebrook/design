@@ -26,7 +26,7 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
   }, [value]);
 
   const handleChange = useCallback(
-    (newValue: any) => {
+    (newValue: unknown) => {
       setInputValue(newValue);
       setError(null);
 

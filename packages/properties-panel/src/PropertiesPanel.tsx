@@ -17,7 +17,6 @@ import { useProperties } from "./use-properties";
  * Main properties panel component
  */
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
-  _documentId,
   selection: externalSelection,
   onPropertyChange,
   onSelectionChange,

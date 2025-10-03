@@ -13,6 +13,7 @@ import {
   type ConflictSeverity,
   type MergeDocuments,
   type NodeSnapshot,
+  type ResolutionStrategy,
 } from "./types.js";
 import { buildNodeIndex, sortConflicts } from "./utils.js";
 
@@ -504,7 +505,7 @@ interface CreateConflictParams {
   severity: ConflictSeverity;
   path: string[];
   autoResolvable: boolean;
-  resolutionStrategy?: import("./types.js").ResolutionStrategy;
+  resolutionStrategy?: ResolutionStrategy;
   baseValue?: unknown;
   localValue?: unknown;
   remoteValue?: unknown;

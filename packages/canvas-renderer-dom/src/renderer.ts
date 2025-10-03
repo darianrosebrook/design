@@ -10,7 +10,7 @@ import type {
   TextNodeType,
   // ComponentInstanceNodeType, // TODO: Remove if not needed
 } from "@paths-design/canvas-schema";
-import type { Observability} from "./observability.js";
+import type { Observability } from "./observability.js";
 import { createObservability } from "./observability.js";
 import { renderComponent } from "./renderers/component.js";
 import { renderFrame } from "./renderers/frame.js";
@@ -138,7 +138,10 @@ export class CanvasDOMRenderer implements CanvasRenderer {
     // Render all artboards
     for (const artboard of document.artboards) {
       // Render artboard as a frame
-      const artboardElement = this.renderNode(artboard as FrameNodeType, context);
+      const artboardElement = this.renderNode(
+        artboard as FrameNodeType,
+        context
+      );
       container.appendChild(artboardElement);
     }
 
@@ -183,7 +186,9 @@ export class CanvasDOMRenderer implements CanvasRenderer {
    * Update specific nodes (with dirty tracking)
    */
   updateNodes(nodeIds: string[], updates: Partial<NodeType>[]): void {
-    if (!this.document || !this.container) {return;}
+    if (!this.document || !this.container) {
+      return;
+    }
 
     this.observability.logger.debug("renderer.updateNodes", "Updating nodes", {
       nodeCount: nodeIds.length,
@@ -247,7 +252,9 @@ export class CanvasDOMRenderer implements CanvasRenderer {
    */
   getRenderedNode(nodeId: string): RenderedNode | null {
     const element = this.nodeElements.get(nodeId);
-    if (!element) {return null;}
+    if (!element) {
+      return null;
+    }
 
     return {
       element,
@@ -542,7 +549,9 @@ export class CanvasDOMRenderer implements CanvasRenderer {
    * Announce message to screen readers
    */
   private announce(message: string): void {
-    if (!this.liveRegion) {return;}
+    if (!this.liveRegion) {
+      return;
+    }
 
     // Clear and set message
     this.liveRegion.textContent = "";
@@ -682,7 +691,9 @@ export class CanvasDOMRenderer implements CanvasRenderer {
     const nodes = Array.from(this.nodeElements.entries());
     const currentIndex = nodes.findIndex(([id]) => id === currentNodeId);
 
-    if (currentIndex === -1) {return;}
+    if (currentIndex === -1) {
+      return;
+    }
 
     let nextIndex = currentIndex;
     switch (key) {
@@ -707,7 +718,9 @@ export class CanvasDOMRenderer implements CanvasRenderer {
    * Update selection overlay and styling
    */
   private updateSelectionOverlay(): void {
-    if (!this.container) {return;}
+    if (!this.container) {
+      return;
+    }
 
     // Remove existing selection elements
     const existingOutlines = this.container.querySelectorAll(

@@ -5,9 +5,9 @@
 
 import fs from "fs";
 import path from "path";
-import { resolveTokenReferences, validateTokenReferences } from "./resolver";
+import { validateTokenReferences } from "./resolver";
+import { DesignTokensSchema } from "./tokens";
 import { tokensToCSS } from "./utils";
-import { DesignTokensSchema, type DesignTokens } from "./tokens";
 
 export interface WatcherOptions {
   /**
@@ -55,10 +55,10 @@ export interface WatcherInstance {
 
 /**
  * Watch tokens file and auto-regenerate CSS on changes
- * 
+ *
  * @param options - Watcher configuration
  * @returns Watcher instance with stop() and regenerate() methods
- * 
+ *
  * @example
  * ```ts
  * const watcher = watchTokens({
@@ -67,7 +67,7 @@ export interface WatcherInstance {
  *   onRegenerate: (css) => console.log("✅ Regenerated CSS"),
  *   onError: (err) => console.error("❌ Error:", err),
  * });
- * 
+ *
  * // Later, stop watching
  * watcher.stop();
  * ```
@@ -90,7 +90,7 @@ export function watchTokens(options: WatcherOptions): WatcherInstance {
    */
   function log(message: string): void {
     if (verbose) {
-      console.log(`[TokenWatcher] ${message}`);
+      console.info(`[TokenWatcher] ${message}`);
     }
   }
 
@@ -108,7 +108,7 @@ export function watchTokens(options: WatcherOptions): WatcherInstance {
 
     try {
       log(`Reading tokens from ${tokensPath}`);
-      
+
       // Read and parse tokens file
       const tokensContent = fs.readFileSync(tokensPath, "utf8");
       const tokensJson = JSON.parse(tokensContent);
@@ -118,7 +118,10 @@ export function watchTokens(options: WatcherOptions): WatcherInstance {
       if (!parseResult.success) {
         throw new Error(
           `Invalid tokens schema: ${parseResult.error.issues
-            .map((e: any) => `${e.path.join(".")}: ${e.message}`)
+            .map(
+              (e: { path: string[]; message: string }) =>
+                `${e.path.join(".")}: ${e.message}`
+            )
             .join(", ")}`
         );
       }
@@ -134,12 +137,12 @@ export function watchTokens(options: WatcherOptions): WatcherInstance {
       }
 
       log("Resolving token references");
-      
+
       // Resolve references and generate CSS
       const css = tokensToCSS(tokens, ":root", { resolveReferences: true });
 
       log(`Writing CSS to ${outputPath}`);
-      
+
       // Ensure output directory exists
       const outputDir = path.dirname(outputPath);
       if (!fs.existsSync(outputDir)) {
@@ -214,12 +217,12 @@ export function watchTokens(options: WatcherOptions): WatcherInstance {
 
 /**
  * Watch tokens file and auto-regenerate CSS (simpler API without callbacks)
- * 
+ *
  * @param tokensPath - Path to tokens.json
  * @param outputPath - Path to output CSS file
  * @param options - Optional configuration
  * @returns Watcher instance
- * 
+ *
  * @example
  * ```ts
  * const watcher = watchTokensSimple(
@@ -240,11 +243,10 @@ export function watchTokensSimple(
     debounceMs: options?.debounceMs,
     verbose: options?.verbose,
     onRegenerate: (css) => {
-      console.log(`✅ Regenerated ${outputPath} (${css.length} bytes)`);
+      console.info(`✅ Regenerated ${outputPath} (${css.length} bytes)`);
     },
     onError: (error) => {
       console.error(`❌ Error: ${error.message}`);
     },
   });
 }
-

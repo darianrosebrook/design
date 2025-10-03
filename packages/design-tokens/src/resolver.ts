@@ -63,7 +63,7 @@ export function buildDependencyGraph(
 ): Map<string, Set<string>> {
   const graph = new Map<string, Set<string>>();
 
-  function walk(obj: any, path: string[] = []): void {
+  function walk(obj: Record<string, unknown>, path: string[] = []): void {
     for (const [key, value] of Object.entries(obj)) {
       const currentPath = [...path, key].join(".");
 
@@ -229,10 +229,10 @@ export function resolveTokenReferences(
 
   // Resolve all references
   function resolveValue(
-    value: any,
+    value: unknown,
     depth = 0,
     visited = new Set<string>()
-  ): any {
+  ): unknown {
     if (depth > maxDepth) {
       if (strict) {
         throw new Error(`Max reference depth (${maxDepth}) exceeded`);
@@ -270,7 +270,7 @@ export function resolveTokenReferences(
   }
 
   // Walk and resolve all values
-  function walk(obj: any): any {
+  function walk(obj: unknown): unknown {
     if (typeof obj !== "object" || obj === null) {
       return resolveValue(obj);
     }
@@ -279,7 +279,7 @@ export function resolveTokenReferences(
       return obj.map(walk);
     }
 
-    const result: any = {};
+    const result: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(obj)) {
       result[key] = walk(value);
     }

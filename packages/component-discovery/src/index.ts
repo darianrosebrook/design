@@ -3,19 +3,14 @@
  * @author @darianrosebrook
  */
 
-import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
-import type { ComponentIndex } from "@paths-design/component-indexer";
-import { generateAugmentedVariants } from "@paths-design/augment";
-import {
-  Project,
-  SourceFile,
-  Node as TsNode,
-  PropertySignature,
-  TypeNode,
-} from "ts-morph";
-import { glob } from "glob";
 import * as fs from "node:fs";
 import * as path from "node:path";
+// import { generateAugmentedVariants } from "@paths-design/augment"; // TODO: Remove if not needed
+import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
+import type { ComponentIndex } from "@paths-design/component-indexer";
+import { glob } from "glob";
+import type { TypeNode } from "ts-morph";
+import { Project, Node as TsNode } from "ts-morph";
 
 /**
  * Component discovery result
@@ -379,7 +374,9 @@ export class ComponentDiscoveryEngine {
   private async analyzeSourceCodeComponents(
     existingComponents: DiscoveredComponent[]
   ): Promise<void> {
-    if (!this.project) return;
+    if (!this.project) {
+      return;
+    }
 
     const sourceFiles = this.project.getSourceFiles();
 
@@ -391,11 +388,15 @@ export class ComponentDiscoveryEngine {
 
       for (const component of components) {
         const name = component.getName();
-        if (!name) continue;
+        if (!name) {
+          continue;
+        }
 
         // Check if this component is used in our canvas
         const canvasComponent = existingComponents.find((c) => c.name === name);
-        if (!canvasComponent) continue;
+        if (!canvasComponent) {
+          continue;
+        }
 
         // Analyze props
         const props = this.analyzeComponentProps(component, canvasComponent);
@@ -415,7 +416,9 @@ export class ComponentDiscoveryEngine {
 
     // Look for props interface or type
     const propsType = this.findPropsType(component);
-    if (!propsType) return props;
+    if (!propsType) {
+      return props;
+    }
 
     const properties = propsType.getDescendantsOfKind(
       TsNode.isPropertySignature
@@ -468,7 +471,9 @@ export class ComponentDiscoveryEngine {
    * Get type string from TypeScript type node
    */
   private getTypeString(typeNode?: TypeNode): string {
-    if (!typeNode) return "unknown";
+    if (!typeNode) {
+      return "unknown";
+    }
 
     // Simple type extraction - in a real implementation, this would be more sophisticated
     const text = typeNode.getText();
@@ -699,11 +704,15 @@ export class ComponentDiscoveryEngine {
   ): NodeType | null {
     function searchNodes(nodes: NodeType[]): NodeType | null {
       for (const node of nodes) {
-        if (node.id === nodeId) return node;
+        if (node.id === nodeId) {
+          return node;
+        }
 
         if ("children" in node && node.children) {
           const found = searchNodes(node.children);
-          if (found) return found;
+          if (found) {
+            return found;
+          }
         }
       }
       return null;
@@ -711,7 +720,9 @@ export class ComponentDiscoveryEngine {
 
     for (const artboard of document.artboards) {
       const found = searchNodes(artboard.children);
-      if (found) return found;
+      if (found) {
+        return found;
+      }
     }
 
     return null;
@@ -831,7 +842,7 @@ export class ComponentDiscoveryEngine {
       },
     };
 
-    const category = token.split(".")[1]; // color, space, typography
+    const _category = token.split(".")[1]; // color, space, typography
     const name = token.split(".").pop() || "";
 
     return suggestions[type]?.[name] || "#000000";
@@ -844,7 +855,7 @@ export class ComponentDiscoveryEngine {
     components: DiscoveredComponent[],
     propAnalysis: PropAnalysisResult,
     subcomponentAnalysis: SubcomponentAnalysisResult,
-    tokenAnalysis: TokenAnalysisResult
+    _tokenAnalysis: TokenAnalysisResult
   ): Recommendation[] {
     const recommendations: Recommendation[] = [];
 

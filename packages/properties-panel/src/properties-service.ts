@@ -3,11 +3,8 @@
  * @author @darianrosebrook
  */
 
-import type {
-  NodeType,
-  SemanticKeyType,
-} from "../../canvas-schema/src/index.js";
-import type { ComponentIndex } from "../../component-indexer/src/index.js";
+import type { NodeType, SemanticKeyType } from "@paths-design/canvas-schema";
+import type { ComponentIndex } from "@paths-design/component-indexer";
 import {
   getNodeProperty,
   setNodeProperty,
@@ -189,8 +186,9 @@ export class PropertiesService {
     const properties = getApplicablePropertiesForNode(node);
 
     // If node has a semantic key, try to find component contract
-    if (this.componentIndex && (node as any).semanticKey) {
-      const semanticKey = (node as any).semanticKey as SemanticKeyType;
+    if (this.componentIndex && (node as Record<string, unknown>).semanticKey) {
+      const semanticKey = (node as Record<string, unknown>)
+        .semanticKey as SemanticKeyType;
       const contractProperties = this.getContractPropertiesForSemanticKey(
         semanticKey,
         node
@@ -200,7 +198,7 @@ export class PropertiesService {
 
     // If node is a component instance, get contract properties
     if (node.type === "component" && this.componentIndex) {
-      const componentKey = (node as any).componentKey;
+      const componentKey = (node as Record<string, unknown>).componentKey;
       const component = this.componentIndex.components[componentKey];
       if (component) {
         const contractProperties = this.getContractPropertiesForComponent(
@@ -229,7 +227,10 @@ export class PropertiesService {
     for (const [_componentKey, component] of Object.entries(
       this.componentIndex.components
     )) {
-      if ((component as ComponentIndexComponent)?.semanticKeys?.[semanticKey]) {
+      if (
+        semanticKey &&
+        (component as ComponentIndexComponent)?.semanticKeys?.[semanticKey]
+      ) {
         const mapping = (component as ComponentIndexComponent)?.semanticKeys?.[
           semanticKey
         ];
@@ -248,7 +249,7 @@ export class PropertiesService {
    * Get properties from component contract
    */
   private getContractPropertiesForComponent(
-    component: any,
+    component: Record<string, unknown>,
     node: NodeType,
     propDefaults?: Record<string, unknown>
   ): PropertyDefinition[] {
@@ -261,7 +262,7 @@ export class PropertiesService {
         type: this.mapTypeToPropertyType(prop.type),
         category: "component",
         description: `Component property: ${prop.name}`,
-        semanticKey: (node as any).semanticKey,
+        semanticKey: (node as Record<string, unknown>).semanticKey,
         componentContract: {
           componentKey: component.id || component.name,
           propName: prop.name,
@@ -320,7 +321,7 @@ export class PropertiesService {
   /**
    * Get all applicable properties for the current selection
    */
-  getAllApplicableProperties(): any[] {
+  getAllApplicableProperties(): PropertyDefinition[] {
     const allProperties = new Set<string>();
 
     for (const nodeId of this.selection.selectedNodeIds) {

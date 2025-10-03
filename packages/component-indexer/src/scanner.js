@@ -2,9 +2,9 @@
  * @fileoverview TypeScript Compiler API-based component scanner
  * @author @darianrosebrook
  */
-import * as ts from "typescript";
-import * as path from "node:path";
 import * as fs from "node:fs";
+import * as path from "node:path";
+import * as ts from "typescript";
 import { ulid } from "ulidx";
 /**
  * Component scanner using TypeScript Compiler API
@@ -93,7 +93,9 @@ export class ComponentScanner {
   findTypeScriptFiles(dir) {
     const files = [];
     const scan = (currentDir) => {
-      if (!fs.existsSync(currentDir)) return;
+      if (!fs.existsSync(currentDir)) {
+        return;
+      }
       const entries = fs.readdirSync(currentDir, { withFileTypes: true });
       for (const entry of entries) {
         const fullPath = path.join(currentDir, entry.name);
@@ -118,22 +120,30 @@ export class ComponentScanner {
   shouldScanFile(sourceFile, options) {
     const filePath = sourceFile.fileName;
     // Skip declaration files
-    if (filePath.endsWith(".d.ts")) return false;
+    if (filePath.endsWith(".d.ts")) {
+      return false;
+    }
     // Skip node_modules
-    if (filePath.includes("node_modules")) return false;
+    if (filePath.includes("node_modules")) {
+      return false;
+    }
     // Check includes
     if (options.include && options.include.length > 0) {
       const included = options.include.some((pattern) =>
         filePath.includes(pattern)
       );
-      if (!included) return false;
+      if (!included) {
+        return false;
+      }
     }
     // Check excludes
     if (options.exclude && options.exclude.length > 0) {
       const excluded = options.exclude.some((pattern) =>
         filePath.includes(pattern)
       );
-      if (excluded) return false;
+      if (excluded) {
+        return false;
+      }
     }
     return true;
   }
@@ -189,7 +199,9 @@ export class ComponentScanner {
    * Check if function returns JSX
    */
   hasJSXReturnType(node) {
-    if (!this.checker) return false;
+    if (!this.checker) {
+      return false;
+    }
     // First, check if explicit return type annotation is JSX
     if (node.type) {
       const typeText = node.type.getText();
@@ -222,7 +234,9 @@ export class ComponentScanner {
    * Check if function body contains JSX elements
    */
   hasJSXInBody(body) {
-    if (!body) return false;
+    if (!body) {
+      return false;
+    }
     let hasJSX = false;
     const visitor = (node) => {
       if (
@@ -247,7 +261,9 @@ export class ComponentScanner {
    * Check if class extends React.Component
    */
   extendsReactComponent(node) {
-    if (!node.heritageClauses) return false;
+    if (!node.heritageClauses) {
+      return false;
+    }
     for (const clause of node.heritageClauses) {
       if (clause.token === ts.SyntaxKind.ExtendsKeyword) {
         for (const type of clause.types) {
@@ -266,7 +282,9 @@ export class ComponentScanner {
   extractComponentMetadata(node, sourceFile) {
     // First extract the component metadata normally
     const metadata = this.extractComponentMetadataBase(node, sourceFile);
-    if (!metadata) return null;
+    if (!metadata) {
+      return null;
+    }
     // Then try to extract default values from the implementation
     const defaultValues = this.extractDefaultValues(node, sourceFile);
     if (defaultValues) {
@@ -355,10 +373,12 @@ export class ComponentScanner {
    * Extract component metadata from AST node (base implementation)
    */
   extractComponentMetadataBase(node, sourceFile) {
-    if (!this.checker) return null;
+    if (!this.checker) {
+      return null;
+    }
     let name;
     let props = [];
-    let jsDocTags = {};
+    const jsDocTags = {};
     // Get component name
     if (ts.isFunctionDeclaration(node) && node.name) {
       name = node.name.text;
@@ -370,7 +390,9 @@ export class ComponentScanner {
     } else if (ts.isClassDeclaration(node) && node.name) {
       name = node.name.text;
     }
-    if (!name) return null;
+    if (!name) {
+      return null;
+    }
     // Extract JSDoc comments from the component node
     const jsDoc = node.jsDoc;
     if (jsDoc && jsDoc.length > 0) {
@@ -478,7 +500,9 @@ export class ComponentScanner {
    * Extract props from TypeScript type
    */
   extractPropsFromType(typeNode) {
-    if (!this.checker) return [];
+    if (!this.checker) {
+      return [];
+    }
     const props = [];
     if (ts.isTypeLiteralNode(typeNode)) {
       for (const member of typeNode.members) {
@@ -566,7 +590,9 @@ export class ComponentScanner {
    * Get JSDoc comment text from a JSDoc node or tag
    */
   getJSDocComment(jsDocNode) {
-    if (!jsDocNode) return "";
+    if (!jsDocNode) {
+      return "";
+    }
     // Handle string comments
     if (typeof jsDocNode.comment === "string") {
       return jsDocNode.comment;
@@ -637,7 +663,6 @@ export class ComponentScanner {
   extractDefaultsFromTypeLiteral(typeLiteral) {
     for (const member of typeLiteral.members) {
       if (ts.isPropertySignature(member) && member.name) {
-        // const _propName = member.name.getText();
         // Look for default value in the initializer (if present in destructuring)
         // Note: TypeScript AST doesn't directly store destructuring defaults in type literals
         // We need to look at the parameter declaration itself
@@ -650,7 +675,9 @@ export class ComponentScanner {
    */
   extractFromDefaultProps(node, sourceFile, defaultValues) {
     const componentName = this.getComponentName(node);
-    if (!componentName) return;
+    if (!componentName) {
+      return;
+    }
     // Walk the source file to find defaultProps assignments
     const visitor = (node) => {
       // Look for: ComponentName.defaultProps = { ... }
@@ -697,7 +724,9 @@ export class ComponentScanner {
         body = declaration.initializer.body;
       }
     }
-    if (!body) return;
+    if (!body) {
+      return;
+    }
     // Walk the body to find destructuring assignments
     const visitor = (node) => {
       // Look for: const { variant = "primary" } = props;

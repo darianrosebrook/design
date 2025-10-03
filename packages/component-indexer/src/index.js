@@ -3,8 +3,9 @@
  * @author @darianrosebrook
  */
 import * as fs from "node:fs/promises";
-import { ComponentIndexSchema } from "./types.js";
+// import * as path from "node:path"; // TODO: Remove if not needed
 import { discoverComponents } from "./scanner.js";
+import { ComponentIndexSchema } from "./types.js";
 export * from "./types.js";
 export * from "./scanner.js";
 export * from "./watcher.js";
@@ -67,9 +68,9 @@ export async function buildComponentIndex(rootDir, outputPath, options) {
     const index = await generateIndex(discoveryResult, source);
     // Save index
     await saveIndex(index, outputPath);
-    console.log(`✅ Generated component index: ${outputPath}`);
-    console.log(`   Found ${discoveryResult.stats.componentsFound} components`);
-    console.log(`   Scanned ${discoveryResult.stats.filesScanned} files`);
-    console.log(`   Duration: ${discoveryResult.stats.duration}ms`);
+    console.info(`✅ Generated component index: ${outputPath}`);
+    console.info(`   Found ${discoveryResult.stats.componentsFound} components`);
+    console.info(`   Scanned ${discoveryResult.stats.filesScanned} files`);
+    console.info(`   Duration: ${discoveryResult.stats.duration}ms`);
     return index;
 }

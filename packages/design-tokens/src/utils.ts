@@ -3,8 +3,8 @@
  * @author @darianrosebrook
  */
 
-import { DesignTokensSchema, type DesignTokens } from "./tokens";
 import { resolveTokenReferences } from "./resolver";
+import { DesignTokensSchema, type DesignTokens } from "./tokens";
 
 /**
  * Flatten nested token objects into CSS custom property format
@@ -16,7 +16,7 @@ export function flattenTokens(
   options?: { resolveReferences?: boolean }
 ): Record<string, string | number> {
   const resolveReferences = options?.resolveReferences ?? true;
-  
+
   // Resolve references first if enabled
   const tokensToFlatten = resolveReferences
     ? resolveTokenReferences(tokens, { strict: false })
@@ -24,7 +24,7 @@ export function flattenTokens(
 
   const result: Record<string, string | number> = {};
 
-  function walk(obj: any, path: string[] = []) {
+  function walk(obj: Record<string, unknown>, path: string[] = []) {
     for (const [key, value] of Object.entries(obj)) {
       const currentPath = [...path, key];
 
@@ -73,7 +73,7 @@ export function getToken(
   path: string
 ): string | number | undefined {
   const parts = path.split(".");
-  let current: any = tokens;
+  let current: unknown = tokens;
 
   for (const part of parts) {
     if (current && typeof current === "object" && part in current) {
@@ -96,7 +96,7 @@ export function setToken(
 ): DesignTokens {
   const parts = path.split(".");
   const newTokens = JSON.parse(JSON.stringify(tokens)) as DesignTokens;
-  let current: any = newTokens;
+  let current: Record<string, unknown> = newTokens;
 
   // Navigate to the parent object
   for (let i = 0; i < parts.length - 1; i++) {
@@ -116,7 +116,7 @@ export function setToken(
 /**
  * Validate tokens against schema
  */
-export function validateTokens(tokens: any): {
+export function validateTokens(tokens: Record<string, unknown>): {
   valid: boolean;
   errors: string[];
 } {
@@ -126,8 +126,9 @@ export function validateTokens(tokens: any): {
   } else {
     return {
       valid: false,
-      errors: (result.error as any).errors.map(
-        (err: any) => `${err.path.join(".")}: ${err.message}`
+      errors: result.error.errors.map(
+        (err: { path: string[]; message: string }) =>
+          `${err.path.join(".")}: ${err.message}`
       ),
     };
   }
@@ -142,14 +143,19 @@ export function mergeTokens(
 ): DesignTokens {
   const result = JSON.parse(JSON.stringify(base)) as DesignTokens;
 
-  function deepMerge(target: any, source: any) {
+  function deepMerge(
+    target: Record<string, unknown>,
+    source: Record<string, unknown>
+  ) {
     for (const key in source) {
       if (
         source[key] &&
         typeof source[key] === "object" &&
         !Array.isArray(source[key])
       ) {
-        if (!target[key]) {target[key] = {};}
+        if (!target[key]) {
+          target[key] = {};
+        }
         deepMerge(target[key], source[key]);
       } else {
         target[key] = source[key];
@@ -167,7 +173,7 @@ export function mergeTokens(
 export function tokensToTypes(tokens: DesignTokens): string {
   const types: string[] = [];
 
-  function walk(obj: any, path: string[] = []) {
+  function walk(obj: Record<string, unknown>, path: string[] = []) {
     for (const [key, value] of Object.entries(obj)) {
       const currentPath = [...path, key];
 

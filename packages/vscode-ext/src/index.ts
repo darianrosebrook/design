@@ -216,12 +216,12 @@ class DesignerExtension {
     // Set nodes in properties service for semantic key and contract support
     if (document.artboards.length > 0) {
       // Flatten all nodes from all artboards
-      const allNodes: any[] = [];
+      const allNodes: NodeType[] = [];
       document.artboards.forEach((artboard) => {
         allNodes.push(...artboard.children);
 
         // Recursively collect all child nodes
-        const collectNodes = (nodes: any[]) => {
+        const collectNodes = (nodes: NodeType[]) => {
           nodes.forEach((node) => {
             if (node.children) {
               allNodes.push(...node.children);
@@ -302,7 +302,7 @@ export function activate(context: vscode.ExtensionContext): void {
   extensionInstance = new DesignerExtension(context);
 
   // Export the extension instance for use by other parts of the extension
-  (globalThis as any).designerExtension = extensionInstance;
+  (globalThis as Record<string, unknown>).designerExtension = extensionInstance;
 
   console.info("Designer extension fully initialized");
 }
@@ -315,7 +315,7 @@ export function deactivate(): void {
 
   if (extensionInstance) {
     extensionInstance = null;
-    (globalThis as any).designerExtension = null;
+    (globalThis as Record<string, unknown>).designerExtension = null;
   }
 }
 

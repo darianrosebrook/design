@@ -206,7 +206,7 @@ export class AugmentationEngine {
     document: CanvasDocumentType,
     transformations: TransformationRecord[]
   ): void {
-    const tolerance = this.config.layoutPerturbation!.tolerance;
+    const tolerance = this.config.layoutPerturbation?.tolerance ?? 0;
 
     function perturbNode(node: NodeType, path: string): void {
       if (node.type === "frame" && "frame" in node) {
@@ -237,7 +237,12 @@ export class AugmentationEngine {
         });
 
         // Apply the perturbation
-        node.frame = transformations[transformations.length - 1].after as { x: number; y: number; width: number; height: number };
+        node.frame = transformations[transformations.length - 1].after as {
+          x: number;
+          y: number;
+          width: number;
+          height: number;
+        };
       }
 
       // Recurse into children
@@ -248,11 +253,13 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
-      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
-        perturbNode(node, `artboards[${index}].children[${nodeIndex}]`);
-      });
-    });
+    document.artboards.forEach(
+      (artboard: { children: NodeType[] }, index: number) => {
+        artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+          perturbNode(node, `artboards[${index}].children[${nodeIndex}]`);
+        });
+      }
+    );
   }
 
   /**
@@ -387,11 +394,13 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
-      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
-        fuzzNode(node, `artboards[${index}].children[${nodeIndex}]`);
-      });
-    });
+    document.artboards.forEach(
+      (artboard: { children: NodeType[] }, index: number) => {
+        artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+          fuzzNode(node, `artboards[${index}].children[${nodeIndex}]`);
+        });
+      }
+    );
   }
 
   /**
@@ -436,11 +445,13 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
-      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
-        fuzzNode(node, `artboards[${index}].children[${nodeIndex}]`);
-      });
-    });
+    document.artboards.forEach(
+      (artboard: { children: NodeType[] }, index: number) => {
+        artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+          fuzzNode(node, `artboards[${index}].children[${nodeIndex}]`);
+        });
+      }
+    );
   }
 
   /**
@@ -508,11 +519,13 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
-      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
-        validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
-      });
-    });
+    document.artboards.forEach(
+      (artboard: { children: NodeType[] }, index: number) => {
+        artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+          validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
+        });
+      }
+    );
   }
 
   /**
@@ -569,11 +582,13 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
-      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
-        validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
-      });
-    });
+    document.artboards.forEach(
+      (artboard: { children: NodeType[] }, index: number) => {
+        artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+          validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
+        });
+      }
+    );
   }
 
   /**
@@ -620,11 +635,13 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
-      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
-        validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
-      });
-    });
+    document.artboards.forEach(
+      (artboard: { children: NodeType[] }, index: number) => {
+        artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+          validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
+        });
+      }
+    );
   }
 
   /**
@@ -688,11 +705,13 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
-      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
-        validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
-      });
-    });
+    document.artboards.forEach(
+      (artboard: { children: NodeType[] }, index: number) => {
+        artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+          validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
+        });
+      }
+    );
   }
 }
 

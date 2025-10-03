@@ -66,7 +66,6 @@ export class PropertiesService {
    * Set current selection
    */
   setSelection(selection) {
-    const _oldSelection = this.selection;
     this.selection = { ...selection };
     // Notify selection change callbacks
     for (const callback of this.selectionChangeCallbacks) {
@@ -150,7 +149,7 @@ export class PropertiesService {
   getContractPropertiesForSemanticKey(semanticKey, node) {
     if (!this.componentIndex) return [];
     // Find component that has this semantic key
-    for (const [_componentKey, component] of Object.entries(
+    for (const [, component] of Object.entries(
       this.componentIndex.components
     )) {
       if (component?.semanticKeys?.[semanticKey]) {

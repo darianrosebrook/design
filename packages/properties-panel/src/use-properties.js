@@ -20,7 +20,7 @@ export function useProperties() {
       setSelection(newSelection);
     });
     // Subscribe to property changes
-    const unsubscribeProperties = service.onPropertyChange((_event) => {
+    const unsubscribeProperties = service.onPropertyChange(() => {
       // Trigger a re-render when properties change
       setNodes((prevNodes) => [...prevNodes]);
     });
@@ -45,7 +45,7 @@ export function useProperties() {
   /**
    * Handle property change
    */
-  const handlePropertyChange = useCallback((_event) => {
+  const handlePropertyChange = useCallback(() => {
     // For now, we just need to trigger a re-render
     // In a real implementation, this would send the change to the canvas
     setNodes((prevNodes) => [...prevNodes]);

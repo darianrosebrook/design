@@ -2,7 +2,7 @@
  * @fileoverview Core types for the properties panel
  * @author @darianrosebrook
  */
-import type { SemanticKeyType } from "../../canvas-schema/src/index.js";
+import type { SemanticKeyType } from "@paths-design/canvas-schema";
 /**
  * Selection state for the properties panel
  */

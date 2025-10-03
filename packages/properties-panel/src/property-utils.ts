@@ -3,11 +3,7 @@
  * @author @darianrosebrook
  */
 
-import type {
-  NodeType,
-  // FrameNodeType, // TODO: Remove if not needed
-  TextNodeType,
-} from "../../canvas-schema/src/index.js";
+import type { NodeType, TextNodeType } from "@paths-design/canvas-schema";
 import type { PropertyValue, PropertyDefinition } from "./types";
 
 /**
@@ -22,7 +18,7 @@ export function getNodeProperty(
 
   if (parts.length === 1) {
     // Direct property access
-    return (node as any)[propertyKey];
+    return (node as Record<string, unknown>)[propertyKey];
   }
 
   if (parts.length === 2) {
@@ -30,11 +26,13 @@ export function getNodeProperty(
 
     switch (parent) {
       case "frame":
-        return node.frame ? (node.frame as any)[child] : undefined;
+        return node.frame
+          ? (node.frame as Record<string, unknown>)[child]
+          : undefined;
 
       case "textStyle":
         return node.type === "text" && node.textStyle
-          ? (node.textStyle as any)[child]
+          ? (node.textStyle as Record<string, unknown>)[child]
           : undefined;
 
       case "text":
@@ -45,17 +43,17 @@ export function getNodeProperty(
         return undefined;
 
       default:
-        return (node as any)[parent]?.[child];
+        return (node as Record<string, unknown>)[parent]?.[child];
     }
   }
 
   // For deeper nesting, traverse the object
-  let current: any = node;
+  let current: unknown = node;
   for (const part of parts) {
-    if (current == null) {
+    if (current == null || typeof current !== "object") {
       return undefined;
     }
-    current = current[part];
+    current = (current as Record<string, unknown>)[part];
   }
 
   return current;
@@ -129,7 +127,7 @@ export function setNodeProperty(
 
   // For deeper nesting, create a deep clone and update
   const updatedNode = JSON.parse(JSON.stringify(node));
-  let current: any = updatedNode;
+  let current: Record<string, unknown> = updatedNode;
 
   // Navigate to the parent of the final property
   for (let i = 0; i < parts.length - 1; i++) {

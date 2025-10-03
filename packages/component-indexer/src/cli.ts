@@ -12,31 +12,31 @@ async function main() {
   const args = process.argv.slice(2);
 
   if (args.length === 0 || args.includes("--help") || args.includes("-h")) {
-    console.log("Designer Component Indexer");
-    console.log("");
-    console.log("Usage:");
-    console.log("  designer-index <root-dir> [options]");
-    console.log("");
-    console.log("Options:");
-    console.log(
+    console.info("Designer Component Indexer");
+    console.info("");
+    console.info("Usage:");
+    console.info("  designer-index <root-dir> [options]");
+    console.info("");
+    console.info("Options:");
+    console.info(
       "  --output, -o <path>      Output path (default: design/component-index.json)"
     );
-    console.log("  --tsconfig <path>        Path to tsconfig.json");
-    console.log("  --include <patterns>     Comma-separated include patterns");
-    console.log("  --exclude <patterns>     Comma-separated exclude patterns");
-    console.log(
+    console.info("  --tsconfig <path>        Path to tsconfig.json");
+    console.info("  --include <patterns>     Comma-separated include patterns");
+    console.info("  --exclude <patterns>     Comma-separated exclude patterns");
+    console.info(
       "  --watch, -w              Watch for changes and rebuild automatically"
     );
-    console.log(
+    console.info(
       "  --debounce <ms>          Debounce delay for watch mode (default: 500)"
     );
-    console.log("  --help, -h               Show this help message");
-    console.log("");
-    console.log("Examples:");
-    console.log("  designer-index src/components");
-    console.log("  designer-index src --output dist/components.json");
-    console.log("  designer-index src --include 'ui/**,forms/**'");
-    console.log("  designer-index src --watch --debounce 1000");
+    console.info("  --help, -h               Show this help message");
+    console.info("");
+    console.info("Examples:");
+    console.info("  designer-index src/components");
+    console.info("  designer-index src --output dist/components.json");
+    console.info("  designer-index src --include 'ui/**,forms/**'");
+    console.info("  designer-index src --watch --debounce 1000");
     process.exit(0);
   }
 
@@ -78,7 +78,7 @@ async function main() {
         exclude,
         debounceMs,
         onChange: (filePath) => {
-          console.log(`📝 Changed: ${path.relative(process.cwd(), filePath)}`);
+          console.info(`📝 Changed: ${path.relative(process.cwd(), filePath)}`);
         },
         onError: (error) => {
           console.error(`❌ Error: ${error.message}`);
@@ -87,7 +87,7 @@ async function main() {
 
       // Handle graceful shutdown
       process.on("SIGINT", () => {
-        console.log("\n👋 Shutting down watcher...");
+        console.info("\n👋 Shutting down watcher...");
         watcher.stop();
         process.exit(0);
       });
@@ -98,7 +98,7 @@ async function main() {
       });
 
       // Keep process alive
-      console.log("\n✅ Watch mode active. Press Ctrl+C to stop.");
+      console.info("\n✅ Watch mode active. Press Ctrl+C to stop.");
     } else {
       // One-time build
       await buildComponentIndex(rootDir, outputPath, {

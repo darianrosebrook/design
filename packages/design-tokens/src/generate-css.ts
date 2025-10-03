@@ -15,7 +15,7 @@ function flattenTokens(
 ): Record<string, string | number> {
   const result: Record<string, string | number> = {};
 
-  function walk(obj: any, path: string[] = []) {
+  function walk(obj: Record<string, unknown>, path: string[] = []) {
     for (const [key, value] of Object.entries(obj)) {
       const currentPath = [...path, key];
 

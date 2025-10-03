@@ -194,10 +194,180 @@
 
 ---
 
-### 2.1 Button
+## 3. Editor Guided Flow (Updated for Implementation)
 
-* **ID**: `pattern.button`
-* **Nodes**: `button`
+1. **Choose Semantic Key** → Designer selects from available semantic patterns or creates custom keys.
+2. **Component Mapping** → System maps semantic keys to appropriate React components with defaults.
+3. **Property Configuration** → Designer sets component properties through semantic key-aware interface.
+4. **Accessibility Review** → System validates WCAG compliance and semantic correctness.
+5. **Code Generation** → Produces semantic HTML with proper ARIA attributes.
+
+**Implementation Reality:**
+- Semantic key selection is more intuitive than complex pattern matching
+- Component contracts provide clear mapping from design intent to implementation
+- Built-in validation catches accessibility issues during design, not after
+
+---
+
+## 4. Emission Rules (Component Contract Priority)
+
+* **Component contracts first.** If a semantic key maps to a component contract, use it with prop defaults.
+* **Semantic HTML fallback.** Generate appropriate semantic elements (`<button>`, `<nav>`, `<article>`) when no contract exists.
+* **ARIA enhancement.** Add ARIA attributes for accessibility even when using semantic HTML.
+* **Attribute canonicalization.** Maintain consistent attribute ordering for deterministic output.
+
+**Implementation Benefits:**
+- Component contracts provide explicit design → code mapping
+- Semantic HTML generation reduces need for complex ARIA role assignments
+- Built-in accessibility validation ensures WCAG compliance
+
+---
+
+## 5. Validation Matrix (Updated for Implementation)
+
+| Pattern Category | Semantic Key Examples | Component Contract | HTML Emission | Accessibility Check |
+| ---------------- | --------------------- | ------------------ | -------------- | ------------------- |
+| Call-to-Action | `cta.primary`, `cta.secondary` | Button component | `<button>` with ARIA | Focus management, ARIA labels |
+| Navigation | `nav.container`, `nav.items[0]` | Navigation component | `<nav>` + `<a>` | Landmark roles, link context |
+| Hero Content | `hero.title`, `hero.subtitle` | Typography component | `<h1>` + `<p>` | Heading hierarchy |
+| Form Elements | `form.input.field`, `form.submit` | Input/Button components | `<input>` + `<label>` | Form associations, validation states |
+| Content Sections | `card.container`, `content.section` | Article/Card components | `<article>` + `<section>` | Landmark roles, semantic structure |
+
+**Implementation Learnings:**
+- Component contracts eliminate need for complex validation matrices
+- Semantic key validation is simpler and more reliable than pattern matching
+- Built-in accessibility validation during augmentation is more effective
+
+---
+
+## 6. Roadmap (Updated for Implementation)
+
+* **v1.0: ✅ COMPLETE** - Semantic key system with component contracts and MCP integration
+* **v1.1: Future** - Advanced pattern inference for complex UI patterns (Tabs, Dialogs, etc.)
+* **v1.2: Future** - Enhanced component discovery and automatic contract generation
+* **v1.3: Future** - Real-time collaborative editing with CRDT support
+* **v2.0: Future** - Full pattern manifest system for complex multi-component patterns
+
+---
+
+## 7. Implementation Benefits
+
+### **For Designers**
+- **Natural Expression**: Semantic keys feel intuitive and stable
+- **Component Contracts**: Clear mapping from design intent to implementation
+- **Visual Feedback**: Real-time accessibility validation
+- **Collaborative**: Work seamlessly with developers
+
+### **For Developers**
+- **Clear Specifications**: Component contracts provide explicit requirements
+- **Semantic Mapping**: Understand design purpose through semantic keys
+- **Automated Generation**: Consistent code from design specifications
+- **Testing Support**: Systematic augmentation for comprehensive testing
+
+### **For Both**
+- **Bidirectional Sync**: Changes flow naturally between design and code
+- **Semantic Diffs**: PRs show "moved hero.title" instead of array index changes
+- **Accessibility Built-in**: WCAG validation during the entire process
+- **Test Coverage**: Systematic augmentation for edge case coverage
+
+---
+
+## 8. Usage Examples
+
+### **Basic Canvas Document with Semantic Keys**
+```json
+{
+  "schemaVersion": "0.1.0",
+  "name": "Landing Page",
+  "artboards": [{
+    "children": [
+      {
+        "type": "frame",
+        "name": "Hero Section",
+        "semanticKey": "hero.section",
+        "children": [
+          {
+            "type": "text",
+            "name": "Title",
+            "semanticKey": "hero.title",
+            "text": "Build Amazing Interfaces"
+          },
+          {
+            "type": "frame",
+            "name": "CTA Button",
+            "semanticKey": "cta.primary"
+          }
+        ]
+      }
+    ]
+  }]
+}
+```
+
+### **Component Index with Semantic Mapping**
+```json
+{
+  "Button": {
+    "semanticKeys": {
+      "cta.primary": {
+        "description": "Primary call-to-action button",
+        "propDefaults": { "variant": "primary", "size": "large" }
+      }
+    }
+  }
+}
+```
+
+### **Generated React Component**
+```jsx
+// Semantic key mapping in action
+export default function HeroSection() {
+  return (
+    <header className="hero-section">
+      <h1 className="hero-title">Build Amazing Interfaces</h1>
+      <Button variant="primary" size="large">Get Started</Button>
+    </header>
+  );
+}
+```
+
+---
+
+## 9. Architecture Overview
+
+```
+🎨 Design Agent ←→ Canvas Document ←→ MCP Server ←→ Dev Agent
+     ↓                    ↓                    ↓                    ↓
+Semantic Keys ←→ Component ←→ Bidirectional ←→ React Components
+     ↓         Contracts    Sync              ↓
+     ↓                    ↓                    ↓                    ↓
+Accessibility ←→ Code Generation ←→ Testing ←→ Validation
+Validation      & Optimization    Variants
+```
+
+**Key Systems:**
+- **Semantic Key System**: Stable node identification with dot notation
+- **Component Contracts**: Design intent → React component mapping
+- **Data Augmentation**: Systematic testing with layout/token/prop variations
+- **Accessibility Validation**: WCAG compliance built into the pipeline
+- **Diff Visualization**: Human-readable change tracking for PRs
+- **Bidirectional MCP**: Collaborative design-dev workflows
+
+---
+
+## 10. Production Status
+
+**✅ IMPLEMENTATION COMPLETE**
+
+The semantic key system is now production-ready with:
+
+- ✅ **Complete Integration**: All systems connected and working together
+- ✅ **Comprehensive Testing**: Property-based testing with fast-check
+- ✅ **Accessibility Compliance**: Built-in WCAG validation
+- ✅ **Developer Tools**: VS Code extension and Cursor MCP integration
+- ✅ **Documentation**: Complete examples and usage guides
+
+**🚀 Ready for production use** with semantic key-based design documents, component contract mapping, VS Code extension integration, and Cursor MCP adapter for collaborative workflows.
 * **Role**: `button` (native `<button type="button">`)
 * **State**: `pressed`, `disabled`, `busy`
 * **Keyboard**: `Enter`/`Space` activate.

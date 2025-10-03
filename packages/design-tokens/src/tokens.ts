@@ -22,10 +22,7 @@ const colorValue = z.union([
 /**
  * Numeric token value - either a number or a reference to a number
  */
-const numericValue = z.union([
-  z.number(),
-  tokenReference,
-]);
+const numericValue = z.union([z.number(), tokenReference]);
 
 // Design tokens schema with reference support
 export const DesignTokensSchema = z.object({

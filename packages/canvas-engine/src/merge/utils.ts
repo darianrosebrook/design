@@ -6,6 +6,7 @@
 import { ulid } from "ulidx";
 import type {
   CanvasDocumentType,
+  Conflict,
   NodeSnapshot,
   NodeIndex,
   NodeType,
@@ -96,16 +97,22 @@ export function formatPath(path: string[]): string {
 /**
  * Stable conflict ordering for deterministic results
  */
-export function sortConflicts(
-  conflicts: import("./types.js").Conflict[]
-): import("./types.js").Conflict[] {
+export function sortConflicts(conflicts: Conflict[]): Conflict[] {
   return [...conflicts].sort((a, b) => {
     const pathA = formatPath(a.path);
     const pathB = formatPath(b.path);
-    if (pathA < pathB) {return -1;}
-    if (pathA > pathB) {return 1;}
-    if (a.code < b.code) {return -1;}
-    if (a.code > b.code) {return 1;}
+    if (pathA < pathB) {
+      return -1;
+    }
+    if (pathA > pathB) {
+      return 1;
+    }
+    if (a.code < b.code) {
+      return -1;
+    }
+    if (a.code > b.code) {
+      return 1;
+    }
     return a.id.localeCompare(b.id);
   });
 }

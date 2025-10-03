@@ -84,7 +84,7 @@ export function useProperties() {
  * Hook for individual property editing
  */
 export function usePropertyEditor(nodeId: string, propertyKey: string) {
-  const [value, setValue] = useState<any>(undefined);
+  const [value, setValue] = useState<unknown>(undefined);
   const [isLoading, setIsLoading] = useState(false);
 
   // Update value when selection or nodes change
@@ -98,7 +98,7 @@ export function usePropertyEditor(nodeId: string, propertyKey: string) {
    * Handle property value change
    */
   const handleChange = useCallback(
-    async (newValue: any) => {
+    async (newValue: unknown) => {
       setIsLoading(true);
 
       try {

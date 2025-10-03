@@ -137,7 +137,9 @@ export class ComponentIndexWatcher {
 
     try {
       if (changedCount > 0) {
-        console.log(`\n🔄 Rebuilding index (${changedCount} files changed)...`);
+        console.info(
+          `\n🔄 Rebuilding index (${changedCount} files changed)...`
+        );
       }
 
       const index = await buildComponentIndex(

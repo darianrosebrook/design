@@ -16,12 +16,17 @@ export interface PatternManifest {
   description: string;
   version: string;
   category:
-    | "layout"
-    | "navigation"
-    | "form"
-    | "feedback"
-    | "data-display"
-    | "overlay";
+    | "Actions"
+    | "Containers"
+    | "Display"
+    | "Feedback"
+    | "Forms"
+    | "Inputs"
+    | "Navigation"
+    | "Textual"
+    | "Data Visualization"
+    | "Editing";
+  layer: "primitives" | "compounds" | "composers" | "assemblies";
   tags: string[];
 
   // Pattern structure definition
@@ -214,7 +219,8 @@ export class PatternRegistry {
       name: "Tabs",
       description: "Tab navigation pattern with panels",
       version: "1.0.0",
-      category: "navigation",
+      category: "Navigation",
+      layer: "composers",
       tags: ["tabs", "navigation", "panels", "accessibility"],
       structure: [
         {
@@ -322,7 +328,8 @@ export class PatternRegistry {
       name: "Dialog",
       description: "Modal dialog pattern with backdrop and focus management",
       version: "1.0.0",
-      category: "overlay",
+      category: "Containers",
+      layer: "composers",
       tags: ["dialog", "modal", "overlay", "accessibility"],
       structure: [
         {
@@ -438,7 +445,8 @@ export class PatternRegistry {
       name: "Accordion",
       description: "Collapsible content sections",
       version: "1.0.0",
-      category: "data-display",
+      category: "Containers",
+      layer: "compounds",
       tags: ["accordion", "collapsible", "disclosure"],
       structure: [
         {

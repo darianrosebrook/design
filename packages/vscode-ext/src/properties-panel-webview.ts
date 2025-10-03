@@ -28,12 +28,14 @@ export class PropertiesPanelWebviewProvider
     focusedNodeId: null,
   };
   private _isReady = false;
-  private _extensionInstance?: any;
-  private _propertyValues: Map<string, Map<string, any>> = new Map(); // nodeId -> propertyKey -> value
+  private _extensionInstance?: Record<string, unknown>;
+  private _propertyValues: Map<string, Map<string, unknown>> = new Map(); // nodeId -> propertyKey -> value
 
   constructor(private context: vscode.ExtensionContext) {
     // Get reference to the extension instance for communication
-    this._extensionInstance = (globalThis as any).designerExtension;
+    this._extensionInstance = (
+      globalThis as Record<string, unknown>
+    ).designerExtension;
   }
 
   /**
@@ -112,7 +114,10 @@ export class PropertiesPanelWebviewProvider
   /**
    * Find a node by ID in the document
    */
-  private _findNodeById(document: CanvasDocumentType, nodeId: string): any {
+  private _findNodeById(
+    document: CanvasDocumentType,
+    nodeId: string
+  ): NodeType | null {
     for (const artboard of document.artboards) {
       const node = this._findNodeInChildren(artboard.children, nodeId);
       if (node) {
@@ -125,7 +130,10 @@ export class PropertiesPanelWebviewProvider
   /**
    * Recursively find a node in children
    */
-  private _findNodeInChildren(nodes: any[], nodeId: string): any {
+  private _findNodeInChildren(
+    nodes: NodeType[],
+    nodeId: string
+  ): NodeType | null {
     for (const node of nodes) {
       if (node.id === nodeId) {
         return node;

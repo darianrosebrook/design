@@ -463,12 +463,12 @@ describe("Token System Integration", () => {
       };
 
       const resolved = resolveTokenReferences(designSystem);
-      
+
       expect(resolved.color.background.secondary).toBe("#0B0B0B");
-      
+
       const validation = validateTokenReferences(designSystem);
       expect(validation.valid).toBe(true);
-      
+
       const css = tokensToCSS(designSystem);
       expect(css).toContain(":root {");
       expect(css).toContain("}");
@@ -476,4 +476,3 @@ describe("Token System Integration", () => {
     });
   });
 });
-

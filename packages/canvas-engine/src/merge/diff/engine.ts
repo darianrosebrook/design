@@ -185,7 +185,9 @@ export class SemanticDiffEngine {
       metadata: {
         parentId: this.getParentIdFromPath(parentPath),
         index,
-        description: `Added ${newNode?.type ?? "unknown"} node "${newNode?.name ?? "unnamed"}"`,
+        description: `Added ${newNode?.type ?? "unknown"} node "${
+          newNode?.name ?? "unnamed"
+        }"`,
         severity: "info",
       },
     };
@@ -203,7 +205,9 @@ export class SemanticDiffEngine {
       path: oldPath ?? [],
       oldValue: oldNode,
       metadata: {
-        description: `Removed ${oldNode?.type ?? "unknown"} node "${oldNode?.name ?? "unnamed"}"`,
+        description: `Removed ${oldNode?.type ?? "unknown"} node "${
+          oldNode?.name ?? "unnamed"
+        }"`,
         severity: "warning",
       },
     };
@@ -216,7 +220,9 @@ export class SemanticDiffEngine {
     const { nodeId, oldNode, newNode, newPath } = change;
     const operations: DiffOperation[] = [];
 
-    if (!oldNode || !newNode) {return operations;}
+    if (!oldNode || !newNode) {
+      return operations;
+    }
 
     // Compare frames
     if (this.options.includeProperty) {
@@ -233,7 +239,7 @@ export class SemanticDiffEngine {
     if (this.options.includeProperty) {
       const visibilityOps = this.diffVisibility(
         nodeId,
-        newPath!,
+        newPath ?? [],
         oldNode.visible,
         newNode.visible
       );
@@ -244,7 +250,7 @@ export class SemanticDiffEngine {
     if (this.options.includeProperty) {
       const layoutOps = this.diffLayout(
         nodeId,
-        newPath!,
+        newPath ?? [],
         oldNode.layout,
         newNode.layout
       );
@@ -259,7 +265,7 @@ export class SemanticDiffEngine {
     ) {
       const textOps = this.diffText(
         nodeId,
-        newPath!,
+        newPath ?? [],
         oldNode.text,
         newNode.text
       );
@@ -270,7 +276,7 @@ export class SemanticDiffEngine {
     if (this.options.includeMetadata) {
       const nameOps = this.diffName(
         nodeId,
-        newPath!,
+        newPath ?? [],
         oldNode.name,
         newNode.name
       );
@@ -313,10 +319,16 @@ export class SemanticDiffEngine {
   private diffFrames(
     nodeId: string,
     path: string[],
-    oldFrame: { x: number; y: number; width: number; height: number } | undefined,
-    newFrame: { x: number; y: number; width: number; height: number } | undefined
+    oldFrame:
+      | { x: number; y: number; width: number; height: number }
+      | undefined,
+    newFrame:
+      | { x: number; y: number; width: number; height: number }
+      | undefined
   ): DiffOperation[] {
-    if (!oldFrame || !newFrame) {return [];}
+    if (!oldFrame || !newFrame) {
+      return [];
+    }
 
     const operations: DiffOperation[] = [];
 
@@ -387,7 +399,9 @@ export class SemanticDiffEngine {
     const oldLayoutStr = oldLayout ? JSON.stringify(oldLayout) : "";
     const newLayoutStr = newLayout ? JSON.stringify(newLayout) : "";
 
-    if (oldLayoutStr === newLayoutStr) {return [];}
+    if (oldLayoutStr === newLayoutStr) {
+      return [];
+    }
 
     return [
       {
@@ -414,7 +428,9 @@ export class SemanticDiffEngine {
     oldText: string,
     newText: string
   ): DiffOperation[] {
-    if (oldText === newText) {return [];}
+    if (oldText === newText) {
+      return [];
+    }
 
     return [
       {
@@ -441,7 +457,9 @@ export class SemanticDiffEngine {
     oldName: string,
     newName: string
   ): DiffOperation[] {
-    if (oldName === newName) {return [];}
+    if (oldName === newName) {
+      return [];
+    }
 
     return [
       {
@@ -512,12 +530,18 @@ export class SemanticDiffEngine {
     // Sort by type, then by path, then by nodeId
     const typeOrder = { remove: 0, add: 1, move: 2, modify: 3 };
     const typeDiff = typeOrder[a.type] - typeOrder[b.type];
-    if (typeDiff !== 0) {return typeDiff;}
+    if (typeDiff !== 0) {
+      return typeDiff;
+    }
 
     const pathA = a.path.join(".");
     const pathB = b.path.join(".");
-    if (pathA < pathB) {return -1;}
-    if (pathA > pathB) {return 1;}
+    if (pathA < pathB) {
+      return -1;
+    }
+    if (pathA > pathB) {
+      return 1;
+    }
 
     return a.nodeId.localeCompare(b.nodeId);
   }

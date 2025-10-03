@@ -111,8 +111,13 @@ function applyTypography(
 /**
  * Apply text color from fills
  */
-function applyTextColor(element: HTMLElement, fills: Array<{ type: string; color?: string; [key: string]: unknown }>): void {
-  if (!fills || fills.length === 0) {return;}
+function applyTextColor(
+  element: HTMLElement,
+  fills: Array<{ type: string; color?: string; [key: string]: unknown }>
+): void {
+  if (!fills || fills.length === 0) {
+    return;
+  }
 
   // Handle solid fills for text color
   const solidFills = fills.filter((f) => f.type === "solid");

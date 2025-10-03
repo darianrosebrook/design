@@ -175,7 +175,11 @@ class ObservabilityManager {
       return;
     }
 
-    const span = this.activeSpans.get(spanId)!;
+    const span = this.activeSpans.get(spanId);
+    if (!span) {
+      console.warn(`Span ${spanId} not found in addSpanEvent`);
+      return;
+    }
     span.events.push({
       name,
       timestamp: Date.now(),
@@ -209,15 +213,12 @@ class ObservabilityManager {
         console.debug(output);
         break;
       case "info":
-         
         console.info(output);
         break;
       case "warn":
-         
         console.warn(output);
         break;
       case "error":
-         
         console.error(output);
         break;
     }

@@ -108,7 +108,12 @@ describe("Token Schema Migrations", () => {
             "2xl": 24,
             "3xl": 30,
           },
-          weight: { normal: "400", medium: "500", semibold: "600", bold: "700" },
+          weight: {
+            normal: "400",
+            medium: "500",
+            semibold: "600",
+            bold: "700",
+          },
           lineHeight: { tight: 1.25, normal: 1.5, loose: 1.75 },
         },
         radius: { none: 0, sm: 4, md: 6, lg: 8, xl: 12, full: 9999 },
@@ -269,4 +274,3 @@ describe("Token Schema Migrations", () => {
     });
   });
 });
-
