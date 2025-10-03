@@ -4,16 +4,16 @@
  */
 
 import React, { useMemo } from "react";
-import { Button } from "../primitives/Button";
-import { TextField } from "../compounds/TextField";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { PropertyRegistry } from "../../../properties-panel/src/property-registry";
 import type {
   PropertiesPanelProps,
   PropertySectionProps,
-  PropertySection,
+  // PropertySection, // TODO: Remove if not needed
   PropertyValue,
 } from "../../../properties-panel/src/types";
-import { PropertyRegistry } from "../../../properties-panel/src/property-registry";
+import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+// import { TextField } from "../compounds/TextField"; // TODO: Remove if not needed
+import { Button } from "../primitives/Button";
 
 /**
  * PropertiesPanel composer - orchestrates property editing for design elements
@@ -35,10 +35,10 @@ import { PropertyRegistry } from "../../../properties-panel/src/property-registr
  * ```
  */
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
-  documentId,
+  _documentId,
   selection,
   onPropertyChange,
-  onSelectionChange,
+  _onSelectionChange,
   className = "",
   style = {},
 }) => {
@@ -166,7 +166,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             onPropertyChange={(event) => {
               onPropertyChange?.(event);
             }}
-            getPropertyValue={(propertyKey) => {
+            getPropertyValue={(_propertyKey) => {
               // TODO: Get actual value from nodes
               return undefined;
             }}
@@ -689,7 +689,7 @@ export const PropertyEditor: React.FC<{
  * Format a property value for display
  */
 function formatPropertyValue(value: PropertyValue, definition: any): string {
-  if (value == null) return "";
+  if (value == null) {return "";}
 
   switch (definition.type) {
     case "number":

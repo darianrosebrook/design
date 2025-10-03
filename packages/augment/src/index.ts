@@ -8,8 +8,8 @@ import type {
   NodeType,
   FrameNodeType,
 } from "@paths-design/canvas-schema";
-import { ulid } from "ulidx";
 import * as fc from "fast-check";
+// import { ulid } from "ulidx"; // TODO: Remove if not needed
 
 /**
  * Augmentation configuration
@@ -327,7 +327,7 @@ export class AugmentationEngine {
         // Apply the token swap (simplified - would need proper path resolution)
         // For now, just log that we would apply the transformation
         // In a real implementation, this would use a proper JSON path library
-        console.log(
+        console.info(
           `Would apply token swap: ${token} → ${newToken} at path: ${path}`
         );
       }
@@ -369,7 +369,7 @@ export class AugmentationEngine {
                   after: newValue,
                 });
 
-                if (!node.props) node.props = {};
+                if (!node.props) {node.props = {};}
                 node.props[prop.name] = newValue;
               }
             }
@@ -481,7 +481,7 @@ export class AugmentationEngine {
     function validateNode(node: NodeType, path: string): void {
       if (node.type === "text" && node.textStyle?.color) {
         const textColor = node.textStyle.color;
-        const backgroundColor = "#ffffff"; // Assume white background for now
+        const _backgroundColor = "#ffffff"; // Assume white background for now
 
         // This is a simplified check - in reality, we'd need to resolve tokens
         // and check actual contrast ratios

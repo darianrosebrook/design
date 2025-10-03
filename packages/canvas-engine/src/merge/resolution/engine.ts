@@ -4,6 +4,9 @@
  */
 
 import { type Conflict, type CanvasDocumentType } from "../types.js";
+import { ManualResolver } from "./resolvers/manual.js";
+import { PreferLocalResolver } from "./resolvers/prefer-local.js";
+import { PreferRemoteResolver } from "./resolvers/prefer-remote.js";
 import {
   type MergeResolution,
   type MergeContext,
@@ -15,9 +18,6 @@ import {
   CONFLICT_TYPE_STRATEGIES,
   STRATEGY_CONFIDENCE,
 } from "./types.js";
-import { PreferLocalResolver } from "./resolvers/prefer-local.js";
-import { PreferRemoteResolver } from "./resolvers/prefer-remote.js";
-import { ManualResolver } from "./resolvers/manual.js";
 
 /**
  * Main merge resolution engine that attempts to automatically resolve conflicts

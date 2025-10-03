@@ -4,14 +4,24 @@
  */
 
 import { DesignTokensSchema, type DesignTokens } from "./tokens";
+import { resolveTokenReferences } from "./resolver";
 
 /**
  * Flatten nested token objects into CSS custom property format
+ * Automatically resolves token references before flattening
  */
 export function flattenTokens(
   tokens: DesignTokens,
-  prefix = ""
+  prefix = "",
+  options?: { resolveReferences?: boolean }
 ): Record<string, string | number> {
+  const resolveReferences = options?.resolveReferences ?? true;
+  
+  // Resolve references first if enabled
+  const tokensToFlatten = resolveReferences
+    ? resolveTokenReferences(tokens, { strict: false })
+    : tokens;
+
   const result: Record<string, string | number> = {};
 
   function walk(obj: any, path: string[] = []) {
@@ -29,18 +39,27 @@ export function flattenTokens(
     }
   }
 
-  walk(tokens);
+  walk(tokensToFlatten);
   return result;
 }
 
 /**
  * Generate CSS custom properties from tokens
+ * Automatically resolves token references before generating CSS
  */
-export function tokensToCSS(tokens: DesignTokens, selector = ":root"): string {
-  const flattened = flattenTokens(tokens);
+export function tokensToCSS(
+  tokens: DesignTokens,
+  selector = ":root",
+  options?: { resolveReferences?: boolean }
+): string {
+  const flattened = flattenTokens(tokens, "", options);
 
   const cssVars = Object.entries(flattened)
-    .map(([key, value]) => `  ${key}: ${value};`)
+    .map(([key, value]) => {
+      // Add px suffix for numeric values that look like sizes
+      const formattedValue = typeof value === "number" ? `${value}px` : value;
+      return `  ${key}: ${formattedValue};`;
+    })
     .join("\n");
 
   return `${selector} {\n${cssVars}\n}`;
@@ -130,7 +149,7 @@ export function mergeTokens(
         typeof source[key] === "object" &&
         !Array.isArray(source[key])
       ) {
-        if (!target[key]) target[key] = {};
+        if (!target[key]) {target[key] = {};}
         deepMerge(target[key], source[key]);
       } else {
         target[key] = source[key];

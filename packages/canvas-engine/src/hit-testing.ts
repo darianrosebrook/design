@@ -128,7 +128,7 @@ function pointInNode(point: Point, node: NodeType, path: NodePath): boolean {
 /**
  * Get the frame (bounding box) of a node
  */
-function getNodeFrame(node: NodeType, path: NodePath): RectType | null {
+function getNodeFrame(node: NodeType, _path: NodePath): RectType | null {
   // For now, assume nodes have a 'frame' property
   // In a full implementation, we'd calculate frames based on layout
   if ("frame" in node && node.frame) {

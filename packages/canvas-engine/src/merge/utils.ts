@@ -102,10 +102,10 @@ export function sortConflicts(
   return [...conflicts].sort((a, b) => {
     const pathA = formatPath(a.path);
     const pathB = formatPath(b.path);
-    if (pathA < pathB) return -1;
-    if (pathA > pathB) return 1;
-    if (a.code < b.code) return -1;
-    if (a.code > b.code) return 1;
+    if (pathA < pathB) {return -1;}
+    if (pathA > pathB) {return 1;}
+    if (a.code < b.code) {return -1;}
+    if (a.code > b.code) {return 1;}
     return a.id.localeCompare(b.id);
   });
 }

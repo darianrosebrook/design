@@ -29,7 +29,7 @@ import { RENDERER_CLASSES } from "../types.js";
 export function renderText(
   node: TextNodeType,
   options: RendererOptions,
-  context: RenderContext
+  _context: RenderContext
 ): HTMLElement {
   const element = document.createElement("div");
 
@@ -112,7 +112,7 @@ function applyTypography(
  * Apply text color from fills
  */
 function applyTextColor(element: HTMLElement, fills: any[]): void {
-  if (!fills || fills.length === 0) return;
+  if (!fills || fills.length === 0) {return;}
 
   // Handle solid fills for text color
   const solidFills = fills.filter((f: any) => f.type === "solid");

@@ -75,11 +75,11 @@ export class ComponentIndexWatcher {
    */
   async start(): Promise<void> {
     // Build initial index
-    console.log(`🔍 Building initial component index...`);
+    console.info(`🔍 Building initial component index...`);
     await this.rebuild();
 
     // Start watching
-    console.log(`👀 Watching for changes in ${this.options.rootDir}...`);
+    console.info(`👀 Watching for changes in ${this.options.rootDir}...`);
     this.watcher = fs.watch(
       this.options.rootDir,
       { recursive: true },
@@ -108,7 +108,7 @@ export class ComponentIndexWatcher {
       this.rebuildTimer = null;
     }
 
-    console.log(`🛑 Stopped watching`);
+    console.info(`🛑 Stopped watching`);
   }
 
   /**
@@ -196,7 +196,7 @@ export class ComponentIndexWatcher {
       const excluded = this.options.exclude.some((pattern) =>
         filename.includes(pattern)
       );
-      if (excluded) return false;
+      if (excluded) {return false;}
     }
 
     return true;

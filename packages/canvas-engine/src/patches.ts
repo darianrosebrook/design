@@ -233,8 +233,8 @@ function applyMove(
   }
 
   // Parse paths to understand the move operation
-  const fromPath = patch.from.split("/").filter(Boolean);
-  const toPath = patch.path.split("/").filter(Boolean);
+  const _fromPath = patch.from.split("/").filter(Boolean);
+  const _toPath = patch.path.split("/").filter(Boolean);
 
   // No adjustment needed for destination index when removing first, then adding
 

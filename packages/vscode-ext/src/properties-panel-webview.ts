@@ -6,7 +6,7 @@
 import * as vscode from "vscode";
 import type {
   CanvasDocumentType,
-  NodeType,
+  // NodeType, // TODO: Remove if not needed
 } from "../../canvas-schema/src/index.js";
 import type {
   SelectionState,
@@ -115,7 +115,7 @@ export class PropertiesPanelWebviewProvider
   private _findNodeById(document: CanvasDocumentType, nodeId: string): any {
     for (const artboard of document.artboards) {
       const node = this._findNodeInChildren(artboard.children, nodeId);
-      if (node) return node;
+      if (node) {return node;}
     }
     return null;
   }
@@ -125,11 +125,11 @@ export class PropertiesPanelWebviewProvider
    */
   private _findNodeInChildren(nodes: any[], nodeId: string): any {
     for (const node of nodes) {
-      if (node.id === nodeId) return node;
+      if (node.id === nodeId) {return node;}
 
       if (node.children && node.children.length > 0) {
         const found = this._findNodeInChildren(node.children, nodeId);
-        if (found) return found;
+        if (found) {return found;}
       }
     }
     return null;
@@ -193,7 +193,7 @@ export class PropertiesPanelWebviewProvider
         Buffer.from(content, "utf-8")
       );
 
-      console.log(`Document saved to ${filePath.fsPath}`);
+      console.info(`Document saved to ${filePath.fsPath}`);
     } catch (error) {
       console.error("Failed to save document:", error);
       throw error;
@@ -207,7 +207,7 @@ export class PropertiesPanelWebviewProvider
     this._propertyValues.clear();
 
     const cacheNodeProperties = (node: any) => {
-      if (!node || !node.id) return;
+      if (!node || !node.id) {return;}
 
       const nodeValues = new Map<string, any>();
 
@@ -278,7 +278,7 @@ export class PropertiesPanelWebviewProvider
       });
     }
 
-    console.log("Notifying canvas renderer of property change:", event);
+    console.info("Notifying canvas renderer of property change:", event);
   }
 
   /**
@@ -287,7 +287,7 @@ export class PropertiesPanelWebviewProvider
   private async handlePropertyChange(
     event: PropertyChangeEvent
   ): Promise<void> {
-    console.log("Property change received:", event);
+    console.info("Property change received:", event);
 
     try {
       // Validate the property change
@@ -417,7 +417,7 @@ export class PropertiesPanelWebviewProvider
    * Send current state to the webview
    */
   private _sendCurrentState(): void {
-    if (!this._view || !this._isReady) return;
+    if (!this._view || !this._isReady) {return;}
 
     try {
       // Send current document if available
@@ -438,7 +438,7 @@ export class PropertiesPanelWebviewProvider
     }
   }
 
-  private _getHtmlForWebview(webview: vscode.Webview): string {
+  private _getHtmlForWebview(_webview: vscode.Webview): string {
     // In a production setup, this would use a proper bundler to build the React app
     // For now, we'll create a template that can load the properties panel
 
@@ -564,7 +564,7 @@ export class PropertiesPanelWebviewProvider
                 loading.style.display = 'none';
               }
 
-              console.log('Properties panel initialized successfully');
+              console.info('Properties panel initialized successfully');
             } catch (error) {
               console.error('Failed to initialize properties panel:', error);
               showError('Failed to initialize properties panel: ' + error.message);

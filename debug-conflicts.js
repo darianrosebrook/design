@@ -1,9 +1,5 @@
-const {
-  detectConflicts,
-} = require("./packages/canvas-engine/src/merge/conflict-detector.js");
-const {
-  MERGE_TEST_SCENARIOS,
-} = require("./packages/canvas-engine/tests/merge/scenarios.js");
+import { detectConflicts } from "./packages/canvas-engine/src/merge/conflict-detector.js";
+import { MERGE_TEST_SCENARIOS } from "./packages/canvas-engine/tests/merge/scenarios.js";
 
 const scenario = MERGE_TEST_SCENARIOS.find(
   (s) => s.name === "single_property_change"

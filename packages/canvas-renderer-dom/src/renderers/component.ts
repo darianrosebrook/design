@@ -28,7 +28,7 @@ import { RENDERER_CLASSES } from "../types.js";
 export function renderComponent(
   node: ComponentInstanceNodeType,
   options: RendererOptions,
-  context: RenderContext
+  _context: RenderContext
 ): HTMLElement {
   const element = document.createElement("div");
 
@@ -239,6 +239,6 @@ function renderComponentError(
  */
 function truncateValue(value: unknown, maxLength: number = 30): string {
   const str = typeof value === "string" ? value : JSON.stringify(value);
-  if (str.length <= maxLength) return str;
+  if (str.length <= maxLength) {return str;}
   return str.substring(0, maxLength - 3) + "...";
 }

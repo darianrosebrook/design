@@ -6,8 +6,8 @@
  * stable extension performance with large documents.
  */
 
-import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 import * as fs from "node:fs/promises";
+import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 
 /**
  * Resource limit configuration
@@ -282,7 +282,7 @@ export class ResourceManager {
    * Format bytes to human-readable string
    */
   private formatBytes(bytes: number): string {
-    if (bytes === 0) return "0 Bytes";
+    if (bytes === 0) {return "0 Bytes";}
 
     const k = 1024;
     const sizes = ["Bytes", "KB", "MB", "GB"];

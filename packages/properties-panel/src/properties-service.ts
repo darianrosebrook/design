@@ -3,27 +3,26 @@
  * @author @darianrosebrook
  */
 
-import type { NodeType } from "../../canvas-schema/src/index.js";
-import type {
-  PropertyChangeEvent,
-  SelectionState,
-  PropertyValue,
-  PropertyDefinition,
-  ComponentContractProperty,
-} from "./types";
+import type { NodeType , SemanticKeyType } from "../../canvas-schema/src/index.js";
+import type { ComponentIndex } from "../../component-indexer/src/index.js";
 import {
   getNodeProperty,
   setNodeProperty,
   getApplicablePropertiesForNode,
 } from "./property-utils";
-import type { ComponentIndex } from "../../component-indexer/src/index.js";
+import type {
+  PropertyChangeEvent,
+  SelectionState,
+  PropertyValue,
+  PropertyDefinition,
+  // ComponentContractProperty, // TODO: Remove if not needed
+} from "./types";
 
 // Type for component from component index
 interface ComponentIndexComponent {
   semanticKeys?: Record<string, any>;
   [key: string]: unknown;
 }
-import type { SemanticKeyType } from "../../canvas-schema/src/index.js";
 
 /**
  * Callback type for property change notifications
@@ -101,7 +100,7 @@ export class PropertiesService {
    * Set current selection
    */
   setSelection(selection: SelectionState): void {
-    const oldSelection = this.selection;
+    const _oldSelection = this.selection;
     this.selection = { ...selection };
 
     // Notify selection change callbacks
@@ -118,7 +117,7 @@ export class PropertiesService {
     propertyKey: string
   ): PropertyValue | undefined {
     const node = this.nodes.get(nodeId);
-    if (!node) return undefined;
+    if (!node) {return undefined;}
 
     const value = getNodeProperty(node, propertyKey);
     return value as PropertyValue | undefined;
@@ -133,7 +132,7 @@ export class PropertiesService {
     value: PropertyValue
   ): boolean {
     const node = this.nodes.get(nodeId);
-    if (!node) return false;
+    if (!node) {return false;}
 
     try {
       const oldNode = node;
@@ -215,10 +214,10 @@ export class PropertiesService {
     semanticKey: SemanticKeyType,
     node: NodeType
   ): PropertyDefinition[] {
-    if (!this.componentIndex) return [];
+    if (!this.componentIndex) {return [];}
 
     // Find component that has this semantic key
-    for (const [componentKey, component] of Object.entries(
+    for (const [_componentKey, component] of Object.entries(
       this.componentIndex.components
     )) {
       if ((component as ComponentIndexComponent)?.semanticKeys?.[semanticKey]) {
@@ -343,7 +342,7 @@ export class PropertiesService {
       }
     }
 
-    if (values.length === 0) return undefined;
+    if (values.length === 0) {return undefined;}
 
     // Check if all values are the same
     const firstValue = values[0];

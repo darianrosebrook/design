@@ -5,109 +5,131 @@
 
 import { z } from "zod";
 
-// Design tokens schema
+/**
+ * Token reference validator
+ * Checks for {token.path} syntax
+ */
+const tokenReference = z.string().regex(/^\{[a-zA-Z0-9.]+\}$/);
+
+/**
+ * Color token value - either a color string or a reference
+ */
+const colorValue = z.union([
+  z.string(), // Color hex, rgb, or reference
+  tokenReference,
+]);
+
+/**
+ * Numeric token value - either a number or a reference to a number
+ */
+const numericValue = z.union([
+  z.number(),
+  tokenReference,
+]);
+
+// Design tokens schema with reference support
 export const DesignTokensSchema = z.object({
   $schema: z.string().optional(),
   schemaVersion: z.string().optional(),
   color: z.object({
     background: z.object({
-      primary: z.string(),
-      secondary: z.string(),
-      tertiary: z.string(),
-      surface: z.string(),
-      elevated: z.string(),
+      primary: colorValue,
+      secondary: colorValue,
+      tertiary: colorValue,
+      surface: colorValue,
+      elevated: colorValue,
     }),
     text: z.object({
-      primary: z.string(),
-      secondary: z.string(),
-      tertiary: z.string(),
-      inverse: z.string(),
+      primary: colorValue,
+      secondary: colorValue,
+      tertiary: colorValue,
+      inverse: colorValue,
     }),
     border: z.object({
-      subtle: z.string(),
-      default: z.string(),
-      strong: z.string(),
+      subtle: colorValue,
+      default: colorValue,
+      strong: colorValue,
     }),
     interactive: z.object({
-      primary: z.string(),
-      primaryHover: z.string(),
-      primaryPressed: z.string(),
-      secondary: z.string(),
-      secondaryHover: z.string(),
-      secondaryPressed: z.string(),
-      destructive: z.string(),
-      destructiveHover: z.string(),
-      destructivePressed: z.string(),
+      primary: colorValue,
+      primaryHover: colorValue,
+      primaryPressed: colorValue,
+      secondary: colorValue,
+      secondaryHover: colorValue,
+      secondaryPressed: colorValue,
+      destructive: colorValue,
+      destructiveHover: colorValue,
+      destructivePressed: colorValue,
     }),
     semantic: z.object({
-      success: z.string(),
-      warning: z.string(),
-      error: z.string(),
-      info: z.string(),
+      success: colorValue,
+      warning: colorValue,
+      error: colorValue,
+      info: colorValue,
     }),
   }),
   space: z.object({
-    xs: z.number(),
-    sm: z.number(),
-    md: z.number(),
-    lg: z.number(),
-    xl: z.number(),
-    "2xl": z.number(),
-    "3xl": z.number(),
+    xs: numericValue,
+    sm: numericValue,
+    md: numericValue,
+    lg: numericValue,
+    xl: numericValue,
+    "2xl": numericValue,
+    "3xl": numericValue,
   }),
   type: z.object({
     family: z.object({
-      sans: z.string(),
-      mono: z.string(),
+      sans: z.union([z.string(), tokenReference]),
+      mono: z.union([z.string(), tokenReference]),
     }),
     size: z.object({
-      xs: z.number(),
-      sm: z.number(),
-      md: z.number(),
-      lg: z.number(),
-      xl: z.number(),
-      "2xl": z.number(),
-      "3xl": z.number(),
+      xs: numericValue,
+      sm: numericValue,
+      md: numericValue,
+      lg: numericValue,
+      xl: numericValue,
+      "2xl": numericValue,
+      "3xl": numericValue,
     }),
     weight: z.object({
-      normal: z.string(),
-      medium: z.string(),
-      semibold: z.string(),
-      bold: z.string(),
+      normal: z.union([z.string(), tokenReference]),
+      medium: z.union([z.string(), tokenReference]),
+      semibold: z.union([z.string(), tokenReference]),
+      bold: z.union([z.string(), tokenReference]),
     }),
     lineHeight: z.object({
-      tight: z.number(),
-      normal: z.number(),
-      loose: z.number(),
+      tight: numericValue,
+      normal: numericValue,
+      loose: numericValue,
     }),
   }),
   radius: z.object({
-    none: z.number(),
-    sm: z.number(),
-    md: z.number(),
-    lg: z.number(),
-    xl: z.number(),
-    full: z.number(),
+    none: numericValue,
+    sm: numericValue,
+    md: numericValue,
+    lg: numericValue,
+    xl: numericValue,
+    full: numericValue,
   }),
   shadow: z.object({
-    sm: z.string(),
-    md: z.string(),
-    lg: z.string(),
-    xl: z.string(),
+    sm: z.union([z.string(), tokenReference]),
+    md: z.union([z.string(), tokenReference]),
+    lg: z.union([z.string(), tokenReference]),
+    xl: z.union([z.string(), tokenReference]),
   }),
   borderWidth: z.object({
-    none: z.number(),
-    sm: z.number(),
-    md: z.number(),
-    lg: z.number(),
+    none: numericValue,
+    sm: numericValue,
+    md: numericValue,
+    lg: numericValue,
   }),
   zIndex: z.object({
-    dropdown: z.number(),
-    sticky: z.number(),
-    fixed: z.number(),
-    modal: z.number(),
-    popover: z.number(),
-    tooltip: z.number(),
+    dropdown: numericValue,
+    sticky: numericValue,
+    fixed: numericValue,
+    modal: numericValue,
+    popover: numericValue,
+    tooltip: numericValue,
   }),
 });
 

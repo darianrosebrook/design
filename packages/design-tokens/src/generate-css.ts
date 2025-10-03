@@ -56,7 +56,7 @@ export function generateCSSFile(
     const css = tokensToCSS(tokens);
     fs.writeFileSync(outPath, css);
 
-    console.log(`✅ Generated CSS tokens at ${outPath}`);
+    console.info(`✅ Generated CSS tokens at ${outPath}`);
   } catch (error) {
     console.error("❌ Failed to generate CSS tokens:", (error as Error).message);
     throw error;

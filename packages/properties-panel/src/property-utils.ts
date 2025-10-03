@@ -5,7 +5,7 @@
 
 import type {
   NodeType,
-  FrameNodeType,
+  // FrameNodeType, // TODO: Remove if not needed
   TextNodeType,
 } from "../../canvas-schema/src/index.js";
 import type { PropertyValue, PropertyDefinition } from "./types";
@@ -52,7 +52,7 @@ export function getNodeProperty(
   // For deeper nesting, traverse the object
   let current: any = node;
   for (const part of parts) {
-    if (current == null) return undefined;
+    if (current == null) {return undefined;}
     current = current[part];
   }
 
@@ -355,7 +355,7 @@ export function formatPropertyValue(
   value: PropertyValue,
   definition: PropertyDefinition
 ): string {
-  if (value == null) return "";
+  if (value == null) {return "";}
 
   switch (definition.type) {
     case "number":

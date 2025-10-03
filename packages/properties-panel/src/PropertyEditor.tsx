@@ -4,8 +4,8 @@
  */
 
 import React, { useState, useCallback } from "react";
-import type { PropertyEditorProps } from "./types";
 import { formatPropertyValue, validatePropertyValue } from "./property-utils";
+import type { PropertyEditorProps } from "./types";
 
 /**
  * Property editor component that handles different input types

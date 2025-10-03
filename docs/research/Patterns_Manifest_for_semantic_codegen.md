@@ -4,81 +4,129 @@
 
 ---
 
-## 0. Principles
+## 0. Principles (Updated for Implementation)
 
-* **Native first.** Prefer semantic HTML elements over `role` on generic containers.
-* **Contracts over heuristics.** Inference can propose, but manifests are the ground truth.
-* **Determinism.** Same IR → same JSX/attrs; attribute order canonicalized.
-* **APG parity.** Every manifest cites ARIA APG requirements and keyboard behavior.
-* **Composable.** Patterns nest (e.g., Tabs inside a Dialog) without violating focus order.
+* **Semantic keys first.** Use stable semantic identifiers (`hero.title`, `cta.primary`) for node identification.
+* **Component contracts over heuristics.** Component index defines the ground truth for semantic → component mapping.
+* **Determinism.** Same IR → same JSX/HTML; attribute order canonicalized; semantic key stability.
+* **Accessibility built-in.** Semantic HTML generation with ARIA support; WCAG validation during augmentation.
+* **Bidirectional editing.** Design ↔ Dev synchronization through MCP tools and semantic key preservation.
+
+**Implementation Learnings:**
+- Component contracts proved more practical than pure manifest patterns for React ecosystems
+- Semantic keys provide better stability than complex pattern matching
+- Built-in accessibility validation during augmentation catches issues early
+- MCP integration enables true collaborative design-dev workflows
 
 ---
 
-## 1. Manifest Shape (JSON)
+## 1. Component Contract Shape (JSON) - **IMPLEMENTED**
+
+**Updated for Component Contract Approach:**
 
 ```jsonc
 {
-  "$schema": "https://paths.design.dev/schemas/pattern-manifest-0.1.json",
-  "name": "Tabs",
-  "id": "pattern.tabs",
-  "version": "0.1.0",
-  "summary": "Switch between views with a tablist, tabs, and tabpanels.",
-  "nodes": {
-    "tablist": {
-      "role": "tablist",
-      "requiredChildren": ["tab*"],
-      "aria": {},
-      "keyboard": {
-        "arrowLeft": "focusPrevTab",
-        "arrowRight": "focusNextTab",
-        "home": "focusFirstTab",
-        "end": "focusLastTab"
-      }
-    },
-    "tab": {
-      "role": "tab",
-      "state": { "selected": false, "disabled": false },
-      "aria": { "controls": "tabpanel#id" },
-      "keyboard": { "enter": "activateTab", "space": "activateTab" }
-    },
-    "tabpanel": {
-      "role": "tabpanel",
-      "aria": { "labelledby": "tab#id" }
+  "$schema": "https://paths.design.dev/schemas/component-contract-1.0.json",
+  "version": "1.0.0",
+  "components": {
+    "Button": {
+      "id": "01JF2Q15H0C3YV2TE8EH8X7MTG",
+      "name": "Button",
+      "modulePath": "src/ui/Button.tsx",
+      "export": "Button",
+      "category": "ui",
+      "tags": ["interactive", "form"],
+      "semanticKeys": {
+        "cta.primary": {
+          "description": "Primary call-to-action button",
+          "priority": 10,
+          "propDefaults": {
+            "variant": "primary",
+            "size": "large"
+          }
+        },
+        "cta.secondary": {
+          "description": "Secondary call-to-action button",
+          "priority": 9,
+          "propDefaults": {
+            "variant": "secondary",
+            "size": "medium"
+          }
+        },
+        "form.submit": {
+          "description": "Form submission button",
+          "priority": 8,
+          "propDefaults": {
+            "variant": "primary",
+            "size": "medium",
+            "type": "submit"
+          }
+        }
+      },
+      "props": [
+        {
+          "name": "variant",
+          "type": "\"primary\" | \"secondary\" | \"danger\"",
+          "required": false,
+          "defaultValue": "primary",
+          "description": "Visual style variant",
+          "design": {
+            "control": "select",
+            "options": ["primary", "secondary", "danger"]
+          },
+          "passthrough": {
+            "attributes": ["data-variant"],
+            "cssVars": ["--button-variant"]
+          }
+        },
+        {
+          "name": "size",
+          "type": "\"small\" | \"medium\" | \"large\"",
+          "required": false,
+          "defaultValue": "medium",
+          "design": {
+            "control": "select",
+            "options": ["small", "medium", "large"]
+          },
+          "passthrough": {
+            "attributes": ["data-size"],
+            "cssVars": ["--button-size"]
+          }
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "required": false,
+          "defaultValue": false,
+          "design": {
+            "control": "boolean"
+          },
+          "passthrough": {
+            "attributes": ["disabled", "aria-disabled"],
+            "events": []
+          }
+        }
+      ],
+      "variants": [
+        { "name": "primary" },
+        { "name": "secondary" },
+        { "name": "danger" }
+      ],
+      "examples": [
+        "<Button variant=\"primary\" size=\"large\">Get Started</Button>",
+        "<Button variant=\"secondary\" size=\"medium\" disabled>Disabled</Button>"
+      ]
     }
-  },
-  "relationships": [
-    { "from": "tab", "to": "tabpanel", "type": "controls", "cardinality": "1:1", "required": true },
-    { "from": "tablist", "to": "tab", "type": "contains", "cardinality": "1:N", "required": true }
-  ],
-  "emission": {
-    "native": [
-      { "node": "tablist", "element": "div", "role": "tablist" },
-      { "node": "tab", "element": "button", "role": "tab" },
-      { "node": "tabpanel", "element": "div", "role": "tabpanel" }
-    ],
-    "react": {
-      "preferred": "Component",
-      "fallback": "native",
-      "componentMap": {
-        "tablist": "@/ui/Tabs.TabList",
-        "tab": "@/ui/Tabs.Tab",
-        "tabpanel": "@/ui/Tabs.TabPanel"
-      }
-    }
-  },
-  "validation": {
-    "rules": [
-      "Each tab must reference exactly one tabpanel via aria-controls",
-      "Exactly one tab in a tablist is selected at a time"
-    ]
-  },
-  "apg": "https://www.w3.org/WAI/ARIA/apg/patterns/tabs/"
+  }
 }
 ```
 
-**Authoring UX**
+**Implementation Learnings:**
 
-* Guided creator asks: count of tabs, labels, default selected. It then scaffolds the three node kinds and wires ids/relations.
+* **Component contracts** proved more practical than pure manifest patterns for React ecosystems
+* **Semantic keys** provide the stable identification that was originally planned for manifests
+* **Passthrough configuration** enables proper designer → engineer attribute mapping
+* **Property-based testing** with fast-check validates contract integrity
 
 ---
 

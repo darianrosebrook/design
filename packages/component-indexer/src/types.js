@@ -60,6 +60,10 @@ export const ComponentEntrySchema = z.object({
     props: z.array(ComponentPropSchema),
     variants: z.array(z.record(z.unknown())).optional(),
     examples: z.array(z.string()).optional(),
+    // Compound component support
+    parent: z.string().optional(), // Parent component name (e.g., "Card" for "Card.Header")
+    isCompound: z.boolean().optional(), // True if this is a compound component
+    compoundChildren: z.array(z.string()).optional(), // IDs of child compounds
 });
 /**
  * Source configuration for component discovery

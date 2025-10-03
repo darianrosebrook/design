@@ -3,8 +3,8 @@
  * @author @darianrosebrook
  */
 
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+// import path from "path"; // TODO: Remove if not needed
 
 function flattenTokens(tokens, prefix = "") {
   const result = {};

@@ -32,5 +32,4 @@ export {
   type ValidationResult,
 } from "./resolver";
 
-// Export CSS generation script
-export * from "./generate-css";
+// Note: generate-css.js is a CLI script, not exported as library code

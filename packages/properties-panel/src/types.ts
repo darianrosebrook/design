@@ -4,11 +4,11 @@
  */
 
 import type {
-  NodeType,
-  BaseNodeType,
+  // NodeType, // TODO: Remove if not needed
+  // BaseNodeType, // TODO: Remove if not needed
   SemanticKeyType,
 } from "../../canvas-schema/src/index.js";
-import type { ComponentIndex } from "../../component-indexer/src/index.js";
+// import type { ComponentIndex } from "../../component-indexer/src/index.js"; // TODO: Remove if not needed
 
 /**
  * Selection state for the properties panel

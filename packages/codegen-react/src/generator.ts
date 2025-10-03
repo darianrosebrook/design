@@ -124,7 +124,7 @@ export class ReactGenerator {
    * Load component index for semantic key mappings
    */
   loadComponentIndex(componentIndexPath?: string): void {
-    if (!componentIndexPath) return;
+    if (!componentIndexPath) {return;}
 
     try {
       // In a real implementation, this would load from the file system
@@ -625,9 +625,9 @@ export class ReactGenerator {
    */
   private matchSemanticKeyToComponentContract(
     semanticKey: string,
-    node: NodeType
+    _node: NodeType
   ): SemanticComponentInfo | null {
-    if (!this.componentIndex) return null;
+    if (!this.componentIndex) {return null;}
 
     // Find the best matching component contract for this semantic key
     let bestMatch: {
@@ -649,7 +649,7 @@ export class ReactGenerator {
       }
     }
 
-    if (!bestMatch) return null;
+    if (!bestMatch) {return null;}
 
     // Generate component info from the contract
     const { componentKey, mapping } = bestMatch;
@@ -1196,7 +1196,7 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
   /**
    * Generate props for component instances using passthrough information
    */
-  private generatePropsForComponent(node: NodeType): string | null {
+  private generatePropsForComponent(_node: NodeType): string | null {
     // For now, just pass through basic props
     // In a full implementation, this would analyze which props are needed
     // based on component contracts and passthrough information

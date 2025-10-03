@@ -3,15 +3,15 @@
  * @author @darianrosebrook
  */
 
-import { buildNodeIndex, sortConflicts } from "../utils.js";
 import type { CanvasDocumentType, NodeIndex } from "../types.js";
+import { buildNodeIndex } from "../utils.js";
 import type {
   DiffOperation,
   DiffResult,
   DiffOptions,
-  DocumentPair,
+  // DocumentPair, // TODO: Remove if not needed
   NodeChange,
-  PropertyDiff,
+  // PropertyDiff, // TODO: Remove if not needed
 } from "./types.js";
 import { DEFAULT_DIFF_OPTIONS } from "./types.js";
 
@@ -140,8 +140,8 @@ export class SemanticDiffEngine {
    */
   private generateOperationsForChange(
     change: NodeChange,
-    baseIndex: NodeIndex,
-    targetIndex: NodeIndex
+    _baseIndex: NodeIndex,
+    _targetIndex: NodeIndex
   ): DiffOperation[] {
     const operations: DiffOperation[] = [];
 
@@ -213,7 +213,7 @@ export class SemanticDiffEngine {
     const { nodeId, oldNode, newNode, newPath } = change;
     const operations: DiffOperation[] = [];
 
-    if (!oldNode || !newNode) return operations;
+    if (!oldNode || !newNode) {return operations;}
 
     // Compare frames
     if (this.options.includeProperty) {
@@ -282,7 +282,7 @@ export class SemanticDiffEngine {
    */
   private createMoveOperation(change: NodeChange): DiffOperation {
     const { nodeId, oldPath, newPath } = change;
-    const oldParentPath = oldPath!.slice(0, -1);
+    const _oldParentPath = oldPath!.slice(0, -1);
     const newParentPath = newPath!.slice(0, -1);
     const newIndex = parseInt(newPath![newPath!.length - 1]);
 
@@ -310,7 +310,7 @@ export class SemanticDiffEngine {
     oldFrame: any,
     newFrame: any
   ): DiffOperation[] {
-    if (!oldFrame || !newFrame) return [];
+    if (!oldFrame || !newFrame) {return [];}
 
     const operations: DiffOperation[] = [];
 
@@ -381,7 +381,7 @@ export class SemanticDiffEngine {
     const oldLayoutStr = oldLayout ? JSON.stringify(oldLayout) : "";
     const newLayoutStr = newLayout ? JSON.stringify(newLayout) : "";
 
-    if (oldLayoutStr === newLayoutStr) return [];
+    if (oldLayoutStr === newLayoutStr) {return [];}
 
     return [
       {
@@ -408,7 +408,7 @@ export class SemanticDiffEngine {
     oldText: string,
     newText: string
   ): DiffOperation[] {
-    if (oldText === newText) return [];
+    if (oldText === newText) {return [];}
 
     return [
       {
@@ -435,7 +435,7 @@ export class SemanticDiffEngine {
     oldName: string,
     newName: string
   ): DiffOperation[] {
-    if (oldName === newName) return [];
+    if (oldName === newName) {return [];}
 
     return [
       {
@@ -481,7 +481,7 @@ export class SemanticDiffEngine {
   /**
    * Extract parent ID from a path
    */
-  private getParentIdFromPath(path: string[]): string | undefined {
+  private getParentIdFromPath(_path: string[]): string | undefined {
     // Parent ID would be the node ID in the artboards or children arrays
     // This is a simplified implementation
     return undefined;
@@ -506,12 +506,12 @@ export class SemanticDiffEngine {
     // Sort by type, then by path, then by nodeId
     const typeOrder = { remove: 0, add: 1, move: 2, modify: 3 };
     const typeDiff = typeOrder[a.type] - typeOrder[b.type];
-    if (typeDiff !== 0) return typeDiff;
+    if (typeDiff !== 0) {return typeDiff;}
 
     const pathA = a.path.join(".");
     const pathB = b.path.join(".");
-    if (pathA < pathB) return -1;
-    if (pathA > pathB) return 1;
+    if (pathA < pathB) {return -1;}
+    if (pathA > pathB) {return 1;}
 
     return a.nodeId.localeCompare(b.nodeId);
   }

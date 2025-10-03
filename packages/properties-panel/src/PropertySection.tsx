@@ -4,8 +4,8 @@
  */
 
 import React, { useState } from "react";
-import type { PropertySectionProps, PropertyValue } from "./types";
 import { PropertyEditor } from "./PropertyEditor";
+import type { PropertySectionProps, PropertyValue } from "./types";
 
 /**
  * Property section component that groups related properties

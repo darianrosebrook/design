@@ -125,8 +125,8 @@ export class Logger {
     message: string,
     metadata?: Record<string, unknown>
   ): void {
-    if (!this.enabled) return;
-    if (!this.shouldLog(level)) return;
+    if (!this.enabled) {return;}
+    if (!this.shouldLog(level)) {return;}
 
     const entry: LogEntry = {
       timestamp: new Date().toISOString(),
@@ -216,7 +216,7 @@ export class MetricsCollector {
     value: number = 1,
     labels?: Record<string, string>
   ): void {
-    if (!this.enabled) return;
+    if (!this.enabled) {return;}
 
     const key = this.getMetricKey(name, labels);
     const existing = this.metrics.get(key);
@@ -234,7 +234,7 @@ export class MetricsCollector {
    * Record a gauge metric
    */
   gauge(name: string, value: number, labels?: Record<string, string>): void {
-    if (!this.enabled) return;
+    if (!this.enabled) {return;}
 
     const key = this.getMetricKey(name, labels);
     this.metrics.set(key, {
@@ -254,7 +254,7 @@ export class MetricsCollector {
     value: number,
     labels?: Record<string, string>
   ): void {
-    if (!this.enabled) return;
+    if (!this.enabled) {return;}
 
     const key = this.getMetricKey(name, labels);
     this.metrics.set(key, {
@@ -270,7 +270,7 @@ export class MetricsCollector {
    * Get metric key with labels
    */
   private getMetricKey(name: string, labels?: Record<string, string>): string {
-    if (!labels) return name;
+    if (!labels) {return name;}
     const labelStr = Object.entries(labels)
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([k, v]) => `${k}=${v}`)
@@ -318,7 +318,7 @@ export class PerformanceTracer {
    * Start a trace span
    */
   start(name: string, metadata?: Record<string, unknown>): void {
-    if (!this.enabled) return;
+    if (!this.enabled) {return;}
 
     this.activeSpans.set(name, {
       name,
@@ -331,10 +331,10 @@ export class PerformanceTracer {
    * End a trace span
    */
   end(name: string): void {
-    if (!this.enabled) return;
+    if (!this.enabled) {return;}
 
     const span = this.activeSpans.get(name);
-    if (!span) return;
+    if (!span) {return;}
 
     span.endTime = performance.now();
     span.duration = span.endTime - span.startTime;
@@ -356,7 +356,7 @@ export class PerformanceTracer {
     fn: () => T | Promise<T>,
     metadata?: Record<string, unknown>
   ): Promise<T> {
-    if (!this.enabled) return fn();
+    if (!this.enabled) {return fn();}
 
     this.start(name, metadata);
     try {

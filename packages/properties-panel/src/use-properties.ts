@@ -3,11 +3,11 @@
  * @author @darianrosebrook
  */
 
-import { useState, useEffect, useCallback } from "react";
 import type { NodeType } from "@paths-design/canvas-schema";
-import type { SelectionState, PropertyChangeEvent } from "./types";
+import { useState, useEffect, useCallback } from "react";
 import { PropertiesService } from "./properties-service";
-import { getApplicablePropertiesForNode } from "./property-utils";
+// import { getApplicablePropertiesForNode } from "./property-utils"; // TODO: Remove if not needed
+import type { SelectionState, PropertyChangeEvent } from "./types";
 
 /**
  * Hook for integrating with the properties service
@@ -28,7 +28,7 @@ export function useProperties() {
     });
 
     // Subscribe to property changes
-    const unsubscribeProperties = service.onPropertyChange((event) => {
+    const unsubscribeProperties = service.onPropertyChange((_event) => {
       // Trigger a re-render when properties change
       setNodes((prevNodes) => [...prevNodes]);
     });
@@ -57,7 +57,7 @@ export function useProperties() {
   /**
    * Handle property change
    */
-  const handlePropertyChange = useCallback((event: PropertyChangeEvent) => {
+  const handlePropertyChange = useCallback((_event: PropertyChangeEvent) => {
     // For now, we just need to trigger a re-render
     // In a real implementation, this would send the change to the canvas
     setNodes((prevNodes) => [...prevNodes]);

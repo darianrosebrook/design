@@ -357,22 +357,22 @@ try {
 console.log("\n🔄 Phase 9: Dev Agent Updates Component Contracts");
 console.log("-".repeat(50));
 
-const updatedComponentIndex = {
-  ...componentIndex,
-  Button: {
-    ...componentIndex.Button,
-    semanticKeys: {
-      ...componentIndex.Button.semanticKeys,
-      "cta.primary": {
-        ...componentIndex.Button.semanticKeys["cta.primary"],
-        propDefaults: {
-          variant: "primary",
-          size: "large", // Updated based on design feedback
-        },
-      },
-    },
-  },
-};
+// const _updatedComponentIndex = {
+//   ...componentIndex,
+//   Button: {
+//     ...componentIndex.Button,
+//     semanticKeys: {
+//       ...componentIndex.Button.semanticKeys,
+//       "cta.primary": {
+//         ...componentIndex.Button.semanticKeys["cta.primary"],
+//         propDefaults: {
+//           variant: "primary",
+//           size: "large", // Updated based on design feedback
+//         },
+//       },
+//     },
+//   },
+// };
 
 console.log("Component contracts updated:");
 console.log(

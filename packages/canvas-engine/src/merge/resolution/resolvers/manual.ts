@@ -3,8 +3,7 @@
  * @author @darianrosebrook
  */
 
-import type { Conflict, MergeContext } from "../types.js";
-import {
+import type { Conflict, MergeContext ,
   ResolutionStrategy,
   STRATEGY_CONFIDENCE,
   type MergeResolution,
@@ -14,12 +13,12 @@ import {
  * Resolver that marks conflicts as requiring manual review
  */
 export class ManualResolver {
-  canResolve(conflict: Conflict): boolean {
+  canResolve(_conflict: Conflict): boolean {
     // This resolver can handle any conflict type
     return true;
   }
 
-  resolve(conflict: Conflict, context: MergeContext): MergeResolution {
+  resolve(conflict: Conflict, _context: MergeContext): MergeResolution {
     return {
       conflict,
       strategy: ResolutionStrategy.MANUAL,

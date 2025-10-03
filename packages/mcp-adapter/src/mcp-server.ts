@@ -3,21 +3,23 @@
  * @author @darianrosebrook
  */
 
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import type {
+  Tool} from "@modelcontextprotocol/sdk/types.js";
 import {
   CallToolRequestSchema,
   ErrorCode,
   ListToolsRequestSchema,
-  McpError,
-  Tool,
+  McpError
 } from "@modelcontextprotocol/sdk/types.js";
-import * as fs from "node:fs";
-import * as path from "node:path";
+import { generateAugmentedVariants } from "@paths-design/augment";
 import type { CanvasDocumentType } from "@paths-design/canvas-schema";
 import { generateReactComponents } from "@paths-design/codegen-react";
-import { generateAugmentedVariants } from "@paths-design/augment";
 import { compareCanvasDocuments } from "@paths-design/diff-visualizer";
+import { ulid } from "ulidx";
 
 /**
  * MCP server for Designer operations
@@ -730,7 +732,7 @@ ${
   async start(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.log("Designer MCP server started");
+    console.info("Designer MCP server started");
   }
 
   /**
@@ -738,7 +740,7 @@ ${
    */
   async stop(): Promise<void> {
     await this.server.close();
-    console.log("Designer MCP server stopped");
+    console.info("Designer MCP server stopped");
   }
 
   /**
@@ -757,7 +759,7 @@ ${
       const document = JSON.parse(content) as CanvasDocumentType;
 
       // Generate a new ULID for the component
-      const nodeId = require("ulidx").ulid();
+      const nodeId = (await import("ulidx")).ulid();
 
       // Create the component node
       const componentNode: any = {
@@ -904,7 +906,7 @@ ${
       function analyzeNode(node: any): void {
         if (node && typeof node === "object") {
           // Skip if already has semantic key
-          if (node.semanticKey) return;
+          if (node.semanticKey) {return;}
 
           let suggestedKey = "";
           let confidence = 0;
@@ -1048,11 +1050,11 @@ ${
       // Create a basic canvas document structure
       const document: CanvasDocumentType = {
         schemaVersion: "0.1.0",
-        id: require("ulidx").ulid(),
+        id: ulid(),
         name: args.spec.name,
         artboards: [
           {
-            id: require("ulidx").ulid(),
+            id: ulid(),
             name: "Main",
             frame: { x: 0, y: 0, width: 1440, height: 1024 },
             children: [],
@@ -1066,7 +1068,7 @@ ${
 
       for (const componentSpec of args.spec.components) {
         const componentNode: any = {
-          id: require("ulidx").ulid(),
+          id: ulid(),
           type: componentSpec.type,
           name:
             componentSpec.semanticKey.split(".").pop() || componentSpec.type,
@@ -1158,7 +1160,7 @@ ${
   }): Promise<{ success: boolean; specPath: string; message: string }> {
     try {
       const componentSpec = {
-        id: require("ulidx").ulid(),
+        id: ulid(),
         name: args.requirements.name,
         purpose: args.requirements.purpose,
         props: args.requirements.props.map((prop) => ({

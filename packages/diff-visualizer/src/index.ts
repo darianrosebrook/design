@@ -402,7 +402,7 @@ export class DiffVisualizer {
    */
   private pathToString(path: NodePath): string {
     return path
-      .map((segment, index) => {
+      .map((segment, _index) => {
         if (typeof segment === "number") {
           return `[${segment}]`;
         }

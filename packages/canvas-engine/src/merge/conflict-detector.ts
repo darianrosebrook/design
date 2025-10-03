@@ -5,7 +5,7 @@
  */
 
 import {
-  type CanvasDocumentType,
+  // type CanvasDocumentType, // TODO: Remove if not needed
   type Conflict,
   type ConflictCategory,
   type ConflictDetectionOptions,
@@ -165,7 +165,7 @@ function detectStructuralConflicts(
     // Case: Node moved to different parents
     const parentLocal = localSnapshot.parentId;
     const parentRemote = remoteSnapshot.parentId;
-    const baseParent = baseSnapshot.parentId;
+    const _baseParent = baseSnapshot.parentId;
     if (
       baseSnapshot.parentId &&
       parentLocal &&

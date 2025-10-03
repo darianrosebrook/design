@@ -6,8 +6,8 @@
  * remains within the workspace boundary.
  */
 
-import * as path from "node:path";
 import * as fs from "node:fs/promises";
+import * as path from "node:path";
 
 /**
  * Validation result for path checks
@@ -129,7 +129,7 @@ export class PathValidator {
     }
 
     // 7. Check file extension
-    const ext = path.extname(normalized);
+    const _ext = path.extname(normalized);
     const hasAllowedExtension = this.config.allowedExtensions.some((allowed) =>
       normalized.endsWith(allowed)
     );

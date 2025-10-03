@@ -3,8 +3,7 @@
  * @author @darianrosebrook
  */
 
-import type { CanvasDocumentType } from "../types.js";
-import type { Conflict } from "../types.js";
+import type { CanvasDocumentType , Conflict } from "../types.js";
 
 export type { Conflict };
 

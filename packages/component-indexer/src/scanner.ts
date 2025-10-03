@@ -3,9 +3,9 @@
  * @author @darianrosebrook
  */
 
-import * as ts from "typescript";
-import * as path from "node:path";
 import * as fs from "node:fs";
+import * as path from "node:path";
+import * as ts from "typescript";
 import { ulid } from "ulidx";
 import type {
   DiscoveryOptions,
@@ -115,7 +115,7 @@ export class ComponentScanner {
     const files: string[] = [];
 
     const scan = (currentDir: string) => {
-      if (!fs.existsSync(currentDir)) return;
+      if (!fs.existsSync(currentDir)) {return;}
 
       const entries = fs.readdirSync(currentDir, { withFileTypes: true });
 
@@ -149,17 +149,17 @@ export class ComponentScanner {
     const filePath = sourceFile.fileName;
 
     // Skip declaration files
-    if (filePath.endsWith(".d.ts")) return false;
+    if (filePath.endsWith(".d.ts")) {return false;}
 
     // Skip node_modules
-    if (filePath.includes("node_modules")) return false;
+    if (filePath.includes("node_modules")) {return false;}
 
     // Check includes
     if (options.include && options.include.length > 0) {
       const included = options.include.some((pattern) =>
         filePath.includes(pattern)
       );
-      if (!included) return false;
+      if (!included) {return false;}
     }
 
     // Check excludes
@@ -167,7 +167,7 @@ export class ComponentScanner {
       const excluded = options.exclude.some((pattern) =>
         filePath.includes(pattern)
       );
-      if (excluded) return false;
+      if (excluded) {return false;}
     }
 
     return true;
@@ -239,7 +239,7 @@ export class ComponentScanner {
   private hasJSXReturnType(
     node: ts.FunctionDeclaration | ts.ArrowFunction | ts.FunctionExpression
   ): boolean {
-    if (!this.checker) return false;
+    if (!this.checker) {return false;}
 
     // First, check if explicit return type annotation is JSX
     if (node.type) {
@@ -277,7 +277,7 @@ export class ComponentScanner {
    * Check if function body contains JSX elements
    */
   private hasJSXInBody(body: ts.ConciseBody | undefined): boolean {
-    if (!body) return false;
+    if (!body) {return false;}
 
     let hasJSX = false;
 
@@ -307,7 +307,7 @@ export class ComponentScanner {
    * Check if class extends React.Component
    */
   private extendsReactComponent(node: ts.ClassDeclaration): boolean {
-    if (!node.heritageClauses) return false;
+    if (!node.heritageClauses) {return false;}
 
     for (const clause of node.heritageClauses) {
       if (clause.token === ts.SyntaxKind.ExtendsKeyword) {
@@ -332,7 +332,7 @@ export class ComponentScanner {
   ): RawComponentMetadata | null {
     // First extract the component metadata normally
     const metadata = this.extractComponentMetadataBase(node, sourceFile);
-    if (!metadata) return null;
+    if (!metadata) {return null;}
 
     // Then try to extract default values from the implementation
     const defaultValues = this.extractDefaultValues(node, sourceFile);
@@ -438,11 +438,11 @@ export class ComponentScanner {
     node: ts.Node,
     sourceFile: ts.SourceFile
   ): RawComponentMetadata | null {
-    if (!this.checker) return null;
+    if (!this.checker) {return null;}
 
     let name: string | undefined;
     let props: RawComponentMetadata["props"] = [];
-    let jsDocTags: Record<string, string> = {};
+    const jsDocTags: Record<string, string> = {};
 
     // Get component name
     if (ts.isFunctionDeclaration(node) && node.name) {
@@ -456,7 +456,7 @@ export class ComponentScanner {
       name = node.name.text;
     }
 
-    if (!name) return null;
+    if (!name) {return null;}
 
     // Extract JSDoc comments from the component node
     const jsDoc = (node as any).jsDoc;
@@ -573,7 +573,7 @@ export class ComponentScanner {
   private extractPropsFromType(
     typeNode: ts.TypeNode
   ): RawComponentMetadata["props"] {
-    if (!this.checker) return [];
+    if (!this.checker) {return [];}
 
     const props: RawComponentMetadata["props"] = [];
 
@@ -674,7 +674,7 @@ export class ComponentScanner {
    * Get JSDoc comment text from a JSDoc node or tag
    */
   private getJSDocComment(jsDocNode: any): string {
-    if (!jsDocNode) return "";
+    if (!jsDocNode) {return "";}
 
     // Handle string comments
     if (typeof jsDocNode.comment === "string") {
@@ -762,11 +762,11 @@ export class ComponentScanner {
    */
   private extractDefaultsFromTypeLiteral(
     typeLiteral: ts.TypeLiteralNode,
-    defaultValues: Record<string, unknown>
+    _defaultValues: Record<string, unknown>
   ): void {
     for (const member of typeLiteral.members) {
       if (ts.isPropertySignature(member) && member.name) {
-        const propName = member.name.getText();
+        const _propName = member.name.getText();
 
         // Look for default value in the initializer (if present in destructuring)
         // Note: TypeScript AST doesn't directly store destructuring defaults in type literals
@@ -785,7 +785,7 @@ export class ComponentScanner {
     defaultValues: Record<string, unknown>
   ): void {
     const componentName = this.getComponentName(node);
-    if (!componentName) return;
+    if (!componentName) {return;}
 
     // Walk the source file to find defaultProps assignments
     const visitor = (node: ts.Node): void => {
@@ -842,7 +842,7 @@ export class ComponentScanner {
       }
     }
 
-    if (!body) return;
+    if (!body) {return;}
 
     // Walk the body to find destructuring assignments
     const visitor = (node: ts.Node): void => {

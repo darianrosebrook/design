@@ -6,17 +6,17 @@
  * Provides secure message protocol, workspace file access, and UI components.
  */
 
-import * as vscode from "vscode";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { PropertiesPanelWebviewProvider } from "./properties-panel-webview";
+import * as vscode from "vscode";
 import type { CanvasDocumentType } from "../../canvas-schema/src/index.js";
+import type { ComponentIndex } from "../../component-indexer/src/index.js";
 import type {
   SelectionState,
   PropertyChangeEvent,
 } from "../../properties-panel/src/index.js";
-import type { ComponentIndex } from "../../component-indexer/src/index.js";
 import { PropertiesService } from "../../properties-panel/src/index.js";
+import { PropertiesPanelWebviewProvider } from "./properties-panel-webview";
 
 export * from "./protocol/index.js";
 export * from "./security/index.js";
@@ -55,7 +55,7 @@ class DesignerExtension {
     try {
       // Look for component index in the design directory
       const workspaceFolders = vscode.workspace.workspaceFolders;
-      if (!workspaceFolders) return;
+      if (!workspaceFolders) {return;}
 
       const designDir = path.join(workspaceFolders[0].uri.fsPath, "design");
       const componentIndexPath = path.join(designDir, "components.index.json");
@@ -72,13 +72,13 @@ class DesignerExtension {
         this.componentIndex = componentIndex;
         this.propertiesService.setComponentIndex(componentIndex);
 
-        console.log(
+        console.info(
           `Loaded component index with ${
             Object.keys(componentIndex.components).length
           } components`
         );
       } else {
-        console.log("No component index found, using basic properties only");
+        console.info("No component index found, using basic properties only");
       }
     } catch (error) {
       console.warn("Failed to load component index:", error);
@@ -261,7 +261,7 @@ class DesignerExtension {
 
     // Delegate to properties panel provider for full handling
     // This includes applying the change, saving, and notifying other views
-    console.log("Property change received in extension:", event);
+    console.info("Property change received in extension:", event);
   }
 
   /**
@@ -294,7 +294,7 @@ let extensionInstance: DesignerExtension | null = null;
  * Main extension activation function
  */
 export function activate(context: vscode.ExtensionContext): void {
-  console.log("Designer extension is now active!");
+  console.info("Designer extension is now active!");
 
   // Create the main extension instance
   extensionInstance = new DesignerExtension(context);
@@ -302,14 +302,14 @@ export function activate(context: vscode.ExtensionContext): void {
   // Export the extension instance for use by other parts of the extension
   (globalThis as any).designerExtension = extensionInstance;
 
-  console.log("Designer extension fully initialized");
+  console.info("Designer extension fully initialized");
 }
 
 /**
  * Extension deactivation function
  */
 export function deactivate(): void {
-  console.log("Designer extension is now deactivated");
+  console.info("Designer extension is now deactivated");
 
   if (extensionInstance) {
     extensionInstance = null;

@@ -27,7 +27,7 @@ import { RENDERER_CLASSES } from "../types.js";
 export function renderFrame(
   node: FrameNodeType,
   options: RendererOptions,
-  context: RenderContext
+  _context: RenderContext
 ): HTMLElement {
   const element = document.createElement("div");
 
@@ -79,7 +79,7 @@ export function renderFrame(
 /**
  * Apply base frame styles (container behavior)
  */
-function applyFrameStyles(element: HTMLElement, node: FrameNodeType): void {
+function applyFrameStyles(element: HTMLElement, _node: FrameNodeType): void {
   // Frame acts as a positioned container
   element.style.boxSizing = "border-box";
 
@@ -91,7 +91,7 @@ function applyFrameStyles(element: HTMLElement, node: FrameNodeType): void {
  * Apply fill styles to element
  */
 function applyFills(element: HTMLElement, fills: any[]): void {
-  if (!fills || fills.length === 0) return;
+  if (!fills || fills.length === 0) {return;}
 
   // For now, handle solid fills (most common case)
   // TODO: Support gradients, images in future
@@ -122,7 +122,7 @@ function applyFills(element: HTMLElement, fills: any[]): void {
  * Apply stroke/border styles to element
  */
 function applyStrokes(element: HTMLElement, strokes: any[]): void {
-  if (!strokes || strokes.length === 0) return;
+  if (!strokes || strokes.length === 0) {return;}
 
   // For now, handle solid strokes (most common case)
   const solidStrokes = strokes.filter((s) => s.type === "solid");
@@ -159,7 +159,7 @@ function applyLayout(
   element: HTMLElement,
   layout: FrameNodeType["layout"]
 ): void {
-  if (!layout) return;
+  if (!layout) {return;}
 
   switch (layout.type) {
     case "none":

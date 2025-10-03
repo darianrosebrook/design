@@ -6,8 +6,8 @@
  * to prevent security vulnerabilities and ensure type safety.
  */
 
-import { z } from "zod";
 import { CanvasDocument, ULID, Patch } from "@paths-design/canvas-schema";
+import { z } from "zod";
 
 /**
  * Protocol version for backwards compatibility

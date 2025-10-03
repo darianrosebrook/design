@@ -4,20 +4,20 @@
  */
 
 import React, { useMemo } from "react";
-import type {
-  PropertiesPanelProps,
-  PropertySectionProps,
-  PropertySection,
-} from "./types";
 import { PropertyRegistry } from "./property-registry";
 import { PropertySectionComponent } from "./PropertySection";
+import type {
+  PropertiesPanelProps,
+  // PropertySectionProps, // TODO: Remove if not needed
+  // PropertySection, // TODO: Remove if not needed
+} from "./types";
 import { useProperties } from "./use-properties";
 
 /**
  * Main properties panel component
  */
 export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
-  documentId,
+  _documentId,
   selection: externalSelection,
   onPropertyChange,
   onSelectionChange,

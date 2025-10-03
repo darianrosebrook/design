@@ -46,19 +46,19 @@ export declare const TextStyle: z.ZodObject<{
     letterSpacing: z.ZodOptional<z.ZodNumber>;
     color: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    family?: string | undefined;
     size?: number | undefined;
+    color?: string | undefined;
+    family?: string | undefined;
     lineHeight?: number | undefined;
     weight?: string | undefined;
     letterSpacing?: number | undefined;
-    color?: string | undefined;
 }, {
-    family?: string | undefined;
     size?: number | undefined;
+    color?: string | undefined;
+    family?: string | undefined;
     lineHeight?: number | undefined;
     weight?: string | undefined;
     letterSpacing?: number | undefined;
-    color?: string | undefined;
 }>;
 /**
  * Visual styling properties for nodes
@@ -130,9 +130,9 @@ export declare const BaseNode: z.ZodObject<{
     semanticKey: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     type: string;
+    visible: boolean;
     id: string;
     name: string;
-    visible: boolean;
     frame: {
         x: number;
         y: number;
@@ -159,7 +159,6 @@ export declare const BaseNode: z.ZodObject<{
         width: number;
         height: number;
     };
-    visible?: boolean | undefined;
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -167,6 +166,7 @@ export declare const BaseNode: z.ZodObject<{
         opacity?: number | undefined;
         shadow?: any;
     } | undefined;
+    visible?: boolean | undefined;
     data?: Record<string, any> | undefined;
     bind?: any;
     semanticKey?: string | undefined;
@@ -221,17 +221,17 @@ export declare const FrameNode: z.ZodObject<{
     layout: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodAny>>;
     children: z.ZodDefault<z.ZodLazy<z.ZodArray<z.ZodType<any, z.ZodTypeDef, any>, "many">>>;
 }, "strip", z.ZodTypeAny, {
+    children: any[];
     type: "frame";
+    visible: boolean;
     id: string;
     name: string;
-    visible: boolean;
     frame: {
         x: number;
         y: number;
         width: number;
         height: number;
     };
-    children: any[];
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -253,7 +253,7 @@ export declare const FrameNode: z.ZodObject<{
         width: number;
         height: number;
     };
-    visible?: boolean | undefined;
+    children?: any[] | undefined;
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -261,11 +261,11 @@ export declare const FrameNode: z.ZodObject<{
         opacity?: number | undefined;
         shadow?: any;
     } | undefined;
+    visible?: boolean | undefined;
     data?: Record<string, any> | undefined;
     bind?: any;
     semanticKey?: string | undefined;
     layout?: Record<string, any> | undefined;
-    children?: any[] | undefined;
 }>;
 /**
  * Group node - logical grouping of nodes
@@ -316,17 +316,17 @@ export declare const GroupNode: z.ZodObject<{
     type: z.ZodLiteral<"group">;
     children: z.ZodDefault<z.ZodLazy<z.ZodArray<z.ZodType<any, z.ZodTypeDef, any>, "many">>>;
 }, "strip", z.ZodTypeAny, {
+    children: any[];
     type: "group";
+    visible: boolean;
     id: string;
     name: string;
-    visible: boolean;
     frame: {
         x: number;
         y: number;
         width: number;
         height: number;
     };
-    children: any[];
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -347,7 +347,7 @@ export declare const GroupNode: z.ZodObject<{
         width: number;
         height: number;
     };
-    visible?: boolean | undefined;
+    children?: any[] | undefined;
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -355,10 +355,10 @@ export declare const GroupNode: z.ZodObject<{
         opacity?: number | undefined;
         shadow?: any;
     } | undefined;
+    visible?: boolean | undefined;
     data?: Record<string, any> | undefined;
     bind?: any;
     semanticKey?: string | undefined;
-    children?: any[] | undefined;
 }>;
 /**
  * Vector node - SVG path-based graphics
@@ -410,11 +410,11 @@ export declare const VectorNode: z.ZodObject<{
     path: z.ZodString;
     windingRule: z.ZodDefault<z.ZodEnum<["nonzero", "evenodd"]>>;
 }, "strip", z.ZodTypeAny, {
-    path: string;
     type: "vector";
+    visible: boolean;
     id: string;
     name: string;
-    visible: boolean;
+    path: string;
     frame: {
         x: number;
         y: number;
@@ -433,17 +433,16 @@ export declare const VectorNode: z.ZodObject<{
     bind?: any;
     semanticKey?: string | undefined;
 }, {
-    path: string;
     type: "vector";
     id: string;
     name: string;
+    path: string;
     frame: {
         x: number;
         y: number;
         width: number;
         height: number;
     };
-    visible?: boolean | undefined;
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -451,6 +450,7 @@ export declare const VectorNode: z.ZodObject<{
         opacity?: number | undefined;
         shadow?: any;
     } | undefined;
+    visible?: boolean | undefined;
     data?: Record<string, any> | undefined;
     bind?: any;
     semanticKey?: string | undefined;
@@ -512,32 +512,32 @@ export declare const TextNode: z.ZodObject<{
         letterSpacing: z.ZodOptional<z.ZodNumber>;
         color: z.ZodOptional<z.ZodString>;
     }, "strip", z.ZodTypeAny, {
-        family?: string | undefined;
         size?: number | undefined;
+        color?: string | undefined;
+        family?: string | undefined;
         lineHeight?: number | undefined;
         weight?: string | undefined;
         letterSpacing?: number | undefined;
-        color?: string | undefined;
     }, {
-        family?: string | undefined;
         size?: number | undefined;
+        color?: string | undefined;
+        family?: string | undefined;
         lineHeight?: number | undefined;
         weight?: string | undefined;
         letterSpacing?: number | undefined;
-        color?: string | undefined;
     }>>;
 }, "strip", z.ZodTypeAny, {
     type: "text";
+    text: string;
+    visible: boolean;
     id: string;
     name: string;
-    visible: boolean;
     frame: {
         x: number;
         y: number;
         width: number;
         height: number;
     };
-    text: string;
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -549,15 +549,16 @@ export declare const TextNode: z.ZodObject<{
     bind?: any;
     semanticKey?: string | undefined;
     textStyle?: {
-        family?: string | undefined;
         size?: number | undefined;
+        color?: string | undefined;
+        family?: string | undefined;
         lineHeight?: number | undefined;
         weight?: string | undefined;
         letterSpacing?: number | undefined;
-        color?: string | undefined;
     } | undefined;
 }, {
     type: "text";
+    text: string;
     id: string;
     name: string;
     frame: {
@@ -566,8 +567,6 @@ export declare const TextNode: z.ZodObject<{
         width: number;
         height: number;
     };
-    text: string;
-    visible?: boolean | undefined;
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -575,16 +574,17 @@ export declare const TextNode: z.ZodObject<{
         opacity?: number | undefined;
         shadow?: any;
     } | undefined;
+    visible?: boolean | undefined;
     data?: Record<string, any> | undefined;
     bind?: any;
     semanticKey?: string | undefined;
     textStyle?: {
-        family?: string | undefined;
         size?: number | undefined;
+        color?: string | undefined;
+        family?: string | undefined;
         lineHeight?: number | undefined;
         weight?: string | undefined;
         letterSpacing?: number | undefined;
-        color?: string | undefined;
     } | undefined;
 }>;
 /**
@@ -638,9 +638,9 @@ export declare const ImageNode: z.ZodObject<{
     mode: z.ZodDefault<z.ZodEnum<["cover", "contain", "fill", "none"]>>;
 }, "strip", z.ZodTypeAny, {
     type: "image";
+    visible: boolean;
     id: string;
     name: string;
-    visible: boolean;
     frame: {
         x: number;
         y: number;
@@ -648,7 +648,7 @@ export declare const ImageNode: z.ZodObject<{
         height: number;
     };
     src: string;
-    mode: "fill" | "cover" | "contain" | "none";
+    mode: "none" | "fill" | "cover" | "contain";
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -670,7 +670,6 @@ export declare const ImageNode: z.ZodObject<{
         height: number;
     };
     src: string;
-    visible?: boolean | undefined;
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -678,10 +677,11 @@ export declare const ImageNode: z.ZodObject<{
         opacity?: number | undefined;
         shadow?: any;
     } | undefined;
+    visible?: boolean | undefined;
     data?: Record<string, any> | undefined;
     bind?: any;
     semanticKey?: string | undefined;
-    mode?: "fill" | "cover" | "contain" | "none" | undefined;
+    mode?: "none" | "fill" | "cover" | "contain" | undefined;
 }>;
 /**
  * Component instance node - references to React components
@@ -734,9 +734,9 @@ export declare const ComponentInstanceNode: z.ZodObject<{
     props: z.ZodDefault<z.ZodRecord<z.ZodString, z.ZodAny>>;
 }, "strip", z.ZodTypeAny, {
     type: "component";
+    visible: boolean;
     id: string;
     name: string;
-    visible: boolean;
     frame: {
         x: number;
         y: number;
@@ -766,7 +766,6 @@ export declare const ComponentInstanceNode: z.ZodObject<{
         height: number;
     };
     componentKey: string;
-    visible?: boolean | undefined;
     style?: {
         fills?: any[] | undefined;
         strokes?: any[] | undefined;
@@ -774,6 +773,7 @@ export declare const ComponentInstanceNode: z.ZodObject<{
         opacity?: number | undefined;
         shadow?: any;
     } | undefined;
+    visible?: boolean | undefined;
     data?: Record<string, any> | undefined;
     bind?: any;
     semanticKey?: string | undefined;
@@ -807,6 +807,7 @@ export declare const Artboard: z.ZodObject<{
     }>;
     children: z.ZodDefault<z.ZodArray<z.ZodType<any, z.ZodTypeDef, any>, "many">>;
 }, "strip", z.ZodTypeAny, {
+    children: any[];
     id: string;
     name: string;
     frame: {
@@ -815,7 +816,6 @@ export declare const Artboard: z.ZodObject<{
         width: number;
         height: number;
     };
-    children: any[];
 }, {
     id: string;
     name: string;
@@ -855,6 +855,7 @@ export declare const CanvasDocument: z.ZodObject<{
         }>;
         children: z.ZodDefault<z.ZodArray<z.ZodType<any, z.ZodTypeDef, any>, "many">>;
     }, "strip", z.ZodTypeAny, {
+        children: any[];
         id: string;
         name: string;
         frame: {
@@ -863,7 +864,6 @@ export declare const CanvasDocument: z.ZodObject<{
             width: number;
             height: number;
         };
-        children: any[];
     }, {
         id: string;
         name: string;
@@ -880,6 +880,7 @@ export declare const CanvasDocument: z.ZodObject<{
     name: string;
     schemaVersion: "0.1.0";
     artboards: {
+        children: any[];
         id: string;
         name: string;
         frame: {
@@ -888,7 +889,6 @@ export declare const CanvasDocument: z.ZodObject<{
             width: number;
             height: number;
         };
-        children: any[];
     }[];
 }, {
     id: string;

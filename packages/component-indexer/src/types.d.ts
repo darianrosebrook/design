@@ -17,10 +17,10 @@ export declare const ComponentPropSchema: z.ZodObject<{
         options: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         options?: string[] | undefined;
-        control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+        control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
     }, {
         options?: string[] | undefined;
-        control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+        control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
     }>>;
     passthrough: z.ZodOptional<z.ZodObject<{
         attributes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -43,8 +43,8 @@ export declare const ComponentPropSchema: z.ZodObject<{
     }>>;
 }, "strip", z.ZodTypeAny, {
     type: string;
-    name: string;
     required: boolean;
+    name: string;
     passthrough?: {
         children?: boolean | undefined;
         attributes?: string[] | undefined;
@@ -56,12 +56,12 @@ export declare const ComponentPropSchema: z.ZodObject<{
     description?: string | undefined;
     design?: {
         options?: string[] | undefined;
-        control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+        control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
     } | undefined;
 }, {
     type: string;
-    name: string;
     required: boolean;
+    name: string;
     passthrough?: {
         children?: boolean | undefined;
         attributes?: string[] | undefined;
@@ -73,7 +73,7 @@ export declare const ComponentPropSchema: z.ZodObject<{
     description?: string | undefined;
     design?: {
         options?: string[] | undefined;
-        control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+        control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
     } | undefined;
 }>;
 export type ComponentProp = z.infer<typeof ComponentPropSchema>;
@@ -127,10 +127,10 @@ export declare const ComponentEntrySchema: z.ZodObject<{
             options: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
         }, "strip", z.ZodTypeAny, {
             options?: string[] | undefined;
-            control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+            control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
         }, {
             options?: string[] | undefined;
-            control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+            control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
         }>>;
         passthrough: z.ZodOptional<z.ZodObject<{
             attributes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -153,8 +153,8 @@ export declare const ComponentEntrySchema: z.ZodObject<{
         }>>;
     }, "strip", z.ZodTypeAny, {
         type: string;
-        name: string;
         required: boolean;
+        name: string;
         passthrough?: {
             children?: boolean | undefined;
             attributes?: string[] | undefined;
@@ -166,12 +166,12 @@ export declare const ComponentEntrySchema: z.ZodObject<{
         description?: string | undefined;
         design?: {
             options?: string[] | undefined;
-            control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+            control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
         } | undefined;
     }, {
         type: string;
-        name: string;
         required: boolean;
+        name: string;
         passthrough?: {
             children?: boolean | undefined;
             attributes?: string[] | undefined;
@@ -183,18 +183,21 @@ export declare const ComponentEntrySchema: z.ZodObject<{
         description?: string | undefined;
         design?: {
             options?: string[] | undefined;
-            control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+            control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
         } | undefined;
     }>, "many">;
     variants: z.ZodOptional<z.ZodArray<z.ZodRecord<z.ZodString, z.ZodUnknown>, "many">>;
     examples: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+    parent: z.ZodOptional<z.ZodString>;
+    isCompound: z.ZodOptional<z.ZodBoolean>;
+    compoundChildren: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
 }, "strip", z.ZodTypeAny, {
     id: string;
     name: string;
     props: {
         type: string;
-        name: string;
         required: boolean;
+        name: string;
         passthrough?: {
             children?: boolean | undefined;
             attributes?: string[] | undefined;
@@ -206,7 +209,7 @@ export declare const ComponentEntrySchema: z.ZodObject<{
         description?: string | undefined;
         design?: {
             options?: string[] | undefined;
-            control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+            control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
         } | undefined;
     }[];
     modulePath: string;
@@ -220,13 +223,16 @@ export declare const ComponentEntrySchema: z.ZodObject<{
     }> | undefined;
     variants?: Record<string, unknown>[] | undefined;
     examples?: string[] | undefined;
+    parent?: string | undefined;
+    isCompound?: boolean | undefined;
+    compoundChildren?: string[] | undefined;
 }, {
     id: string;
     name: string;
     props: {
         type: string;
-        name: string;
         required: boolean;
+        name: string;
         passthrough?: {
             children?: boolean | undefined;
             attributes?: string[] | undefined;
@@ -238,7 +244,7 @@ export declare const ComponentEntrySchema: z.ZodObject<{
         description?: string | undefined;
         design?: {
             options?: string[] | undefined;
-            control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+            control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
         } | undefined;
     }[];
     modulePath: string;
@@ -252,6 +258,9 @@ export declare const ComponentEntrySchema: z.ZodObject<{
     }> | undefined;
     variants?: Record<string, unknown>[] | undefined;
     examples?: string[] | undefined;
+    parent?: string | undefined;
+    isCompound?: boolean | undefined;
+    compoundChildren?: string[] | undefined;
 }>;
 export type ComponentEntry = z.infer<typeof ComponentEntrySchema>;
 /**
@@ -327,10 +336,10 @@ export declare const ComponentIndexSchema: z.ZodObject<{
                 options: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
             }, "strip", z.ZodTypeAny, {
                 options?: string[] | undefined;
-                control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+                control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
             }, {
                 options?: string[] | undefined;
-                control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+                control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
             }>>;
             passthrough: z.ZodOptional<z.ZodObject<{
                 attributes: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
@@ -353,8 +362,8 @@ export declare const ComponentIndexSchema: z.ZodObject<{
             }>>;
         }, "strip", z.ZodTypeAny, {
             type: string;
-            name: string;
             required: boolean;
+            name: string;
             passthrough?: {
                 children?: boolean | undefined;
                 attributes?: string[] | undefined;
@@ -366,12 +375,12 @@ export declare const ComponentIndexSchema: z.ZodObject<{
             description?: string | undefined;
             design?: {
                 options?: string[] | undefined;
-                control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+                control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
             } | undefined;
         }, {
             type: string;
-            name: string;
             required: boolean;
+            name: string;
             passthrough?: {
                 children?: boolean | undefined;
                 attributes?: string[] | undefined;
@@ -383,18 +392,21 @@ export declare const ComponentIndexSchema: z.ZodObject<{
             description?: string | undefined;
             design?: {
                 options?: string[] | undefined;
-                control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+                control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
             } | undefined;
         }>, "many">;
         variants: z.ZodOptional<z.ZodArray<z.ZodRecord<z.ZodString, z.ZodUnknown>, "many">>;
         examples: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
+        parent: z.ZodOptional<z.ZodString>;
+        isCompound: z.ZodOptional<z.ZodBoolean>;
+        compoundChildren: z.ZodOptional<z.ZodArray<z.ZodString, "many">>;
     }, "strip", z.ZodTypeAny, {
         id: string;
         name: string;
         props: {
             type: string;
-            name: string;
             required: boolean;
+            name: string;
             passthrough?: {
                 children?: boolean | undefined;
                 attributes?: string[] | undefined;
@@ -406,7 +418,7 @@ export declare const ComponentIndexSchema: z.ZodObject<{
             description?: string | undefined;
             design?: {
                 options?: string[] | undefined;
-                control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+                control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
             } | undefined;
         }[];
         modulePath: string;
@@ -420,13 +432,16 @@ export declare const ComponentIndexSchema: z.ZodObject<{
         }> | undefined;
         variants?: Record<string, unknown>[] | undefined;
         examples?: string[] | undefined;
+        parent?: string | undefined;
+        isCompound?: boolean | undefined;
+        compoundChildren?: string[] | undefined;
     }, {
         id: string;
         name: string;
         props: {
             type: string;
-            name: string;
             required: boolean;
+            name: string;
             passthrough?: {
                 children?: boolean | undefined;
                 attributes?: string[] | undefined;
@@ -438,7 +453,7 @@ export declare const ComponentIndexSchema: z.ZodObject<{
             description?: string | undefined;
             design?: {
                 options?: string[] | undefined;
-                control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+                control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
             } | undefined;
         }[];
         modulePath: string;
@@ -452,6 +467,9 @@ export declare const ComponentIndexSchema: z.ZodObject<{
         }> | undefined;
         variants?: Record<string, unknown>[] | undefined;
         examples?: string[] | undefined;
+        parent?: string | undefined;
+        isCompound?: boolean | undefined;
+        compoundChildren?: string[] | undefined;
     }>, "many">;
 }, "strip", z.ZodTypeAny, {
     version: "1.0.0";
@@ -467,8 +485,8 @@ export declare const ComponentIndexSchema: z.ZodObject<{
         name: string;
         props: {
             type: string;
-            name: string;
             required: boolean;
+            name: string;
             passthrough?: {
                 children?: boolean | undefined;
                 attributes?: string[] | undefined;
@@ -480,7 +498,7 @@ export declare const ComponentIndexSchema: z.ZodObject<{
             description?: string | undefined;
             design?: {
                 options?: string[] | undefined;
-                control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+                control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
             } | undefined;
         }[];
         modulePath: string;
@@ -494,6 +512,9 @@ export declare const ComponentIndexSchema: z.ZodObject<{
         }> | undefined;
         variants?: Record<string, unknown>[] | undefined;
         examples?: string[] | undefined;
+        parent?: string | undefined;
+        isCompound?: boolean | undefined;
+        compoundChildren?: string[] | undefined;
     }[];
 }, {
     version: "1.0.0";
@@ -509,8 +530,8 @@ export declare const ComponentIndexSchema: z.ZodObject<{
         name: string;
         props: {
             type: string;
-            name: string;
             required: boolean;
+            name: string;
             passthrough?: {
                 children?: boolean | undefined;
                 attributes?: string[] | undefined;
@@ -522,7 +543,7 @@ export declare const ComponentIndexSchema: z.ZodObject<{
             description?: string | undefined;
             design?: {
                 options?: string[] | undefined;
-                control?: "number" | "boolean" | "color" | "text" | "select" | undefined;
+                control?: "number" | "boolean" | "text" | "color" | "select" | undefined;
             } | undefined;
         }[];
         modulePath: string;
@@ -536,6 +557,9 @@ export declare const ComponentIndexSchema: z.ZodObject<{
         }> | undefined;
         variants?: Record<string, unknown>[] | undefined;
         examples?: string[] | undefined;
+        parent?: string | undefined;
+        isCompound?: boolean | undefined;
+        compoundChildren?: string[] | undefined;
     }[];
 }>;
 export type ComponentIndex = z.infer<typeof ComponentIndexSchema>;
