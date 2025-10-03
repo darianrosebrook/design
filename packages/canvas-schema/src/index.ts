@@ -25,6 +25,15 @@ export {
 export const ULID = z.string().regex(/^[0-9A-HJKMNP-TV-Z]{26}$/);
 
 /**
+ * Semantic key pattern for stable node identification
+ * Uses dot notation for hierarchy (e.g., 'hero.title', 'nav.items[0]')
+ */
+export const SemanticKey = z
+  .string()
+  .regex(/^[a-z][a-z0-9]*(\.[a-z0-9]+|\[[0-9]+\])*$/)
+  .optional();
+
+/**
  * Rectangle geometry type
  */
 export const Rect = z.object({
@@ -131,6 +140,7 @@ export const CanvasDocument = z.object({
  * TypeScript type exports for external use
  */
 export type ULIDType = z.infer<typeof ULID>;
+export type SemanticKeyType = z.infer<typeof SemanticKey>;
 export type RectType = z.infer<typeof Rect>;
 export type TextStyleType = z.infer<typeof TextStyle>;
 export type StyleType = z.infer<typeof Style>;

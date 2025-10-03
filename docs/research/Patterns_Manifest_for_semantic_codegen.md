@@ -18,7 +18,7 @@
 
 ```jsonc
 {
-  "$schema": "https://localpencil.dev/schemas/pattern-manifest-0.1.json",
+  "$schema": "https://paths.design.dev/schemas/pattern-manifest-0.1.json",
   "name": "Tabs",
   "id": "pattern.tabs",
   "version": "0.1.0",

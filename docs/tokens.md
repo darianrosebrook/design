@@ -4,7 +4,7 @@
 
 ```json
 {
-  "$schema": "https://localpencil.dev/schemas/tokens-0.1.json",
+  "$schema": "https://paths.design.dev/schemas/tokens-0.1.json",
   "schemaVersion": "0.1.0",
   "color": {
     "background": "#0B0B0B",

@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "hooks": {
+    "beforeShellExecution": [
+      {
+        "command": "./hooks/block-nondeterministic-commands.sh"
+      }
+    ],
+    "afterFileEdit": [
+      {
+        "command": "./hooks/enforce-determinism.sh"
+      },
+      {
+        "command": "./hooks/canonicalize-json.sh"
+      },
+      {
+        "command": "./hooks/validate-schemas.sh"
+      }
+    ],
+    "beforeReadFile": [
+      {
+        "command": "./hooks/validate-token-safety.sh"
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "command": "./hooks/enforce-development-workflow.sh"
+      }
+    ]
+  }
+}

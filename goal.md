@@ -52,7 +52,7 @@
 ```jsonc
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://localpencil.dev/schemas/canvas-0.1.json",
+  "$id": "https://paths.design.dev/schemas/canvas-0.1.json",
   "title": "CanvasDocument",
   "type": "object",
   "required": ["schemaVersion", "id", "name", "artboards"],
@@ -324,7 +324,7 @@
 
 ```json
 {
-  "$schema": "https://localpencil.dev/schemas/tokens-0.1.json",
+  "$schema": "https://paths.design.dev/schemas/tokens-0.1.json",
   "schemaVersion": "0.1.0",
   "color": {
     "background": "#0B0B0B",

@@ -3,7 +3,7 @@
  * @author @darianrosebrook
  */
 
-import type { NodeType } from "@paths-design/canvas-schema";
+import type { NodeType } from "../../canvas-schema/src/index.js";
 import type {
   PropertyChangeEvent,
   SelectionState,
@@ -16,8 +16,14 @@ import {
   setNodeProperty,
   getApplicablePropertiesForNode,
 } from "./property-utils";
-import type { ComponentIndex } from "@paths-design/component-indexer";
-import type { SemanticKeyType } from "@paths-design/canvas-schema";
+import type { ComponentIndex } from "../../component-indexer/src/index.js";
+
+// Type for component from component index
+interface ComponentIndexComponent {
+  semanticKeys?: Record<string, any>;
+  [key: string]: unknown;
+}
+import type { SemanticKeyType } from "../../canvas-schema/src/index.js";
 
 /**
  * Callback type for property change notifications
@@ -149,13 +155,18 @@ export class PropertiesService {
   /**
    * Get applicable properties for currently selected nodes
    */
-  getApplicableProperties(): Array<{ nodeId: string; properties: PropertyDefinition[] }> {
-    const results: Array<{ nodeId: string; properties: PropertyDefinition[] }> = [];
+  getApplicableProperties(): Array<{
+    nodeId: string;
+    properties: PropertyDefinition[];
+  }> {
+    const results: Array<{ nodeId: string; properties: PropertyDefinition[] }> =
+      [];
 
     for (const nodeId of this.selection.selectedNodeIds) {
       const node = this.nodes.get(nodeId);
       if (node) {
-        const properties = this.getApplicablePropertiesForNodeWithContracts(node);
+        const properties =
+          this.getApplicablePropertiesForNodeWithContracts(node);
         results.push({ nodeId, properties });
       }
     }
@@ -166,13 +177,18 @@ export class PropertiesService {
   /**
    * Get applicable properties for a node, enhanced with semantic keys and component contracts
    */
-  private getApplicablePropertiesForNodeWithContracts(node: NodeType): PropertyDefinition[] {
+  private getApplicablePropertiesForNodeWithContracts(
+    node: NodeType
+  ): PropertyDefinition[] {
     const properties = getApplicablePropertiesForNode(node);
 
     // If node has a semantic key, try to find component contract
     if (this.componentIndex && (node as any).semanticKey) {
       const semanticKey = (node as any).semanticKey as SemanticKeyType;
-      const contractProperties = this.getContractPropertiesForSemanticKey(semanticKey, node);
+      const contractProperties = this.getContractPropertiesForSemanticKey(
+        semanticKey,
+        node
+      );
       properties.push(...contractProperties);
     }
 
@@ -181,7 +197,10 @@ export class PropertiesService {
       const componentKey = (node as any).componentKey;
       const component = this.componentIndex.components[componentKey];
       if (component) {
-        const contractProperties = this.getContractPropertiesForComponent(component, node);
+        const contractProperties = this.getContractPropertiesForComponent(
+          component,
+          node
+        );
         properties.push(...contractProperties);
       }
     }
@@ -192,14 +211,25 @@ export class PropertiesService {
   /**
    * Get properties from component contract for a semantic key
    */
-  private getContractPropertiesForSemanticKey(semanticKey: SemanticKeyType, node: NodeType): PropertyDefinition[] {
+  private getContractPropertiesForSemanticKey(
+    semanticKey: SemanticKeyType,
+    node: NodeType
+  ): PropertyDefinition[] {
     if (!this.componentIndex) return [];
 
     // Find component that has this semantic key
-    for (const [componentKey, component] of Object.entries(this.componentIndex.components)) {
-      if (component.semanticKeys?.[semanticKey]) {
-        const mapping = component.semanticKeys[semanticKey];
-        return this.getContractPropertiesForComponent(component, node, mapping.propDefaults);
+    for (const [componentKey, component] of Object.entries(
+      this.componentIndex.components
+    )) {
+      if ((component as ComponentIndexComponent)?.semanticKeys?.[semanticKey]) {
+        const mapping = (component as ComponentIndexComponent)?.semanticKeys?.[
+          semanticKey
+        ];
+        return this.getContractPropertiesForComponent(
+          component,
+          node,
+          mapping.propDefaults
+        );
       }
     }
 
@@ -261,8 +291,8 @@ export class PropertiesService {
   private mapTypeToPropertyType(type: string): PropertyDefinition["type"] {
     if (type.includes("|")) {
       // Union type - check if it's an enum-like union
-      const values = type.split("|").map(v => v.trim().replace(/['"]/g, ""));
-      if (values.length <= 5 && values.every(v => v.length < 20)) {
+      const values = type.split("|").map((v) => v.trim().replace(/['"]/g, ""));
+      if (values.length <= 5 && values.every((v) => v.length < 20)) {
         return "select";
       }
     }

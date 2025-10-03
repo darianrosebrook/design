@@ -1,0 +1,40 @@
+{
+  "name": "@paths-design/design-system",
+  "version": "0.1.0",
+  "description": "Design system components and primitives for Designer",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "designer",
+    "design-system",
+    "components",
+    "primitives",
+    "ui"
+  ],
+  "author": "@darianrosebrook",
+  "license": "MIT",
+  "dependencies": {
+    "@paths-design/design-tokens": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0",
+    "eslint": "^8.0.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

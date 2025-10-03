@@ -1,0 +1,24 @@
+{
+  "name": "@paths-design/design-tokens",
+  "version": "0.1.0",
+  "description": "Design tokens and theme utilities for Designer",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "generate-css": "node dist/generate-css.js"
+  },
+  "keywords": [
+    "designer",
+    "design-tokens",
+    "design-system",
+    "theme"
+  ],
+  "author": "@darianrosebrook",
+  "license": "MIT"
+}

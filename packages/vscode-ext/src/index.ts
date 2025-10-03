@@ -10,10 +10,13 @@ import * as vscode from "vscode";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { PropertiesPanelWebviewProvider } from "./properties-panel-webview";
-import type { CanvasDocumentType } from "@paths-design/canvas-schema";
-import type { SelectionState, PropertyChangeEvent } from "@paths-design/properties-panel";
-import type { ComponentIndex } from "@paths-design/component-indexer";
-import { PropertiesService } from "@paths-design/properties-panel";
+import type { CanvasDocumentType } from "../../canvas-schema/src/index.js";
+import type {
+  SelectionState,
+  PropertyChangeEvent,
+} from "../../properties-panel/src/index.js";
+import type { ComponentIndex } from "../../component-indexer/src/index.js";
+import { PropertiesService } from "../../properties-panel/src/index.js";
 
 export * from "./protocol/index.js";
 export * from "./security/index.js";
@@ -27,7 +30,10 @@ class DesignerExtension {
   private propertiesService: PropertiesService;
   private componentIndex: ComponentIndex | null = null;
   private currentDocument: CanvasDocumentType | null = null;
-  private currentSelection: SelectionState = { selectedNodeIds: [], focusedNodeId: null };
+  private currentSelection: SelectionState = {
+    selectedNodeIds: [],
+    focusedNodeId: null,
+  };
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
@@ -55,13 +61,22 @@ class DesignerExtension {
       const componentIndexPath = path.join(designDir, "components.index.json");
 
       if (fs.existsSync(componentIndexPath)) {
-        const componentIndexContent = fs.readFileSync(componentIndexPath, "utf-8");
-        const componentIndex = JSON.parse(componentIndexContent) as ComponentIndex;
+        const componentIndexContent = fs.readFileSync(
+          componentIndexPath,
+          "utf-8"
+        );
+        const componentIndex = JSON.parse(
+          componentIndexContent
+        ) as ComponentIndex;
 
         this.componentIndex = componentIndex;
         this.propertiesService.setComponentIndex(componentIndex);
 
-        console.log(`Loaded component index with ${Object.keys(componentIndex.components).length} components`);
+        console.log(
+          `Loaded component index with ${
+            Object.keys(componentIndex.components).length
+          } components`
+        );
       } else {
         console.log("No component index found, using basic properties only");
       }
@@ -78,9 +93,7 @@ class DesignerExtension {
     const openPropertiesPanelCommand = vscode.commands.registerCommand(
       "designer.openPropertiesPanel",
       () => {
-        vscode.commands.executeCommand(
-          "workbench.view.extension.designer"
-        );
+        vscode.commands.executeCommand("workbench.view.extension.designer");
       }
     );
 
@@ -154,12 +167,14 @@ class DesignerExtension {
     });
 
     // Watch for file changes
-    const fileWatcher = vscode.workspace.createFileSystemWatcher(
-      "**/*.canvas.json"
-    );
+    const fileWatcher =
+      vscode.workspace.createFileSystemWatcher("**/*.canvas.json");
 
     fileWatcher.onDidChange((uri) => {
-      if (this.currentDocument && uri.fsPath === vscode.workspace.asRelativePath(this.currentDocument.id)) {
+      if (
+        this.currentDocument &&
+        uri.fsPath === vscode.workspace.asRelativePath(this.currentDocument.id)
+      ) {
         this.loadDocument(uri);
       }
     });
@@ -183,7 +198,9 @@ class DesignerExtension {
       );
     } catch (error) {
       vscode.window.showErrorMessage(
-        `Failed to load canvas document: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to load canvas document: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -198,12 +215,12 @@ class DesignerExtension {
     if (document.artboards.length > 0) {
       // Flatten all nodes from all artboards
       const allNodes: any[] = [];
-      document.artboards.forEach(artboard => {
+      document.artboards.forEach((artboard) => {
         allNodes.push(...artboard.children);
 
         // Recursively collect all child nodes
         const collectNodes = (nodes: any[]) => {
-          nodes.forEach(node => {
+          nodes.forEach((node) => {
             if (node.children) {
               allNodes.push(...node.children);
               collectNodes(node.children);
@@ -242,12 +259,17 @@ class DesignerExtension {
       return;
     }
 
-    // TODO: Apply the property change to the document
-    // This would involve updating the canvas document and saving it
-    console.log("Property change received:", event);
+    // Delegate to properties panel provider for full handling
+    // This includes applying the change, saving, and notifying other views
+    console.log("Property change received in extension:", event);
+  }
 
-    // For now, just acknowledge the change
-    this.propertiesPanelProvider.notifyPropertyChanged(event);
+  /**
+   * Update the current document (called by properties panel provider after changes)
+   * @internal
+   */
+  _updateDocument(document: CanvasDocumentType): void {
+    this.updateDocument(document);
   }
 
   /**

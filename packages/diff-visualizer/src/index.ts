@@ -3,7 +3,11 @@
  * @author @darianrosebrook
  */
 
-import type { CanvasDocumentType, NodeType, ArtboardType } from "@paths-design/canvas-schema";
+import type {
+  CanvasDocumentType,
+  NodeType,
+  ArtboardType,
+} from "@paths-design/canvas-schema";
 
 /**
  * Diff result types
@@ -96,8 +100,12 @@ export class DiffVisualizer {
     nodeDiffs: SemanticDiff[],
     propertyChanges: PropertyChange[]
   ): void {
-    const oldArtboards = new Map<string, ArtboardType>(oldDoc.artboards.map((ab: ArtboardType) => [ab.id, ab]));
-    const newArtboards = new Map<string, ArtboardType>(newDoc.artboards.map((ab: ArtboardType) => [ab.id, ab]));
+    const oldArtboards = new Map<string, ArtboardType>(
+      oldDoc.artboards.map((ab: ArtboardType) => [ab.id, ab])
+    );
+    const newArtboards = new Map<string, ArtboardType>(
+      newDoc.artboards.map((ab: ArtboardType) => [ab.id, ab])
+    );
 
     // Find removed artboards
     for (const [id, oldArtboard] of oldArtboards) {
@@ -106,7 +114,9 @@ export class DiffVisualizer {
           type: "removed",
           nodeId: id,
           description: `Removed artboard "${oldArtboard.name}"`,
-          oldPath: [`artboards[${oldDoc.artboards.indexOf(oldArtboard as any)}]`],
+          oldPath: [
+            `artboards[${oldDoc.artboards.indexOf(oldArtboard as any)}]`,
+          ],
         });
       }
     }
@@ -118,11 +128,18 @@ export class DiffVisualizer {
           type: "added",
           nodeId: id,
           description: `Added artboard "${newArtboard.name}"`,
-          newPath: [`artboards[${newDoc.artboards.indexOf(newArtboard as any)}]`],
+          newPath: [
+            `artboards[${newDoc.artboards.indexOf(newArtboard as any)}]`,
+          ],
         });
       } else {
         const oldArtboard = oldArtboards.get(id)!;
-        this.compareArtboardNodes(oldArtboard, newArtboard, nodeDiffs, propertyChanges);
+        this.compareArtboardNodes(
+          oldArtboard,
+          newArtboard,
+          nodeDiffs,
+          propertyChanges
+        );
       }
     }
   }
@@ -171,7 +188,14 @@ export class DiffVisualizer {
         });
       } else {
         const { node: oldNode, path: oldPath } = oldNodes.get(id)!;
-        this.compareNodes(oldNode, newNode, oldPath, newPath, nodeDiffs, propertyChanges);
+        this.compareNodes(
+          oldNode,
+          newNode,
+          oldPath,
+          newPath,
+          nodeDiffs,
+          propertyChanges
+        );
       }
     }
   }
@@ -193,7 +217,9 @@ export class DiffVisualizer {
         type: "moved",
         nodeId: oldNode.id,
         semanticKey: (oldNode as any).semanticKey,
-        description: `Moved ${this.describeNode(oldNode)} from ${this.pathToString(oldPath)} to ${this.pathToString(newPath)}`,
+        description: `Moved ${this.describeNode(
+          oldNode
+        )} from ${this.pathToString(oldPath)} to ${this.pathToString(newPath)}`,
         oldPath,
         newPath,
       });
@@ -208,7 +234,13 @@ export class DiffVisualizer {
 
     // Compare children if both nodes have them
     if ("children" in oldNode && "children" in newNode) {
-      this.compareChildNodes(oldNode.children, newNode.children, [...oldPath, "children"], nodeDiffs, propertyChanges);
+      this.compareChildNodes(
+        oldNode.children,
+        newNode.children,
+        [...oldPath, "children"],
+        nodeDiffs,
+        propertyChanges
+      );
     }
   }
 
@@ -222,8 +254,12 @@ export class DiffVisualizer {
     nodeDiffs: SemanticDiff[],
     propertyChanges: PropertyChange[]
   ): void {
-    const oldChildMap = new Map(oldChildren.map((child, index) => [child.id, { child, index }]));
-    const newChildMap = new Map(newChildren.map((child, index) => [child.id, { child, index }]));
+    const oldChildMap = new Map(
+      oldChildren.map((child, index) => [child.id, { child, index }])
+    );
+    const newChildMap = new Map(
+      newChildren.map((child, index) => [child.id, { child, index }])
+    );
 
     // Find removed children
     for (const [id, { child: oldChild, index }] of oldChildMap) {
@@ -253,7 +289,14 @@ export class DiffVisualizer {
         const oldPath = [...parentPath, oldIndex];
         const newPath = [...parentPath, index];
 
-        this.compareNodes(oldChild, newChild, oldPath, newPath, nodeDiffs, propertyChanges);
+        this.compareNodes(
+          oldChild,
+          newChild,
+          oldPath,
+          newPath,
+          nodeDiffs,
+          propertyChanges
+        );
       }
     }
   }
@@ -261,7 +304,10 @@ export class DiffVisualizer {
   /**
    * Compare properties of two nodes
    */
-  private compareNodeProperties(oldNode: NodeType, newNode: NodeType): PropertyChange[] {
+  private compareNodeProperties(
+    oldNode: NodeType,
+    newNode: NodeType
+  ): PropertyChange[] {
     const changes: PropertyChange[] = [];
 
     // Compare semantic keys
@@ -301,7 +347,10 @@ export class DiffVisualizer {
 
     // Compare component props for component nodes
     if (oldNode.type === "component" && newNode.type === "component") {
-      if (JSON.stringify((oldNode as any).props) !== JSON.stringify((newNode as any).props)) {
+      if (
+        JSON.stringify((oldNode as any).props) !==
+        JSON.stringify((newNode as any).props)
+      ) {
         changes.push({
           property: "props",
           oldValue: (oldNode as any).props,
@@ -317,7 +366,11 @@ export class DiffVisualizer {
   /**
    * Build a map of nodes by ID with their paths
    */
-  private buildNodeMap(nodes: NodeType[], currentPath: NodePath, nodeMap: Map<string, { node: NodeType; path: NodePath }>): void {
+  private buildNodeMap(
+    nodes: NodeType[],
+    currentPath: NodePath,
+    nodeMap: Map<string, { node: NodeType; path: NodePath }>
+  ): void {
     nodes.forEach((node, index) => {
       const path = [...currentPath, index];
       nodeMap.set(node.id, { node, path });
@@ -361,13 +414,16 @@ export class DiffVisualizer {
   /**
    * Generate summary statistics from diffs
    */
-  private generateSummary(nodeDiffs: SemanticDiff[], propertyChanges: PropertyChange[]): DiffSummary {
-    const addedNodes = nodeDiffs.filter(d => d.type === "added").length;
-    const removedNodes = nodeDiffs.filter(d => d.type === "removed").length;
-    const modifiedNodes = nodeDiffs.filter(d => d.type === "modified").length;
-    const movedNodes = nodeDiffs.filter(d => d.type === "moved").length;
+  private generateSummary(
+    nodeDiffs: SemanticDiff[],
+    propertyChanges: PropertyChange[]
+  ): DiffSummary {
+    const addedNodes = nodeDiffs.filter((d) => d.type === "added").length;
+    const removedNodes = nodeDiffs.filter((d) => d.type === "removed").length;
+    const modifiedNodes = nodeDiffs.filter((d) => d.type === "modified").length;
+    const movedNodes = nodeDiffs.filter((d) => d.type === "moved").length;
 
-    const semanticChanges = nodeDiffs.filter(d => d.semanticKey).length;
+    const semanticChanges = nodeDiffs.filter((d) => d.semanticKey).length;
     const structuralChanges = nodeDiffs.length - semanticChanges;
 
     return {
@@ -395,19 +451,19 @@ export class DiffVisualizer {
             <span class="stat-value">${summary.totalChanges}</span>
             <span class="stat-label">Total Changes</span>
           </div>
-          <div class="stat ${summary.addedNodes > 0 ? 'stat-added' : ''}">
+          <div class="stat ${summary.addedNodes > 0 ? "stat-added" : ""}">
             <span class="stat-value">${summary.addedNodes}</span>
             <span class="stat-label">Added</span>
           </div>
-          <div class="stat ${summary.removedNodes > 0 ? 'stat-removed' : ''}">
+          <div class="stat ${summary.removedNodes > 0 ? "stat-removed" : ""}">
             <span class="stat-value">${summary.removedNodes}</span>
             <span class="stat-label">Removed</span>
           </div>
-          <div class="stat ${summary.modifiedNodes > 0 ? 'stat-modified' : ''}">
+          <div class="stat ${summary.modifiedNodes > 0 ? "stat-modified" : ""}">
             <span class="stat-value">${summary.modifiedNodes}</span>
             <span class="stat-label">Modified</span>
           </div>
-          <div class="stat ${summary.movedNodes > 0 ? 'stat-moved' : ''}">
+          <div class="stat ${summary.movedNodes > 0 ? "stat-moved" : ""}">
             <span class="stat-value">${summary.movedNodes}</span>
             <span class="stat-label">Moved</span>
           </div>
@@ -422,10 +478,10 @@ export class DiffVisualizer {
           <ul class="diff-list">
       `;
 
-      nodeDiffs.forEach(diff => {
+      nodeDiffs.forEach((diff) => {
         const semanticBadge = diff.semanticKey
           ? `<span class="semantic-badge">${diff.semanticKey}</span>`
-          : '';
+          : "";
 
         html += `
           <li class="diff-item diff-${diff.type}">
@@ -449,7 +505,7 @@ export class DiffVisualizer {
           <ul class="diff-list">
       `;
 
-      propertyChanges.forEach(change => {
+      propertyChanges.forEach((change) => {
         html += `
           <li class="diff-item diff-property">
             <span class="diff-property">${change.property}</span>
@@ -482,9 +538,13 @@ export class DiffVisualizer {
     if (nodeDiffs.length > 0) {
       markdown += `### Node Changes\n\n`;
 
-      nodeDiffs.forEach(diff => {
-        const semanticBadge = diff.semanticKey ? ` \`${diff.semanticKey}\`` : '';
-        markdown += `- **${diff.type.charAt(0).toUpperCase() + diff.type.slice(1)}**: ${diff.description}${semanticBadge}\n`;
+      nodeDiffs.forEach((diff) => {
+        const semanticBadge = diff.semanticKey
+          ? ` \`${diff.semanticKey}\``
+          : "";
+        markdown += `- **${
+          diff.type.charAt(0).toUpperCase() + diff.type.slice(1)
+        }**: ${diff.description}${semanticBadge}\n`;
       });
 
       markdown += `\n`;
@@ -493,7 +553,7 @@ export class DiffVisualizer {
     if (propertyChanges.length > 0) {
       markdown += `### Property Changes\n\n`;
 
-      propertyChanges.forEach(change => {
+      propertyChanges.forEach((change) => {
         markdown += `- **${change.property}**: ${change.description}\n`;
       });
 

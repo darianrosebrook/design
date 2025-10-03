@@ -3,7 +3,11 @@
  * @author @darianrosebrook
  */
 
-import type { CanvasDocumentType, NodeType, FrameNodeType } from "@paths-design/canvas-schema";
+import type {
+  CanvasDocumentType,
+  NodeType,
+  FrameNodeType,
+} from "@paths-design/canvas-schema";
 import { ulid } from "ulidx";
 import * as fc from "fast-check";
 
@@ -40,14 +44,17 @@ export interface AugmentationConfig {
  */
 export interface ComponentIndex {
   version: string;
-  components: Record<string, {
-    props: Array<{
-      name: string;
-      type: string;
-      enum?: string[];
-      defaultValue?: unknown;
-    }>;
-  }>;
+  components: Record<
+    string,
+    {
+      props: Array<{
+        name: string;
+        type: string;
+        enum?: string[];
+        defaultValue?: unknown;
+      }>;
+    }
+  >;
 }
 
 /**
@@ -115,7 +122,11 @@ export class AugmentationEngine {
       layoutPerturbation: { enabled: true, tolerance: 0.1 },
       tokenPermutation: { enabled: true },
       propFuzzing: { enabled: true },
-      svgFuzzing: { enabled: true, windingRuleVariation: true, strokeWidthVariation: true },
+      svgFuzzing: {
+        enabled: true,
+        windingRuleVariation: true,
+        strokeWidthVariation: true,
+      },
       a11yValidation: { enabled: true, strict: false, contrastThreshold: "AA" },
       ...config,
     };
@@ -141,9 +152,13 @@ export class AugmentationEngine {
   /**
    * Augment a single document
    */
-  async augmentDocument(document: CanvasDocumentType): Promise<AugmentedDocument> {
+  async augmentDocument(
+    document: CanvasDocumentType
+  ): Promise<AugmentedDocument> {
     const transformations: TransformationRecord[] = [];
-    const augmented = JSON.parse(JSON.stringify(document)) as CanvasDocumentType;
+    const augmented = JSON.parse(
+      JSON.stringify(document)
+    ) as CanvasDocumentType;
 
     // Apply layout perturbations
     if (this.config.layoutPerturbation?.enabled) {
@@ -170,7 +185,9 @@ export class AugmentationEngine {
     if (this.config.a11yValidation?.enabled) {
       a11yValidation = this.validateAccessibility(augmented);
       if (this.config.a11yValidation.strict && !a11yValidation.passed) {
-        throw new Error(`Accessibility validation failed: ${a11yValidation.violations.length} violations found`);
+        throw new Error(
+          `Accessibility validation failed: ${a11yValidation.violations.length} violations found`
+        );
       }
     }
 
@@ -200,13 +217,16 @@ export class AugmentationEngine {
         const xPerturb = (Math.random() - 0.5) * frame.width * tolerance;
         const yPerturb = (Math.random() - 0.5) * frame.height * tolerance;
         const widthPerturb = (Math.random() - 0.5) * frame.width * perturbation;
-        const heightPerturb = (Math.random() - 0.5) * frame.height * perturbation;
+        const heightPerturb =
+          (Math.random() - 0.5) * frame.height * perturbation;
 
         transformations.push({
           type: "layout",
           nodeId: node.id,
           nodePath: path,
-          description: `Perturbed frame coordinates by ${Math.round(tolerance * 100)}%`,
+          description: `Perturbed frame coordinates by ${Math.round(
+            tolerance * 100
+          )}%`,
           before: { ...frame },
           after: {
             x: Math.max(0, frame.x + xPerturb),
@@ -244,15 +264,27 @@ export class AugmentationEngine {
   ): void {
     // Define common token permutations for testing
     const tokenPermutations: Record<string, string[]> = {
-      "tokens.color.surface": ["tokens.color.background", "tokens.color.primary"],
-      "tokens.color.background": ["tokens.color.surface", "tokens.color.secondary"],
+      "tokens.color.surface": [
+        "tokens.color.background",
+        "tokens.color.primary",
+      ],
+      "tokens.color.background": [
+        "tokens.color.surface",
+        "tokens.color.secondary",
+      ],
       "tokens.color.primary": ["tokens.color.secondary", "tokens.color.accent"],
-      "tokens.color.text": ["tokens.color.textSecondary", "tokens.color.textInverse"],
+      "tokens.color.text": [
+        "tokens.color.textSecondary",
+        "tokens.color.textInverse",
+      ],
       ...this.config.tokenPermutation?.tokenMap,
     };
 
     // Find all token references in the document
-    function findTokens(obj: any, path = ""): Array<{ path: string; token: string }> {
+    function findTokens(
+      obj: any,
+      path = ""
+    ): Array<{ path: string; token: string }> {
       const tokens: Array<{ path: string; token: string }> = [];
 
       if (typeof obj === "object" && obj !== null) {
@@ -280,7 +312,8 @@ export class AugmentationEngine {
     tokensToPermute.forEach(({ path, token }) => {
       const permutations = tokenPermutations[token];
       if (permutations && permutations.length > 0) {
-        const newToken = permutations[Math.floor(Math.random() * permutations.length)];
+        const newToken =
+          permutations[Math.floor(Math.random() * permutations.length)];
 
         transformations.push({
           type: "token",
@@ -294,7 +327,9 @@ export class AugmentationEngine {
         // Apply the token swap (simplified - would need proper path resolution)
         // For now, just log that we would apply the transformation
         // In a real implementation, this would use a proper JSON path library
-        console.log(`Would apply token swap: ${token} → ${newToken} at path: ${path}`);
+        console.log(
+          `Would apply token swap: ${token} → ${newToken} at path: ${path}`
+        );
       }
     });
   }
@@ -313,11 +348,15 @@ export class AugmentationEngine {
         const component = componentIndex.components[node.componentKey];
         if (component?.props) {
           // Fuzz a subset of props
-          const propsToFuzz = component.props.slice(0, Math.min(2, component.props.length));
+          const propsToFuzz = component.props.slice(
+            0,
+            Math.min(2, component.props.length)
+          );
 
           propsToFuzz.forEach((prop) => {
             if (prop.enum && prop.enum.length > 0) {
-              const newValue = prop.enum[Math.floor(Math.random() * prop.enum.length)];
+              const newValue =
+                prop.enum[Math.floor(Math.random() * prop.enum.length)];
               const oldValue = node.props?.[prop.name];
 
               if (newValue !== oldValue) {
@@ -365,7 +404,10 @@ export class AugmentationEngine {
       if (node.type === "vector") {
         const vectorNode = node as any;
 
-        if (engine.config.svgFuzzing?.windingRuleVariation && vectorNode.windingRule) {
+        if (
+          engine.config.svgFuzzing?.windingRuleVariation &&
+          vectorNode.windingRule
+        ) {
           const oldRule = vectorNode.windingRule;
           const newRule = oldRule === "nonzero" ? "evenodd" : "nonzero";
 
@@ -402,7 +444,9 @@ export class AugmentationEngine {
   /**
    * Validate accessibility constraints on a canvas document
    */
-  private validateAccessibility(document: CanvasDocumentType): A11yValidationResult {
+  private validateAccessibility(
+    document: CanvasDocumentType
+  ): A11yValidationResult {
     const violations: A11yViolation[] = [];
     const warnings: A11yWarning[] = [];
 
@@ -448,7 +492,8 @@ export class AugmentationEngine {
             nodeId: node.id,
             nodePath: path,
             message: `Text color uses token "${textColor}" - contrast ratio should be validated after token resolution`,
-            suggestion: "Ensure resolved color meets WCAG contrast requirements",
+            suggestion:
+              "Ensure resolved color meets WCAG contrast requirements",
           });
         }
       }
@@ -508,7 +553,8 @@ export class AugmentationEngine {
             nodeId: node.id,
             nodePath: path,
             message: `CTA semantic key "${semanticKey}" used on text node - may not be interactive`,
-            suggestion: "Consider using frame or component nodes for interactive CTAs",
+            suggestion:
+              "Consider using frame or component nodes for interactive CTAs",
           });
         }
       }
@@ -549,14 +595,18 @@ export class AugmentationEngine {
         });
       }
 
-      if (node.semanticKey?.startsWith("cta.") || node.name.toLowerCase().includes("button")) {
+      if (
+        node.semanticKey?.startsWith("cta.") ||
+        node.name.toLowerCase().includes("button")
+      ) {
         // Interactive elements should have focus styles
         warnings.push({
           type: "focus",
           nodeId: node.id,
           nodePath: path,
           message: `Interactive element should have visible focus indicator`,
-          suggestion: "Add focus styles or ensure component handles focus visibility",
+          suggestion:
+            "Add focus styles or ensure component handles focus visibility",
         });
       }
 
@@ -586,7 +636,10 @@ export class AugmentationEngine {
     // Check for proper ARIA usage patterns
     function validateNode(node: NodeType, path: string): void {
       // Check for form elements without labels
-      if (node.type === "component" && node.componentKey?.toLowerCase().includes("input")) {
+      if (
+        node.type === "component" &&
+        node.componentKey?.toLowerCase().includes("input")
+      ) {
         warnings.push({
           type: "aria",
           nodeId: node.id,
@@ -597,7 +650,10 @@ export class AugmentationEngine {
       }
 
       // Check for landmark roles
-      if (node.semanticKey?.startsWith("nav.") && !node.name.toLowerCase().includes("nav")) {
+      if (
+        node.semanticKey?.startsWith("nav.") &&
+        !node.name.toLowerCase().includes("nav")
+      ) {
         warnings.push({
           type: "aria",
           nodeId: node.id,
@@ -608,7 +664,11 @@ export class AugmentationEngine {
       }
 
       // Check for heading hierarchy
-      if (node.type === "text" && node.textStyle?.size && node.textStyle.size > 24) {
+      if (
+        node.type === "text" &&
+        node.textStyle?.size &&
+        node.textStyle.size > 24
+      ) {
         warnings.push({
           type: "aria",
           nodeId: node.id,
@@ -663,7 +723,15 @@ export class CanvasGenerators {
         width: fc.integer({ min: 1, max: 2000 }),
         height: fc.integer({ min: 1, max: 2000 }),
       }),
-      children: fc.array(fc.oneof(this.textNode(), this.vectorNode(), this.imageNode(), this.componentInstanceNode()), { maxLength: 10 }),
+      children: fc.array(
+        fc.oneof(
+          this.textNode(),
+          this.vectorNode(),
+          this.imageNode(),
+          this.componentInstanceNode()
+        ),
+        { maxLength: 10 }
+      ),
     });
   }
 
@@ -711,14 +779,30 @@ export class CanvasGenerators {
       ),
       layout: fc.oneof(
         fc.record({
-          mode: fc.oneof(fc.constant("absolute"), fc.constant("flex"), fc.constant("grid")),
-          direction: fc.oneof(fc.constant("row"), fc.constant("column"), fc.constant(undefined)),
+          mode: fc.oneof(
+            fc.constant("absolute"),
+            fc.constant("flex"),
+            fc.constant("grid")
+          ),
+          direction: fc.oneof(
+            fc.constant("row"),
+            fc.constant("column"),
+            fc.constant(undefined)
+          ),
           gap: fc.oneof(fc.nat(), fc.constant(undefined)),
           padding: fc.oneof(fc.nat(), fc.constant(undefined)),
         }),
         fc.constant(undefined)
       ),
-      children: fc.array(fc.oneof(this.textNode(), this.vectorNode(), this.imageNode(), this.componentInstanceNode()), { maxLength: 5 }),
+      children: fc.array(
+        fc.oneof(
+          this.textNode(),
+          this.vectorNode(),
+          this.imageNode(),
+          this.componentInstanceNode()
+        ),
+        { maxLength: 5 }
+      ),
     });
   }
 
@@ -756,10 +840,23 @@ export class CanvasGenerators {
       textStyle: fc.oneof(
         fc.record({
           family: fc.oneof(fc.string(), fc.constant(undefined)),
-          size: fc.oneof(fc.integer({ min: 8, max: 72 }), fc.constant(undefined)),
-          lineHeight: fc.oneof(fc.integer({ min: 8, max: 100 }), fc.constant(undefined)),
-          weight: fc.oneof(fc.constant("normal"), fc.constant("bold"), fc.constant(undefined)),
-          letterSpacing: fc.oneof(fc.integer({ min: -10, max: 10 }), fc.constant(undefined)),
+          size: fc.oneof(
+            fc.integer({ min: 8, max: 72 }),
+            fc.constant(undefined)
+          ),
+          lineHeight: fc.oneof(
+            fc.integer({ min: 8, max: 100 }),
+            fc.constant(undefined)
+          ),
+          weight: fc.oneof(
+            fc.constant("normal"),
+            fc.constant("bold"),
+            fc.constant(undefined)
+          ),
+          letterSpacing: fc.oneof(
+            fc.integer({ min: -10, max: 10 }),
+            fc.constant(undefined)
+          ),
           color: fc.oneof(fc.string(), fc.constant(undefined)),
         }),
         fc.constant(undefined)
@@ -833,7 +930,12 @@ export class CanvasGenerators {
         fc.constant(undefined)
       ),
       src: fc.string(),
-      mode: fc.oneof(fc.constant("cover"), fc.constant("contain"), fc.constant("fill"), fc.constant("none")),
+      mode: fc.oneof(
+        fc.constant("cover"),
+        fc.constant("contain"),
+        fc.constant("fill"),
+        fc.constant("none")
+      ),
     });
   }
 
@@ -876,7 +978,9 @@ export class CanvasGenerators {
 /**
  * Convenience function for creating augmentation engine
  */
-export function createAugmentationEngine(config?: AugmentationConfig): AugmentationEngine {
+export function createAugmentationEngine(
+  config?: AugmentationConfig
+): AugmentationEngine {
   return new AugmentationEngine(config);
 }
 

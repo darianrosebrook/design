@@ -7,7 +7,7 @@
 ```jsonc
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://localpencil.dev/schemas/canvas-0.1.json",
+  "$id": "https://paths.design.dev/schemas/canvas-0.1.json",
   "title": "CanvasDocument",
   "type": "object",
   "required": ["schemaVersion", "id", "name", "artboards"],

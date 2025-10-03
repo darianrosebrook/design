@@ -4,7 +4,12 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { DiffVisualizer, compareCanvasDocuments, generateHTMLDiff, generateMarkdownDiff } from "../src/index.js";
+import {
+  DiffVisualizer,
+  compareCanvasDocuments,
+  generateHTMLDiff,
+  generateMarkdownDiff,
+} from "../src/index.js";
 
 describe("DiffVisualizer", () => {
   let visualizer: DiffVisualizer;
@@ -93,7 +98,10 @@ describe("DiffVisualizer", () => {
         ],
       };
 
-      const result = visualizer.compareDocuments(baseDocument, modifiedDocument);
+      const result = visualizer.compareDocuments(
+        baseDocument,
+        modifiedDocument
+      );
 
       expect(result.summary.addedNodes).toBe(1);
       expect(result.nodeDiffs).toHaveLength(1);
@@ -107,7 +115,10 @@ describe("DiffVisualizer", () => {
         artboards: [],
       };
 
-      const result = visualizer.compareDocuments(baseDocument, modifiedDocument);
+      const result = visualizer.compareDocuments(
+        baseDocument,
+        modifiedDocument
+      );
 
       expect(result.summary.removedNodes).toBe(1);
       expect(result.nodeDiffs).toHaveLength(1);
@@ -129,10 +140,13 @@ describe("DiffVisualizer", () => {
         ],
       };
 
-      const result = visualizer.compareDocuments(baseDocument, modifiedDocument);
+      const result = visualizer.compareDocuments(
+        baseDocument,
+        modifiedDocument
+      );
 
       expect(result.summary.movedNodes).toBeGreaterThan(0);
-      const moveDiffs = result.nodeDiffs.filter(d => d.type === "moved");
+      const moveDiffs = result.nodeDiffs.filter((d) => d.type === "moved");
       expect(moveDiffs.length).toBeGreaterThan(0);
       expect(moveDiffs[0].description).toContain("Moved");
       expect(moveDiffs[0].oldPath).toBeDefined();
@@ -155,11 +169,16 @@ describe("DiffVisualizer", () => {
         ],
       };
 
-      const result = visualizer.compareDocuments(baseDocument, modifiedDocument);
+      const result = visualizer.compareDocuments(
+        baseDocument,
+        modifiedDocument
+      );
 
       expect(result.propertyChanges).toHaveLength(1);
       expect(result.propertyChanges[0].property).toBe("semanticKey");
-      expect(result.propertyChanges[0].description).toContain("Changed semantic key");
+      expect(result.propertyChanges[0].description).toContain(
+        "Changed semantic key"
+      );
     });
 
     it("detects text content changes", () => {
@@ -183,12 +202,19 @@ describe("DiffVisualizer", () => {
         ],
       };
 
-      const result = visualizer.compareDocuments(baseDocument, modifiedDocument);
+      const result = visualizer.compareDocuments(
+        baseDocument,
+        modifiedDocument
+      );
 
       expect(result.propertyChanges.length).toBeGreaterThan(0);
-      const textChanges = result.propertyChanges.filter(c => c.property === "text");
+      const textChanges = result.propertyChanges.filter(
+        (c) => c.property === "text"
+      );
       expect(textChanges.length).toBeGreaterThan(0);
-      expect(result.propertyChanges[0].description).toContain("Changed text content");
+      expect(result.propertyChanges[0].description).toContain(
+        "Changed text content"
+      );
     });
 
     it("includes semantic keys in diff descriptions", () => {
@@ -207,9 +233,12 @@ describe("DiffVisualizer", () => {
         ],
       };
 
-      const result = visualizer.compareDocuments(baseDocument, modifiedDocument);
+      const result = visualizer.compareDocuments(
+        baseDocument,
+        modifiedDocument
+      );
 
-      const titleRemoval = result.nodeDiffs.find(d =>
+      const titleRemoval = result.nodeDiffs.find((d) =>
         d.description.includes("hero.title")
       );
       expect(titleRemoval).toBeDefined();
@@ -239,7 +268,10 @@ describe("DiffVisualizer", () => {
         ],
       };
 
-      const result = visualizer.compareDocuments(baseDocument, modifiedDocument);
+      const result = visualizer.compareDocuments(
+        baseDocument,
+        modifiedDocument
+      );
       const html = visualizer.generateHTMLDiff(result);
 
       expect(html).toContain("Canvas Document Changes");
@@ -275,7 +307,10 @@ describe("DiffVisualizer", () => {
         ],
       };
 
-      const result = visualizer.compareDocuments(baseDocument, modifiedDocument);
+      const result = visualizer.compareDocuments(
+        baseDocument,
+        modifiedDocument
+      );
       const markdown = visualizer.generateMarkdownDiff(result);
 
       expect(markdown).toContain("Canvas Document Changes");
@@ -308,7 +343,10 @@ describe("DiffVisualizer", () => {
         ],
       };
 
-      const result = visualizer.compareDocuments(baseDocument, modifiedDocument);
+      const result = visualizer.compareDocuments(
+        baseDocument,
+        modifiedDocument
+      );
 
       expect(result.summary.totalChanges).toBeGreaterThan(0);
       expect(result.summary.movedNodes).toBeGreaterThan(0);

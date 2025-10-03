@@ -15,8 +15,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@paths-design/canvas-schema": "file:../canvas-schema",
-    "@paths-design/canvas-engine": "file:../canvas-engine",
+    "@paths-design/canvas-schema": "workspace:*",
+    "@paths-design/canvas-engine": "workspace:*",
+    "@paths-design/canvas-renderer-dom": "workspace:*",
+    "@paths-design/component-indexer": "workspace:*",
+    "@paths-design/properties-panel": "workspace:*",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -28,6 +31,33 @@
   },
   "engines": {
     "vscode": "^1.84.0"
+  },
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "designer",
+          "title": "Designer",
+          "icon": "$(paintcan)"
+        }
+      ]
+    },
+    "views": {
+      "designer": [
+        {
+          "type": "webview",
+          "id": "designer.propertiesPanel",
+          "name": "Properties",
+          "when": "workspaceHasCanvasFiles"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "designer.openPropertiesPanel",
+        "title": "Open Properties Panel"
+      }
+    ]
   }
 }
 

@@ -170,17 +170,17 @@
 
 > **Source: goal.md §2**
 > ```json
-> "$id": "https://localpencil.dev/schemas/canvas-0.1.json"
+> "$id": "https://paths.design.dev/schemas/canvas-0.1.json"
 > ```
 
 > **Source: docs/data-model.md**
 > ```json
-> "$id": "https://localpencil.dev/schemas/canvas-0.1.json"
+> "$id": "https://paths.design.dev/schemas/canvas-0.1.json"
 > ```
 
 **Alignment**: ✅ Schema URL is consistent
 
-**Note**: Domain `localpencil.dev` is used consistently. Need to decide if this is final or placeholder.
+**Note**: Domain `paths.design.dev` is used consistently. Need to decide if this is final or placeholder.
 
 ---
 
@@ -207,7 +207,7 @@
 
 > **Source: goal.md §4**
 > ```json
-> "$schema": "https://localpencil.dev/schemas/tokens-0.1.json"
+> "$schema": "https://paths.design.dev/schemas/tokens-0.1.json"
 > ```
 
 > **Source: DESIGNER-001**
@@ -730,7 +730,7 @@
 11. **Update docs/**: Create missing documentation files
 12. **Clarify API performance**: Define which APIs the 50ms p95 applies to
 13. **Extension naming**: Standardize marketplace vs monorepo naming
-14. **Schema domain**: Decide if `localpencil.dev` is final or placeholder
+14. **Schema domain**: Decide if `paths.design.dev` is final or placeholder
 
 ---
 

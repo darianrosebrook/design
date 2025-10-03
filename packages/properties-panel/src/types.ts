@@ -3,9 +3,12 @@
  * @author @darianrosebrook
  */
 
-import type { NodeType, BaseNodeType } from "@paths-design/canvas-schema";
-import type { SemanticKeyType } from "@paths-design/canvas-schema";
-import type { ComponentIndex } from "@paths-design/component-indexer";
+import type {
+  NodeType,
+  BaseNodeType,
+  SemanticKeyType,
+} from "../../canvas-schema/src/index.js";
+import type { ComponentIndex } from "../../component-indexer/src/index.js";
 
 /**
  * Selection state for the properties panel

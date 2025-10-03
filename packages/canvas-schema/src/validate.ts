@@ -22,7 +22,7 @@ addFormats(ajv);
  * Canvas document schema
  */
 const schema = {
-  $id: "https://localpencil.dev/schemas/canvas-0.1.json",
+  $id: "https://paths.design.dev/schemas/canvas-0.1.json",
   title: "CanvasDocument",
   type: "object",
   required: ["schemaVersion", "id", "name", "artboards"],

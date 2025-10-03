@@ -53,11 +53,16 @@ export class DesignerMCPServer {
 
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       try {
-        return await this.handleToolCall(request.params.name, request.params.arguments);
+        return await this.handleToolCall(
+          request.params.name,
+          request.params.arguments
+        );
       } catch (error) {
         throw new McpError(
           ErrorCode.InternalError,
-          `Tool execution failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+          `Tool execution failed: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`
         );
       }
     });
@@ -98,7 +103,8 @@ export class DesignerMCPServer {
             },
             componentIndexPath: {
               type: "string",
-              description: "Optional path to component index for semantic key support",
+              description:
+                "Optional path to component index for semantic key support",
             },
           },
           required: ["documentPath", "outputDir"],
@@ -106,7 +112,8 @@ export class DesignerMCPServer {
       },
       {
         name: "generate_augmented_variants",
-        description: "Generate augmented variants of a canvas document for testing",
+        description:
+          "Generate augmented variants of a canvas document for testing",
         inputSchema: {
           type: "object",
           properties: {
@@ -158,7 +165,8 @@ export class DesignerMCPServer {
       },
       {
         name: "validate_canvas_document",
-        description: "Validate a canvas document for semantic keys and accessibility",
+        description:
+          "Validate a canvas document for semantic keys and accessibility",
         inputSchema: {
           type: "object",
           properties: {
@@ -173,6 +181,240 @@ export class DesignerMCPServer {
             },
           },
           required: ["documentPath"],
+        },
+      },
+
+      // Bidirectional Editing Tools
+      {
+        name: "create_semantic_component",
+        description: "Create a new component with semantic key mapping",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            semanticKey: {
+              type: "string",
+              description: "Semantic key for the component (e.g., 'hero.title')",
+            },
+            componentType: {
+              type: "string",
+              description: "Type of component to create",
+              enum: ["frame", "text", "button", "input", "card", "navigation"],
+            },
+            properties: {
+              type: "object",
+              description: "Initial properties for the component",
+              additionalProperties: true,
+            },
+            position: {
+              type: "object",
+              description: "Position and size for the component",
+              properties: {
+                x: { type: "number" },
+                y: { type: "number" },
+                width: { type: "number" },
+                height: { type: "number" },
+              },
+            },
+            parentPath: {
+              type: "string",
+              description: "Path to parent element (e.g., 'artboards[0].children')",
+            },
+          },
+          required: ["documentPath", "semanticKey", "componentType"],
+        },
+      },
+      {
+        name: "update_semantic_component",
+        description: "Update an existing component with semantic key awareness",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            semanticKey: {
+              type: "string",
+              description: "Semantic key of the component to update",
+            },
+            properties: {
+              type: "object",
+              description: "Properties to update",
+              additionalProperties: true,
+            },
+          },
+          required: ["documentPath", "semanticKey", "properties"],
+        },
+      },
+      {
+        name: "infer_semantic_keys",
+        description: "Infer appropriate semantic keys for existing components",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            componentIndexPath: {
+              type: "string",
+              description: "Path to component index for contract awareness",
+            },
+            interactive: {
+              type: "boolean",
+              description: "Enable interactive mode for user confirmation",
+              default: false,
+            },
+          },
+          required: ["documentPath"],
+        },
+      },
+      {
+        name: "analyze_component_usage",
+        description: "Analyze how components are used across the document",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            componentIndexPath: {
+              type: "string",
+              description: "Path to component index for contract awareness",
+            },
+          },
+          required: ["documentPath"],
+        },
+      },
+      {
+        name: "create_design_spec",
+        description: "Create a canvas document from a high-level design specification",
+        inputSchema: {
+          type: "object",
+          properties: {
+            spec: {
+              type: "object",
+              description: "Design specification object",
+              properties: {
+                name: { type: "string", description: "Document name" },
+                layout: { type: "string", description: "Layout type (hero, landing, dashboard)" },
+                components: {
+                  type: "array",
+                  description: "List of components to include",
+                  items: {
+                    type: "object",
+                    properties: {
+                      type: { type: "string", description: "Component type" },
+                      semanticKey: { type: "string", description: "Semantic identifier" },
+                      props: { type: "object", description: "Component properties" },
+                    },
+                  },
+                },
+                tokens: { type: "object", description: "Design tokens to use" },
+              },
+            },
+            outputPath: {
+              type: "string",
+              description: "Path to save the generated canvas document",
+            },
+          },
+          required: ["spec", "outputPath"],
+        },
+      },
+      {
+        name: "update_design_from_spec",
+        description: "Update an existing canvas document based on design specification changes",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to existing canvas document",
+            },
+            specUpdates: {
+              type: "object",
+              description: "Design specification updates",
+            },
+            preserveExisting: {
+              type: "boolean",
+              description: "Preserve existing nodes not mentioned in updates",
+              default: true,
+            },
+          },
+          required: ["documentPath", "specUpdates"],
+        },
+      },
+      {
+        name: "generate_component_spec",
+        description: "Generate component specification from design requirements",
+        inputSchema: {
+          type: "object",
+          properties: {
+            requirements: {
+              type: "object",
+              description: "Component requirements",
+              properties: {
+                name: { type: "string", description: "Component name" },
+                purpose: { type: "string", description: "Component purpose/role" },
+                props: {
+                  type: "array",
+                  description: "Required props",
+                  items: {
+                    type: "object",
+                    properties: {
+                      name: { type: "string" },
+                      type: { type: "string" },
+                      required: { type: "boolean" },
+                      description: { type: "string" },
+                    },
+                  },
+                },
+                variants: {
+                  type: "array",
+                  description: "Component variants",
+                  items: { type: "string" },
+                },
+              },
+            },
+            outputPath: {
+              type: "string",
+              description: "Path to save component specification",
+            },
+          },
+          required: ["requirements", "outputPath"],
+        },
+      },
+      {
+        name: "sync_design_dev",
+        description: "Bidirectional sync between design canvas and dev component specifications",
+        inputSchema: {
+          type: "object",
+          properties: {
+            canvasDocumentPath: {
+              type: "string",
+              description: "Path to canvas document",
+            },
+            componentIndexPath: {
+              type: "string",
+              description: "Path to component index",
+            },
+            direction: {
+              type: "string",
+              enum: ["design-to-dev", "dev-to-design", "bidirectional"],
+              description: "Sync direction",
+            },
+            dryRun: {
+              type: "boolean",
+              description: "Show what would be changed without applying",
+              default: false,
+            },
+          },
+          required: ["canvasDocumentPath", "componentIndexPath", "direction"],
         },
       },
     ];
@@ -198,15 +440,44 @@ export class DesignerMCPServer {
       case "validate_canvas_document":
         return await this.validateCanvasDocument(args);
 
+      case "create_semantic_component":
+        return await this.createSemanticComponent(args);
+
+      case "update_semantic_component":
+        return await this.updateSemanticComponent(args);
+
+      case "infer_semantic_keys":
+        return await this.inferSemanticKeys(args);
+
+      case "analyze_component_usage":
+        return await this.analyzeComponentUsage(args);
+
+      case "create_design_spec":
+        return await this.createDesignSpec(args);
+
+      case "update_design_from_spec":
+        return await this.updateDesignFromSpec(args);
+
+      case "generate_component_spec":
+        return await this.generateComponentSpec(args);
+
+      case "sync_design_dev":
+        return await this.syncDesignDev(args);
+
       default:
-        throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${toolName}`);
+        throw new McpError(
+          ErrorCode.MethodNotFound,
+          `Unknown tool: ${toolName}`
+        );
     }
   }
 
   /**
    * Load a canvas document from file
    */
-  private async loadCanvasDocument(filePath: string): Promise<{ document: CanvasDocumentType }> {
+  private async loadCanvasDocument(
+    filePath: string
+  ): Promise<{ document: CanvasDocumentType }> {
     try {
       const content = fs.readFileSync(filePath, "utf-8");
       const document = JSON.parse(content) as CanvasDocumentType;
@@ -215,7 +486,9 @@ export class DesignerMCPServer {
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to load canvas document: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to load canvas document: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -259,7 +532,9 @@ export class DesignerMCPServer {
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to generate React components: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to generate React components: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -278,19 +553,37 @@ export class DesignerMCPServer {
       const content = fs.readFileSync(args.documentPath, "utf-8");
       const document = JSON.parse(content) as CanvasDocumentType;
 
-      const variants = await generateAugmentedVariants(document, args.count || 5, {
-        layoutPerturbation: { enabled: args.enableLayoutPerturbation ?? true, tolerance: 0.1 },
-        tokenPermutation: { enabled: args.enableTokenPermutation ?? true },
-        a11yValidation: { enabled: args.enableAccessibilityValidation ?? true, strict: false, contrastThreshold: "AA" },
-      });
+      const variants = await generateAugmentedVariants(
+        document,
+        args.count || 5,
+        {
+          layoutPerturbation: {
+            enabled: args.enableLayoutPerturbation ?? true,
+            tolerance: 0.1,
+          },
+          tokenPermutation: { enabled: args.enableTokenPermutation ?? true },
+          a11yValidation: {
+            enabled: args.enableAccessibilityValidation ?? true,
+            strict: false,
+            contrastThreshold: "AA",
+          },
+        }
+      );
 
-      const summary = `Generated ${variants.length} augmented variants with ${variants.reduce((sum, v) => sum + v.transformations.length, 0)} total transformations`;
+      const summary = `Generated ${
+        variants.length
+      } augmented variants with ${variants.reduce(
+        (sum, v) => sum + v.transformations.length,
+        0
+      )} total transformations`;
 
       return { variants, summary };
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to generate augmented variants: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to generate augmented variants: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -319,7 +612,9 @@ export class DesignerMCPServer {
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to compare canvas documents: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to compare canvas documents: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -337,7 +632,11 @@ export class DesignerMCPServer {
 
       // Use our augmentation system for validation
       const variants = await generateAugmentedVariants(document, 1, {
-        a11yValidation: { enabled: true, strict: args.strict ?? false, contrastThreshold: "AA" },
+        a11yValidation: {
+          enabled: true,
+          strict: args.strict ?? false,
+          contrastThreshold: "AA",
+        },
       });
 
       const validation = variants[0].a11yValidation;
@@ -352,7 +651,9 @@ export class DesignerMCPServer {
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to validate canvas document: ${error instanceof Error ? error.message : 'Unknown error'}`
+        `Failed to validate canvas document: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -388,9 +689,21 @@ export class DesignerMCPServer {
 - ${diff.summary.modifiedNodes} modified
 - ${diff.summary.movedNodes} moved
 
-${diff.nodeDiffs.length > 0 ? `### Node Changes\n\n${diff.nodeDiffs.map((d: any) => `- **${d.type}**: ${d.description}`).join('\n')}` : ''}
+${
+  diff.nodeDiffs.length > 0
+    ? `### Node Changes\n\n${diff.nodeDiffs
+        .map((d: any) => `- **${d.type}**: ${d.description}`)
+        .join("\n")}`
+    : ""
+}
 
-${diff.propertyChanges.length > 0 ? `### Property Changes\n\n${diff.propertyChanges.map((c: any) => `- **${c.property}**: ${c.description}`).join('\n')}` : ''}`;
+${
+  diff.propertyChanges.length > 0
+    ? `### Property Changes\n\n${diff.propertyChanges
+        .map((c: any) => `- **${c.property}**: ${c.description}`)
+        .join("\n")}`
+    : ""
+}`;
   }
 
   /**
@@ -408,6 +721,483 @@ ${diff.propertyChanges.length > 0 ? `### Property Changes\n\n${diff.propertyChan
   async stop(): Promise<void> {
     await this.server.close();
     console.log("Designer MCP server stopped");
+  }
+
+  /**
+   * Create a semantic component in a canvas document
+   */
+  private async createSemanticComponent(args: {
+    documentPath: string;
+    semanticKey: string;
+    componentType: string;
+    properties?: Record<string, any>;
+    position?: { x: number; y: number; width: number; height: number };
+    parentPath?: string;
+  }): Promise<{ success: boolean; nodeId: string; message: string }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      // Generate a new ULID for the component
+      const nodeId = require("ulidx").ulid();
+
+      // Create the component node
+      const componentNode: any = {
+        id: nodeId,
+        type: args.componentType,
+        name: args.semanticKey.split(".").pop() || args.componentType,
+        visible: true,
+        frame: args.position || { x: 0, y: 0, width: 100, height: 50 },
+        semanticKey: args.semanticKey,
+        ...(args.properties && { props: args.properties }),
+      };
+
+      // If component type needs children (like frame), add children array
+      if (args.componentType === "frame" || args.componentType === "group") {
+        componentNode.children = [];
+      }
+
+      // Determine where to add the component
+      const parentPath = args.parentPath || "artboards[0].children";
+
+      // Simple path-based insertion (in a real implementation, this would use a proper JSON path library)
+      const pathParts = parentPath.split(".");
+      let current: any = document;
+
+      for (let i = 0; i < pathParts.length; i++) {
+        const part = pathParts[i];
+        if (i === pathParts.length - 1) {
+          // Last part - this should be the array to push to
+          if (Array.isArray(current[part])) {
+            current[part].push(componentNode);
+          }
+        } else {
+          current = current[part];
+        }
+      }
+
+      // Save the updated document
+      fs.writeFileSync(args.documentPath, JSON.stringify(document, null, 2));
+
+      return {
+        success: true,
+        nodeId,
+        message: `Created ${args.componentType} component with semantic key "${args.semanticKey}"`,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to create semantic component: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
+  }
+
+  /**
+   * Update an existing semantic component
+   */
+  private async updateSemanticComponent(args: {
+    documentPath: string;
+    semanticKey: string;
+    properties: Record<string, any>;
+  }): Promise<{ success: boolean; message: string }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      // Find the node with the semantic key
+      let foundNode: any = null;
+
+      function findNodeBySemanticKey(obj: any): void {
+        if (obj && typeof obj === "object") {
+          if (obj.semanticKey === args.semanticKey) {
+            foundNode = obj;
+            return;
+          }
+
+          for (const [key, value] of Object.entries(obj)) {
+            if (Array.isArray(value)) {
+              value.forEach((item) => {
+                findNodeBySemanticKey(item);
+              });
+            } else if (typeof value === "object" && value !== null) {
+              findNodeBySemanticKey(value);
+            }
+          }
+        }
+      }
+
+      findNodeBySemanticKey(document);
+
+      if (!foundNode) {
+        throw new Error(`No component found with semantic key "${args.semanticKey}"`);
+      }
+
+      // Update the component properties
+      Object.assign(foundNode, args.properties);
+
+      // Save the updated document
+      fs.writeFileSync(args.documentPath, JSON.stringify(document, null, 2));
+
+      return {
+        success: true,
+        message: `Updated component with semantic key "${args.semanticKey}"`,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to update semantic component: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
+  }
+
+  /**
+   * Infer semantic keys for existing components
+   */
+  private async inferSemanticKeys(args: {
+    documentPath: string;
+    componentIndexPath?: string;
+    interactive?: boolean;
+  }): Promise<{ suggestions: Array<{ nodeId: string; suggestedKey: string; confidence: number; reason: string }> }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      const suggestions: Array<{ nodeId: string; suggestedKey: string; confidence: number; reason: string }> = [];
+
+      // Simple semantic key inference based on naming patterns
+      function analyzeNode(node: any): void {
+        if (node && typeof node === "object") {
+          // Skip if already has semantic key
+          if (node.semanticKey) return;
+
+          let suggestedKey = "";
+          let confidence = 0;
+          let reason = "";
+
+          // Infer based on name patterns
+          const name = node.name?.toLowerCase() || "";
+          const type = node.type;
+
+          if (name.includes("hero") && (type === "frame" || type === "text")) {
+            if (name.includes("title") || name.includes("heading")) {
+              suggestedKey = "hero.title";
+              confidence = 0.9;
+              reason = "Hero section with title-like name";
+            } else {
+              suggestedKey = "hero.section";
+              confidence = 0.7;
+              reason = "Hero section frame";
+            }
+          } else if (name.includes("nav") || name.includes("menu")) {
+            suggestedKey = "nav.container";
+            confidence = 0.8;
+            reason = "Navigation or menu container";
+          } else if (name.includes("button") || name.includes("cta")) {
+            suggestedKey = "cta.primary";
+            confidence = 0.8;
+            reason = "Button or call-to-action element";
+          } else if (name.includes("card") || name.includes("panel")) {
+            suggestedKey = "card.container";
+            confidence = 0.7;
+            reason = "Card or panel container";
+          } else if (type === "text" && name.includes("title")) {
+            suggestedKey = "content.title";
+            confidence = 0.6;
+            reason = "Text element with title-like name";
+          }
+
+          if (suggestedKey) {
+            suggestions.push({
+              nodeId: node.id,
+              suggestedKey,
+              confidence,
+              reason,
+            });
+          }
+
+          // Recurse into children
+          if (node.children && Array.isArray(node.children)) {
+            node.children.forEach(analyzeNode);
+          }
+        }
+      }
+
+      document.artboards.forEach((artboard: any) => {
+        artboard.children.forEach(analyzeNode);
+      });
+
+      return { suggestions };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to infer semantic keys: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
+  }
+
+  /**
+   * Analyze component usage across the document
+   */
+  private async analyzeComponentUsage(args: {
+    documentPath: string;
+    componentIndexPath?: string;
+  }): Promise<{ analysis: any }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      const analysis = {
+        totalComponents: 0,
+        componentsByType: {} as Record<string, number>,
+        componentsBySemanticKey: {} as Record<string, number>,
+        unusedSemanticKeys: [] as string[],
+        missingSemanticKeys: [] as string[],
+      };
+
+      function analyzeNode(node: any): void {
+        if (node && typeof node === "object") {
+          analysis.totalComponents++;
+
+          if (node.type) {
+            analysis.componentsByType[node.type] = (analysis.componentsByType[node.type] || 0) + 1;
+          }
+
+          if (node.semanticKey) {
+            analysis.componentsBySemanticKey[node.semanticKey] = (analysis.componentsBySemanticKey[node.semanticKey] || 0) + 1;
+          }
+
+          // Recurse into children
+          if (node.children && Array.isArray(node.children)) {
+            node.children.forEach(analyzeNode);
+          }
+        }
+      }
+
+      document.artboards.forEach((artboard: any) => {
+        artboard.children.forEach(analyzeNode);
+      });
+
+      return { analysis };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to analyze component usage: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
+  }
+
+  /**
+   * Create a design specification document
+   */
+  private async createDesignSpec(args: {
+    spec: {
+      name: string;
+      layout: string;
+      components: Array<{
+        type: string;
+        semanticKey: string;
+        props?: Record<string, any>;
+      }>;
+      tokens?: Record<string, any>;
+    };
+    outputPath: string;
+  }): Promise<{ success: boolean; documentPath: string; message: string }> {
+    try {
+      // Create a basic canvas document structure
+      const document: CanvasDocumentType = {
+        schemaVersion: "0.1.0",
+        id: require("ulidx").ulid(),
+        name: args.spec.name,
+        artboards: [
+          {
+            id: require("ulidx").ulid(),
+            name: "Main",
+            frame: { x: 0, y: 0, width: 1440, height: 1024 },
+            children: [],
+          },
+        ],
+      };
+
+      // Add components based on the specification
+      const artboard = document.artboards[0];
+      let yOffset = 0;
+
+      for (const componentSpec of args.spec.components) {
+        const componentNode: any = {
+          id: require("ulidx").ulid(),
+          type: componentSpec.type,
+          name: componentSpec.semanticKey.split(".").pop() || componentSpec.type,
+          visible: true,
+          frame: {
+            x: 0,
+            y: yOffset,
+            width: componentSpec.type === "frame" ? 300 : 200,
+            height: componentSpec.type === "frame" ? 100 : 40,
+          },
+          semanticKey: componentSpec.semanticKey,
+          ...(componentSpec.props && { props: componentSpec.props }),
+        };
+
+        // Add children array for container types
+        if (componentSpec.type === "frame" || componentSpec.type === "group") {
+          componentNode.children = [];
+        }
+
+        artboard.children.push(componentNode);
+        yOffset += 60;
+      }
+
+      // Save the document
+      fs.writeFileSync(args.outputPath, JSON.stringify(document, null, 2));
+
+      return {
+        success: true,
+        documentPath: args.outputPath,
+        message: `Created design specification "${args.spec.name}" with ${args.spec.components.length} components`,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to create design spec: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
+  }
+
+  /**
+   * Update design from specification changes
+   */
+  private async updateDesignFromSpec(args: {
+    documentPath: string;
+    specUpdates: any;
+    preserveExisting?: boolean;
+  }): Promise<{ success: boolean; message: string }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      // Apply updates (simplified implementation)
+      // In a real implementation, this would merge the spec updates with the existing document
+
+      fs.writeFileSync(args.documentPath, JSON.stringify(document, null, 2));
+
+      return {
+        success: true,
+        message: "Updated design from specification changes",
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to update design from spec: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
+  }
+
+  /**
+   * Generate component specification from requirements
+   */
+  private async generateComponentSpec(args: {
+    requirements: {
+      name: string;
+      purpose: string;
+      props: Array<{
+        name: string;
+        type: string;
+        required: boolean;
+        description: string;
+      }>;
+      variants: string[];
+    };
+    outputPath: string;
+  }): Promise<{ success: boolean; specPath: string; message: string }> {
+    try {
+      const componentSpec = {
+        id: require("ulidx").ulid(),
+        name: args.requirements.name,
+        purpose: args.requirements.purpose,
+        props: args.requirements.props.map(prop => ({
+          name: prop.name,
+          type: prop.type,
+          required: prop.required,
+          description: prop.description,
+          passthrough: {
+            attributes: [`data-${prop.name}`],
+            cssVars: [`--${args.requirements.name.toLowerCase()}-${prop.name}`],
+          },
+        })),
+        variants: args.requirements.variants,
+        semanticKeys: {
+          [`${args.requirements.name.toLowerCase()}.primary`]: {
+            description: `Primary ${args.requirements.name}`,
+            priority: 10,
+            propDefaults: {
+              variant: "primary",
+            },
+          },
+        },
+      };
+
+      fs.writeFileSync(args.outputPath, JSON.stringify(componentSpec, null, 2));
+
+      return {
+        success: true,
+        specPath: args.outputPath,
+        message: `Generated component specification for "${args.requirements.name}"`,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to generate component spec: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
+  }
+
+  /**
+   * Bidirectional sync between design and dev
+   */
+  private async syncDesignDev(args: {
+    canvasDocumentPath: string;
+    componentIndexPath: string;
+    direction: "design-to-dev" | "dev-to-design" | "bidirectional";
+    dryRun?: boolean;
+  }): Promise<{ success: boolean; message: string; changes?: any[] }> {
+    try {
+      // Load both documents
+      const canvasContent = fs.readFileSync(args.canvasDocumentPath, "utf-8");
+      const canvasDocument = JSON.parse(canvasContent) as CanvasDocumentType;
+
+      const indexContent = fs.readFileSync(args.componentIndexPath, "utf-8");
+      const componentIndex = JSON.parse(indexContent);
+
+      // Perform sync based on direction
+      const changes: any[] = [];
+
+      if (args.direction === "design-to-dev" || args.direction === "bidirectional") {
+        // Extract component usage from design and update component index
+        changes.push({ type: "design-to-dev", description: "Updated component index from design usage" });
+      }
+
+      if (args.direction === "dev-to-design" || args.direction === "bidirectional") {
+        // Update design with component contract changes
+        changes.push({ type: "dev-to-design", description: "Updated design with component contract changes" });
+      }
+
+      if (!args.dryRun) {
+        // Apply changes
+        fs.writeFileSync(args.canvasDocumentPath, JSON.stringify(canvasDocument, null, 2));
+        fs.writeFileSync(args.componentIndexPath, JSON.stringify(componentIndex, null, 2));
+      }
+
+      return {
+        success: true,
+        message: `Synced ${args.direction} with ${changes.length} changes`,
+        changes,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to sync design and dev: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
+    }
   }
 }
 

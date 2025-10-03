@@ -54,11 +54,14 @@ interface ComponentIndexEntry {
   name: string;
   modulePath: string;
   export: string;
-  semanticKeys?: Record<string, {
-    description?: string;
-    priority?: number;
-    propDefaults?: Record<string, unknown>;
-  }>;
+  semanticKeys?: Record<
+    string,
+    {
+      description?: string;
+      priority?: number;
+      propDefaults?: Record<string, unknown>;
+    }
+  >;
   props: Array<{
     name: string;
     type: string;
@@ -138,7 +141,10 @@ export class ReactGenerator {
   /**
    * Generate React components from a canvas document with component reuse
    */
-  generate(document: CanvasDocumentType, options?: { componentIndexPath?: string }): GenerationResult {
+  generate(
+    document: CanvasDocumentType,
+    options?: { componentIndexPath?: string }
+  ): GenerationResult {
     const files: GeneratedFile[] = [];
     const {
       clock: _clock,
@@ -451,7 +457,10 @@ export class ReactGenerator {
   ): SemanticComponentInfo | null {
     // Priority 1: Component contract matching (highest priority)
     if (this.componentIndex) {
-      const contractMatch = this.matchSemanticKeyToComponentContract(semanticKey, node);
+      const contractMatch = this.matchSemanticKeyToComponentContract(
+        semanticKey,
+        node
+      );
       if (contractMatch) {
         return contractMatch;
       }
@@ -614,13 +623,22 @@ export class ReactGenerator {
   /**
    * Match semantic key to component contracts from the component index
    */
-  private matchSemanticKeyToComponentContract(semanticKey: string, node: NodeType): SemanticComponentInfo | null {
+  private matchSemanticKeyToComponentContract(
+    semanticKey: string,
+    node: NodeType
+  ): SemanticComponentInfo | null {
     if (!this.componentIndex) return null;
 
     // Find the best matching component contract for this semantic key
-    let bestMatch: { componentKey: string; mapping: any; priority: number } | null = null;
+    let bestMatch: {
+      componentKey: string;
+      mapping: any;
+      priority: number;
+    } | null = null;
 
-    for (const [componentKey, component] of Object.entries(this.componentIndex.components)) {
+    for (const [componentKey, component] of Object.entries(
+      this.componentIndex.components
+    )) {
       if (component.semanticKeys?.[semanticKey]) {
         const mapping = component.semanticKeys[semanticKey];
         const priority = mapping.priority ?? 5;
@@ -639,7 +657,10 @@ export class ReactGenerator {
 
     return {
       tagName: component.name.toLowerCase(), // Use component name as fallback
-      className: `${component.name.toLowerCase()} ${semanticKey.replace(/[.\[\]]/g, "-")}`,
+      className: `${component.name.toLowerCase()} ${semanticKey.replace(
+        /[.\[\]]/g,
+        "-"
+      )}`,
       attributes: {},
       componentKey,
       propDefaults: mapping.propDefaults || {},
@@ -1250,5 +1271,7 @@ export function generateReactComponents(
   options: CodeGenOptions & { componentIndexPath?: string } = {}
 ): GenerationResult {
   const generator = new ReactGenerator(options);
-  return generator.generate(document, { componentIndexPath: options.componentIndexPath });
+  return generator.generate(document, {
+    componentIndexPath: options.componentIndexPath,
+  });
 }

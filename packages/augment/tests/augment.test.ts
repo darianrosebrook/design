@@ -31,7 +31,12 @@ describe("AugmentationEngine", () => {
                 name: "Title",
                 frame: { x: 32, y: 40, width: 600, height: 64 },
                 text: "Build in your IDE",
-                textStyle: { family: "Inter", size: 48, weight: "700", color: "tokens.color.text" },
+                textStyle: {
+                  family: "Inter",
+                  size: 48,
+                  weight: "700",
+                  color: "tokens.color.text",
+                },
               },
             ],
           },
@@ -45,7 +50,11 @@ describe("AugmentationEngine", () => {
       layoutPerturbation: { enabled: true, tolerance: 0.1 },
       tokenPermutation: { enabled: true },
       propFuzzing: { enabled: true },
-      svgFuzzing: { enabled: true, windingRuleVariation: true, strokeWidthVariation: true },
+      svgFuzzing: {
+        enabled: true,
+        windingRuleVariation: true,
+        strokeWidthVariation: true,
+      },
       a11yValidation: { enabled: true, strict: false, contrastThreshold: "AA" },
     });
   });
@@ -67,7 +76,9 @@ describe("AugmentationEngine", () => {
       const variant = variants[0];
 
       // Should have layout transformations
-      const layoutTransformations = variant.transformations.filter(t => t.type === "layout");
+      const layoutTransformations = variant.transformations.filter(
+        (t) => t.type === "layout"
+      );
       expect(layoutTransformations.length).toBeGreaterThan(0);
 
       // Frame coordinates should be different
@@ -81,7 +92,9 @@ describe("AugmentationEngine", () => {
       const variant = variants[0];
 
       // Should have token transformations
-      const tokenTransformations = variant.transformations.filter(t => t.type === "token");
+      const tokenTransformations = variant.transformations.filter(
+        (t) => t.type === "token"
+      );
       expect(tokenTransformations.length).toBeGreaterThan(0);
     });
 
@@ -113,7 +126,9 @@ describe("AugmentationEngine", () => {
       const result = await engine.augmentDocument(testDocument);
 
       // Should have same number of artboards
-      expect(result.augmented.artboards).toHaveLength(testDocument.artboards.length);
+      expect(result.augmented.artboards).toHaveLength(
+        testDocument.artboards.length
+      );
 
       // Should preserve node types and IDs
       const originalHero = testDocument.artboards[0].children[0];
@@ -130,7 +145,11 @@ describe("AugmentationEngine", () => {
         layoutPerturbation: { enabled: false, tolerance: 0.1 },
         tokenPermutation: { enabled: false },
         propFuzzing: { enabled: false },
-        svgFuzzing: { enabled: false, windingRuleVariation: true, strokeWidthVariation: true },
+        svgFuzzing: {
+          enabled: false,
+          windingRuleVariation: true,
+          strokeWidthVariation: true,
+        },
       });
 
       const result = await disabledEngine.augmentDocument(testDocument);
@@ -184,21 +203,32 @@ describe("AugmentationEngine", () => {
         ],
       };
 
-      const variants = await engine.generateAugmentedVariants(semanticDocument, 1);
+      const variants = await engine.generateAugmentedVariants(
+        semanticDocument,
+        1
+      );
       const variant = variants[0];
 
       expect(variant.a11yValidation!.warnings.length).toBeGreaterThan(0);
-      const semanticWarnings = variant.a11yValidation!.warnings.filter(w => w.type === "semantic");
+      const semanticWarnings = variant.a11yValidation!.warnings.filter(
+        (w) => w.type === "semantic"
+      );
       expect(semanticWarnings.length).toBeGreaterThan(0);
     });
 
     it("respects strict accessibility validation", async () => {
       const strictEngine = new AugmentationEngine({
-        a11yValidation: { enabled: true, strict: true, contrastThreshold: "AA" },
+        a11yValidation: {
+          enabled: true,
+          strict: true,
+          contrastThreshold: "AA",
+        },
       });
 
       // This should not throw since our test document passes validation
-      await expect(strictEngine.augmentDocument(testDocument)).resolves.toBeDefined();
+      await expect(
+        strictEngine.augmentDocument(testDocument)
+      ).resolves.toBeDefined();
     });
   });
 
@@ -234,20 +264,23 @@ describe("AugmentationEngine", () => {
         ],
       };
 
-      const variants = await engine.generateAugmentedVariants(problematicDocument, 1);
+      const variants = await engine.generateAugmentedVariants(
+        problematicDocument,
+        1
+      );
       const variant = variants[0];
 
       expect(variant.a11yValidation!.warnings.length).toBeGreaterThan(0);
 
       // Should warn about input without label
-      const inputWarnings = variant.a11yValidation!.warnings.filter(w =>
-        w.type === "aria" && w.message.includes("Input component")
+      const inputWarnings = variant.a11yValidation!.warnings.filter(
+        (w) => w.type === "aria" && w.message.includes("Input component")
       );
       expect(inputWarnings.length).toBeGreaterThan(0);
 
       // Should warn about large text needing heading semantics
-      const headingWarnings = variant.a11yValidation!.warnings.filter(w =>
-        w.type === "aria" && w.message.includes("heading")
+      const headingWarnings = variant.a11yValidation!.warnings.filter(
+        (w) => w.type === "aria" && w.message.includes("heading")
       );
       expect(headingWarnings.length).toBeGreaterThan(0);
     });
@@ -291,7 +324,9 @@ describe("CanvasGenerators", () => {
           expect(node.frame.height).toBeGreaterThan(0);
 
           if (node.semanticKey) {
-            expect(node.semanticKey).toMatch(/^[a-z][a-z0-9]*(\.[a-z0-9]+|\[[0-9]+\])*$/);
+            expect(node.semanticKey).toMatch(
+              /^[a-z][a-z0-9]*(\.[a-z0-9]+|\[[0-9]+\])*$/
+            );
           }
 
           return true;
@@ -310,7 +345,9 @@ describe("CanvasGenerators", () => {
           expect(node.frame).toBeDefined();
 
           if (node.semanticKey) {
-            expect(node.semanticKey).toMatch(/^[a-z][a-z0-9]*(\.[a-z0-9]+|\[[0-9]+\])*$/);
+            expect(node.semanticKey).toMatch(
+              /^[a-z][a-z0-9]*(\.[a-z0-9]+|\[[0-9]+\])*$/
+            );
           }
 
           return true;
