@@ -20,7 +20,7 @@ function flattenTokens(tokens: DesignTokens, prefix = ""): Record<string, string
         walk(value, currentPath);
       } else {
         const cssVar = `--${prefix ? `${prefix}-` : ""}${currentPath.join("-")}`;
-        result[cssVar] = value;
+        result[cssVar] = value as string | number;
       }
     }
   }

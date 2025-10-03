@@ -77,7 +77,7 @@ describe("Compound Component Detection", () => {
       const result = await scanTestFile(code);
 
       expect(result.components).toHaveLength(2); // Card + Card.Header
-      
+
       const compound = result.components.find((c) => c.name === "Card.Header");
       expect(compound).toBeDefined();
       expect(compound?.parent).toBe("Card");
@@ -112,7 +112,7 @@ describe("Compound Component Detection", () => {
       const result = await scanTestFile(code);
 
       expect(result.components).toHaveLength(4); // Card + 3 compounds
-      
+
       const compounds = result.components.filter((c) => c.isCompound);
       expect(compounds).toHaveLength(3);
       expect(compounds.map((c) => c.name)).toEqual([
@@ -120,7 +120,7 @@ describe("Compound Component Detection", () => {
         "Card.Body",
         "Card.Footer",
       ]);
-      
+
       compounds.forEach((compound) => {
         expect(compound.parent).toBe("Card");
         expect(compound.isCompound).toBe(true);
@@ -153,7 +153,7 @@ describe("Compound Component Detection", () => {
       const compound = result.components.find((c) => c.name === "Tabs.Panel");
       expect(compound).toBeDefined();
       expect(compound?.props).toHaveLength(3);
-      
+
       const props = compound!.props;
       expect(props.find((p) => p.name === "title")).toBeDefined();
       expect(props.find((p) => p.name === "active")).toBeDefined();
@@ -183,7 +183,7 @@ describe("Compound Component Detection", () => {
 
       // Should detect Menu, MenuItem, and Menu.Item (compound reference)
       expect(result.components.length).toBeGreaterThanOrEqual(2);
-      
+
       const compound = result.components.find((c) => c.name === "Menu.Item");
       expect(compound).toBeDefined();
       expect(compound?.parent).toBe("Menu");
@@ -229,7 +229,9 @@ describe("Compound Component Detection", () => {
 
       const result = await scanTestFile(code);
 
-      const compound = result.components.find((c) => c.name === "Select.Option");
+      const compound = result.components.find(
+        (c) => c.name === "Select.Option"
+      );
       expect(compound).toBeDefined();
       expect(compound?.parent).toBe("Select");
       expect(compound?.isCompound).toBe(true);
@@ -296,14 +298,18 @@ describe("Compound Component Detection", () => {
       const result = await scanTestFile(code);
 
       expect(result.components).toHaveLength(3); // Accordion + 2 compounds
-      
-      const summary = result.components.find((c) => c.name === "Accordion.Summary");
-      const details = result.components.find((c) => c.name === "Accordion.Details");
-      
+
+      const summary = result.components.find(
+        (c) => c.name === "Accordion.Summary"
+      );
+      const details = result.components.find(
+        (c) => c.name === "Accordion.Details"
+      );
+
       expect(summary).toBeDefined();
       expect(summary?.parent).toBe("Accordion");
       expect(summary?.props).toHaveLength(2); // children, expandIcon
-      
+
       expect(details).toBeDefined();
       expect(details?.parent).toBe("Accordion");
       expect(details?.props).toHaveLength(1); // children
@@ -337,7 +343,7 @@ describe("Compound Component Detection", () => {
       const result = await scanTestFile(code);
 
       expect(result.components).toHaveLength(6); // Modal + 5 compounds
-      
+
       const compounds = result.components.filter((c) => c.isCompound);
       expect(compounds).toHaveLength(5);
       expect(compounds.map((c) => c.name)).toEqual([

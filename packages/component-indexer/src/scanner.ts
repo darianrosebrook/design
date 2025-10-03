@@ -392,12 +392,18 @@ export class ComponentScanner {
             if (isComponent) {
               // Create a compound component entry
               const compoundName = `${baseComponentName}.${subComponentName}`;
-              
+
               // Extract props from the compound component function
               let props: RawComponentMetadata["props"] = [];
-              if (ts.isArrowFunction(rightSide) || ts.isFunctionExpression(rightSide)) {
+              if (
+                ts.isArrowFunction(rightSide) ||
+                ts.isFunctionExpression(rightSide)
+              ) {
                 // Extract props from function parameters
-                const metadata = this.extractComponentMetadataBase(rightSide as any, sourceFile);
+                const metadata = this.extractComponentMetadataBase(
+                  rightSide as any,
+                  sourceFile
+                );
                 if (metadata) {
                   props = metadata.props;
                 }

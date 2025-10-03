@@ -107,7 +107,7 @@ export function validateTokens(tokens: any): {
   } else {
     return {
       valid: false,
-      errors: result.error.errors.map(
+      errors: (result.error as any).errors.map(
         (err: any) => `${err.path.join(".")}: ${err.message}`
       ),
     };
