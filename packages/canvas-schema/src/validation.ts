@@ -5,9 +5,21 @@
 
 import Ajv from "ajv";
 import addFormats from "ajv-formats";
-import type { CanvasDocumentType } from "./types.js";
+import type { CanvasDocumentType, SemanticKeyType } from "./types.js";
 import { CanvasDocument } from "./types.js";
 import { validateCanvasDocument as ajvValidate } from "./validate.js";
+
+/**
+ * Semantic key uniqueness validation error
+ */
+export interface SemanticKeyValidationError {
+  duplicateKey: SemanticKeyType;
+  conflictingNodes: Array<{
+    id: string;
+    name: string;
+    path: string;
+  }>;
+}
 
 /**
  * Validation error details
@@ -67,6 +79,8 @@ export class CanvasValidator {
         };
       }
 
+      const validDocument = zodResult.data;
+
       // Then, validate with Ajv against JSON schema for deeper validation
       const ajvResult = ajvValidate(document);
 
@@ -83,10 +97,32 @@ export class CanvasValidator {
         };
       }
 
+      // Additional semantic key validation
+      const semanticKeyErrors = this.validateSemanticKeys(validDocument);
+
+      if (semanticKeyErrors.length > 0) {
+        return {
+          valid: false,
+          errors: semanticKeyErrors.map((error) => ({
+            instancePath: error.conflictingNodes[0].path,
+            message: `Semantic key "${
+              error.duplicateKey
+            }" is not unique. Found in multiple nodes: ${error.conflictingNodes
+              .map((n) => n.path)
+              .join(", ")}`,
+            keyword: "semantic-key-duplicate",
+            params: {
+              duplicateKey: error.duplicateKey,
+              conflictingNodes: error.conflictingNodes,
+            },
+          })),
+        };
+      }
+
       return {
         valid: true,
         errors: [],
-        document: zodResult.data,
+        document: validDocument,
       };
     } catch (error) {
       return {
@@ -147,6 +183,100 @@ export class CanvasValidator {
       };
     }
   }
+
+  /**
+   * Validate semantic key uniqueness within artboard/component scopes
+   */
+  validateSemanticKeys(
+    document: CanvasDocumentType
+  ): SemanticKeyValidationError[] {
+    const errors: SemanticKeyValidationError[] = [];
+
+    // Track semantic keys by scope (artboard level, component subtree level)
+    const semanticKeyMap = new Map<
+      string,
+      Array<{
+        id: string;
+        name: string;
+        path: string;
+      }>
+    >();
+
+    // Walk through all artboards and collect semantic keys
+    for (
+      let artboardIndex = 0;
+      artboardIndex < document.artboards.length;
+      artboardIndex++
+    ) {
+      const artboard = document.artboards[artboardIndex];
+      const artboardPrefix = `artboards[${artboardIndex}]`;
+
+      this.collectSemanticKeys(
+        artboard.children,
+        `${artboardPrefix}.children`,
+        semanticKeyMap,
+        errors
+      );
+    }
+
+    return errors;
+  }
+
+  /**
+   * Recursively collect semantic keys and detect duplicates
+   */
+  private collectSemanticKeys(
+    nodes: any[],
+    currentPath: string,
+    semanticKeyMap: Map<
+      string,
+      Array<{
+        id: string;
+        name: string;
+        path: string;
+      }>
+    >,
+    errors: SemanticKeyValidationError[]
+  ): void {
+    for (let nodeIndex = 0; nodeIndex < nodes.length; nodeIndex++) {
+      const node = nodes[nodeIndex];
+      const nodePath = `${currentPath}[${nodeIndex}]`;
+
+      // Check if this node has a semantic key
+      if (node.semanticKey) {
+        const key = node.semanticKey;
+
+        if (!semanticKeyMap.has(key)) {
+          semanticKeyMap.set(key, []);
+        }
+
+        const existingNodes = semanticKeyMap.get(key)!;
+        existingNodes.push({
+          id: node.id,
+          name: node.name,
+          path: nodePath,
+        });
+
+        // If we have more than one node with this key, it's a duplicate
+        if (existingNodes.length > 1) {
+          errors.push({
+            duplicateKey: key,
+            conflictingNodes: [...existingNodes],
+          });
+        }
+      }
+
+      // Recurse into children if this node has them
+      if (node.children && Array.isArray(node.children)) {
+        this.collectSemanticKeys(
+          node.children,
+          `${nodePath}.children`,
+          semanticKeyMap,
+          errors
+        );
+      }
+    }
+  }
 }
 
 /**
@@ -159,4 +289,13 @@ export const validator = new CanvasValidator();
  */
 export function validateCanvasDocument(document: unknown): ValidationResult {
   return validator.validate(document);
+}
+
+/**
+ * Convenience function for validating semantic key uniqueness
+ */
+export function validateSemanticKeys(
+  document: CanvasDocumentType
+): SemanticKeyValidationError[] {
+  return validator.validateSemanticKeys(document);
 }

@@ -1,5 +1,5 @@
 {
-  "$id": "https://localpencil.dev/schemas/canvas-0.1.json",
+  "$id": "https://paths.design.dev/schemas/canvas-0.1.json",
   "title": "CanvasDocument",
   "type": "object",
   "required": ["schemaVersion", "id", "name", "artboards"],
@@ -44,7 +44,12 @@
         "frame": { "$ref": "#/$defs/Rect" },
         "style": { "$ref": "#/$defs/Style" },
         "data": { "type": "object", "additionalProperties": true },
-        "bind": { "$ref": "#/$defs/Binding" }
+        "bind": { "$ref": "#/$defs/Binding" },
+        "semanticKey": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(\\.[a-z0-9]+|\\[[0-9]+\\])*$",
+          "description": "Semantic identifier for stable node reference (e.g., 'hero.title', 'nav.items[0]')"
+        }
       }
     },
     "FrameNode": {

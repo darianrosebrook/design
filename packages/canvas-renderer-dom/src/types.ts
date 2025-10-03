@@ -114,6 +114,7 @@ export const RENDERER_CLASSES = {
   TEXT: "canvas-text",
   COMPONENT: "canvas-component",
   SELECTED: "canvas-selected",
+  FOCUSED: "canvas-focused",
   SELECTION_OUTLINE: "canvas-selection-outline",
   SELECTION_HANDLES: "canvas-selection-handles",
   HANDLE: "canvas-handle",

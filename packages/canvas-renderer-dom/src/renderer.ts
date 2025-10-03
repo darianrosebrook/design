@@ -22,6 +22,7 @@ import { RENDERER_CLASSES, RENDERER_EVENTS } from "./types.js";
 import { renderFrame } from "./renderers/frame.js";
 import { renderText } from "./renderers/text.js";
 import { renderComponent } from "./renderers/component.js";
+import { Observability, createObservability } from "./observability.js";
 
 /**
  * DOM-based canvas renderer
@@ -50,6 +51,13 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   // High-DPI support
   private pixelRatio = 1;
 
+  // Accessibility support
+  private focusedNodeId: string | null = null;
+  private liveRegion: HTMLElement | null = null;
+
+  // Observability
+  private observability: Observability;
+
   constructor(options: RendererOptions = {}) {
     this.options = {
       componentIndex: options.componentIndex,
@@ -58,12 +66,29 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       onSelectionChange: options.onSelectionChange ?? (() => {}),
       onNodeUpdate: options.onNodeUpdate ?? (() => {}),
     };
+
+    // Initialize observability
+    this.observability = createObservability(
+      process.env.NODE_ENV !== "production"
+    );
   }
 
   /**
    * Render canvas document to DOM
    */
   render(document: CanvasDocumentType, container: HTMLElement): void {
+    const startTime = performance.now();
+    const nodeCount = document.artboards.reduce(
+      (sum, ab) => sum + (ab.children?.length ?? 0),
+      0
+    );
+
+    this.observability.logger.info("renderer.render.start", "Starting render", {
+      documentId: document.id,
+      nodeCount,
+    });
+    this.observability.tracer.start("renderer.render.pipeline");
+
     this.document = document;
     this.container = container;
 
@@ -82,6 +107,11 @@ export class CanvasDOMRenderer implements CanvasRenderer {
     container.style.height = "100%";
     container.style.overflow = "hidden";
 
+    // Accessibility: Set ARIA role for canvas
+    container.setAttribute("role", "application");
+    container.setAttribute("aria-label", "Canvas design editor");
+    container.tabIndex = 0; // Make container focusable
+
     // Apply High-DPI scaling hint for crisp rendering
     if (this.pixelRatio > 1) {
       container.style.imageRendering = "crisp-edges";
@@ -91,6 +121,9 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       container.style.width = `${100 * this.pixelRatio}%`;
       container.style.height = `${100 * this.pixelRatio}%`;
     }
+
+    // Create live region for screen reader announcements
+    this.createLiveRegion(container);
 
     // Create render context
     const context: RenderContext = {
@@ -111,10 +144,38 @@ export class CanvasDOMRenderer implements CanvasRenderer {
     // Set up event listeners if interactive
     if (this.options.interactive) {
       this.setupEventListeners(container);
+      this.setupKeyboardNavigation(container);
     }
 
     // Render selection overlay
     this.updateSelectionOverlay();
+
+    // Observability: Complete render
+    this.observability.tracer.end("renderer.render.pipeline");
+    const duration = performance.now() - startTime;
+
+    this.observability.logger.info(
+      "renderer.render.complete",
+      "Render complete",
+      {
+        documentId: document.id,
+        nodeCount,
+        duration: `${duration.toFixed(2)}ms`,
+        nodesDrawn: this.nodeElements.size,
+      }
+    );
+
+    this.observability.metrics.histogram(
+      "renderer_frame_duration_ms",
+      duration,
+      { document_id: document.id }
+    );
+    this.observability.metrics.counter(
+      "renderer_nodes_drawn_total",
+      this.nodeElements.size,
+      { document_id: document.id }
+    );
+    this.observability.metrics.gauge("renderer_fps", this.fps);
   }
 
   /**
@@ -123,10 +184,19 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   updateNodes(nodeIds: string[], updates: Partial<NodeType>[]): void {
     if (!this.document || !this.container) return;
 
+    this.observability.logger.debug("renderer.updateNodes", "Updating nodes", {
+      nodeCount: nodeIds.length,
+    });
+
     // Mark nodes as dirty
     for (const nodeId of nodeIds) {
       this.dirtyNodes.add(nodeId);
     }
+
+    this.observability.metrics.counter(
+      "renderer_dirty_nodes_total",
+      nodeIds.length
+    );
 
     // Schedule update on next frame (throttled)
     this.scheduleUpdate(() => {
@@ -147,7 +217,26 @@ export class CanvasDOMRenderer implements CanvasRenderer {
    * Update selection
    */
   setSelection(nodeIds: string[]): void {
+    const previousSelection = new Set(this.selection.selectedIds);
     this.selection.selectedIds = new Set(nodeIds);
+
+    // Update ARIA attributes for changed nodes
+    for (const nodeId of previousSelection) {
+      if (!this.selection.selectedIds.has(nodeId)) {
+        const element = this.nodeElements.get(nodeId);
+        if (element) {
+          element.setAttribute("aria-selected", "false");
+        }
+      }
+    }
+
+    for (const nodeId of this.selection.selectedIds) {
+      const element = this.nodeElements.get(nodeId);
+      if (element) {
+        element.setAttribute("aria-selected", "true");
+      }
+    }
+
     this.updateSelectionOverlay();
     this.options.onSelectionChange([...nodeIds]);
   }
@@ -258,6 +347,13 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   }
 
   /**
+   * Get observability instance for monitoring
+   */
+  getObservability(): Observability {
+    return this.observability;
+  }
+
+  /**
    * Render a single node
    */
   private renderNode(node: NodeType, context: RenderContext): HTMLElement {
@@ -271,6 +367,9 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       `${this.options.classPrefix}${RENDERER_CLASSES.NODE}`,
       `${this.options.classPrefix}${RENDERER_CLASSES.NODE}-${node.type}`
     );
+
+    // Accessibility: Add ARIA attributes
+    this.applyAccessibilityAttributes(element, node);
 
     // Apply positioning
     this.applyNodePositioning(element, node);
@@ -414,10 +513,193 @@ export class CanvasDOMRenderer implements CanvasRenderer {
           this.container.removeEventListener("click", listener);
         } else if (eventType === "node-click") {
           this.container.removeEventListener("click", listener, true);
+        } else if (eventType === "keydown") {
+          this.container.removeEventListener("keydown", listener);
         }
       }
     }
     this.eventListeners.clear();
+  }
+
+  /**
+   * Create live region for screen reader announcements
+   */
+  private createLiveRegion(container: HTMLElement): void {
+    this.liveRegion = document.createElement("div");
+    this.liveRegion.setAttribute("role", "status");
+    this.liveRegion.setAttribute("aria-live", "polite");
+    this.liveRegion.setAttribute("aria-atomic", "true");
+    this.liveRegion.style.position = "absolute";
+    this.liveRegion.style.left = "-10000px";
+    this.liveRegion.style.width = "1px";
+    this.liveRegion.style.height = "1px";
+    this.liveRegion.style.overflow = "hidden";
+    container.appendChild(this.liveRegion);
+  }
+
+  /**
+   * Announce message to screen readers
+   */
+  private announce(message: string): void {
+    if (!this.liveRegion) return;
+
+    // Clear and set message
+    this.liveRegion.textContent = "";
+    setTimeout(() => {
+      if (this.liveRegion) {
+        this.liveRegion.textContent = message;
+      }
+    }, 100);
+  }
+
+  /**
+   * Apply accessibility attributes to node element
+   */
+  private applyAccessibilityAttributes(
+    element: HTMLElement,
+    node: NodeType
+  ): void {
+    // Make element focusable
+    element.tabIndex = 0;
+
+    // Set ARIA role based on node type
+    switch (node.type) {
+      case "frame":
+        element.setAttribute("role", "group");
+        element.setAttribute("aria-label", `Frame: ${node.name}`);
+        break;
+      case "text":
+        element.setAttribute("role", "text");
+        const textNode = node as TextNodeType;
+        element.setAttribute(
+          "aria-label",
+          `Text: ${textNode.text || node.name}`
+        );
+        break;
+      case "component":
+        element.setAttribute("role", "button");
+        element.setAttribute("aria-label", `Component: ${node.name}`);
+        break;
+      default:
+        element.setAttribute("role", "group");
+        element.setAttribute("aria-label", node.name);
+    }
+
+    // Set visibility state
+    element.setAttribute("aria-hidden", (!node.visible).toString());
+
+    // Set selection state
+    const isSelected = this.selection.selectedIds.has(node.id);
+    element.setAttribute("aria-selected", isSelected.toString());
+  }
+
+  /**
+   * Setup keyboard navigation
+   */
+  private setupKeyboardNavigation(container: HTMLElement): void {
+    const handleKeyDown = (event: Event) => {
+      const keyEvent = event as KeyboardEvent;
+      const focusedElement = document.activeElement as HTMLElement;
+      const focusedNodeId = focusedElement?.dataset?.nodeId;
+
+      switch (keyEvent.key) {
+        case "Tab":
+          // Let default tab behavior work
+          break;
+
+        case "Enter":
+        case " ": // Space
+          keyEvent.preventDefault();
+          if (focusedNodeId) {
+            // Toggle selection
+            const newSelection = new Set(this.selection.selectedIds);
+            if (newSelection.has(focusedNodeId)) {
+              newSelection.delete(focusedNodeId);
+              const label = focusedElement.getAttribute("aria-label") || "item";
+              this.announce(`Deselected ${label}`);
+            } else {
+              newSelection.add(focusedNodeId);
+              const label = focusedElement.getAttribute("aria-label") || "item";
+              this.announce(`Selected ${label}`);
+            }
+            this.setSelection([...newSelection]);
+          }
+          break;
+
+        case "Escape":
+          keyEvent.preventDefault();
+          if (this.selection.selectedIds.size > 0) {
+            this.setSelection([]);
+            this.announce("Selection cleared");
+          }
+          break;
+
+        case "a":
+          // Ctrl/Cmd+A: Select all
+          if (keyEvent.ctrlKey || keyEvent.metaKey) {
+            keyEvent.preventDefault();
+            const allNodeIds = Array.from(this.nodeElements.keys());
+            this.setSelection(allNodeIds);
+            this.announce(`Selected all ${allNodeIds.length} items`);
+          }
+          break;
+
+        case "ArrowUp":
+        case "ArrowDown":
+        case "ArrowLeft":
+        case "ArrowRight":
+          // Arrow key navigation (future: move between nodes spatially)
+          keyEvent.preventDefault();
+          this.handleArrowNavigation(keyEvent.key, focusedNodeId);
+          break;
+      }
+    };
+
+    container.addEventListener("keydown", handleKeyDown);
+    this.eventListeners.set("keydown", handleKeyDown);
+  }
+
+  /**
+   * Handle arrow key navigation between nodes
+   */
+  private handleArrowNavigation(
+    key: string,
+    currentNodeId: string | null | undefined
+  ): void {
+    if (!currentNodeId) {
+      // Focus first node
+      const firstNode = this.nodeElements.values().next().value;
+      if (firstNode) {
+        firstNode.focus();
+        const label = firstNode.getAttribute("aria-label") || "item";
+        this.announce(`Focused ${label}`);
+      }
+      return;
+    }
+
+    // Get all focusable nodes in order
+    const nodes = Array.from(this.nodeElements.entries());
+    const currentIndex = nodes.findIndex(([id]) => id === currentNodeId);
+
+    if (currentIndex === -1) return;
+
+    let nextIndex = currentIndex;
+    switch (key) {
+      case "ArrowUp":
+      case "ArrowLeft":
+        nextIndex = currentIndex > 0 ? currentIndex - 1 : nodes.length - 1;
+        break;
+      case "ArrowDown":
+      case "ArrowRight":
+        nextIndex = currentIndex < nodes.length - 1 ? currentIndex + 1 : 0;
+        break;
+    }
+
+    const [nextNodeId, nextElement] = nodes[nextIndex];
+    nextElement.focus();
+    this.focusedNodeId = nextNodeId;
+    const label = nextElement.getAttribute("aria-label") || "item";
+    this.announce(`Focused ${label}`);
   }
 
   /**

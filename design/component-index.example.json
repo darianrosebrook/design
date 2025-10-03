@@ -15,6 +15,33 @@
       "export": "Button",
       "category": "ui",
       "tags": ["interactive", "form"],
+      "semanticKeys": {
+        "cta.primary": {
+          "description": "Primary call-to-action button",
+          "priority": 10,
+          "propDefaults": {
+            "variant": "primary",
+            "size": "medium"
+          }
+        },
+        "cta.secondary": {
+          "description": "Secondary call-to-action button",
+          "priority": 9,
+          "propDefaults": {
+            "variant": "secondary",
+            "size": "medium"
+          }
+        },
+        "form.submit": {
+          "description": "Form submission button",
+          "priority": 8,
+          "propDefaults": {
+            "variant": "primary",
+            "size": "medium",
+            "type": "submit"
+          }
+        }
+      },
       "variants": [
         { "name": "primary" },
         { "name": "secondary" },
@@ -30,6 +57,10 @@
           "design": {
             "control": "select",
             "options": ["primary", "secondary", "danger"]
+          },
+          "passthrough": {
+            "attributes": ["data-variant"],
+            "cssVars": ["--button-variant"]
           }
         },
         {
@@ -40,19 +71,30 @@
           "design": {
             "control": "select",
             "options": ["small", "medium", "large"]
+          },
+          "passthrough": {
+            "attributes": ["data-size"],
+            "cssVars": ["--button-size"]
           }
         },
         {
           "name": "label",
           "type": "string",
           "required": true,
-          "description": "Button text"
+          "description": "Button text",
+          "passthrough": {
+            "children": true,
+            "ariaLabel": true
+          }
         },
         {
           "name": "onClick",
           "type": "() => void",
           "required": true,
-          "description": "Click handler"
+          "description": "Click handler",
+          "passthrough": {
+            "events": ["onClick"]
+          }
         },
         {
           "name": "disabled",
@@ -61,6 +103,10 @@
           "defaultValue": false,
           "design": {
             "control": "boolean"
+          },
+          "passthrough": {
+            "attributes": ["disabled", "aria-disabled"],
+            "events": []
           }
         }
       ],
