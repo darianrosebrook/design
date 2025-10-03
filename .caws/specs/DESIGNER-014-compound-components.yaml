@@ -1,0 +1,79 @@
+id: DESIGNER-014
+title: 'Component Indexer - Compound Component Detection'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 10
+  max_loc: 300
+blast_radius:
+  modules:
+    - packages/component-indexer/src/scanner.ts
+    - packages/component-indexer/src/types.ts
+  data_migration: false
+operational_rollback_slo: 5m
+threats:
+  - 'False positives detecting non-component property assignments'
+  - 'Missing compound components due to complex patterns'
+  - 'Performance degradation with deep component hierarchies'
+  - 'Schema changes breaking existing component indexes'
+scope:
+  in:
+    - packages/component-indexer/src/scanner.ts
+    - packages/component-indexer/src/scanner.js
+    - packages/component-indexer/src/types.ts
+    - packages/component-indexer/tests/
+  out:
+    - packages/vscode-ext/
+    - packages/canvas-renderer-dom/
+invariants:
+  - 'Compound components have parent-child relationships tracked'
+  - 'Component IDs remain stable across re-scans'
+  - 'Compound detection does not affect regular component detection'
+  - 'Props extraction works for both regular and compound components'
+acceptance:
+  - id: A1
+    given: 'Source file with `Card.Header = () => <div/>`'
+    when: 'Scanner processes file'
+    then: 'Compound component `Card.Header` detected with parent `Card`'
+  - id: A2
+    given: 'Component with multiple sub-components (Card.Header, Card.Body, Card.Footer)'
+    when: 'Scanner processes file'
+    then: 'All three compound components detected and linked to Card'
+  - id: A3
+    given: 'Property assignment is not a component (Card.displayName = "Card")'
+    when: 'Scanner processes file'
+    then: 'Property assignment ignored, not treated as compound component'
+  - id: A4
+    given: 'Compound component with props (Menu.Item = ({label}) => <li>{label}</li>)'
+    when: 'Scanner extracts metadata'
+    then: 'Props extracted from compound component function'
+non_functional:
+  a11y:
+    - 'N/A - internal tooling'
+  perf:
+    compound_detection_overhead_ms: 50
+    max_compound_depth: 3
+    additional:
+      - 'Compound detection adds <10% to total scan time'
+      - 'Memory usage scales linearly with compound count'
+  security:
+    - 'Scanner only reads TypeScript files, no code execution'
+    - 'No arbitrary file system access'
+contracts:
+  - type: schema
+    path: packages/component-indexer/src/types.ts
+observability:
+  logs:
+    - 'scanner.compound.detected with parent and child component names'
+    - 'scanner.compound.skipped with reason (e.g., not a component)'
+  metrics:
+    - 'scanner_compound_components_total counter'
+    - 'scanner_compound_detection_duration_ms histogram'
+  traces:
+    - 'scanner.discover.compound from file scan to component entry creation'
+migrations:
+  - 'Existing component indexes remain valid - compound components are additive'
+rollback:
+  - 'Can disable compound detection via feature flag'
+  - 'Fallback to regular component detection only'
+
