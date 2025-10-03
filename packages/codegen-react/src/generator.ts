@@ -249,7 +249,7 @@ export class ReactGenerator {
   }
 
   /**
-   * Infer semantic component type from node properties
+   * Infer semantic component type from node properties with semanticKey priority
    */
   private inferSemanticComponent(node: NodeType): SemanticComponentInfo {
     const name = node.name.toLowerCase();
@@ -257,7 +257,15 @@ export class ReactGenerator {
       "children" in node && node.children && node.children.length > 0;
     const _style = node.style || {};
 
-    // Pattern-based inference
+    // Priority 1: Semantic key-based inference (highest priority)
+    if (node.semanticKey) {
+      const semanticMatch = this.matchSemanticKey(node.semanticKey, node);
+      if (semanticMatch) {
+        return semanticMatch;
+      }
+    }
+
+    // Priority 2: Name-based inference (current logic)
     if (name.includes("button") || name.includes("btn")) {
       return {
         tagName: "button",
@@ -348,7 +356,7 @@ export class ReactGenerator {
       };
     }
 
-    // Layout-based inference
+    // Priority 3: Layout-based inference
     if (node.type === "frame" && hasChildren && node.layout?.mode === "flex") {
       if (node.layout.direction === "row") {
         return {
@@ -372,6 +380,167 @@ export class ReactGenerator {
       className: node.type === "frame" ? "frame" : "text",
       attributes: {},
     };
+  }
+
+  /**
+   * Match node against semantic key patterns for component inference
+   */
+  private matchSemanticKey(
+    semanticKey: string,
+    node: NodeType
+  ): SemanticComponentInfo | null {
+    // Define semantic key patterns and their corresponding component info
+    const semanticPatterns: Array<{
+      pattern: RegExp;
+      component: SemanticComponentInfo;
+    }> = [
+      // Hero patterns
+      {
+        pattern: /^hero\.(title|subtitle|description)$/,
+        component: {
+          tagName: node.type === "frame" ? "header" : "h1",
+          className: "hero-text",
+          attributes: {},
+          role: node.type === "frame" ? "banner" : "heading",
+        },
+      },
+
+      // Navigation patterns
+      {
+        pattern: /^nav\.(items?|links?)$/,
+        component: {
+          tagName: "nav",
+          className: "navigation",
+          attributes: {},
+          role: "navigation",
+        },
+      },
+      {
+        pattern: /^nav\.(items?|links?)\[[0-9]+\]$/,
+        component: {
+          tagName: "a",
+          className: "nav-link",
+          attributes: { href: "#" },
+          role: "link",
+        },
+      },
+
+      // CTA (Call to Action) patterns
+      {
+        pattern: /^cta\.(primary|secondary|button)$/,
+        component: {
+          tagName: "button",
+          className: "cta-button",
+          attributes: { type: "button" },
+          role: "button",
+        },
+      },
+
+      // Form patterns
+      {
+        pattern: /^(form|input)\.(field|input)$/,
+        component: {
+          tagName: "input",
+          className: "form-input",
+          attributes: { type: "text" },
+          role: "textbox",
+        },
+      },
+      {
+        pattern: /^(form|input)\.label$/,
+        component: {
+          tagName: "label",
+          className: "form-label",
+          attributes: {},
+        },
+      },
+
+      // Card patterns
+      {
+        pattern: /^card\.(header|body|footer)$/,
+        component: {
+          tagName: node.type === "frame" ? "article" : "div",
+          className: "card-section",
+          attributes: {},
+          role: node.type === "frame" ? "article" : undefined,
+        },
+      },
+
+      // List patterns
+      {
+        pattern: /^(list|items)\[[0-9]+\]$/,
+        component: {
+          tagName: "li",
+          className: "list-item",
+          attributes: {},
+          role: "listitem",
+        },
+      },
+      {
+        pattern: /^(list|items)$/,
+        component: {
+          tagName: "ul",
+          className: "list",
+          attributes: {},
+          role: "list",
+        },
+      },
+
+      // Content section patterns
+      {
+        pattern: /^(content|section)\.(heading|title)$/,
+        component: {
+          tagName: "h2",
+          className: "section-heading",
+          attributes: {},
+          role: "heading",
+        },
+      },
+      {
+        pattern: /^(content|section)\.text$/,
+        component: {
+          tagName: "p",
+          className: "section-text",
+          attributes: {},
+        },
+      },
+
+      // Modal/Dialog patterns
+      {
+        pattern: /^(modal|dialog)\.(trigger|opener)$/,
+        component: {
+          tagName: "button",
+          className: "modal-trigger",
+          attributes: { type: "button" },
+          role: "button",
+        },
+      },
+      {
+        pattern: /^(modal|dialog)\.content$/,
+        component: {
+          tagName: "div",
+          className: "modal-content",
+          attributes: {},
+          role: "dialog",
+        },
+      },
+    ];
+
+    // Find matching pattern
+    for (const { pattern, component } of semanticPatterns) {
+      if (pattern.test(semanticKey)) {
+        // Add semantic key to className for more specific styling
+        return {
+          ...component,
+          className: `${component.className} ${semanticKey.replace(
+            /[.\[\]]/g,
+            "-"
+          )}`,
+        };
+      }
+    }
+
+    return null; // No semantic pattern matched
   }
 
   /**

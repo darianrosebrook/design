@@ -213,6 +213,102 @@ describe("React Component Generation", () => {
       }
     });
 
+    it("prioritizes semanticKey over naming for component inference", () => {
+      // Create a document with semantic keys
+      const semanticKeyDocument = {
+        schemaVersion: "0.1.0",
+        id: "01JF2PZV9G2WR5C3W7P0YHNX9D",
+        name: "Semantic Key Test",
+        artboards: [
+          {
+            id: "01JF2Q02Q3MZ3Q9J7HB3X6N9QB",
+            name: "Page",
+            frame: { x: 0, y: 0, width: 1440, height: 1024 },
+            children: [
+              {
+                id: "01JF2Q06GTS16EJ3A3F0KK9K3T",
+                type: "frame",
+                name: "Generic Frame", // Generic name
+                frame: { x: 0, y: 0, width: 200, height: 100 },
+                semanticKey: "hero.title", // But has semantic key for hero title
+                children: [
+                  {
+                    id: "01JF2Q09H0C3YV2TE8EH8X7MTA",
+                    type: "text",
+                    name: "Title Text",
+                    frame: { x: 0, y: 0, width: 200, height: 100 },
+                    text: "Hero Title",
+                  },
+                ],
+              },
+              {
+                id: "01JF2Q10H0C3YV2TE8EH8X7MTB",
+                type: "frame",
+                name: "Another Frame",
+                frame: { x: 0, y: 120, width: 300, height: 150 },
+                semanticKey: "cta.primary", // CTA button semantic key
+                children: [
+                  {
+                    id: "01JF2Q11H0C3YV2TE8EH8X7MTC",
+                    type: "text",
+                    name: "Button Text",
+                    frame: { x: 0, y: 0, width: 300, height: 150 },
+                    text: "Get Started",
+                  },
+                ],
+              },
+              {
+                id: "01JF2Q12H0C3YV2TE8EH8X7MTD",
+                type: "frame",
+                name: "List Container",
+                frame: { x: 0, y: 300, width: 400, height: 200 },
+                semanticKey: "nav.items", // Navigation list semantic key
+                children: [
+                  {
+                    id: "01JF2Q13H0C3YV2TE8EH8X7MTE",
+                    type: "text",
+                    name: "Item 1",
+                    frame: { x: 0, y: 0, width: 100, height: 40 },
+                    text: "Home",
+                    semanticKey: "nav.items[0]", // Individual nav item
+                  },
+                  {
+                    id: "01JF2Q14H0C3YV2TE8EH8X7MTF",
+                    type: "text",
+                    name: "Item 2",
+                    frame: { x: 0, y: 50, width: 100, height: 40 },
+                    text: "About",
+                    semanticKey: "nav.items[1]", // Individual nav item
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
+
+      const result = generateReactComponents(semanticKeyDocument);
+
+      const componentFiles = result.files.filter(
+        (f) => f.type === "tsx" && f.path !== "index.ts"
+      );
+
+      for (const file of componentFiles) {
+        // Should use semantic keys to determine component types
+        // Hero title should become <h1> or <header>
+        expect(file.content).toMatch(/<h1|<header/);
+
+        // CTA should become <button>
+        expect(file.content).toMatch(/<button/);
+
+        // Nav items should become <a> elements in <nav>
+        expect(file.content).toMatch(/<nav|<a/);
+
+        // Should include semantic key in class names for specific styling
+        expect(file.content).toMatch(/hero-title|cta-primary|nav-items/);
+      }
+    });
+
     it("generates valid JSX structure with semantic components", () => {
       const result = generateReactComponents(testDocument);
 
