@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 import { Input } from "../primitives/Input";
 import { Label } from "../primitives/Label";
 
@@ -83,7 +83,8 @@ export const ColorField: React.FC<ColorFieldProps> = ({
     onChange?.(newValue);
   };
 
-  const fieldId = id || `color-field-${Math.random().toString(36).substr(2, 9)}`;
+  const fieldId =
+    id || `color-field-${Math.random().toString(36).substr(2, 9)}`;
   const helperId = `${fieldId}-helper`;
   const errorId = `${fieldId}-error`;
 
@@ -93,11 +94,7 @@ export const ColorField: React.FC<ColorFieldProps> = ({
   return (
     <div className={`color-field ${className}`}>
       {label && (
-        <Label
-          htmlFor={fieldId}
-          required={required}
-          disabled={disabled}
-        >
+        <Label htmlFor={fieldId} required={required} disabled={disabled}>
           {label}
         </Label>
       )}
@@ -119,17 +116,22 @@ export const ColorField: React.FC<ColorFieldProps> = ({
           style={{
             width: "40px",
             height: "40px",
-            border: `${tokens.borderWidth.sm}px solid ${hasError ? tokens.color.semantic.error : tokens.color.border.default}`,
+            border: `${tokens.borderWidth.sm}px solid ${
+              hasError
+                ? tokens.color.semantic.error
+                : tokens.color.border.default
+            }`,
             borderRadius: tokens.radius.md,
             cursor: disabled ? "not-allowed" : "pointer",
             backgroundColor: "transparent",
             padding: 0,
           }}
           aria-label={label ? `${label} color picker` : "Color picker"}
-          aria-describedby={[
-            showHelper ? helperId : "",
-            hasError ? errorId : "",
-          ].filter(Boolean).join(" ") || undefined}
+          aria-describedby={
+            [showHelper ? helperId : "", hasError ? errorId : ""]
+              .filter(Boolean)
+              .join(" ") || undefined
+          }
           aria-invalid={hasError}
         />
 
@@ -145,10 +147,11 @@ export const ColorField: React.FC<ColorFieldProps> = ({
             onChange={handleTextChange}
             onFocus={onFocus}
             onBlur={onBlur}
-            aria-describedby={[
-              showHelper ? helperId : "",
-              hasError ? errorId : "",
-            ].filter(Boolean).join(" ") || undefined}
+            aria-describedby={
+              [showHelper ? helperId : "", hasError ? errorId : ""]
+                .filter(Boolean)
+                .join(" ") || undefined
+            }
             aria-invalid={hasError}
             style={{
               flex: 1,

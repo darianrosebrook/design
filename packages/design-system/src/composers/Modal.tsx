@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useRef } from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 import { Box } from "../primitives/Box";
 
 export interface ModalProps {
@@ -198,7 +198,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className={`modal ${size} ${isOpen ? 'open' : 'closed'} ${className}`}
+      className={`modal ${size} ${isOpen ? "open" : "closed"} ${className}`}
       style={modalStyles}
       onClick={handleBackdropClick}
     >
@@ -224,7 +224,8 @@ export const Modal: React.FC<ModalProps> = ({
                 onClick={onClose}
                 aria-label="Close modal"
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = tokens.color.background.tertiary;
+                  e.currentTarget.style.backgroundColor =
+                    tokens.color.background.tertiary;
                   e.currentTarget.style.color = tokens.color.text.primary;
                 }}
                 onMouseLeave={(e) => {
@@ -246,9 +247,7 @@ export const Modal: React.FC<ModalProps> = ({
           </div>
         )}
 
-        <div style={contentStyles}>
-          {children}
-        </div>
+        <div style={contentStyles}>{children}</div>
       </div>
     </div>
   );

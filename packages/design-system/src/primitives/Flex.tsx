@@ -4,13 +4,20 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 
 export interface FlexProps {
   children: React.ReactNode;
   direction?: "row" | "row-reverse" | "column" | "column-reverse";
   wrap?: "nowrap" | "wrap" | "wrap-reverse";
-  justify?: "start" | "end" | "center" | "between" | "around" | "evenly" | "stretch";
+  justify?:
+    | "start"
+    | "end"
+    | "center"
+    | "between"
+    | "around"
+    | "evenly"
+    | "stretch";
   align?: "start" | "end" | "center" | "stretch" | "baseline";
   gap?: "none" | "xs" | "sm" | "md" | "lg" | "xl";
   as?: keyof JSX.IntrinsicElements;

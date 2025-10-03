@@ -4,12 +4,24 @@
  */
 
 import React, { useState, useRef, useEffect } from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 
 export interface TooltipProps {
   content: React.ReactNode;
   children: React.ReactNode;
-  placement?: "top" | "bottom" | "left" | "right" | "top-start" | "top-end" | "bottom-start" | "bottom-end" | "left-start" | "left-end" | "right-start" | "right-end";
+  placement?:
+    | "top"
+    | "bottom"
+    | "left"
+    | "right"
+    | "top-start"
+    | "top-end"
+    | "bottom-start"
+    | "bottom-end"
+    | "left-start"
+    | "left-end"
+    | "right-start"
+    | "right-end";
   trigger?: "hover" | "click" | "focus";
   delay?: number;
   disabled?: boolean;
@@ -44,7 +56,9 @@ export const Tooltip: React.FC<TooltipProps> = ({
   const timeoutRef = useRef<NodeJS.Timeout>();
 
   const updatePosition = () => {
-    if (!triggerRef.current || !tooltipRef.current) {return;}
+    if (!triggerRef.current || !tooltipRef.current) {
+      return;
+    }
 
     const triggerRect = triggerRef.current.getBoundingClientRect();
     const tooltipRect = tooltipRef.current.getBoundingClientRect();
@@ -57,18 +71,18 @@ export const Tooltip: React.FC<TooltipProps> = ({
     switch (placement) {
       case "top":
         top = triggerRect.top - tooltipRect.height - 8;
-        left = triggerRect.left + (triggerRect.width / 2) - (tooltipRect.width / 2);
+        left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
         break;
       case "bottom":
         top = triggerRect.bottom + 8;
-        left = triggerRect.left + (triggerRect.width / 2) - (tooltipRect.width / 2);
+        left = triggerRect.left + triggerRect.width / 2 - tooltipRect.width / 2;
         break;
       case "left":
-        top = triggerRect.top + (triggerRect.height / 2) - (tooltipRect.height / 2);
+        top = triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
         left = triggerRect.left - tooltipRect.width - 8;
         break;
       case "right":
-        top = triggerRect.top + (triggerRect.height / 2) - (tooltipRect.height / 2);
+        top = triggerRect.top + triggerRect.height / 2 - tooltipRect.height / 2;
         left = triggerRect.right + 8;
         break;
       case "top-start":
@@ -106,11 +120,15 @@ export const Tooltip: React.FC<TooltipProps> = ({
     }
 
     // Ensure tooltip stays within viewport
-    if (left < 8) {left = 8;}
+    if (left < 8) {
+      left = 8;
+    }
     if (left + tooltipRect.width > viewportWidth - 8) {
       left = viewportWidth - tooltipRect.width - 8;
     }
-    if (top < 8) {top = 8;}
+    if (top < 8) {
+      top = 8;
+    }
     if (top + tooltipRect.height > viewportHeight - 8) {
       top = viewportHeight - tooltipRect.height - 8;
     }
@@ -119,7 +137,9 @@ export const Tooltip: React.FC<TooltipProps> = ({
   };
 
   const showTooltip = () => {
-    if (disabled) {return;}
+    if (disabled) {
+      return;
+    }
 
     if (delay > 0) {
       timeoutRef.current = setTimeout(() => {
@@ -209,7 +229,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
             pointerEvents: "none",
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? "translateY(0)" : "translateY(-4px)",
-            transition: "opacity 0.15s ease-in-out, transform 0.15s ease-in-out",
+            transition:
+              "opacity 0.15s ease-in-out, transform 0.15s ease-in-out",
           }}
         >
           {content}

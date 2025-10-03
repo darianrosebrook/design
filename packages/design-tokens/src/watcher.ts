@@ -118,10 +118,7 @@ export function watchTokens(options: WatcherOptions): WatcherInstance {
       if (!parseResult.success) {
         throw new Error(
           `Invalid tokens schema: ${parseResult.error.issues
-            .map(
-              (e: { path: string[]; message: string }) =>
-                `${e.path.join(".")}: ${e.message}`
-            )
+            .map((e) => `${e.path.join(".")}: ${e.message}`)
             .join(", ")}`
         );
       }
@@ -132,7 +129,9 @@ export function watchTokens(options: WatcherOptions): WatcherInstance {
       const validation = validateTokenReferences(tokens);
       if (!validation.valid) {
         throw new Error(
-          `Invalid token references: ${validation.errors.join(", ")}`
+          `Invalid token references: ${validation.errors
+            .map((e) => `${e.path}: ${e.message}`)
+            .join(", ")}`
         );
       }
 

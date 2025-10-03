@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 import { Input } from "../primitives/Input";
 import { Label } from "../primitives/Label";
 
@@ -96,20 +96,25 @@ export const NumberField: React.FC<NumberFieldProps> = ({
 
     // Apply constraints
     let constrainedValue = numericValue;
-    if (min !== undefined && constrainedValue < min) {
-      constrainedValue = min;
-    }
-    if (max !== undefined && constrainedValue > max) {
-      constrainedValue = max;
+    if (constrainedValue !== undefined) {
+      if (min !== undefined && constrainedValue < min) {
+        constrainedValue = min;
+      }
+      if (max !== undefined && constrainedValue > max) {
+        constrainedValue = max;
+      }
     }
 
-    if (value === undefined) {
+    if (value === undefined && constrainedValue !== undefined) {
       setInternalValue(constrainedValue);
     }
-    onChange?.(constrainedValue);
+    if (constrainedValue !== undefined) {
+      onChange?.(constrainedValue);
+    }
   };
 
-  const fieldId = id || `number-field-${Math.random().toString(36).substr(2, 9)}`;
+  const fieldId =
+    id || `number-field-${Math.random().toString(36).substr(2, 9)}`;
   const helperId = `${fieldId}-helper`;
   const errorId = `${fieldId}-error`;
 
@@ -121,11 +126,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
   return (
     <div className={`number-field ${className}`}>
       {label && (
-        <Label
-          htmlFor={fieldId}
-          required={required}
-          disabled={disabled}
-        >
+        <Label htmlFor={fieldId} required={required} disabled={disabled}>
           {label}
         </Label>
       )}
@@ -145,10 +146,11 @@ export const NumberField: React.FC<NumberFieldProps> = ({
           onChange={handleChange}
           onFocus={onFocus}
           onBlur={onBlur}
-          aria-describedby={[
-            showHelper ? helperId : "",
-            hasError ? errorId : "",
-          ].filter(Boolean).join(" ") || undefined}
+          aria-describedby={
+            [showHelper ? helperId : "", hasError ? errorId : ""]
+              .filter(Boolean)
+              .join(" ") || undefined
+          }
           aria-invalid={hasError}
           style={{
             paddingRight: showValue ? "60px" : undefined,
@@ -167,7 +169,9 @@ export const NumberField: React.FC<NumberFieldProps> = ({
               pointerEvents: "none",
             }}
           >
-            {precision !== undefined ? Number(internalValue).toFixed(precision) : internalValue}
+            {precision !== undefined
+              ? Number(internalValue).toFixed(precision)
+              : internalValue}
           </div>
         )}
       </div>

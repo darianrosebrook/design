@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 
 export interface SliderProps {
   value?: number;
@@ -75,7 +75,9 @@ export const Slider: React.FC<SliderProps> = ({
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (disabled) {return;}
+    if (disabled) {
+      return;
+    }
 
     const newValue = Number(e.target.value);
     if (value === undefined) {
@@ -164,7 +166,9 @@ export const Slider: React.FC<SliderProps> = ({
 
   return (
     <div
-      className={`slider ${orientation} ${disabled ? 'disabled' : ''} ${className}`}
+      className={`slider ${orientation} ${
+        disabled ? "disabled" : ""
+      } ${className}`}
       style={containerStyles}
     >
       <div style={sliderContainerStyles}>
@@ -200,9 +204,7 @@ export const Slider: React.FC<SliderProps> = ({
       </div>
 
       {showValue && (
-        <div style={valueDisplayStyles}>
-          {formatValue(internalValue)}
-        </div>
+        <div style={valueDisplayStyles}>{formatValue(internalValue)}</div>
       )}
     </div>
   );

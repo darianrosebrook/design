@@ -73,8 +73,12 @@ export function buildDependencyGraph(
           graph.set(currentPath, new Set());
         }
         graph.get(currentPath)!.add(refPath);
-      } else if (typeof value === "object" && value !== null) {
-        walk(value, [...path, key]);
+      } else if (
+        typeof value === "object" &&
+        value !== null &&
+        !Array.isArray(value)
+      ) {
+        walk(value as Record<string, unknown>, [...path, key]);
       }
     }
   }

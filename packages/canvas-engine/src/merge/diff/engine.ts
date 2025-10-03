@@ -333,7 +333,7 @@ export class SemanticDiffEngine {
     const operations: DiffOperation[] = [];
 
     // Compare individual frame properties
-    const frameProps = ["x", "y", "width", "height"];
+    const frameProps: (keyof typeof oldFrame)[] = ["x", "y", "width", "height"];
     for (const prop of frameProps) {
       if (oldFrame[prop] !== newFrame[prop]) {
         operations.push({

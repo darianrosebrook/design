@@ -3,11 +3,8 @@
  * @author @darianrosebrook
  */
 
-import type { Conflict, MergeContext ,
-  ResolutionStrategy,
-  STRATEGY_CONFIDENCE,
-  type MergeResolution,
-} from "../types.js";
+import type { Conflict, MergeContext, MergeResolution } from "../types.js";
+import { ResolutionStrategy, STRATEGY_CONFIDENCE } from "../types.js";
 
 /**
  * Resolver that prefers local changes over remote changes

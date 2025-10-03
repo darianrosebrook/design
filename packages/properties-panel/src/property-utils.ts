@@ -7,6 +7,41 @@ import type { NodeType, TextNodeType } from "@paths-design/canvas-schema";
 import type { PropertyValue, PropertyDefinition } from "./types";
 
 /**
+ * Type guard to safely convert unknown to PropertyValue
+ */
+function isPropertyValue(value: unknown): value is PropertyValue {
+  if (value === null || value === undefined) return true;
+  if (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  )
+    return true;
+  if (Array.isArray(value))
+    return value.every((item) => typeof item === "string");
+  if (typeof value === "object" && value !== null) {
+    const obj = value as Record<string, unknown>;
+    // Check for Rect type
+    if (
+      typeof obj.x === "number" &&
+      typeof obj.y === "number" &&
+      typeof obj.width === "number" &&
+      typeof obj.height === "number"
+    )
+      return true;
+    // Check for Color type
+    if (
+      typeof obj.r === "number" &&
+      typeof obj.g === "number" &&
+      typeof obj.b === "number" &&
+      (obj.a === undefined || typeof obj.a === "number")
+    )
+      return true;
+  }
+  return false;
+}
+
+/**
  * Get the value of a property from a node
  */
 export function getNodeProperty(
@@ -18,7 +53,8 @@ export function getNodeProperty(
 
   if (parts.length === 1) {
     // Direct property access
-    return (node as Record<string, unknown>)[propertyKey];
+    const value = (node as Record<string, unknown>)[propertyKey];
+    return isPropertyValue(value) ? value : undefined;
   }
 
   if (parts.length === 2) {
@@ -26,14 +62,18 @@ export function getNodeProperty(
 
     switch (parent) {
       case "frame":
-        return node.frame
-          ? (node.frame as Record<string, unknown>)[child]
-          : undefined;
+        if (node.frame) {
+          const value = (node.frame as Record<string, unknown>)[child];
+          return isPropertyValue(value) ? value : undefined;
+        }
+        return undefined;
 
       case "textStyle":
-        return node.type === "text" && node.textStyle
-          ? (node.textStyle as Record<string, unknown>)[child]
-          : undefined;
+        if (node.type === "text" && node.textStyle) {
+          const value = (node.textStyle as Record<string, unknown>)[child];
+          return isPropertyValue(value) ? value : undefined;
+        }
+        return undefined;
 
       case "text":
         return node.type === "text" ? (node as TextNodeType).text : undefined;
@@ -43,7 +83,11 @@ export function getNodeProperty(
         return undefined;
 
       default:
-        return (node as Record<string, unknown>)[parent]?.[child];
+        const parentObj = (node as Record<string, unknown>)[parent] as
+          | Record<string, unknown>
+          | undefined;
+        const value = parentObj?.[child];
+        return isPropertyValue(value) ? value : undefined;
     }
   }
 
@@ -56,7 +100,7 @@ export function getNodeProperty(
     current = (current as Record<string, unknown>)[part];
   }
 
-  return current;
+  return isPropertyValue(current) ? current : undefined;
 }
 
 /**
@@ -135,7 +179,7 @@ export function setNodeProperty(
     if (current[part] == null) {
       current[part] = {};
     }
-    current = current[part];
+    current = current[part] as Record<string, unknown>;
   }
 
   // Set the final property

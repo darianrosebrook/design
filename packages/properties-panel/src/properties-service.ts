@@ -199,13 +199,18 @@ export class PropertiesService {
     // If node is a component instance, get contract properties
     if (node.type === "component" && this.componentIndex) {
       const componentKey = (node as Record<string, unknown>).componentKey;
-      const component = this.componentIndex.components[componentKey];
-      if (component) {
-        const contractProperties = this.getContractPropertiesForComponent(
-          component,
-          node
-        );
-        properties.push(...contractProperties);
+      if (typeof componentKey === "string") {
+        const component =
+          this.componentIndex.components[
+            componentKey as keyof typeof this.componentIndex.components
+          ];
+        if (component) {
+          const contractProperties = this.getContractPropertiesForComponent(
+            component as Record<string, unknown>,
+            node
+          );
+          properties.push(...contractProperties);
+        }
       }
     }
 
@@ -255,40 +260,44 @@ export class PropertiesService {
   ): PropertyDefinition[] {
     const properties: PropertyDefinition[] = [];
 
-    for (const prop of component.props) {
-      const propertyDef: PropertyDefinition = {
-        key: `props.${prop.name}`,
-        label: prop.name,
-        type: this.mapTypeToPropertyType(prop.type),
-        category: "component",
-        description: `Component property: ${prop.name}`,
-        semanticKey: (node as Record<string, unknown>).semanticKey,
-        componentContract: {
-          componentKey: component.id || component.name,
-          propName: prop.name,
-          propType: prop.type,
-          propDefaults,
-          passthrough: prop.passthrough,
-        },
-      };
+    if (component.props && Array.isArray(component.props)) {
+      for (const prop of component.props) {
+        const propertyDef: PropertyDefinition = {
+          key: `props.${prop.name}`,
+          label: prop.name,
+          type: this.mapTypeToPropertyType(prop.type),
+          category: "component",
+          description: `Component property: ${prop.name}`,
+          semanticKey: (node as Record<string, unknown>).semanticKey as
+            | string
+            | undefined,
+          componentContract: {
+            componentKey: (component.id || component.name) as string,
+            propName: prop.name,
+            propType: prop.type,
+            propDefaults,
+            passthrough: prop.passthrough,
+          },
+        };
 
-      // Set default value from contract or prop defaults
-      if (prop.defaultValue !== undefined) {
-        propertyDef.placeholder = String(prop.defaultValue);
-      } else if (propDefaults?.[prop.name] !== undefined) {
-        propertyDef.placeholder = String(propDefaults[prop.name]);
+        // Set default value from contract or prop defaults
+        if (prop.defaultValue !== undefined) {
+          propertyDef.placeholder = String(prop.defaultValue);
+        } else if (propDefaults?.[prop.name] !== undefined) {
+          propertyDef.placeholder = String(propDefaults[prop.name]);
+        }
+
+        // Handle enum types
+        if (prop.enum) {
+          propertyDef.type = "select";
+          propertyDef.options = prop.enum.map((value: string) => ({
+            label: value,
+            value: value,
+          }));
+        }
+
+        properties.push(propertyDef);
       }
-
-      // Handle enum types
-      if (prop.enum) {
-        propertyDef.type = "select";
-        propertyDef.options = prop.enum.map((value: string) => ({
-          label: value,
-          value: value,
-        }));
-      }
-
-      properties.push(propertyDef);
     }
 
     return properties;
@@ -332,7 +341,12 @@ export class PropertiesService {
       }
     }
 
-    return Array.from(allProperties).map((key) => ({ key }));
+    return Array.from(allProperties).map((key) => ({
+      key,
+      label: key,
+      type: "string" as const,
+      category: "general" as const,
+    }));
   }
 
   /**

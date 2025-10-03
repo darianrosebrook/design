@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 import { Box } from "./Box";
 
 export interface StackProps {
@@ -72,7 +72,9 @@ export const Stack: React.FC<StackProps> = ({
 
   return (
     <Component
-      className={`stack ${direction} ${spacing} ${align} ${justify} ${wrap ? 'wrap' : 'nowrap'} ${className}`}
+      className={`stack ${direction} ${spacing} ${align} ${justify} ${
+        wrap ? "wrap" : "nowrap"
+      } ${className}`}
       style={containerStyles}
     >
       {wrappedChildren}

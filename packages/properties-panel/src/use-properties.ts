@@ -7,7 +7,11 @@ import type { NodeType } from "@paths-design/canvas-schema";
 import { useState, useEffect, useCallback } from "react";
 import { PropertiesService } from "./properties-service";
 // import { getApplicablePropertiesForNode } from "./property-utils"; // TODO: Remove if not needed
-import type { SelectionState, PropertyChangeEvent } from "./types";
+import type {
+  SelectionState,
+  PropertyChangeEvent,
+  PropertyValue,
+} from "./types";
 
 /**
  * Hook for integrating with the properties service
@@ -105,7 +109,7 @@ export function usePropertyEditor(nodeId: string, propertyKey: string) {
         const success = PropertiesService.getInstance().setNodeProperty(
           nodeId,
           propertyKey,
-          newValue
+          newValue as PropertyValue
         );
 
         if (success) {

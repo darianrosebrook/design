@@ -9,13 +9,13 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as vscode from "vscode";
-import type { CanvasDocumentType } from "../../canvas-schema/src/index.js";
-import type { ComponentIndex } from "../../component-indexer/src/index.js";
+import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
+import type { ComponentIndex } from "@paths-design/component-indexer";
 import type {
   SelectionState,
   PropertyChangeEvent,
-} from "../../properties-panel/src/index.js";
-import { PropertiesService } from "../../properties-panel/src/index.js";
+} from "@paths-design/properties-panel";
+import { PropertiesService } from "@paths-design/properties-panel";
 import { PropertiesPanelWebviewProvider } from "./properties-panel-webview";
 
 export * from "./protocol/index.js";

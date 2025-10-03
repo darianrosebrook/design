@@ -105,11 +105,11 @@ function applyFills(
   if (solidFills.length > 0) {
     const fill = solidFills[0];
     const opacity = fill.opacity ?? 1;
-    element.style.backgroundColor = fill.color ?? "transparent";
+    element.style.backgroundColor = (fill.color as string) ?? "transparent";
 
     if (opacity !== 1) {
       // Apply opacity to background only
-      const color = fill.color ?? "transparent";
+      const color = (fill.color as string) ?? "transparent";
       if (color.startsWith("#")) {
         // Convert hex to rgba
         const r = parseInt(color.slice(1, 3), 16);
@@ -140,7 +140,7 @@ function applyStrokes(
   if (solidStrokes.length > 0) {
     const stroke = solidStrokes[0];
     const width = stroke.thickness ?? 1;
-    const color = stroke.color ?? "#000000";
+    const color = (stroke.color as string) ?? "#000000";
     const opacity = stroke.opacity ?? 1;
 
     element.style.borderStyle = "solid";

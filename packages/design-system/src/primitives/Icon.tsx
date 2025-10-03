@@ -4,12 +4,20 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 
 export interface IconProps {
   name: string;
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
-  color?: "primary" | "secondary" | "tertiary" | "inverse" | "error" | "success" | "warning" | "info";
+  color?:
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "inverse"
+    | "error"
+    | "success"
+    | "warning"
+    | "info";
   decorative?: boolean;
   className?: string;
   "aria-label"?: string;
@@ -68,26 +76,26 @@ export const Icon: React.FC<IconProps> = ({
   const getIconContent = (iconName: string): string => {
     const iconMap: Record<string, string> = {
       // Layout icons
-      "layout": "📐",
-      "grid": "⊞",
-      "columns": "⫿",
-      "rows": "⫿",
+      layout: "📐",
+      grid: "⊞",
+      columns: "⫿",
+      rows: "⫿",
 
       // Text icons
-      "text": "📝",
-      "font": "𝔄",
-      "type": "Aa",
+      text: "📝",
+      font: "𝔄",
+      type: "Aa",
       "align-left": "⬅",
       "align-center": "⬌",
       "align-right": "➡",
 
       // Interactive icons
-      "button": "🔘",
-      "input": "▭",
-      "checkbox": "☑",
-      "radio": "🔘",
-      "select": "▼",
-      "toggle": "⏻",
+      button: "🔘",
+      input: "▭",
+      checkbox: "☑",
+      radio: "🔘",
+      select: "▼",
+      toggle: "⏻",
 
       // Navigation icons
       "arrow-left": "←",
@@ -98,52 +106,52 @@ export const Icon: React.FC<IconProps> = ({
       "chevron-right": "›",
       "chevron-up": "˄",
       "chevron-down": "˅",
-      "menu": "☰",
-      "close": "✕",
-      "expand": "⊕",
-      "collapse": "⊖",
+      menu: "☰",
+      close: "✕",
+      expand: "⊕",
+      collapse: "⊖",
 
       // Status icons
-      "check": "✓",
-      "cross": "✗",
-      "warning": "⚠",
-      "error": "✗",
-      "info": "ℹ",
-      "success": "✓",
-      "loading": "⟲",
+      check: "✓",
+      cross: "✗",
+      warning: "⚠",
+      error: "✗",
+      info: "ℹ",
+      success: "✓",
+      loading: "⟲",
 
       // Object icons
-      "frame": "▭",
-      "rectangle": "▭",
-      "circle": "○",
-      "image": "🖼",
-      "vector": "△",
+      frame: "▭",
+      rectangle: "▭",
+      circle: "○",
+      image: "🖼",
+      vector: "△",
 
       // Action icons
-      "edit": "✏",
-      "delete": "🗑",
-      "copy": "📋",
-      "paste": "📋",
-      "undo": "↺",
-      "redo": "↻",
-      "save": "💾",
-      "download": "⬇",
-      "upload": "⬆",
+      edit: "✏",
+      delete: "🗑",
+      copy: "📋",
+      paste: "📋",
+      undo: "↺",
+      redo: "↻",
+      save: "💾",
+      download: "⬇",
+      upload: "⬆",
 
       // UI icons
-      "settings": "⚙",
-      "search": "🔍",
-      "filter": "🔽",
-      "sort": "🔀",
-      "eye": "👁",
+      settings: "⚙",
+      search: "🔍",
+      filter: "🔽",
+      sort: "🔀",
+      eye: "👁",
       "eye-off": "🙈",
-      "lock": "🔒",
-      "unlock": "🔓",
-      "star": "⭐",
-      "heart": "❤️",
-      "bookmark": "🔖",
-      "link": "🔗",
-      "share": "📤",
+      lock: "🔒",
+      unlock: "🔓",
+      star: "⭐",
+      heart: "❤️",
+      bookmark: "🔖",
+      link: "🔗",
+      share: "📤",
     };
 
     return iconMap[iconName] || iconName;
@@ -151,7 +159,9 @@ export const Icon: React.FC<IconProps> = ({
 
   return (
     <span
-      className={`icon ${name} ${size} ${color} ${decorative ? 'decorative' : ''} ${className}`}
+      className={`icon ${name} ${size} ${color} ${
+        decorative ? "decorative" : ""
+      } ${className}`}
       style={baseStyles}
       aria-label={decorative ? undefined : ariaLabel}
       aria-hidden={ariaHidden ?? decorative}

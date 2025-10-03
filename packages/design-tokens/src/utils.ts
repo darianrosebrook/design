@@ -28,8 +28,12 @@ export function flattenTokens(
     for (const [key, value] of Object.entries(obj)) {
       const currentPath = [...path, key];
 
-      if (typeof value === "object" && value !== null) {
-        walk(value, currentPath);
+      if (
+        typeof value === "object" &&
+        value !== null &&
+        !Array.isArray(value)
+      ) {
+        walk(value as Record<string, unknown>, currentPath);
       } else {
         const cssVar = `--${prefix ? `${prefix}-` : ""}${currentPath.join(
           "-"
@@ -77,13 +81,13 @@ export function getToken(
 
   for (const part of parts) {
     if (current && typeof current === "object" && part in current) {
-      current = current[part];
+      current = (current as Record<string, unknown>)[part];
     } else {
       return undefined;
     }
   }
 
-  return current;
+  return current as string | number | undefined;
 }
 
 /**
@@ -104,7 +108,7 @@ export function setToken(
     if (!current[part] || typeof current[part] !== "object") {
       current[part] = {};
     }
-    current = current[part];
+    current = current[part] as Record<string, unknown>;
   }
 
   // Set the final value
@@ -126,9 +130,8 @@ export function validateTokens(tokens: Record<string, unknown>): {
   } else {
     return {
       valid: false,
-      errors: result.error.errors.map(
-        (err: { path: string[]; message: string }) =>
-          `${err.path.join(".")}: ${err.message}`
+      errors: result.error.issues.map(
+        (err) => `${err.path.join(".")}: ${err.message}`
       ),
     };
   }
@@ -156,7 +159,10 @@ export function mergeTokens(
         if (!target[key]) {
           target[key] = {};
         }
-        deepMerge(target[key], source[key]);
+        deepMerge(
+          target[key] as Record<string, unknown>,
+          source[key] as Record<string, unknown>
+        );
       } else {
         target[key] = source[key];
       }
@@ -182,7 +188,7 @@ export function tokensToTypes(tokens: DesignTokens): string {
         value !== null &&
         !Array.isArray(value)
       ) {
-        walk(value, currentPath);
+        walk(value as Record<string, unknown>, currentPath);
       } else {
         const typePath = currentPath.join(".");
         const type = typeof value === "string" ? "string" : "number";

@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 
 export interface SelectOption {
   label: string;
@@ -108,7 +108,10 @@ export const Select: React.FC<SelectProps> = ({
       multiple={multiple}
       onChange={(e) => {
         if (multiple) {
-          const selectedOptions = Array.from(e.target.selectedOptions, option => option.value);
+          const selectedOptions = Array.from(
+            e.target.selectedOptions,
+            (option) => option.value
+          );
           onChange?.(selectedOptions);
         } else {
           onChange?.(e.target.value);
@@ -135,7 +138,9 @@ export const Select: React.FC<SelectProps> = ({
       aria-invalid={ariaInvalid}
       id={id}
       name={name}
-      className={`select ${size} ${disabled ? 'disabled' : ''} ${ariaInvalid ? 'invalid' : ''} ${className}`}
+      className={`select ${size} ${disabled ? "disabled" : ""} ${
+        ariaInvalid ? "invalid" : ""
+      } ${className}`}
       style={{
         ...baseStyles,
         ...(disabled ? disabledStyles : {}),

@@ -26,5 +26,5 @@ export { Tooltip } from "./composers/Tooltip";
 export { Modal } from "./composers/Modal";
 
 // Export design tokens (re-export for convenience)
-export { defaultTokens as tokens } from "../design-tokens/src/tokens";
-export type { DesignTokens } from "../design-tokens/src/tokens";
+export { defaultTokens as tokens } from "@paths-design/design-tokens";
+export type { DesignTokens } from "@paths-design/design-tokens";

@@ -4,14 +4,20 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 
 export interface BoxProps {
   children?: React.ReactNode;
   as?: keyof JSX.IntrinsicElements;
   padding?: "none" | "xs" | "sm" | "md" | "lg" | "xl";
   margin?: "none" | "xs" | "sm" | "md" | "lg" | "xl";
-  backgroundColor?: "primary" | "secondary" | "tertiary" | "surface" | "elevated" | "transparent";
+  backgroundColor?:
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "surface"
+    | "elevated"
+    | "transparent";
   borderRadius?: "none" | "sm" | "md" | "lg" | "xl" | "full";
   border?: "none" | "subtle" | "default" | "strong";
   shadow?: "none" | "sm" | "md" | "lg" | "xl";
@@ -21,13 +27,19 @@ export interface BoxProps {
   minHeight?: string | number;
   maxWidth?: string | number;
   maxHeight?: string | number;
-  display?: "block" | "inline-block" | "flex" | "inline-flex" | "grid" | "inline-grid";
+  display?:
+    | "block"
+    | "inline-block"
+    | "flex"
+    | "inline-flex"
+    | "grid"
+    | "inline-grid";
   position?: "static" | "relative" | "absolute" | "fixed" | "sticky";
   className?: string;
   style?: React.CSSProperties;
-  onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-  onMouseEnter?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-  onMouseLeave?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  onClick?: (event: React.MouseEvent) => void;
+  onMouseEnter?: (event: React.MouseEvent) => void;
+  onMouseLeave?: (event: React.MouseEvent) => void;
   role?: string;
   "aria-label"?: string;
 }

@@ -4,7 +4,7 @@
  */
 
 import React, { useMemo } from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 import { Button } from "../primitives/Button";
 
 // Local types to avoid circular dependencies
@@ -19,6 +19,7 @@ export interface PropertyDefinition {
   type: string;
   value?: unknown;
   options?: unknown[];
+  category?: string;
 }
 
 export interface PropertyChangeEvent {
@@ -35,6 +36,8 @@ export interface PropertiesPanelProps {
   onSelectionChange?: (selection: SelectionState) => void;
   className?: string;
   style?: React.CSSProperties;
+  _documentId?: string;
+  _onSelectionChange?: (selection: SelectionState) => void;
 }
 
 export interface PropertySectionProps {
@@ -289,7 +292,7 @@ export const PropertySectionComponent: React.FC<
           padding: `${tokens.space.md}px ${tokens.space.lg}px`,
           cursor: "pointer",
           backgroundColor: tokens.color.background.secondary,
-          transition: `background-color ${tokens.transition || "0.15s ease"}`,
+          transition: "background-color 0.15s ease",
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor =

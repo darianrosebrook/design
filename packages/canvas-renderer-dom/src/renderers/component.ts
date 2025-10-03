@@ -163,7 +163,7 @@ function renderComponentPlaceholder(
     description.style.fontSize = "10px";
     description.style.color = "#94a3b8";
     description.style.lineHeight = "1.4";
-    description.textContent = component.description;
+    description.textContent = String(component.description || "");
     content.appendChild(description);
   }
 

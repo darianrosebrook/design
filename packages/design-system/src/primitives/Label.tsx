@@ -4,14 +4,21 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 
 export interface LabelProps {
   children: React.ReactNode;
   htmlFor?: string;
   size?: "xs" | "sm" | "md" | "lg";
   weight?: "normal" | "medium" | "semibold" | "bold";
-  color?: "primary" | "secondary" | "tertiary" | "inverse" | "error" | "success" | "warning";
+  color?:
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "inverse"
+    | "error"
+    | "success"
+    | "warning";
   required?: boolean;
   disabled?: boolean;
   className?: string;
@@ -92,7 +99,9 @@ export const Label: React.FC<LabelProps> = ({
   return (
     <label
       htmlFor={htmlFor}
-      className={`label ${size} ${weight} ${color} ${disabled ? 'disabled' : ''} ${className}`}
+      className={`label ${size} ${weight} ${color} ${
+        disabled ? "disabled" : ""
+      } ${className}`}
       style={baseStyles}
       id={id}
     >

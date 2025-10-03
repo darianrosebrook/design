@@ -1,13 +1,10 @@
 {
-  "name": "@paths-design/mcp-adapter",
+  "name": "@paths-design/system-integration",
   "version": "0.1.0",
   "type": "module",
-  "description": "MCP adapter for Cursor integration with Designer",
+  "description": "Integration layer connecting semantic key system with component standards",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": {
-    "designer-mcp": "dist/mcp-server.js"
-  },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -15,8 +12,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src --max-warnings 0",
-    "lint:fix": "eslint src --fix",
-    "start": "node dist/mcp-server.js"
+    "lint:fix": "eslint src --fix"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -26,21 +22,23 @@
   },
   "dependencies": {
     "@paths-design/canvas-schema": "file:../canvas-schema",
-    "@paths-design/codegen-react": "file:../codegen-react",
-    "@paths-design/augment": "file:../augment",
-    "@paths-design/diff-visualizer": "file:../diff-visualizer",
+    "@paths-design/component-indexer": "file:../component-indexer",
     "@paths-design/pattern-manifests": "file:../pattern-manifests",
     "@paths-design/component-discovery": "file:../component-discovery",
-    "@modelcontextprotocol/sdk": "^1.0.0",
-    "ulidx": "^2.4.1"
+    "@paths-design/augment": "file:../augment",
+    "@paths-design/diff-visualizer": "file:../diff-visualizer",
+    "@paths-design/codegen-react": "file:../codegen-react"
   },
   "files": [
-    "dist"
+    "dist",
+    "integrations",
+    "adapters"
   ],
   "keywords": [
     "designer",
-    "mcp",
-    "cursor",
-    "canvas"
+    "system-integration",
+    "component-standards",
+    "semantic-keys",
+    "unified-system"
   ]
 }

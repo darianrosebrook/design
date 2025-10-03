@@ -4,14 +4,11 @@
  */
 
 import * as vscode from "vscode";
-import type {
-  CanvasDocumentType,
-  // NodeType, // TODO: Remove if not needed
-} from "../../canvas-schema/src/index.js";
+import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 import type {
   SelectionState,
   PropertyChangeEvent,
-} from "../../properties-panel/src/index.js";
+} from "@paths-design/properties-panel";
 
 /**
  * Properties panel webview provider
@@ -33,9 +30,8 @@ export class PropertiesPanelWebviewProvider
 
   constructor(private context: vscode.ExtensionContext) {
     // Get reference to the extension instance for communication
-    this._extensionInstance = (
-      globalThis as Record<string, unknown>
-    ).designerExtension;
+    this._extensionInstance = (globalThis as Record<string, unknown>)
+      .designerExtension as any;
   }
 
   /**
@@ -311,7 +307,9 @@ export class PropertiesPanelWebviewProvider
         throw new Error("Extension not initialized");
       }
 
-      const currentDocument = this._extensionInstance.getCurrentDocument();
+      const currentDocument = (
+        this._extensionInstance as any
+      ).getCurrentDocument();
       if (!currentDocument) {
         throw new Error("No current document loaded");
       }
@@ -323,7 +321,7 @@ export class PropertiesPanelWebviewProvider
       );
 
       // Update the extension's document
-      this._extensionInstance._updateDocument(updatedDocument);
+      (this._extensionInstance as any)._updateDocument(updatedDocument);
 
       // Save the document to file
       await this._saveDocument(updatedDocument);

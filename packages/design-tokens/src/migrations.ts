@@ -105,10 +105,10 @@ export function detectVersion(
   tokens: Record<string, unknown>
 ): string | undefined {
   // Check explicit version fields
-  if (tokens.version) {
+  if (tokens.version && typeof tokens.version === "string") {
     return tokens.version;
   }
-  if (tokens.schemaVersion) {
+  if (tokens.schemaVersion && typeof tokens.schemaVersion === "string") {
     return tokens.schemaVersion;
   }
 

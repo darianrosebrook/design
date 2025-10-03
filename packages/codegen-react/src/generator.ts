@@ -655,7 +655,14 @@ export class ReactGenerator {
         const priority = mapping.priority ?? 5;
 
         if (!bestMatch || priority > bestMatch.priority) {
-          bestMatch = { componentKey, mapping, priority };
+          bestMatch = {
+            componentKey,
+            mapping: {
+              ...mapping,
+              propDefaults: mapping.propDefaults ?? {},
+            },
+            priority,
+          };
         }
       }
     }

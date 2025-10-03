@@ -179,6 +179,22 @@ export class PatternRegistry {
   }
 
   /**
+   * Get patterns by layer
+   */
+  getByLayer(layer: PatternManifest["layer"]): PatternManifest[] {
+    return this.getAll().filter((p) => p.layer === layer);
+  }
+
+  /**
+   * Get patterns by status (from component standards)
+   */
+  getByStatus(status: "Planned" | "Built" | "DocOnly"): PatternManifest[] {
+    // For now, all patterns are considered "Built" since they're implemented
+    // In a real system, this would be tracked separately
+    return this.getAll();
+  }
+
+  /**
    * Get patterns by tag
    */
   getByTag(tag: string): PatternManifest[] {
@@ -530,7 +546,8 @@ export class PatternRegistry {
       name: "Form",
       description: "Form with fields, labels, and validation",
       version: "1.0.0",
-      category: "form",
+      category: "Forms",
+      layer: "composers",
       tags: ["form", "input", "validation"],
       structure: [
         {
@@ -628,7 +645,8 @@ export class PatternRegistry {
       name: "Card",
       description: "Content card with optional header, body, and footer",
       version: "1.0.0",
-      category: "data-display",
+      category: "Display",
+      layer: "compounds",
       tags: ["card", "container", "layout"],
       structure: [
         {
@@ -696,7 +714,8 @@ export class PatternRegistry {
       name: "Navigation",
       description: "Navigation menu with links",
       version: "1.0.0",
-      category: "navigation",
+      category: "Navigation",
+      layer: "compounds",
       tags: ["navigation", "menu", "links"],
       structure: [
         {
@@ -898,11 +917,12 @@ export class PatternDetector {
     pattern: PatternManifest
   ): NodeType[] {
     const roots: NodeType[] = [];
+    const self = this;
 
     function traverseNodes(nodes: NodeType[]): void {
       for (const node of nodes) {
         // Check if this node could be a pattern root
-        if (this.nodeMatchesPatternRoot(node, pattern)) {
+        if (self.nodeMatchesPatternRoot(node, pattern)) {
           roots.push(node);
         }
 
@@ -913,7 +933,7 @@ export class PatternDetector {
       }
     }
 
-    document.artboards.forEach((artboard) => {
+    document.artboards.forEach((artboard: any) => {
       traverseNodes(artboard.children);
     });
 
@@ -940,7 +960,7 @@ export class PatternDetector {
     if (node.type === "frame" && "children" in node) {
       const children = node.children || [];
       return pattern.structure.some((struct) => {
-        return children.some((child) => child.type === struct.type);
+        return children.some((child: any) => child.type === struct.type);
       });
     }
 

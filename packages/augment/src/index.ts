@@ -299,12 +299,19 @@ export class AugmentationEngine {
           tokens.push({ path: `${path}.color`, token: obj.color });
         }
 
-        if (obj.bind?.token) {
-          tokens.push({ path: `${path}.bind.token`, token: obj.bind.token });
+        if (obj.bind && typeof obj.bind === "object" && "token" in obj.bind) {
+          tokens.push({
+            path: `${path}.bind.token`,
+            token: (obj.bind as { token: string }).token,
+          });
         }
 
         for (const [key, value] of Object.entries(obj)) {
-          tokens.push(...findTokens(value, `${path}.${key}`));
+          if (typeof value === "object" && value !== null) {
+            tokens.push(
+              ...findTokens(value as Record<string, unknown>, `${path}.${key}`)
+            );
+          }
         }
       }
 
@@ -410,13 +417,13 @@ export class AugmentationEngine {
     document: CanvasDocumentType,
     transformations: TransformationRecord[]
   ): void {
-    // const engine = this; // Capture this context - removed to avoid this aliasing
+    const self = this; // Capture this context
     function fuzzNode(node: NodeType, path: string): void {
       if (node.type === "vector") {
         const vectorNode = node as { type: string; [key: string]: unknown };
 
         if (
-          this.config.svgFuzzing?.windingRuleVariation &&
+          self.config.svgFuzzing?.windingRuleVariation &&
           vectorNode.windingRule
         ) {
           const oldRule = vectorNode.windingRule;

@@ -1444,7 +1444,9 @@ ${
 
       const summary = `Detected ${
         instances.length
-      } pattern instances: ${instances.map((i) => i.patternId).join(", ")}`;
+      } pattern instances: ${instances
+        .map((i: any) => i.patternId)
+        .join(", ")}`;
 
       return { instances, summary };
     } catch (error) {
@@ -1623,9 +1625,6 @@ ${
       const result = await runAutoDiscovery(".", {
         canvasFiles: [args.documentPath],
         sourceFiles: args.sourceCodePaths,
-        componentIndex: args.componentIndexPath
-          ? await this.loadComponentIndex(args.componentIndexPath)
-          : undefined,
       });
 
       const summary = `Analysis complete: ${result.discoveredComponents.length} components, ${result.recommendations.length} recommendations, ${result.issues.length} issues`;

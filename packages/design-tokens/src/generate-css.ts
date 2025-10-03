@@ -19,8 +19,12 @@ function flattenTokens(
     for (const [key, value] of Object.entries(obj)) {
       const currentPath = [...path, key];
 
-      if (typeof value === "object" && value !== null) {
-        walk(value, currentPath);
+      if (
+        typeof value === "object" &&
+        value !== null &&
+        !Array.isArray(value)
+      ) {
+        walk(value as Record<string, unknown>, currentPath);
       } else {
         const cssVar = `--${prefix ? `${prefix}-` : ""}${currentPath.join(
           "-"

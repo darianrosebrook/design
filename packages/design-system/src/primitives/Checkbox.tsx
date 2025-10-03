@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 
 export interface CheckboxProps {
   checked?: boolean;
@@ -93,7 +93,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     backgroundColor: tokens.color.background.primary,
     cursor: disabled ? "not-allowed" : "pointer",
     transition: "all 0.15s ease-in-out",
-    appearance: "none",
+    appearance: "none" as const,
     position: "relative" as const,
   };
 

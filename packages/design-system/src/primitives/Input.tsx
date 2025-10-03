@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { defaultTokens as tokens } from "../../design-tokens/src/tokens";
+import { defaultTokens as tokens } from "@paths-design/design-tokens";
 
 export interface InputProps {
   type?: "text" | "number" | "email" | "password" | "tel" | "url" | "search";
@@ -29,6 +29,7 @@ export interface InputProps {
   "aria-invalid"?: boolean;
   id?: string;
   name?: string;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -67,6 +68,7 @@ export const Input: React.FC<InputProps> = ({
   "aria-invalid": ariaInvalid,
   id,
   name,
+  style,
 }) => {
   const baseStyles = {
     fontFamily: tokens.type.family.sans,
@@ -122,8 +124,6 @@ export const Input: React.FC<InputProps> = ({
       autoComplete={autoComplete}
       autoFocus={autoFocus}
       onChange={disabled || readOnly ? undefined : onChange}
-      onFocus={onFocus}
-      onBlur={onBlur}
       onKeyDown={onKeyDown}
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
@@ -136,6 +136,7 @@ export const Input: React.FC<InputProps> = ({
       style={{
         ...baseStyles,
         ...(disabled ? disabledStyles : {}),
+        ...style,
         ...(readOnly ? readOnlyStyles : {}),
         ...(ariaInvalid ? invalidStyles : {}),
       }}
