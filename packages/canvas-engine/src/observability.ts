@@ -150,7 +150,11 @@ class ObservabilityManager {
       return;
     }
 
-    const span = this.activeSpans.get(spanId)!;
+    const span = this.activeSpans.get(spanId);
+    if (!span) {
+      console.warn(`Span ${spanId} not found`);
+      return;
+    }
     span.endTime = Date.now();
     this.activeSpans.delete(spanId);
 
