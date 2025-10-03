@@ -1,0 +1,43 @@
+{
+  "name": "@paths-design/mcp-adapter",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "MCP adapter for Cursor integration with Designer",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "designer-mcp": "dist/mcp-server.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --max-warnings 0",
+    "lint:fix": "eslint src --fix",
+    "start": "node dist/mcp-server.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^1.0.0",
+    "typescript": "^5.6.2",
+    "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "@paths-design/canvas-schema": "file:../canvas-schema",
+    "@paths-design/codegen-react": "file:../codegen-react",
+    "@paths-design/augment": "file:../augment",
+    "@paths-design/diff-visualizer": "file:../diff-visualizer",
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "designer",
+    "mcp",
+    "cursor",
+    "canvas"
+  ]
+}
