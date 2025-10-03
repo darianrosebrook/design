@@ -197,7 +197,8 @@ export class DesignerMCPServer {
             },
             semanticKey: {
               type: "string",
-              description: "Semantic key for the component (e.g., 'hero.title')",
+              description:
+                "Semantic key for the component (e.g., 'hero.title')",
             },
             componentType: {
               type: "string",
@@ -221,7 +222,8 @@ export class DesignerMCPServer {
             },
             parentPath: {
               type: "string",
-              description: "Path to parent element (e.g., 'artboards[0].children')",
+              description:
+                "Path to parent element (e.g., 'artboards[0].children')",
             },
           },
           required: ["documentPath", "semanticKey", "componentType"],
@@ -293,7 +295,8 @@ export class DesignerMCPServer {
       },
       {
         name: "create_design_spec",
-        description: "Create a canvas document from a high-level design specification",
+        description:
+          "Create a canvas document from a high-level design specification",
         inputSchema: {
           type: "object",
           properties: {
@@ -302,7 +305,10 @@ export class DesignerMCPServer {
               description: "Design specification object",
               properties: {
                 name: { type: "string", description: "Document name" },
-                layout: { type: "string", description: "Layout type (hero, landing, dashboard)" },
+                layout: {
+                  type: "string",
+                  description: "Layout type (hero, landing, dashboard)",
+                },
                 components: {
                   type: "array",
                   description: "List of components to include",
@@ -310,8 +316,14 @@ export class DesignerMCPServer {
                     type: "object",
                     properties: {
                       type: { type: "string", description: "Component type" },
-                      semanticKey: { type: "string", description: "Semantic identifier" },
-                      props: { type: "object", description: "Component properties" },
+                      semanticKey: {
+                        type: "string",
+                        description: "Semantic identifier",
+                      },
+                      props: {
+                        type: "object",
+                        description: "Component properties",
+                      },
                     },
                   },
                 },
@@ -328,7 +340,8 @@ export class DesignerMCPServer {
       },
       {
         name: "update_design_from_spec",
-        description: "Update an existing canvas document based on design specification changes",
+        description:
+          "Update an existing canvas document based on design specification changes",
         inputSchema: {
           type: "object",
           properties: {
@@ -351,7 +364,8 @@ export class DesignerMCPServer {
       },
       {
         name: "generate_component_spec",
-        description: "Generate component specification from design requirements",
+        description:
+          "Generate component specification from design requirements",
         inputSchema: {
           type: "object",
           properties: {
@@ -360,7 +374,10 @@ export class DesignerMCPServer {
               description: "Component requirements",
               properties: {
                 name: { type: "string", description: "Component name" },
-                purpose: { type: "string", description: "Component purpose/role" },
+                purpose: {
+                  type: "string",
+                  description: "Component purpose/role",
+                },
                 props: {
                   type: "array",
                   description: "Required props",
@@ -391,7 +408,8 @@ export class DesignerMCPServer {
       },
       {
         name: "sync_design_dev",
-        description: "Bidirectional sync between design canvas and dev component specifications",
+        description:
+          "Bidirectional sync between design canvas and dev component specifications",
         inputSchema: {
           type: "object",
           properties: {
@@ -787,7 +805,9 @@ ${
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to create semantic component: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to create semantic component: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -829,7 +849,9 @@ ${
       findNodeBySemanticKey(document);
 
       if (!foundNode) {
-        throw new Error(`No component found with semantic key "${args.semanticKey}"`);
+        throw new Error(
+          `No component found with semantic key "${args.semanticKey}"`
+        );
       }
 
       // Update the component properties
@@ -845,7 +867,9 @@ ${
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to update semantic component: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to update semantic component: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -857,12 +881,24 @@ ${
     documentPath: string;
     componentIndexPath?: string;
     interactive?: boolean;
-  }): Promise<{ suggestions: Array<{ nodeId: string; suggestedKey: string; confidence: number; reason: string }> }> {
+  }): Promise<{
+    suggestions: Array<{
+      nodeId: string;
+      suggestedKey: string;
+      confidence: number;
+      reason: string;
+    }>;
+  }> {
     try {
       const content = fs.readFileSync(args.documentPath, "utf-8");
       const document = JSON.parse(content) as CanvasDocumentType;
 
-      const suggestions: Array<{ nodeId: string; suggestedKey: string; confidence: number; reason: string }> = [];
+      const suggestions: Array<{
+        nodeId: string;
+        suggestedKey: string;
+        confidence: number;
+        reason: string;
+      }> = [];
 
       // Simple semantic key inference based on naming patterns
       function analyzeNode(node: any): void {
@@ -930,7 +966,9 @@ ${
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to infer semantic keys: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to infer semantic keys: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -959,11 +997,13 @@ ${
           analysis.totalComponents++;
 
           if (node.type) {
-            analysis.componentsByType[node.type] = (analysis.componentsByType[node.type] || 0) + 1;
+            analysis.componentsByType[node.type] =
+              (analysis.componentsByType[node.type] || 0) + 1;
           }
 
           if (node.semanticKey) {
-            analysis.componentsBySemanticKey[node.semanticKey] = (analysis.componentsBySemanticKey[node.semanticKey] || 0) + 1;
+            analysis.componentsBySemanticKey[node.semanticKey] =
+              (analysis.componentsBySemanticKey[node.semanticKey] || 0) + 1;
           }
 
           // Recurse into children
@@ -981,7 +1021,9 @@ ${
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to analyze component usage: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to analyze component usage: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -1026,7 +1068,8 @@ ${
         const componentNode: any = {
           id: require("ulidx").ulid(),
           type: componentSpec.type,
-          name: componentSpec.semanticKey.split(".").pop() || componentSpec.type,
+          name:
+            componentSpec.semanticKey.split(".").pop() || componentSpec.type,
           visible: true,
           frame: {
             x: 0,
@@ -1058,7 +1101,9 @@ ${
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to create design spec: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to create design spec: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -1087,7 +1132,9 @@ ${
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to update design from spec: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to update design from spec: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -1114,7 +1161,7 @@ ${
         id: require("ulidx").ulid(),
         name: args.requirements.name,
         purpose: args.requirements.purpose,
-        props: args.requirements.props.map(prop => ({
+        props: args.requirements.props.map((prop) => ({
           name: prop.name,
           type: prop.type,
           required: prop.required,
@@ -1146,7 +1193,9 @@ ${
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to generate component spec: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to generate component spec: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }
@@ -1171,20 +1220,38 @@ ${
       // Perform sync based on direction
       const changes: any[] = [];
 
-      if (args.direction === "design-to-dev" || args.direction === "bidirectional") {
+      if (
+        args.direction === "design-to-dev" ||
+        args.direction === "bidirectional"
+      ) {
         // Extract component usage from design and update component index
-        changes.push({ type: "design-to-dev", description: "Updated component index from design usage" });
+        changes.push({
+          type: "design-to-dev",
+          description: "Updated component index from design usage",
+        });
       }
 
-      if (args.direction === "dev-to-design" || args.direction === "bidirectional") {
+      if (
+        args.direction === "dev-to-design" ||
+        args.direction === "bidirectional"
+      ) {
         // Update design with component contract changes
-        changes.push({ type: "dev-to-design", description: "Updated design with component contract changes" });
+        changes.push({
+          type: "dev-to-design",
+          description: "Updated design with component contract changes",
+        });
       }
 
       if (!args.dryRun) {
         // Apply changes
-        fs.writeFileSync(args.canvasDocumentPath, JSON.stringify(canvasDocument, null, 2));
-        fs.writeFileSync(args.componentIndexPath, JSON.stringify(componentIndex, null, 2));
+        fs.writeFileSync(
+          args.canvasDocumentPath,
+          JSON.stringify(canvasDocument, null, 2)
+        );
+        fs.writeFileSync(
+          args.componentIndexPath,
+          JSON.stringify(componentIndex, null, 2)
+        );
       }
 
       return {
@@ -1195,7 +1262,9 @@ ${
     } catch (error) {
       throw new McpError(
         ErrorCode.InternalError,
-        `Failed to sync design and dev: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to sync design and dev: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
       );
     }
   }

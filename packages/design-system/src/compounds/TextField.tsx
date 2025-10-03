@@ -121,15 +121,17 @@ export const TextField: React.FC<TextFieldProps> = ({
         autoComplete={autoComplete}
         autoFocus={autoFocus}
         onChange={(e) => {
-          const newValue = type === "number" ? Number(e.target.value) : e.target.value;
+          const newValue =
+            type === "number" ? Number(e.target.value) : e.target.value;
           onChange?.(newValue);
         }}
         onFocus={onFocus}
         onBlur={onBlur}
-        aria-describedby={[
-          showHelper ? helperId : "",
-          hasError ? errorId : "",
-        ].filter(Boolean).join(" ") || undefined}
+        aria-describedby={
+          [showHelper ? helperId : "", hasError ? errorId : ""]
+            .filter(Boolean)
+            .join(" ") || undefined
+        }
         aria-invalid={hasError}
         className="field-input"
       />

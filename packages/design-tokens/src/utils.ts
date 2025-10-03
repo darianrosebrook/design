@@ -8,7 +8,10 @@ import { DesignTokensSchema, type DesignTokens } from "./tokens";
 /**
  * Flatten nested token objects into CSS custom property format
  */
-export function flattenTokens(tokens: DesignTokens, prefix = ""): Record<string, string | number> {
+export function flattenTokens(
+  tokens: DesignTokens,
+  prefix = ""
+): Record<string, string | number> {
   const result: Record<string, string | number> = {};
 
   function walk(obj: any, path: string[] = []) {
@@ -18,8 +21,10 @@ export function flattenTokens(tokens: DesignTokens, prefix = ""): Record<string,
       if (typeof value === "object" && value !== null) {
         walk(value, currentPath);
       } else {
-        const cssVar = `--${prefix ? `${prefix}-` : ""}${currentPath.join("-")}`;
-        result[cssVar] = value;
+        const cssVar = `--${prefix ? `${prefix}-` : ""}${currentPath.join(
+          "-"
+        )}`;
+        result[cssVar] = value as string | number;
       }
     }
   }
@@ -44,7 +49,10 @@ export function tokensToCSS(tokens: DesignTokens, selector = ":root"): string {
 /**
  * Get a token value using dot notation path
  */
-export function getToken(tokens: DesignTokens, path: string): string | number | undefined {
+export function getToken(
+  tokens: DesignTokens,
+  path: string
+): string | number | undefined {
   const parts = path.split(".");
   let current: any = tokens;
 
@@ -62,7 +70,11 @@ export function getToken(tokens: DesignTokens, path: string): string | number | 
 /**
  * Set a token value using dot notation path
  */
-export function setToken(tokens: DesignTokens, path: string, value: string | number): DesignTokens {
+export function setToken(
+  tokens: DesignTokens,
+  path: string,
+  value: string | number
+): DesignTokens {
   const parts = path.split(".");
   const newTokens = JSON.parse(JSON.stringify(tokens)) as DesignTokens;
   let current: any = newTokens;
@@ -85,14 +97,19 @@ export function setToken(tokens: DesignTokens, path: string, value: string | num
 /**
  * Validate tokens against schema
  */
-export function validateTokens(tokens: any): { valid: boolean; errors: string[] } {
+export function validateTokens(tokens: any): {
+  valid: boolean;
+  errors: string[];
+} {
   const result = DesignTokensSchema.safeParse(tokens);
   if (result.success) {
     return { valid: true, errors: [] };
   } else {
     return {
       valid: false,
-      errors: result.error.errors.map(err => `${err.path.join(".")}: ${err.message}`)
+      errors: result.error.errors.map(
+        (err: any) => `${err.path.join(".")}: ${err.message}`
+      ),
     };
   }
 }
@@ -100,12 +117,19 @@ export function validateTokens(tokens: any): { valid: boolean; errors: string[] 
 /**
  * Merge two token objects
  */
-export function mergeTokens(base: DesignTokens, override: Partial<DesignTokens>): DesignTokens {
+export function mergeTokens(
+  base: DesignTokens,
+  override: Partial<DesignTokens>
+): DesignTokens {
   const result = JSON.parse(JSON.stringify(base)) as DesignTokens;
 
   function deepMerge(target: any, source: any) {
     for (const key in source) {
-      if (source[key] && typeof source[key] === "object" && !Array.isArray(source[key])) {
+      if (
+        source[key] &&
+        typeof source[key] === "object" &&
+        !Array.isArray(source[key])
+      ) {
         if (!target[key]) target[key] = {};
         deepMerge(target[key], source[key]);
       } else {
@@ -128,7 +152,11 @@ export function tokensToTypes(tokens: DesignTokens): string {
     for (const [key, value] of Object.entries(obj)) {
       const currentPath = [...path, key];
 
-      if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+      if (
+        typeof value === "object" &&
+        value !== null &&
+        !Array.isArray(value)
+      ) {
         walk(value, currentPath);
       } else {
         const typePath = currentPath.join(".");

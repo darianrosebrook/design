@@ -133,7 +133,9 @@ export const Button: React.FC<ButtonProps> = ({
       onClick={disabled ? undefined : onClick}
       aria-label={ariaLabel}
       aria-describedby={ariaDescribedBy}
-      className={`button ${variant} ${size} ${disabled ? 'disabled' : ''} ${className}`}
+      className={`button ${variant} ${size} ${
+        disabled ? "disabled" : ""
+      } ${className}`}
       style={{
         ...baseStyles,
         ...currentSize,
@@ -155,7 +157,8 @@ export const Button: React.FC<ButtonProps> = ({
       }}
       onMouseDown={(e) => {
         if (!disabled) {
-          const pressedVariant = `${variant}Pressed` as keyof typeof variantStyles;
+          const pressedVariant =
+            `${variant}Pressed` as keyof typeof variantStyles;
           if (variantStyles[pressedVariant]) {
             Object.assign(e.currentTarget.style, variantStyles[pressedVariant]);
           }

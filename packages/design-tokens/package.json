@@ -20,5 +20,8 @@
     "theme"
   ],
   "author": "@darianrosebrook",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "zod": "^4.1.11"
+  }
 }

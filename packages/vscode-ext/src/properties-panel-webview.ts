@@ -210,7 +210,7 @@ export class PropertiesPanelWebviewProvider
       if (!node || !node.id) return;
 
       const nodeValues = new Map<string, any>();
-      
+
       // Cache common properties
       if (node.frame) {
         nodeValues.set("frame.x", node.frame.x);
@@ -221,10 +221,16 @@ export class PropertiesPanelWebviewProvider
       if (node.style) {
         nodeValues.set("opacity", node.style.opacity);
         if (node.style.fills) {
-          nodeValues.set("style.fills", JSON.parse(JSON.stringify(node.style.fills)));
+          nodeValues.set(
+            "style.fills",
+            JSON.parse(JSON.stringify(node.style.fills))
+          );
         }
         if (node.style.strokes) {
-          nodeValues.set("style.strokes", JSON.parse(JSON.stringify(node.style.strokes)));
+          nodeValues.set(
+            "style.strokes",
+            JSON.parse(JSON.stringify(node.style.strokes))
+          );
         }
       }
       if (node.visible !== undefined) {
@@ -271,7 +277,7 @@ export class PropertiesPanelWebviewProvider
         event,
       });
     }
-    
+
     console.log("Notifying canvas renderer of property change:", event);
   }
 

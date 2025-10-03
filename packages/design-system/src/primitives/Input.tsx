@@ -130,7 +130,9 @@ export const Input: React.FC<InputProps> = ({
       aria-invalid={ariaInvalid}
       id={id}
       name={name}
-      className={`input ${disabled ? 'disabled' : ''} ${readOnly ? 'readonly' : ''} ${ariaInvalid ? 'invalid' : ''} ${className}`}
+      className={`input ${disabled ? "disabled" : ""} ${
+        readOnly ? "readonly" : ""
+      } ${ariaInvalid ? "invalid" : ""} ${className}`}
       style={{
         ...baseStyles,
         ...(disabled ? disabledStyles : {}),

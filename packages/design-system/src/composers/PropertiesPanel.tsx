@@ -152,7 +152,8 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             margin: 0,
           }}
         >
-          {selection.selectedNodeIds.length} element{selection.selectedNodeIds.length !== 1 ? 's' : ''} selected
+          {selection.selectedNodeIds.length} element
+          {selection.selectedNodeIds.length !== 1 ? "s" : ""} selected
         </div>
       </div>
 
@@ -179,16 +180,20 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 /**
  * PropertySection component that groups related properties
  */
-export const PropertySectionComponent: React.FC<PropertySectionProps & {
-  getPropertyValue?: (propertyKey: string) => PropertyValue | "mixed";
-}> = ({
+export const PropertySectionComponent: React.FC<
+  PropertySectionProps & {
+    getPropertyValue?: (propertyKey: string) => PropertyValue | "mixed";
+  }
+> = ({
   section,
   selection,
   onPropertyChange,
   getPropertyValue,
   className = "",
 }) => {
-  const [isCollapsed, setIsCollapsed] = React.useState(section.defaultCollapsed ?? false);
+  const [isCollapsed, setIsCollapsed] = React.useState(
+    section.defaultCollapsed ?? false
+  );
 
   const toggleCollapsed = () => {
     setIsCollapsed(!isCollapsed);
@@ -214,10 +219,12 @@ export const PropertySectionComponent: React.FC<PropertySectionProps & {
           transition: `background-color ${tokens.transition || "0.15s ease"}`,
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = tokens.color.background.tertiary;
+          e.currentTarget.style.backgroundColor =
+            tokens.color.background.tertiary;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = tokens.color.background.secondary;
+          e.currentTarget.style.backgroundColor =
+            tokens.color.background.secondary;
         }}
       >
         <div
@@ -254,8 +261,8 @@ export const PropertySectionComponent: React.FC<PropertySectionProps & {
         <Button
           variant="secondary"
           size="sm"
-          className={`section-toggle ${isCollapsed ? 'collapsed' : 'expanded'}`}
-          aria-label={isCollapsed ? 'Expand section' : 'Collapse section'}
+          className={`section-toggle ${isCollapsed ? "collapsed" : "expanded"}`}
+          aria-label={isCollapsed ? "Expand section" : "Collapse section"}
           onClick={(e) => {
             e.stopPropagation();
             toggleCollapsed();
@@ -294,14 +301,18 @@ export const PropertySectionComponent: React.FC<PropertySectionProps & {
             <PropertyEditor
               key={property.key}
               definition={property}
-              value={getPropertyValue ? getPropertyValue(property.key) : undefined}
+              value={
+                getPropertyValue ? getPropertyValue(property.key) : undefined
+              }
               onChange={(value) => {
                 // Create a property change event for the first selected node
                 if (selection.selectedNodeIds.length > 0) {
                   const event = {
                     nodeId: selection.selectedNodeIds[0],
                     propertyKey: property.key,
-                    oldValue: getPropertyValue ? getPropertyValue(property.key) : undefined,
+                    oldValue: getPropertyValue
+                      ? getPropertyValue(property.key)
+                      : undefined,
                     newValue: value,
                     sectionId: section.id,
                   };
@@ -325,13 +336,7 @@ export const PropertyEditor: React.FC<{
   onChange: (value: PropertyValue) => void;
   disabled?: boolean;
   className?: string;
-}> = ({
-  definition,
-  value,
-  onChange,
-  disabled = false,
-  className = "",
-}) => {
+}> = ({ definition, value, onChange, disabled = false, className = "" }) => {
   const [inputValue, setInputValue] = React.useState(value);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -340,47 +345,56 @@ export const PropertyEditor: React.FC<{
     setInputValue(value);
   }, [value]);
 
-  const handleChange = React.useCallback((newValue: any) => {
-    setInputValue(newValue);
-    setError(null);
+  const handleChange = React.useCallback(
+    (newValue: any) => {
+      setInputValue(newValue);
+      setError(null);
 
-    // Basic validation
-    if (definition.type === "number") {
-      const num = typeof newValue === "number" ? newValue : parseFloat(newValue);
-      if (isNaN(num)) {
-        setError("Must be a valid number");
-        return;
+      // Basic validation
+      if (definition.type === "number") {
+        const num =
+          typeof newValue === "number" ? newValue : parseFloat(newValue);
+        if (isNaN(num)) {
+          setError("Must be a valid number");
+          return;
+        }
+
+        if (definition.min !== undefined && num < definition.min) {
+          setError(`Must be at least ${definition.min}`);
+          return;
+        }
+
+        if (definition.max !== undefined && num > definition.max) {
+          setError(`Must be at most ${definition.max}`);
+          return;
+        }
       }
 
-      if (definition.min !== undefined && num < definition.min) {
-        setError(`Must be at least ${definition.min}`);
-        return;
-      }
+      onChange(newValue);
+    },
+    [definition, onChange]
+  );
 
-      if (definition.max !== undefined && num > definition.max) {
-        setError(`Must be at most ${definition.max}`);
-        return;
-      }
-    }
-
-    onChange(newValue);
-  }, [definition, onChange]);
-
-  const displayValue = inputValue != null ? formatPropertyValue(inputValue, definition) : "";
+  const displayValue =
+    inputValue != null ? formatPropertyValue(inputValue, definition) : "";
 
   const renderInput = () => {
     switch (definition.type) {
       case "string":
         return (
           <textarea
-            value={inputValue as string || ""}
+            value={(inputValue as string) || ""}
             onChange={(e) => handleChange(e.target.value)}
             placeholder={definition.placeholder}
             disabled={disabled}
             style={{
               width: "100%",
               padding: `${tokens.space.sm}px ${tokens.space.md}px`,
-              border: `${tokens.borderWidth.sm}px solid ${error ? tokens.color.semantic.error : tokens.color.border.default}`,
+              border: `${tokens.borderWidth.sm}px solid ${
+                error
+                  ? tokens.color.semantic.error
+                  : tokens.color.border.default
+              }`,
               borderRadius: tokens.radius.md,
               fontSize: tokens.type.size.sm,
               fontFamily: tokens.type.family.sans,
@@ -395,7 +409,9 @@ export const PropertyEditor: React.FC<{
               e.target.style.outline = `2px solid ${tokens.color.interactive.primary}40`;
             }}
             onBlur={(e) => {
-              e.target.style.borderColor = error ? tokens.color.semantic.error : tokens.color.border.default;
+              e.target.style.borderColor = error
+                ? tokens.color.semantic.error
+                : tokens.color.border.default;
               e.target.style.outline = "none";
             }}
           />
@@ -406,7 +422,7 @@ export const PropertyEditor: React.FC<{
           <div style={{ position: "relative", width: "100%" }}>
             <input
               type="number"
-              value={inputValue as number || ""}
+              value={(inputValue as number) || ""}
               onChange={(e) => handleChange(parseFloat(e.target.value) || 0)}
               min={definition.min}
               max={definition.max}
@@ -415,8 +431,16 @@ export const PropertyEditor: React.FC<{
               style={{
                 width: "100%",
                 padding: `${tokens.space.sm}px ${tokens.space.md}px`,
-                paddingRight: definition.category === "typography" && definition.key.includes("size") ? "24px" : `${tokens.space.md}px`,
-                border: `${tokens.borderWidth.sm}px solid ${error ? tokens.color.semantic.error : tokens.color.border.default}`,
+                paddingRight:
+                  definition.category === "typography" &&
+                  definition.key.includes("size")
+                    ? "24px"
+                    : `${tokens.space.md}px`,
+                border: `${tokens.borderWidth.sm}px solid ${
+                  error
+                    ? tokens.color.semantic.error
+                    : tokens.color.border.default
+                }`,
                 borderRadius: tokens.radius.md,
                 fontSize: tokens.type.size.sm,
                 fontFamily: tokens.type.family.sans,
@@ -429,25 +453,28 @@ export const PropertyEditor: React.FC<{
                 e.target.style.outline = `2px solid ${tokens.color.interactive.primary}40`;
               }}
               onBlur={(e) => {
-                e.target.style.borderColor = error ? tokens.color.semantic.error : tokens.color.border.default;
+                e.target.style.borderColor = error
+                  ? tokens.color.semantic.error
+                  : tokens.color.border.default;
                 e.target.style.outline = "none";
               }}
             />
-            {definition.category === "typography" && definition.key.includes("size") && (
-              <span
-                style={{
-                  position: "absolute",
-                  right: tokens.space.md,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  fontSize: tokens.type.size.xs,
-                  color: tokens.color.text.tertiary,
-                  pointerEvents: "none",
-                }}
-              >
-                px
-              </span>
-            )}
+            {definition.category === "typography" &&
+              definition.key.includes("size") && (
+                <span
+                  style={{
+                    position: "absolute",
+                    right: tokens.space.md,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    fontSize: tokens.type.size.xs,
+                    color: tokens.color.text.tertiary,
+                    pointerEvents: "none",
+                  }}
+                >
+                  px
+                </span>
+              )}
           </div>
         );
 
@@ -455,7 +482,7 @@ export const PropertyEditor: React.FC<{
         return (
           <input
             type="checkbox"
-            checked={inputValue as boolean || false}
+            checked={(inputValue as boolean) || false}
             onChange={(e) => handleChange(e.target.checked)}
             disabled={disabled}
             style={{
@@ -469,13 +496,17 @@ export const PropertyEditor: React.FC<{
       case "select":
         return (
           <select
-            value={inputValue as string || ""}
+            value={(inputValue as string) || ""}
             onChange={(e) => handleChange(e.target.value)}
             disabled={disabled}
             style={{
               width: "100%",
               padding: `${tokens.space.sm}px ${tokens.space.md}px`,
-              border: `${tokens.borderWidth.sm}px solid ${error ? tokens.color.semantic.error : tokens.color.border.default}`,
+              border: `${tokens.borderWidth.sm}px solid ${
+                error
+                  ? tokens.color.semantic.error
+                  : tokens.color.border.default
+              }`,
               borderRadius: tokens.radius.md,
               fontSize: tokens.type.size.sm,
               fontFamily: tokens.type.family.sans,
@@ -489,7 +520,9 @@ export const PropertyEditor: React.FC<{
               e.target.style.outline = `2px solid ${tokens.color.interactive.primary}40`;
             }}
             onBlur={(e) => {
-              e.target.style.borderColor = error ? tokens.color.semantic.error : tokens.color.border.default;
+              e.target.style.borderColor = error
+                ? tokens.color.semantic.error
+                : tokens.color.border.default;
               e.target.style.outline = "none";
             }}
           >
@@ -514,7 +547,11 @@ export const PropertyEditor: React.FC<{
                 width: "32px",
                 height: "32px",
                 padding: 0,
-                border: `${tokens.borderWidth.sm}px solid ${error ? tokens.color.semantic.error : tokens.color.border.default}`,
+                border: `${tokens.borderWidth.sm}px solid ${
+                  error
+                    ? tokens.color.semantic.error
+                    : tokens.color.border.default
+                }`,
                 borderRadius: tokens.radius.md,
                 cursor: disabled ? "not-allowed" : "pointer",
                 backgroundColor: "transparent",
@@ -529,7 +566,11 @@ export const PropertyEditor: React.FC<{
               style={{
                 flex: 1,
                 padding: `${tokens.space.sm}px ${tokens.space.md}px`,
-                border: `${tokens.borderWidth.sm}px solid ${error ? tokens.color.semantic.error : tokens.color.border.default}`,
+                border: `${tokens.borderWidth.sm}px solid ${
+                  error
+                    ? tokens.color.semantic.error
+                    : tokens.color.border.default
+                }`,
                 borderRadius: tokens.radius.md,
                 fontSize: tokens.type.size.sm,
                 fontFamily: tokens.type.family.mono,
@@ -542,7 +583,9 @@ export const PropertyEditor: React.FC<{
                 e.target.style.outline = `2px solid ${tokens.color.interactive.primary}40`;
               }}
               onBlur={(e) => {
-                e.target.style.borderColor = error ? tokens.color.semantic.error : tokens.color.border.default;
+                e.target.style.borderColor = error
+                  ? tokens.color.semantic.error
+                  : tokens.color.border.default;
                 e.target.style.outline = "none";
               }}
             />
@@ -560,7 +603,11 @@ export const PropertyEditor: React.FC<{
             style={{
               width: "100%",
               padding: `${tokens.space.sm}px ${tokens.space.md}px`,
-              border: `${tokens.borderWidth.sm}px solid ${error ? tokens.color.semantic.error : tokens.color.border.default}`,
+              border: `${tokens.borderWidth.sm}px solid ${
+                error
+                  ? tokens.color.semantic.error
+                  : tokens.color.border.default
+              }`,
               borderRadius: tokens.radius.md,
               fontSize: tokens.type.size.sm,
               fontFamily: tokens.type.family.sans,
@@ -573,7 +620,9 @@ export const PropertyEditor: React.FC<{
               e.target.style.outline = `2px solid ${tokens.color.interactive.primary}40`;
             }}
             onBlur={(e) => {
-              e.target.style.borderColor = error ? tokens.color.semantic.error : tokens.color.border.default;
+              e.target.style.borderColor = error
+                ? tokens.color.semantic.error
+                : tokens.color.border.default;
               e.target.style.outline = "none";
             }}
           />
@@ -602,9 +651,7 @@ export const PropertyEditor: React.FC<{
           fontWeight: tokens.type.weight.medium,
         }}
       >
-        <label title={definition.description}>
-          {definition.label}
-        </label>
+        <label title={definition.description}>{definition.label}</label>
       </div>
       <div
         className="property-input-container"
@@ -646,7 +693,8 @@ function formatPropertyValue(value: PropertyValue, definition: any): string {
 
   switch (definition.type) {
     case "number":
-      const num = typeof value === "number" ? value : parseFloat(value as string);
+      const num =
+        typeof value === "number" ? value : parseFloat(value as string);
       if (definition.precision !== undefined) {
         return num.toFixed(definition.precision);
       }

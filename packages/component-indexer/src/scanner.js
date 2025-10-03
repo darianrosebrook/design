@@ -148,11 +148,11 @@ export class ComponentScanner {
             ts.forEachChild(node, visit);
         };
         visit(sourceFile);
-        // TODO: Implement compound component detection
-        // const compoundComponents = this.discoverCompoundComponents(sourceFile);
-        // for (const compound of compoundComponents) {
-        //   components.push(this.createComponentEntry(compound));
-        // }
+        // Discover compound components (e.g., Card.Header, Menu.Item)
+        const compoundComponents = this.discoverCompoundComponents(sourceFile);
+        for (const compound of compoundComponents) {
+            components.push(this.createComponentEntry(compound));
+        }
         return components;
     }
     /**
@@ -304,12 +304,20 @@ export class ComponentScanner {
                         if (isComponent) {
                             // Create a compound component entry
                             const compoundName = `${baseComponentName}.${subComponentName}`;
-                            const compoundId = `compound-${baseComponentName}-${subComponentName}`;
+                            // Extract props from the compound component function
+                            let props = [];
+                            if (ts.isArrowFunction(rightSide) || ts.isFunctionExpression(rightSide)) {
+                                // Extract props from function parameters
+                                const metadata = this.extractComponentMetadataBase(rightSide, sourceFile);
+                                if (metadata) {
+                                    props = metadata.props;
+                                }
+                            }
                             compounds.push({
                                 name: compoundName,
                                 filePath: sourceFile.fileName,
                                 exportName: compoundName,
-                                props: [], // Compound components typically don't have their own props
+                                props: props, // Extract props from compound component
                                 jsDocTags: {
                                     category: "compound",
                                     parent: baseComponentName,
