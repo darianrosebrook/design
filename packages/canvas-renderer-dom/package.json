@@ -1,0 +1,39 @@
+{
+  "name": "@paths-design/canvas-renderer-dom",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "DOM renderer for canvas documents - renders CanvasDocument to HTML/React",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src tests --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@paths-design/canvas-schema": "file:../canvas-schema",
+    "@paths-design/canvas-engine": "file:../canvas-engine",
+    "@paths-design/component-indexer": "file:../component-indexer",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/node": "^20.10.0",
+    "@vitest/coverage-v8": "^1.0.4",
+    "typescript": "^5.3.3",
+    "vitest": "^1.0.4",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/jest-dom": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+
+
