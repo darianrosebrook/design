@@ -6,7 +6,6 @@
  * selection mode management for the VS Code extension.
  */
 
-import { createHash } from "crypto";
 import type { SelectionState } from "@paths-design/properties-panel";
 import type * as vscode from "vscode";
 

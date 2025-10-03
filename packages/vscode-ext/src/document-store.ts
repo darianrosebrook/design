@@ -166,7 +166,7 @@ export class DocumentStore {
 
       // Update the document and rebuild the index
       this.currentDocument = newDocument;
-      this.buildNodeIndex();
+      this.rebuildNodeIndex();
 
       this.observability?.log(
         "info",
@@ -481,12 +481,6 @@ export class DocumentStore {
             });
             return { success: false, error };
           }
-
-          const patch = {
-            path: `${nodePath}/${mutation.propertyKey}`,
-            op: "replace" as const,
-            value: mutation.newValue,
-          };
         } else {
           // Node-level mutation (no property key)
           const nodePath = this.buildNodePath(mutation.nodeId);
@@ -664,7 +658,7 @@ export class DocumentStore {
   /**
    * Create a document snapshot for undo/redo
    */
-  private createSnapshot(reason: string): DocumentSnapshot {
+  private createSnapshot(_reason: string): DocumentSnapshot {
     if (!this.currentDocument) {
       throw new Error("No document to snapshot");
     }

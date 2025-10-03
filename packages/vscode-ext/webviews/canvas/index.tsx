@@ -10,11 +10,14 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import { createCanvasRenderer } from "@paths-design/canvas-renderer-dom";
 import type {
-  SelectionMode,
   SelectionModeConfig,
   SelectionResult,
 } from "@paths-design/canvas-renderer-dom";
 import { createMessage } from "../../src/protocol/messages";
+
+// SelectionMode type for consistency with protocol
+type SelectionMode = "single" | "rectangle" | "lasso";
+
 import {
   PropertiesPanel,
   PropertiesService,
@@ -77,7 +80,7 @@ type WebviewPropertyChangeMessage = ReturnType<
   typeof createMessage<"propertyChange">
 >;
 type WebviewViewModeChangeMessage = ReturnType<
-  typeof createMessage<"setViewMode">
+  typeof createMessage<"viewModeChange">
 >;
 type WebviewReadyMessage = ReturnType<typeof createMessage<"ready">>;
 type OutgoingWebviewMessage =
@@ -88,11 +91,21 @@ type OutgoingWebviewMessage =
   | WebviewPropertyChangeMessage
   | WebviewViewModeChangeMessage;
 
+// Acquire VS Code API once at module level
+let vscodeApi: VSCodeAPI | null = null;
+
+const getVSCodeApi = (): VSCodeAPI => {
+  if (!vscodeApi) {
+    vscodeApi = window.acquireVsCodeApi();
+  }
+  return vscodeApi;
+};
+
 /**
  * Main Canvas Webview App component
  */
 const CanvasWebviewApp: React.FC = () => {
-  const [vscode] = useState(() => window.acquireVsCodeApi());
+  const [vscode] = useState(() => getVSCodeApi());
   const [document, setDocument] = useState<CanvasDocumentType | null>(null);
   const [selection, setSelection] = useState<SelectionState>({
     selectedNodeIds: [],
@@ -199,8 +212,6 @@ const CanvasWebviewApp: React.FC = () => {
       return;
     }
 
-    console.info("Rendering canvas document:", document.id);
-
     try {
       renderer.render(document, canvasContainer);
       setError(null);
@@ -238,7 +249,6 @@ const CanvasWebviewApp: React.FC = () => {
 
       switch (message.command) {
         case "setDocument":
-          console.info("Received document from extension");
           setDocument(message.document);
 
           // Initialize PropertiesService with document nodes
@@ -274,17 +284,21 @@ const CanvasWebviewApp: React.FC = () => {
 
         case "setSelectionMode":
           console.info("Received selection mode from extension", {
-            mode: message.payload.mode,
-            config: message.payload.config,
+            mode: message.mode,
+            config: message.config,
           });
-          selectionModeRef.current = message.payload.mode;
+          selectionModeRef.current = message.mode;
           selectionConfigRef.current = {
             ...selectionConfigRef.current,
-            ...message.payload.config,
-            mode: message.payload.mode,
+            ...message.config,
+            mode: message.mode,
           };
 
-          rendererRef.current?.setSelectionMode(message.payload.mode);
+          if (rendererRef.current?.setSelectionMode) {
+            rendererRef.current.setSelectionMode(message.mode);
+          } else {
+            console.warn("Renderer setSelectionMode not available yet");
+          }
 
           break;
 
@@ -315,11 +329,6 @@ const CanvasWebviewApp: React.FC = () => {
 
         case "propertyChangeAcknowledged":
           console.info("Property change acknowledged");
-          break;
-
-        case "propertyChangeError":
-          console.error("Property change error:", message.error);
-          // Could show a toast notification or inline error
           break;
 
         case "propertyChangedFromExtension":
@@ -386,7 +395,7 @@ const CanvasWebviewApp: React.FC = () => {
     (mode: "canvas" | "code") => {
       setViewMode(mode);
       vscode.postMessage(
-        createMessage("setViewMode", { mode }) as OutgoingWebviewMessage
+        createMessage("viewModeChange", { mode }) as OutgoingWebviewMessage
       );
     },
     [vscode]
@@ -401,7 +410,7 @@ const CanvasWebviewApp: React.FC = () => {
       )}
 
       {/* Toolbar */}
-      <CanvasToolbar onViewModeChange={handleViewModeChange} />
+      <CanvasToolbar onViewModeChange={handleViewModeChange} vscode={vscode} />
 
       <div className="canvas-layout">
         {viewMode === "canvas" ? (
@@ -427,6 +436,7 @@ const CanvasWebviewApp: React.FC = () => {
                   documentId={document.id}
                   selection={selection}
                   onPropertyChange={handlePropertyChange}
+                  onSelectionChange={setSelection}
                   fonts={fonts}
                   propertyError={propertyError}
                   onDismissError={() => setPropertyError(null)}

@@ -282,104 +282,125 @@ export class CanvasWebviewProvider {
 
       // Start performance monitoring for document load
       const monitor = PerformanceMonitor.getInstance();
-      monitor.startOperation(`load_document_${document.id}`);
+      const operationId = `load_document_${document.id}`;
+      monitor.startOperation(operationId);
 
-      if (!validation.success) {
-        // If validation fails and auto-initialization is enabled, create empty document
-        if (this._shouldAutoInitialize()) {
-          document = await this._createEmptyDocument(uri);
-          this._observability.log(
-            "info",
-            "canvas_webview.auto_initialized_validation_error",
-            {
-              path: uri.fsPath,
-              errors: validation.errors,
-            }
-          );
-        } else {
-          throw new Error(
-            `Invalid canvas document: ${validation.errors?.join(", ")}`
-          );
+      let duration: number | undefined;
+      let finalDocument: CanvasDocumentType | null = null;
+
+      try {
+        if (!validation.success) {
+          // If validation fails and auto-initialization is enabled, create empty document
+          if (this._shouldAutoInitialize()) {
+            document = await this._createEmptyDocument(uri);
+            this._observability.log(
+              "info",
+              "canvas_webview.auto_initialized_validation_error",
+              {
+                path: uri.fsPath,
+                errors: validation.errors,
+              }
+            );
+          } else {
+            throw new Error(
+              `Invalid canvas document: ${validation.errors?.join(", ")}`
+            );
+          }
+        } else if (validation.migrated) {
+          // Document was migrated - save the migrated version
+          this._observability.log("info", "canvas_webview.document_migrated", {
+            path: uri.fsPath,
+            fromVersion: document.schemaVersion,
+            toVersion: validation.data!.schemaVersion,
+          });
+
+          // Save the migrated document back to disk
+          try {
+            const { canonicalizeDocument } = await import(
+              "@paths-design/canvas-schema"
+            );
+            const jsonContent = canonicalizeDocument(validation.data!);
+            await vscode.workspace.fs.writeFile(
+              uri,
+              Buffer.from(jsonContent, "utf8")
+            );
+
+            // Show migration notification
+            vscode.window.showInformationMessage(
+              `Document migrated from schema version ${
+                document.schemaVersion
+              } to ${validation.data!.schemaVersion}`
+            );
+          } catch (saveError) {
+            this._observability.log(
+              "warn",
+              "canvas_webview.migration_save_failed",
+              {
+                path: uri.fsPath,
+                error:
+                  saveError instanceof Error
+                    ? saveError.message
+                    : "Unknown error",
+              }
+            );
+          }
         }
-      } else if (validation.migrated) {
-        // Document was migrated - save the migrated version
-        this._observability.log("info", "canvas_webview.document_migrated", {
+
+        finalDocument = validation.migrated ? validation.data! : document;
+        this._document = finalDocument;
+        this._documentFilePath = uri;
+        this._documentStore.setDocument(finalDocument, uri);
+
+        const nodeCount = this._countNodes(finalDocument);
+        this._observability.log("info", "canvas_webview.document_loaded", {
+          documentId: finalDocument.id,
+          nodeCount,
           path: uri.fsPath,
-          fromVersion: document.schemaVersion,
-          toVersion: validation.data!.schemaVersion,
         });
 
-        // Save the migrated document back to disk
-        try {
-          const { canonicalizeDocument } = await import(
-            "@paths-design/canvas-schema"
-          );
-          const jsonContent = canonicalizeDocument(validation.data!);
-          await vscode.workspace.fs.writeFile(
-            uri,
-            Buffer.from(jsonContent, "utf8")
-          );
+        // End performance monitoring for document load
+        duration = monitor.endOperation(operationId);
 
-          // Show migration notification
-          vscode.window.showInformationMessage(
-            `Document migrated from schema version ${
-              document.schemaVersion
-            } to ${validation.data!.schemaVersion}`
+        // Record memory usage estimate
+        if (validation.performance) {
+          monitor.recordMemoryUsage(
+            operationId,
+            validation.performance.metrics.estimatedMemoryMB * 1024 * 1024
           );
-        } catch (saveError) {
+        }
+
+        // Check if operation exceeded time budget
+        if (duration && monitor.exceedsTimeBudget(duration)) {
+          vscode.window.showWarningMessage(
+            `Document load took ${duration.toFixed(
+              2
+            )}ms, exceeding recommended limit of 30000ms`
+          );
+        }
+
+        // Send to webview if ready
+        if (this._panel && this._isReady) {
+          await this._panel.webview.postMessage({
+            command: "setDocument",
+            document: finalDocument,
+          });
+        }
+      } finally {
+        // Ensure operation is always ended, even on exceptions
+        try {
+          monitor.endOperation(operationId);
+        } catch (endError) {
+          // If ending operation fails, log but don't throw
           this._observability.log(
             "warn",
-            "canvas_webview.migration_save_failed",
+            "canvas_webview.end_operation_failed",
             {
-              path: uri.fsPath,
+              operationId,
               error:
-                saveError instanceof Error
-                  ? saveError.message
-                  : "Unknown error",
+                endError instanceof Error ? endError.message : "Unknown error",
             }
           );
         }
-      }
-
-      this._document = validation.migrated ? validation.data! : document;
-      this._documentFilePath = uri;
-      this._documentStore.setDocument(this._document, uri);
-
-      const nodeCount = this._countNodes(this._document);
-      this._observability.log("info", "canvas_webview.document_loaded", {
-        documentId: this._document.id,
-        nodeCount,
-        path: uri.fsPath,
-      });
-
-      // End performance monitoring for document load
-      const duration = monitor.endOperation(
-        `load_document_${this._document.id}`
-      );
-
-      // Record memory usage estimate
-      if (validation.performance) {
-        monitor.recordMemoryUsage(
-          `load_document_${this._document.id}`,
-          validation.performance.metrics.estimatedMemoryMB * 1024 * 1024
-        );
-      }
-
-      // Check if operation exceeded time budget
-      if (monitor.exceedsTimeBudget(duration)) {
-        vscode.window.showWarningMessage(
-          `Document load took ${duration.toFixed(
-            2
-          )}ms, exceeding recommended limit of 30000ms`
-        );
-      }
-
-      // Send to webview if ready
-      if (this._panel && this._isReady) {
-        await this._panel.webview.postMessage({
-          command: "setDocument",
-          document: this._document,
-        });
       }
 
       this._observability.metric("canvas_webview_bundle_size_bytes", 0); // TODO: Get actual size
@@ -562,7 +583,9 @@ export class CanvasWebviewProvider {
       console.error(
         "Invalid message received:",
         validation.error,
-        validation.details
+        validation.details,
+        "Raw message:",
+        rawMessage
       );
       throw new Error(`Invalid message: ${validation.error}`);
     }
@@ -582,10 +605,12 @@ export class CanvasWebviewProvider {
             document: this._document,
           });
 
-          await this._panel.webview.postMessage({
-            command: "setSelection",
-            selection: this._selection,
-          });
+          if (this._selection) {
+            await this._panel.webview.postMessage({
+              command: "setSelection",
+              selection: this._selection,
+            });
+          }
         }
         break;
 
@@ -703,9 +728,9 @@ export class CanvasWebviewProvider {
         console.info("Save requested");
         break;
 
-      case "setViewMode":
+      case "viewModeChange":
         // Handle view mode change
-        console.info("View mode change:", message.mode);
+        console.info("View mode change:", message.payload.mode);
         break;
 
       case "validateDocument":

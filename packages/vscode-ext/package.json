@@ -1,19 +1,18 @@
 {
   "name": "@paths-design/vscode-ext",
   "version": "0.1.0",
-  "type": "module",
   "description": "VS Code extension for Designer - local-first design tool",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc && node esbuild.config.js",
-    "build:webview": "node esbuild.config.js",
-    "watch": "tsc --watch",
-    "watch:webview": "node esbuild.config.js --watch",
+    "build": "node esbuild.config.js",
+    "build:webview": "node esbuild.config.js --webview-only",
+    "watch": "node esbuild.config.js --watch",
+    "watch:webview": "node esbuild.config.js --watch --webview-only",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "lint": "eslint src tests --ext .ts",
+    "lint": "eslint src --ext .ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -39,6 +38,39 @@
   "engines": {
     "vscode": "^1.84.0"
   },
+  "activationEvents": [
+    "onCommand:designer.createCanvasDocument",
+    "onCommand:designer.openCanvas",
+    "onCommand:designer.viewCanvasSource",
+    "onCommand:designer.createComponentLibrary",
+    "onCommand:designer.createComponentFromSelection",
+    "onCommand:designer.showComponentLibrary",
+    "onCommand:designer.showKeyboardShortcuts",
+    "onCommand:designer.showPerformanceMetrics",
+    "onCommand:designer.togglePerformanceBudget",
+    "onCommand:designer.openPropertiesPanel",
+    "onCommand:designer.toggleSelectionMode",
+    "onCommand:designer.setSelectionModeRectangle",
+    "onCommand:designer.setSelectionModeLasso",
+    "onCommand:designer.setSelectionModeSingle",
+    "onCommand:designer.showSelectionState",
+    "onCommand:designer.copySelectionJSON",
+    "onCommand:designer.quickPickSelection",
+    "onCommand:designer.quickToggleSelectionMode",
+    "onCommand:designer.clearSelectionHistory",
+    "onCommand:designer.zoomIn",
+    "onCommand:designer.zoomOut",
+    "onCommand:designer.zoomFit",
+    "onCommand:designer.toggleGrid",
+    "onCommand:designer.toggleSnap",
+    "onCommand:designer.undo",
+    "onCommand:designer.redo",
+    "onCommand:designer.saveDocument",
+    "onCommand:designer.switchToCanvasView",
+    "onCommand:designer.switchToCodeView",
+    "onCommand:designer.getFonts",
+    "onView:designer.propertiesPanel"
+  ],
   "contributes": {
     "viewsContainers": {
       "activitybar": [

@@ -1068,7 +1068,7 @@ ${Object.entries(metrics.memoryUsage)
         patch
       );
 
-      if (result.success) {
+      if (result.success && result.document) {
         // Update the current document
         this.currentDocument = result.document;
 
@@ -1084,7 +1084,7 @@ ${Object.entries(metrics.memoryUsage)
         console.error("Failed to apply property change:", result.error);
         this.propertiesPanelProvider.showPropertyChangeError(
           event,
-          result.error
+          result.error || "Unknown error"
         );
       }
     } catch (error) {

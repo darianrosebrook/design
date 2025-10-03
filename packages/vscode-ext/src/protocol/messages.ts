@@ -146,6 +146,16 @@ export const ReadyNotification = MessageEnvelope.extend({
 });
 
 /**
+ * View mode change notification - notify extension of view mode changes
+ */
+export const ViewModeChangeNotification = MessageEnvelope.extend({
+  type: z.literal("viewModeChange"),
+  payload: z.object({
+    mode: z.enum(["canvas", "code"]),
+  }),
+});
+
+/**
  * Union of all request message types
  */
 export const WebviewMessage = z.discriminatedUnion("type", [
@@ -158,6 +168,7 @@ export const WebviewMessage = z.discriminatedUnion("type", [
   SelectionModeChangeRequest,
   SelectionOperationNotification,
   PropertyChangeNotification,
+  ViewModeChangeNotification,
   ReadyNotification,
 ]);
 
@@ -180,6 +191,9 @@ export type SelectionOperationNotificationType = z.infer<
 >;
 export type PropertyChangeNotificationType = z.infer<
   typeof PropertyChangeNotification
+>;
+export type ViewModeChangeNotificationType = z.infer<
+  typeof ViewModeChangeNotification
 >;
 export type ReadyNotificationType = z.infer<typeof ReadyNotification>;
 
