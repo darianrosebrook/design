@@ -3,8 +3,8 @@
  * @author @darianrosebrook
  */
 
-import React, { useMemo } from "react";
 import { defaultTokens as tokens } from "@paths-design/design-tokens";
+import React, { useMemo } from "react";
 import { Button } from "../primitives/Button";
 
 // Local types to avoid circular dependencies

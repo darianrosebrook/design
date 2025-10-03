@@ -3,9 +3,8 @@
  * @author @darianrosebrook
  */
 
-import React, { useEffect, useRef } from "react";
 import { defaultTokens as tokens } from "@paths-design/design-tokens";
-import { Box } from "../primitives/Box";
+import React, { useEffect, useRef } from "react";
 
 export interface ModalProps {
   isOpen: boolean;
@@ -47,7 +46,9 @@ export const Modal: React.FC<ModalProps> = ({
 
   // Handle escape key
   useEffect(() => {
-    if (!isOpen || !closeOnEscape) return;
+    if (!isOpen || !closeOnEscape) {
+      return;
+    }
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && onClose) {
@@ -61,7 +62,9 @@ export const Modal: React.FC<ModalProps> = ({
 
   // Handle body scroll prevention
   useEffect(() => {
-    if (!preventScroll) return;
+    if (!preventScroll) {
+      return;
+    }
 
     if (isOpen) {
       // Store the current active element
@@ -104,7 +107,9 @@ export const Modal: React.FC<ModalProps> = ({
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   const sizeStyles = {
     sm: { width: "400px", maxWidth: "90vw" },

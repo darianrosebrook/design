@@ -6,15 +6,16 @@
  * selection updates, and property changes with proper validation.
  */
 
+import { createHash } from "crypto";
 import type { CanvasDocumentType } from "@paths-design/canvas-schema";
 import type {
   SelectionState,
   PropertyChangeEvent,
 } from "@paths-design/properties-panel";
-import { createHash } from "crypto";
-import { validateMessage } from "../protocol/messages";
-import { DocumentStore } from "../document-store";
 import * as vscode from "vscode";
+import { DocumentStore } from "../document-store";
+import { createMessage, validateMessage } from "../protocol/messages";
+import { SelectionCoordinator } from "./selection-coordinator";
 
 /**
  * Simple observability implementation for CAWS compliance
@@ -96,6 +97,7 @@ export class CanvasWebviewProvider {
   private _isReady = false;
   private _observability: Observability;
   private _documentStore: DocumentStore;
+  private _selectionCoordinator: SelectionCoordinator;
 
   constructor(
     private readonly context: vscode.ExtensionContext,
@@ -103,6 +105,7 @@ export class CanvasWebviewProvider {
   ) {
     this._observability = new Observability();
     this._documentStore = DocumentStore.getInstance();
+    this._selectionCoordinator = SelectionCoordinator.getInstance();
   }
 
   /**
@@ -166,6 +169,9 @@ export class CanvasWebviewProvider {
     // Set the webview's HTML
     this._panel.webview.html = this._getHtmlForWebview(this._panel.webview);
 
+    // Register with selection coordinator
+    this._selectionCoordinator.registerWebviewPanel(this._panel);
+
     // Handle messages from the webview
     this._panel.webview.onDidReceiveMessage(
       async (message) => {
@@ -223,24 +229,156 @@ export class CanvasWebviewProvider {
     );
     try {
       const content = await vscode.workspace.fs.readFile(uri);
-      const document = JSON.parse(content.toString()) as CanvasDocumentType;
+      let document: CanvasDocumentType;
 
-      this._document = document;
+      try {
+        document = JSON.parse(content.toString()) as CanvasDocumentType;
+      } catch (parseError) {
+        // If parsing fails and auto-initialization is enabled, create empty document
+        if (this._shouldAutoInitialize()) {
+          document = await this._createEmptyDocument(uri);
+          this._observability.log(
+            "info",
+            "canvas_webview.auto_initialized_parse_error",
+            {
+              path: uri.fsPath,
+              reason: "JSON parse error",
+            }
+          );
+        } else {
+          throw parseError;
+        }
+      }
+
+      // Validate the document (with migration support and performance monitoring)
+      const { validateDocumentWithPerformance, PerformanceMonitor } =
+        await import("@paths-design/canvas-schema");
+      const validation = validateDocumentWithPerformance(document);
+
+      // Check if performance budget monitoring is enabled
+      const enableBudgetMonitoring = vscode.workspace
+        .getConfiguration("designer")
+        .get("performance.enableBudgetMonitoring", true);
+
+      if (
+        enableBudgetMonitoring &&
+        validation.performance &&
+        !validation.performance.withinBudget
+      ) {
+        // Show performance warnings
+        validation.performance.warnings.forEach((warning) => {
+          vscode.window.showWarningMessage(`Performance Warning: ${warning}`);
+        });
+
+        this._observability.log(
+          "warn",
+          "canvas_webview.performance_budget_exceeded",
+          {
+            warnings: validation.performance.warnings,
+            metrics: validation.performance.metrics,
+          }
+        );
+      }
+
+      // Start performance monitoring for document load
+      const monitor = PerformanceMonitor.getInstance();
+      monitor.startOperation(`load_document_${document.id}`);
+
+      if (!validation.success) {
+        // If validation fails and auto-initialization is enabled, create empty document
+        if (this._shouldAutoInitialize()) {
+          document = await this._createEmptyDocument(uri);
+          this._observability.log(
+            "info",
+            "canvas_webview.auto_initialized_validation_error",
+            {
+              path: uri.fsPath,
+              errors: validation.errors,
+            }
+          );
+        } else {
+          throw new Error(
+            `Invalid canvas document: ${validation.errors?.join(", ")}`
+          );
+        }
+      } else if (validation.migrated) {
+        // Document was migrated - save the migrated version
+        this._observability.log("info", "canvas_webview.document_migrated", {
+          path: uri.fsPath,
+          fromVersion: document.schemaVersion,
+          toVersion: validation.data!.schemaVersion,
+        });
+
+        // Save the migrated document back to disk
+        try {
+          const { canonicalizeDocument } = await import(
+            "@paths-design/canvas-schema"
+          );
+          const jsonContent = canonicalizeDocument(validation.data!);
+          await vscode.workspace.fs.writeFile(
+            uri,
+            Buffer.from(jsonContent, "utf8")
+          );
+
+          // Show migration notification
+          vscode.window.showInformationMessage(
+            `Document migrated from schema version ${
+              document.schemaVersion
+            } to ${validation.data!.schemaVersion}`
+          );
+        } catch (saveError) {
+          this._observability.log(
+            "warn",
+            "canvas_webview.migration_save_failed",
+            {
+              path: uri.fsPath,
+              error:
+                saveError instanceof Error
+                  ? saveError.message
+                  : "Unknown error",
+            }
+          );
+        }
+      }
+
+      this._document = validation.migrated ? validation.data! : document;
       this._documentFilePath = uri;
-      this._documentStore.setDocument(document, uri);
+      this._documentStore.setDocument(this._document, uri);
 
-      const nodeCount = this._countNodes(document);
+      const nodeCount = this._countNodes(this._document);
       this._observability.log("info", "canvas_webview.document_loaded", {
-        documentId: document.id,
+        documentId: this._document.id,
         nodeCount,
         path: uri.fsPath,
       });
+
+      // End performance monitoring for document load
+      const duration = monitor.endOperation(
+        `load_document_${this._document.id}`
+      );
+
+      // Record memory usage estimate
+      if (validation.performance) {
+        monitor.recordMemoryUsage(
+          `load_document_${this._document.id}`,
+          validation.performance.metrics.estimatedMemoryMB * 1024 * 1024
+        );
+      }
+
+      // Check if operation exceeded time budget
+      if (monitor.exceedsTimeBudget(duration)) {
+        vscode.window.showWarningMessage(
+          `Document load took ${duration.toFixed(
+            2
+          )}ms, exceeding recommended limit of 30000ms`
+        );
+      }
 
       // Send to webview if ready
       if (this._panel && this._isReady) {
         await this._panel.webview.postMessage({
           command: "setDocument",
-          document,
+          document: this._document,
         });
       }
 
@@ -259,6 +397,43 @@ export class CanvasWebviewProvider {
       );
       this._observability.endTrace(traceId);
     }
+  }
+
+  /**
+   * Check if auto-initialization is enabled
+   */
+  private _shouldAutoInitialize(): boolean {
+    return vscode.workspace
+      .getConfiguration("designer")
+      .get("webview.autoInitialize", true);
+  }
+
+  /**
+   * Create an empty document and save it to disk
+   */
+  private async _createEmptyDocument(
+    uri: vscode.Uri
+  ): Promise<CanvasDocumentType> {
+    const { createEmptyDocument, canonicalizeDocument } = await import(
+      "@paths-design/canvas-schema"
+    );
+
+    // Extract name from filename
+    const filename = uri.fsPath.split("/").pop() || "canvas";
+    const documentName = filename.replace(".canvas.json", "");
+
+    const document = createEmptyDocument(documentName);
+    const jsonContent = canonicalizeDocument(document);
+
+    // Save to disk
+    await vscode.workspace.fs.writeFile(uri, Buffer.from(jsonContent, "utf8"));
+
+    // Show toast notification
+    vscode.window.showInformationMessage(
+      `Initialized empty canvas for "${documentName}"`
+    );
+
+    return document;
   }
 
   /**
@@ -331,6 +506,8 @@ export class CanvasWebviewProvider {
         this._isReady = true;
         console.info("Canvas webview ready");
 
+        this._applySelectionModeSettings();
+
         // Send current document and selection
         if (this._document && this._panel) {
           await this._panel.webview.postMessage({
@@ -348,18 +525,23 @@ export class CanvasWebviewProvider {
       case "selectionChange":
         const selectionMsg = message as any; // Type assertion for discriminated union
         const nodeIds = selectionMsg.payload.nodeIds;
-        this._selection = {
+        const newSelection = {
           selectedNodeIds: nodeIds,
           focusedNodeId: nodeIds[0] || null,
         };
 
-        // Notify extension instance
-        console.info("Selection changed:", this._selection);
+        // Update selection through coordinator
+        await this._selectionCoordinator.updateSelection(
+          newSelection,
+          this._panel
+        );
+
+        // Keep local reference in sync
+        this._selection = newSelection;
         break;
 
       case "propertyChange":
-        const propMsg = message as any; // Type assertion for discriminated union
-        await this._handlePropertyChange(propMsg.payload.event);
+        await this._handlePropertyChange(message.payload.event);
         break;
 
       case "loadDocument":
@@ -395,6 +577,30 @@ export class CanvasWebviewProvider {
         }
         break;
 
+      case "selectionModeChange":
+        if (!this._panel) {
+          break;
+        }
+
+        await this._selectionCoordinator.setSelectionMode(
+          message.payload.mode,
+          message.payload.config,
+          this._panel
+        );
+        break;
+
+      case "selectionOperation":
+        if (!this._panel) {
+          break;
+        }
+
+        await this._selectionCoordinator.handleSelectionOperation(
+          message.payload.result,
+          message.payload.mode,
+          this._panel
+        );
+        break;
+
       case "validateDocument":
         // TODO: Implement validation
         console.info("Document validation requested");
@@ -405,6 +611,47 @@ export class CanvasWebviewProvider {
           "Unknown message type:",
           (message as { type: string }).type
         );
+    }
+  }
+
+  /**
+   * Apply feature flag and default selection mode settings.
+   */
+  private _applySelectionModeSettings(): void {
+    const config = vscode.workspace.getConfiguration("designer.selectionModes");
+    const selectionModesEnabled = config.get<boolean>("enabled", true);
+    const defaultMode = config.get<"single" | "rectangle" | "lasso">(
+      "default",
+      "single"
+    );
+
+    if (!selectionModesEnabled) {
+      void this._selectionCoordinator.setSelectionMode("single");
+      if (this._panel) {
+        this._panel.webview.postMessage({
+          command: "setSelectionMode",
+          mode: "single",
+          config: {
+            mode: "single",
+            multiSelect: false,
+            preserveSelection: false,
+          },
+        });
+      }
+      return;
+    }
+
+    void this._selectionCoordinator.setSelectionMode(defaultMode);
+    if (this._panel) {
+      this._panel.webview.postMessage({
+        command: "setSelectionMode",
+        mode: defaultMode,
+        config: {
+          mode: defaultMode,
+          multiSelect: false,
+          preserveSelection: false,
+        },
+      });
     }
   }
 

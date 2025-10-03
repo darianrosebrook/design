@@ -1,0 +1,77 @@
+id: DESIGNER-042
+title: Canvas Document Creation and Bootstrap
+risk_tier: 2
+scope:
+  in:
+    - packages/canvas-schema/src/index.ts - Add createEmptyDocument and canonicalizeDocument helpers
+    - packages/vscode-ext/package.json - Register new command and menu entries
+    - packages/vscode-ext/src/index.ts - Implement command handler
+    - packages/vscode-ext/src/CanvasWebviewProvider.ts - Add auto-initialization logic
+    - .canvas/templates/default.canvas.json - Create template file
+    - docs/overview.md - Document the command
+  out:
+    - Breaking changes to existing canvas document format
+    - Changes to core canvas rendering logic
+    - Impact on existing webview behavior
+invariants:
+  - All canvas documents must have schemaVersion 0.1.0
+  - Artboards must have unique ULID identifiers
+  - Documents must be deterministically serializable
+  - Empty documents must pass Zod validation
+  - Command must work in both command palette and explorer context
+acceptance:
+  - id: A1
+    given: User runs designer.createCanvasDocument command
+    when: They provide filename "homepage.canvas.json"
+    then: A new file is created with canonical skeleton containing one artboard
+  - id: A2
+    given: CanvasWebviewProvider encounters invalid/empty JSON
+    when: designer.webview.autoInitialize is true
+    then: Document is auto-initialized with default structure and user is notified
+  - id: A3
+    given: User opens .canvas.json file
+    when: They use explorer context menu
+    then: Quick-pick appears with "Open in Canvas Designer" and "View JSON" options
+  - id: A4
+    given: User is in canvas designer view
+    when: They run designer.viewCanvasSource command
+    then: The backing JSON file opens in editor for inspection
+  - id: A5
+    given: New canvas document is created
+    when: Webview loads it
+    then: Accessible message announces "Blank canvas created; press R for rectangle mode"
+non_functional:
+  a11y:
+    - Screen reader announcements for canvas initialization
+    - Keyboard navigation support in quick-pick menus
+    - Status bar items must be accessible
+  perf:
+    api_p95_ms: 100
+    lcp_ms: 200
+  security:
+    - No arbitrary file access beyond workspace
+    - Input validation for filenames
+    - Safe JSON parsing with error boundaries
+contracts:
+  - type: openapi
+    path: docs/api/canvas-schema.yaml
+observability:
+  logs:
+    - "Created canvas document: {filename}"
+    - "Auto-initialized empty canvas: {uri}"
+    - "Failed to create canvas document: {error}"
+  metrics:
+    - canvas.documents.created
+    - canvas.documents.auto_initialized
+    - canvas.commands.executed
+  traces:
+    - createCanvasDocument span
+    - loadDocument span
+    - autoInitializeDocument span
+migrations:
+  - Add feature flag designer.webview.autoInitialize (default: true)
+  - Update existing invalid documents to use new skeleton structure
+rollback:
+  - Remove designer.createCanvasDocument command registration
+  - Revert CanvasWebviewProvider.loadDocument to original error handling
+  - Remove auto-initialization feature flag

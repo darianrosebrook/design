@@ -417,13 +417,12 @@ export class AugmentationEngine {
     document: CanvasDocumentType,
     transformations: TransformationRecord[]
   ): void {
-    const self = this; // Capture this context
-    function fuzzNode(node: NodeType, path: string): void {
+    const fuzzNode = (node: NodeType, path: string): void => {
       if (node.type === "vector") {
         const vectorNode = node as { type: string; [key: string]: unknown };
 
         if (
-          self.config.svgFuzzing?.windingRuleVariation &&
+          this.config.svgFuzzing?.windingRuleVariation &&
           vectorNode.windingRule
         ) {
           const oldRule = vectorNode.windingRule;
@@ -450,7 +449,7 @@ export class AugmentationEngine {
           fuzzNode(child, `${path}.children[${index}]`);
         });
       }
-    }
+    };
 
     document.artboards.forEach(
       (artboard: { children: NodeType[] }, index: number) => {

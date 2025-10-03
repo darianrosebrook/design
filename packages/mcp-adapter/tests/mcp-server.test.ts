@@ -9,21 +9,25 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 
 // Mock file system operations
-vi.mock("node:fs", () => ({
-  default: {
+vi.mock("node:fs", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("node:fs")>();
+  return {
+    ...actual,
     readFileSync: vi.fn(),
     writeFileSync: vi.fn(),
     existsSync: vi.fn(),
     mkdirSync: vi.fn(),
-  },
-}));
+  };
+});
 
-vi.mock("node:path", () => ({
-  default: {
+vi.mock("node:path", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("node:path")>();
+  return {
+    ...actual,
     join: vi.fn((...args) => args.join("/")),
     dirname: vi.fn((p) => p.split("/").slice(0, -1).join("/")),
-  },
-}));
+  };
+});
 
 describe("DesignerMCPServer", () => {
   let server: DesignerMCPServer;

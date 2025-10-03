@@ -61,17 +61,161 @@
     },
     "commands": [
       {
+        "command": "designer.createCanvasDocument",
+        "title": "New Canvas Document",
+        "icon": "$(add)"
+      },
+      {
         "command": "designer.openCanvas",
         "title": "Open in Canvas Designer",
         "icon": "$(paintcan)"
       },
       {
+        "command": "designer.viewCanvasSource",
+        "title": "View Canvas Source"
+      },
+      {
+        "command": "designer.createComponentLibrary",
+        "title": "Create Component Library"
+      },
+      {
+        "command": "designer.createComponentFromSelection",
+        "title": "Create Component from Selection",
+        "when": "designer.canvasViewActive && designer.selectionActive"
+      },
+      {
+        "command": "designer.showComponentLibrary",
+        "title": "Show Component Library"
+      },
+      {
+        "command": "designer.showKeyboardShortcuts",
+        "title": "Show Keyboard Shortcuts"
+      },
+      {
+        "command": "designer.showPerformanceMetrics",
+        "title": "Show Performance Metrics"
+      },
+      {
+        "command": "designer.togglePerformanceBudget",
+        "title": "Toggle Performance Budget Monitoring"
+      },
+      {
         "command": "designer.openPropertiesPanel",
         "title": "Open Properties Panel"
+      },
+      {
+        "command": "designer.toggleSelectionMode",
+        "title": "Toggle Selection Mode"
+      },
+      {
+        "command": "designer.setSelectionModeRectangle",
+        "title": "Set Selection Mode: Rectangle"
+      },
+      {
+        "command": "designer.setSelectionModeLasso",
+        "title": "Set Selection Mode: Lasso"
+      },
+      {
+        "command": "designer.setSelectionModeSingle",
+        "title": "Set Selection Mode: Single"
+      },
+      {
+        "command": "designer.showSelectionState",
+        "title": "Designer: Show Selection State"
+      },
+      {
+        "command": "designer.copySelectionJSON",
+        "title": "Designer: Copy Selection as JSON"
+      },
+      {
+        "command": "designer.quickPickSelection",
+        "title": "Designer: Quick Pick Selection"
+      },
+      {
+        "command": "designer.quickToggleSelectionMode",
+        "title": "Designer: Toggle Selection Mode (Quick Pick)"
+      },
+      {
+        "command": "designer.clearSelectionHistory",
+        "title": "Designer: Clear Selection History"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "designer.toggleSelectionMode",
+        "key": "ctrl+shift+s",
+        "mac": "cmd+shift+s",
+        "when": "designer.canvasViewActive"
+      },
+      {
+        "command": "designer.setSelectionModeRectangle",
+        "key": "r",
+        "when": "designer.canvasViewActive"
+      },
+      {
+        "command": "designer.setSelectionModeLasso",
+        "key": "l",
+        "when": "designer.canvasViewActive"
+      },
+      {
+        "command": "designer.setSelectionModeSingle",
+        "key": "v",
+        "when": "designer.canvasViewActive"
       }
     ],
     "menus": {
+      "commandPalette": [
+        {
+          "command": "designer.createCanvasDocument",
+          "when": "workspaceFolderCount != 0",
+          "category": "Designer"
+        },
+        {
+          "command": "designer.openCanvas",
+          "when": "workspaceFolderCount != 0",
+          "category": "Designer"
+        },
+        {
+          "command": "designer.viewCanvasSource",
+          "when": "resourceExtname == .json && resourceFilename =~ /\\.canvas\\.json$/",
+          "category": "Designer"
+        },
+        {
+          "command": "designer.createComponentLibrary",
+          "when": "workspaceFolderCount != 0",
+          "category": "Designer"
+        },
+        {
+          "command": "designer.createComponentFromSelection",
+          "when": "workspaceFolderCount != 0",
+          "category": "Designer"
+        },
+        {
+          "command": "designer.showComponentLibrary",
+          "when": "workspaceFolderCount != 0",
+          "category": "Designer"
+        },
+        {
+          "command": "designer.showKeyboardShortcuts",
+          "when": "workspaceFolderCount != 0",
+          "category": "Designer"
+        },
+        {
+          "command": "designer.showPerformanceMetrics",
+          "when": "workspaceFolderCount != 0",
+          "category": "Designer"
+        },
+        {
+          "command": "designer.togglePerformanceBudget",
+          "when": "workspaceFolderCount != 0",
+          "category": "Designer"
+        }
+      ],
       "explorer/context": [
+        {
+          "command": "designer.createCanvasDocument",
+          "group": "navigation"
+        },
         {
           "command": "designer.openCanvas",
           "when": "resourceExtname == .json && resourceFilename =~ /\\.canvas\\.json$/",
@@ -83,8 +227,68 @@
           "command": "designer.openCanvas",
           "when": "resourceExtname == .json && resourceFilename =~ /\\.canvas\\.json$/",
           "group": "navigation"
+        },
+        {
+          "command": "designer.viewCanvasSource",
+          "when": "resourceExtname == .json && resourceFilename =~ /\\.canvas\\.json$/",
+          "group": "navigation"
         }
       ]
+    },
+    "configuration": {
+      "title": "Designer",
+      "properties": {
+        "designer.selectionModes.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable advanced selection modes (rectangle, lasso)"
+        },
+        "designer.selectionModes.default": {
+          "type": "string",
+          "enum": ["single", "rectangle", "lasso"],
+          "default": "single",
+          "description": "Default selection mode when opening canvas"
+        },
+        "designer.accessibility.announceSelectionChanges": {
+          "type": "boolean",
+          "default": true,
+          "description": "Announce selection changes to screen readers"
+        },
+        "designer.webview.autoInitialize": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically initialize empty or invalid canvas documents with default structure"
+        },
+        "designer.performance.enableBudgetMonitoring": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable performance budget monitoring and warnings for large documents"
+        },
+        "designer.performance.memoryBudgetMB": {
+          "type": "number",
+          "default": 100,
+          "minimum": 10,
+          "maximum": 1000,
+          "description": "Memory budget in MB for canvas operations (affects performance warnings)"
+        },
+        "designer.performance.maxNodesPerDocument": {
+          "type": "number",
+          "default": 10000,
+          "minimum": 100,
+          "maximum": 100000,
+          "description": "Maximum recommended nodes per document (performance threshold)"
+        },
+        "designer.achievements.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable achievement notifications for usage milestones"
+        },
+        "designer.shortcuts.showOnStartup": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show keyboard shortcuts guide on extension startup"
+        }
+      }
     }
   }
 }

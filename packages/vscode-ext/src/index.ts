@@ -8,7 +8,12 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
+import type {
+  CanvasDocumentType,
+  NodeType,
+  ComponentLibraryType,
+  PerformanceMonitor,
+} from "@paths-design/canvas-schema";
 import type { ComponentIndex } from "@paths-design/component-indexer";
 import type {
   SelectionState,
@@ -16,12 +21,179 @@ import type {
 } from "@paths-design/properties-panel";
 import { PropertiesService } from "@paths-design/properties-panel";
 import * as vscode from "vscode";
+import { SelectionAPI } from "./api/selection-api";
 import { CanvasWebviewProvider } from "./canvas-webview/canvas-webview-provider";
+import { SelectionCoordinator } from "./canvas-webview/selection-coordinator";
+import { registerSelectionCommands } from "./commands/selection-commands";
 import { DocumentStore } from "./document-store";
 import { PropertiesPanelWebviewProvider } from "./properties-panel-webview";
+import { WelcomeViewProvider } from "./welcome-view";
 
 export * from "./protocol/index.js";
 export * from "./security/index.js";
+
+/**
+ * Achievement system for tracking user milestones and engagement
+ */
+class AchievementSystem {
+  private static instance: AchievementSystem;
+  private achievements = new Map<string, boolean>();
+  private usageStats = new Map<string, number>();
+
+  static getInstance(): AchievementSystem {
+    if (!AchievementSystem.instance) {
+      AchievementSystem.instance = new AchievementSystem();
+    }
+    return AchievementSystem.instance;
+  }
+
+  /**
+   * Track a usage milestone
+   */
+  trackMilestone(milestone: string, count: number = 1): void {
+    const current = this.usageStats.get(milestone) || 0;
+    this.usageStats.set(milestone, current + count);
+
+    this.checkAchievements();
+  }
+
+  /**
+   * Check if any achievements should be unlocked
+   */
+  private checkAchievements(): void {
+    const enabled = vscode.workspace
+      .getConfiguration("designer")
+      .get("achievements.enabled", true);
+    if (!enabled) return;
+
+    // First canvas document created
+    if (
+      this.usageStats.get("documents_created") === 1 &&
+      !this.achievements.get("first_canvas")
+    ) {
+      this.unlockAchievement(
+        "first_canvas",
+        "🎨 First Canvas Created!",
+        "Welcome to Designer! Your first canvas document is ready."
+      );
+    }
+
+    // 10 canvas documents created
+    if (
+      this.usageStats.get("documents_created") === 10 &&
+      !this.achievements.get("canvas_veteran")
+    ) {
+      this.unlockAchievement(
+        "canvas_veteran",
+        "🏗️ Canvas Veteran",
+        "You've created 10 canvas documents! You're getting the hang of this."
+      );
+    }
+
+    // First component created
+    if (
+      this.usageStats.get("components_created") === 1 &&
+      !this.achievements.get("first_component")
+    ) {
+      this.unlockAchievement(
+        "first_component",
+        "🧩 Component Creator",
+        "You created your first reusable component!"
+      );
+    }
+
+    // 5 components created
+    if (
+      this.usageStats.get("components_created") === 5 &&
+      !this.achievements.get("component_master")
+    ) {
+      this.unlockAchievement(
+        "component_master",
+        "🏆 Component Master",
+        "You've created 5 components! Your design system is growing."
+      );
+    }
+
+    // Performance budget monitoring toggled
+    if (
+      this.usageStats.get("performance_toggles") === 1 &&
+      !this.achievements.get("performance_aware")
+    ) {
+      this.unlockAchievement(
+        "performance_aware",
+        "⚡ Performance Aware",
+        "You configured performance monitoring! Smart designer."
+      );
+    }
+  }
+
+  /**
+   * Unlock and show an achievement
+   */
+  private unlockAchievement(
+    id: string,
+    title: string,
+    description: string
+  ): void {
+    this.achievements.set(id, true);
+
+    vscode.window
+      .showInformationMessage(`🏆 ${title}\n${description}`, "Show Shortcuts")
+      .then((selection) => {
+        if (selection === "Show Shortcuts") {
+          vscode.commands.executeCommand("designer.showKeyboardShortcuts");
+        }
+      });
+  }
+
+  /**
+   * Get current achievement status
+   */
+  getAchievements(): Record<string, boolean> {
+    return Object.fromEntries(this.achievements);
+  }
+
+  /**
+   * Get usage statistics
+   */
+  getUsageStats(): Record<string, number> {
+    return Object.fromEntries(this.usageStats);
+  }
+
+  /**
+   * Show startup guide if enabled
+   */
+  private async showStartupGuide(): Promise<void> {
+    const showOnStartup = vscode.workspace
+      .getConfiguration("designer")
+      .get("shortcuts.showOnStartup", true);
+
+    if (showOnStartup) {
+      // Delay slightly to avoid interfering with extension activation
+      setTimeout(() => {
+        vscode.window
+          .showInformationMessage(
+            "🎨 Welcome to Designer! Press Cmd+K Cmd+S (macOS) or Ctrl+K Ctrl+S (Windows) to see all shortcuts.",
+            "Show Shortcuts",
+            "Don't Show Again"
+          )
+          .then((selection) => {
+            if (selection === "Show Shortcuts") {
+              vscode.commands.executeCommand("designer.showKeyboardShortcuts");
+            } else if (selection === "Don't Show Again") {
+              vscode.workspace
+                .getConfiguration("designer")
+                .update(
+                  "shortcuts.showOnStartup",
+                  false,
+                  vscode.ConfigurationTarget.Global
+                );
+            }
+          });
+      }, 2000);
+    }
+  }
+}
 
 /**
  * Main extension class managing the Designer VS Code extension
@@ -30,6 +202,7 @@ class DesignerExtension {
   private context: vscode.ExtensionContext;
   private canvasWebviewProvider: CanvasWebviewProvider;
   private propertiesPanelProvider: PropertiesPanelWebviewProvider;
+  private welcomeViewProvider: WelcomeViewProvider;
   private propertiesService: PropertiesService;
   private documentStore: DocumentStore;
   private componentIndex: ComponentIndex | null = null;
@@ -38,6 +211,7 @@ class DesignerExtension {
     selectedNodeIds: [],
     focusedNodeId: null,
   };
+  private achievementSystem: AchievementSystem;
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
@@ -45,6 +219,12 @@ class DesignerExtension {
     this.documentStore = DocumentStore.getInstance();
     this.canvasWebviewProvider = new CanvasWebviewProvider(context, this);
     this.propertiesPanelProvider = new PropertiesPanelWebviewProvider(context);
+    this.welcomeViewProvider = new WelcomeViewProvider(context);
+
+    // Initialize SelectionAPI and connect to coordinator events
+    const selectionAPI = SelectionAPI.getInstance();
+    const apiDisposable = selectionAPI.initialize();
+    context.subscriptions.push(apiDisposable);
 
     // Load component index if it exists
     this.loadComponentIndex();
@@ -52,6 +232,9 @@ class DesignerExtension {
     this.registerCommands();
     this.registerWebviewProviders();
     this.setupFileAssociations();
+
+    // Show shortcuts guide on first startup if enabled
+    this.showStartupGuide();
   }
 
   /**
@@ -97,6 +280,459 @@ class DesignerExtension {
    * Register extension commands
    */
   private registerCommands(): void {
+    // Command to create a new canvas document
+    const createCanvasDocumentCommand = vscode.commands.registerCommand(
+      "designer.createCanvasDocument",
+      async (uri?: vscode.Uri) => {
+        const workspaceFolder = uri
+          ? vscode.workspace.getWorkspaceFolder(uri)
+          : vscode.workspace.workspaceFolders?.[0];
+
+        if (!workspaceFolder) {
+          vscode.window.showErrorMessage("No workspace folder available");
+          return;
+        }
+
+        // Prompt for filename with security validation and organization guidance
+        const filename = await vscode.window.showInputBox({
+          prompt:
+            "Enter canvas document name (recommended: design/homepage.canvas.json)",
+          placeHolder: "design/homepage.canvas.json",
+          value: "design/.canvas.json",
+          validateInput: (value: string) => {
+            // Basic extension check
+            if (!value.endsWith(".canvas.json")) {
+              return "Filename must end with .canvas.json";
+            }
+
+            // Sanitize and validate filename for security
+            const sanitized = this._sanitizeFilename(value);
+            if (sanitized !== value) {
+              return "Filename contains unsafe characters or paths";
+            }
+
+            // Check for reserved names
+            const baseName =
+              value.replace(".canvas.json", "").split("/").pop() || "";
+            if (this._isReservedFilename(baseName)) {
+              return "This filename is reserved";
+            }
+
+            // Organization guidance
+            if (!value.includes("/") && !value.startsWith("design/")) {
+              return "Consider organizing in design/ folder (e.g., design/homepage.canvas.json)";
+            }
+
+            return null;
+          },
+        });
+
+        if (!filename) {
+          return;
+        }
+
+        // Create the document
+        const { createEmptyDocument, canonicalizeDocument } = await import(
+          "@paths-design/canvas-schema"
+        );
+        const documentName = filename.replace(".canvas.json", "");
+        const canvasDoc = createEmptyDocument(documentName);
+        const jsonContent = canonicalizeDocument(canvasDoc);
+
+        // Write to file with path validation and overwrite protection
+        const fileUri = vscode.Uri.joinPath(workspaceFolder.uri, filename);
+
+        // Additional security check: ensure path is within workspace
+        if (!this._isPathWithinWorkspace(fileUri, workspaceFolder.uri)) {
+          vscode.window.showErrorMessage(
+            "Cannot create file outside workspace"
+          );
+          return;
+        }
+
+        // Check if file already exists and prompt for confirmation
+        try {
+          await vscode.workspace.fs.stat(fileUri);
+          const confirmOverwrite = await vscode.window.showWarningMessage(
+            `File "${filename}" already exists. Do you want to overwrite it?`,
+            "Overwrite",
+            "Cancel"
+          );
+
+          if (confirmOverwrite !== "Overwrite") {
+            vscode.window.showInformationMessage(
+              "Canvas document creation cancelled"
+            );
+            return;
+          }
+        } catch (error) {
+          // File doesn't exist, proceed with creation
+        }
+
+        // Write file with error handling and cleanup
+        let fileCreated = false;
+        try {
+          await vscode.workspace.fs.writeFile(
+            fileUri,
+            Buffer.from(jsonContent, "utf8")
+          );
+          fileCreated = true;
+
+          // Ask user how they want to open the new document
+          const choice = await vscode.window.showInformationMessage(
+            `Created canvas document: ${filename}`,
+            "Open in Designer",
+            "View JSON"
+          );
+
+          if (choice === "Open in Designer") {
+            // Open in designer
+            await this.canvasWebviewProvider.show(fileUri);
+          } else {
+            // Open as JSON (default if no choice made)
+            const document = await vscode.workspace.openTextDocument(fileUri);
+            await vscode.window.showTextDocument(document);
+          }
+
+          // Track milestone
+          this.achievementSystem.trackMilestone("documents_created");
+        } catch (error) {
+          // Clean up partial file if write failed
+          if (fileCreated && error instanceof Error) {
+            try {
+              // Check if file exists and is empty/truncated
+              const stat = await vscode.workspace.fs.stat(fileUri);
+              if (stat.size < jsonContent.length) {
+                // File appears truncated, attempt cleanup
+                try {
+                  await vscode.workspace.fs.delete(fileUri);
+                  vscode.window.showWarningMessage(
+                    `File creation failed and partial file was cleaned up: ${filename}`
+                  );
+                } catch (cleanupError) {
+                  vscode.window.showWarningMessage(
+                    `File creation failed. Please manually delete: ${filename}`
+                  );
+                }
+              }
+            } catch (statError) {
+              // File may not exist, continue with error message
+            }
+          }
+
+          // Show appropriate error message based on error type
+          const errorMessage =
+            error instanceof Error ? error.message : "Unknown error";
+          if (
+            errorMessage.includes("EPERM") ||
+            errorMessage.includes("EACCES")
+          ) {
+            vscode.window.showErrorMessage(
+              `Permission denied creating ${filename}. Check file permissions.`
+            );
+          } else if (errorMessage.includes("ENOSPC")) {
+            vscode.window.showErrorMessage(
+              `Insufficient disk space to create ${filename}.`
+            );
+          } else {
+            vscode.window.showErrorMessage(
+              `Failed to create canvas document ${filename}: ${errorMessage}`
+            );
+          }
+        }
+      }
+    );
+
+    // Command to create component library
+    const createComponentLibraryCommand = vscode.commands.registerCommand(
+      "designer.createComponentLibrary",
+      async () => {
+        const libraryName = await vscode.window.showInputBox({
+          prompt: "Enter component library name",
+          placeHolder: "My Components",
+          value: "components",
+        });
+
+        if (!libraryName) {
+          return;
+        }
+
+        const { createEmptyComponentLibrary, canonicalizeDocument } =
+          await import("@paths-design/canvas-schema");
+
+        const library = createEmptyComponentLibrary(libraryName);
+        const jsonContent = canonicalizeDocument(library);
+
+        // Create in design directory
+        const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+        if (!workspaceFolder) {
+          vscode.window.showErrorMessage("No workspace folder available");
+          return;
+        }
+
+        const designDir = vscode.Uri.joinPath(workspaceFolder.uri, "design");
+        const libraryUri = vscode.Uri.joinPath(
+          designDir,
+          `${libraryName}.components.json`
+        );
+
+        await vscode.workspace.fs.writeFile(
+          libraryUri,
+          Buffer.from(jsonContent, "utf8")
+        );
+
+        vscode.window.showInformationMessage(
+          `Created component library: ${libraryName}.components.json`
+        );
+      }
+    );
+
+    // Command to create component from selection
+    const createComponentFromSelectionCommand = vscode.commands.registerCommand(
+      "designer.createComponentFromSelection",
+      async () => {
+        // Get current selection from the canvas webview
+        const selection = this.getCurrentSelection();
+        if (selection.selectedNodeIds.length === 0) {
+          vscode.window.showWarningMessage("No nodes selected");
+          return;
+        }
+
+        if (!this.currentDocument) {
+          vscode.window.showErrorMessage("No active document");
+          return;
+        }
+
+        // Find the selected node
+        const selectedNode = this._findNodeById(
+          this.currentDocument,
+          selection.selectedNodeIds[0]
+        );
+        if (!selectedNode) {
+          vscode.window.showErrorMessage("Selected node not found");
+          return;
+        }
+
+        // Prompt for component details
+        const componentName = await vscode.window.showInputBox({
+          prompt: "Enter component name",
+          placeHolder: "Button",
+          value: selectedNode.name || "Component",
+        });
+
+        if (!componentName) {
+          return;
+        }
+
+        const componentDescription = await vscode.window.showInputBox({
+          prompt: "Enter component description (optional)",
+          placeHolder: "A reusable button component",
+        });
+
+        // Create the component
+        const { createComponentFromNode } = await import(
+          "@paths-design/canvas-schema"
+        );
+        const component = createComponentFromNode(
+          selectedNode,
+          componentName,
+          componentDescription
+        );
+
+        vscode.window.showInformationMessage(
+          `Created component "${componentName}" with ID: ${component.id}`
+        );
+
+        // Track milestone
+        this.achievementSystem.trackMilestone("components_created");
+
+        // TODO: Add to component library
+        // For now, just show the component definition
+        const componentJson = JSON.stringify(component, null, 2);
+        const doc = await vscode.workspace.openTextDocument({
+          content: componentJson,
+          language: "json",
+        });
+        await vscode.window.showTextDocument(doc);
+      }
+    );
+
+    // Command to show component library
+    const showComponentLibraryCommand = vscode.commands.registerCommand(
+      "designer.showComponentLibrary",
+      async () => {
+        const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+        if (!workspaceFolder) {
+          vscode.window.showErrorMessage("No workspace folder available");
+          return;
+        }
+
+        // Look for component library files
+        const designDir = vscode.Uri.joinPath(workspaceFolder.uri, "design");
+        const libraryPattern = new vscode.RelativePattern(
+          designDir,
+          "*.components.json"
+        );
+
+        try {
+          const libraryFiles = await vscode.workspace.findFiles(libraryPattern);
+
+          if (libraryFiles.length === 0) {
+            vscode.window.showInformationMessage(
+              "No component libraries found. Create one first."
+            );
+            return;
+          }
+
+          // Show quick pick of available libraries
+          const selectedLibrary = await vscode.window.showQuickPick(
+            libraryFiles.map((file) => ({
+              label: `$(package) ${vscode.workspace.asRelativePath(file)}`,
+              description: "Component Library",
+              uri: file,
+            })),
+            {
+              placeHolder: "Select a component library to open",
+            }
+          );
+
+          if (selectedLibrary) {
+            const document = await vscode.workspace.openTextDocument(
+              selectedLibrary.uri
+            );
+            await vscode.window.showTextDocument(document);
+          }
+        } catch (error) {
+          vscode.window.showErrorMessage("Failed to find component libraries");
+        }
+      }
+    );
+
+    // Command to show keyboard shortcuts
+    const showKeyboardShortcutsCommand = vscode.commands.registerCommand(
+      "designer.showKeyboardShortcuts",
+      async () => {
+        const shortcuts = [
+          {
+            key: "Ctrl+Shift+C",
+            description: "Create component from selection",
+          },
+          { key: "Ctrl+Shift+L", description: "Show component library" },
+          { key: "Ctrl+Shift+S", description: "Toggle selection mode" },
+          {
+            key: "R",
+            description: "Rectangle selection mode",
+            context: "in canvas",
+          },
+          {
+            key: "L",
+            description: "Lasso selection mode",
+            context: "in canvas",
+          },
+          {
+            key: "V",
+            description: "Single selection mode",
+            context: "in canvas",
+          },
+          { key: "Ctrl+Shift+N", description: "Create new canvas document" },
+          { key: "Ctrl+O", description: "Open canvas document" },
+          { key: "Ctrl+Shift+P", description: "Show performance metrics" },
+        ];
+
+        const content = `## Designer Keyboard Shortcuts
+
+${shortcuts
+  .map(
+    (s) =>
+      `**${s.key}** - ${s.description}${s.context ? ` *(${s.context})*` : ""}`
+  )
+  .join("\n")}
+
+*Tip: Use Cmd+K Cmd+S (macOS) or Ctrl+K Ctrl+S (Windows/Linux) to view all VS Code shortcuts*`;
+
+        const doc = await vscode.workspace.openTextDocument({
+          content,
+          language: "markdown",
+        });
+        await vscode.window.showTextDocument(doc);
+      }
+    );
+
+    // Command to show performance metrics
+    const showPerformanceMetricsCommand = vscode.commands.registerCommand(
+      "designer.showPerformanceMetrics",
+      async () => {
+        const { PerformanceMonitor } = await import(
+          "@paths-design/canvas-schema"
+        );
+        const monitor = PerformanceMonitor.getInstance();
+        const metrics = monitor.getMetrics();
+
+        const content = `# Designer Performance Metrics
+
+## Operation Counts
+${Object.entries(metrics.operationCounts)
+  .map(([op, count]) => `- **${op}**: ${count} operations`)
+  .join("\n")}
+
+## Memory Usage
+${Object.entries(metrics.memoryUsage)
+  .map(([op, bytes]) => `- **${op}**: ${(bytes / 1024 / 1024).toFixed(2)} MB`)
+  .join("\n")}
+
+## Configuration
+- Memory Budget: ${vscode.workspace
+          .getConfiguration("designer")
+          .get("performance.memoryBudgetMB", 100)} MB
+- Max Nodes: ${vscode.workspace
+          .getConfiguration("designer")
+          .get("performance.maxNodesPerDocument", 10000)}
+- Budget Monitoring: ${
+          vscode.workspace
+            .getConfiguration("designer")
+            .get("performance.enableBudgetMonitoring", true)
+            ? "Enabled"
+            : "Disabled"
+        }
+
+*Performance metrics reset on extension reload*`;
+
+        const doc = await vscode.workspace.openTextDocument({
+          content,
+          language: "markdown",
+        });
+        await vscode.window.showTextDocument(doc);
+      }
+    );
+
+    // Command to toggle performance budget monitoring
+    const togglePerformanceBudgetCommand = vscode.commands.registerCommand(
+      "designer.togglePerformanceBudget",
+      async () => {
+        const config = vscode.workspace.getConfiguration("designer");
+        const currentValue = config.get(
+          "performance.enableBudgetMonitoring",
+          true
+        );
+        const newValue = !currentValue;
+
+        await config.update(
+          "performance.enableBudgetMonitoring",
+          newValue,
+          vscode.ConfigurationTarget.Global
+        );
+
+        vscode.window.showInformationMessage(
+          `Performance budget monitoring ${newValue ? "enabled" : "disabled"}`
+        );
+
+        // Track milestone if enabled
+        if (newValue) {
+          this.achievementSystem.trackMilestone("performance_toggles");
+        }
+      }
+    );
+
     // Command to open canvas designer
     const openCanvasCommand = vscode.commands.registerCommand(
       "designer.openCanvas",
@@ -104,24 +740,111 @@ class DesignerExtension {
         let documentUri = uri;
 
         if (!documentUri) {
-          // Ask user to select a file
-          const uris = await vscode.window.showOpenDialog({
-            canSelectFiles: true,
-            canSelectFolders: false,
-            filters: {
-              "Canvas Documents": ["canvas.json", "json"],
-            },
-            openLabel: "Open Canvas Document",
-          });
+          // First, look for existing canvas documents in the workspace
+          const existingCanvasFiles = await this._findExistingCanvasFiles();
 
-          if (!uris || uris.length === 0) {
+          if (existingCanvasFiles.length > 0) {
+            // Show quick pick of existing files
+            const selectedFile = await vscode.window.showQuickPick(
+              existingCanvasFiles.map((file) => ({
+                label: `$(file) ${file.relativePath}`,
+                description: `Modified ${file.mtime}`,
+                detail: file.uri.fsPath,
+                uri: file.uri,
+              })),
+              {
+                placeHolder: "Select a canvas document to open",
+                matchOnDescription: true,
+                matchOnDetail: true,
+              }
+            );
+
+            if (selectedFile) {
+              documentUri = selectedFile.uri;
+            } else {
+              return; // User cancelled
+            }
+          } else {
+            // No existing files, fall back to file dialog
+            const uris = await vscode.window.showOpenDialog({
+              canSelectFiles: true,
+              canSelectFolders: false,
+              filters: {
+                "Canvas Documents": ["canvas.json", "json"],
+              },
+              openLabel: "Open Canvas Document",
+            });
+
+            if (!uris || uris.length === 0) {
+              return;
+            }
+
+            documentUri = uris[0];
+          }
+        }
+
+        // Show quick-pick for canvas files
+        if (documentUri.fsPath.endsWith(".canvas.json")) {
+          const choice = await vscode.window.showQuickPick(
+            [
+              {
+                label: "$(paintcan) Open in Canvas Designer",
+                description: "Visual canvas editor",
+                action: "designer",
+              },
+              {
+                label: "$(json) View JSON",
+                description: "Edit raw JSON source",
+                action: "json",
+              },
+            ],
+            {
+              placeHolder: "How would you like to open this canvas document?",
+              matchOnDescription: true,
+            }
+          );
+
+          if (!choice) {
             return;
           }
 
-          documentUri = uris[0];
+          if (choice.action === "json") {
+            // Open as JSON
+            const document = await vscode.workspace.openTextDocument(
+              documentUri
+            );
+            await vscode.window.showTextDocument(document);
+            return;
+          }
         }
 
+        // Default: open in designer
         await this.canvasWebviewProvider.show(documentUri);
+      }
+    );
+
+    // Command to view canvas source (JSON)
+    const viewCanvasSourceCommand = vscode.commands.registerCommand(
+      "designer.viewCanvasSource",
+      async (uri?: vscode.Uri) => {
+        let documentUri = uri;
+
+        if (
+          !documentUri &&
+          vscode.window.activeTextEditor?.document.fileName.endsWith(
+            ".canvas.json"
+          )
+        ) {
+          documentUri = vscode.window.activeTextEditor.document.uri;
+        }
+
+        if (!documentUri) {
+          vscode.window.showErrorMessage("No canvas document selected");
+          return;
+        }
+
+        const document = await vscode.workspace.openTextDocument(documentUri);
+        await vscode.window.showTextDocument(document);
       }
     );
 
@@ -130,6 +853,51 @@ class DesignerExtension {
       "designer.openPropertiesPanel",
       () => {
         vscode.commands.executeCommand("workbench.view.extension.designer");
+      }
+    );
+
+    // Command to toggle selection mode
+    const toggleSelectionModeCommand = vscode.commands.registerCommand(
+      "designer.toggleSelectionMode",
+      async () => {
+        const selectionCoordinator = SelectionCoordinator.getInstance();
+        await selectionCoordinator.toggleSelectionMode();
+
+        const mode = selectionCoordinator.getCurrentMode();
+        vscode.window.showInformationMessage(`Selection mode: ${mode}`);
+      }
+    );
+
+    // Command to set selection mode to rectangle
+    const setSelectionModeRectangleCommand = vscode.commands.registerCommand(
+      "designer.setSelectionModeRectangle",
+      async () => {
+        const selectionCoordinator = SelectionCoordinator.getInstance();
+        await selectionCoordinator.setSelectionMode("rectangle");
+
+        vscode.window.showInformationMessage("Selection mode: rectangle");
+      }
+    );
+
+    // Command to set selection mode to lasso
+    const setSelectionModeLassoCommand = vscode.commands.registerCommand(
+      "designer.setSelectionModeLasso",
+      async () => {
+        const selectionCoordinator = SelectionCoordinator.getInstance();
+        await selectionCoordinator.setSelectionMode("lasso");
+
+        vscode.window.showInformationMessage("Selection mode: lasso");
+      }
+    );
+
+    // Command to set selection mode to single
+    const setSelectionModeSingleCommand = vscode.commands.registerCommand(
+      "designer.setSelectionModeSingle",
+      async () => {
+        const selectionCoordinator = SelectionCoordinator.getInstance();
+        await selectionCoordinator.setSelectionMode("single");
+
+        vscode.window.showInformationMessage("Selection mode: single");
       }
     );
 
@@ -171,9 +939,24 @@ class DesignerExtension {
       }
     );
 
+    // Register selection debugging commands
+    registerSelectionCommands(this.context);
+
     this.context.subscriptions.push(
+      createCanvasDocumentCommand,
+      createComponentLibraryCommand,
+      createComponentFromSelectionCommand,
+      showComponentLibraryCommand,
+      showKeyboardShortcutsCommand,
+      showPerformanceMetricsCommand,
+      togglePerformanceBudgetCommand,
       openCanvasCommand,
+      viewCanvasSourceCommand,
       openPropertiesPanelCommand,
+      toggleSelectionModeCommand,
+      setSelectionModeRectangleCommand,
+      setSelectionModeLassoCommand,
+      setSelectionModeSingleCommand,
       loadDocumentCommand,
       refreshDocumentCommand
     );
@@ -188,6 +971,14 @@ class DesignerExtension {
       vscode.window.registerWebviewViewProvider(
         PropertiesPanelWebviewProvider.viewType,
         this.propertiesPanelProvider
+      )
+    );
+
+    // Welcome view
+    this.context.subscriptions.push(
+      vscode.window.registerWebviewViewProvider(
+        WelcomeViewProvider.viewType,
+        this.welcomeViewProvider
       )
     );
   }
@@ -332,6 +1123,172 @@ class DesignerExtension {
    */
   getCurrentSelection(): SelectionState {
     return this.currentSelection;
+  }
+
+  /**
+   * Sanitize filename for security - removes path components and unsafe characters
+   */
+  private _sanitizeFilename(filename: string): string {
+    // Remove any path components (/, \, ..)
+    const safeFilename = filename
+      .replace(/[\/\\]/g, "") // Remove path separators
+      .replace(/\.\./g, "") // Remove path traversal attempts
+      .replace(/^\.+/, "") // Remove leading dots
+      .replace(/[<>:*?"|]/g, ""); // Remove Windows reserved chars
+
+    // Ensure it still ends with .canvas.json
+    if (!safeFilename.endsWith(".canvas.json")) {
+      return safeFilename + ".canvas.json";
+    }
+
+    return safeFilename;
+  }
+
+  /**
+   * Check if filename is reserved for security
+   */
+  private _isReservedFilename(basename: string): boolean {
+    const reserved = [
+      "con",
+      "prn",
+      "aux",
+      "nul",
+      "com1",
+      "com2",
+      "com3",
+      "com4",
+      "com5",
+      "com6",
+      "com7",
+      "com8",
+      "com9",
+      "lpt1",
+      "lpt2",
+      "lpt3",
+      "lpt4",
+      "lpt5",
+      "lpt6",
+      "lpt7",
+      "lpt8",
+      "lpt9",
+    ];
+    return reserved.includes(basename.toLowerCase());
+  }
+
+  /**
+   * Verify that a file path is within the workspace boundary
+   */
+  private _isPathWithinWorkspace(
+    fileUri: vscode.Uri,
+    workspaceUri: vscode.Uri
+  ): boolean {
+    const filePath = fileUri.fsPath;
+    const workspacePath = workspaceUri.fsPath;
+
+    // Ensure file path starts with workspace path
+    if (!filePath.startsWith(workspacePath)) {
+      return false;
+    }
+
+    // Additional check: ensure no parent directory traversal beyond workspace
+    const relativePath = filePath.substring(workspacePath.length);
+    if (relativePath.includes("../") || relativePath.startsWith("../")) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * Find a node by ID in a canvas document
+   */
+  private _findNodeById(
+    document: CanvasDocumentType,
+    nodeId: string
+  ): NodeType | null {
+    const findInNodes = (nodes: NodeType[]): NodeType | null => {
+      for (const node of nodes) {
+        if (node.id === nodeId) {
+          return node;
+        }
+
+        if (node.children && node.children.length > 0) {
+          const found = findInNodes(node.children);
+          if (found) {
+            return found;
+          }
+        }
+      }
+      return null;
+    };
+
+    for (const artboard of document.artboards) {
+      if (artboard.children && artboard.children.length > 0) {
+        const found = findInNodes(artboard.children);
+        if (found) {
+          return found;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Find existing canvas files in the workspace
+   */
+  private async _findExistingCanvasFiles(): Promise<
+    Array<{
+      uri: vscode.Uri;
+      relativePath: string;
+      mtime: string;
+    }>
+  > {
+    const canvasFiles: Array<{
+      uri: vscode.Uri;
+      relativePath: string;
+      mtime: string;
+    }> = [];
+
+    const workspaceFolders = vscode.workspace.workspaceFolders;
+    if (!workspaceFolders) {
+      return canvasFiles;
+    }
+
+    // Search for canvas files in each workspace folder
+    for (const folder of workspaceFolders) {
+      try {
+        const pattern = new vscode.RelativePattern(folder, "**/*.canvas.json");
+        const files = await vscode.workspace.findFiles(
+          pattern,
+          "**/node_modules/**"
+        );
+
+        for (const file of files) {
+          try {
+            const stat = await vscode.workspace.fs.stat(file);
+            const relativePath = vscode.workspace.asRelativePath(file);
+
+            canvasFiles.push({
+              uri: file,
+              relativePath,
+              mtime: new Date(stat.mtime).toLocaleDateString(),
+            });
+          } catch (error) {
+            // Skip files that can't be accessed
+          }
+        }
+      } catch (error) {
+        // Skip folders that can't be searched
+      }
+    }
+
+    // Sort by modification time (newest first)
+    return canvasFiles.sort((a, b) => {
+      // For simplicity, sort alphabetically for now
+      // TODO: Implement proper mtime comparison
+      return a.relativePath.localeCompare(b.relativePath);
+    });
   }
 }
 

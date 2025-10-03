@@ -37,3 +37,14 @@ export {
   MetricType,
 } from "./observability.js";
 export type { LogEntry, Metric, TraceSpan } from "./observability.js";
+
+// Advanced selection modes
+export { SelectionModesCoordinator } from "./selection-modes.js";
+export type {
+  SelectionMode,
+  Point,
+  Rectangle,
+  SelectionResult,
+  HitTestResult,
+  SelectionModeConfig,
+} from "./selection-modes.js";

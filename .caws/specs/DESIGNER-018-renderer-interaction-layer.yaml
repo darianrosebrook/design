@@ -1,0 +1,105 @@
+id: DESIGNER-018
+title: 'Renderer Coordinate System & Interaction Layer'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 25
+  max_loc: 1000
+blast_radius:
+  modules:
+    - packages/canvas-renderer-dom/
+    - packages/canvas-engine/src/hit-testing.ts
+    - packages/canvas-renderer-dom/tests/
+  data_migration: false
+operational_rollback_slo: 10m
+threats:
+  - 'Incorrect devicePixelRatio handling causing blurry renders'
+  - 'Selection overlays misaligned after zoom or pan'
+  - 'Hit testing fails for transformed nodes'
+  - 'Pointer events throttling introduces lag in interactions'
+  - 'Keyboard navigation regressions break accessibility'
+scope:
+  in:
+    - packages/canvas-renderer-dom/src/
+    - packages/canvas-renderer-dom/tests/
+    - packages/canvas-engine/src/hit-testing.ts
+  out:
+    - packages/vscode-ext/
+    - packages/properties-panel/
+invariants:
+  - 'Renderer uses document-space frames for DOM positioning with pixel ratio applied only to draw surfaces'
+  - 'Selection overlays share the same transform state as canvas nodes'
+  - 'Pan and zoom state managed centrally with deterministic math'
+  - 'Hit testing incorporates transforms and viewport adjustments'
+  - 'Keyboard navigation paths remain functional for all node types'
+  - 'Device pixel ratio observed from injected clock/test harness for deterministic snapshots'
+acceptance:
+  - id: A1
+    given: 'Device pixel ratio set to 2'
+    when: 'Renderer draws frame'
+    then: 'Visual output remains crisp without double-scaling artifacts'
+  - id: A2
+    given: 'User drags selection rectangle at 150% zoom'
+    when: 'Selection overlay updates'
+    then: 'Overlay aligns with underlying nodes within 1px tolerance'
+  - id: A3
+    given: 'Node rotated and nested inside transformed frame'
+    when: 'Hit test resolves selection'
+    then: 'Correct node id returned for pointer and keyboard navigation'
+  - id: A4
+    given: '500 pointer move events in 5 seconds'
+    when: 'Renderer processes input'
+    then: 'Frame rate remains ≥60fps with throttled interactions'
+  - id: A5
+    given: 'User navigates nodes via arrow keys after zoom change'
+    when: 'Focus moves to next node'
+    then: 'Canvas scrolls and focus outlines remain visible'
+  - id: A6
+    given: 'Golden frame rendering executed twice with same document'
+    when: 'Snapshot comparison performed'
+    then: 'Snapshots identical, confirming deterministic transforms'
+non_functional:
+  a11y:
+    - 'Focus outlines rendered consistently across zoom levels'
+    - 'Keyboard navigation order predictable after transformations'
+    - 'Announcements triggered for selection changes'
+  perf:
+    render_frame_ms: 16
+    pointer_move_budget_ms: 5
+    additional:
+      - 'Selection overlay recalculation <4ms per update'
+      - 'Pan/zoom adjustments avoid forced reflows via requestAnimationFrame batching'
+      - 'Hit testing for 1000 nodes <8ms avg'
+      - 'Golden frame test suite executes within 90s on CI hardware'
+  security:
+    - 'No DOM injection via selection overlays or zoom controls'
+    - 'Clamp zoom inputs to safe range (0.25x-4x)'
+    - 'Reject malformed hit test payloads from external sources'
+contracts:
+  - type: typescript
+    path: packages/canvas-renderer-dom/src/types.ts
+  - type: typescript
+    path: packages/canvas-engine/src/types.ts
+observability:
+  logs:
+    - 'renderer.viewport.change with zoom and pan values'
+    - 'renderer.hit_test.miss with coordinates and reason'
+    - 'renderer.accessibility.focus_change with node id'
+    - 'renderer.performance.warn when frame budget exceeded'
+  metrics:
+    - 'renderer_zoom_level gauge'
+    - 'renderer_hit_test_duration_ms histogram'
+    - 'renderer_pointer_events_dropped_total counter'
+    - 'renderer_high_dpi_frames_total counter'
+  traces:
+    - 'renderer.frame.lifecycle from layout to paint'
+    - 'renderer.selection_overlay.update span for overlay computation'
+    - 'renderer.hit_test.pipeline from event to node resolution'
+migrations:
+  - 'No migrations required'
+rollback:
+  - 'Feature flag `designer.renderer.interactions` toggles new interaction layer'
+  - 'Fallback to existing coordinate math for emergency hotfix'
+  - 'Disable high DPI adjustments via configuration flag'
+
+

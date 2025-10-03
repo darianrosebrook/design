@@ -6,14 +6,15 @@
  * with schema validation, canonical serialization, and undo/redo support.
  */
 
-import * as vscode from "vscode";
-import {
-  validateCanvasDocument,
-  Patch,
-  type Patch as PatchType,
-} from "@paths-design/canvas-schema";
 import { applyPatch } from "@paths-design/canvas-engine";
-import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
+import type {
+  CanvasDocumentType,
+  Patch,
+  PatchType,
+  NodeType,
+} from "@paths-design/canvas-schema";
+import { validateCanvasDocument } from "@paths-design/canvas-schema";
+import * as vscode from "vscode";
 
 /**
  * Document mutation event for tracking changes
@@ -87,6 +88,16 @@ class DocumentStoreObservability {
 }
 
 /**
+ * Node lookup index for O(1) node access
+ */
+interface NodeIndexEntry {
+  node: NodeType;
+  artboardId: string;
+  parentId: string | null;
+  depth: number;
+}
+
+/**
  * Deterministic Document Mutation Pipeline
  * Routes all mutations through canvas-engine with validation and canonical serialization
  */
@@ -97,6 +108,9 @@ export class DocumentStore {
   private undoStack: DocumentSnapshot[] = [];
   private redoStack: DocumentSnapshot[] = [];
   private observability = new DocumentStoreObservability();
+
+  // Node index for O(1) lookups - rebuilt on document changes
+  private nodeIndex = new Map<string, NodeIndexEntry>();
 
   private static instance: DocumentStore | null = null;
 
@@ -118,6 +132,9 @@ export class DocumentStore {
     this.currentDocument = document;
     this.documentFilePath = filePath || null;
 
+    // Rebuild node index for O(1) lookups
+    this.rebuildNodeIndex();
+
     // Create initial snapshot
     const snapshot = this.createSnapshot("initial_state");
     this.mutationHistory = snapshot.mutations;
@@ -136,6 +153,97 @@ export class DocumentStore {
    */
   getDocument(): CanvasDocumentType | null {
     return this.currentDocument;
+  }
+
+  /**
+   * Get a node by ID with O(1) lookup
+   *
+   * @param nodeId Node ID to find
+   * @returns Node information or null if not found
+   *
+   * **Performance**: O(1) - uses pre-built index
+   */
+  getNodeById(nodeId: string): NodeIndexEntry | null {
+    return this.nodeIndex.get(nodeId) ?? null;
+  }
+
+  /**
+   * Get multiple nodes by IDs with O(k) lookup where k = query size
+   *
+   * @param nodeIds Array of node IDs to find
+   * @returns Map of nodeId -> NodeInfo (only found nodes)
+   *
+   * **Performance**: O(k) where k = number of requested nodes
+   */
+  getNodesByIds(nodeIds: string[]): Map<string, NodeIndexEntry> {
+    const results = new Map<string, NodeIndexEntry>();
+    for (const id of nodeIds) {
+      const entry = this.nodeIndex.get(id);
+      if (entry) {
+        results.set(id, entry);
+      }
+    }
+    return results;
+  }
+
+  /**
+   * Rebuild the node index after document changes
+   * Called automatically when document is set
+   *
+   * **Performance**: O(n) where n = total nodes - called once per document load
+   */
+  private rebuildNodeIndex(): void {
+    this.nodeIndex.clear();
+
+    if (!this.currentDocument) {
+      return;
+    }
+
+    const startTime = performance.now();
+
+    const traverse = (
+      nodes: NodeType[],
+      artboardId: string,
+      parentId: string | null,
+      depth: number
+    ): void => {
+      for (const node of nodes) {
+        // Index this node
+        this.nodeIndex.set(node.id, {
+          node,
+          artboardId,
+          parentId,
+          depth,
+        });
+
+        // Recurse into children
+        if (node.type === "frame" && node.children) {
+          traverse(node.children, artboardId, node.id, depth + 1);
+        }
+      }
+    };
+
+    // Index all artboards and their children
+    for (const artboard of this.currentDocument.artboards) {
+      // Index artboard itself
+      this.nodeIndex.set(artboard.id, {
+        node: artboard,
+        artboardId: artboard.id,
+        parentId: null,
+        depth: 0,
+      });
+
+      // Index artboard children
+      if (artboard.children) {
+        traverse(artboard.children, artboard.id, artboard.id, 1);
+      }
+    }
+
+    const duration = performance.now() - startTime;
+    this.observability.log("info", "Node index rebuilt", {
+      nodeCount: this.nodeIndex.size,
+      duration: Math.round(duration * 100) / 100,
+    });
   }
 
   /**

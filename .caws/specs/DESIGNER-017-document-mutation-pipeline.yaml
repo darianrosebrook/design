@@ -1,0 +1,104 @@
+id: DESIGNER-017
+title: 'Deterministic Document Mutation Pipeline'
+risk_tier: 1
+mode: feature
+change_budget:
+  max_files: 40
+  max_loc: 1500
+blast_radius:
+  modules:
+    - packages/canvas-engine/
+    - packages/canvas-schema/
+    - packages/vscode-ext/src/
+  data_migration: false
+operational_rollback_slo: 5m
+threats:
+  - 'Non-deterministic mutations produce diverging documents'
+  - 'ULID regeneration breaks stable node identifiers'
+  - 'Schema validation skipped leading to corrupt documents'
+  - 'Undo/redo stack desynchronizes across webviews'
+  - 'Canonical serialization omitted causing git noise'
+scope:
+  in:
+    - packages/canvas-engine/src/
+    - packages/canvas-engine/tests/
+    - packages/canvas-schema/src/
+    - packages/vscode-ext/src/document-store.ts
+    - packages/vscode-ext/src/properties-panel-webview.ts
+  out:
+    - packages/canvas-renderer-dom/
+    - packages/mcp-adapter/
+invariants:
+  - 'All document mutations route through canvas-engine operations with deterministic outputs'
+  - 'Node IDs generated once via ULID helpers and never regenerated on update'
+  - 'Document snapshots persisted in canonical JSON with newline termination'
+  - 'Undo/redo operations replay deterministic patches without drift'
+  - 'Validation with canvas schema occurs before broadcasting updates'
+  - 'Document persistence always reuses recorded URI without fabricating paths'
+acceptance:
+  - id: A1
+    given: 'Property change event dispatched from properties panel'
+    when: 'DocumentStore applies mutation'
+    then: 'Resulting document passes validateCanvasDocument and matches golden hash'
+  - id: A2
+    given: 'Create node operation executed twice with same inputs'
+    when: 'Hash of serialized output calculated'
+    then: 'Hashes identical and ULIDs differ only where creation occurred'
+  - id: A3
+    given: 'Undo followed by redo sequence with three mutations'
+    when: 'DocumentStore processes stack'
+    then: 'Document state returns to expected snapshots without divergence'
+  - id: A4
+    given: 'Invalid mutation payload received from webview'
+    when: 'Schema validation fails'
+    then: 'Mutation rejected with error logged and no state changes applied'
+  - id: A5
+    given: 'Document loaded from tracked workspace URI'
+    when: 'User triggers save from canvas host'
+    then: 'Pipeline writes back to original file, canonicalizes JSON, and preserves newline EOF'
+  - id: A6
+    given: 'External edit modifies same document on disk'
+    when: 'DocumentStore notices timestamp change'
+    then: 'User prompted for reload or diff using deterministic merge path'
+non_functional:
+  a11y:
+    - 'N/A - internal engine pipeline'
+  perf:
+    mutation_apply_ms: 5
+    undo_redo_ms: 5
+    additional:
+      - 'Batch apply supports 100 mutations within 50ms'
+      - 'Memory overhead for history stack <30MB for 50 operations'
+      - 'Schema validation overhead <10ms per mutation'
+  security:
+    - 'Reject mutations attempting to access filesystem paths or non-canvas data'
+    - 'Ensure error messages sanitize user-supplied values'
+    - 'Feature flag gating for experimental operations'
+contracts:
+  - type: typescript
+    path: packages/canvas-engine/src/types.ts
+  - type: typescript
+    path: packages/vscode-ext/src/protocol/events.ts
+observability:
+  logs:
+    - 'document_store.apply.start with event type and node id'
+    - 'document_store.apply.success with duration and patch size'
+    - 'document_store.apply.failure with validation error'
+    - 'document_store.undo_redo.state with stack depth'
+  metrics:
+    - 'document_mutation_duration_ms histogram'
+    - 'document_mutation_validation_failures_total counter'
+    - 'document_undo_stack_depth gauge'
+    - 'document_canonicalization_duration_ms histogram'
+  traces:
+    - 'document_mutation.pipeline from payload validation to broadcast'
+    - 'document_persistence.save cycle from canonicalize to writeFile'
+    - 'document_history.replay for undo/redo sequences'
+migrations:
+  - 'No persistent schema updates — migration not required'
+rollback:
+  - 'Feature flag `designer.documentPipeline.enabled` toggles new pipeline'
+  - 'Fallback to previous direct mutation path preserved for emergency use'
+  - 'Reinstate backup document snapshot if validation fails repeatedly'
+
+

@@ -188,7 +188,7 @@ export class PatternRegistry {
   /**
    * Get patterns by status (from component standards)
    */
-  getByStatus(status: "Planned" | "Built" | "DocOnly"): PatternManifest[] {
+  getByStatus(_status: "Planned" | "Built" | "DocOnly"): PatternManifest[] {
     // For now, all patterns are considered "Built" since they're implemented
     // In a real system, this would be tracked separately
     return this.getAll();
@@ -917,12 +917,11 @@ export class PatternDetector {
     pattern: PatternManifest
   ): NodeType[] {
     const roots: NodeType[] = [];
-    const self = this;
 
-    function traverseNodes(nodes: NodeType[]): void {
+    const traverseNodes = (nodes: NodeType[]): void => {
       for (const node of nodes) {
         // Check if this node could be a pattern root
-        if (self.nodeMatchesPatternRoot(node, pattern)) {
+        if (this.nodeMatchesPatternRoot(node, pattern)) {
           roots.push(node);
         }
 
@@ -931,7 +930,7 @@ export class PatternDetector {
           traverseNodes(node.children);
         }
       }
-    }
+    };
 
     document.artboards.forEach((artboard: any) => {
       traverseNodes(artboard.children);

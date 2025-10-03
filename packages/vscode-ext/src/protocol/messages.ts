@@ -77,6 +77,75 @@ export const ValidateDocumentRequest = MessageEnvelope.extend({
 });
 
 /**
+ * Selection mode types
+ */
+const SelectionMode = z.enum(["single", "rectangle", "lasso"]);
+
+/**
+ * Selection change notification - notify extension of selection changes
+ */
+export const SelectionChangeNotification = MessageEnvelope.extend({
+  type: z.literal("selectionChange"),
+  payload: z.object({
+    nodeIds: z.array(z.string()),
+  }),
+});
+
+/**
+ * Selection mode change request - change the active selection mode
+ */
+export const SelectionModeChangeRequest = MessageEnvelope.extend({
+  type: z.literal("selectionModeChange"),
+  payload: z.object({
+    mode: SelectionMode,
+    config: z
+      .object({
+        multiSelect: z.boolean().optional(),
+        preserveSelection: z.boolean().optional(),
+      })
+      .optional(),
+  }),
+});
+
+/**
+ * Selection operation complete notification - report selection operation results
+ */
+export const SelectionOperationNotification = MessageEnvelope.extend({
+  type: z.literal("selectionOperation"),
+  payload: z.object({
+    mode: SelectionMode,
+    result: z.object({
+      selectedNodeIds: z.array(z.string()),
+      accuracy: z.number().min(0).max(1),
+      duration: z.number().min(0),
+    }),
+  }),
+});
+
+/**
+ * Property change notification - notify extension of property changes
+ */
+export const PropertyChangeNotification = MessageEnvelope.extend({
+  type: z.literal("propertyChange"),
+  payload: z.object({
+    event: z.object({
+      nodeId: z.string(),
+      property: z.string(),
+      value: z.unknown(),
+      oldValue: z.unknown().optional(),
+    }),
+  }),
+});
+
+/**
+ * Ready notification - webview is ready to receive messages
+ */
+export const ReadyNotification = MessageEnvelope.extend({
+  type: z.literal("ready"),
+  payload: z.object({}).optional(),
+});
+
+/**
  * Union of all request message types
  */
 export const WebviewMessage = z.discriminatedUnion("type", [
@@ -85,6 +154,11 @@ export const WebviewMessage = z.discriminatedUnion("type", [
   UpdateNodeRequest,
   ListDocumentsRequest,
   ValidateDocumentRequest,
+  SelectionChangeNotification,
+  SelectionModeChangeRequest,
+  SelectionOperationNotification,
+  PropertyChangeNotification,
+  ReadyNotification,
 ]);
 
 export type WebviewMessageType = z.infer<typeof WebviewMessage>;
@@ -95,6 +169,19 @@ export type ListDocumentsRequestType = z.infer<typeof ListDocumentsRequest>;
 export type ValidateDocumentRequestType = z.infer<
   typeof ValidateDocumentRequest
 >;
+export type SelectionChangeNotificationType = z.infer<
+  typeof SelectionChangeNotification
+>;
+export type SelectionModeChangeRequestType = z.infer<
+  typeof SelectionModeChangeRequest
+>;
+export type SelectionOperationNotificationType = z.infer<
+  typeof SelectionOperationNotification
+>;
+export type PropertyChangeNotificationType = z.infer<
+  typeof PropertyChangeNotification
+>;
+export type ReadyNotificationType = z.infer<typeof ReadyNotification>;
 
 /**
  * Response messages
@@ -160,6 +247,23 @@ export function createSuccessResponse(
     requestId,
     data,
   };
+}
+
+export function createMessage<TType extends WebviewMessageType["type"]>(
+  type: TType,
+  payload: Extract<WebviewMessageType, { type: TType }> extends {
+    payload: infer TPayload;
+  }
+    ? TPayload
+    : never
+) {
+  return {
+    id: crypto.randomUUID(),
+    version: PROTOCOL_VERSION,
+    timestamp: Date.now(),
+    type,
+    payload,
+  } as WebviewMessageType;
 }
 
 /**

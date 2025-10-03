@@ -15,6 +15,14 @@ import { createObservability } from "./observability.js";
 import { renderComponent } from "./renderers/component.js";
 import { renderFrame } from "./renderers/frame.js";
 import { renderText } from "./renderers/text.js";
+import {
+  SelectionModesCoordinator,
+  type SelectionMode,
+  type Point,
+  type Rectangle,
+  type SelectionResult,
+  type SelectionModeConfig,
+} from "./selection-modes.js";
 import type {
   CanvasRenderer,
   RendererOptions,
@@ -32,12 +40,18 @@ import { RENDERER_CLASSES } from "./types.js";
 export class CanvasDOMRenderer implements CanvasRenderer {
   private container: HTMLElement | null = null;
   private document: CanvasDocumentType | null = null;
-  private options: RendererOptions & {
-    interactive: boolean;
-    classPrefix: string;
-    onSelectionChange: (nodeIds: string[]) => void;
-    onNodeUpdate: (nodeId: string, updates: Partial<NodeType>) => void;
-  };
+  private options: Required<
+    Pick<
+      RendererOptions,
+      | "interactive"
+      | "classPrefix"
+      | "onSelectionChange"
+      | "onNodeUpdate"
+      | "onSelectionModeChange"
+      | "onSelectionOperation"
+    >
+  > &
+    RendererOptions;
   private selection: SelectionState = { selectedIds: new Set() };
   private nodeElements = new Map<string, HTMLElement>();
   private eventListeners = new Map<string, EventListener>();
@@ -59,18 +73,42 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   // Observability
   private observability: Observability;
 
+  // Advanced selection modes
+  private selectionCoordinator: SelectionModesCoordinator;
+  private selectionMode: SelectionMode = "single";
+  private selectionPath: Point[] = [];
+  private selectionRect: Rectangle | null = null;
+  private isSelectingWithMode = false;
+
   constructor(options: RendererOptions = {}) {
     this.options = {
+      ...options,
       componentIndex: options.componentIndex,
       interactive: options.interactive ?? true,
       classPrefix: options.classPrefix ?? "",
       onSelectionChange: options.onSelectionChange ?? (() => {}),
       onNodeUpdate: options.onNodeUpdate ?? (() => {}),
+      onSelectionModeChange: options.onSelectionModeChange ?? (() => {}),
+      onSelectionOperation: options.onSelectionOperation ?? (() => {}),
     };
+
+    if (options.initialSelectionMode) {
+      this.selectionMode = options.initialSelectionMode;
+    }
+
+    if (options.advancedSelectionEnabled === false) {
+      this.selectionMode = "single";
+      this.options.interactive = false;
+    }
 
     // Initialize observability
     this.observability = createObservability(
       process.env.NODE_ENV !== "production"
+    );
+
+    // Initialize selection coordinator
+    this.selectionCoordinator = new SelectionModesCoordinator(
+      this.observability
     );
   }
 
@@ -92,6 +130,9 @@ export class CanvasDOMRenderer implements CanvasRenderer {
 
     this.document = document;
     this.container = container;
+
+    // Update selection coordinator with new document
+    this.selectionCoordinator.setDocument(document);
 
     // Clear previous render
     container.innerHTML = "";
@@ -225,6 +266,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   setSelection(nodeIds: string[]): void {
     const previousSelection = new Set(this.selection.selectedIds);
     this.selection.selectedIds = new Set(nodeIds);
+    this.selectionCoordinator.setCurrentSelection(nodeIds);
 
     // Update ARIA attributes for changed nodes
     for (const nodeId of previousSelection) {
@@ -245,6 +287,10 @@ export class CanvasDOMRenderer implements CanvasRenderer {
 
     this.updateSelectionOverlay();
     this.options.onSelectionChange([...nodeIds]);
+
+    if (nodeIds.length === 0) {
+      this.clearSelectionVisualization();
+    }
   }
 
   /**
@@ -504,11 +550,137 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       }
     };
 
+    // Advanced selection mode handlers
+    const handleMouseDown = (event: Event) => {
+      const mouseEvent = event as MouseEvent;
+      if (this.selectionMode === "single") {
+        return;
+      }
+
+      // Don't start selection if clicking on a node
+      if ((mouseEvent.target as HTMLElement).closest(`[data-node-id]`)) {
+        return;
+      }
+
+      mouseEvent.preventDefault();
+      this.isSelectingWithMode = true;
+
+      const rect = container.getBoundingClientRect();
+      const startPoint: Point = {
+        x: mouseEvent.clientX - rect.left,
+        y: mouseEvent.clientY - rect.top,
+      };
+
+      if (this.selectionMode === "rectangle") {
+        this.selectionRect = {
+          x: startPoint.x,
+          y: startPoint.y,
+          width: 0,
+          height: 0,
+        };
+        this.drawSelectionRectangle();
+      } else if (this.selectionMode === "lasso") {
+        this.selectionPath = [startPoint];
+        this.drawSelectionLasso();
+      }
+    };
+
+    const handleMouseMove = (event: Event) => {
+      const mouseEvent = event as MouseEvent;
+      if (!this.isSelectingWithMode) {
+        return;
+      }
+
+      mouseEvent.preventDefault();
+
+      const rect = container.getBoundingClientRect();
+      const currentPoint: Point = {
+        x: mouseEvent.clientX - rect.left,
+        y: mouseEvent.clientY - rect.top,
+      };
+
+      if (this.selectionMode === "rectangle" && this.selectionRect) {
+        // Update rectangle
+        this.selectionRect.width = currentPoint.x - this.selectionRect.x;
+        this.selectionRect.height = currentPoint.y - this.selectionRect.y;
+        this.drawSelectionRectangle();
+      } else if (this.selectionMode === "lasso") {
+        // Add point to lasso path
+        this.selectionPath.push(currentPoint);
+        this.drawSelectionLasso();
+      }
+    };
+
+    const handleMouseUp = async (event: Event) => {
+      const mouseEvent = event as MouseEvent;
+      if (!this.isSelectingWithMode) {
+        return;
+      }
+
+      mouseEvent.preventDefault();
+      this.isSelectingWithMode = false;
+
+      try {
+        this.selectionCoordinator.setCurrentSelection([
+          ...this.selection.selectedIds,
+        ]);
+
+        const mouseEvent = event as MouseEvent;
+        const config: SelectionModeConfig = {
+          mode: this.selectionMode,
+          multiSelect: Boolean(
+            mouseEvent.shiftKey || mouseEvent.ctrlKey || mouseEvent.metaKey
+          ),
+          preserveSelection: Boolean(mouseEvent.shiftKey),
+        };
+
+        if (this.selectionMode === "rectangle" && this.selectionRect) {
+          // Normalize rectangle (handle negative width/height)
+          const rect = this.normalizeRectangle(this.selectionRect);
+
+          const result =
+            await this.selectionCoordinator.performRectangleSelection(
+              rect,
+              config
+            );
+
+          this.notifySelectionOperation(this.selectionMode, result, config);
+        } else if (
+          this.selectionMode === "lasso" &&
+          this.selectionPath.length >= 3
+        ) {
+          const result = await this.selectionCoordinator.performLassoSelection(
+            this.selectionPath,
+            config
+          );
+
+          this.notifySelectionOperation(this.selectionMode, result, config);
+        }
+      } catch (error) {
+        this.observability.logger.error(
+          "renderer.selection.error",
+          "Selection operation failed",
+          { error }
+        );
+      } finally {
+        // Clean up selection visualizations
+        this.clearSelectionVisualization();
+        this.selectionRect = null;
+        this.selectionPath = [];
+      }
+    };
+
     container.addEventListener("click", handleCanvasClick);
     container.addEventListener("click", handleNodeClick, true);
+    container.addEventListener("mousedown", handleMouseDown);
+    container.addEventListener("mousemove", handleMouseMove);
+    container.addEventListener("mouseup", handleMouseUp);
 
     this.eventListeners.set("canvas-click", handleCanvasClick);
     this.eventListeners.set("node-click", handleNodeClick);
+    this.eventListeners.set("mousedown", handleMouseDown);
+    this.eventListeners.set("mousemove", handleMouseMove);
+    this.eventListeners.set("mouseup", handleMouseUp);
   }
 
   /**
@@ -523,6 +695,12 @@ export class CanvasDOMRenderer implements CanvasRenderer {
           this.container.removeEventListener("click", listener, true);
         } else if (eventType === "keydown") {
           this.container.removeEventListener("keydown", listener);
+        } else if (eventType === "mousedown") {
+          this.container.removeEventListener("mousedown", listener);
+        } else if (eventType === "mousemove") {
+          this.container.removeEventListener("mousemove", listener);
+        } else if (eventType === "mouseup") {
+          this.container.removeEventListener("mouseup", listener);
         }
       }
     }
@@ -763,6 +941,176 @@ export class CanvasDOMRenderer implements CanvasRenderer {
     outline.style.zIndex = "9999";
 
     this.container!.appendChild(outline);
+  }
+
+  /**
+   * Set selection mode
+   */
+  setSelectionMode(mode: SelectionMode): void {
+    this.selectionMode = mode;
+    this.options.onSelectionModeChange(mode);
+    this.observability.logger.info(
+      "renderer.selection_mode.changed",
+      "Selection mode changed",
+      { mode }
+    );
+    this.observability.metrics.gauge("selection_mode_current", 1, {
+      mode,
+    });
+    this.clearSelectionVisualization();
+    this.setSelection([]);
+
+    // Announce to screen reader
+    if (this.liveRegion) {
+      this.liveRegion.textContent = `Selection mode changed to ${mode}`;
+    }
+  }
+
+  /**
+   * Get current selection mode
+   */
+  getSelectionMode(): SelectionMode {
+    return this.selectionMode;
+  }
+
+  /**
+   * Draw rectangle selection visualization
+   */
+  private drawSelectionRectangle(): void {
+    if (!this.container || !this.selectionRect) {
+      return;
+    }
+
+    // Remove existing rectangle
+    const existingRect = this.container.querySelector(
+      ".selection-rectangle"
+    ) as HTMLElement;
+    if (existingRect) {
+      existingRect.remove();
+    }
+
+    // Create rectangle overlay
+    const rect = document.createElement("div");
+    rect.className = "selection-rectangle";
+    rect.style.position = "absolute";
+    rect.style.left = `${this.selectionRect.x}px`;
+    rect.style.top = `${this.selectionRect.y}px`;
+    rect.style.width = `${Math.abs(this.selectionRect.width)}px`;
+    rect.style.height = `${Math.abs(this.selectionRect.height)}px`;
+    rect.style.border = "2px dashed #007acc";
+    rect.style.backgroundColor = "rgba(0, 122, 204, 0.1)";
+    rect.style.pointerEvents = "none";
+    rect.style.zIndex = "10000";
+
+    // Handle negative width/height
+    if (this.selectionRect.width < 0) {
+      rect.style.left = `${this.selectionRect.x + this.selectionRect.width}px`;
+    }
+    if (this.selectionRect.height < 0) {
+      rect.style.top = `${this.selectionRect.y + this.selectionRect.height}px`;
+    }
+
+    this.container.appendChild(rect);
+  }
+
+  /**
+   * Draw lasso selection visualization
+   */
+  private drawSelectionLasso(): void {
+    if (!this.container || this.selectionPath.length < 2) {
+      return;
+    }
+
+    // Remove existing lasso
+    const existingLasso = this.container.querySelector(
+      ".selection-lasso"
+    ) as SVGElement;
+    if (existingLasso) {
+      existingLasso.remove();
+    }
+
+    // Create SVG overlay
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "selection-lasso");
+    svg.style.position = "absolute";
+    svg.style.left = "0";
+    svg.style.top = "0";
+    svg.style.width = "100%";
+    svg.style.height = "100%";
+    svg.style.pointerEvents = "none";
+    svg.style.zIndex = "10000";
+
+    // Create path
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    const pathData = this.selectionPath
+      .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`)
+      .join(" ");
+
+    path.setAttribute("d", pathData);
+    path.setAttribute("stroke", "#007acc");
+    path.setAttribute("stroke-width", "2");
+    path.setAttribute("stroke-dasharray", "5,5");
+    path.setAttribute("fill", "rgba(0, 122, 204, 0.1)");
+
+    svg.appendChild(path);
+    this.container.appendChild(svg);
+  }
+
+  /**
+   * Clear selection visualization overlays
+   */
+  private clearSelectionVisualization(): void {
+    if (!this.container) {
+      return;
+    }
+
+    const rect = this.container.querySelector(".selection-rectangle");
+    if (rect) {
+      rect.remove();
+    }
+
+    const lasso = this.container.querySelector(".selection-lasso");
+    if (lasso) {
+      lasso.remove();
+    }
+  }
+
+  /**
+   * Normalize rectangle to positive width/height
+   */
+  private normalizeRectangle(rect: Rectangle): Rectangle {
+    const x = rect.width < 0 ? rect.x + rect.width : rect.x;
+    const y = rect.height < 0 ? rect.y + rect.height : rect.y;
+    const width = Math.abs(rect.width);
+    const height = Math.abs(rect.height);
+
+    return { x, y, width, height };
+  }
+
+  /**
+   * Notify observers about selection operation completion and apply
+   * resulting selection to renderer state.
+   */
+  private notifySelectionOperation(
+    mode: SelectionMode,
+    result: SelectionResult,
+    config: SelectionModeConfig
+  ): void {
+    this.setSelection(result.selectedNodeIds);
+
+    try {
+      this.options.onSelectionOperation({ mode, result, config });
+    } catch (error) {
+      this.observability.logger.error(
+        "renderer.selection_operation_callback_failed",
+        "Selection operation callback threw an error",
+        {
+          mode,
+          error,
+        }
+      );
+      throw error;
+    }
   }
 }
 

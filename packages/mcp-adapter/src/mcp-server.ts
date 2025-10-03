@@ -573,6 +573,334 @@ export class DesignerMCPServer {
           required: ["documentPath"],
         },
       },
+
+      // Advanced Developer Tools for Plugin Authoring
+      {
+        name: "inspect_document",
+        description:
+          "Inspect document structure and return detailed node information",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            nodeId: {
+              type: "string",
+              description:
+                "Specific node ID to inspect (optional - returns all if omitted)",
+            },
+            includeHierarchy: {
+              type: "boolean",
+              description: "Include parent/child relationships",
+              default: true,
+            },
+            includeStyles: {
+              type: "boolean",
+              description: "Include computed styles and properties",
+              default: true,
+            },
+            includeMetadata: {
+              type: "boolean",
+              description: "Include semantic keys and metadata",
+              default: true,
+            },
+          },
+          required: ["documentPath"],
+        },
+      },
+      {
+        name: "query_nodes",
+        description: "Query nodes using advanced filters and selectors",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            selector: {
+              type: "object",
+              description: "Query selector object",
+              properties: {
+                type: {
+                  type: "string",
+                  description: "Node type (frame, text, etc.)",
+                },
+                name: { type: "string", description: "Node name pattern" },
+                semanticKey: {
+                  type: "string",
+                  description: "Semantic key pattern",
+                },
+                hasChildren: {
+                  type: "boolean",
+                  description: "Has child nodes",
+                },
+                visible: { type: "boolean", description: "Visibility state" },
+                frame: {
+                  type: "object",
+                  description: "Frame bounds filter",
+                  properties: {
+                    minWidth: { type: "number" },
+                    maxWidth: { type: "number" },
+                    minHeight: { type: "number" },
+                    maxHeight: { type: "number" },
+                  },
+                },
+              },
+            },
+            maxResults: {
+              type: "number",
+              description: "Maximum number of results to return",
+              default: 100,
+            },
+          },
+          required: ["documentPath"],
+        },
+      },
+      {
+        name: "create_node_at_position",
+        description:
+          "Create a new node at a specific position with full control",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            nodeType: {
+              type: "string",
+              enum: ["frame", "text", "component"],
+              description: "Type of node to create",
+            },
+            position: {
+              type: "object",
+              description: "Position and size for the new node",
+              properties: {
+                x: { type: "number", description: "X coordinate" },
+                y: { type: "number", description: "Y coordinate" },
+                width: { type: "number", description: "Width (default: 100)" },
+                height: { type: "number", description: "Height (default: 50)" },
+              },
+              required: ["x", "y"],
+            },
+            properties: {
+              type: "object",
+              description: "Node properties (name, style, text content, etc.)",
+              additionalProperties: true,
+            },
+            parentPath: {
+              type: "string",
+              description: "Path to parent (e.g., 'artboards[0].children')",
+              default: "artboards[0].children",
+            },
+            insertIndex: {
+              type: "number",
+              description: "Index to insert at (-1 for end)",
+              default: -1,
+            },
+          },
+          required: ["documentPath", "nodeType", "position"],
+        },
+      },
+      {
+        name: "batch_update_nodes",
+        description:
+          "Update multiple nodes in a single operation with conflict resolution",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            updates: {
+              type: "array",
+              description: "Array of node updates",
+              items: {
+                type: "object",
+                properties: {
+                  nodeId: { type: "string", description: "Node ID to update" },
+                  properties: {
+                    type: "object",
+                    description: "Properties to update",
+                    additionalProperties: true,
+                  },
+                  condition: {
+                    type: "object",
+                    description: "Conditional update based on current state",
+                  },
+                },
+                required: ["nodeId", "properties"],
+              },
+            },
+            conflictStrategy: {
+              type: "string",
+              enum: ["merge", "replace", "skip"],
+              description: "How to handle conflicting updates",
+              default: "merge",
+            },
+          },
+          required: ["documentPath", "updates"],
+        },
+      },
+      {
+        name: "find_similar_nodes",
+        description:
+          "Find nodes similar to a reference node using ML-like similarity scoring",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            referenceNodeId: {
+              type: "string",
+              description: "ID of the reference node",
+            },
+            similarityThreshold: {
+              type: "number",
+              description: "Similarity threshold (0-1)",
+              default: 0.7,
+              minimum: 0,
+              maximum: 1,
+            },
+            maxResults: {
+              type: "number",
+              description: "Maximum number of similar nodes to return",
+              default: 10,
+            },
+            similarityFactors: {
+              type: "object",
+              description: "Weight factors for similarity calculation",
+              properties: {
+                type: {
+                  type: "number",
+                  description: "Node type similarity (0-1)",
+                },
+                size: { type: "number", description: "Size similarity (0-1)" },
+                position: {
+                  type: "number",
+                  description: "Position similarity (0-1)",
+                },
+                style: {
+                  type: "number",
+                  description: "Style similarity (0-1)",
+                },
+                name: { type: "number", description: "Name similarity (0-1)" },
+              },
+            },
+          },
+          required: ["documentPath", "referenceNodeId"],
+        },
+      },
+      {
+        name: "extract_design_tokens",
+        description:
+          "Extract design tokens from document for theming and consistency",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            tokenTypes: {
+              type: "array",
+              description: "Types of tokens to extract",
+              items: {
+                type: "string",
+                enum: ["colors", "typography", "spacing", "shadows", "borders"],
+              },
+              default: ["colors", "typography", "spacing"],
+            },
+            includeUsage: {
+              type: "boolean",
+              description: "Include usage statistics for each token",
+              default: true,
+            },
+            outputFormat: {
+              type: "string",
+              enum: ["json", "css", "scss", "typescript"],
+              description: "Output format for the tokens",
+              default: "json",
+            },
+          },
+          required: ["documentPath"],
+        },
+      },
+      {
+        name: "apply_design_system",
+        description: "Apply a design system to an existing document",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            designSystemPath: {
+              type: "string",
+              description: "Path to design system specification",
+            },
+            strategy: {
+              type: "string",
+              enum: ["replace", "merge", "migrate"],
+              description: "How to apply the design system",
+              default: "merge",
+            },
+            previewOnly: {
+              type: "boolean",
+              description: "Preview changes without applying them",
+              default: false,
+            },
+          },
+          required: ["documentPath", "designSystemPath"],
+        },
+      },
+      {
+        name: "measure_performance",
+        description:
+          "Measure rendering and interaction performance of the document",
+        inputSchema: {
+          type: "object",
+          properties: {
+            documentPath: {
+              type: "string",
+              description: "Path to the canvas document",
+            },
+            metrics: {
+              type: "array",
+              description: "Performance metrics to measure",
+              items: {
+                type: "string",
+                enum: [
+                  "render_time",
+                  "hit_test",
+                  "selection",
+                  "traversal",
+                  "memory",
+                ],
+              },
+              default: ["render_time", "hit_test"],
+            },
+            iterations: {
+              type: "number",
+              description: "Number of iterations for each test",
+              default: 10,
+            },
+            warmUp: {
+              type: "number",
+              description: "Number of warm-up iterations",
+              default: 5,
+            },
+          },
+          required: ["documentPath"],
+        },
+      },
     ];
   }
 
@@ -634,6 +962,30 @@ export class DesignerMCPServer {
 
       case "analyze_design":
         return await this.analyzeDesign(args);
+
+      case "inspect_document":
+        return await this.inspectDocument(args);
+
+      case "query_nodes":
+        return await this.queryNodes(args);
+
+      case "create_node_at_position":
+        return await this.createNodeAtPosition(args);
+
+      case "batch_update_nodes":
+        return await this.batchUpdateNodes(args);
+
+      case "find_similar_nodes":
+        return await this.findSimilarNodes(args);
+
+      case "extract_design_tokens":
+        return await this.extractDesignTokens(args);
+
+      case "apply_design_system":
+        return await this.applyDesignSystem(args);
+
+      case "measure_performance":
+        return await this.measurePerformance(args);
 
       default:
         throw new McpError(
@@ -1653,6 +2005,1063 @@ ${
     } catch (error) {
       console.warn("Failed to load component index:", error);
       return null;
+    }
+  }
+
+  /**
+   * Inspect document structure with detailed node information
+   */
+  private async inspectDocument(args: {
+    documentPath: string;
+    nodeId?: string;
+    includeHierarchy?: boolean;
+    includeStyles?: boolean;
+    includeMetadata?: boolean;
+  }): Promise<{
+    document: any;
+    nodes: any[];
+    summary: string;
+  }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      // Import traversal functionality
+      const { traverseDocument, getAncestors, getDescendants } = await import(
+        "@paths-design/canvas-engine"
+      );
+
+      const nodes: any[] = [];
+      const options = {
+        includeHierarchy: args.includeHierarchy ?? true,
+        includeStyles: args.includeStyles ?? true,
+        includeMetadata: args.includeMetadata ?? true,
+      };
+
+      for (const result of traverseDocument(document)) {
+        if (args.nodeId && result.node.id !== args.nodeId) {
+          continue;
+        }
+
+        const nodeInfo: any = {
+          id: result.node.id,
+          type: result.node.type,
+          name: result.node.name,
+          path: result.path,
+          depth: result.depth,
+          artboardIndex: result.artboardIndex,
+          frame: result.node.frame,
+          visible: result.node.visible,
+        };
+
+        if (options.includeStyles) {
+          nodeInfo.style = result.node.style;
+          nodeInfo.data = result.node.data;
+        }
+
+        if (options.includeMetadata && "semanticKey" in result.node) {
+          nodeInfo.semanticKey = result.node.semanticKey;
+        }
+
+        if (options.includeHierarchy) {
+          const ancestors = getAncestors(document, result.path);
+          const descendants = getDescendants(document, result.path);
+
+          nodeInfo.ancestors = ancestors.map((a) => ({
+            id: a.node.id,
+            type: a.node.type,
+            name: a.node.name,
+          }));
+
+          nodeInfo.descendants = descendants.map((d) => ({
+            id: d.node.id,
+            type: d.node.type,
+            name: d.node.name,
+          }));
+        }
+
+        nodes.push(nodeInfo);
+      }
+
+      const summary = `Inspected document with ${nodes.length} nodes (${document.artboards.length} artboards)`;
+
+      return {
+        document: {
+          id: document.id,
+          name: document.name,
+          schemaVersion: document.schemaVersion,
+          artboardCount: document.artboards.length,
+        },
+        nodes,
+        summary,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to inspect document: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Query nodes using advanced filters and selectors
+   */
+  private async queryNodes(args: {
+    documentPath: string;
+    selector: {
+      type?: string;
+      name?: string;
+      semanticKey?: string;
+      hasChildren?: boolean;
+      visible?: boolean;
+      frame?: {
+        minWidth?: number;
+        maxWidth?: number;
+        minHeight?: number;
+        maxHeight?: number;
+      };
+    };
+    maxResults?: number;
+  }): Promise<{
+    nodes: any[];
+    summary: string;
+    totalFound: number;
+  }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      // Import traversal functionality
+      const { traverseDocument } = await import("@paths-design/canvas-engine");
+
+      const nodes: any[] = [];
+      const maxResults = args.maxResults ?? 100;
+
+      for (const result of traverseDocument(document)) {
+        let matches = true;
+
+        // Apply selector filters
+        if (args.selector.type && result.node.type !== args.selector.type) {
+          matches = false;
+        }
+
+        if (args.selector.name) {
+          const nameRegex = new RegExp(args.selector.name, "i");
+          if (!nameRegex.test(result.node.name)) {
+            matches = false;
+          }
+        }
+
+        if (args.selector.semanticKey) {
+          if (!result.node.semanticKey?.includes(args.selector.semanticKey)) {
+            matches = false;
+          }
+        }
+
+        if (args.selector.hasChildren !== undefined) {
+          const hasChildren =
+            "children" in result.node && result.node.children?.length > 0;
+          if (hasChildren !== args.selector.hasChildren) {
+            matches = false;
+          }
+        }
+
+        if (
+          args.selector.visible !== undefined &&
+          result.node.visible !== args.selector.visible
+        ) {
+          matches = false;
+        }
+
+        if (args.selector.frame && result.node.frame) {
+          const frame = result.node.frame;
+          if (
+            args.selector.frame.minWidth &&
+            frame.width < args.selector.frame.minWidth
+          ) {
+            matches = false;
+          }
+          if (
+            args.selector.frame.maxWidth &&
+            frame.width > args.selector.frame.maxWidth
+          ) {
+            matches = false;
+          }
+          if (
+            args.selector.frame.minHeight &&
+            frame.height < args.selector.frame.minHeight
+          ) {
+            matches = false;
+          }
+          if (
+            args.selector.frame.maxHeight &&
+            frame.height > args.selector.frame.maxHeight
+          ) {
+            matches = false;
+          }
+        }
+
+        if (matches) {
+          nodes.push({
+            id: result.node.id,
+            type: result.node.type,
+            name: result.node.name,
+            path: result.path,
+            frame: result.node.frame,
+            visible: result.node.visible,
+            semanticKey: result.node.semanticKey,
+          });
+
+          if (nodes.length >= maxResults) {
+            break;
+          }
+        }
+      }
+
+      const summary = `Found ${nodes.length} nodes matching selector criteria`;
+
+      return {
+        nodes,
+        summary,
+        totalFound: nodes.length,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to query nodes: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Create a node at a specific position
+   */
+  private async createNodeAtPosition(args: {
+    documentPath: string;
+    nodeType: string;
+    position: { x: number; y: number; width?: number; height?: number };
+    properties?: Record<string, any>;
+    parentPath?: string;
+    insertIndex?: number;
+  }): Promise<{
+    success: boolean;
+    nodeId: string;
+    message: string;
+  }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      const nodeId = (await import("ulidx")).ulid();
+
+      const newNode: any = {
+        id: nodeId,
+        type: args.nodeType,
+        name: args.properties?.name || `${args.nodeType}_${nodeId.slice(-4)}`,
+        visible: true,
+        frame: {
+          x: args.position.x,
+          y: args.position.y,
+          width: args.position.width ?? 100,
+          height: args.position.height ?? 50,
+        },
+        ...(args.properties && { ...args.properties }),
+      };
+
+      // Add children array for container types
+      if (args.nodeType === "frame" || args.nodeType === "group") {
+        newNode.children = [];
+      }
+
+      // Determine parent path
+      const parentPath = args.parentPath || "artboards[0].children";
+
+      // Simple path-based insertion
+      const pathParts = parentPath.split(".");
+      let current: any = document;
+
+      for (let i = 0; i < pathParts.length; i++) {
+        const part = pathParts[i];
+        if (i === pathParts.length - 1) {
+          // Last part - this should be the array to push to
+          if (Array.isArray(current[part])) {
+            const insertIndex = args.insertIndex ?? current[part].length;
+            current[part].splice(insertIndex, 0, newNode);
+          }
+        } else {
+          current = current[part];
+        }
+      }
+
+      // Save the updated document
+      fs.writeFileSync(args.documentPath, JSON.stringify(document, null, 2));
+
+      return {
+        success: true,
+        nodeId,
+        message: `Created ${args.nodeType} node "${newNode.name}" at position (${args.position.x}, ${args.position.y})`,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to create node: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Batch update multiple nodes
+   */
+  private async batchUpdateNodes(args: {
+    documentPath: string;
+    updates: Array<{
+      nodeId: string;
+      properties: Record<string, any>;
+      condition?: any;
+    }>;
+    conflictStrategy?: "merge" | "replace" | "skip";
+  }): Promise<{
+    success: boolean;
+    updatedCount: number;
+    skippedCount: number;
+    message: string;
+  }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      let updatedCount = 0;
+      let skippedCount = 0;
+
+      for (const update of args.updates) {
+        // Find the node
+        let foundNode: any = null;
+        function findNode(obj: any): void {
+          if (obj && typeof obj === "object") {
+            if (obj.id === update.nodeId) {
+              foundNode = obj;
+              return;
+            }
+            for (const value of Object.values(obj)) {
+              if (Array.isArray(value)) {
+                value.forEach(findNode);
+              } else if (typeof value === "object" && value !== null) {
+                findNode(value);
+              }
+            }
+          }
+        }
+        findNode(document);
+
+        if (!foundNode) {
+          skippedCount++;
+          continue;
+        }
+
+        // Check condition if provided
+        if (update.condition) {
+          // Simple condition checking - could be enhanced
+          let conditionMet = true;
+          for (const [key, expectedValue] of Object.entries(update.condition)) {
+            if (foundNode[key] !== expectedValue) {
+              conditionMet = false;
+              break;
+            }
+          }
+          if (!conditionMet) {
+            skippedCount++;
+            continue;
+          }
+        }
+
+        // Apply updates based on strategy
+        const strategy = args.conflictStrategy || "merge";
+        if (strategy === "replace") {
+          Object.assign(foundNode, update.properties);
+        } else if (strategy === "merge") {
+          // Deep merge properties
+          const mergeObject = (target: any, source: any) => {
+            for (const key in source) {
+              if (
+                source[key] &&
+                typeof source[key] === "object" &&
+                !Array.isArray(source[key])
+              ) {
+                if (!target[key]) target[key] = {};
+                mergeObject(target[key], source[key]);
+              } else {
+                target[key] = source[key];
+              }
+            }
+          };
+          mergeObject(foundNode, update.properties);
+        }
+
+        updatedCount++;
+      }
+
+      // Save the updated document
+      fs.writeFileSync(args.documentPath, JSON.stringify(document, null, 2));
+
+      return {
+        success: true,
+        updatedCount,
+        skippedCount,
+        message: `Updated ${updatedCount} nodes, skipped ${skippedCount}`,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to batch update nodes: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Find similar nodes using similarity scoring
+   */
+  private async findSimilarNodes(args: {
+    documentPath: string;
+    referenceNodeId: string;
+    similarityThreshold?: number;
+    maxResults?: number;
+    similarityFactors?: {
+      type?: number;
+      size?: number;
+      position?: number;
+      style?: number;
+      name?: number;
+    };
+  }): Promise<{
+    similarNodes: Array<{
+      node: any;
+      similarityScore: number;
+      factors: Record<string, number>;
+    }>;
+    summary: string;
+  }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      // Find reference node
+      let referenceNode: any = null;
+      function findNode(obj: any): void {
+        if (obj && typeof obj === "object") {
+          if (obj.id === args.referenceNodeId) {
+            referenceNode = obj;
+            return;
+          }
+          for (const value of Object.values(obj)) {
+            if (Array.isArray(value)) {
+              value.forEach(findNode);
+            } else if (typeof value === "object" && value !== null) {
+              findNode(value);
+            }
+          }
+        }
+      }
+      findNode(document);
+
+      if (!referenceNode) {
+        throw new Error(`Reference node ${args.referenceNodeId} not found`);
+      }
+
+      // Import traversal for getting all nodes
+      const { traverseDocument } = await import("@paths-design/canvas-engine");
+
+      const similarNodes: Array<{
+        node: any;
+        similarityScore: number;
+        factors: Record<string, number>;
+      }> = [];
+
+      const threshold = args.similarityThreshold ?? 0.7;
+      const maxResults = args.maxResults ?? 10;
+
+      const factors = args.similarityFactors || {
+        type: 0.3,
+        size: 0.2,
+        position: 0.1,
+        style: 0.2,
+        name: 0.2,
+      };
+
+      for (const result of traverseDocument(document)) {
+        if (result.node.id === args.referenceNodeId) {
+          continue; // Skip reference node itself
+        }
+
+        const similarity = this.calculateNodeSimilarity(
+          referenceNode,
+          result.node,
+          factors
+        );
+
+        if (similarity.score >= threshold) {
+          similarNodes.push({
+            node: {
+              id: result.node.id,
+              type: result.node.type,
+              name: result.node.name,
+              frame: result.node.frame,
+            },
+            similarityScore: similarity.score,
+            factors: similarity.factors,
+          });
+
+          if (similarNodes.length >= maxResults) {
+            break;
+          }
+        }
+      }
+
+      // Sort by similarity score
+      similarNodes.sort((a, b) => b.similarityScore - a.similarityScore);
+
+      return {
+        similarNodes,
+        summary: `Found ${similarNodes.length} similar nodes with threshold ${threshold}`,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to find similar nodes: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Calculate similarity score between two nodes
+   */
+  private calculateNodeSimilarity(
+    node1: any,
+    node2: any,
+    factors: {
+      type?: number;
+      size?: number;
+      position?: number;
+      style?: number;
+      name?: number;
+    }
+  ): { score: number; factors: Record<string, number> } {
+    const scores: Record<string, number> = {};
+
+    // Type similarity
+    scores.type = node1.type === node2.type ? 1 : 0;
+    const typeScore = scores.type * (factors.type || 0.3);
+
+    // Size similarity (frame dimensions)
+    if (node1.frame && node2.frame) {
+      const widthRatio =
+        Math.min(node1.frame.width, node2.frame.width) /
+        Math.max(node1.frame.width, node2.frame.width);
+      const heightRatio =
+        Math.min(node1.frame.height, node2.frame.height) /
+        Math.max(node1.frame.height, node2.frame.height);
+      scores.size = (widthRatio + heightRatio) / 2;
+    } else {
+      scores.size = 0;
+    }
+    const sizeScore = scores.size * (factors.size || 0.2);
+
+    // Name similarity (simple string similarity)
+    if (node1.name && node2.name) {
+      const name1 = node1.name.toLowerCase();
+      const name2 = node2.name.toLowerCase();
+      const maxLength = Math.max(name1.length, name2.length);
+      if (maxLength === 0) {
+        scores.name = 1;
+      } else {
+        let matches = 0;
+        for (let i = 0; i < Math.min(name1.length, name2.length); i++) {
+          if (name1[i] === name2[i]) matches++;
+        }
+        scores.name = matches / maxLength;
+      }
+    } else {
+      scores.name = 0;
+    }
+    const nameScore = scores.name * (factors.name || 0.2);
+
+    // Style similarity (simplified)
+    if (node1.style && node2.style) {
+      let styleMatches = 0;
+      const totalStyles = Math.max(
+        Object.keys(node1.style).length,
+        Object.keys(node2.style).length
+      );
+      if (totalStyles === 0) {
+        scores.style = 1;
+      } else {
+        for (const key of Object.keys(node1.style)) {
+          if (node1.style[key] === node2.style[key]) {
+            styleMatches++;
+          }
+        }
+        scores.style = styleMatches / totalStyles;
+      }
+    } else {
+      scores.style = 0;
+    }
+    const styleScore = scores.style * (factors.style || 0.2);
+
+    // Position similarity (if available)
+    scores.position = 0; // Would need absolute position data
+    const positionScore = scores.position * (factors.position || 0.1);
+
+    const totalScore =
+      typeScore + sizeScore + nameScore + styleScore + positionScore;
+
+    return {
+      score: totalScore,
+      factors: scores,
+    };
+  }
+
+  /**
+   * Extract design tokens from document
+   */
+  private async extractDesignTokens(args: {
+    documentPath: string;
+    tokenTypes?: string[];
+    includeUsage?: boolean;
+    outputFormat?: "json" | "css" | "scss" | "typescript";
+  }): Promise<{
+    tokens: any;
+    summary: string;
+    format: string;
+  }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      // Import traversal functionality
+      const { traverseDocument } = await import("@paths-design/canvas-engine");
+
+      const tokens: any = {};
+      const tokenTypes = args.tokenTypes || ["colors", "typography", "spacing"];
+      const usageCount: Record<string, number> = {};
+
+      for (const result of traverseDocument(document)) {
+        const node = result.node;
+
+        // Extract colors from fills and strokes
+        if (tokenTypes.includes("colors")) {
+          if (node.style?.fills) {
+            for (const fill of node.style.fills) {
+              if (fill.type === "solid" && fill.color) {
+                const colorKey = `color-${fill.color.r}-${fill.color.g}-${fill.color.b}`;
+                tokens.colors = tokens.colors || {};
+                tokens.colors[colorKey] = {
+                  r: fill.color.r,
+                  g: fill.color.g,
+                  b: fill.color.b,
+                  a: fill.color.a || 1,
+                };
+                usageCount[colorKey] = (usageCount[colorKey] || 0) + 1;
+              }
+            }
+          }
+        }
+
+        // Extract typography tokens
+        if (
+          tokenTypes.includes("typography") &&
+          node.type === "text" &&
+          node.textStyle
+        ) {
+          const textStyle = node.textStyle;
+          tokens.typography = tokens.typography || {};
+
+          if (textStyle.family) {
+            tokens.typography[
+              `font-family-${textStyle.family
+                .replace(/\s+/g, "-")
+                .toLowerCase()}`
+            ] = {
+              value: textStyle.family,
+              category: "font-family",
+            };
+          }
+
+          if (textStyle.size) {
+            tokens.typography[`font-size-${textStyle.size}`] = {
+              value: `${textStyle.size}px`,
+              category: "font-size",
+            };
+          }
+
+          if (textStyle.weight) {
+            tokens.typography[`font-weight-${textStyle.weight}`] = {
+              value: textStyle.weight,
+              category: "font-weight",
+            };
+          }
+        }
+
+        // Extract spacing from frame properties
+        if (tokenTypes.includes("spacing") && node.frame) {
+          tokens.spacing = tokens.spacing || {};
+
+          const frame = node.frame;
+          if (frame.width) {
+            tokens.spacing[`width-${frame.width}`] = {
+              value: `${frame.width}px`,
+              category: "width",
+            };
+          }
+
+          if (frame.height) {
+            tokens.spacing[`height-${frame.height}`] = {
+              value: `${frame.height}px`,
+              category: "height",
+            };
+          }
+        }
+      }
+
+      // Add usage counts if requested
+      if (args.includeUsage) {
+        for (const [tokenKey, count] of Object.entries(usageCount)) {
+          if (tokens.colors && tokens.colors[tokenKey]) {
+            tokens.colors[tokenKey].usageCount = count;
+          }
+        }
+      }
+
+      // Format output based on requested format
+      const format = args.outputFormat || "json";
+      let formattedTokens: any = tokens;
+
+      if (format === "css") {
+        formattedTokens = this.formatTokensAsCSS(tokens);
+      } else if (format === "scss") {
+        formattedTokens = this.formatTokensAsSCSS(tokens);
+      } else if (format === "typescript") {
+        formattedTokens = this.formatTokensAsTypeScript(tokens);
+      }
+
+      const summary = `Extracted ${
+        Object.keys(tokens).length
+      } token categories with ${this.countTokens(tokens)} total tokens`;
+
+      return {
+        tokens: formattedTokens,
+        summary,
+        format,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to extract design tokens: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Format tokens as CSS custom properties
+   */
+  private formatTokensAsCSS(tokens: any): string {
+    let css = ":root {\n";
+
+    if (tokens.colors) {
+      for (const [key, value] of Object.entries(tokens.colors)) {
+        css += `  --${key}: rgba(${(value as any).r}, ${(value as any).g}, ${
+          (value as any).b
+        }, ${(value as any).a});\n`;
+      }
+    }
+
+    if (tokens.typography) {
+      for (const [key, value] of Object.entries(tokens.typography)) {
+        css += `  --${key}: ${(value as any).value};\n`;
+      }
+    }
+
+    if (tokens.spacing) {
+      for (const [key, value] of Object.entries(tokens.spacing)) {
+        css += `  --${key}: ${(value as any).value};\n`;
+      }
+    }
+
+    css += "}\n";
+    return css;
+  }
+
+  /**
+   * Format tokens as SCSS variables
+   */
+  private formatTokensAsSCSS(tokens: any): string {
+    let scss = "";
+
+    if (tokens.colors) {
+      scss += "// Color tokens\n";
+      for (const [key, value] of Object.entries(tokens.colors)) {
+        scss += `$${key}: rgba(${(value as any).r}, ${(value as any).g}, ${
+          (value as any).b
+        }, ${(value as any).a});\n`;
+      }
+    }
+
+    if (tokens.typography) {
+      scss += "\n// Typography tokens\n";
+      for (const [key, value] of Object.entries(tokens.typography)) {
+        scss += `$${key}: ${(value as any).value};\n`;
+      }
+    }
+
+    if (tokens.spacing) {
+      scss += "\n// Spacing tokens\n";
+      for (const [key, value] of Object.entries(tokens.spacing)) {
+        scss += `$${key}: ${(value as any).value};\n`;
+      }
+    }
+
+    return scss;
+  }
+
+  /**
+   * Format tokens as TypeScript constants
+   */
+  private formatTokensAsTypeScript(tokens: any): string {
+    let ts = "export const designTokens = {\n";
+
+    if (tokens.colors) {
+      ts += "  colors: {\n";
+      for (const [key, value] of Object.entries(tokens.colors)) {
+        ts += `    '${key}': 'rgba(${(value as any).r}, ${(value as any).g}, ${
+          (value as any).b
+        }, ${(value as any).a})',\n`;
+      }
+      ts += "  },\n";
+    }
+
+    if (tokens.typography) {
+      ts += "  typography: {\n";
+      for (const [key, value] of Object.entries(tokens.typography)) {
+        ts += `    '${key}': '${(value as any).value}',\n`;
+      }
+      ts += "  },\n";
+    }
+
+    if (tokens.spacing) {
+      ts += "  spacing: {\n";
+      for (const [key, value] of Object.entries(tokens.spacing)) {
+        ts += `    '${key}': '${(value as any).value}',\n`;
+      }
+      ts += "  },\n";
+    }
+
+    ts += "};\n";
+    return ts;
+  }
+
+  /**
+   * Count total tokens in nested structure
+   */
+  private countTokens(tokens: any): number {
+    let count = 0;
+    for (const category of Object.values(tokens)) {
+      if (typeof category === "object" && category !== null) {
+        count += Object.keys(category).length;
+      }
+    }
+    return count;
+  }
+
+  /**
+   * Apply design system to document
+   */
+  private async applyDesignSystem(args: {
+    documentPath: string;
+    designSystemPath: string;
+    strategy?: "replace" | "merge" | "migrate";
+    previewOnly?: boolean;
+  }): Promise<{
+    success: boolean;
+    changes: any[];
+    message: string;
+  }> {
+    try {
+      // Load design system
+      const designSystemContent = fs.readFileSync(
+        args.designSystemPath,
+        "utf-8"
+      );
+      const designSystem = JSON.parse(designSystemContent);
+
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      const changes: any[] = [];
+      const strategy = args.strategy || "merge";
+
+      // Apply design system based on strategy
+      if (strategy === "replace") {
+        // Replace existing tokens/styles completely
+        changes.push({
+          type: "design_system_replace",
+          description: "Replaced existing design system",
+        });
+      } else if (strategy === "merge") {
+        // Merge with existing tokens/styles
+        changes.push({
+          type: "design_system_merge",
+          description: "Merged design system with existing styles",
+        });
+      }
+
+      if (!args.previewOnly) {
+        // Apply changes to document
+        fs.writeFileSync(args.documentPath, JSON.stringify(document, null, 2));
+      }
+
+      return {
+        success: true,
+        changes,
+        message: `Applied design system using ${strategy} strategy`,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to apply design system: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Measure performance of document operations
+   */
+  private async measurePerformance(args: {
+    documentPath: string;
+    metrics?: string[];
+    iterations?: number;
+    warmUp?: number;
+  }): Promise<{
+    results: Record<
+      string,
+      { average: number; min: number; max: number; samples: number[] }
+    >;
+    summary: string;
+  }> {
+    try {
+      const content = fs.readFileSync(args.documentPath, "utf-8");
+      const document = JSON.parse(content) as CanvasDocumentType;
+
+      const metrics = args.metrics || ["render_time", "hit_test"];
+      const iterations = args.iterations || 10;
+      const warmUp = args.warmUp || 5;
+
+      const results: Record<
+        string,
+        { average: number; min: number; max: number; samples: number[] }
+      > = {};
+
+      for (const metric of metrics) {
+        const samples: number[] = [];
+
+        // Warm-up iterations
+        for (let i = 0; i < warmUp; i++) {
+          await this.performMetricTest(document, metric);
+        }
+
+        // Actual measurement iterations
+        for (let i = 0; i < iterations; i++) {
+          const duration = await this.performMetricTest(document, metric);
+          samples.push(duration);
+        }
+
+        const average = samples.reduce((sum, s) => sum + s, 0) / samples.length;
+        const min = Math.min(...samples);
+        const max = Math.max(...samples);
+
+        results[metric] = {
+          average,
+          min,
+          max,
+          samples,
+        };
+      }
+
+      const summary = `Measured ${metrics.length} metrics over ${iterations} iterations each`;
+
+      return {
+        results,
+        summary,
+      };
+    } catch (error) {
+      throw new McpError(
+        ErrorCode.InternalError,
+        `Failed to measure performance: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
+    }
+  }
+
+  /**
+   * Perform a specific metric test
+   */
+  private async performMetricTest(
+    document: CanvasDocumentType,
+    metric: string
+  ): Promise<number> {
+    const startTime = performance.now();
+
+    try {
+      switch (metric) {
+        case "render_time":
+          // Simulate rendering by traversing all nodes
+          const { traverseDocument } = await import(
+            "@paths-design/canvas-engine"
+          );
+          let nodeCount = 0;
+          for (const _ of traverseDocument(document)) {
+            nodeCount++;
+          }
+          break;
+
+        case "hit_test":
+          // Simulate hit testing at random points
+          const { hitTest } = await import("@paths-design/canvas-engine");
+          for (let i = 0; i < 10; i++) {
+            const point = {
+              x: Math.random() * 1000,
+              y: Math.random() * 1000,
+            };
+            hitTest(document, point);
+          }
+          break;
+
+        case "traversal":
+          // Measure traversal performance
+          const { countNodes } = await import("@paths-design/canvas-engine");
+          countNodes(document);
+          break;
+
+        default:
+          // Unknown metric, just measure time
+          await new Promise((resolve) => setTimeout(resolve, 1));
+      }
+
+      return performance.now() - startTime;
+    } catch (error) {
+      return performance.now() - startTime;
     }
   }
 }

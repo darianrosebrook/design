@@ -3,8 +3,8 @@
  * @author @darianrosebrook
  */
 
-import React, { useState, useRef, useEffect } from "react";
 import { defaultTokens as tokens } from "@paths-design/design-tokens";
+import React, { useState, useRef, useEffect } from "react";
 
 export interface TooltipProps {
   content: React.ReactNode;

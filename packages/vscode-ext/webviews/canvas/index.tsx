@@ -6,9 +6,15 @@
  * canvas-renderer-dom with the properties panel in a single view.
  */
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { createRoot } from "react-dom/client";
 import { createCanvasRenderer } from "@paths-design/canvas-renderer-dom";
+import type {
+  SelectionMode,
+  SelectionModeConfig,
+  SelectionResult,
+} from "@paths-design/canvas-renderer-dom";
+import { createMessage } from "../../src/protocol/messages";
 import {
   PropertiesPanel,
   PropertiesService,
@@ -36,16 +42,39 @@ declare global {
 type ExtensionMessage =
   | { command: "setDocument"; document: CanvasDocumentType }
   | { command: "setSelection"; selection: SelectionState }
+  | {
+      command: "setSelectionMode";
+      payload: {
+        mode: SelectionMode;
+        config?: Partial<SelectionModeConfig>;
+        requestId?: string;
+      };
+    }
   | { command: "propertyChangeAcknowledged"; event: unknown }
   | { command: "showError"; error: string };
 
 /**
  * Message types from webview to extension
  */
-type WebviewMessage =
-  | { command: "ready" }
-  | { command: "selectionChange"; nodeIds: string[] }
-  | { command: "propertyChange"; event: unknown };
+type WebviewSelectionChangeMessage = ReturnType<
+  typeof createMessage<"selectionChange">
+>;
+type WebviewSelectionModeChangeMessage = ReturnType<
+  typeof createMessage<"selectionModeChange">
+>;
+type WebviewSelectionOperationMessage = ReturnType<
+  typeof createMessage<"selectionOperation">
+>;
+type WebviewPropertyChangeMessage = ReturnType<
+  typeof createMessage<"propertyChange">
+>;
+type WebviewReadyMessage = ReturnType<typeof createMessage<"ready">>;
+type OutgoingWebviewMessage =
+  | WebviewReadyMessage
+  | WebviewSelectionChangeMessage
+  | WebviewSelectionModeChangeMessage
+  | WebviewSelectionOperationMessage
+  | WebviewPropertyChangeMessage;
 
 /**
  * Main Canvas Webview App component
@@ -57,6 +86,12 @@ const CanvasWebviewApp: React.FC = () => {
     selectedNodeIds: [],
     focusedNodeId: null,
   });
+  const selectionModeRef = useRef<SelectionMode>("single");
+  const selectionConfigRef = useRef<SelectionModeConfig>({
+    mode: "single",
+    multiSelect: false,
+    preserveSelection: false,
+  });
   const [canvasContainer, setCanvasContainer] = useState<HTMLDivElement | null>(
     null
   );
@@ -65,6 +100,9 @@ const CanvasWebviewApp: React.FC = () => {
   > | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [propertiesService] = useState(() => PropertiesService.getInstance());
+  const rendererRef = useRef<ReturnType<typeof createCanvasRenderer> | null>(
+    null
+  );
 
   /**
    * Initialize canvas renderer when container is ready
@@ -86,22 +124,50 @@ const CanvasWebviewApp: React.FC = () => {
         setSelection(newSelection);
 
         // Notify extension of selection change
-        vscode.postMessage({
-          command: "selectionChange",
-          nodeIds,
-        } as WebviewMessage);
+        vscode.postMessage(
+          createMessage("selectionChange", {
+            nodeIds,
+          }) as OutgoingWebviewMessage
+        );
       },
       onNodeUpdate: (nodeId, updates) => {
         console.info("Node updated:", nodeId, updates);
       },
+      onSelectionModeChange: (mode) => {
+        selectionModeRef.current = mode;
+        vscode.postMessage(
+          createMessage("selectionModeChange", {
+            mode,
+            config: selectionConfigRef.current,
+          }) as OutgoingWebviewMessage
+        );
+      },
+      onSelectionOperation: ({ mode, result, config }) => {
+        selectionModeRef.current = mode;
+        selectionConfigRef.current = config;
+        setSelection({
+          selectedNodeIds: result.selectedNodeIds,
+          focusedNodeId: result.selectedNodeIds[0] || null,
+        });
+
+        vscode.postMessage(
+          createMessage("selectionOperation", {
+            mode,
+            result,
+            config,
+          }) as OutgoingWebviewMessage
+        );
+      },
     });
 
     setRenderer(newRenderer);
+    rendererRef.current = newRenderer;
 
     return () => {
       if (newRenderer) {
         newRenderer.destroy();
       }
+      rendererRef.current = null;
     };
   }, [canvasContainer, renderer, vscode]);
 
@@ -176,6 +242,23 @@ const CanvasWebviewApp: React.FC = () => {
           console.info("Received selection from extension");
           setSelection(message.selection);
           propertiesService.setSelection(message.selection);
+          rendererRef.current?.setSelection(message.selection.selectedNodeIds);
+          break;
+
+        case "setSelectionMode":
+          console.info("Received selection mode from extension", {
+            mode: message.payload.mode,
+            config: message.payload.config,
+          });
+          selectionModeRef.current = message.payload.mode;
+          selectionConfigRef.current = {
+            ...selectionConfigRef.current,
+            ...message.payload.config,
+            mode: message.payload.mode,
+          };
+
+          rendererRef.current?.setSelectionMode(message.payload.mode);
+
           break;
 
         case "propertyChangeAcknowledged":
@@ -198,7 +281,7 @@ const CanvasWebviewApp: React.FC = () => {
     window.addEventListener("message", handleMessage);
 
     // Notify extension that webview is ready
-    vscode.postMessage({ command: "ready" } as WebviewMessage);
+    vscode.postMessage(createMessage("ready", {}) as OutgoingWebviewMessage);
 
     return () => {
       window.removeEventListener("message", handleMessage);
@@ -211,10 +294,11 @@ const CanvasWebviewApp: React.FC = () => {
   const handlePropertyChange = useCallback(
     (event: unknown) => {
       console.info("Property change:", event);
-      vscode.postMessage({
-        command: "propertyChange",
-        event,
-      } as WebviewMessage);
+      vscode.postMessage(
+        createMessage("propertyChange", {
+          event,
+        }) as OutgoingWebviewMessage
+      );
     },
     [vscode]
   );

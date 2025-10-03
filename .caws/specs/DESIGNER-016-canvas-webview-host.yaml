@@ -1,0 +1,105 @@
+id: DESIGNER-016
+title: 'Canvas Webview Host Integration'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 25
+  max_loc: 1000
+blast_radius:
+  modules:
+    - packages/vscode-ext/
+    - packages/vscode-ext/webviews/canvas/
+    - packages/properties-panel/
+  data_migration: false
+operational_rollback_slo: 10m
+threats:
+  - 'Webview fails to load or crashes due to bundle errors'
+  - 'Canvas and properties panel fall out of sync'
+  - 'Unvalidated messages allow malformed payloads'
+  - 'Memory leaks from unbounded event listeners'
+  - 'Accessibility regressions when combining canvas and inspector'
+scope:
+  in:
+    - packages/vscode-ext/package.json
+    - packages/vscode-ext/src/
+    - packages/vscode-ext/webviews/canvas/
+    - packages/properties-panel/src/
+  out:
+    - packages/canvas-engine/
+    - packages/canvas-renderer-dom/
+invariants:
+  - 'Single VS Code webview hosts canvas and inspector with shared state store'
+  - 'All messages between webview and extension validate against protocol schemas'
+  - 'Feature flags gate optional MCP integrations'
+  - 'Webview bundle remains deterministic and reproducible across builds'
+  - 'Accessibility tree remains navigable with keyboard and screen readers'
+acceptance:
+  - id: A1
+    given: 'Designer extension activates'
+    when: 'User triggers the canvas command'
+    then: 'Canvas webview opens with canvas surface and properties panel rendered'
+  - id: A2
+    given: 'User selects node in canvas'
+    when: 'Selection event posts to extension'
+    then: 'Properties panel reflects selection within 50ms'
+  - id: A3
+    given: 'Properties panel edits node property'
+    when: 'Mutation dispatches to extension'
+    then: 'Canvas re-renders node and webview state stays consistent'
+  - id: A4
+    given: 'User resizes webview or toggles theme'
+    when: 'Canvas host renders both surfaces'
+    then: 'Layout remains responsive with no overlapping UI elements'
+  - id: A5
+    given: 'Webview disposed or document closed'
+    when: 'Extension handles cleanup'
+    then: 'All timers, listeners, and message ports release without leaks'
+  - id: A6
+    given: 'Canvas bundle built for production'
+    when: 'CI runs integrity check'
+    then: 'Bundle hash matches canonical reference and CSP passes'
+non_functional:
+  a11y:
+    - 'All interactive controls reachable via keyboard navigation order'
+    - 'Roles and aria attributes applied to canvas regions and inspector panes'
+    - 'Focus traps avoided; users can transition between canvas and inspector'
+  perf:
+    initial_render_ms: 150
+    message_roundtrip_ms: 50
+    additional:
+      - 'Webview bundle size <2.5MB gzipped'
+      - 'Memory footprint <75MB for 500-node document'
+      - 'No more than one frame drop (>33ms) during initial render'
+  security:
+    - 'Enforce CSP limiting scripts to vscode-resource:// origins'
+    - 'Sanitize user-driven HTML before injection into webview'
+    - 'Restrict message types to protocol schemas with exhaustive switch statements'
+contracts:
+  - type: typescript
+    path: packages/vscode-ext/src/protocol/message-types.ts
+  - type: react_component
+    path: packages/properties-panel/src/PropertiesPanel.tsx
+observability:
+  logs:
+    - 'canvas_webview.open with document id and node count'
+    - 'canvas_webview.selection_change with selection size'
+    - 'canvas_webview.property_change with property key'
+    - 'canvas_webview.error with sanitized stack trace'
+  metrics:
+    - 'canvas_webview_activation_duration_ms histogram'
+    - 'canvas_webview_messages_in_flight gauge'
+    - 'canvas_webview_render_failures_total counter'
+    - 'canvas_webview_bundle_size_bytes gauge'
+  traces:
+    - 'canvas_webview.lifecycle from activation to disposal'
+    - 'canvas_webview.message_roundtrip from dispatch to ack'
+    - 'canvas_webview.render_pipeline from loadDocument to paint'
+migrations:
+  - 'No persistent data changes — migration not required'
+rollback:
+  - 'Feature flag `designer.webview.enabled` disables bundled canvas host'
+  - 'Fallback to existing properties-only panel when flag disabled'
+  - 'Revert to previous extension version via VS Code rollback command'
+  - 'Keep legacy static HTML host available behind hidden command for diagnosis'
+
+

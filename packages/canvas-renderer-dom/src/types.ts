@@ -5,6 +5,11 @@
 
 import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 import type { ComponentIndex } from "@paths-design/component-indexer";
+import type {
+  SelectionMode,
+  SelectionResult,
+  SelectionModeConfig,
+} from "./selection-modes.js";
 
 /**
  * Renderer configuration options
@@ -20,6 +25,18 @@ export interface RendererOptions {
   onSelectionChange?: (nodeIds: string[]) => void;
   /** Node update callback */
   onNodeUpdate?: (nodeId: string, updates: Partial<NodeType>) => void;
+  /** Selection mode change callback */
+  onSelectionModeChange?: (mode: SelectionMode) => void;
+  /** Selection operation completion callback */
+  onSelectionOperation?: (details: {
+    mode: SelectionMode;
+    result: SelectionResult;
+    config: SelectionModeConfig;
+  }) => void;
+  /** Initial selection mode for renderer */
+  initialSelectionMode?: SelectionMode;
+  /** Enable advanced selection features (rectangle, lasso) */
+  advancedSelectionEnabled?: boolean;
 }
 
 /**

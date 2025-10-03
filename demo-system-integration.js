@@ -13,8 +13,9 @@ console.log("🔗 System Integration Demo");
 console.log("=========================");
 
 // Load component standards data directly
+import fs from "fs";
 const componentStandards = JSON.parse(
-  require("fs").readFileSync(
+  fs.readFileSync(
     "./docs/component-standards/components-transformed.json",
     "utf-8"
   )

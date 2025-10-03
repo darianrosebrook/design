@@ -3,8 +3,8 @@
  * @author @darianrosebrook
  */
 
-import React from "react";
 import { defaultTokens as tokens } from "@paths-design/design-tokens";
+import React from "react";
 
 export interface InputProps {
   type?: "text" | "number" | "email" | "password" | "tel" | "url" | "search";

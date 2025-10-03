@@ -11,15 +11,19 @@ import type { PropertyEditorProps, PropertyValue } from "./types";
  * Type guard to safely convert unknown to PropertyValue
  */
 function isPropertyValue(value: unknown): value is PropertyValue {
-  if (value === null || value === undefined) return true;
+  if (value === null || value === undefined) {
+    return true;
+  }
   if (
     typeof value === "string" ||
     typeof value === "number" ||
     typeof value === "boolean"
-  )
+  ) {
     return true;
-  if (Array.isArray(value))
+  }
+  if (Array.isArray(value)) {
     return value.every((item) => typeof item === "string");
+  }
   if (typeof value === "object" && value !== null) {
     const obj = value as Record<string, unknown>;
     // Check for Rect type
@@ -28,16 +32,18 @@ function isPropertyValue(value: unknown): value is PropertyValue {
       typeof obj.y === "number" &&
       typeof obj.width === "number" &&
       typeof obj.height === "number"
-    )
+    ) {
       return true;
+    }
     // Check for Color type
     if (
       typeof obj.r === "number" &&
       typeof obj.g === "number" &&
       typeof obj.b === "number" &&
       (obj.a === undefined || typeof obj.a === "number")
-    )
+    ) {
       return true;
+    }
   }
   return false;
 }

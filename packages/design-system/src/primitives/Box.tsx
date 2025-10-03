@@ -3,8 +3,8 @@
  * @author @darianrosebrook
  */
 
-import React from "react";
 import { defaultTokens as tokens } from "@paths-design/design-tokens";
+import React from "react";
 
 export interface BoxProps {
   children?: React.ReactNode;

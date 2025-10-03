@@ -1,0 +1,30 @@
+{
+  "name": "@paths-design/websocket-server",
+  "version": "0.1.0",
+  "description": "WebSocket server for real-time collaboration in Designer",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@paths-design/canvas-schema": "workspace:*",
+    "@paths-design/canvas-engine": "workspace:*",
+    "ws": "^8.14.2",
+    "ulid": "^2.3.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "@types/ws": "^8.5.8",
+    "typescript": "^5.2.2",
+    "vitest": "^3.2.4"
+  },
+  "files": [
+    "dist/**/*",
+    "src/**/*"
+  ]
+}

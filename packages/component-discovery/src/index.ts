@@ -328,7 +328,9 @@ export class ComponentDiscoveryEngine {
 
           const instance = componentInstances.get(componentKey)!;
           instance.count++;
-          Object.keys((node as any).props || {}).forEach(prop => instance.props.add(prop));
+          Object.keys((node as any).props || {}).forEach((prop) =>
+            instance.props.add(prop)
+          );
 
           const semanticKey = (node as any).semanticKey;
           if (semanticKey) {
@@ -490,7 +492,7 @@ export class ComponentDiscoveryEngine {
   /**
    * Extract default value from prop
    */
-  private extractDefaultValue(prop: TsNode): unknown {
+  private extractDefaultValue(_prop: TsNode): unknown {
     // Property signatures in TypeScript interfaces don't have initializers
     // Default values are typically set in the component implementation
     // This is a placeholder for future enhancement

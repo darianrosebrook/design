@@ -3,17 +3,8 @@
  * @author @darianrosebrook
  */
 
-import type { CanvasDocumentType } from "@paths-design/canvas-schema";
 import type { ComponentIndex } from "@paths-design/component-indexer";
-import {
-  PatternRegistry,
-  PatternDetector,
-  PatternGenerator,
-} from "@paths-design/pattern-manifests";
-import { ComponentDiscoveryEngine } from "@paths-design/component-discovery";
-import { generateAugmentedVariants } from "@paths-design/augment";
-import { compareCanvasDocuments } from "@paths-design/diff-visualizer";
-import { generateReactComponents } from "@paths-design/codegen-react";
+import { PatternRegistry } from "@paths-design/pattern-manifests";
 
 /**
  * Component standards data structure (from existing system)
@@ -269,7 +260,7 @@ export class SystemIntegrator {
   private generateIntegrationRecommendations(
     patternAlignment: any,
     semanticKeyAnalysis: any,
-    standardsIntegration: any
+    _standardsIntegration: any
   ): {
     immediate: string[];
     shortTerm: string[];
