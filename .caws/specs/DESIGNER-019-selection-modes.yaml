@@ -1,0 +1,100 @@
+id: DESIGNER-019
+title: 'Advanced Selection Modes & Multi-Select'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 35
+  max_loc: 1400
+blast_radius:
+  modules:
+    - packages/canvas-renderer-dom/
+    - packages/canvas-renderer-dom/tests/
+    - packages/vscode-ext/src/
+  data_migration: false
+operational_rollback_slo: 5m
+threats:
+  - 'Selection rectangle calculation errors causing incorrect selections'
+  - 'Lasso path complexity overwhelming renderer performance'
+  - 'Multi-select state synchronization failures across webviews'
+  - 'Selection mode switching breaks keyboard navigation'
+  - 'Performance degradation with high node counts during selection'
+scope:
+  in:
+    - packages/canvas-renderer-dom/src/
+    - packages/canvas-renderer-dom/tests/
+    - packages/vscode-ext/src/canvas-webview/
+  out:
+    - packages/canvas-engine/
+    - packages/properties-panel/
+invariants:
+  - 'Selection rectangle calculations use document-space coordinates with viewport transformation'
+  - 'Lasso path segments stored as viewport coordinates but tested against document-space nodes'
+  - 'Multi-select state broadcasts to all connected webviews within 50ms'
+  - 'Selection mode changes preserve existing selection state'
+  - 'Keyboard navigation adapts to current selection mode and multi-select context'
+acceptance:
+  - id: A1
+    given: 'User drags selection rectangle across multiple nodes'
+    when: 'Selection rectangle completes'
+    then: 'All nodes within rectangle selected with 99% accuracy'
+  - id: A2
+    given: 'User draws lasso path around irregular node arrangement'
+    when: 'Lasso path closes'
+    then: 'Only nodes inside lasso path selected with winding rule algorithm'
+  - id: A3
+    given: 'User holds Ctrl+click to multi-select scattered nodes'
+    when: 'Third node selected'
+    then: 'All three nodes remain selected with toggle behavior'
+  - id: A4
+    given: 'Selection mode changes from rectangle to lasso'
+    when: 'User starts new selection'
+    then: 'Previous selection cleared and new mode activated'
+  - id: A5
+    given: '1000 nodes in document with complex selection'
+    when: 'Rectangle selection performed'
+    then: 'Selection completes within 100ms without frame drops'
+non_functional:
+  a11y:
+    - 'Selection rectangle provides audio feedback for start/end'
+    - 'Multi-select state announced to screen readers'
+    - 'Selection mode changes keyboard accessible'
+  perf:
+    rectangle_selection_ms: 50
+    lasso_path_processing_ms: 30
+    additional:
+      - 'Multi-select state broadcast <25ms across webviews'
+      - 'Selection rectangle hit testing <20ms for 1000 nodes'
+      - 'Lasso path simplification preserves 95% accuracy'
+  security:
+    - 'Selection rectangle coordinates clamped to viewport bounds'
+    - 'Lasso path segments validated for reasonable complexity'
+    - 'Selection state changes authenticated before broadcasting'
+contracts:
+  - type: typescript
+    path: packages/canvas-renderer-dom/src/selection-modes.ts
+  - type: typescript
+    path: packages/vscode-ext/src/canvas-webview/selection-coordinator.ts
+observability:
+  logs:
+    - 'selection.rectangle.start with coordinates and node count'
+    - 'selection.rectangle.complete with selected count and accuracy'
+    - 'selection.lasso.path with segment count and complexity'
+    - 'selection.multi_select.toggle with node id and current count'
+    - 'selection.mode.change with previous and new mode'
+  metrics:
+    - 'selection_rectangle_accuracy_percent histogram'
+    - 'selection_lasso_segments_total counter'
+    - 'selection_multi_select_count gauge'
+    - 'selection_mode_switch_duration_ms histogram'
+  traces:
+    - 'selection.rectangle.pipeline from mouse down to selection complete'
+    - 'selection.lasso.path_processing from segments to hit test'
+    - 'selection.multi_select.broadcast from state change to webview update'
+migrations:
+  - 'No data migrations required'
+rollback:
+  - 'Feature flag `designer.selectionModes.enabled` toggles advanced selection'
+  - 'Fallback to single-click selection mode when disabled'
+  - 'Selection mode preferences persisted in workspace settings'
+
+

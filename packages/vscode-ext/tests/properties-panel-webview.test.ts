@@ -149,7 +149,9 @@ describe("PropertiesPanelWebviewProvider", () => {
 
       mockExtensionInstance.getCurrentDocument.mockReturnValue(mockDocument);
 
-      provider.setDocument(mockDocument);
+      // Set document with file path to avoid "No file path tracked" error
+      const mockFilePath = { fsPath: "/test/path/test.canvas.json" } as any;
+      provider.setDocument(mockDocument, mockFilePath);
       provider.resolveWebviewView(mockWebviewView);
 
       const messageHandler = mockWebviewView.webview.onDidReceiveMessage;

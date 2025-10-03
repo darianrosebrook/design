@@ -1,0 +1,105 @@
+id: DESIGNER-020
+title: 'Node Manipulation & Direct Editing'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 40
+  max_loc: 1600
+blast_radius:
+  modules:
+    - packages/canvas-renderer-dom/
+    - packages/canvas-renderer-dom/tests/
+    - packages/canvas-engine/
+    - packages/vscode-ext/src/
+  data_migration: false
+operational_rollback_slo: 10m
+threats:
+  - 'Drag operations cause visual artifacts or jerky movement'
+  - 'Resize handles interfere with node selection or hit testing'
+  - 'Node manipulation conflicts with multi-select operations'
+  - 'Performance degradation during complex drag operations'
+  - 'Undo/redo stack corruption from interrupted manipulations'
+scope:
+  in:
+    - packages/canvas-renderer-dom/src/
+    - packages/canvas-renderer-dom/tests/
+    - packages/canvas-engine/src/
+    - packages/vscode-ext/src/document-store.ts
+  out:
+    - packages/vscode-ext/webviews/
+    - packages/properties-panel/
+invariants:
+  - 'Drag operations use document-space coordinates with real-time viewport transformation'
+  - 'Resize handles positioned relative to node bounds in viewport space'
+  - 'Node manipulation state isolated from selection state to prevent conflicts'
+  - 'All manipulation operations route through DocumentStore for validation and persistence'
+  - 'Manipulation feedback provides visual and accessibility cues during operations'
+acceptance:
+  - id: A1
+    given: 'User drags selected node across canvas'
+    when: 'Drag operation completes'
+    then: 'Node position updates in real-time with smooth 60fps movement'
+  - id: A2
+    given: 'User drags resize handle on frame node'
+    when: 'Resize operation completes'
+    then: 'Node dimensions update with aspect ratio preservation options'
+  - id: A3
+    given: 'User drags node during multi-select operation'
+    when: 'Drag completes with Shift held'
+    then: 'All selected nodes move together maintaining relative positions'
+  - id: A4
+    given: 'Complex node hierarchy with nested transformations'
+    when: 'Parent node dragged'
+    then: 'Child nodes move with parent while preserving local transformations'
+  - id: A5
+    given: 'User drags node beyond canvas bounds'
+    when: 'Viewport pans automatically'
+    then: 'Node remains visible and draggable with auto-pan behavior'
+non_functional:
+  a11y:
+    - 'Drag operations provide tactile feedback via keyboard modifiers'
+    - 'Resize handles keyboard accessible with arrow key adjustment'
+    - 'Manipulation state announced to screen readers'
+  perf:
+    drag_update_ms: 16
+    resize_calculation_ms: 8
+    additional:
+      - 'Multi-node drag operations maintain 60fps'
+      - 'Resize handle hit testing <4ms per frame'
+      - 'Auto-pan calculations avoid layout thrashing'
+  security:
+    - 'Node manipulation coordinates validated against viewport bounds'
+    - 'Drag operations clamped to prevent extreme transformations'
+    - 'Manipulation state changes authenticated before DocumentStore updates'
+contracts:
+  - type: typescript
+    path: packages/canvas-renderer-dom/src/node-manipulation.ts
+  - type: typescript
+    path: packages/canvas-renderer-dom/src/resize-handles.ts
+  - type: typescript
+    path: packages/vscode-ext/src/document-store.ts
+observability:
+  logs:
+    - 'manipulation.drag.start with node id and initial position'
+    - 'manipulation.drag.update with delta and current position'
+    - 'manipulation.drag.end with final position and duration'
+    - 'manipulation.resize.start with node id and handle position'
+    - 'manipulation.resize.update with new dimensions and constraints'
+    - 'manipulation.multi_drag.sync with participating node count'
+  metrics:
+    - 'manipulation_drag_duration_ms histogram'
+    - 'manipulation_resize_accuracy_percent histogram'
+    - 'manipulation_multi_drag_nodes gauge'
+    - 'manipulation_auto_pan_events_total counter'
+  traces:
+    - 'manipulation.drag.pipeline from pointer down to position update'
+    - 'manipulation.resize.calculation from handle drag to dimension update'
+    - 'manipulation.multi_drag.broadcast from state change to all nodes'
+migrations:
+  - 'No data migrations required'
+rollback:
+  - 'Feature flag `designer.nodeManipulation.enabled` toggles manipulation features'
+  - 'Fallback to read-only selection mode when disabled'
+  - 'Manipulation preferences stored in workspace configuration'
+
+

@@ -8,7 +8,6 @@
 
 import * as fs from "node:fs";
 import * as path from "node:path";
-import * as vscode from "vscode";
 import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 import type { ComponentIndex } from "@paths-design/component-indexer";
 import type {
@@ -16,6 +15,9 @@ import type {
   PropertyChangeEvent,
 } from "@paths-design/properties-panel";
 import { PropertiesService } from "@paths-design/properties-panel";
+import * as vscode from "vscode";
+import { CanvasWebviewProvider } from "./canvas-webview/canvas-webview-provider";
+import { DocumentStore } from "./document-store";
 import { PropertiesPanelWebviewProvider } from "./properties-panel-webview";
 
 export * from "./protocol/index.js";
@@ -26,8 +28,10 @@ export * from "./security/index.js";
  */
 class DesignerExtension {
   private context: vscode.ExtensionContext;
+  private canvasWebviewProvider: CanvasWebviewProvider;
   private propertiesPanelProvider: PropertiesPanelWebviewProvider;
   private propertiesService: PropertiesService;
+  private documentStore: DocumentStore;
   private componentIndex: ComponentIndex | null = null;
   private currentDocument: CanvasDocumentType | null = null;
   private currentSelection: SelectionState = {
@@ -38,6 +42,8 @@ class DesignerExtension {
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
     this.propertiesService = PropertiesService.getInstance();
+    this.documentStore = DocumentStore.getInstance();
+    this.canvasWebviewProvider = new CanvasWebviewProvider(context, this);
     this.propertiesPanelProvider = new PropertiesPanelWebviewProvider(context);
 
     // Load component index if it exists
@@ -91,6 +97,34 @@ class DesignerExtension {
    * Register extension commands
    */
   private registerCommands(): void {
+    // Command to open canvas designer
+    const openCanvasCommand = vscode.commands.registerCommand(
+      "designer.openCanvas",
+      async (uri?: vscode.Uri) => {
+        let documentUri = uri;
+
+        if (!documentUri) {
+          // Ask user to select a file
+          const uris = await vscode.window.showOpenDialog({
+            canSelectFiles: true,
+            canSelectFolders: false,
+            filters: {
+              "Canvas Documents": ["canvas.json", "json"],
+            },
+            openLabel: "Open Canvas Document",
+          });
+
+          if (!uris || uris.length === 0) {
+            return;
+          }
+
+          documentUri = uris[0];
+        }
+
+        await this.canvasWebviewProvider.show(documentUri);
+      }
+    );
+
     // Command to open properties panel
     const openPropertiesPanelCommand = vscode.commands.registerCommand(
       "designer.openPropertiesPanel",
@@ -138,6 +172,7 @@ class DesignerExtension {
     );
 
     this.context.subscriptions.push(
+      openCanvasCommand,
       openPropertiesPanelCommand,
       loadDocumentCommand,
       refreshDocumentCommand
@@ -193,7 +228,8 @@ class DesignerExtension {
       const document = JSON.parse(content.toString()) as CanvasDocumentType;
 
       this.currentDocument = document;
-      this.updateDocument(document);
+      this.documentStore.setDocument(document, uri);
+      this.updateDocument(document, uri);
 
       vscode.window.showInformationMessage(
         `Loaded canvas document: ${document.name}`
@@ -210,7 +246,10 @@ class DesignerExtension {
   /**
    * Update the current document and notify all views
    */
-  private updateDocument(document: CanvasDocumentType): void {
+  private updateDocument(
+    document: CanvasDocumentType,
+    filePath?: vscode.Uri
+  ): void {
     this.currentDocument = document;
 
     // Set nodes in properties service for semantic key and contract support
@@ -235,12 +274,19 @@ class DesignerExtension {
       this.propertiesService.setNodes(allNodes);
     }
 
-    // Update properties panel
-    this.propertiesPanelProvider.setDocument(document);
+    // Update DocumentStore
+    this.documentStore.setDocument(document, filePath);
+
+    // Update properties panel with file path tracking
+    this.propertiesPanelProvider.setDocument(document, filePath);
+
+    // Update canvas webview
+    this.canvasWebviewProvider.setDocument(document, filePath);
 
     // Update selection if it exists
     if (this.currentSelection.selectedNodeIds.length > 0) {
       this.propertiesPanelProvider.setSelection(this.currentSelection);
+      this.canvasWebviewProvider.setSelection(this.currentSelection);
     }
   }
 

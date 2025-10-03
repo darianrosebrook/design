@@ -3,12 +3,12 @@
  * @author @darianrosebrook
  */
 
-import * as vscode from "vscode";
 import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 import type {
   SelectionState,
   PropertyChangeEvent,
 } from "@paths-design/properties-panel";
+import * as vscode from "vscode";
 
 /**
  * Properties panel webview provider
@@ -27,6 +27,7 @@ export class PropertiesPanelWebviewProvider
   private _isReady = false;
   private _extensionInstance?: Record<string, unknown>;
   private _propertyValues: Map<string, Map<string, unknown>> = new Map(); // nodeId -> propertyKey -> value
+  private _documentFilePath?: vscode.Uri; // Track the original file path
 
   constructor(private context: vscode.ExtensionContext) {
     // Get reference to the extension instance for communication
@@ -37,8 +38,9 @@ export class PropertiesPanelWebviewProvider
   /**
    * Set the current canvas document
    */
-  setDocument(document: CanvasDocumentType): void {
+  setDocument(document: CanvasDocumentType, filePath?: vscode.Uri): void {
     this._document = document;
+    this._documentFilePath = filePath;
     this._cachePropertyValues(document);
 
     if (this._view) {
@@ -184,26 +186,17 @@ export class PropertiesPanelWebviewProvider
    */
   private async _saveDocument(document: CanvasDocumentType): Promise<void> {
     try {
-      // Find the file path for this document
-      const workspaceFolders = vscode.workspace.workspaceFolders;
-      if (!workspaceFolders) {
-        throw new Error("No workspace open");
+      if (!this._documentFilePath) {
+        throw new Error("No file path tracked for this document");
       }
-
-      // For now, assume the document ID corresponds to the file path
-      // In a real implementation, we'd maintain a mapping
-      const filePath = vscode.Uri.joinPath(
-        workspaceFolders[0].uri,
-        `${document.id}.canvas.json`
-      );
 
       const content = JSON.stringify(document, null, 2);
       await vscode.workspace.fs.writeFile(
-        filePath,
+        this._documentFilePath,
         Buffer.from(content, "utf-8")
       );
 
-      console.info(`Document saved to ${filePath.fsPath}`);
+      console.info(`Document saved to ${this._documentFilePath.fsPath}`);
     } catch (error) {
       console.error("Failed to save document:", error);
       throw error;

@@ -1,0 +1,536 @@
+/**
+ * @fileoverview Deterministic Document Mutation Pipeline
+ * @author @darianrosebrook
+ *
+ * Manages all document mutations through canvas-engine operations
+ * with schema validation, canonical serialization, and undo/redo support.
+ */
+
+import * as vscode from "vscode";
+import {
+  validateCanvasDocument,
+  Patch,
+  type Patch as PatchType,
+} from "@paths-design/canvas-schema";
+import { applyPatch } from "@paths-design/canvas-engine";
+import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
+
+/**
+ * Document mutation event for tracking changes
+ */
+export interface DocumentMutationEvent {
+  id: string;
+  type: "property_change" | "create_node" | "delete_node" | "move_node";
+  nodeId: string;
+  propertyKey?: string;
+  oldValue?: unknown;
+  newValue?: unknown;
+  patch?: any;
+  timestamp: number;
+  documentHash: string; // Hash of document state before mutation
+}
+
+/**
+ * Document snapshot for undo/redo
+ */
+export interface DocumentSnapshot {
+  id: string;
+  document: CanvasDocumentType;
+  mutations: DocumentMutationEvent[];
+  timestamp: number;
+}
+
+/**
+ * Undo/Redo operation result
+ */
+export interface UndoRedoResult {
+  success: boolean;
+  document?: CanvasDocumentType;
+  error?: string;
+  snapshotId?: string;
+}
+
+/**
+ * Simple observability for document mutations
+ */
+class DocumentStoreObservability {
+  private logs: Array<{
+    timestamp: number;
+    level: string;
+    message: string;
+    context?: unknown;
+  }> = [];
+
+  private metrics: Map<string, number> = new Map();
+
+  log(level: string, message: string, context?: unknown): void {
+    this.logs.push({ timestamp: Date.now(), level, message, context });
+    console.log(`[${level.toUpperCase()}] DocumentStore: ${message}`, context);
+  }
+
+  metric(name: string, value: number): void {
+    this.metrics.set(name, value);
+  }
+
+  getLogs(): Array<{
+    timestamp: number;
+    level: string;
+    message: string;
+    context?: unknown;
+  }> {
+    return [...this.logs];
+  }
+
+  getMetrics(): Map<string, number> {
+    return new Map(this.metrics);
+  }
+}
+
+/**
+ * Deterministic Document Mutation Pipeline
+ * Routes all mutations through canvas-engine with validation and canonical serialization
+ */
+export class DocumentStore {
+  private currentDocument: CanvasDocumentType | null = null;
+  private documentFilePath: vscode.Uri | null = null;
+  private mutationHistory: DocumentMutationEvent[] = [];
+  private undoStack: DocumentSnapshot[] = [];
+  private redoStack: DocumentSnapshot[] = [];
+  private observability = new DocumentStoreObservability();
+
+  private static instance: DocumentStore | null = null;
+
+  static getInstance(): DocumentStore {
+    if (!DocumentStore.instance) {
+      DocumentStore.instance = new DocumentStore();
+    }
+    return DocumentStore.instance;
+  }
+
+  private constructor() {
+    this.observability.log("info", "DocumentStore initialized");
+  }
+
+  /**
+   * Set the current document and file path
+   */
+  setDocument(document: CanvasDocumentType, filePath?: vscode.Uri): void {
+    this.currentDocument = document;
+    this.documentFilePath = filePath || null;
+
+    // Create initial snapshot
+    const snapshot = this.createSnapshot("initial_state");
+    this.mutationHistory = snapshot.mutations;
+    this.undoStack = [];
+    this.redoStack = [];
+
+    this.observability.log("info", "Document loaded", {
+      documentId: document.id,
+      nodeCount: this.countNodes(document),
+      filePath: filePath?.fsPath,
+    });
+  }
+
+  /**
+   * Get the current document
+   */
+  getDocument(): CanvasDocumentType | null {
+    return this.currentDocument;
+  }
+
+  /**
+   * Get the document file path
+   */
+  getDocumentFilePath(): vscode.Uri | null {
+    return this.documentFilePath;
+  }
+
+  /**
+   * Apply a property change mutation through canvas-engine
+   */
+  async applyPropertyChange(
+    nodeId: string,
+    propertyKey: string,
+    newValue: unknown,
+    oldValue?: unknown
+  ): Promise<{
+    success: boolean;
+    document?: CanvasDocumentType;
+    error?: string;
+  }> {
+    if (!this.currentDocument) {
+      const error = "No document loaded";
+      this.observability.log("error", "apply_property_change_failed", {
+        error,
+      });
+      return { success: false, error };
+    }
+
+    const traceId = this.observability.metric(
+      "document_mutation_duration_ms",
+      0
+    );
+
+    try {
+      // Create patch for property change
+      const patch = {
+        path: `${nodeId}.${propertyKey}`,
+        op: "replace" as const,
+        value: newValue,
+      };
+
+      // Apply mutation through engine
+      const startTime = Date.now();
+      const newDocument = applyPatch(this.currentDocument, patch);
+      const duration = Date.now() - startTime;
+
+      // Validate resulting document
+      const validation = validateCanvasDocument(newDocument);
+      if (!validation.success) {
+        this.observability.log("error", "document_validation_failed", {
+          errors: validation.errors || ["Unknown validation error"],
+          duration,
+        });
+        return {
+          success: false,
+          error: `Document validation failed: ${(
+            validation.errors || ["Unknown error"]
+          ).join(", ")}`,
+        };
+      }
+
+      // Canonicalize the document
+      const canonicalDocument = this.canonicalizeDocument(newDocument);
+
+      // Create mutation record
+      const mutation: DocumentMutationEvent = {
+        id: this.generateMutationId(),
+        type: "property_change",
+        nodeId,
+        propertyKey,
+        oldValue,
+        newValue,
+        patch,
+        timestamp: Date.now(),
+        documentHash: this.hashDocument(this.currentDocument),
+      };
+
+      // Update current document and history
+      this.currentDocument = canonicalDocument;
+      this.addToHistory(mutation);
+
+      this.observability.log("info", "property_change_applied", {
+        nodeId,
+        propertyKey,
+        duration,
+        mutationId: mutation.id,
+      });
+
+      return { success: true, document: canonicalDocument };
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      this.observability.log("error", "property_change_failed", {
+        nodeId,
+        propertyKey,
+        error: errorMessage,
+      });
+
+      return { success: false, error: errorMessage };
+    }
+  }
+
+  /**
+   * Apply multiple mutations in batch
+   */
+  async applyMutations(
+    mutations: Array<{
+      nodeId: string;
+      propertyKey?: string;
+      newValue?: unknown;
+      oldValue?: unknown;
+    }>
+  ): Promise<{
+    success: boolean;
+    document?: CanvasDocumentType;
+    error?: string;
+  }> {
+    if (!this.currentDocument) {
+      return { success: false, error: "No document loaded" };
+    }
+
+    const traceId = this.observability.metric(
+      "document_mutation_duration_ms",
+      0
+    );
+
+    try {
+      let workingDocument = this.currentDocument;
+
+      for (const mutation of mutations) {
+        const patch = {
+          path: mutation.propertyKey
+            ? `${mutation.nodeId}.${mutation.propertyKey}`
+            : mutation.nodeId,
+          op: "replace" as const,
+          value: mutation.newValue,
+        };
+
+        workingDocument = applyPatch(workingDocument, patch);
+
+        // Validate after each mutation
+        const validation = validateCanvasDocument(workingDocument);
+        if (!validation.success) {
+          return {
+            success: false,
+            error: `Validation failed: ${(
+              validation.errors || ["Unknown error"]
+            ).join(", ")}`,
+          };
+        }
+      }
+
+      // Canonicalize final document
+      const canonicalDocument = this.canonicalizeDocument(workingDocument);
+
+      this.currentDocument = canonicalDocument;
+
+      this.observability.log("info", "batch_mutations_applied", {
+        mutationCount: mutations.length,
+      });
+
+      return { success: true, document: canonicalDocument };
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      this.observability.log("error", "batch_mutations_failed", {
+        mutationCount: mutations.length,
+        error: errorMessage,
+      });
+
+      return { success: false, error: errorMessage };
+    }
+  }
+
+  /**
+   * Undo the last mutation
+   */
+  async undo(): Promise<UndoRedoResult> {
+    if (this.undoStack.length === 0) {
+      return { success: false, error: "No mutations to undo" };
+    }
+
+    const snapshot = this.undoStack.pop()!;
+    this.redoStack.push(this.createSnapshot("before_undo"));
+
+    this.currentDocument = snapshot.document;
+    this.mutationHistory = [...snapshot.mutations];
+
+    this.observability.log("info", "mutation_undone", {
+      snapshotId: snapshot.id,
+      mutationsReverted: snapshot.mutations.length,
+    });
+
+    return {
+      success: true,
+      document: this.currentDocument,
+      snapshotId: snapshot.id,
+    };
+  }
+
+  /**
+   * Redo the last undone mutation
+   */
+  async redo(): Promise<UndoRedoResult> {
+    if (this.redoStack.length === 0) {
+      return { success: false, error: "No mutations to redo" };
+    }
+
+    const snapshot = this.redoStack.pop()!;
+    this.undoStack.push(this.createSnapshot("before_redo"));
+
+    this.currentDocument = snapshot.document;
+    this.mutationHistory = [...snapshot.mutations];
+
+    this.observability.log("info", "mutation_redone", {
+      snapshotId: snapshot.id,
+      mutationsApplied: snapshot.mutations.length,
+    });
+
+    return {
+      success: true,
+      document: this.currentDocument,
+      snapshotId: snapshot.id,
+    };
+  }
+
+  /**
+   * Save document to file with canonical serialization
+   */
+  async saveDocument(): Promise<{ success: boolean; error?: string }> {
+    if (!this.currentDocument || !this.documentFilePath) {
+      return { success: false, error: "No document or file path" };
+    }
+
+    try {
+      const canonicalDocument = this.canonicalizeDocument(this.currentDocument);
+      const content = JSON.stringify(canonicalDocument, null, 2) + "\n";
+
+      await vscode.workspace.fs.writeFile(
+        this.documentFilePath,
+        Buffer.from(content, "utf-8")
+      );
+
+      this.observability.log("info", "document_saved", {
+        path: this.documentFilePath.fsPath,
+        nodeCount: this.countNodes(canonicalDocument),
+      });
+
+      return { success: true };
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      this.observability.log("error", "document_save_failed", {
+        path: this.documentFilePath.fsPath,
+        error: errorMessage,
+      });
+
+      return { success: false, error: errorMessage };
+    }
+  }
+
+  /**
+   * Get mutation history
+   */
+  getHistory(): DocumentMutationEvent[] {
+    return [...this.mutationHistory];
+  }
+
+  /**
+   * Get undo stack depth
+   */
+  getUndoStackDepth(): number {
+    return this.undoStack.length;
+  }
+
+  /**
+   * Get redo stack depth
+   */
+  getRedoStackDepth(): number {
+    return this.redoStack.length;
+  }
+
+  /**
+   * Get observability data
+   */
+  getObservability() {
+    return {
+      logs: this.observability.getLogs(),
+      metrics: this.observability.getMetrics(),
+    };
+  }
+
+  /**
+   * Create a document snapshot for undo/redo
+   */
+  private createSnapshot(reason: string): DocumentSnapshot {
+    if (!this.currentDocument) {
+      throw new Error("No document to snapshot");
+    }
+
+    return {
+      id: this.generateSnapshotId(),
+      document: this.canonicalizeDocument(this.currentDocument),
+      mutations: [...this.mutationHistory],
+      timestamp: Date.now(),
+    };
+  }
+
+  /**
+   * Add mutation to history and maintain undo stack
+   */
+  private addToHistory(mutation: DocumentMutationEvent): void {
+    this.mutationHistory.push(mutation);
+
+    // Add current state to undo stack
+    if (this.currentDocument) {
+      const snapshot = this.createSnapshot("after_mutation");
+      this.undoStack.push(snapshot);
+      this.redoStack = []; // Clear redo stack on new mutation
+    }
+  }
+
+  /**
+   * Canonicalize document for deterministic serialization
+   */
+  private canonicalizeDocument(
+    document: CanvasDocumentType
+  ): CanvasDocumentType {
+    // Deep clone and sort keys recursively
+    const sorted = JSON.parse(JSON.stringify(document));
+
+    const sortKeys = (obj: any): any => {
+      if (obj && typeof obj === "object" && !Array.isArray(obj)) {
+        const sortedObj: any = {};
+        Object.keys(obj)
+          .sort()
+          .forEach((key) => {
+            sortedObj[key] = sortKeys(obj[key]);
+          });
+        return sortedObj;
+      }
+      if (Array.isArray(obj)) {
+        return obj.map(sortKeys);
+      }
+      return obj;
+    };
+
+    return sortKeys(sorted) as CanvasDocumentType;
+  }
+
+  /**
+   * Count nodes in document for observability
+   */
+  private countNodes(document: CanvasDocumentType): number {
+    let count = 0;
+    const traverse = (nodes: any[]) => {
+      nodes.forEach((node) => {
+        count++;
+        if (node.children) {
+          traverse(node.children);
+        }
+      });
+    };
+
+    document.artboards.forEach((artboard) => {
+      if (artboard.children) {
+        traverse(artboard.children);
+      }
+    });
+
+    return count;
+  }
+
+  /**
+   * Generate deterministic hash of document state
+   */
+  private hashDocument(document: CanvasDocumentType): string {
+    const canonical = this.canonicalizeDocument(document);
+    const content = JSON.stringify(canonical);
+    return Buffer.from(content).toString("base64").substring(0, 16);
+  }
+
+  /**
+   * Generate unique mutation ID
+   */
+  private generateMutationId(): string {
+    return `mut-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  /**
+   * Generate unique snapshot ID
+   */
+  private generateSnapshotId(): string {
+    return `snap-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
+}

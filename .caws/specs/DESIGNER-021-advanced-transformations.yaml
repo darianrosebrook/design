@@ -1,0 +1,105 @@
+id: DESIGNER-021
+title: 'Advanced Transformations & Visual Effects'
+risk_tier: 3
+mode: feature
+change_budget:
+  max_files: 45
+  max_loc: 2000
+blast_radius:
+  modules:
+    - packages/canvas-renderer-dom/
+    - packages/canvas-renderer-dom/tests/
+    - packages/canvas-engine/
+    - packages/canvas-schema/
+  data_migration: false
+operational_rollback_slo: 15m
+threats:
+  - 'Complex transformations break hit testing and selection'
+  - '3D perspective calculations cause performance degradation'
+  - 'Skew transformations interfere with text rendering quality'
+  - 'Advanced effects memory usage exceeds reasonable bounds'
+  - 'Transformation state synchronization fails across webviews'
+scope:
+  in:
+    - packages/canvas-renderer-dom/src/
+    - packages/canvas-renderer-dom/tests/
+    - packages/canvas-engine/src/
+    - packages/canvas-schema/src/
+  out:
+    - packages/vscode-ext/
+    - packages/properties-panel/
+invariants:
+  - 'All transformation matrices computed deterministically from node properties'
+  - '3D perspective calculations maintain viewport coordinate consistency'
+  - 'Skew transformations preserve text legibility and selection accuracy'
+  - 'Advanced effects memory usage bounded with automatic cleanup'
+  - 'Transformation state broadcasts to connected webviews within 100ms'
+acceptance:
+  - id: A1
+    given: 'Node with 45-degree skew transformation applied'
+    when: 'Hit testing performed on skewed node'
+    then: 'Selection works correctly with transformed geometry'
+  - id: A2
+    given: 'Frame with 3D perspective and depth applied'
+    when: 'Child nodes positioned at different Z depths'
+    then: 'Visual depth ordering and perspective projection correct'
+  - id: A3
+    given: 'Text node with advanced typography effects'
+    when: 'Text rendered with custom font and effects'
+    then: 'Text remains legible and selection boundaries accurate'
+  - id: A4
+    given: 'Node with complex shadow and glow effects'
+    when: 'Performance measured during animation'
+    then: 'Frame rate remains ≥30fps with effects enabled'
+  - id: A5
+    given: 'Multiple webviews connected to same document'
+    when: 'Transformation applied in one webview'
+    then: 'All webviews update transformation within 100ms'
+non_functional:
+  a11y:
+    - 'Advanced transformations maintain keyboard navigation accuracy'
+    - '3D effects provide alternative 2D representations for screen readers'
+    - 'Transformation controls keyboard accessible with clear feedback'
+  perf:
+    transformation_matrix_ms: 2
+    perspective_projection_ms: 5
+    additional:
+      - '3D scene rendering maintains 30fps with 100 transformed nodes'
+      - 'Skew text rendering preserves subpixel accuracy'
+      - 'Effect memory usage auto-cleanup prevents leaks'
+  security:
+    - 'Transformation matrix calculations bounded to prevent DoS'
+    - 'Effect parameters validated against reasonable ranges'
+    - 'Advanced transformation state changes authenticated'
+contracts:
+  - type: typescript
+    path: packages/canvas-renderer-dom/src/transformations.ts
+  - type: typescript
+    path: packages/canvas-renderer-dom/src/effects.ts
+  - type: typescript
+    path: packages/canvas-engine/src/transformation-engine.ts
+observability:
+  logs:
+    - 'transformation.skew.applied with angle and node id'
+    - 'transformation.perspective.set with depth and field of view'
+    - 'transformation.3d.update with node count and performance impact'
+    - 'effects.shadow.rendered with complexity and duration'
+    - 'effects.glow.applied with radius and performance cost'
+  metrics:
+    - 'transformation_matrix_computation_ms histogram'
+    - 'transformation_3d_nodes_rendered gauge'
+    - 'effects_memory_usage_mb gauge'
+    - 'transformation_sync_duration_ms histogram'
+  traces:
+    - 'transformation.matrix.pipeline from properties to DOM update'
+    - 'transformation.3d.rendering from scene setup to pixel output'
+    - 'effects.application.chain from filter setup to visual result'
+migrations:
+  - 'Schema extension required for advanced transformation properties'
+  - 'Migration path for existing documents without 3D properties'
+rollback:
+  - 'Feature flag `designer.advancedTransformations.enabled` toggles 3D features'
+  - 'Fallback to 2D-only transformations when disabled'
+  - 'Transformation preferences preserved in user settings'
+
+

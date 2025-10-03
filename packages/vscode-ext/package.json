@@ -6,8 +6,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node esbuild.config.js",
+    "build:webview": "node esbuild.config.js",
     "watch": "tsc --watch",
+    "watch:webview": "node esbuild.config.js --watch",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -20,12 +22,17 @@
     "@paths-design/canvas-renderer-dom": "workspace:*",
     "@paths-design/component-indexer": "workspace:*",
     "@paths-design/properties-panel": "workspace:*",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
     "@types/vscode": "^1.84.0",
     "@vitest/coverage-v8": "^1.0.4",
+    "esbuild": "^0.19.0",
     "typescript": "^5.3.3",
     "vitest": "^1.0.4"
   },
@@ -54,10 +61,31 @@
     },
     "commands": [
       {
+        "command": "designer.openCanvas",
+        "title": "Open in Canvas Designer",
+        "icon": "$(paintcan)"
+      },
+      {
         "command": "designer.openPropertiesPanel",
         "title": "Open Properties Panel"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "designer.openCanvas",
+          "when": "resourceExtname == .json && resourceFilename =~ /\\.canvas\\.json$/",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "designer.openCanvas",
+          "when": "resourceExtname == .json && resourceFilename =~ /\\.canvas\\.json$/",
+          "group": "navigation"
+        }
+      ]
+    }
   }
 }
 
