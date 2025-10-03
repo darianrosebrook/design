@@ -21,6 +21,7 @@
     "@paths-design/canvas-renderer-dom": "workspace:*",
     "@paths-design/component-indexer": "workspace:*",
     "@paths-design/properties-panel": "workspace:*",
+    "@paths-design/design-system": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zod": "^3.23.8"

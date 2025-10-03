@@ -670,6 +670,10 @@ ${Object.entries(metrics.memoryUsage)
         }
 
         // Default: open in designer
+        console.log(
+          "[Extension] Opening canvas document:",
+          documentUri?.fsPath
+        );
         await this.canvasWebviewProvider.show(documentUri);
       }
     );

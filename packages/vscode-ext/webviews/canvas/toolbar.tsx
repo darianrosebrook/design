@@ -8,7 +8,195 @@
 
 import React, { useState, useCallback } from "react";
 import { createMessage } from "../../src/protocol/messages";
+import { Button, Stack } from "@paths-design/design-system";
 
+const toolbarLayout = [
+  {
+    name: "Selection",
+    defaultIcon: "MousePointer2",
+    defaultIconOnClick: "MousePointerClick",
+    shortcut: "V",
+    overflowOptions: [
+      {
+        name: "Single Selection",
+        icon: "MousePointer2",
+        iconOnClick: "MousePointerClick",
+        onClick: () => handleSelectionModeChange("single"),
+        isActive: selectionMode === "single",
+      },
+      {
+        name: "Move Canvas",
+        icon: "Hand",
+        iconOnClick: "HandGrab",
+        onClick: () => handleSelectionModeChange("move"),
+        isActive: selectionMode === "move",
+      },
+      {
+        name: "Scale",
+        icon: "Scaling",
+        iconOnClick: "Scaling",
+        onClick: () => handleSelectionModeChange("scale"),
+        isActive: selectionMode === "scale",
+      },
+    ],
+  },
+  {
+    name: "Wrap",
+    defaultIcon: "Frame",
+    defaultIconOnClick: "Frame",
+    shortcut: "F",
+    overflowOptions: [
+      {
+        name: "Group",
+        icon: "Group",
+        iconOnClick: "Group",
+        onClick: () => handleWrapModeChange("group"),
+        isActive: wrapMode === "group",
+      },
+      {
+        name: "Frame",
+        icon: "Frame",
+        iconOnClick: "Frame",
+        onClick: () => handleWrapModeChange("frame"),
+        isActive: wrapMode === "frame",
+      },
+      {
+        name: "Section",
+        icon: "Section",
+        iconOnClick: "Section",
+        onClick: () => handleWrapModeChange("section"),
+        isActive: wrapMode === "section",
+      },
+      {
+        name: "Page",
+        icon: "FileInput",
+        iconOnClick: "FileInput",
+        onClick: () => handleWrapModeChange("page"),
+        isActive: wrapMode === "page",
+      },
+    ],
+  },
+  {
+    name: "Type",
+    defaultIcon: "Type",
+    defaultIconOnClick: "Type",
+    shortcut: "T",
+    overflowOptions: [
+      {
+        name: "Text",
+        icon: "Type",
+        iconOnClick: "Type",
+        onClick: () => handleTypeModeChange("text"),
+        isActive: typeMode === "text",
+      },
+    ],
+  },
+  {
+    name: "Image",
+    defaultIcon: "Image",
+    defaultIconOnClick: "Image",
+    shortcut: "I",
+    overflowOptions: [
+      {
+        name: "Image",
+        icon: "Image",
+        iconOnClick: "ImageUp",
+        onClick: () => handleImageModeChange("image"),
+        isActive: imageMode === "image",
+      },
+      {
+        name: "Video",
+        icon: "Video",
+        iconOnClick: "Video",
+        onClick: () => handleImageModeChange("video"),
+        isActive: imageMode === "video",
+      },
+    ],
+  },
+  {
+    name: "Shape",
+    defaultIcon: "Shape",
+    defaultIconOnClick: "Shape",
+    shortcut: "R",
+    overflowOptions: [
+      {
+        name: "Line",
+        icon: "Line",
+        iconOnClick: "Spline",
+        shortcut: ["L", "P"],
+        onClick: () => handleShapeModeChange("line"),
+        isActive: shapeMode === "line",
+      },
+      {
+        name: "Rectangle",
+        icon: "VectorSquare",
+        iconOnClick: "VectorSquare",
+        shortcut: "R",
+        onClick: () => handleShapeModeChange("rectangle"),
+        isActive: shapeMode === "rectangle",
+      },
+      {
+        name: "Ellipse",
+        icon: "Circle",
+        iconOnClick: "Circle",
+        shortcut: "E",
+        onClick: () => handleShapeModeChange("ellipse"),
+        isActive: shapeMode === "ellipse",
+      },
+      {
+        name: "Polygon",
+        icon: "Shapes",
+        iconOnClick: "Shapes",
+        shortcut: "Shift+P",
+        onClick: () => handleShapeModeChange("polygon"),
+        isActive: shapeMode === "polygon",
+      },
+    ],
+  },
+];
+interface ToolbarAction {
+  name: string;
+  defaultIcon: string;
+  defaultIconOnClick: string;
+  shortcut: string;
+  overflowOptions: ToolbarAction[];
+  isActive: boolean;
+}
+
+const TOOLBAR_ACTIONS = {
+  SELECTION_MODE_CHANGE: "selectionModeChange",
+  ZOOM: "zoom",
+  ZOOM_FIT: "zoomFit",
+  TOGGLE_GRID: "toggleGrid",
+  TOGGLE_SNAP: "toggleSnap",
+};
+const toolbarActions: ToolbarAction[] = new Map([]);
+
+const registerToolbarAction = (action: ToolbarAction) => {
+  toolbarActions.set(action.command, action);
+};
+
+const getToolbarAction = (command: string) => {
+  return toolbarActions.get(command);
+};
+
+const getToolbarActionByTitle = (title: string) => {
+  return Array.from(toolbarActions.values()).find(
+    (action) => action.title === title
+  );
+};
+
+const getToolbarActionByShortcut = (shortcut: string) => {
+  return Array.from(toolbarActions.values()).find(
+    (action) => action.shortcut === shortcut
+  );
+};
+
+const getToolbarActionByPayload = (payload: Record<string, any>) => {
+  return Array.from(toolbarActions.values()).find(
+    (action) => action.payload === payload
+  );
+};
 // Declare Lucide icons as global types
 declare global {
   interface Window {
@@ -22,27 +210,6 @@ declare global {
     };
   }
 }
-
-// Simple SVG icon renderer
-const renderSimpleIcon = (iconName: string) => {
-  const icons: Record<string, string> = {
-    MousePointer2: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5.653 12.367 7.5 7.5a9 9 0 0 0 7.694-7.694l-7.5-7.5a9 9 0 0 0-7.694 7.694Z"/><path d="m11 15-3-3"/><path d="m11 9 3 3"/></svg>`,
-    Square: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/></svg>`,
-    Lasso: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22a5 5 0 0 1-2-4"/><path d="M3.3 13.3A10.97 10.97 0 0 1 3 7c0-2.8 2.2-5 5-5 1.78 0 3.36.84 4.4 2.15"/><path d="M21 2.3a10.97 10.97 0 0 1-.3 6.7"/><path d="M20.7 10.7A10.97 10.97 0 0 1 21 17c0 2.8-2.2 5-5 5-1.78 0-3.36-.84-4.4-2.15"/></svg>`,
-    ZoomOut: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><line x1="8" x2="16" y1="11" y2="11"/></svg>`,
-    ZoomIn: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><line x1="11" x2="11" y1="8" y2="16"/><line x1="8" x2="16" y1="11" y2="11"/></svg>`,
-    Maximize: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>`,
-    Grid3X3: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/><path d="M15 3v18"/><path d="M3 9h18"/><path d="M3 15h18"/></svg>`,
-    Magnet: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 2-2 2"/><path d="m17 7 2-2"/><rect width="8" height="14" x="8" y="4" rx="2"/><path d="M12 16v4"/><path d="m8 16-2 2"/></svg>`,
-    Undo: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>`,
-    Redo: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13"/></svg>`,
-    Palette: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.82-.13 2.66-.375"/><path d="M16.25 19.25a2 2 0 0 1-2.5-2.5"/><path d="M12 12c1.5 0 2.5-1 2.5-2.5s-1-2.5-2.5-2.5-2.5 1-2.5 2.5 1 2.5 2.5 2.5Z"/></svg>`,
-    Code: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>`,
-    Save: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>`,
-  };
-
-  return icons[iconName] || null;
-};
 
 // VS Code API type
 interface VSCodeAPI {
@@ -64,6 +231,8 @@ interface ToolbarButtonProps {
   isActive?: boolean;
   isDisabled?: boolean;
   shortcut?: string;
+  variant?: "primary" | "secondary" | "destructive";
+  size?: "sm" | "md" | "lg";
 }
 
 const ToolbarButton: React.FC<ToolbarButtonProps> = ({
@@ -75,29 +244,24 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({
   isActive = false,
   isDisabled = false,
   shortcut,
+  variant = "secondary",
+  size = "sm",
 }) => {
-  const handleClick = useCallback(
-    (e: React.MouseEvent) => {
-      e.preventDefault();
-      if (!isDisabled) {
-        onClick();
-      }
-    },
-    [onClick, isDisabled]
-  );
-
   // Get icon SVG
   const iconSvg = lucideIconName ? renderSimpleIcon(lucideIconName) : null;
 
+  // Determine button variant based on active state
+  const buttonVariant = isActive ? "primary" : variant;
+
   return (
-    <button
-      className={`toolbar-button ${isActive ? "active" : ""} ${
-        isDisabled ? "disabled" : ""
-      }`}
-      onClick={handleClick}
+    <Button
+      variant={buttonVariant}
+      size={size}
       disabled={isDisabled}
+      onClick={onClick}
       title={shortcut ? `${title} (${shortcut})` : title}
-      type="button"
+      className={`toolbar-button ${isActive ? "active" : ""}`}
+      aria-label={title}
     >
       {iconSvg ? (
         <div
@@ -111,7 +275,7 @@ const ToolbarButton: React.FC<ToolbarButtonProps> = ({
       ) : (
         <span className="button-text">?</span>
       )}
-    </button>
+    </Button>
   );
 };
 
@@ -122,9 +286,16 @@ interface ToolbarGroupProps {
 
 const ToolbarGroup: React.FC<ToolbarGroupProps> = ({ children, label }) => {
   return (
-    <div className="toolbar-group" role="group" aria-label={label}>
+    <Stack
+      direction="horizontal"
+      spacing="xs"
+      className="toolbar-group"
+      as="div"
+      role="group"
+      aria-label={label}
+    >
       {children}
-    </div>
+    </Stack>
   );
 };
 
@@ -141,8 +312,16 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({
 
   // Toolbar state
   const [selectionMode, setSelectionMode] = useState<
-    "single" | "rectangle" | "lasso"
+    "single" | "rectangle" | "lasso" | "move" | "scale"
   >("single");
+  const [wrapMode, setWrapMode] = useState<
+    "group" | "frame" | "section" | "page"
+  >("frame");
+  const [typeMode, setTypeMode] = useState<"text">("text");
+  const [imageMode, setImageMode] = useState<"image" | "video">("image");
+  const [shapeMode, setShapeMode] = useState<
+    "line" | "rectangle" | "ellipse" | "polygon"
+  >("rectangle");
   const [zoom, setZoom] = useState(100);
   const [showGrid, setShowGrid] = useState(true);
   const [snapToGrid, setSnapToGrid] = useState(true);
@@ -150,7 +329,7 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({
 
   // Selection mode handlers
   const handleSelectionModeChange = useCallback(
-    (mode: "single" | "rectangle" | "lasso") => {
+    (mode: "single" | "rectangle" | "lasso" | "move" | "scale") => {
       setSelectionMode(mode);
       vscodeApi.postMessage(
         createMessage("selectionModeChange", {
@@ -160,6 +339,32 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({
       );
     },
     [vscodeApi]
+  );
+
+  const handleWrapModeChange = useCallback(
+    (mode: "group" | "frame" | "section" | "page") => {
+      setWrapMode(mode);
+      // TODO: Implement wrap mode change
+    },
+    []
+  );
+
+  const handleTypeModeChange = useCallback((mode: "text") => {
+    setTypeMode(mode);
+    // TODO: Implement type mode change
+  }, []);
+
+  const handleImageModeChange = useCallback((mode: "image" | "video") => {
+    setImageMode(mode);
+    // TODO: Implement image mode change
+  }, []);
+
+  const handleShapeModeChange = useCallback(
+    (mode: "line" | "rectangle" | "ellipse" | "polygon") => {
+      setShapeMode(mode);
+      // TODO: Implement shape mode change
+    },
+    []
   );
 
   // Zoom handlers
@@ -226,127 +431,77 @@ export const CanvasToolbar: React.FC<CanvasToolbarProps> = ({
   );
 
   return (
-    <div className="canvas-toolbar" role="toolbar" aria-label="Canvas tools">
-      {/* Selection Tools */}
-      <ToolbarGroup label="Selection tools">
-        <ToolbarButton
-          lucideIconName="MousePointer2"
-          title="Single Selection"
-          shortcut="V"
-          onClick={() => handleSelectionModeChange("single")}
-          isActive={selectionMode === "single"}
-        />
-        <ToolbarButton
-          lucideIconName="Square"
-          title="Rectangle Selection"
-          shortcut="R"
-          onClick={() => handleSelectionModeChange("rectangle")}
-          isActive={selectionMode === "rectangle"}
-        />
-        <ToolbarButton
-          lucideIconName="Lasso"
-          title="Lasso Selection"
-          shortcut="L"
-          onClick={() => handleSelectionModeChange("lasso")}
-          isActive={selectionMode === "lasso"}
-        />
-      </ToolbarGroup>
+    <div className="bottom-action-bar" role="toolbar" aria-label="Canvas tools">
+      <div className="action-bar-content">
+        {toolbarLayout.map((category) => (
+          <div key={category.name} className="tool-category">
+            <div className="category-tools">
+              {/* Primary tool button */}
+              <ToolbarButton
+                lucideIconName={category.defaultIcon}
+                title={category.name}
+                shortcut={category.shortcut}
+                onClick={() => {
+                  const firstOption = category.overflowOptions[0];
+                  if (firstOption) {
+                    firstOption.onClick();
+                  }
+                }}
+                isActive={category.overflowOptions.some((opt) => opt.isActive)}
+              />
 
-      {/* Separator */}
-      <div className="toolbar-separator" />
+              {/* Overflow menu could be added here */}
+            </div>
+          </div>
+        ))}
 
-      {/* Zoom Controls */}
-      <ToolbarGroup label="Zoom controls">
-        <ToolbarButton
-          lucideIconName="ZoomOut"
-          title="Zoom Out"
-          shortcut="Ctrl+-"
-          onClick={handleZoomOut}
-        />
-        <span className="zoom-display">{Math.round(zoom)}%</span>
-        <ToolbarButton
-          lucideIconName="ZoomIn"
-          title="Zoom In"
-          shortcut="Ctrl+="
-          onClick={handleZoomIn}
-        />
-        <ToolbarButton
-          lucideIconName="Maximize"
-          title="Fit to Screen"
-          shortcut="Ctrl+0"
-          onClick={handleZoomFit}
-        />
-      </ToolbarGroup>
+        {/* Separator */}
+        <div className="action-bar-separator" />
 
-      {/* Separator */}
-      <div className="toolbar-separator" />
+        {/* Secondary actions */}
+        <div className="secondary-actions">
+          <ToolbarButton
+            lucideIconName="ZoomOut"
+            title="Zoom Out"
+            onClick={handleZoomOut}
+            size="sm"
+          />
+          <span className="zoom-display">{Math.round(zoom)}%</span>
+          <ToolbarButton
+            lucideIconName="ZoomIn"
+            title="Zoom In"
+            onClick={handleZoomIn}
+            size="sm"
+          />
+          <ToolbarButton
+            lucideIconName="Maximize"
+            title="Fit to Screen"
+            onClick={handleZoomFit}
+            size="sm"
+          />
+        </div>
 
-      {/* Grid and Snap */}
-      <ToolbarGroup label="Grid and snap">
-        <ToolbarButton
-          lucideIconName="Grid3X3"
-          title="Toggle Grid"
-          onClick={handleToggleGrid}
-          isActive={showGrid}
-        />
-        <ToolbarButton
-          lucideIconName="Magnet"
-          title="Toggle Snap to Grid"
-          onClick={handleToggleSnap}
-          isActive={snapToGrid}
-        />
-      </ToolbarGroup>
+        {/* Separator */}
+        <div className="action-bar-separator" />
 
-      {/* Separator */}
-      <div className="toolbar-separator" />
-
-      {/* History */}
-      <ToolbarGroup label="History">
-        <ToolbarButton
-          lucideIconName="Undo"
-          title="Undo"
-          shortcut="Ctrl+Z"
-          onClick={handleUndo}
-        />
-        <ToolbarButton
-          lucideIconName="Redo"
-          title="Redo"
-          shortcut="Ctrl+Y"
-          onClick={handleRedo}
-        />
-      </ToolbarGroup>
-
-      {/* Separator */}
-      <div className="toolbar-separator" />
-
-      {/* View Mode Toggle */}
-      <ToolbarGroup label="View mode">
-        <ToolbarButton
-          lucideIconName="Palette"
-          title="Canvas View"
-          onClick={() => handleViewModeChange("canvas")}
-          isActive={viewMode === "canvas"}
-        />
-        <ToolbarButton
-          lucideIconName="Code"
-          title="Code View"
-          onClick={() => handleViewModeChange("code")}
-          isActive={viewMode === "code"}
-        />
-      </ToolbarGroup>
-
-      {/* Separator */}
-      <div className="toolbar-separator" />
-
-      {/* Save */}
-      <ToolbarGroup label="File operations">
-        <ToolbarButton
-          lucideIconName="Save"
-          title="Save Document"
-          shortcut="Ctrl+S"
-          onClick={handleSave}
-        />
-      </ToolbarGroup>
+        {/* View mode toggle */}
+        <div className="view-mode-toggle">
+          <ToolbarButton
+            lucideIconName="Palette"
+            title="Canvas View"
+            onClick={() => handleViewModeChange("canvas")}
+            isActive={viewMode === "canvas"}
+            size="sm"
+          />
+          <ToolbarButton
+            lucideIconName="Code"
+            title="Code View"
+            onClick={() => handleViewModeChange("code")}
+            isActive={viewMode === "code"}
+            size="sm"
+          />
+        </div>
+      </div>
     </div>
   );
 };

@@ -120,7 +120,7 @@ export class CanvasWebviewProvider {
    * Show or reveal the canvas webview
    */
   public async show(documentUri?: vscode.Uri): Promise<void> {
-    // Check feature flag for rollback capability
+    console.log('[CanvasWebviewProvider] Show called with URI:', documentUri?.fsPath);    // Check feature flag for rollback capability
     if (!this._isWebviewEnabled()) {
       this._observability.log("warn", "canvas_webview.disabled", {
         reason: "Feature flag designer.webview.enabled is false",
@@ -231,7 +231,7 @@ export class CanvasWebviewProvider {
       const content = await vscode.workspace.fs.readFile(uri);
       let document: CanvasDocumentType;
 
-      try {
+    console.log(`[CanvasWebviewProvider] Starting document load for: ${uri.fsPath}`);      try {
         document = JSON.parse(content.toString()) as CanvasDocumentType;
       } catch (parseError) {
         // If parsing fails and auto-initialization is enabled, create empty document
@@ -733,6 +733,25 @@ export class CanvasWebviewProvider {
         console.info("View mode change:", message.payload.mode);
         break;
 
+      case "wrapModeChange":
+        console.info("Wrap mode change:", message.payload.mode);
+        // Handle wrap mode change - could trigger node creation
+        break;
+
+      case "typeModeChange":
+        console.info("Type mode change:", message.payload.mode);
+        // Handle type mode change - could trigger text node creation
+        break;
+
+      case "imageModeChange":
+        console.info("Image mode change:", message.payload.mode);
+        // Handle image mode change - could trigger image node creation
+        break;
+
+      case "shapeModeChange":
+        console.info("Shape mode change:", message.payload.mode);
+        // Handle shape mode change - could trigger shape node creation
+        break;
       case "validateDocument":
         // TODO: Implement validation
         console.info("Document validation requested");

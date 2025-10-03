@@ -156,6 +156,46 @@ export const ViewModeChangeNotification = MessageEnvelope.extend({
 });
 
 /**
+ * Wrap mode change notification - notify extension of wrap mode changes
+ */
+export const WrapModeChangeNotification = MessageEnvelope.extend({
+  type: z.literal("wrapModeChange"),
+  payload: z.object({
+    mode: z.enum(["group", "frame", "section", "page"]),
+  }),
+});
+
+/**
+ * Type mode change notification - notify extension of type mode changes
+ */
+export const TypeModeChangeNotification = MessageEnvelope.extend({
+  type: z.literal("typeModeChange"),
+  payload: z.object({
+    mode: z.enum(["text"]),
+  }),
+});
+
+/**
+ * Image mode change notification - notify extension of image mode changes
+ */
+export const ImageModeChangeNotification = MessageEnvelope.extend({
+  type: z.literal("imageModeChange"),
+  payload: z.object({
+    mode: z.enum(["image", "video"]),
+  }),
+});
+
+/**
+ * Shape mode change notification - notify extension of shape mode changes
+ */
+export const ShapeModeChangeNotification = MessageEnvelope.extend({
+  type: z.literal("shapeModeChange"),
+  payload: z.object({
+    mode: z.enum(["line", "rectangle", "ellipse", "polygon"]),
+  }),
+});
+
+/**
  * Union of all request message types
  */
 export const WebviewMessage = z.discriminatedUnion("type", [
@@ -169,6 +209,10 @@ export const WebviewMessage = z.discriminatedUnion("type", [
   SelectionOperationNotification,
   PropertyChangeNotification,
   ViewModeChangeNotification,
+  WrapModeChangeNotification,
+  TypeModeChangeNotification,
+  ImageModeChangeNotification,
+  ShapeModeChangeNotification,
   ReadyNotification,
 ]);
 
@@ -194,6 +238,18 @@ export type PropertyChangeNotificationType = z.infer<
 >;
 export type ViewModeChangeNotificationType = z.infer<
   typeof ViewModeChangeNotification
+>;
+export type WrapModeChangeNotificationType = z.infer<
+  typeof WrapModeChangeNotification
+>;
+export type TypeModeChangeNotificationType = z.infer<
+  typeof TypeModeChangeNotification
+>;
+export type ImageModeChangeNotificationType = z.infer<
+  typeof ImageModeChangeNotification
+>;
+export type ShapeModeChangeNotificationType = z.infer<
+  typeof ShapeModeChangeNotification
 >;
 export type ReadyNotificationType = z.infer<typeof ReadyNotification>;
 

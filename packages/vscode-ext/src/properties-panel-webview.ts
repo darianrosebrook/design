@@ -40,15 +40,22 @@ export class PropertiesPanelWebviewProvider
    * Set the current canvas document
    */
   setDocument(document: CanvasDocumentType, filePath?: vscode.Uri): void {
+    console.log("[PropertiesPanel] Setting document:", {
+      id: document.id,
+      artboards: document.artboards?.length,
+    });
     this._document = document;
     this._documentFilePath = filePath;
     this._cachePropertyValues(document);
 
     if (this._view) {
+      console.log("[PropertiesPanel] Sending document to webview");
       this._view.webview.postMessage({
         command: "setDocument",
         document,
       });
+    } else {
+      console.warn("[PropertiesPanel] No webview available to send document");
     }
   }
 
@@ -807,6 +814,37 @@ export class PropertiesPanelWebviewProvider
             }
           }
 
+          function createDocumentPropertyEditors() {
+            if (!currentDocument) {
+              return '<div class="empty-state"><p>No document loaded</p></div>';
+            }
+
+            return \`
+              <div class="property-section">
+                <h4 class="section-title">Canvas Properties</h4>
+                <div class="property-group">
+                  <label class="property-label">Name</label>
+                  <input type="text" class="property-input" data-property="document.name" value="\${currentDocument.name || ''}" onchange="handleDocumentPropertyChange('name', this.value)">
+                </div>
+                <div class="property-group">
+                  <label class="property-label">Schema Version</label>
+                  <span class="property-value">\${currentDocument.schemaVersion}</span>
+                </div>
+                <div class="property-group">
+                  <label class="property-label">Document ID</label>
+                  <span class="property-value">\${currentDocument.id}</span>
+                </div>
+              </div>
+              <div class="property-section">
+                <h4 class="section-title">Artboards</h4>
+                <div class="property-group">
+                  <label class="property-label">Count</label>
+                  <span class="property-value">\${currentDocument.artboards?.length || 0} artboard\${(currentDocument.artboards?.length || 0) !== 1 ? 's' : ''}</span>
+                </div>
+              </div>
+            \`;
+          }
+
           function handleSetSelection(selection) {
             console.log('Selection updated:', selection);
             currentSelection = selection;
@@ -825,14 +863,8 @@ export class PropertiesPanelWebviewProvider
               // Create property editors with current values from the node
               content.innerHTML = createPropertyEditors(selection, selectedNode);
             } else {
-              selectionInfo.textContent = 'No selection';
-              content.innerHTML = \`
-                <div class="empty-state">
-                  <div class="empty-icon">🎯</div>
-                  <h3>Select an Element</h3>
-                  <p>Choose an element in the canvas to edit its properties</p>
-                </div>
-              \`;
+              selectionInfo.textContent = 'Document Properties';
+              content.innerHTML = createDocumentPropertyEditors();
             }
           }
 
@@ -936,6 +968,26 @@ export class PropertiesPanelWebviewProvider
             \`;
           }
 
+          function handleDocumentPropertyChange(propertyKey, value) {
+            if (!currentDocument) {
+              console.warn('No document loaded, cannot change document property');
+              return;
+            }
+
+            const oldValue = getPropertyValue(currentDocument, propertyKey);
+
+            // Send document property change to extension
+            vscode.postMessage({
+              command: 'documentPropertyChange',
+              event: {
+                propertyKey: propertyKey,
+                oldValue: oldValue,
+                newValue: value,
+                sectionId: 'document'
+              }
+            });
+          }
+
           function handlePropertyChange(propertyKey, value) {
             if (!currentSelection || !currentSelection.selectedNodeIds || currentSelection.selectedNodeIds.length === 0) {
               console.warn('No selection, cannot change property');
@@ -944,7 +996,7 @@ export class PropertiesPanelWebviewProvider
 
             // Get the actual selected node ID
             const nodeId = currentSelection.focusedNodeId || currentSelection.selectedNodeIds[0];
-            
+
             // Get the current node to track old value
             const node = currentDocument ? findNodeById(currentDocument, nodeId) : null;
             const oldValue = node ? getPropertyValue(node, propertyKey) : null;
@@ -1037,6 +1089,7 @@ export class PropertiesPanelWebviewProvider
 
           // Global function for property changes from HTML
           window.handlePropertyChange = handlePropertyChange;
+          window.handleDocumentPropertyChange = handleDocumentPropertyChange;
 
           console.log('Properties panel webview initialized');
         </script>
