@@ -30,9 +30,27 @@ export const ComponentPropSchema = z.object({
       options: z.array(z.string()).optional(),
     })
     .optional(),
+  passthrough: z
+    .object({
+      attributes: z.array(z.string()).optional(),
+      cssVars: z.array(z.string()).optional(),
+      events: z.array(z.string()).optional(),
+      children: z.boolean().optional(),
+      ariaLabel: z.boolean().optional(),
+    })
+    .optional(),
 });
 
 export type ComponentProp = z.infer<typeof ComponentPropSchema>;
+
+/**
+ * Semantic key mapping for component contracts
+ */
+export const SemanticKeyMappingSchema = z.object({
+  description: z.string().optional(),
+  priority: z.number().min(0).max(10).optional(),
+  propDefaults: z.record(z.unknown()).optional(),
+});
 
 /**
  * Component metadata entry
@@ -44,6 +62,7 @@ export const ComponentEntrySchema = z.object({
   export: z.string(),
   category: z.string().optional(),
   tags: z.array(z.string()).optional(),
+  semanticKeys: z.record(SemanticKeyMappingSchema).optional(),
   props: z.array(ComponentPropSchema),
   variants: z.array(z.record(z.unknown())).optional(),
   examples: z.array(z.string()).optional(),

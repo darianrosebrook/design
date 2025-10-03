@@ -47,6 +47,40 @@ export interface GenerationResult {
 }
 
 /**
+ * Component index entry for semantic key mapping
+ */
+interface ComponentIndexEntry {
+  id: string;
+  name: string;
+  modulePath: string;
+  export: string;
+  semanticKeys?: Record<string, {
+    description?: string;
+    priority?: number;
+    propDefaults?: Record<string, unknown>;
+  }>;
+  props: Array<{
+    name: string;
+    type: string;
+    passthrough?: {
+      attributes?: string[];
+      cssVars?: string[];
+      events?: string[];
+      children?: boolean;
+      ariaLabel?: boolean;
+    };
+  }>;
+}
+
+/**
+ * Component index for semantic key mappings
+ */
+interface ComponentIndex {
+  version: string;
+  components: Record<string, ComponentIndexEntry>;
+}
+
+/**
  * Semantic component inference result
  */
 interface SemanticComponentInfo {
@@ -55,6 +89,8 @@ interface SemanticComponentInfo {
   attributes: Record<string, string>;
   role?: string;
   ariaLabel?: string;
+  componentKey?: string;
+  propDefaults?: Record<string, unknown>;
 }
 
 /**
@@ -75,21 +111,45 @@ export class ReactGenerator {
   private options: ReturnType<typeof mergeCodeGenOptions>;
   private componentPatterns: Map<string, ComponentPattern> = new Map();
   private extractedComponents: Map<string, GeneratedFile> = new Map();
+  private componentIndex: ComponentIndex | null = null;
 
   constructor(options: CodeGenOptions = {}) {
     this.options = mergeCodeGenOptions(options);
   }
 
   /**
+   * Load component index for semantic key mappings
+   */
+  loadComponentIndex(componentIndexPath?: string): void {
+    if (!componentIndexPath) return;
+
+    try {
+      // In a real implementation, this would load from the file system
+      // For now, we'll use a placeholder structure
+      this.componentIndex = {
+        version: "1.0.0",
+        components: {},
+      };
+    } catch (error) {
+      console.warn("Failed to load component index:", error);
+    }
+  }
+
+  /**
    * Generate React components from a canvas document with component reuse
    */
-  generate(document: CanvasDocumentType): GenerationResult {
+  generate(document: CanvasDocumentType, options?: { componentIndexPath?: string }): GenerationResult {
     const files: GeneratedFile[] = [];
     const {
       clock: _clock,
       sorter: _sorter,
       normalizer: _normalizer,
     } = this.options;
+
+    // Load component index if provided
+    if (options?.componentIndexPath) {
+      this.loadComponentIndex(options.componentIndexPath);
+    }
 
     // Clear previous patterns
     this.componentPatterns.clear();
@@ -389,7 +449,15 @@ export class ReactGenerator {
     semanticKey: string,
     node: NodeType
   ): SemanticComponentInfo | null {
-    // Define semantic key patterns and their corresponding component info
+    // Priority 1: Component contract matching (highest priority)
+    if (this.componentIndex) {
+      const contractMatch = this.matchSemanticKeyToComponentContract(semanticKey, node);
+      if (contractMatch) {
+        return contractMatch;
+      }
+    }
+
+    // Priority 2: Built-in semantic patterns (fallback)
     const semanticPatterns: Array<{
       pattern: RegExp;
       component: SemanticComponentInfo;
@@ -541,6 +609,41 @@ export class ReactGenerator {
     }
 
     return null; // No semantic pattern matched
+  }
+
+  /**
+   * Match semantic key to component contracts from the component index
+   */
+  private matchSemanticKeyToComponentContract(semanticKey: string, node: NodeType): SemanticComponentInfo | null {
+    if (!this.componentIndex) return null;
+
+    // Find the best matching component contract for this semantic key
+    let bestMatch: { componentKey: string; mapping: any; priority: number } | null = null;
+
+    for (const [componentKey, component] of Object.entries(this.componentIndex.components)) {
+      if (component.semanticKeys?.[semanticKey]) {
+        const mapping = component.semanticKeys[semanticKey];
+        const priority = mapping.priority ?? 5;
+
+        if (!bestMatch || priority > bestMatch.priority) {
+          bestMatch = { componentKey, mapping, priority };
+        }
+      }
+    }
+
+    if (!bestMatch) return null;
+
+    // Generate component info from the contract
+    const { componentKey, mapping } = bestMatch;
+    const component = this.componentIndex!.components[componentKey];
+
+    return {
+      tagName: component.name.toLowerCase(), // Use component name as fallback
+      className: `${component.name.toLowerCase()} ${semanticKey.replace(/[.\[\]]/g, "-")}`,
+      attributes: {},
+      componentKey,
+      propDefaults: mapping.propDefaults || {},
+    };
   }
 
   /**
@@ -1070,11 +1173,12 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
   }
 
   /**
-   * Generate props for component instances
+   * Generate props for component instances using passthrough information
    */
-  private generatePropsForComponent(_node: NodeType): string | null {
+  private generatePropsForComponent(node: NodeType): string | null {
     // For now, just pass through basic props
     // In a full implementation, this would analyze which props are needed
+    // based on component contracts and passthrough information
     return null;
   }
 
@@ -1143,8 +1247,8 @@ ${componentNames.map((name) => `  ${name}`).join(",\n")}
  */
 export function generateReactComponents(
   document: CanvasDocumentType,
-  options: CodeGenOptions = {}
+  options: CodeGenOptions & { componentIndexPath?: string } = {}
 ): GenerationResult {
   const generator = new ReactGenerator(options);
-  return generator.generate(document);
+  return generator.generate(document, { componentIndexPath: options.componentIndexPath });
 }
