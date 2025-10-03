@@ -21,6 +21,7 @@ import {
 } from "@paths-design/properties-panel";
 import type { CanvasDocumentType } from "@paths-design/canvas-schema";
 import type { SelectionState } from "@paths-design/properties-panel";
+import { CanvasToolbar } from "./toolbar";
 import styles from "./styles.css";
 
 // VS Code API type
@@ -50,6 +51,12 @@ type ExtensionMessage =
         requestId?: string;
       };
     }
+  | { command: "zoomIn" }
+  | { command: "zoomOut" }
+  | { command: "zoomFit" }
+  | { command: "toggleGrid" }
+  | { command: "toggleSnap" }
+  | { command: "setViewMode"; mode: "canvas" | "code" }
   | { command: "propertyChangeAcknowledged"; event: unknown }
   | { command: "showError"; error: string };
 
@@ -68,13 +75,17 @@ type WebviewSelectionOperationMessage = ReturnType<
 type WebviewPropertyChangeMessage = ReturnType<
   typeof createMessage<"propertyChange">
 >;
+type WebviewViewModeChangeMessage = ReturnType<
+  typeof createMessage<"setViewMode">
+>;
 type WebviewReadyMessage = ReturnType<typeof createMessage<"ready">>;
 type OutgoingWebviewMessage =
   | WebviewReadyMessage
   | WebviewSelectionChangeMessage
   | WebviewSelectionModeChangeMessage
   | WebviewSelectionOperationMessage
-  | WebviewPropertyChangeMessage;
+  | WebviewPropertyChangeMessage
+  | WebviewViewModeChangeMessage;
 
 /**
  * Main Canvas Webview App component
@@ -99,6 +110,7 @@ const CanvasWebviewApp: React.FC = () => {
     typeof createCanvasRenderer
   > | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"canvas" | "code">("canvas");
   const [propertiesService] = useState(() => PropertiesService.getInstance());
   const rendererRef = useRef<ReturnType<typeof createCanvasRenderer> | null>(
     null
@@ -261,6 +273,31 @@ const CanvasWebviewApp: React.FC = () => {
 
           break;
 
+        case "zoomIn":
+          rendererRef.current?.zoomIn?.();
+          break;
+
+        case "zoomOut":
+          rendererRef.current?.zoomOut?.();
+          break;
+
+        case "zoomFit":
+          rendererRef.current?.zoomFit?.();
+          break;
+
+        case "toggleGrid":
+          rendererRef.current?.toggleGrid?.();
+          break;
+
+        case "toggleSnap":
+          rendererRef.current?.toggleSnap?.();
+          break;
+
+        case "setViewMode":
+          console.info("Setting view mode:", message.mode);
+          setViewMode(message.mode);
+          break;
+
         case "propertyChangeAcknowledged":
           console.info("Property change acknowledged");
           break;
@@ -303,6 +340,19 @@ const CanvasWebviewApp: React.FC = () => {
     [vscode]
   );
 
+  /**
+   * Handle view mode changes from toolbar
+   */
+  const handleViewModeChange = useCallback(
+    (mode: "canvas" | "code") => {
+      setViewMode(mode);
+      vscode.postMessage(
+        createMessage("setViewMode", { mode }) as OutgoingWebviewMessage
+      );
+    },
+    [vscode]
+  );
+
   return (
     <div className="canvas-webview">
       {error && (
@@ -311,31 +361,48 @@ const CanvasWebviewApp: React.FC = () => {
         </div>
       )}
 
-      <div className="canvas-layout">
-        <div className="canvas-area">
-          <div
-            ref={setCanvasContainer}
-            className="canvas-container"
-            role="application"
-            aria-label="Canvas design surface"
-          />
-          {!document && (
-            <div className="empty-state">
-              <h2>No Document Loaded</h2>
-              <p>Open a .canvas.json file to start editing</p>
-            </div>
-          )}
-        </div>
+      {/* Toolbar */}
+      <CanvasToolbar onViewModeChange={handleViewModeChange} />
 
-        <div className="properties-area">
-          {document && (
-            <PropertiesPanel
-              documentId={document.id}
-              selection={selection}
-              onPropertyChange={handlePropertyChange}
-            />
-          )}
-        </div>
+      <div className="canvas-layout">
+        {viewMode === "canvas" ? (
+          <>
+            <div className="canvas-area">
+              <div
+                ref={setCanvasContainer}
+                className="canvas-container"
+                role="application"
+                aria-label="Canvas design surface"
+              />
+              {!document && (
+                <div className="empty-state">
+                  <h2>No Document Loaded</h2>
+                  <p>Open a .canvas.json file to start editing</p>
+                </div>
+              )}
+            </div>
+
+            <div className="properties-area">
+              {document && (
+                <PropertiesPanel
+                  documentId={document.id}
+                  selection={selection}
+                  onPropertyChange={handlePropertyChange}
+                />
+              )}
+            </div>
+          </>
+        ) : (
+          <div className="code-view">
+            <div className="code-editor">
+              <pre className="json-content">
+                {document
+                  ? JSON.stringify(document, null, 2)
+                  : "No document loaded"}
+              </pre>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

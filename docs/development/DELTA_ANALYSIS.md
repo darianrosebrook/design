@@ -125,13 +125,13 @@
 
 ### Delta 2.2: MCP in Documentation
 
-> **Source: docs/vscode-extension.md**
+> **Source: docs/getting-started/vscode-extension.md**
 > Includes full MCP server code example
 
-> **Source: docs/overview.md**
+> **Source: docs/getting-started/overview.md**
 > No mention of MCP integration
 
-**Gap**: MCP is documented in vscode-extension.md but not mentioned in overview.md or as a separate feature.
+**Gap**: MCP is documented in getting-started/vscode-extension.md but not mentioned in overview.md or as a separate feature.
 
 **Resolution**: Add MCP section to overview.md; create docs/mcp-integration.md
 
@@ -173,7 +173,7 @@
 > "$id": "https://paths.design.dev/schemas/canvas-0.1.json"
 > ```
 
-> **Source: docs/data-model.md**
+> **Source: docs/reference/data-model.md**
 > ```json
 > "$id": "https://paths.design.dev/schemas/canvas-0.1.json"
 > ```
@@ -189,7 +189,7 @@
 > **Source: goal.md §2**
 > Full JSON Schema (273 lines) with all node types
 
-> **Source: docs/data-model.md**
+> **Source: docs/reference/data-model.md**
 > Same full JSON Schema (227 lines, identical structure)
 
 > **Source: goal.md §24.2 (Monorepo)**
@@ -267,7 +267,7 @@
 > "componentLibrary": "vanilla"
 > ```
 
-> **Source: docs/codegen.md**
+> **Source: docs/getting-started/codegen.md**
 > Same mappings.react.json structure
 
 **Alignment**: ✅ Mappings spec is consistent
@@ -373,7 +373,7 @@
 > **Source: DESIGNER-001, DESIGNER-002**
 > No mention of React preview feature
 
-> **Source: docs/codegen.md**
+> **Source: docs/getting-started/codegen.md**
 > No mention of React preview feature
 
 **Gap**: React preview is a major feature in goal.md but completely absent from working specs and docs.
@@ -634,11 +634,11 @@
 
 > **Source: docs/ directory**
 > Only has:
-> - overview.md
-> - data-model.md
-> - tokens.md
-> - codegen.md
-> - vscode-extension.md
+> - getting-started/overview.md
+> - reference/data-model.md
+> - getting-started/tokens.md
+> - getting-started/codegen.md
+> - getting-started/vscode-extension.md
 
 **Gaps**: Missing documentation for:
 - ❌ canvas-engine.md (scene graph operations)
@@ -655,10 +655,10 @@
 > **Source: goal.md**
 > 1302 lines, comprehensive specification with examples
 
-> **Source: docs/overview.md**
+> **Source: docs/getting-started/overview.md**
 > 53 lines, high-level overview only
 
-> **Source: docs/data-model.md**
+> **Source: docs/reference/data-model.md**
 > 285 lines, detailed schema specification
 
 **Observation**: docs/ are intentionally simplified reference docs, not full specification. This is correct.

@@ -426,7 +426,7 @@ Evaluate:
 ### Documentation
 - **Working Specs**: `.caws/specs/DESIGNER-*.yaml`
 - **Research**: `docs/research/`
-- **Architecture**: `docs/overview.md`, `docs/data-model.md`
+- **Architecture**: `docs/getting-started/overview.md`, `docs/reference/data-model.md`
 
 ### Tools
 - **Validation**: `node apps/tools/caws/validate.js`

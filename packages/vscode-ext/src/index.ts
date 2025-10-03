@@ -939,6 +939,80 @@ ${Object.entries(metrics.memoryUsage)
       }
     );
 
+    // Toolbar commands
+    const zoomInCommand = vscode.commands.registerCommand(
+      "designer.zoomIn",
+      () => {
+        this.canvasWebviewProvider.zoomIn();
+      }
+    );
+
+    const zoomOutCommand = vscode.commands.registerCommand(
+      "designer.zoomOut",
+      () => {
+        this.canvasWebviewProvider.zoomOut();
+      }
+    );
+
+    const zoomFitCommand = vscode.commands.registerCommand(
+      "designer.zoomFit",
+      () => {
+        this.canvasWebviewProvider.zoomFit();
+      }
+    );
+
+    const toggleGridCommand = vscode.commands.registerCommand(
+      "designer.toggleGrid",
+      () => {
+        this.canvasWebviewProvider.toggleGrid();
+      }
+    );
+
+    const toggleSnapCommand = vscode.commands.registerCommand(
+      "designer.toggleSnap",
+      () => {
+        this.canvasWebviewProvider.toggleSnap();
+      }
+    );
+
+    const undoCommand = vscode.commands.registerCommand("designer.undo", () => {
+      this.documentStore.undo();
+      this.updateDocument(this.currentDocument);
+    });
+
+    const redoCommand = vscode.commands.registerCommand("designer.redo", () => {
+      this.documentStore.redo();
+      this.updateDocument(this.currentDocument);
+    });
+
+    const saveDocumentCommand = vscode.commands.registerCommand(
+      "designer.saveDocument",
+      async () => {
+        const result = await this.documentStore.saveDocument();
+        if (result.success) {
+          vscode.window.showInformationMessage("Document saved successfully");
+        } else {
+          vscode.window.showErrorMessage(
+            `Failed to save document: ${result.error}`
+          );
+        }
+      }
+    );
+
+    const switchToCanvasViewCommand = vscode.commands.registerCommand(
+      "designer.switchToCanvasView",
+      () => {
+        this.canvasWebviewProvider.setViewMode("canvas");
+      }
+    );
+
+    const switchToCodeViewCommand = vscode.commands.registerCommand(
+      "designer.switchToCodeView",
+      () => {
+        this.canvasWebviewProvider.setViewMode("code");
+      }
+    );
+
     // Register selection debugging commands
     registerSelectionCommands(this.context);
 
@@ -958,7 +1032,17 @@ ${Object.entries(metrics.memoryUsage)
       setSelectionModeLassoCommand,
       setSelectionModeSingleCommand,
       loadDocumentCommand,
-      refreshDocumentCommand
+      refreshDocumentCommand,
+      zoomInCommand,
+      zoomOutCommand,
+      zoomFitCommand,
+      toggleGridCommand,
+      toggleSnapCommand,
+      undoCommand,
+      redoCommand,
+      saveDocumentCommand,
+      switchToCanvasViewCommand,
+      switchToCodeViewCommand
     );
   }
 

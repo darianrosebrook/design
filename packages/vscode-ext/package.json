@@ -138,6 +138,54 @@
       {
         "command": "designer.clearSelectionHistory",
         "title": "Designer: Clear Selection History"
+      },
+      {
+        "command": "designer.zoomIn",
+        "title": "Zoom In",
+        "icon": "$(zoom-in)"
+      },
+      {
+        "command": "designer.zoomOut",
+        "title": "Zoom Out",
+        "icon": "$(zoom-out)"
+      },
+      {
+        "command": "designer.zoomFit",
+        "title": "Fit to Screen",
+        "icon": "$(screen-full)"
+      },
+      {
+        "command": "designer.toggleGrid",
+        "title": "Toggle Grid",
+        "icon": "$(grid)"
+      },
+      {
+        "command": "designer.toggleSnap",
+        "title": "Toggle Snap to Grid",
+        "icon": "$(magnet)"
+      },
+      {
+        "command": "designer.undo",
+        "title": "Undo",
+        "icon": "$(arrow-left)"
+      },
+      {
+        "command": "designer.redo",
+        "title": "Redo",
+        "icon": "$(arrow-right)"
+      },
+      {
+        "command": "designer.saveDocument",
+        "title": "Save Document",
+        "icon": "$(save)"
+      },
+      {
+        "command": "designer.switchToCanvasView",
+        "title": "Canvas View"
+      },
+      {
+        "command": "designer.switchToCodeView",
+        "title": "Code View"
       }
     ],
     "keybindings": [
@@ -160,6 +208,42 @@
       {
         "command": "designer.setSelectionModeSingle",
         "key": "v",
+        "when": "designer.canvasViewActive"
+      },
+      {
+        "command": "designer.zoomIn",
+        "key": "ctrl+=",
+        "mac": "cmd+=",
+        "when": "designer.canvasViewActive"
+      },
+      {
+        "command": "designer.zoomOut",
+        "key": "ctrl+-",
+        "mac": "cmd+-",
+        "when": "designer.canvasViewActive"
+      },
+      {
+        "command": "designer.zoomFit",
+        "key": "ctrl+0",
+        "mac": "cmd+0",
+        "when": "designer.canvasViewActive"
+      },
+      {
+        "command": "designer.undo",
+        "key": "ctrl+z",
+        "mac": "cmd+z",
+        "when": "designer.canvasViewActive"
+      },
+      {
+        "command": "designer.redo",
+        "key": "ctrl+y",
+        "mac": "cmd+y",
+        "when": "designer.canvasViewActive"
+      },
+      {
+        "command": "designer.saveDocument",
+        "key": "ctrl+s",
+        "mac": "cmd+s",
         "when": "designer.canvasViewActive"
       }
     ],

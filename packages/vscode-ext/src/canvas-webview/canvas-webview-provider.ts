@@ -486,6 +486,73 @@ export class CanvasWebviewProvider {
   }
 
   /**
+   * Zoom in on the canvas
+   */
+  public zoomIn(): void {
+    if (this._panel && this._isReady) {
+      this._panel.webview.postMessage({
+        command: "zoomIn",
+      });
+    }
+  }
+
+  /**
+   * Zoom out on the canvas
+   */
+  public zoomOut(): void {
+    if (this._panel && this._isReady) {
+      this._panel.webview.postMessage({
+        command: "zoomOut",
+      });
+    }
+  }
+
+  /**
+   * Fit canvas to screen
+   */
+  public zoomFit(): void {
+    if (this._panel && this._isReady) {
+      this._panel.webview.postMessage({
+        command: "zoomFit",
+      });
+    }
+  }
+
+  /**
+   * Toggle grid visibility
+   */
+  public toggleGrid(): void {
+    if (this._panel && this._isReady) {
+      this._panel.webview.postMessage({
+        command: "toggleGrid",
+      });
+    }
+  }
+
+  /**
+   * Toggle snap to grid
+   */
+  public toggleSnap(): void {
+    if (this._panel && this._isReady) {
+      this._panel.webview.postMessage({
+        command: "toggleSnap",
+      });
+    }
+  }
+
+  /**
+   * Set the view mode (canvas or code)
+   */
+  public setViewMode(mode: "canvas" | "code"): void {
+    if (this._panel && this._isReady) {
+      this._panel.webview.postMessage({
+        command: "setViewMode",
+        mode,
+      });
+    }
+  }
+
+  /**
    * Handle messages from the webview with protocol validation
    */
   private async _handleMessage(rawMessage: unknown): Promise<void> {
@@ -599,6 +666,46 @@ export class CanvasWebviewProvider {
           message.payload.mode,
           this._panel
         );
+        break;
+
+      case "zoom":
+        // Handle zoom level from toolbar
+        console.info("Zoom level set:", message.level);
+        break;
+
+      case "zoomFit":
+        // Handle zoom fit
+        console.info("Zoom fit requested");
+        break;
+
+      case "toggleGrid":
+        // Handle grid toggle
+        console.info("Grid toggle requested");
+        break;
+
+      case "toggleSnap":
+        // Handle snap toggle
+        console.info("Snap toggle requested");
+        break;
+
+      case "undo":
+        // Handle undo
+        console.info("Undo requested");
+        break;
+
+      case "redo":
+        // Handle redo
+        console.info("Redo requested");
+        break;
+
+      case "save":
+        // Handle save
+        console.info("Save requested");
+        break;
+
+      case "setViewMode":
+        // Handle view mode change
+        console.info("View mode change:", message.mode);
         break;
 
       case "validateDocument":
