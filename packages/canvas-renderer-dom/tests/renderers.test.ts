@@ -8,7 +8,11 @@ import { renderFrame } from "../src/renderers/frame.js";
 import { renderText } from "../src/renderers/text.js";
 import { renderComponent } from "../src/renderers/component.js";
 import type { RenderContext } from "../src/types.js";
-import type { FrameNodeType, TextNodeType, ComponentNodeType } from "@paths-design/canvas-schema";
+import type {
+  FrameNodeType,
+  TextNodeType,
+  ComponentNodeType,
+} from "@paths-design/canvas-schema";
 import { JSDOM } from "jsdom";
 
 // Setup JSDOM environment
@@ -63,7 +67,9 @@ describe("Frame Renderer", () => {
 
     const element = renderFrame(node, context);
     // Browser may convert to rgb format
-    expect(element.style.backgroundColor).toMatch(/rgb\(255,\s*0,\s*0\)|#ff0000/i);
+    expect(element.style.backgroundColor).toMatch(
+      /rgb\(255,\s*0,\s*0\)|#ff0000/i
+    );
   });
 
   it("should apply strokes to frame", () => {
@@ -320,7 +326,11 @@ describe("Component Renderer", () => {
             path: "./Button",
             props: [
               { name: "label", type: "string", required: true },
-              { name: "variant", type: '"primary" | "secondary"', required: false },
+              {
+                name: "variant",
+                type: '"primary" | "secondary"',
+                required: false,
+              },
             ],
             defaultProps: {},
             compound: false,
@@ -426,4 +436,3 @@ describe("Component Renderer", () => {
     expect(element.textContent).toContain("NonExistent");
   });
 });
-

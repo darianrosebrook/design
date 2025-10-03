@@ -117,11 +117,14 @@ describe("MetricsCollector", () => {
   it("should support metric labels", () => {
     metrics.counter("requests", 1, { method: "GET", status: "200" });
     metrics.counter("requests", 1, { method: "POST", status: "201" });
-    
+
     const allMetrics = metrics.getMetrics();
     expect(allMetrics.length).toBe(2);
-    
-    const getMetric = metrics.getMetric("requests", { method: "GET", status: "200" });
+
+    const getMetric = metrics.getMetric("requests", {
+      method: "GET",
+      status: "200",
+    });
     expect(getMetric?.value).toBe(1);
   });
 
@@ -149,7 +152,7 @@ describe("PerformanceTracer", () => {
   it("should start and end traces", () => {
     tracer.start("test_operation");
     tracer.end("test_operation");
-    
+
     const spans = tracer.getSpans();
     expect(spans.length).toBe(1);
     expect(spans[0].name).toBe("test_operation");
@@ -159,10 +162,10 @@ describe("PerformanceTracer", () => {
   it("should track active spans", () => {
     tracer.start("operation1");
     tracer.start("operation2");
-    
+
     const activeSpans = tracer.getActiveSpans();
     expect(activeSpans.length).toBe(2);
-    
+
     tracer.end("operation1");
     expect(tracer.getActiveSpans().length).toBe(1);
   });
@@ -171,7 +174,7 @@ describe("PerformanceTracer", () => {
     const result = await tracer.measure("test_fn", async () => {
       return "success";
     });
-    
+
     expect(result).toBe("success");
     const spans = tracer.getSpans();
     expect(spans.length).toBe(1);
@@ -184,7 +187,7 @@ describe("PerformanceTracer", () => {
         throw new Error("Test error");
       })
     ).rejects.toThrow("Test error");
-    
+
     // Span should still be recorded
     const spans = tracer.getSpans();
     expect(spans.length).toBe(1);
@@ -193,7 +196,7 @@ describe("PerformanceTracer", () => {
   it("should store metadata with spans", () => {
     tracer.start("test", { userId: 123, action: "render" });
     tracer.end("test");
-    
+
     const spans = tracer.getSpans();
     expect(spans[0].metadata).toEqual({ userId: 123, action: "render" });
   });
@@ -228,27 +231,27 @@ describe("Observability", () => {
     obs.metrics.counter("test", 1);
     obs.tracer.start("test");
     obs.tracer.end("test");
-    
+
     expect(obs.logger.getLogs().length).toBeGreaterThan(0);
     expect(obs.metrics.getMetrics().length).toBeGreaterThan(0);
     expect(obs.tracer.getSpans().length).toBeGreaterThan(0);
-    
+
     obs.disable();
-    
+
     // After disable, new operations should not be recorded
     obs.logger.info("test2", "message2");
     obs.metrics.counter("test2", 1);
     obs.tracer.start("test2");
     obs.tracer.end("test2");
-    
+
     // Should still have the original entries but no new ones
     const logs = obs.logger.getLogs();
     const metrics = obs.metrics.getMetrics();
     const spans = obs.tracer.getSpans();
-    
-    expect(logs.every(l => l.category !== "test2")).toBe(true);
-    expect(metrics.every(m => m.name !== "test2")).toBe(true);
-    expect(spans.every(s => s.name !== "test2")).toBe(true);
+
+    expect(logs.every((l) => l.category !== "test2")).toBe(true);
+    expect(metrics.every((m) => m.name !== "test2")).toBe(true);
+    expect(spans.every((s) => s.name !== "test2")).toBe(true);
   });
 
   it("should clear all observability data", () => {
@@ -257,9 +260,9 @@ describe("Observability", () => {
     obs.metrics.counter("test", 1);
     obs.tracer.start("test");
     obs.tracer.end("test");
-    
+
     obs.clear();
-    
+
     expect(obs.logger.getLogs().length).toBe(0);
     expect(obs.metrics.getMetrics().length).toBe(0);
     expect(obs.tracer.getSpans().length).toBe(0);

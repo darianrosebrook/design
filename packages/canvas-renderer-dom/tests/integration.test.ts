@@ -25,7 +25,8 @@ global.performance = {
   },
 } as any;
 
-global.requestAnimationFrame = ((cb: Function) => setTimeout(() => cb(mockTime), 0)) as any;
+global.requestAnimationFrame = ((cb: Function) =>
+  setTimeout(() => cb(mockTime), 0)) as any;
 global.cancelAnimationFrame = ((id: number) => clearTimeout(id)) as any;
 
 describe("Integration Tests", () => {
@@ -82,8 +83,8 @@ describe("Integration Tests", () => {
         // Check that nodes were rendered
         expect(container.children.length).toBeGreaterThan(0);
         // Check that frame and text nodes exist (using class names since IDs are generated)
-        expect(container.querySelector('.canvas-frame')).toBeTruthy();
-        expect(container.querySelector('.canvas-text')).toBeTruthy();
+        expect(container.querySelector(".canvas-frame")).toBeTruthy();
+        expect(container.querySelector(".canvas-text")).toBeTruthy();
       }
     });
 
@@ -148,9 +149,9 @@ describe("Integration Tests", () => {
         renderer.render(result.data, container);
 
         // Check nodes were rendered by class name
-        expect(container.querySelector('.canvas-frame')).toBeTruthy();
-        expect(container.querySelector('.canvas-text')).toBeTruthy();
-        expect(container.querySelector('.canvas-component')).toBeTruthy();
+        expect(container.querySelector(".canvas-frame")).toBeTruthy();
+        expect(container.querySelector(".canvas-text")).toBeTruthy();
+        expect(container.querySelector(".canvas-component")).toBeTruthy();
       }
     });
   });
@@ -214,7 +215,9 @@ describe("Integration Tests", () => {
       expect(container.querySelector('[data-node-id="level-1"]')).toBeTruthy();
       expect(container.querySelector('[data-node-id="level-2"]')).toBeTruthy();
       expect(container.querySelector('[data-node-id="level-3"]')).toBeTruthy();
-      expect(container.querySelector('[data-node-id="text-deep"]')).toBeTruthy();
+      expect(
+        container.querySelector('[data-node-id="text-deep"]')
+      ).toBeTruthy();
 
       // Verify nesting structure
       const level1 = container.querySelector('[data-node-id="level-1"]');
@@ -236,7 +239,12 @@ describe("Integration Tests", () => {
           type: "frame" as const,
           name: `Frame ${i}`,
           visible: true,
-          frame: { x: (i % 10) * 100, y: Math.floor(i / 10) * 100, width: 90, height: 90 },
+          frame: {
+            x: (i % 10) * 100,
+            y: Math.floor(i / 10) * 100,
+            width: 90,
+            height: 90,
+          },
           children: [],
         });
       }
@@ -264,7 +272,9 @@ describe("Integration Tests", () => {
       expect(renderTime).toBeLessThan(1000);
 
       // All nodes should be rendered
-      expect(container.querySelectorAll(".canvas-frame").length).toBeGreaterThanOrEqual(100);
+      expect(
+        container.querySelectorAll(".canvas-frame").length
+      ).toBeGreaterThanOrEqual(100);
     });
 
     it("should track performance metrics", () => {
@@ -298,7 +308,9 @@ describe("Integration Tests", () => {
       const metrics = renderer.getObservability().metrics.getMetrics();
       expect(metrics.length).toBeGreaterThan(0);
 
-      const frameMetric = metrics.find((m) => m.name === "renderer_frame_duration_ms");
+      const frameMetric = metrics.find(
+        (m) => m.name === "renderer_frame_duration_ms"
+      );
       expect(frameMetric).toBeDefined();
       expect(frameMetric?.value).toBeGreaterThan(0);
     });
@@ -349,7 +361,7 @@ describe("Integration Tests", () => {
       renderer.setSelection(["text-1"]);
       frameElement = container.querySelector('[data-node-id="frame-1"]');
       const textElement = container.querySelector('[data-node-id="text-1"]');
-      
+
       expect(frameElement?.getAttribute("aria-selected")).toBe("false");
       expect(textElement?.getAttribute("aria-selected")).toBe("true");
 
@@ -364,7 +376,7 @@ describe("Integration Tests", () => {
   describe("Error Handling", () => {
     it("should handle rendering errors gracefully", () => {
       const renderer = createCanvasRenderer();
-      
+
       // Try to render before document is set
       expect(() => {
         renderer.updateNodes(["non-existent"], [{}]);
@@ -410,12 +422,15 @@ describe("Integration Tests", () => {
       const renderer = createCanvasRenderer();
       renderer.render(doc, container);
 
-      const visibleFrame = container.querySelector('[data-node-id="frame-1"]') as HTMLElement;
-      const hiddenFrame = container.querySelector('[data-node-id="frame-2"]') as HTMLElement;
+      const visibleFrame = container.querySelector(
+        '[data-node-id="frame-1"]'
+      ) as HTMLElement;
+      const hiddenFrame = container.querySelector(
+        '[data-node-id="frame-2"]'
+      ) as HTMLElement;
 
       expect(visibleFrame?.style.display).not.toBe("none");
       expect(hiddenFrame?.style.display).toBe("none");
     });
   });
 });
-

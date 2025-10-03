@@ -11,6 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:performance": "vitest run tests/performance.test.ts",
+    "test:snapshot": "vitest run tests/snapshot.test.ts",
     "lint": "eslint src tests --ext .ts,.tsx",
     "typecheck": "tsc --noEmit"
   },

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Observability utilities for canvas renderer
  * @author @darianrosebrook
- * 
+ *
  * Provides logging, metrics, and performance monitoring for the renderer.
  * Follows the observability requirements from DESIGNER-005 spec.
  */
@@ -67,10 +67,7 @@ export class Logger {
   private logs: LogEntry[] = [];
   private maxLogs = 1000; // Circular buffer
 
-  constructor(
-    enabled: boolean = true,
-    minLevel: LogLevel = LogLevel.INFO
-  ) {
+  constructor(enabled: boolean = true, minLevel: LogLevel = LogLevel.INFO) {
     this.enabled = enabled;
     this.minLevel = minLevel;
   }
@@ -78,28 +75,44 @@ export class Logger {
   /**
    * Log an error
    */
-  error(category: string, message: string, metadata?: Record<string, unknown>): void {
+  error(
+    category: string,
+    message: string,
+    metadata?: Record<string, unknown>
+  ): void {
     this.log(LogLevel.ERROR, category, message, metadata);
   }
 
   /**
    * Log a warning
    */
-  warn(category: string, message: string, metadata?: Record<string, unknown>): void {
+  warn(
+    category: string,
+    message: string,
+    metadata?: Record<string, unknown>
+  ): void {
     this.log(LogLevel.WARN, category, message, metadata);
   }
 
   /**
    * Log info
    */
-  info(category: string, message: string, metadata?: Record<string, unknown>): void {
+  info(
+    category: string,
+    message: string,
+    metadata?: Record<string, unknown>
+  ): void {
     this.log(LogLevel.INFO, category, message, metadata);
   }
 
   /**
    * Log debug
    */
-  debug(category: string, message: string, metadata?: Record<string, unknown>): void {
+  debug(
+    category: string,
+    message: string,
+    metadata?: Record<string, unknown>
+  ): void {
     this.log(LogLevel.DEBUG, category, message, metadata);
   }
 
@@ -132,11 +145,7 @@ export class Logger {
     // Console output in development
     if (process.env.NODE_ENV !== "production") {
       const style = this.getConsoleStyle(level);
-      console[level](
-        `%c[${category}] ${message}`,
-        style,
-        metadata || ""
-      );
+      console[level](`%c[${category}] ${message}`, style, metadata || "");
     }
   }
 
@@ -144,7 +153,12 @@ export class Logger {
    * Check if level should be logged
    */
   private shouldLog(level: LogLevel): boolean {
-    const levels = [LogLevel.ERROR, LogLevel.WARN, LogLevel.INFO, LogLevel.DEBUG];
+    const levels = [
+      LogLevel.ERROR,
+      LogLevel.WARN,
+      LogLevel.INFO,
+      LogLevel.DEBUG,
+    ];
     const currentIndex = levels.indexOf(this.minLevel);
     const levelIndex = levels.indexOf(level);
     return levelIndex <= currentIndex;
@@ -197,7 +211,11 @@ export class MetricsCollector {
   /**
    * Record a counter metric
    */
-  counter(name: string, value: number = 1, labels?: Record<string, string>): void {
+  counter(
+    name: string,
+    value: number = 1,
+    labels?: Record<string, string>
+  ): void {
     if (!this.enabled) return;
 
     const key = this.getMetricKey(name, labels);
@@ -231,7 +249,11 @@ export class MetricsCollector {
   /**
    * Record a histogram metric
    */
-  histogram(name: string, value: number, labels?: Record<string, string>): void {
+  histogram(
+    name: string,
+    value: number,
+    labels?: Record<string, string>
+  ): void {
     if (!this.enabled) return;
 
     const key = this.getMetricKey(name, labels);

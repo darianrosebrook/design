@@ -54,7 +54,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   // Accessibility support
   private focusedNodeId: string | null = null;
   private liveRegion: HTMLElement | null = null;
-  
+
   // Observability
   private observability: Observability;
 
@@ -66,7 +66,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       onSelectionChange: options.onSelectionChange ?? (() => {}),
       onNodeUpdate: options.onNodeUpdate ?? (() => {}),
     };
-    
+
     // Initialize observability
     this.observability = createObservability(
       process.env.NODE_ENV !== "production"
@@ -82,13 +82,13 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       (sum, ab) => sum + (ab.children?.length ?? 0),
       0
     );
-    
+
     this.observability.logger.info("renderer.render.start", "Starting render", {
       documentId: document.id,
       nodeCount,
     });
     this.observability.tracer.start("renderer.render.pipeline");
-    
+
     this.document = document;
     this.container = container;
 
@@ -149,18 +149,22 @@ export class CanvasDOMRenderer implements CanvasRenderer {
 
     // Render selection overlay
     this.updateSelectionOverlay();
-    
+
     // Observability: Complete render
     this.observability.tracer.end("renderer.render.pipeline");
     const duration = performance.now() - startTime;
-    
-    this.observability.logger.info("renderer.render.complete", "Render complete", {
-      documentId: document.id,
-      nodeCount,
-      duration: `${duration.toFixed(2)}ms`,
-      nodesDrawn: this.nodeElements.size,
-    });
-    
+
+    this.observability.logger.info(
+      "renderer.render.complete",
+      "Render complete",
+      {
+        documentId: document.id,
+        nodeCount,
+        duration: `${duration.toFixed(2)}ms`,
+        nodesDrawn: this.nodeElements.size,
+      }
+    );
+
     this.observability.metrics.histogram(
       "renderer_frame_duration_ms",
       duration,
@@ -188,7 +192,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
     for (const nodeId of nodeIds) {
       this.dirtyNodes.add(nodeId);
     }
-    
+
     this.observability.metrics.counter(
       "renderer_dirty_nodes_total",
       nodeIds.length

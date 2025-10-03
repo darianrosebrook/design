@@ -23,7 +23,8 @@ global.performance = {
   },
 } as any;
 
-global.requestAnimationFrame = ((cb: Function) => setTimeout(() => cb(mockTime), 0)) as any;
+global.requestAnimationFrame = ((cb: Function) =>
+  setTimeout(() => cb(mockTime), 0)) as any;
 global.cancelAnimationFrame = ((id: number) => clearTimeout(id)) as any;
 
 describe("CanvasDOMRenderer", () => {
@@ -169,7 +170,9 @@ describe("CanvasDOMRenderer", () => {
 
       renderer.render(doc, container);
 
-      const componentElement = container.querySelector('[data-node-id="component-1"]');
+      const componentElement = container.querySelector(
+        '[data-node-id="component-1"]'
+      );
       expect(componentElement).toBeTruthy();
       expect(componentElement?.getAttribute("role")).toBe("button");
     });
@@ -340,7 +343,7 @@ describe("CanvasDOMRenderer", () => {
     it("should provide observability instance", () => {
       const renderer = createCanvasRenderer();
       const obs = renderer.getObservability();
-      
+
       expect(obs).toBeDefined();
       expect(obs.logger).toBeDefined();
       expect(obs.metrics).toBeDefined();
@@ -364,11 +367,15 @@ describe("CanvasDOMRenderer", () => {
       };
 
       renderer.render(doc, container);
-      
+
       const logs = renderer.getObservability().logger.getLogs();
       expect(logs.length).toBeGreaterThan(0);
-      expect(logs.some(log => log.category === "renderer.render.start")).toBe(true);
-      expect(logs.some(log => log.category === "renderer.render.complete")).toBe(true);
+      expect(logs.some((log) => log.category === "renderer.render.start")).toBe(
+        true
+      );
+      expect(
+        logs.some((log) => log.category === "renderer.render.complete")
+      ).toBe(true);
     });
 
     it("should collect metrics", () => {
@@ -388,10 +395,12 @@ describe("CanvasDOMRenderer", () => {
       };
 
       renderer.render(doc, container);
-      
+
       const metrics = renderer.getObservability().metrics.getMetrics();
       expect(metrics.length).toBeGreaterThan(0);
-      expect(metrics.some(m => m.name === "renderer_frame_duration_ms")).toBe(true);
+      expect(metrics.some((m) => m.name === "renderer_frame_duration_ms")).toBe(
+        true
+      );
     });
   });
 
@@ -420,4 +429,3 @@ describe("CanvasDOMRenderer", () => {
     });
   });
 });
-
