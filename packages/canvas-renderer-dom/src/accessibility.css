@@ -1,0 +1,136 @@
+/**
+ * @fileoverview Accessibility styles for canvas renderer
+ * @author @darianrosebrook
+ * 
+ * Provides focus indicators and keyboard navigation styling
+ * for WCAG 2.1 AA compliance.
+ */
+
+/* Focus indicators - High contrast 3:1 ratio */
+.canvas-node:focus {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+  z-index: 1000;
+}
+
+.canvas-node:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Focus visible for keyboard navigation only */
+.canvas-node:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+  z-index: 1000;
+}
+
+/* Selected state - Different from focus */
+.canvas-node.canvas-selected {
+  outline: 2px solid #007acc;
+  outline-offset: 1px;
+}
+
+/* Both focused and selected */
+.canvas-node.canvas-selected:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3), inset 0 0 0 2px #007acc;
+}
+
+/* Container focus */
+.canvas-renderer:focus {
+  outline: 2px solid #2563eb;
+  outline-offset: -2px;
+}
+
+.canvas-renderer:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .canvas-node:focus,
+  .canvas-node:focus-visible,
+  .canvas-renderer:focus {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .canvas-node:focus,
+  .canvas-node:focus-visible {
+    outline-width: 4px;
+    outline-color: Highlight;
+  }
+}
+
+/* Force colors mode (Windows High Contrast) */
+@media (forced-colors: active) {
+  .canvas-node:focus,
+  .canvas-node:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+  
+  .canvas-node.canvas-selected {
+    outline: 2px solid SelectedItem;
+  }
+}
+
+/* Keyboard focus hints */
+.canvas-node[tabindex="0"] {
+  cursor: pointer;
+}
+
+.canvas-node[aria-hidden="true"] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Skip to content link for keyboard users */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 10000;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Canvas application region */
+[role="application"] {
+  position: relative;
+}
+
+/* Live region (screen reader announcements) */
+[role="status"][aria-live="polite"] {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
