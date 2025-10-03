@@ -53,9 +53,10 @@ Deprecated or historical content.
 
 ### For Contributors
 1. Review **[Agent Workflows](./development/agents.md)** and CAWS framework
-2. Understand **[Component Standards](./development/component-standards/)**
-3. Follow **[Testing Guidelines](./development/testing/)**
-4. Check **[Architectural Decisions](./development/decisions/)**
+2. Explore **[API Documentation](./development/api/)** for plugin development
+3. Understand **[Component Standards](./development/component-standards/)**
+4. Follow **[Testing Guidelines](./development/testing/)**
+5. Check **[Architectural Decisions](./development/decisions/)**
 
 ## 🔍 Finding Information
 

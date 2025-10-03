@@ -6,6 +6,7 @@ Comprehensive documentation for contributors, maintainers, and advanced users wo
 
 ### Core Areas
 - **[Agents](./agents.md)** - CAWS framework and agent workflow guidelines
+- **[API Documentation](./api/)** - Plugin development APIs and integration guides
 - **[Project Management](./)** - Status tracking, todos, and implementation summaries
 - **[Research](./research/)** - Research papers, experiments, and technical analysis
 - **[Implementation](./implementation/)** - Implementation progress, phases, and technical details
@@ -26,6 +27,14 @@ Comprehensive documentation for contributors, maintainers, and advanced users wo
 - **[Research Papers](./research/)** - Technical papers and analysis documents
 
 ## 🧪 Development Workflows
+
+### Plugin Development
+- **[API Documentation](./api/)** - Complete API reference for plugin developers
+  - **[Canvas Schema API](./api/canvas-schema.md)** - Document and node operations
+  - **[VS Code Extension API](./api/vscode-extension.md)** - Extension development
+  - **[Component System API](./api/components.md)** - Component creation and management
+  - **[Performance Monitoring API](./api/performance.md)** - Performance tracking and budgets
+  - **[MCP/Agent API](./api/mcp-agent.md)** - External tool and agent integration
 
 ### Project Management
 - **[Implementation Summary](./IMPLEMENTATION_COMPLETE.md)** - Latest project status and milestones
