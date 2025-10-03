@@ -7,13 +7,12 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import type {
-  Tool} from "@modelcontextprotocol/sdk/types.js";
+import type { Tool } from "@modelcontextprotocol/sdk/types.js";
 import {
   CallToolRequestSchema,
   ErrorCode,
   ListToolsRequestSchema,
-  McpError
+  McpError,
 } from "@modelcontextprotocol/sdk/types.js";
 import { generateAugmentedVariants } from "@paths-design/augment";
 import type { CanvasDocumentType } from "@paths-design/canvas-schema";
@@ -836,7 +835,7 @@ ${
             return;
           }
 
-          for (const [key, value] of Object.entries(obj)) {
+          for (const [_key, value] of Object.entries(obj)) {
             if (Array.isArray(value)) {
               value.forEach((item) => {
                 findNodeBySemanticKey(item);
@@ -906,7 +905,9 @@ ${
       function analyzeNode(node: any): void {
         if (node && typeof node === "object") {
           // Skip if already has semantic key
-          if (node.semanticKey) {return;}
+          if (node.semanticKey) {
+            return;
+          }
 
           let suggestedKey = "";
           let confidence = 0;

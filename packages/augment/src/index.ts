@@ -369,7 +369,9 @@ export class AugmentationEngine {
                   after: newValue,
                 });
 
-                if (!node.props) {node.props = {};}
+                if (!node.props) {
+                  node.props = {};
+                }
                 node.props[prop.name] = newValue;
               }
             }

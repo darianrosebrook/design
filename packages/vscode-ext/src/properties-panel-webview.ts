@@ -115,7 +115,9 @@ export class PropertiesPanelWebviewProvider
   private _findNodeById(document: CanvasDocumentType, nodeId: string): any {
     for (const artboard of document.artboards) {
       const node = this._findNodeInChildren(artboard.children, nodeId);
-      if (node) {return node;}
+      if (node) {
+        return node;
+      }
     }
     return null;
   }
@@ -125,11 +127,15 @@ export class PropertiesPanelWebviewProvider
    */
   private _findNodeInChildren(nodes: any[], nodeId: string): any {
     for (const node of nodes) {
-      if (node.id === nodeId) {return node;}
+      if (node.id === nodeId) {
+        return node;
+      }
 
       if (node.children && node.children.length > 0) {
         const found = this._findNodeInChildren(node.children, nodeId);
-        if (found) {return found;}
+        if (found) {
+          return found;
+        }
       }
     }
     return null;
@@ -207,7 +213,9 @@ export class PropertiesPanelWebviewProvider
     this._propertyValues.clear();
 
     const cacheNodeProperties = (node: any) => {
-      if (!node || !node.id) {return;}
+      if (!node || !node.id) {
+        return;
+      }
 
       const nodeValues = new Map<string, any>();
 
@@ -417,7 +425,9 @@ export class PropertiesPanelWebviewProvider
    * Send current state to the webview
    */
   private _sendCurrentState(): void {
-    if (!this._view || !this._isReady) {return;}
+    if (!this._view || !this._isReady) {
+      return;
+    }
 
     try {
       // Send current document if available

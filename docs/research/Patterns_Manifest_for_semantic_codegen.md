@@ -130,9 +130,9 @@
 
 ---
 
-## 2. Core Patterns (v0.1)
+## 2. Implemented Semantic Patterns (v1.0)
 
-Each includes: roles, relationships, keyboard model, emission rules, APG link.
+**Updated for Component Contract Implementation:**
 
 ### 2.1 Button
 

@@ -3,7 +3,10 @@
  * @author @darianrosebrook
  */
 
-import type { NodeType , SemanticKeyType } from "../../canvas-schema/src/index.js";
+import type {
+  NodeType,
+  SemanticKeyType,
+} from "../../canvas-schema/src/index.js";
 import type { ComponentIndex } from "../../component-indexer/src/index.js";
 import {
   getNodeProperty,
@@ -117,7 +120,9 @@ export class PropertiesService {
     propertyKey: string
   ): PropertyValue | undefined {
     const node = this.nodes.get(nodeId);
-    if (!node) {return undefined;}
+    if (!node) {
+      return undefined;
+    }
 
     const value = getNodeProperty(node, propertyKey);
     return value as PropertyValue | undefined;
@@ -132,7 +137,9 @@ export class PropertiesService {
     value: PropertyValue
   ): boolean {
     const node = this.nodes.get(nodeId);
-    if (!node) {return false;}
+    if (!node) {
+      return false;
+    }
 
     try {
       const oldNode = node;
@@ -214,7 +221,9 @@ export class PropertiesService {
     semanticKey: SemanticKeyType,
     node: NodeType
   ): PropertyDefinition[] {
-    if (!this.componentIndex) {return [];}
+    if (!this.componentIndex) {
+      return [];
+    }
 
     // Find component that has this semantic key
     for (const [_componentKey, component] of Object.entries(
@@ -342,7 +351,9 @@ export class PropertiesService {
       }
     }
 
-    if (values.length === 0) {return undefined;}
+    if (values.length === 0) {
+      return undefined;
+    }
 
     // Check if all values are the same
     const firstValue = values[0];

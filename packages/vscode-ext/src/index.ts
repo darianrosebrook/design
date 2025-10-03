@@ -55,7 +55,9 @@ class DesignerExtension {
     try {
       // Look for component index in the design directory
       const workspaceFolders = vscode.workspace.workspaceFolders;
-      if (!workspaceFolders) {return;}
+      if (!workspaceFolders) {
+        return;
+      }
 
       const designDir = path.join(workspaceFolders[0].uri.fsPath, "design");
       const componentIndexPath = path.join(designDir, "components.index.json");

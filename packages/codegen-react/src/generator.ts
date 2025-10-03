@@ -124,7 +124,9 @@ export class ReactGenerator {
    * Load component index for semantic key mappings
    */
   loadComponentIndex(componentIndexPath?: string): void {
-    if (!componentIndexPath) {return;}
+    if (!componentIndexPath) {
+      return;
+    }
 
     try {
       // In a real implementation, this would load from the file system
@@ -627,7 +629,9 @@ export class ReactGenerator {
     semanticKey: string,
     _node: NodeType
   ): SemanticComponentInfo | null {
-    if (!this.componentIndex) {return null;}
+    if (!this.componentIndex) {
+      return null;
+    }
 
     // Find the best matching component contract for this semantic key
     let bestMatch: {
@@ -649,7 +653,9 @@ export class ReactGenerator {
       }
     }
 
-    if (!bestMatch) {return null;}
+    if (!bestMatch) {
+      return null;
+    }
 
     // Generate component info from the contract
     const { componentKey, mapping } = bestMatch;

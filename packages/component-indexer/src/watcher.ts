@@ -196,7 +196,9 @@ export class ComponentIndexWatcher {
       const excluded = this.options.exclude.some((pattern) =>
         filename.includes(pattern)
       );
-      if (excluded) {return false;}
+      if (excluded) {
+        return false;
+      }
     }
 
     return true;

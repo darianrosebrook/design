@@ -689,7 +689,9 @@ export const PropertyEditor: React.FC<{
  * Format a property value for display
  */
 function formatPropertyValue(value: PropertyValue, definition: any): string {
-  if (value == null) {return "";}
+  if (value == null) {
+    return "";
+  }
 
   switch (definition.type) {
     case "number":

@@ -10,48 +10,109 @@ import { useProperties } from "./use-properties";
 /**
  * Main properties panel component
  */
-export const PropertiesPanel = ({ documentId, selection: externalSelection, onPropertyChange, onSelectionChange, className = "", style = {}, }) => {
-    // Use the properties hook for state management
-    const { selection, updateSelection, handlePropertyChange, getCurrentPropertyValue, } = useProperties();
-    // Use external selection if provided, otherwise use internal state
-    const currentSelection = externalSelection || selection;
-    // Get applicable sections for the current selection
-    const sections = useMemo(() => {
-        if (currentSelection.selectedNodeIds.length === 0) {
-            return [];
-        }
-        // For now, return all sections since we don't have access to the actual nodes
-        // In a real implementation, we'd get the node types and filter accordingly
-        return PropertyRegistry.getSections();
-    }, [currentSelection.selectedNodeIds]);
-    // Handle selection changes
-    React.useEffect(() => {
-        if (externalSelection !== undefined && onSelectionChange !== undefined) {
-            updateSelection(externalSelection);
-        }
-    }, [externalSelection, updateSelection, onSelectionChange]);
+export const PropertiesPanel = ({
+  _documentId,
+  selection: externalSelection,
+  onPropertyChange,
+  onSelectionChange,
+  className = "",
+  style = {},
+}) => {
+  // Use the properties hook for state management
+  const {
+    selection,
+    updateSelection,
+    handlePropertyChange,
+    getCurrentPropertyValue,
+  } = useProperties();
+  // Use external selection if provided, otherwise use internal state
+  const currentSelection = externalSelection || selection;
+  // Get applicable sections for the current selection
+  const sections = useMemo(() => {
     if (currentSelection.selectedNodeIds.length === 0) {
-        return (_jsx("div", { className: `properties-panel ${className}`, style: {
-                width: 280,
-                height: "100%",
-                backgroundColor: "#f8f9fa",
-                borderLeft: "1px solid #e1e5e9",
-                padding: "16px",
-                overflowY: "auto",
-                ...style,
-            }, children: _jsx("div", { className: "properties-panel-empty", children: _jsxs("div", { className: "empty-state", children: [_jsx("div", { className: "empty-icon", children: "\uD83C\uDFAF" }), _jsx("h3", { children: "No Selection" }), _jsx("p", { children: "Select an element to edit its properties" })] }) }) }));
+      return [];
     }
-    return (_jsxs("div", { className: `properties-panel ${className}`, style: {
-            width: 280,
-            height: "100%",
-            backgroundColor: "#ffffff",
-            borderLeft: "1px solid #e1e5e9",
-            overflowY: "auto",
-            ...style,
-        }, children: [_jsxs("div", { className: "properties-panel-header", children: [_jsx("h2", { className: "panel-title", children: "Properties" }), _jsxs("div", { className: "selection-info", children: [currentSelection.selectedNodeIds.length, " element", currentSelection.selectedNodeIds.length !== 1 ? "s" : "", " selected"] })] }), _jsx("div", { className: "properties-panel-content", children: sections.map((section) => (_jsx(PropertySectionComponent, { section: section, selection: currentSelection, onPropertyChange: (event) => {
-                        handlePropertyChange(event);
-                        onPropertyChange?.(event);
-                    }, getPropertyValue: getCurrentPropertyValue }, section.id))) })] }));
+    // For now, return all sections since we don't have access to the actual nodes
+    // In a real implementation, we'd get the node types and filter accordingly
+    return PropertyRegistry.getSections();
+  }, [currentSelection.selectedNodeIds]);
+  // Handle selection changes
+  React.useEffect(() => {
+    if (externalSelection !== undefined && onSelectionChange !== undefined) {
+      updateSelection(externalSelection);
+    }
+  }, [externalSelection, updateSelection, onSelectionChange]);
+  if (currentSelection.selectedNodeIds.length === 0) {
+    return _jsx("div", {
+      className: `properties-panel ${className}`,
+      style: {
+        width: 280,
+        height: "100%",
+        backgroundColor: "#f8f9fa",
+        borderLeft: "1px solid #e1e5e9",
+        padding: "16px",
+        overflowY: "auto",
+        ...style,
+      },
+      children: _jsx("div", {
+        className: "properties-panel-empty",
+        children: _jsxs("div", {
+          className: "empty-state",
+          children: [
+            _jsx("div", { className: "empty-icon", children: "\uD83C\uDFAF" }),
+            _jsx("h3", { children: "No Selection" }),
+            _jsx("p", { children: "Select an element to edit its properties" }),
+          ],
+        }),
+      }),
+    });
+  }
+  return _jsxs("div", {
+    className: `properties-panel ${className}`,
+    style: {
+      width: 280,
+      height: "100%",
+      backgroundColor: "#ffffff",
+      borderLeft: "1px solid #e1e5e9",
+      overflowY: "auto",
+      ...style,
+    },
+    children: [
+      _jsxs("div", {
+        className: "properties-panel-header",
+        children: [
+          _jsx("h2", { className: "panel-title", children: "Properties" }),
+          _jsxs("div", {
+            className: "selection-info",
+            children: [
+              currentSelection.selectedNodeIds.length,
+              " element",
+              currentSelection.selectedNodeIds.length !== 1 ? "s" : "",
+              " selected",
+            ],
+          }),
+        ],
+      }),
+      _jsx("div", {
+        className: "properties-panel-content",
+        children: sections.map((section) =>
+          _jsx(
+            PropertySectionComponent,
+            {
+              section: section,
+              selection: currentSelection,
+              onPropertyChange: (event) => {
+                handlePropertyChange(event);
+                onPropertyChange?.(event);
+              },
+              getPropertyValue: getCurrentPropertyValue,
+            },
+            section.id
+          )
+        ),
+      }),
+    ],
+  });
 };
 /**
  * CSS styles for the properties panel

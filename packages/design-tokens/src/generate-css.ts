@@ -9,7 +9,10 @@ import type { DesignTokens } from "./tokens";
 /**
  * Flatten nested token objects into CSS custom property format
  */
-function flattenTokens(tokens: DesignTokens, prefix = ""): Record<string, string | number> {
+function flattenTokens(
+  tokens: DesignTokens,
+  prefix = ""
+): Record<string, string | number> {
   const result: Record<string, string | number> = {};
 
   function walk(obj: any, path: string[] = []) {
@@ -19,7 +22,9 @@ function flattenTokens(tokens: DesignTokens, prefix = ""): Record<string, string
       if (typeof value === "object" && value !== null) {
         walk(value, currentPath);
       } else {
-        const cssVar = `--${prefix ? `${prefix}-` : ""}${currentPath.join("-")}`;
+        const cssVar = `--${prefix ? `${prefix}-` : ""}${currentPath.join(
+          "-"
+        )}`;
         result[cssVar] = value as string | number;
       }
     }
@@ -58,7 +63,10 @@ export function generateCSSFile(
 
     console.info(`✅ Generated CSS tokens at ${outPath}`);
   } catch (error) {
-    console.error("❌ Failed to generate CSS tokens:", (error as Error).message);
+    console.error(
+      "❌ Failed to generate CSS tokens:",
+      (error as Error).message
+    );
     throw error;
   }
 }

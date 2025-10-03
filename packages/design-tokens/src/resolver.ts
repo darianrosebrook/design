@@ -50,10 +50,7 @@ export function extractReferencePath(reference: string): string {
  * Get token value by dot-notation path
  * Alias for utils.getToken for consistency
  */
-export function getTokenByPath(
-  tokens: DesignTokens,
-  path: string
-): unknown {
+export function getTokenByPath(tokens: DesignTokens, path: string): unknown {
   return getToken(tokens, path);
 }
 
@@ -160,7 +157,11 @@ export function validateTokenReferences(
   }
 
   // Check all references exist and depth is valid
-  function validatePath(path: string, depth = 0, visited = new Set<string>()): void {
+  function validatePath(
+    path: string,
+    depth = 0,
+    visited = new Set<string>()
+  ): void {
     if (depth > maxDepth) {
       errors.push({
         path,
@@ -175,7 +176,7 @@ export function validateTokenReferences(
     visited.add(path);
 
     const value = getTokenByPath(tokens, path);
-    
+
     if (value === undefined) {
       errors.push({
         path,
@@ -191,7 +192,7 @@ export function validateTokenReferences(
   }
 
   // Validate all token references
-  for (const [tokenPath, dependencies] of graph.entries()) {
+  for (const [_tokenPath, dependencies] of graph.entries()) {
     for (const dep of dependencies) {
       validatePath(dep);
     }
@@ -227,7 +228,11 @@ export function resolveTokenReferences(
   const resolved = JSON.parse(JSON.stringify(tokens)) as DesignTokens;
 
   // Resolve all references
-  function resolveValue(value: any, depth = 0, visited = new Set<string>()): any {
+  function resolveValue(
+    value: any,
+    depth = 0,
+    visited = new Set<string>()
+  ): any {
     if (depth > maxDepth) {
       if (strict) {
         throw new Error(`Max reference depth (${maxDepth}) exceeded`);
@@ -295,9 +300,9 @@ export function getTokenDependents(
   const graph = buildDependencyGraph(tokens);
   const dependents: string[] = [];
 
-  for (const [tokenPath, dependencies] of graph.entries()) {
+  for (const [_tokenPath, dependencies] of graph.entries()) {
     if (dependencies.has(targetPath)) {
-      dependents.push(tokenPath);
+      dependents.push(_tokenPath);
     }
   }
 
@@ -314,7 +319,7 @@ export function getTokenDependencies(
 ): string[] {
   const graph = buildDependencyGraph(tokens);
   const dependencies = graph.get(sourcePath);
-  
+
   if (!dependencies) {
     return [];
   }
@@ -340,4 +345,3 @@ export function getTokenDependencies(
 
   return Array.from(allDeps);
 }
-

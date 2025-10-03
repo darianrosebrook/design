@@ -32,4 +32,12 @@ export {
   type ValidationResult,
 } from "./resolver";
 
+// Export watcher
+export {
+  watchTokens,
+  watchTokensSimple,
+  type WatcherOptions,
+  type WatcherInstance,
+} from "./watcher";
+
 // Note: generate-css.js is a CLI script, not exported as library code
