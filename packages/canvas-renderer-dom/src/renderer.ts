@@ -138,7 +138,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
     // Render all artboards
     for (const artboard of document.artboards) {
       // Render artboard as a frame
-      const artboardElement = this.renderNode(artboard as any, context);
+      const artboardElement = this.renderNode(artboard as FrameNodeType, context);
       container.appendChild(artboardElement);
     }
 
@@ -379,7 +379,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
     this.nodeElements.set(node.id, element);
 
     // Render children if this is a frame (or artboard)
-    if (node.type === "frame" || (node as any).children) {
+    if (node.type === "frame" || "children" in node) {
       const frameNode = node as FrameNodeType;
       const childContext = { ...context, parentElement: element };
 

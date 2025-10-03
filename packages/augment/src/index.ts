@@ -237,7 +237,7 @@ export class AugmentationEngine {
         });
 
         // Apply the perturbation
-        node.frame = transformations[transformations.length - 1].after as any;
+        node.frame = transformations[transformations.length - 1].after as { x: number; y: number; width: number; height: number };
       }
 
       // Recurse into children
@@ -248,7 +248,7 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: any, index: number) => {
+    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
       artboard.children.forEach((node: NodeType, nodeIndex: number) => {
         perturbNode(node, `artboards[${index}].children[${nodeIndex}]`);
       });
@@ -282,7 +282,7 @@ export class AugmentationEngine {
 
     // Find all token references in the document
     function findTokens(
-      obj: any,
+      obj: Record<string, unknown>,
       path = ""
     ): Array<{ path: string; token: string }> {
       const tokens: Array<{ path: string; token: string }> = [];
@@ -387,7 +387,7 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: any, index: number) => {
+    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
       artboard.children.forEach((node: NodeType, nodeIndex: number) => {
         fuzzNode(node, `artboards[${index}].children[${nodeIndex}]`);
       });
@@ -401,13 +401,13 @@ export class AugmentationEngine {
     document: CanvasDocumentType,
     transformations: TransformationRecord[]
   ): void {
-    const engine = this; // Capture this context
+    // const engine = this; // Capture this context - removed to avoid this aliasing
     function fuzzNode(node: NodeType, path: string): void {
       if (node.type === "vector") {
-        const vectorNode = node as any;
+        const vectorNode = node as { type: string; [key: string]: unknown };
 
         if (
-          engine.config.svgFuzzing?.windingRuleVariation &&
+          this.config.svgFuzzing?.windingRuleVariation &&
           vectorNode.windingRule
         ) {
           const oldRule = vectorNode.windingRule;
@@ -436,7 +436,7 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: any, index: number) => {
+    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
       artboard.children.forEach((node: NodeType, nodeIndex: number) => {
         fuzzNode(node, `artboards[${index}].children[${nodeIndex}]`);
       });
@@ -508,7 +508,7 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: any, index: number) => {
+    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
       artboard.children.forEach((node: NodeType, nodeIndex: number) => {
         validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
       });
@@ -569,7 +569,7 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: any, index: number) => {
+    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
       artboard.children.forEach((node: NodeType, nodeIndex: number) => {
         validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
       });
@@ -620,7 +620,7 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: any, index: number) => {
+    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
       artboard.children.forEach((node: NodeType, nodeIndex: number) => {
         validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
       });
@@ -688,7 +688,7 @@ export class AugmentationEngine {
       }
     }
 
-    document.artboards.forEach((artboard: any, index: number) => {
+    document.artboards.forEach((artboard: { children: NodeType[] }, index: number) => {
       artboard.children.forEach((node: NodeType, nodeIndex: number) => {
         validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
       });

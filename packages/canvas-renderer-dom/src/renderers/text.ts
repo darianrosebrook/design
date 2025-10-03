@@ -111,11 +111,11 @@ function applyTypography(
 /**
  * Apply text color from fills
  */
-function applyTextColor(element: HTMLElement, fills: any[]): void {
+function applyTextColor(element: HTMLElement, fills: Array<{ type: string; color?: string; [key: string]: unknown }>): void {
   if (!fills || fills.length === 0) {return;}
 
   // Handle solid fills for text color
-  const solidFills = fills.filter((f: any) => f.type === "solid");
+  const solidFills = fills.filter((f) => f.type === "solid");
 
   if (solidFills.length > 0) {
     const fill = solidFills[0];
@@ -134,7 +134,7 @@ function applyTextColor(element: HTMLElement, fills: any[]): void {
   }
 
   // TODO: Handle gradient text (background-clip: text)
-  const gradientFills = fills.filter((f: any) => f.type === "gradient");
+  const gradientFills = fills.filter((f) => f.type === "gradient");
   if (gradientFills.length > 0) {
     console.warn("Gradient text not yet implemented");
   }

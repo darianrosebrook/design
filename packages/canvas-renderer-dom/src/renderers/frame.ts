@@ -90,7 +90,7 @@ function applyFrameStyles(element: HTMLElement, _node: FrameNodeType): void {
 /**
  * Apply fill styles to element
  */
-function applyFills(element: HTMLElement, fills: any[]): void {
+function applyFills(element: HTMLElement, fills: Array<{ type: string; [key: string]: unknown }>): void {
   if (!fills || fills.length === 0) {return;}
 
   // For now, handle solid fills (most common case)
@@ -121,7 +121,7 @@ function applyFills(element: HTMLElement, fills: any[]): void {
 /**
  * Apply stroke/border styles to element
  */
-function applyStrokes(element: HTMLElement, strokes: any[]): void {
+function applyStrokes(element: HTMLElement, strokes: Array<{ type: string; [key: string]: unknown }>): void {
   if (!strokes || strokes.length === 0) {return;}
 
   // For now, handle solid strokes (most common case)

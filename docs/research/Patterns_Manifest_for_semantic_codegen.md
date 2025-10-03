@@ -134,6 +134,66 @@
 
 **Updated for Component Contract Implementation:**
 
+### 2.1 Button Pattern (✅ IMPLEMENTED)
+
+* **Semantic Keys**: `cta.primary`, `cta.secondary`, `form.submit`
+* **Component Contract**: Maps to `Button` component with variant/size defaults
+* **HTML Emission**: `<button>` with proper ARIA attributes
+* **Accessibility**: Built-in focus management and ARIA support
+
+**Example Usage:**
+```json
+{
+  "type": "frame",
+  "name": "Get Started Button",
+  "semanticKey": "cta.primary",
+  "frame": { "x": 32, "y": 120, "width": 200, "height": 48 }
+}
+```
+→ Generates: `<Button variant="primary" size="large">Get Started</Button>`
+
+### 2.2 Hero Section Pattern (✅ IMPLEMENTED)
+
+* **Semantic Keys**: `hero.section`, `hero.title`, `hero.subtitle`
+* **HTML Emission**: `<header>` + `<h1>` with semantic roles
+* **Layout**: Flex-based responsive layout
+* **Accessibility**: Proper heading hierarchy and landmark roles
+
+### 2.3 Navigation Pattern (✅ IMPLEMENTED)
+
+* **Semantic Keys**: `nav.container`, `nav.items[0]`, `nav.items[1]`
+* **HTML Emission**: `<nav>` + `<a>` elements with proper ARIA
+* **Keyboard**: Arrow key navigation support
+* **Accessibility**: Navigation landmark and link roles
+
+### 2.4 Form Patterns (✅ IMPLEMENTED)
+
+* **Semantic Keys**: `form.input.field`, `form.input.label`, `form.submit`
+* **HTML Emission**: `<input>` + `<label>` with proper associations
+* **Accessibility**: Form labeling and validation states
+* **Validation**: Required field indicators
+
+### 2.5 Card Pattern (✅ IMPLEMENTED)
+
+* **Semantic Keys**: `card.container`, `card.header`, `card.body`
+* **HTML Emission**: `<article>` with semantic sections
+* **Layout**: Flexible content organization
+* **Accessibility**: Article landmark role
+
+### 2.6 List Pattern (✅ IMPLEMENTED)
+
+* **Semantic Keys**: `list.items[0]`, `list.container`
+* **HTML Emission**: `<ul>` + `<li>` with proper semantics
+* **Accessibility**: List/listitem roles
+
+**Implementation Learnings:**
+- **Component contracts** work better than pure manifest patterns for React ecosystems
+- **Semantic keys** provide the stable identification originally planned for manifests
+- **Built-in pattern inference** reduces need for complex manifest definitions
+- **Accessibility validation** during augmentation catches issues early
+
+---
+
 ### 2.1 Button
 
 * **ID**: `pattern.button`

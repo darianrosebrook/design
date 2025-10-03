@@ -76,7 +76,7 @@ export function renderComponent(
 function renderComponentPlaceholder(
   element: HTMLElement,
   node: ComponentInstanceNodeType,
-  component: any
+  component: { name: string; [key: string]: unknown }
 ): void {
   // Create header with component name
   const header = document.createElement("div");

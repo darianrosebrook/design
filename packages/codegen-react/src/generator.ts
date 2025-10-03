@@ -201,7 +201,7 @@ export class ReactGenerator {
   /**
    * Generate React component for a single artboard
    */
-  private generateComponentForArtboard(artboard: any): GeneratedFile[] {
+  private generateComponentForArtboard(artboard: { name: string; children: NodeType[]; [key: string]: unknown }): GeneratedFile[] {
     const files: GeneratedFile[] = [];
     const {
       clock: _clock,
@@ -636,7 +636,7 @@ export class ReactGenerator {
     // Find the best matching component contract for this semantic key
     let bestMatch: {
       componentKey: string;
-      mapping: any;
+      mapping: { propDefaults: Record<string, unknown>; [key: string]: unknown };
       priority: number;
     } | null = null;
 
