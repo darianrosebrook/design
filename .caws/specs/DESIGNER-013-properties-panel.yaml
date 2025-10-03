@@ -1,0 +1,99 @@
+id: DESIGNER-013
+title: 'Properties Panel - Interactive Property Editing'
+risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 15
+  max_loc: 800
+blast_radius:
+  modules:
+    - packages/vscode-ext/src/properties-panel-webview.ts
+    - packages/vscode-ext/src/index.ts
+    - packages/properties-panel
+  data_migration: false
+operational_rollback_slo: 15m
+threats:
+  - 'Property changes not persisted to document'
+  - 'Stale property values shown in panel'
+  - 'Canvas renderer out of sync with property panel'
+  - 'Invalid property values accepted without validation'
+  - 'Undo/redo state inconsistent'
+scope:
+  in:
+    - packages/vscode-ext/src/properties-panel-webview.ts
+    - packages/vscode-ext/src/index.ts
+    - packages/vscode-ext/tests/properties-panel-webview.test.ts
+    - packages/properties-panel/
+  out:
+    - packages/canvas-renderer-dom/
+    - packages/canvas-schema/
+invariants:
+  - 'Property changes always save to document before UI acknowledgement'
+  - 'Canvas renderer receives notifications of all property changes'
+  - 'Old values tracked for undo/redo support'
+  - 'Properties panel shows current values from actual document state'
+  - 'Bidirectional sync: canvas → panel and panel → canvas'
+acceptance:
+  - id: A1
+    given: 'User edits X position property in panel'
+    when: 'Value is submitted'
+    then: 'Document updates, file saves, canvas re-renders at new position'
+  - id: A2
+    given: 'Canvas renderer updates node position'
+    when: 'Property change event fires'
+    then: 'Properties panel reflects new values immediately'
+  - id: A3
+    given: 'Multiple nodes selected'
+    when: 'User edits shared property'
+    then: 'All selected nodes update with new value'
+  - id: A4
+    given: 'User opens properties panel with node selected'
+    when: 'Panel loads'
+    then: 'Current property values displayed from document'
+  - id: A5
+    given: 'User changes property to invalid value'
+    when: 'Validation runs'
+    then: 'Error shown, original value retained'
+  - id: A6
+    given: 'Property change applied successfully'
+    when: 'Acknowledgement received'
+    then: 'UI shows success feedback and updates display'
+non_functional:
+  a11y:
+    - 'Properties panel keyboard navigable'
+    - 'Screen reader announces property changes'
+    - 'Focus management between panel and canvas'
+  perf:
+    property_update_latency_ms: 100
+    panel_render_ms: 50
+    additional:
+      - 'Property updates debounced at 300ms for rapid changes'
+      - 'Panel re-renders only affected property editors'
+      - 'Memory usage <10MB for property panel state'
+  security:
+    - 'Property values sanitized before save'
+    - 'Path traversal blocked in document ID lookups'
+    - 'CSP enforced for webview content'
+contracts:
+  - type: message_protocol
+    path: packages/vscode-ext/src/properties-panel-webview.ts
+  - type: event_schema
+    path: packages/properties-panel/src/index.ts
+observability:
+  logs:
+    - 'property.change.start with node ID and property key'
+    - 'property.change.complete with duration and new value'
+    - 'property.change.error with validation failure reason'
+  metrics:
+    - 'property_changes_total counter'
+    - 'property_update_duration_ms histogram'
+    - 'property_validation_failures_total counter'
+    - 'panel_selection_updates_total counter'
+  traces:
+    - 'property.change.pipeline from UI to document save'
+    - 'property.sync.bidirectional for panel ↔ canvas sync'
+migrations:
+  - 'Initial release - no migrations required'
+rollback:
+  - 'Can disable property editing via feature flag'
+  - 'Read-only mode available if save operations fail'
