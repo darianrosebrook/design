@@ -171,18 +171,21 @@ export class SemanticDiffEngine {
    */
   private createAddOperation(change: NodeChange): DiffOperation {
     const { nodeId, newNode, newPath } = change;
-    const parentPath = newPath!.slice(0, -1);
-    const index = parseInt(newPath![newPath!.length - 1]);
+    if (!newPath) {
+      throw new Error("newPath is required for add operation");
+    }
+    const parentPath = newPath.slice(0, -1);
+    const index = parseInt(newPath[newPath.length - 1]);
 
     return {
       type: "add",
       nodeId,
-      path: newPath!,
+      path: newPath,
       newValue: newNode,
       metadata: {
         parentId: this.getParentIdFromPath(parentPath),
         index,
-        description: `Added ${newNode!.type} node "${newNode!.name}"`,
+        description: `Added ${newNode?.type ?? "unknown"} node "${newNode?.name ?? "unnamed"}"`,
         severity: "info",
       },
     };
@@ -197,10 +200,10 @@ export class SemanticDiffEngine {
     return {
       type: "remove",
       nodeId,
-      path: oldPath!,
+      path: oldPath ?? [],
       oldValue: oldNode,
       metadata: {
-        description: `Removed ${oldNode!.type} node "${oldNode!.name}"`,
+        description: `Removed ${oldNode?.type ?? "unknown"} node "${oldNode?.name ?? "unnamed"}"`,
         severity: "warning",
       },
     };
@@ -219,7 +222,7 @@ export class SemanticDiffEngine {
     if (this.options.includeProperty) {
       const frameOps = this.diffFrames(
         nodeId,
-        newPath!,
+        newPath ?? [],
         oldNode.frame,
         newNode.frame
       );
@@ -282,20 +285,23 @@ export class SemanticDiffEngine {
    */
   private createMoveOperation(change: NodeChange): DiffOperation {
     const { nodeId, oldPath, newPath } = change;
-    const _oldParentPath = oldPath!.slice(0, -1);
-    const newParentPath = newPath!.slice(0, -1);
-    const newIndex = parseInt(newPath![newPath!.length - 1]);
+    if (!oldPath || !newPath) {
+      throw new Error("oldPath and newPath are required for move operation");
+    }
+    const _oldParentPath = oldPath.slice(0, -1);
+    const newParentPath = newPath.slice(0, -1);
+    const newIndex = parseInt(newPath[newPath.length - 1]);
 
     return {
       type: "move",
       nodeId,
-      path: newPath!,
+      path: newPath,
       metadata: {
         parentId: this.getParentIdFromPath(newParentPath),
         index: newIndex,
         description: `Moved node from ${this.formatPath(
-          oldPath!
-        )} to ${this.formatPath(newPath!)}`,
+          oldPath
+        )} to ${this.formatPath(newPath)}`,
         severity: "info",
       },
     };
@@ -307,8 +313,8 @@ export class SemanticDiffEngine {
   private diffFrames(
     nodeId: string,
     path: string[],
-    oldFrame: any,
-    newFrame: any
+    oldFrame: { x: number; y: number; width: number; height: number } | undefined,
+    newFrame: { x: number; y: number; width: number; height: number } | undefined
   ): DiffOperation[] {
     if (!oldFrame || !newFrame) {return [];}
 
@@ -374,8 +380,8 @@ export class SemanticDiffEngine {
   private diffLayout(
     nodeId: string,
     path: string[],
-    oldLayout: any,
-    newLayout: any
+    oldLayout: Record<string, unknown> | undefined,
+    newLayout: Record<string, unknown> | undefined
   ): DiffOperation[] {
     // Handle cases where one or both layouts are undefined
     const oldLayoutStr = oldLayout ? JSON.stringify(oldLayout) : "";
