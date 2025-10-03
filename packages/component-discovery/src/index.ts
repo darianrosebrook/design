@@ -10,7 +10,7 @@ import type { CanvasDocumentType, NodeType } from "@paths-design/canvas-schema";
 import type { ComponentIndex } from "@paths-design/component-indexer";
 import { glob } from "glob";
 import type { TypeNode } from "ts-morph";
-import { Project, Node as TsNode } from "ts-morph";
+import { Project, Node as TsNode, SyntaxKind } from "ts-morph";
 
 /**
  * Component discovery result
@@ -146,6 +146,7 @@ export interface ReusablePattern {
   occurrences: number;
   semanticKeys: string[];
   suggestedComponentName: string;
+  complexity: number;
 }
 
 /**
@@ -327,7 +328,7 @@ export class ComponentDiscoveryEngine {
 
           const instance = componentInstances.get(componentKey)!;
           instance.count++;
-          instance.props.add(...Object.keys((node as any).props || {}));
+          Object.keys((node as any).props || {}).forEach(prop => instance.props.add(prop));
 
           const semanticKey = (node as any).semanticKey;
           if (semanticKey) {
@@ -383,10 +384,13 @@ export class ComponentDiscoveryEngine {
     for (const sourceFile of sourceFiles) {
       // Look for React component definitions
       const components = sourceFile.getDescendantsOfKind(
-        TsNode.isFunctionDeclaration
+        SyntaxKind.FunctionDeclaration
       );
 
       for (const component of components) {
+        if (!TsNode.isFunctionDeclaration(component)) {
+          continue;
+        }
         const name = component.getName();
         if (!name) {
           continue;
@@ -421,10 +425,13 @@ export class ComponentDiscoveryEngine {
     }
 
     const properties = propsType.getDescendantsOfKind(
-      TsNode.isPropertySignature
+      SyntaxKind.PropertySignature
     );
 
     for (const prop of properties) {
+      if (!TsNode.isPropertySignature(prop)) {
+        continue;
+      }
       const name = prop.getName();
       const type = this.getTypeString(prop.getTypeNode());
       const required = !prop.hasQuestionToken();
@@ -457,9 +464,9 @@ export class ComponentDiscoveryEngine {
    */
   private findPropsType(component: TsNode): TsNode | undefined {
     // Look for props parameter
-    const parameters = component.getDescendantsOfKind(TsNode.isParameter);
+    const parameters = component.getDescendantsOfKind(SyntaxKind.Parameter);
     for (const param of parameters) {
-      const type = param.getTypeNode();
+      const type = param.asKind(SyntaxKind.Parameter)?.getTypeNode();
       if (type) {
         return type;
       }
@@ -484,17 +491,9 @@ export class ComponentDiscoveryEngine {
    * Extract default value from prop
    */
   private extractDefaultValue(prop: TsNode): unknown {
-    // Look for default value assignment
-    const initializer = prop.getDescendantsOfKind(TsNode.isInitializer);
-    if (initializer.length > 0) {
-      const text = initializer[0].getText();
-      try {
-        // Simple evaluation - in production, use a proper JS evaluator
-        return JSON.parse(text);
-      } catch {
-        return text;
-      }
-    }
+    // Property signatures in TypeScript interfaces don't have initializers
+    // Default values are typically set in the component implementation
+    // This is a placeholder for future enhancement
     return undefined;
   }
 
@@ -688,6 +687,7 @@ export class ComponentDiscoveryEngine {
           occurrences: pattern.occurrences,
           semanticKeys,
           suggestedComponentName: `Reusable${pattern.occurrences}Pattern`,
+          complexity: pattern.nodes.length, // Simple complexity metric based on number of nodes
         });
       }
     }
@@ -1060,6 +1060,7 @@ export class ComponentAutoDiscovery {
             occurrences: 3,
             semanticKeys: ["cta.primary", "cta.secondary"],
             suggestedComponentName: "ButtonWithText",
+            complexity: 2,
           },
         ],
         extractionSuggestions: [

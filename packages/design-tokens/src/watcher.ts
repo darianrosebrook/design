@@ -118,7 +118,7 @@ export function watchTokens(options: WatcherOptions): WatcherInstance {
       if (!parseResult.success) {
         throw new Error(
           `Invalid tokens schema: ${parseResult.error.issues
-            .map((e) => `${e.path.join(".")}: ${e.message}`)
+            .map((e) => `${e.path.map(String).join(".")}: ${e.message}`)
             .join(", ")}`
         );
       }

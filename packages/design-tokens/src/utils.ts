@@ -87,7 +87,10 @@ export function getToken(
     }
   }
 
-  return current as string | number | undefined;
+  if (typeof current === "string" || typeof current === "number") {
+    return current;
+  }
+  return undefined;
 }
 
 /**
@@ -106,7 +109,7 @@ export function setToken(
   for (let i = 0; i < parts.length - 1; i++) {
     const part = parts[i];
     if (!current[part] || typeof current[part] !== "object") {
-      current[part] = {};
+      current[part] = {} as Record<string, unknown>;
     }
     current = current[part] as Record<string, unknown>;
   }
@@ -131,7 +134,7 @@ export function validateTokens(tokens: Record<string, unknown>): {
     return {
       valid: false,
       errors: result.error.issues.map(
-        (err) => `${err.path.join(".")}: ${err.message}`
+        (err) => `${err.path.map(String).join(".")}: ${err.message}`
       ),
     };
   }
@@ -157,7 +160,7 @@ export function mergeTokens(
         !Array.isArray(source[key])
       ) {
         if (!target[key]) {
-          target[key] = {};
+          target[key] = {} as Record<string, unknown>;
         }
         deepMerge(
           target[key] as Record<string, unknown>,
