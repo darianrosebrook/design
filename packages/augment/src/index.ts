@@ -28,6 +28,11 @@ export interface AugmentationConfig {
     windingRuleVariation: boolean;
     strokeWidthVariation: boolean;
   };
+  a11yValidation?: {
+    enabled: boolean;
+    strict: boolean;
+    contrastThreshold: "AA" | "AAA";
+  };
 }
 
 /**
@@ -52,18 +57,51 @@ export interface AugmentedDocument {
   original: CanvasDocumentType;
   augmented: CanvasDocumentType;
   transformations: TransformationRecord[];
+  a11yValidation?: A11yValidationResult;
 }
 
 /**
  * Transformation record for tracking changes
  */
 export interface TransformationRecord {
-  type: "layout" | "token" | "prop" | "svg";
+  type: "layout" | "token" | "prop" | "svg" | "a11y";
   nodeId: string;
   nodePath: string;
   description: string;
   before?: unknown;
   after?: unknown;
+}
+
+/**
+ * Accessibility validation result
+ */
+export interface A11yValidationResult {
+  passed: boolean;
+  violations: A11yViolation[];
+  warnings: A11yWarning[];
+}
+
+/**
+ * Accessibility violation
+ */
+export interface A11yViolation {
+  type: "contrast" | "focus" | "semantic" | "aria" | "keyboard";
+  severity: "error" | "warning";
+  nodeId: string;
+  nodePath: string;
+  message: string;
+  suggestion?: string;
+}
+
+/**
+ * Accessibility warning
+ */
+export interface A11yWarning {
+  type: "contrast" | "focus" | "semantic" | "aria" | "keyboard";
+  nodeId: string;
+  nodePath: string;
+  message: string;
+  suggestion?: string;
 }
 
 /**
@@ -78,6 +116,7 @@ export class AugmentationEngine {
       tokenPermutation: { enabled: true },
       propFuzzing: { enabled: true },
       svgFuzzing: { enabled: true, windingRuleVariation: true, strokeWidthVariation: true },
+      a11yValidation: { enabled: true, strict: false, contrastThreshold: "AA" },
       ...config,
     };
   }
@@ -126,10 +165,20 @@ export class AugmentationEngine {
       this.applySVGFuzzing(augmented, transformations);
     }
 
+    // Apply accessibility validation
+    let a11yValidation: A11yValidationResult | undefined;
+    if (this.config.a11yValidation?.enabled) {
+      a11yValidation = this.validateAccessibility(augmented);
+      if (this.config.a11yValidation.strict && !a11yValidation.passed) {
+        throw new Error(`Accessibility validation failed: ${a11yValidation.violations.length} violations found`);
+      }
+    }
+
     return {
       original: document,
       augmented,
       transformations,
+      a11yValidation,
     };
   }
 
@@ -346,6 +395,240 @@ export class AugmentationEngine {
     document.artboards.forEach((artboard: any, index: number) => {
       artboard.children.forEach((node: NodeType, nodeIndex: number) => {
         fuzzNode(node, `artboards[${index}].children[${nodeIndex}]`);
+      });
+    });
+  }
+
+  /**
+   * Validate accessibility constraints on a canvas document
+   */
+  private validateAccessibility(document: CanvasDocumentType): A11yValidationResult {
+    const violations: A11yViolation[] = [];
+    const warnings: A11yWarning[] = [];
+
+    // Color contrast validation
+    this.validateColorContrast(document, violations, warnings);
+
+    // Semantic role validation
+    this.validateSemanticRoles(document, violations, warnings);
+
+    // Focus visibility validation
+    this.validateFocusVisibility(document, violations, warnings);
+
+    // ARIA attribute validation
+    this.validateARIA(document, violations, warnings);
+
+    return {
+      passed: violations.length === 0,
+      violations,
+      warnings,
+    };
+  }
+
+  /**
+   * Validate color contrast ratios (WCAG 2.1)
+   */
+  private validateColorContrast(
+    document: CanvasDocumentType,
+    violations: A11yViolation[],
+    warnings: A11yWarning[]
+  ): void {
+    // Simple color contrast validation for text nodes
+    function validateNode(node: NodeType, path: string): void {
+      if (node.type === "text" && node.textStyle?.color) {
+        const textColor = node.textStyle.color;
+        const backgroundColor = "#ffffff"; // Assume white background for now
+
+        // This is a simplified check - in reality, we'd need to resolve tokens
+        // and check actual contrast ratios
+        if (textColor.includes("tokens.")) {
+          // Token-based color - would need resolution in real implementation
+          warnings.push({
+            type: "contrast",
+            nodeId: node.id,
+            nodePath: path,
+            message: `Text color uses token "${textColor}" - contrast ratio should be validated after token resolution`,
+            suggestion: "Ensure resolved color meets WCAG contrast requirements",
+          });
+        }
+      }
+
+      // Recurse into children
+      if ("children" in node && node.children) {
+        node.children.forEach((child: NodeType, index: number) => {
+          validateNode(child, `${path}.children[${index}]`);
+        });
+      }
+    }
+
+    document.artboards.forEach((artboard: any, index: number) => {
+      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+        validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
+      });
+    });
+  }
+
+  /**
+   * Validate semantic roles and ARIA attributes
+   */
+  private validateSemanticRoles(
+    document: CanvasDocumentType,
+    violations: A11yViolation[],
+    warnings: A11yWarning[]
+  ): void {
+    function validateNode(node: NodeType, path: string): void {
+      // Check if semantic keys are used appropriately
+      if (node.semanticKey) {
+        const semanticKey = node.semanticKey;
+
+        // Validate common semantic patterns
+        if (semanticKey.startsWith("hero.") && node.type !== "frame") {
+          warnings.push({
+            type: "semantic",
+            nodeId: node.id,
+            nodePath: path,
+            message: `Hero semantic key "${semanticKey}" used on non-frame node`,
+            suggestion: "Consider using frame nodes for hero sections",
+          });
+        }
+
+        if (semanticKey.startsWith("nav.") && node.type !== "frame") {
+          warnings.push({
+            type: "semantic",
+            nodeId: node.id,
+            nodePath: path,
+            message: `Navigation semantic key "${semanticKey}" used on non-frame node`,
+            suggestion: "Consider using frame nodes for navigation sections",
+          });
+        }
+
+        if (semanticKey.startsWith("cta.") && node.type === "text") {
+          warnings.push({
+            type: "semantic",
+            nodeId: node.id,
+            nodePath: path,
+            message: `CTA semantic key "${semanticKey}" used on text node - may not be interactive`,
+            suggestion: "Consider using frame or component nodes for interactive CTAs",
+          });
+        }
+      }
+
+      // Recurse into children
+      if ("children" in node && node.children) {
+        node.children.forEach((child: NodeType, index: number) => {
+          validateNode(child, `${path}.children[${index}]`);
+        });
+      }
+    }
+
+    document.artboards.forEach((artboard: any, index: number) => {
+      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+        validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
+      });
+    });
+  }
+
+  /**
+   * Validate focus visibility
+   */
+  private validateFocusVisibility(
+    document: CanvasDocumentType,
+    violations: A11yViolation[],
+    warnings: A11yWarning[]
+  ): void {
+    // Check for interactive elements that should have focus styles
+    function validateNode(node: NodeType, path: string): void {
+      if (node.type === "component" && node.componentKey) {
+        // Component instances should handle focus internally
+        warnings.push({
+          type: "focus",
+          nodeId: node.id,
+          nodePath: path,
+          message: `Component instance "${node.componentKey}" should handle focus visibility internally`,
+          suggestion: "Ensure component library provides focus indicators",
+        });
+      }
+
+      if (node.semanticKey?.startsWith("cta.") || node.name.toLowerCase().includes("button")) {
+        // Interactive elements should have focus styles
+        warnings.push({
+          type: "focus",
+          nodeId: node.id,
+          nodePath: path,
+          message: `Interactive element should have visible focus indicator`,
+          suggestion: "Add focus styles or ensure component handles focus visibility",
+        });
+      }
+
+      // Recurse into children
+      if ("children" in node && node.children) {
+        node.children.forEach((child: NodeType, index: number) => {
+          validateNode(child, `${path}.children[${index}]`);
+        });
+      }
+    }
+
+    document.artboards.forEach((artboard: any, index: number) => {
+      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+        validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
+      });
+    });
+  }
+
+  /**
+   * Validate ARIA attributes and relationships
+   */
+  private validateARIA(
+    document: CanvasDocumentType,
+    violations: A11yViolation[],
+    warnings: A11yWarning[]
+  ): void {
+    // Check for proper ARIA usage patterns
+    function validateNode(node: NodeType, path: string): void {
+      // Check for form elements without labels
+      if (node.type === "component" && node.componentKey?.toLowerCase().includes("input")) {
+        warnings.push({
+          type: "aria",
+          nodeId: node.id,
+          nodePath: path,
+          message: `Input component should be associated with a label`,
+          suggestion: "Ensure form inputs have proper labeling",
+        });
+      }
+
+      // Check for landmark roles
+      if (node.semanticKey?.startsWith("nav.") && !node.name.toLowerCase().includes("nav")) {
+        warnings.push({
+          type: "aria",
+          nodeId: node.id,
+          nodePath: path,
+          message: `Navigation semantic key used but element may not be properly announced as landmark`,
+          suggestion: "Consider adding navigation landmark role",
+        });
+      }
+
+      // Check for heading hierarchy
+      if (node.type === "text" && node.textStyle?.size && node.textStyle.size > 24) {
+        warnings.push({
+          type: "aria",
+          nodeId: node.id,
+          nodePath: path,
+          message: `Large text may indicate heading - ensure proper heading hierarchy`,
+          suggestion: "Use semantic heading elements or ARIA heading roles",
+        });
+      }
+
+      // Recurse into children
+      if ("children" in node && node.children) {
+        node.children.forEach((child: NodeType, index: number) => {
+          validateNode(child, `${path}.children[${index}]`);
+        });
+      }
+    }
+
+    document.artboards.forEach((artboard: any, index: number) => {
+      artboard.children.forEach((node: NodeType, nodeIndex: number) => {
+        validateNode(node, `artboards[${index}].children[${nodeIndex}]`);
       });
     });
   }

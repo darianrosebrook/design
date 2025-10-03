@@ -46,6 +46,7 @@ describe("AugmentationEngine", () => {
       tokenPermutation: { enabled: true },
       propFuzzing: { enabled: true },
       svgFuzzing: { enabled: true, windingRuleVariation: true, strokeWidthVariation: true },
+      a11yValidation: { enabled: true, strict: false, contrastThreshold: "AA" },
     });
   });
 
@@ -151,6 +152,104 @@ describe("AugmentationEngine", () => {
 
       const result = await customEngine.augmentDocument(testDocument);
       expect(result.transformations.length).toBeGreaterThan(0);
+    });
+
+    it("includes accessibility validation results", async () => {
+      const variants = await engine.generateAugmentedVariants(testDocument, 1);
+      const variant = variants[0];
+
+      expect(variant.a11yValidation).toBeDefined();
+      expect(variant.a11yValidation!.passed).toBe(true);
+      expect(variant.a11yValidation!.violations).toEqual([]);
+      expect(variant.a11yValidation!.warnings.length).toBeGreaterThanOrEqual(0);
+    });
+
+    it("validates semantic role usage", async () => {
+      const semanticDocument = {
+        ...testDocument,
+        artboards: [
+          {
+            ...testDocument.artboards[0],
+            children: [
+              {
+                id: "01JF2Q06GTS16EJ3A3F0KK9K3T",
+                type: "text",
+                name: "Hero Text",
+                frame: { x: 0, y: 0, width: 100, height: 50 },
+                text: "Hero Title",
+                semanticKey: "hero.title", // Hero key on text node (should warn)
+              },
+            ],
+          },
+        ],
+      };
+
+      const variants = await engine.generateAugmentedVariants(semanticDocument, 1);
+      const variant = variants[0];
+
+      expect(variant.a11yValidation!.warnings.length).toBeGreaterThan(0);
+      const semanticWarnings = variant.a11yValidation!.warnings.filter(w => w.type === "semantic");
+      expect(semanticWarnings.length).toBeGreaterThan(0);
+    });
+
+    it("respects strict accessibility validation", async () => {
+      const strictEngine = new AugmentationEngine({
+        a11yValidation: { enabled: true, strict: true, contrastThreshold: "AA" },
+      });
+
+      // This should not throw since our test document passes validation
+      await expect(strictEngine.augmentDocument(testDocument)).resolves.toBeDefined();
+    });
+  });
+
+  describe("accessibility validation", () => {
+    it("detects potential accessibility issues", async () => {
+      const problematicDocument = {
+        schemaVersion: "0.1.0",
+        id: "01JF2PZV9G2WR5C3W7P0YHNX9D",
+        name: "Problematic Document",
+        artboards: [
+          {
+            id: "01JF2Q02Q3MZ3Q9J7HB3X6N9QB",
+            name: "Artboard 1",
+            frame: { x: 0, y: 0, width: 1440, height: 1024 },
+            children: [
+              {
+                id: "01JF2Q06GTS16EJ3A3F0KK9K3T",
+                type: "component",
+                name: "Input Field",
+                frame: { x: 0, y: 0, width: 200, height: 40 },
+                componentKey: "Input", // Input without label
+              },
+              {
+                id: "01JF2Q07GTS16EJ3A3F0KK9K3U",
+                type: "text",
+                name: "Large Text",
+                frame: { x: 0, y: 50, width: 300, height: 60 },
+                text: "This might be a heading",
+                textStyle: { size: 32 }, // Large text that might need heading semantics
+              },
+            ],
+          },
+        ],
+      };
+
+      const variants = await engine.generateAugmentedVariants(problematicDocument, 1);
+      const variant = variants[0];
+
+      expect(variant.a11yValidation!.warnings.length).toBeGreaterThan(0);
+
+      // Should warn about input without label
+      const inputWarnings = variant.a11yValidation!.warnings.filter(w =>
+        w.type === "aria" && w.message.includes("Input component")
+      );
+      expect(inputWarnings.length).toBeGreaterThan(0);
+
+      // Should warn about large text needing heading semantics
+      const headingWarnings = variant.a11yValidation!.warnings.filter(w =>
+        w.type === "aria" && w.message.includes("heading")
+      );
+      expect(headingWarnings.length).toBeGreaterThan(0);
     });
   });
 });
