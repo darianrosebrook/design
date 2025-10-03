@@ -22,6 +22,7 @@ import { RENDERER_CLASSES, RENDERER_EVENTS } from "./types.js";
 import { renderFrame } from "./renderers/frame.js";
 import { renderText } from "./renderers/text.js";
 import { renderComponent } from "./renderers/component.js";
+import { Observability, createObservability } from "./observability.js";
 
 /**
  * DOM-based canvas renderer
@@ -46,13 +47,16 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   private lastFrameTime = 0;
   private frameCount = 0;
   private fps = 60;
-  
+
   // High-DPI support
   private pixelRatio = 1;
-  
+
   // Accessibility support
   private focusedNodeId: string | null = null;
   private liveRegion: HTMLElement | null = null;
+  
+  // Observability
+  private observability: Observability;
 
   constructor(options: RendererOptions = {}) {
     this.options = {
@@ -62,12 +66,29 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       onSelectionChange: options.onSelectionChange ?? (() => {}),
       onNodeUpdate: options.onNodeUpdate ?? (() => {}),
     };
+    
+    // Initialize observability
+    this.observability = createObservability(
+      process.env.NODE_ENV !== "production"
+    );
   }
 
   /**
    * Render canvas document to DOM
    */
   render(document: CanvasDocumentType, container: HTMLElement): void {
+    const startTime = performance.now();
+    const nodeCount = document.artboards.reduce(
+      (sum, ab) => sum + (ab.children?.length ?? 0),
+      0
+    );
+    
+    this.observability.logger.info("renderer.render.start", "Starting render", {
+      documentId: document.id,
+      nodeCount,
+    });
+    this.observability.tracer.start("renderer.render.pipeline");
+    
     this.document = document;
     this.container = container;
 
@@ -85,12 +106,12 @@ export class CanvasDOMRenderer implements CanvasRenderer {
     container.style.width = "100%";
     container.style.height = "100%";
     container.style.overflow = "hidden";
-    
+
     // Accessibility: Set ARIA role for canvas
     container.setAttribute("role", "application");
     container.setAttribute("aria-label", "Canvas design editor");
     container.tabIndex = 0; // Make container focusable
-    
+
     // Apply High-DPI scaling hint for crisp rendering
     if (this.pixelRatio > 1) {
       container.style.imageRendering = "crisp-edges";
@@ -100,7 +121,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       container.style.width = `${100 * this.pixelRatio}%`;
       container.style.height = `${100 * this.pixelRatio}%`;
     }
-    
+
     // Create live region for screen reader announcements
     this.createLiveRegion(container);
 
@@ -128,6 +149,29 @@ export class CanvasDOMRenderer implements CanvasRenderer {
 
     // Render selection overlay
     this.updateSelectionOverlay();
+    
+    // Observability: Complete render
+    this.observability.tracer.end("renderer.render.pipeline");
+    const duration = performance.now() - startTime;
+    
+    this.observability.logger.info("renderer.render.complete", "Render complete", {
+      documentId: document.id,
+      nodeCount,
+      duration: `${duration.toFixed(2)}ms`,
+      nodesDrawn: this.nodeElements.size,
+    });
+    
+    this.observability.metrics.histogram(
+      "renderer_frame_duration_ms",
+      duration,
+      { document_id: document.id }
+    );
+    this.observability.metrics.counter(
+      "renderer_nodes_drawn_total",
+      this.nodeElements.size,
+      { document_id: document.id }
+    );
+    this.observability.metrics.gauge("renderer_fps", this.fps);
   }
 
   /**
@@ -136,10 +180,19 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   updateNodes(nodeIds: string[], updates: Partial<NodeType>[]): void {
     if (!this.document || !this.container) return;
 
+    this.observability.logger.debug("renderer.updateNodes", "Updating nodes", {
+      nodeCount: nodeIds.length,
+    });
+
     // Mark nodes as dirty
     for (const nodeId of nodeIds) {
       this.dirtyNodes.add(nodeId);
     }
+    
+    this.observability.metrics.counter(
+      "renderer_dirty_nodes_total",
+      nodeIds.length
+    );
 
     // Schedule update on next frame (throttled)
     this.scheduleUpdate(() => {
@@ -162,7 +215,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   setSelection(nodeIds: string[]): void {
     const previousSelection = new Set(this.selection.selectedIds);
     this.selection.selectedIds = new Set(nodeIds);
-    
+
     // Update ARIA attributes for changed nodes
     for (const nodeId of previousSelection) {
       if (!this.selection.selectedIds.has(nodeId)) {
@@ -172,14 +225,14 @@ export class CanvasDOMRenderer implements CanvasRenderer {
         }
       }
     }
-    
+
     for (const nodeId of this.selection.selectedIds) {
       const element = this.nodeElements.get(nodeId);
       if (element) {
         element.setAttribute("aria-selected", "true");
       }
     }
-    
+
     this.updateSelectionOverlay();
     this.options.onSelectionChange([...nodeIds]);
   }
@@ -287,6 +340,13 @@ export class CanvasDOMRenderer implements CanvasRenderer {
    */
   getPixelRatio(): number {
     return this.pixelRatio;
+  }
+
+  /**
+   * Get observability instance for monitoring
+   */
+  getObservability(): Observability {
+    return this.observability;
   }
 
   /**
@@ -478,7 +538,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
    */
   private announce(message: string): void {
     if (!this.liveRegion) return;
-    
+
     // Clear and set message
     this.liveRegion.textContent = "";
     setTimeout(() => {
@@ -491,10 +551,13 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   /**
    * Apply accessibility attributes to node element
    */
-  private applyAccessibilityAttributes(element: HTMLElement, node: NodeType): void {
+  private applyAccessibilityAttributes(
+    element: HTMLElement,
+    node: NodeType
+  ): void {
     // Make element focusable
     element.tabIndex = 0;
-    
+
     // Set ARIA role based on node type
     switch (node.type) {
       case "frame":
@@ -504,7 +567,10 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       case "text":
         element.setAttribute("role", "text");
         const textNode = node as TextNodeType;
-        element.setAttribute("aria-label", `Text: ${textNode.text || node.name}`);
+        element.setAttribute(
+          "aria-label",
+          `Text: ${textNode.text || node.name}`
+        );
         break;
       case "component":
         element.setAttribute("role", "button");
@@ -514,10 +580,10 @@ export class CanvasDOMRenderer implements CanvasRenderer {
         element.setAttribute("role", "group");
         element.setAttribute("aria-label", node.name);
     }
-    
+
     // Set visibility state
     element.setAttribute("aria-hidden", (!node.visible).toString());
-    
+
     // Set selection state
     const isSelected = this.selection.selectedIds.has(node.id);
     element.setAttribute("aria-selected", isSelected.toString());
@@ -531,12 +597,12 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       const keyEvent = event as KeyboardEvent;
       const focusedElement = document.activeElement as HTMLElement;
       const focusedNodeId = focusedElement?.dataset?.nodeId;
-      
+
       switch (keyEvent.key) {
         case "Tab":
           // Let default tab behavior work
           break;
-          
+
         case "Enter":
         case " ": // Space
           keyEvent.preventDefault();
@@ -555,7 +621,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
             this.setSelection([...newSelection]);
           }
           break;
-          
+
         case "Escape":
           keyEvent.preventDefault();
           if (this.selection.selectedIds.size > 0) {
@@ -563,7 +629,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
             this.announce("Selection cleared");
           }
           break;
-          
+
         case "a":
           // Ctrl/Cmd+A: Select all
           if (keyEvent.ctrlKey || keyEvent.metaKey) {
@@ -573,7 +639,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
             this.announce(`Selected all ${allNodeIds.length} items`);
           }
           break;
-          
+
         case "ArrowUp":
         case "ArrowDown":
         case "ArrowLeft":
@@ -584,7 +650,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
           break;
       }
     };
-    
+
     container.addEventListener("keydown", handleKeyDown);
     this.eventListeners.set("keydown", handleKeyDown);
   }
@@ -592,7 +658,10 @@ export class CanvasDOMRenderer implements CanvasRenderer {
   /**
    * Handle arrow key navigation between nodes
    */
-  private handleArrowNavigation(key: string, currentNodeId: string | null | undefined): void {
+  private handleArrowNavigation(
+    key: string,
+    currentNodeId: string | null | undefined
+  ): void {
     if (!currentNodeId) {
       // Focus first node
       const firstNode = this.nodeElements.values().next().value;
@@ -603,13 +672,13 @@ export class CanvasDOMRenderer implements CanvasRenderer {
       }
       return;
     }
-    
+
     // Get all focusable nodes in order
     const nodes = Array.from(this.nodeElements.entries());
     const currentIndex = nodes.findIndex(([id]) => id === currentNodeId);
-    
+
     if (currentIndex === -1) return;
-    
+
     let nextIndex = currentIndex;
     switch (key) {
       case "ArrowUp":
@@ -621,7 +690,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
         nextIndex = currentIndex < nodes.length - 1 ? currentIndex + 1 : 0;
         break;
     }
-    
+
     const [nextNodeId, nextElement] = nodes[nextIndex];
     nextElement.focus();
     this.focusedNodeId = nextNodeId;

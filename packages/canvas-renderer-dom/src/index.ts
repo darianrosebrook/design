@@ -25,3 +25,15 @@ export { RENDERER_CLASSES, RENDERER_EVENTS } from "./types.js";
 export { renderFrame } from "./renderers/frame.js";
 export { renderText } from "./renderers/text.js";
 export { renderComponent } from "./renderers/component.js";
+
+// Observability (exported for monitoring and testing)
+export {
+  Observability,
+  Logger,
+  MetricsCollector,
+  PerformanceTracer,
+  createObservability,
+  LogLevel,
+  MetricType,
+} from "./observability.js";
+export type { LogEntry, Metric, TraceSpan } from "./observability.js";
