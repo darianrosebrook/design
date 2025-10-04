@@ -999,18 +999,26 @@ ${Object.entries(metrics.memoryUsage)
       // Flatten all nodes from all artboards
       const allNodes: NodeType[] = [];
       document.artboards.forEach((artboard) => {
-        allNodes.push(...artboard.children);
+        // Ensure children is an array, defaulting to empty array if undefined
+        const children = Array.isArray(artboard.children)
+          ? artboard.children
+          : [];
+        allNodes.push(...children);
 
         // Recursively collect all child nodes
         const collectNodes = (nodes: NodeType[]) => {
           nodes.forEach((node) => {
-            if (node.children) {
-              allNodes.push(...node.children);
-              collectNodes(node.children);
+            // Ensure node.children is an array, defaulting to empty array if undefined
+            const nodeChildren = Array.isArray(node.children)
+              ? node.children
+              : [];
+            if (nodeChildren.length > 0) {
+              allNodes.push(...nodeChildren);
+              collectNodes(nodeChildren);
             }
           });
         };
-        collectNodes(artboard.children);
+        collectNodes(children);
       });
 
       this.propertiesService.setNodes(allNodes);

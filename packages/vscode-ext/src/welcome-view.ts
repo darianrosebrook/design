@@ -26,7 +26,7 @@ export class WelcomeViewProvider implements vscode.WebviewViewProvider {
     webviewView.webview.html = this.getHtmlForWebview(webviewView.webview);
   }
 
-  private getHtmlForWebview(webview: vscode.Webview): string {
+  private getHtmlForWebview(_webview: vscode.Webview): string {
     const shortcuts = [
       { key: "Ctrl+Shift+C", description: "Create component from selection" },
       { key: "Ctrl+Shift+L", description: "Show component library" },

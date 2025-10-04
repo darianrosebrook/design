@@ -50,7 +50,13 @@ export function findNodeById(
     // Ensure children is an array, defaulting to empty array if undefined
     const children = Array.isArray(artboard.children) ? artboard.children : [];
     if (children.length > 0) {
-      const result = findNodeInChildren(children, nodeId, artboard.id, null, 1);
+      const result = findNodeInChildren(
+        children,
+        nodeId,
+        artboard.id,
+        null,
+        1
+      );
       if (result) {
         return result;
       }
@@ -98,7 +104,6 @@ function findNodeInChildren(
         }
       }
     }
-  }
 
   return null;
 }
@@ -195,8 +200,8 @@ function findMultipleInChildren(
           nodeChildren,
           targetSet,
           artboardId,
-          node.id,
-          depth + 1,
+        node.id,
+        depth + 1,
           results
         );
 
@@ -235,7 +240,14 @@ export function getNodesByType(
     // Ensure children is an array, defaulting to empty array if undefined
     const children = Array.isArray(artboard.children) ? artboard.children : [];
     if (children.length > 0) {
-      collectNodesByType(children, nodeType, artboard.id, null, 1, results);
+      collectNodesByType(
+        children,
+        nodeType,
+        artboard.id,
+        null,
+        1,
+        results
+      );
     }
   }
 
@@ -269,18 +281,18 @@ function collectNodesByType(
       // Ensure node.children is an array, defaulting to empty array if undefined
       const nodeChildren = Array.isArray(node.children) ? node.children : [];
       if (nodeChildren.length > 0) {
-        collectNodesByType(
-          nodeChildren,
-          targetType,
-          artboardId,
-          node.id,
-          depth + 1,
-          results
-        );
-      }
+          collectNodesByType(
+            nodeChildren,
+            targetType,
+            artboardId,
+            node.id,
+            depth + 1,
+            results
+          );
     }
   }
 }
+
 /**
  * Search nodes by name pattern (regex supported)
  *
@@ -358,18 +370,18 @@ function searchNodesByNameInChildren(
       // Ensure node.children is an array, defaulting to empty array if undefined
       const nodeChildren = Array.isArray(node.children) ? node.children : [];
       if (nodeChildren.length > 0) {
-        searchNodesByNameInChildren(
-          nodeChildren,
-          regex,
-          artboardId,
-          node.id,
-          depth + 1,
-          results
-        );
-      }
+          searchNodesByNameInChildren(
+            nodeChildren,
+            regex,
+            artboardId,
+            node.id,
+            depth + 1,
+            results
+          );
     }
   }
 }
+
 /**
  * Calculate combined bounding box for multiple nodes
  *
@@ -404,4 +416,5 @@ export function calculateCombinedBounds(
     width: maxX - minX,
     height: maxY - minY,
   };
+}
 }

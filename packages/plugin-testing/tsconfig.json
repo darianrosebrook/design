@@ -2,9 +2,11 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "types": ["node", "vscode"]
+    "rootDir": "./src",
+    "declaration": true,
+    "sourceMap": true
   },
-  "include": ["src/**/*", "webviews/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "tests"]
 }
 

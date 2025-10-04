@@ -130,9 +130,10 @@ export const PropertyChangeNotification = MessageEnvelope.extend({
   payload: z.object({
     event: z.object({
       nodeId: z.string(),
-      property: z.string(),
+      propertyKey: z.string(),
       value: z.unknown(),
       oldValue: z.unknown().optional(),
+      sectionId: z.string().optional(),
     }),
   }),
 });

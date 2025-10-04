@@ -5,12 +5,23 @@
  * Top navigation bar showing file name, metadata, and global actions.
  */
 
-import React from "react";
-import { Button, Stack } from "@paths-design/design-system";
 import type { CanvasDocumentType } from "@paths-design/canvas-schema";
+import { Button } from "@paths-design/design-system";
+import {
+  ChevronDown,
+  File,
+  Settings,
+  Share,
+  Download,
+  Save,
+  Undo,
+  Redo,
+  MoreHorizontal,
+} from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
 
 interface TopNavigationProps {
-  document: CanvasDocumentType | null;
+  canvasDocument: CanvasDocumentType | null;
   fileName?: string;
   filePath?: string;
   onSave?: () => void;
@@ -20,7 +31,7 @@ interface TopNavigationProps {
 }
 
 export const TopNavigation: React.FC<TopNavigationProps> = ({
-  document,
+  canvasDocument,
   fileName,
   filePath,
   onSave,
@@ -28,68 +39,151 @@ export const TopNavigation: React.FC<TopNavigationProps> = ({
   onShare,
   onSettings,
 }) => {
-  const displayName = document?.name || fileName || "Untitled Document";
+  // Early return if document is not available to prevent DOM access errors
+  if (!canvasDocument && !fileName) {
+    return null;
+  }
+
+  const displayName = canvasDocument?.name || fileName || "Untitled Document";
+  const [isFileMenuOpen, setIsFileMenuOpen] = useState(false);
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    if (!window.document) {
+      return;
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsFileMenuOpen(false);
+        setIsSettingsMenuOpen(false);
+      }
+    };
+
+    window.document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      window.document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const fileMenuItems = [
+    { label: "Save", icon: Save, action: onSave, shortcut: "Ctrl+S" },
+    { label: "Export", icon: Download, action: onExport, shortcut: "Ctrl+E" },
+    { label: "Share", icon: Share, action: onShare, shortcut: "Ctrl+H" },
+  ];
+
+  const settingsMenuItems = [
+    {
+      label: "Undo",
+      icon: Undo,
+      action: () => console.log("Undo"),
+      shortcut: "Ctrl+Z",
+    },
+    {
+      label: "Redo",
+      icon: Redo,
+      action: () => console.log("Redo"),
+      shortcut: "Ctrl+Y",
+    },
+    {
+      label: "Settings",
+      icon: Settings,
+      action: onSettings,
+      shortcut: "Ctrl+,",
+    },
+  ];
 
   return (
     <div className="top-navigation">
       <div className="nav-content">
-        <Stack direction="horizontal" align="center" spacing="md">
-          {/* File info */}
-          <div className="file-info">
-            <h1 className="document-title">{displayName}</h1>
-            {filePath && <span className="file-path">{filePath}</span>}
+        {/* File info */}
+        <div className="file-info">
+          <h1 className="document-title">{displayName}</h1>
+          {filePath && <span className="file-path">{filePath}</span>}
+        </div>
+
+        {/* Spacer */}
+        <div className="nav-spacer" />
+
+        {/* Global actions with progressive disclosure */}
+        <div>
+          <div ref={dropdownRef} className="dropdown-container">
+            {/* File Menu */}
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsFileMenuOpen(!isFileMenuOpen)}
+              aria-label="File actions"
+              className="dropdown-toggle"
+            >
+              <File size={14} />
+              File
+              <ChevronDown size={12} />
+            </Button>
+            {isFileMenuOpen && (
+              <div className="dropdown-menu">
+                {fileMenuItems.map(
+                  (item) =>
+                    item.action && (
+                      <button
+                        key={item.label}
+                        className="dropdown-item"
+                        onClick={() => {
+                          item.action?.();
+                          setIsFileMenuOpen(false);
+                        }}
+                      >
+                        <item.icon size={14} />
+                        <span>{item.label}</span>
+                        <span className="shortcut">{item.shortcut}</span>
+                      </button>
+                    )
+                )}
+              </div>
+            )}
           </div>
 
-          {/* Spacer */}
-          <div className="nav-spacer" />
-
-          {/* Global actions */}
-          <Stack direction="horizontal" spacing="xs">
-            {onSave && (
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={onSave}
-                aria-label="Save document"
-              >
-                💾 Save
-              </Button>
+          {/* Settings Menu */}
+          <div>
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setIsSettingsMenuOpen(!isSettingsMenuOpen)}
+              aria-label="Settings and actions"
+              className="dropdown-toggle"
+            >
+              <MoreHorizontal size={14} />
+              Actions
+              <ChevronDown size={12} />
+            </Button>
+            {isSettingsMenuOpen && (
+              <div className="dropdown-menu">
+                {settingsMenuItems.map(
+                  (item) =>
+                    item.action && (
+                      <button
+                        key={item.label}
+                        className="dropdown-item"
+                        onClick={() => {
+                          item.action?.();
+                          setIsSettingsMenuOpen(false);
+                        }}
+                      >
+                        <item.icon size={14} />
+                        <span>{item.label}</span>
+                        <span className="shortcut">{item.shortcut}</span>
+                      </button>
+                    )
+                )}
+              </div>
             )}
-
-            {onExport && (
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={onExport}
-                aria-label="Export document"
-              >
-                📤 Export
-              </Button>
-            )}
-
-            {onShare && (
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={onShare}
-                aria-label="Share document"
-              >
-                🔗 Share
-              </Button>
-            )}
-
-            {onSettings && (
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={onSettings}
-                aria-label="Settings"
-              >
-                ⚙️
-              </Button>
-            )}
-          </Stack>
-        </Stack>
+          </div>
+        </div>
       </div>
     </div>
   );

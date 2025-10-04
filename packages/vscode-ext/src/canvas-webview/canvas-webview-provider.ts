@@ -120,7 +120,10 @@ export class CanvasWebviewProvider {
    * Show or reveal the canvas webview
    */
   public async show(documentUri?: vscode.Uri): Promise<void> {
-    console.log('[CanvasWebviewProvider] Show called with URI:', documentUri?.fsPath);    // Check feature flag for rollback capability
+    console.log(
+      "[CanvasWebviewProvider] Show called with URI:",
+      documentUri?.fsPath
+    ); // Check feature flag for rollback capability
     if (!this._isWebviewEnabled()) {
       this._observability.log("warn", "canvas_webview.disabled", {
         reason: "Feature flag designer.webview.enabled is false",
@@ -205,15 +208,21 @@ export class CanvasWebviewProvider {
     const traverse = (nodes: any[]) => {
       nodes.forEach((node) => {
         count++;
-        if (node.children) {
-          traverse(node.children);
+        // Ensure node.children is an array, defaulting to empty array if undefined
+        const nodeChildren = Array.isArray(node.children) ? node.children : [];
+        if (nodeChildren.length > 0) {
+          traverse(nodeChildren);
         }
       });
     };
 
     document.artboards.forEach((artboard) => {
-      if (artboard.children) {
-        traverse(artboard.children);
+      // Ensure children is an array, defaulting to empty array if undefined
+      const children = Array.isArray(artboard.children)
+        ? artboard.children
+        : [];
+      if (children.length > 0) {
+        traverse(children);
       }
     });
 
@@ -231,7 +240,10 @@ export class CanvasWebviewProvider {
       const content = await vscode.workspace.fs.readFile(uri);
       let document: CanvasDocumentType;
 
-    console.log(`[CanvasWebviewProvider] Starting document load for: ${uri.fsPath}`);      try {
+      console.log(
+        `[CanvasWebviewProvider] Starting document load for: ${uri.fsPath}`
+      );
+      try {
         document = JSON.parse(content.toString()) as CanvasDocumentType;
       } catch (parseError) {
         // If parsing fails and auto-initialization is enabled, create empty document
@@ -901,6 +913,15 @@ export class CanvasWebviewProvider {
       )
     );
 
+    const reactUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(
+        this.context.extensionUri,
+        "dist",
+        "webviews",
+        "react.js"
+      )
+    );
+
     const nonce = this._getNonce();
 
     return `<!DOCTYPE html>
@@ -919,6 +940,7 @@ export class CanvasWebviewProvider {
 </head>
 <body>
   <div id="root"></div>
+  <script nonce="${nonce}" src="${reactUri}"></script>
   <script nonce="${nonce}" src="${scriptUri}"></script>
 </body>
 </html>`;

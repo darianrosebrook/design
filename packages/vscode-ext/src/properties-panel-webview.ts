@@ -304,8 +304,12 @@ export class PropertiesPanelWebviewProvider
     // Cache all nodes in all artboards
     document.artboards.forEach((artboard) => {
       cacheNodeProperties(artboard);
-      if (artboard.children) {
-        artboard.children.forEach(cacheNodeProperties);
+      // Ensure children is an array, defaulting to empty array if undefined
+      const children = Array.isArray(artboard.children)
+        ? artboard.children
+        : [];
+      if (children.length > 0) {
+        children.forEach(cacheNodeProperties);
       }
     });
   }

@@ -3,10 +3,13 @@
  * @author @darianrosebrook
  */
 
-import React, { useState } from "react";
-import { PropertiesPanel as CorePropertiesPanel } from "@paths-design/properties-panel";
 import type { CanvasDocumentType } from "@paths-design/canvas-schema";
-import type { SelectionState } from "@paths-design/properties-panel";
+import { PropertiesPanel as CorePropertiesPanel } from "@paths-design/properties-panel";
+import type {
+  SelectionState,
+  FontMetadata,
+} from "@paths-design/properties-panel";
+import React from "react";
 
 // VS Code API type
 interface VSCodeAPI {
@@ -18,7 +21,7 @@ interface PropertiesPanelProps {
   selection: SelectionState;
   onPropertyChange: (event: unknown) => void;
   onSelectionChange: (selection: SelectionState) => void;
-  fonts: Array<{ label: string; value: string }>;
+  fonts?: FontMetadata[];
   propertyError: { propertyKey: string; error: string } | null;
   onDismissError: () => void;
   isCollapsed: boolean;
@@ -64,7 +67,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               selection={selection}
               onPropertyChange={onPropertyChange}
               onSelectionChange={onSelectionChange}
-              fonts={fonts}
+              fonts={fonts as FontMetadata[]}
               propertyError={propertyError}
               onDismissError={onDismissError}
             />

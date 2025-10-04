@@ -6,11 +6,11 @@
  */
 
 import type { SelectionState } from "@paths-design/properties-panel";
-import type { SelectionMode } from "../canvas-webview/selection-coordinator.js";
-import { SelectionCoordinator } from "../canvas-webview/selection-coordinator.js";
-import { calculateCombinedBounds } from "../document-store-utils.js";
-import { DocumentStore } from "../document-store.js";
-import type { NodeIndexEntry } from "../document-store.js";
+import type { SelectionMode } from "../canvas-webview/selection-coordinator";
+import { SelectionCoordinator } from "../canvas-webview/selection-coordinator";
+import type { NodeIndexEntry } from "../document-store";
+import { DocumentStore } from "../document-store";
+import { calculateCombinedBounds } from "../document-store-utils";
 
 /**
  * Detailed selection information including metadata

@@ -302,8 +302,14 @@ export class DocumentStore {
         });
 
         // Recurse into children
-        if (node.type === "frame" && node.children) {
-          traverse(node.children, artboardId, node.id, depth + 1);
+        if (node.type === "frame") {
+          // Ensure node.children is an array, defaulting to empty array if undefined
+          const nodeChildren = Array.isArray(node.children)
+            ? node.children
+            : [];
+          if (nodeChildren.length > 0) {
+            traverse(nodeChildren, artboardId, node.id, depth + 1);
+          }
         }
       }
     };
@@ -319,8 +325,12 @@ export class DocumentStore {
       });
 
       // Index artboard children
-      if (artboard.children) {
-        traverse(artboard.children, artboard.id, artboard.id, 1);
+      // Ensure children is an array, defaulting to empty array if undefined
+      const children = Array.isArray(artboard.children)
+        ? artboard.children
+        : [];
+      if (children.length > 0) {
+        traverse(children, artboard.id, artboard.id, 1);
       }
     }
 
@@ -721,15 +731,21 @@ export class DocumentStore {
     const traverse = (nodes: any[]) => {
       nodes.forEach((node) => {
         count++;
-        if (node.children) {
-          traverse(node.children);
+        // Ensure node.children is an array, defaulting to empty array if undefined
+        const nodeChildren = Array.isArray(node.children) ? node.children : [];
+        if (nodeChildren.length > 0) {
+          traverse(nodeChildren);
         }
       });
     };
 
     document.artboards.forEach((artboard) => {
-      if (artboard.children) {
-        traverse(artboard.children);
+      // Ensure children is an array, defaulting to empty array if undefined
+      const children = Array.isArray(artboard.children)
+        ? artboard.children
+        : [];
+      if (children.length > 0) {
+        traverse(children);
       }
     });
 

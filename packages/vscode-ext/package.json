@@ -13,15 +13,26 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint src --ext .ts",
-    "typecheck": "tsc --noEmit"
+    "lint:webviews": "eslint webviews --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "typecheck:webviews": "tsc --noEmit -p tsconfig.webviews.json",
+    "check": "npm run typecheck && npm run typecheck:webviews && npm run lint && npm run lint:webviews",
+    "check:watch": "npm run check",
+    "dev": "npm run dev:check",
+    "dev:check": "node dev-helper.js && npm run build:webview",
+    "dev:helper": "node dev-helper.js",
+    "dev:quick": "npm run build:webview",
+    "prebuild": "npm run check",
+    "prebuild:webview": "npm run check"
   },
   "dependencies": {
-    "@paths-design/canvas-schema": "workspace:*",
     "@paths-design/canvas-engine": "workspace:*",
     "@paths-design/canvas-renderer-dom": "workspace:*",
+    "@paths-design/canvas-schema": "workspace:*",
     "@paths-design/component-indexer": "workspace:*",
-    "@paths-design/properties-panel": "workspace:*",
     "@paths-design/design-system": "workspace:*",
+    "@paths-design/properties-panel": "workspace:*",
+    "lucide-react": "^0.544.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zod": "^3.23.8"
@@ -362,7 +373,11 @@
         },
         "designer.selectionModes.default": {
           "type": "string",
-          "enum": ["single", "rectangle", "lasso"],
+          "enum": [
+            "single",
+            "rectangle",
+            "lasso"
+          ],
           "default": "single",
           "description": "Default selection mode when opening canvas"
         },
@@ -409,4 +424,3 @@
     }
   }
 }
-

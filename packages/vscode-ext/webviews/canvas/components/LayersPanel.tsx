@@ -6,9 +6,9 @@
  * Allows selection, visibility toggling, and layer management.
  */
 
-import React, { useState, useCallback } from "react";
-import { Button, Stack } from "@paths-design/design-system";
 import type { CanvasDocumentType } from "@paths-design/canvas-schema";
+import { Button, Stack } from "@paths-design/design-system";
+import React, { useState, useCallback } from "react";
 
 interface LayersPanelProps {
   document: CanvasDocumentType | null;
@@ -40,7 +40,7 @@ const LayerItem: React.FC<LayerItemProps> = ({
   onSelect,
   onToggleVisibility,
 }) => {
-  const hasChildren = node.children && node.children.length > 0;
+  const hasChildren = Array.isArray(node.children) && node.children.length > 0;
 
   const getNodeIcon = (type: string) => {
     switch (type) {
@@ -56,7 +56,7 @@ const LayerItem: React.FC<LayerItemProps> = ({
   };
 
   return (
-    <div className="layer-item" style={{ paddingLeft: `${depth * 16}px` }}>
+    <div className="layer-item">
       <div className="layer-item-content">
         {/* Expand/collapse button */}
         {hasChildren && (
@@ -101,7 +101,7 @@ const LayerItem: React.FC<LayerItemProps> = ({
         <div className="layer-children">
           {node.children.map((child: any, index: number) => (
             <LayerItem
-              key={child.id || index}
+              key={`${node.id}-${child.id || `child-${index}`}`}
               node={child}
               depth={depth + 1}
               isSelected={false} // TODO: Check if child is selected

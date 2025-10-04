@@ -155,7 +155,11 @@ export class ResourceManager {
 
     for (const artboard of document.artboards) {
       count++; // Count the artboard itself
-      count += this.countChildNodes(artboard.children);
+      // Ensure children is an array, defaulting to empty array if undefined
+      const children = Array.isArray(artboard.children)
+        ? artboard.children
+        : [];
+      count += this.countChildNodes(children);
     }
 
     return count;
@@ -282,7 +286,9 @@ export class ResourceManager {
    * Format bytes to human-readable string
    */
   private formatBytes(bytes: number): string {
-    if (bytes === 0) {return "0 Bytes";}
+    if (bytes === 0) {
+      return "0 Bytes";
+    }
 
     const k = 1024;
     const sizes = ["Bytes", "KB", "MB", "GB"];

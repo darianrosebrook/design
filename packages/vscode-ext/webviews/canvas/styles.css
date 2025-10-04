@@ -34,7 +34,142 @@ body {
   line-height: 1.4;
 }
 
+/* Top Navigation Bar Styles */
+.top-navigation {
+  width: 100%;
+  height: 48px;
+  background-color: var(--vscode-titleBar-activeBackground, var(--vscode-editor-background));
+  border-bottom: 1px solid var(--vscode-panel-border);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.nav-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.document-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vscode-foreground);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.file-path {
+  font-size: 11px;
+  color: var(--vscode-descriptionForeground);
+  opacity: 0.7;
+  line-height: 1;
+}
+
+.nav-spacer {
+  flex: 1;
+}
+
+/* Dropdown Menu Styles for Progressive Disclosure */
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--vscode-dropdown-background, var(--vscode-editor-background));
+  border: 1px solid var(--vscode-dropdown-border, var(--vscode-panel-border));
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 160px;
+  z-index: 1000;
+  margin-top: 2px;
+  animation: dropdown-fade-in 0.1s ease-out;
+}
+
+@keyframes dropdown-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  color: var(--vscode-dropdown-foreground, var(--vscode-foreground));
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--vscode-list-hoverBackground, rgba(255, 255, 255, 0.05));
+}
+
+.dropdown-item:first-child {
+  border-radius: 3px 3px 0 0;
+}
+
+.dropdown-item:last-child {
+  border-radius: 0 0 3px 3px;
+}
+
+.dropdown-item:only-child {
+  border-radius: 3px;
+}
+
+.shortcut {
+  margin-left: auto;
+  opacity: 0.6;
+  font-size: 11px;
+}
+/* 
+canvas layout contains:
+- canvas area (background full bleed container)
+- navigation bar (full width top bar with file info, global actions (edit, export, undo/redo, stuff that is not going to live in the action bar), and view mode toggle)
+- empty state (center of canvas area)
+- file panel (resizable, collapsible,floating left sidebar with file, layer, and design system details panel)
+- properties panel (resizable, collapsible, floating right sidebar with properties panel)
+- action bar (floating bottom bar with action buttons)
+
+┌───────────────────────Full Bleed Canvas─────────────────────────┐
+│[Navigation Bar] [File and Edit actions] [global actions] [view mode toggle]  │
+│[File panel] [canvas area] [properties panel]  │
+│[canvas area] [action bar] [canvas area]  │
+└──────────────────────────────────────────────┘
+*/
 .canvas-layout {
+  position: relative;
   flex: 1;
   display: flex;
   overflow: hidden;
@@ -78,10 +213,41 @@ body {
 
 .properties-area {
   width: 300px;
+  min-width: 280px;
+  max-width: 500px;
   border-left: 1px solid var(--vscode-panel-border);
   background-color: var(--vscode-sideBar-background);
   overflow-y: auto;
   flex-shrink: 0;
+  border-radius: 8px 0 0 8px;
+  position: relative;
+  resize: horizontal;
+  overflow: hidden;
+  transition: width 0.2s ease;
+}
+
+.properties-area.collapsed {
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  border-radius: 8px 0 0 8px;
+}
+
+/* Resizer handle for panels */
+.panel-resizer {
+  position: absolute;
+  left: -2px;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  cursor: col-resize;
+  background: transparent;
+  z-index: 10;
+}
+
+.panel-resizer:hover,
+.panel-resizer:active {
+  background-color: var(--vscode-focusBorder);
 }
 
 /* Scrollbar styling for VS Code theme compatibility */
@@ -148,14 +314,23 @@ body {
 
 /* Action Bar Styles */
 .action-bar {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
-  padding: 8px 12px;
+  justify-content: center;
+  padding: 8px 16px;
   background-color: var(--vscode-toolbar-background, var(--vscode-editor-background));
-  border-top: 1px solid var(--vscode-panel-border);
+  border: 1px solid var(--vscode-panel-border);
+  border-radius: 8px;
   gap: 12px;
-  flex-shrink: 0;
   min-height: 40px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  transition: left 0.2s ease;
 }
 
 .action-group {
@@ -190,9 +365,9 @@ body {
 }
 
 .action-button.active {
-  background-color: var(--vscode-button-background);
+  background-color: var(--vscode-actionBar-toggledBackground);
   border-color: var(--vscode-focusBorder);
-  color: var(--vscode-focusBorder);
+  color: var(--vscode-actionBar-toggledForeground);
 }
 
 .action-separator {
