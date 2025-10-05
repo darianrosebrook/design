@@ -14,6 +14,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useCanvas } from "@/lib/canvas-context";
+import { convertLibraryItemToCanvasObject } from "@/lib/utils/library-to-canvas";
+import { getAvailableComponents, getComponentMetadata } from "./component-renderer";
 import type React from "react";
 
 interface LibraryItem {
@@ -34,51 +37,24 @@ interface LibrarySectionProps {
   onOpenDesignSystem?: () => void;
 }
 
-const _mockDesignSystemItems = {
-  inFolder: [
-    {
-      id: "button-primary",
-      name: "Primary Button",
-      type: "component",
-      icon: () => <div className="w-4 h-4 bg-blue-500 rounded" />,
-      description: "Main call-to-action button",
-      tags: ["button", "primary", "cta"],
-      usage: 12,
-      lastUsed: "2 hours ago",
-    },
-    {
-      id: "card-product",
-      name: "Product Card",
-      type: "component",
-      icon: () => <div className="w-4 h-4 bg-gray-300 rounded" />,
-      description: "Product display card with image and details",
-      tags: ["card", "product", "ecommerce"],
-      usage: 8,
-      lastUsed: "1 day ago",
-    },
-  ],
-  repoLevel: [
-    {
-      id: "design-system-colors",
-      name: "Color Palette",
-      type: "snippet",
-      icon: () => <div className="w-4 h-4 bg-purple-500 rounded-full" />,
-      description: "Complete color system with tokens",
-      tags: ["colors", "tokens", "system"],
-      usage: 45,
-      lastUsed: "30 minutes ago",
-    },
-    {
-      id: "typography-scale",
-      name: "Typography Scale",
-      type: "snippet",
-      icon: () => <div className="w-4 h-4 bg-green-500 rounded-full" />,
-      description: "Font sizes, weights, and line heights",
-      tags: ["typography", "fonts", "scale"],
-      usage: 32,
-      lastUsed: "1 hour ago",
-    },
-  ],
+// Convert design system components to library items
+const getDesignSystemLibraryItems = (): LibraryItem[] => {
+  const availableComponents = getAvailableComponents();
+  
+  return availableComponents.map((componentType) => {
+    const metadata = getComponentMetadata(componentType);
+    
+    return {
+      id: `ds-${componentType.toLowerCase()}`,
+      name: metadata.name,
+      type: "component" as const,
+      icon: () => <div className="text-lg">{metadata.icon}</div>,
+      description: metadata.description,
+      tags: [metadata.category.toLowerCase(), componentType.toLowerCase()],
+      usage: Math.floor(Math.random() * 50) + 1, // Mock usage data
+      lastUsed: `${Math.floor(Math.random() * 24)} hours ago`, // Mock last used
+    };
+  });
 };
 
 export function LibrarySection({
@@ -87,18 +63,62 @@ export function LibrarySection({
   onInsert,
   onOpenDesignSystem,
 }: LibrarySectionProps) {
+  const { addObject } = useCanvas();
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
     new Set(["in-folder", "repo-level"])
   );
 
-  const filteredItems = useMemo(() => {
-    if (!searchQuery) {
-      return initialItems;
+  // REAL DATA: Using actual design system components
+  const designSystemItems = getDesignSystemLibraryItems();
+
+  const handleInsertItem = (item: LibraryItem) => {
+    // Check if this is a design system component
+    if (item.id.startsWith('ds-')) {
+      const componentType = item.id.replace('ds-', '').toLowerCase();
+      const capitalizedType = componentType.charAt(0).toUpperCase() + componentType.slice(1);
+      const metadata = getComponentMetadata(capitalizedType as any);
+      
+      // Create component object directly
+      const componentObject = {
+        id: `component-${Date.now()}`,
+        type: "component" as const,
+        name: `${capitalizedType} Component`,
+        x: 100 + Math.random() * 200,
+        y: 100 + Math.random() * 200,
+        width: capitalizedType === "Button" ? 120 : 200,
+        height: capitalizedType === "Button" ? 40 : 60,
+        rotation: 0,
+        visible: true,
+        locked: false,
+        opacity: 100,
+        componentType: capitalizedType,
+        componentProps: metadata.defaultProps,
+      };
+
+      // Add to canvas
+      addObject(componentObject);
+    } else {
+      // Fallback to original conversion for non-design-system items
+      const canvasObject = convertLibraryItemToCanvasObject(item, 200, 200);
+      addObject(canvasObject);
     }
 
-    return initialItems.filter(
+    // Call the onInsert callback if provided
+    onInsert?.(item);
+
+    console.log(`Inserted ${item.name} into canvas`);
+  };
+
+  const filteredItems = useMemo(() => {
+    const itemsToFilter = initialItems.length > 0 ? initialItems : designSystemItems;
+
+    if (!searchQuery) {
+      return itemsToFilter;
+    }
+
+    return itemsToFilter.filter(
       (item) =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -106,7 +126,7 @@ export function LibrarySection({
           tag.toLowerCase().includes(searchQuery.toLowerCase())
         )
     );
-  }, [searchQuery, initialItems]);
+  }, [searchQuery, initialItems, designSystemItems]);
 
   const renderLibraryItem = (item: LibraryItem) => {
     const Icon = item.icon;
@@ -151,7 +171,7 @@ export function LibrarySection({
             variant="ghost"
             size="icon"
             className="h-8 w-8 opacity-0 group-hover:opacity-100"
-            onClick={() => onInsert?.(item)}
+            onClick={() => handleInsertItem(item)}
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -255,21 +275,45 @@ export function LibrarySection({
       {/* Library content */}
       <ScrollArea className="flex-1">
         <div className="p-3 space-y-4">
+          {/* Interactive Components */}
           {renderLibrarySection(
-            "In-folder",
+            "Interactive",
             filteredItems.filter(
-              (item) => item.id.includes("button") || item.id.includes("card")
+              (item) => item.tags.includes("interactive")
             ),
-            "in-folder"
+            "interactive"
           )}
+          {/* Layout Components */}
           {renderLibrarySection(
-            "Repo-level",
+            "Layout",
             filteredItems.filter(
-              (item) =>
-                item.id.includes("design-system") ||
-                item.id.includes("typography")
+              (item) => item.tags.includes("layout")
             ),
-            "repo-level"
+            "layout"
+          )}
+          {/* Form Components */}
+          {renderLibrarySection(
+            "Form",
+            filteredItems.filter(
+              (item) => item.tags.includes("form")
+            ),
+            "form"
+          )}
+          {/* Typography Components */}
+          {renderLibrarySection(
+            "Typography",
+            filteredItems.filter(
+              (item) => item.tags.includes("typography")
+            ),
+            "typography"
+          )}
+          {/* Media Components */}
+          {renderLibrarySection(
+            "Media",
+            filteredItems.filter(
+              (item) => item.tags.includes("media")
+            ),
+            "media"
           )}
         </div>
       </ScrollArea>

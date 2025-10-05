@@ -6,7 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileMetadata } from "@/components/file-metadata";
 import { LayersList } from "@/components/layers-list";
 import { LibrarySection } from "@/components/library-section";
-import { ComponentLibrary } from "@/components/component-library";
 import { useCanvas } from "@/lib/canvas-context";
 
 interface FileDetailsPanelProps {
@@ -75,7 +74,11 @@ export function FileDetailsPanel({
 
         {/* Library Tab */}
         <TabsContent value="library" className="flex-1 m-0">
-          <ComponentLibrary />
+          <LibrarySection
+            title="Design System"
+            items={[]} // Empty array to use real design system components
+            onOpenDesignSystem={onOpenDesignSystem}
+          />
         </TabsContent>
       </Tabs>
     </div>
