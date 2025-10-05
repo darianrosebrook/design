@@ -1,16 +1,30 @@
 "use client";
 
-import { ChevronRight, Eye, Lock, EyeOff, Unlock } from "lucide-react";
+import {
+  ChevronRight,
+  Eye,
+  Lock,
+  EyeOff,
+  Unlock,
+  Square,
+  Circle,
+  Type,
+  ImageIcon,
+  Layers,
+  Frame,
+  Component,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { CanvasObject, ObjectType } from "@/lib/types";
 
 const typeIcons: Record<ObjectType, any> = {
-  rectangle: "▭",
-  circle: "○",
-  text: "T",
-  image: "🖼",
-  group: "⊞",
-  frame: "□",
+  rectangle: Square,
+  circle: Circle,
+  text: Type,
+  image: ImageIcon,
+  group: Layers,
+  frame: Frame,
+  component: Component,
 };
 
 interface LayerItemProps {
@@ -87,8 +101,8 @@ export function LayerItem({
           <div className="w-4" />
         )}
 
-        <div className="h-4 w-4 flex items-center justify-center text-xs font-mono text-muted-foreground shrink-0">
-          {Icon}
+        <div className="h-4 w-4 flex items-center justify-center text-xs text-muted-foreground shrink-0">
+          <Icon className="h-3 w-3" />
         </div>
 
         <span className="flex-1 text-sm truncate">{layer.name}</span>
