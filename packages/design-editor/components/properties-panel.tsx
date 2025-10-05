@@ -46,6 +46,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { useCanvas, findObject } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
+import { CanvasBackgroundControls } from "./canvas-background-controls";
 
 interface PropertySection {
   id: string;
@@ -86,11 +87,11 @@ export function PropertiesPanel() {
           <h2 className="text-sm font-semibold">Properties</h2>
           <span className="text-xs text-muted-foreground">Canvas</span>
         </div>
-        <div className="flex-1 p-3">
-          <div className="text-sm text-muted-foreground text-center">
-            Select an object to edit its properties
+        <ScrollArea className="flex-1">
+          <div className="p-3">
+            <CanvasBackgroundControls />
           </div>
-        </div>
+        </ScrollArea>
       </div>
     );
   }
