@@ -583,7 +583,7 @@ export function CanvasArea() {
       </div>
 
       {/* Map-like UI controls */}
-      <div className="absolute bottom-4 left-4 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-medium">
+      <div className="absolute bottom-4 left-4 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-medium z-[100]">
         <div>
           Cursor: {Math.round(cursorX)}, {Math.round(cursorY)}
         </div>
@@ -593,7 +593,7 @@ export function CanvasArea() {
       </div>
 
       {/* Zoom controls */}
-      <div className="absolute bottom-4 right-4">
+      <div className="absolute bottom-4 right-4 z-[100]">
         <ZoomControls />
       </div>
     </div>
