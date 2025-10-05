@@ -8,6 +8,7 @@ import {
   LayersIcon,
   Frame,
   Settings,
+  Component,
 } from "lucide-react";
 import type React from "react";
 import type { ObjectType } from "@/lib/types";
@@ -19,6 +20,7 @@ const typeIcons: Record<ObjectType, any> = {
   image: ImageIcon,
   group: LayersIcon,
   frame: Frame,
+  component: Component,
 };
 
 interface PropertiesPanelCollapsedProps {
