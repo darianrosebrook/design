@@ -2,6 +2,7 @@
 
 import React from "react";
 import type { CanvasObject } from "@/lib/types";
+import { ComponentSlot } from "./component-slot";
 
 // Import all design system components
 import {
@@ -51,7 +52,7 @@ interface ComponentRendererProps {
  * @author @darianrosebrook
  */
 export function ComponentRenderer({ object }: ComponentRendererProps) {
-  if (object.type !== "component" || !object.componentType) {
+  if (!object || object.type !== "component" || !object.componentType) {
     return null;
   }
 
@@ -130,7 +131,22 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
           }}
         >
           <Component {...componentProps}>
-            {componentProps.children || "Box Content"}
+            {object.children && object.children.length > 0 ? (
+              object.children.map((child) => {
+                // Simple child rendering without recursion to avoid circular dependencies
+                return (
+                  <div key={child.id} style={{ position: 'relative' }}>
+                    {child.type === 'component' ? (
+                      <ComponentRenderer object={child} />
+                    ) : (
+                      <div>Child: {child.name}</div>
+                    )}
+                  </div>
+                );
+              })
+            ) : (
+              <ComponentSlot parentId={object.id} />
+            )}
           </Component>
         </div>
       );
@@ -167,6 +183,39 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
           }}
         >
           <Component {...componentProps} options={[]} />
+        </div>
+      );
+
+    case "Stack":
+    case "Flex":
+      return (
+        <div
+          style={{
+            position: "absolute",
+            left: object.x,
+            top: object.y,
+            width: object.width,
+            height: object.height,
+          }}
+        >
+          <Component {...componentProps}>
+            {object.children && object.children.length > 0 ? (
+              object.children.map((child) => {
+                // Simple child rendering without recursion to avoid circular dependencies
+                return (
+                  <div key={child.id} style={{ position: 'relative' }}>
+                    {child.type === 'component' ? (
+                      <ComponentRenderer object={child} />
+                    ) : (
+                      <div>Child: {child.name}</div>
+                    )}
+                  </div>
+                );
+              })
+            ) : (
+              <ComponentSlot parentId={object.id} />
+            )}
+          </Component>
         </div>
       );
 
@@ -329,11 +378,13 @@ export function getComponentMetadata(componentName: ComponentName) {
     },
   };
 
-  return componentMetadata[componentName] || {
-    name: componentName,
-    description: `${componentName} component`,
-    category: "Other",
-    icon: "❓",
-    defaultProps: {},
-  };
+  return (
+    componentMetadata[componentName] || {
+      name: componentName,
+      description: `${componentName} component`,
+      category: "Other",
+      icon: "❓",
+      defaultProps: {},
+    }
+  );
 }
