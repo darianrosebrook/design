@@ -24,7 +24,7 @@ export function ZoomControls() {
       </Button>
 
       <div className="px-2 text-xs font-medium min-w-[3rem] text-center">
-        {zoom}%
+        {zoom.toFixed(2)}%
       </div>
 
       <Button

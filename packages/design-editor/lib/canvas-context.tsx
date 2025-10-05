@@ -113,7 +113,9 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
     });
     // If this was the primary selection, update it
     if (selectedId === id) {
-      const remainingIds = Array.from(selectedIds).filter((id) => id !== id);
+      const remainingIds = Array.from(selectedIds).filter(
+        (selectedId) => selectedId !== id
+      );
       setSelectedId(remainingIds.length > 0 ? remainingIds[0] : null);
     }
   };
@@ -459,12 +461,12 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   // Zoom controls
   const zoomIn = () => {
     const newZoom = Math.min(zoom * 1.25, 500); // Max 500%
-    setZoom(newZoom);
+    setZoom(Math.round(newZoom * 100) / 100); // Clamp to 2 decimal places
   };
 
   const zoomOut = () => {
     const newZoom = Math.max(zoom * 0.8, 10); // Min 10%
-    setZoom(newZoom);
+    setZoom(Math.round(newZoom * 100) / 100); // Clamp to 2 decimal places
   };
 
   const zoomToFit = () => {
@@ -502,7 +504,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
     const zoomY = (viewportHeight / targetHeight) * 100;
     const fitZoom = Math.min(zoomX, zoomY, 100); // Don't zoom in beyond 100%
 
-    setZoom(Math.max(fitZoom, 10)); // Min 10%
+    setZoom(Math.round(Math.max(fitZoom, 10) * 100) / 100); // Min 10%, clamp to 2 decimal places
 
     // Center the content
     const centerX = (minX + maxX) / 2;
@@ -540,7 +542,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
     const zoomY = (viewportHeight / targetHeight) * 100;
     const fitZoom = Math.min(zoomX, zoomY, 200); // Allow zooming in up to 200%
 
-    setZoom(Math.max(fitZoom, 10)); // Min 10%
+    setZoom(Math.round(Math.max(fitZoom, 10) * 100) / 100); // Min 10%, clamp to 2 decimal places
 
     // Center the selected object
     const centerX = selectedObject.x + selectedObject.width / 2;
