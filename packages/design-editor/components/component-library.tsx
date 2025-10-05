@@ -2,7 +2,11 @@
 
 import React from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ComponentRenderer, getAvailableComponents, getComponentMetadata } from "./component-renderer";
+import {
+  ComponentRenderer,
+  getAvailableComponents,
+  getComponentMetadata,
+} from "./component-renderer";
 import { useCanvas } from "@/lib/canvas-context";
 
 interface ComponentLibraryProps {
@@ -41,12 +45,12 @@ export function ComponentLibrary({ className }: ComponentLibraryProps) {
   const groupedComponents = availableComponents.reduce((acc, componentType) => {
     const metadata = getComponentMetadata(componentType);
     const category = metadata.category;
-    
+
     if (!acc[category]) {
       acc[category] = [];
     }
     acc[category].push({ type: componentType, ...metadata });
-    
+
     return acc;
   }, {} as Record<string, Array<{ type: string; name: string; description: string; icon: string }>>);
 
@@ -58,7 +62,7 @@ export function ComponentLibrary({ className }: ComponentLibraryProps) {
           {availableComponents.length} components
         </span>
       </div>
-      
+
       <ScrollArea className="flex-1">
         <div className="p-3 space-y-4">
           {Object.entries(groupedComponents).map(([category, components]) => (
@@ -66,14 +70,19 @@ export function ComponentLibrary({ className }: ComponentLibraryProps) {
               <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                 {category}
               </h3>
-              
+
               <div className="grid grid-cols-1 gap-1">
                 {components.map(({ type, name, description, icon }) => (
                   <button
                     key={type}
                     onClick={() => addComponentToCanvas(type)}
+                    draggable
+                    onDragStart={(e) => {
+                      e.dataTransfer.setData("component-type", type);
+                      e.dataTransfer.effectAllowed = "copy";
+                    }}
                     className="flex items-center gap-3 p-2 rounded-md hover:bg-accent transition-colors text-left"
-                    title={description}
+                    title={`${description} - Click to insert or drag to canvas`}
                   >
                     <div className="text-lg">{icon}</div>
                     <div className="flex-1 min-w-0">
@@ -96,14 +105,14 @@ export function ComponentLibrary({ className }: ComponentLibraryProps) {
 /**
  * Component preview for the library
  */
-export function ComponentPreview({ 
-  componentType, 
-  width = 200, 
-  height = 60 
-}: { 
-  componentType: string; 
-  width?: number; 
-  height?: number; 
+export function ComponentPreview({
+  componentType,
+  width = 200,
+  height = 60,
+}: {
+  componentType: string;
+  width?: number;
+  height?: number;
 }) {
   const mockObject = {
     id: "preview",
@@ -122,7 +131,10 @@ export function ComponentPreview({
   };
 
   return (
-    <div className="border rounded-md p-4 bg-background" style={{ width, height }}>
+    <div
+      className="border rounded-md p-4 bg-background"
+      style={{ width, height }}
+    >
       <ComponentRenderer object={mockObject} />
     </div>
   );

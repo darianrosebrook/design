@@ -124,6 +124,36 @@ export function CanvasArea() {
     setIsPanning(false);
   };
 
+  const handleCanvasDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const componentType = e.dataTransfer.getData("component-type");
+    if (componentType) {
+      const rect = canvasRef.current?.getBoundingClientRect();
+      if (rect) {
+        const x = (e.clientX - rect.left - 32) / (zoom / 100) - viewportX; // Adjust for zoom and viewport
+        const y = (e.clientY - rect.top - 32) / (zoom / 100) - viewportY;
+        
+        const newComponent = {
+          id: `component-${Date.now()}`,
+          type: "component" as const,
+          name: `${componentType} Component`,
+          x: Math.max(0, x),
+          y: Math.max(0, y),
+          width: componentType === "Button" ? 120 : 200,
+          height: componentType === "Button" ? 40 : 60,
+          rotation: 0,
+          visible: true,
+          locked: false,
+          opacity: 100,
+          componentType,
+          componentProps: {},
+        };
+
+        addObject(newComponent);
+      }
+    }
+  };
+
   const handleObjectMouseDown = (e: React.MouseEvent, obj: CanvasObject) => {
     if (activeTool !== "select" || obj.locked || obj.name === "Background") {
       return;
@@ -492,12 +522,7 @@ export function CanvasArea() {
         );
 
       case "component":
-        return (
-          <ComponentRenderer
-            key={obj.id}
-            object={obj}
-          />
-        );
+        return <ComponentRenderer key={obj.id} object={obj} />;
 
       default:
         return null;
@@ -646,6 +671,8 @@ export function CanvasArea() {
       onMouseDown={handleCanvasMouseDown}
       onMouseMove={handleCanvasMouseMove}
       onMouseUp={handleCanvasMouseUp}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={handleCanvasDrop}
       tabIndex={0}
       style={getBackgroundStyle()}
     >

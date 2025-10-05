@@ -68,6 +68,8 @@ interface CanvasContextType {
   bringForward: (id: string) => void;
   sendBackward: (id: string) => void;
   selectAll: () => void;
+  addObject: (object: CanvasObject) => void;
+  addObjectToParent: (parentId: string, object: CanvasObject, slotIndex?: number) => void;
   // Aliases for linting purposes
   _duplicateObject: (id: string) => void;
   _deleteObject: (id: string) => void;
@@ -458,6 +460,13 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const addObject = (object: CanvasObject) => {
+    setObjects((prev) => [...prev, object]);
+    // Select the newly added object
+    setSelectedId(object.id);
+    setSelectedIds(new Set([object.id]));
+  };
+
   // Zoom controls
   const zoomIn = () => {
     const newZoom = Math.min(zoom * 1.25, 500); // Max 500%
@@ -617,6 +626,8 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         bringForward,
         sendBackward,
         selectAll,
+        addObject,
+        addObjectToParent,
         // Aliases for linting purposes
         _duplicateObject: duplicateObject,
         _deleteObject: deleteObject,

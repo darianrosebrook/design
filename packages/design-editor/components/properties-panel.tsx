@@ -47,6 +47,7 @@ import { Slider } from "@/components/ui/slider";
 import { useCanvas, findObject } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
 import { CanvasBackgroundControls } from "./canvas-background-controls";
+import { ComponentPropsPanel, PrimitivePropsPanel } from "./component-props-panel";
 
 interface PropertySection {
   id: string;
@@ -132,6 +133,19 @@ export function PropertiesPanel() {
       </div>
       <ScrollArea className="flex-1">
         <div className="p-3 space-y-3">
+          {/* Component Props Panel */}
+          {selectedObject.type === "component" ? (
+            <ComponentPropsPanel
+              object={selectedObject}
+              onUpdateProps={(props) => updateObject(selectedObject.id, { componentProps: { ...selectedObject.componentProps, ...props } })}
+            />
+          ) : (
+            <PrimitivePropsPanel
+              object={selectedObject}
+              onUpdateProps={(props) => updateObject(selectedObject.id, props)}
+            />
+          )}
+
           {/* Position Section */}
           {renderSection(
             sections.find((s) => s.id === "position")!,
