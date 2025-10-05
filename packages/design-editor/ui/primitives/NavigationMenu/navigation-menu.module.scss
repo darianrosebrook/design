@@ -1,7 +1,212 @@
-// navigation-menu primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// NavigationMenu component styles
+// Migrated from Tailwind to SCSS with design tokens
 
-.navigation-menu {
-  // Placeholder for future SCSS implementation
-  // Will contain navigation-menu-specific styles when migrating from Tailwind
+.navigationMenu {
+  // Base navigation menu styles (equivalent to group/navigation-menu relative flex max-w-max flex-1 items-center justify-center)
+  position: relative; // equivalent to relative
+  display: flex; // equivalent to flex
+  max-width: max-content; // equivalent to max-w-max
+  flex: 1; // equivalent to flex-1
+  align-items: center; // equivalent to items-center
+  justify-content: center; // equivalent to justify-center
+}
+
+.navigationMenuList {
+  // List container styles (equivalent to group flex flex-1 list-none items-center justify-center gap-1)
+  display: flex; // equivalent to flex
+  flex: 1; // equivalent to flex-1
+  list-style: none; // equivalent to list-none
+  align-items: center; // equivalent to items-center
+  justify-content: center; // equivalent to justify-center
+  gap: 4px; // equivalent to gap-1
+}
+
+.navigationMenuItem {
+  // Item styles (equivalent to relative)
+  position: relative; // equivalent to relative
+}
+
+.navigationMenuTrigger {
+  // Trigger styles (equivalent to group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground disabled:pointer-events-none disabled:opacity-50 data-[state=open]:hover:bg-accent data-[state=open]:text-accent-foreground data-[state=open]:focus:bg-accent data-[state=open]:bg-accent/50 focus-visible:ring-ring/50 outline-none transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1)
+  display: inline-flex; // equivalent to inline-flex
+  height: 36px; // equivalent to h-9
+  width: max-content; // equivalent to w-max
+  align-items: center; // equivalent to items-center
+  justify-content: center; // equivalent to justify-center
+  border-radius: 6px; // equivalent to rounded-md
+  background-color: hsl(var(--background)); // equivalent to bg-background
+  padding: 8px 16px; // equivalent to px-4 py-2
+  font-size: 14px; // equivalent to text-sm
+  font-weight: 500; // equivalent to font-medium
+  outline: none; // equivalent to outline-none
+  transition: color 150ms ease-in-out, box-shadow 150ms ease-in-out; // equivalent to transition-[color,box-shadow]
+
+  // Hover styles
+  &:hover {
+    background-color: hsl(var(--accent)); // equivalent to hover:bg-accent
+    color: hsl(var(--accent-foreground)); // equivalent to hover:text-accent-foreground
+  }
+
+  // Focus styles
+  &:focus {
+    background-color: hsl(var(--accent)); // equivalent to focus:bg-accent
+    color: hsl(var(--accent-foreground)); // equivalent to focus:text-accent-foreground
+  }
+
+  // Focus visible styles
+  &:focus-visible {
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5); // equivalent to focus-visible:ring-ring/50 focus-visible:ring-[3px]
+    outline: 1px solid; // equivalent to focus-visible:outline-1
+  }
+
+  // Open state styles
+  &[data-state="open"] {
+    background-color: hsl(var(--accent) / 0.5); // equivalent to data-[state=open]:bg-accent/50
+
+    &:hover,
+    &:focus {
+      background-color: hsl(var(--accent)); // equivalent to data-[state=open]:hover:bg-accent data-[state=open]:focus:bg-accent
+      color: hsl(var(--accent-foreground)); // equivalent to data-[state=open]:text-accent-foreground
+    }
+  }
+
+  // Disabled state
+  &:disabled {
+    pointer-events: none; // equivalent to disabled:pointer-events-none
+    opacity: 0.5; // equivalent to disabled:opacity-50
+  }
+
+  // Chevron icon styles
+  .navigationMenuTriggerChevron {
+    margin-left: 4px; // equivalent to ml-1
+    width: 12px; // equivalent to size-3
+    height: 12px;
+    transition: transform 300ms ease-in-out; // equivalent to transition duration-300
+
+    // Rotation when open
+    .group[data-state="open"] & {
+      transform: rotate(180deg); // equivalent to group-data-[state=open]:rotate-180
+    }
+  }
+}
+
+.navigationMenuContent {
+  // Content styles - this is very complex with many animation classes
+  position: absolute; // equivalent to md:absolute
+  top: 0; // equivalent to top-0
+  left: 0; // equivalent to left-0
+  width: 100%; // equivalent to w-full md:w-auto
+  padding: 8px; // equivalent to p-2
+  padding-right: 10px; // equivalent to pr-2.5
+
+  // Animation classes (these would need to be defined in a global CSS file)
+  // For now, we'll include the base styles
+
+  // Viewport false styles (very complex - would need global CSS for group selectors)
+  // These are complex group selectors that would be better handled globally
+}
+
+.navigationMenuViewport {
+  // Viewport container styles
+  position: absolute; // equivalent to absolute
+  top: 100%; // equivalent to top-full
+  left: 0; // equivalent to left-0
+  display: flex; // equivalent to flex
+  justify-content: center; // equivalent to justify-center
+  z-index: 50; // equivalent to isolate z-50
+
+  .navigationMenuViewportInner {
+    // Inner viewport styles (equivalent to origin-top-center bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border shadow md:w-[var(--radix-navigation-menu-viewport-width)])
+    transform-origin: top center; // equivalent to origin-top-center
+    background-color: hsl(var(--popover)); // equivalent to bg-popover
+    color: hsl(var(--popover-foreground)); // equivalent to text-popover-foreground
+    position: relative; // equivalent to relative
+    margin-top: 6px; // equivalent to mt-1.5
+    height: var(--radix-navigation-menu-viewport-height); // equivalent to h-[var(--radix-navigation-menu-viewport-height)]
+    width: 100%; // equivalent to w-full
+    overflow: hidden; // equivalent to overflow-hidden
+    border-radius: 6px; // equivalent to rounded-md
+    border: 1px solid hsl(var(--border)); // equivalent to border
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); // equivalent to shadow
+
+    @media (min-width: 768px) {
+      width: var(--radix-navigation-menu-viewport-width); // equivalent to md:w-[var(--radix-navigation-menu-viewport-width)]
+    }
+  }
+}
+
+.navigationMenuLink {
+  // Link styles (equivalent to data-[active=true]:focus:bg-accent data-[active=true]:hover:bg-accent data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4)
+  display: flex; // equivalent to flex
+  flex-direction: column; // equivalent to flex-col
+  gap: 4px; // equivalent to gap-1
+  border-radius: 4px; // equivalent to rounded-sm
+  padding: 8px; // equivalent to p-2
+  font-size: 14px; // equivalent to text-sm
+  transition: all 150ms ease-in-out; // equivalent to transition-all
+  outline: none; // equivalent to outline-none
+
+  // SVG icon colors
+  svg:not([class*="text-"]) {
+    color: hsl(var(--muted-foreground)); // equivalent to [&_svg:not([class*='text-'])]:text-muted-foreground
+  }
+
+  // SVG icon sizes
+  svg:not([class*="size-"]) {
+    width: 16px; // equivalent to [&_svg:not([class*='size-'])]:size-4
+    height: 16px;
+  }
+
+  // Hover styles
+  &:hover {
+    background-color: hsl(var(--accent)); // equivalent to hover:bg-accent
+    color: hsl(var(--accent-foreground)); // equivalent to hover:text-accent-foreground
+  }
+
+  // Focus styles
+  &:focus {
+    background-color: hsl(var(--accent)); // equivalent to focus:bg-accent
+    color: hsl(var(--accent-foreground)); // equivalent to focus:text-accent-foreground
+  }
+
+  // Focus visible styles
+  &:focus-visible {
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5); // equivalent to focus-visible:ring-ring/50 focus-visible:ring-[3px]
+    outline: 1px solid; // equivalent to focus-visible:outline-1
+  }
+
+  // Active state styles
+  &[data-active="true"] {
+    background-color: hsl(var(--accent) / 0.5); // equivalent to data-[active=true]:bg-accent/50
+    color: hsl(var(--accent-foreground)); // equivalent to data-[active=true]:text-accent-foreground
+
+    &:hover,
+    &:focus {
+      background-color: hsl(var(--accent)); // equivalent to data-[active=true]:hover:bg-accent data-[active=true]:focus:bg-accent
+    }
+  }
+}
+
+.navigationMenuIndicator {
+  // Indicator styles (equivalent to data-[state=visible]:animate-in data-[state=hidden]:animate-out data-[state=hidden]:fade-out data-[state=visible]:fade-in top-full z-[1] flex h-1.5 items-end justify-center overflow-hidden)
+  position: absolute; // equivalent to top-full (relative positioning)
+  top: 100%; // equivalent to top-full
+  z-index: 1; // equivalent to z-[1]
+  display: flex; // equivalent to flex
+  height: 6px; // equivalent to h-1.5
+  align-items: flex-end; // equivalent to items-end
+  justify-content: center; // equivalent to justify-center
+  overflow: hidden; // equivalent to overflow-hidden
+
+  .navigationMenuIndicatorArrow {
+    // Arrow styles (equivalent to bg-border relative top-[60%] h-2 w-2 rotate-45 rounded-tl-sm shadow-md)
+    background-color: hsl(var(--border)); // equivalent to bg-border
+    position: relative; // equivalent to relative
+    top: 60%; // equivalent to top-[60%]
+    height: 8px; // equivalent to h-2
+    width: 8px; // equivalent to w-2
+    transform: rotate(45deg); // equivalent to rotate-45
+    border-top-left-radius: 2px; // equivalent to rounded-tl-sm
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); // equivalent to shadow-md
+  }
 }
