@@ -715,6 +715,8 @@ export function findShortcut(
   const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
   const cmdOrCtrl = isMac ? modifiers.cmd : modifiers.ctrl;
 
+  console.log(`[findShortcut] Looking for: key="${key}", modifiers=`, modifiers, `isMac=${isMac}, cmdOrCtrl=${cmdOrCtrl}`);
+
   return KEYBOARD_SHORTCUTS.find((shortcut) => {
     const shortcutModifiers = { ...shortcut.modifiers };
     if (isMac && shortcutModifiers.ctrl) {
@@ -722,12 +724,18 @@ export function findShortcut(
       delete shortcutModifiers.ctrl;
     }
 
-    return (
+    const matches = (
       shortcut.key.toLowerCase() === key.toLowerCase() &&
-      shortcutModifiers.ctrl === cmdOrCtrl &&
+      (isMac ? shortcutModifiers.cmd === cmdOrCtrl : shortcutModifiers.ctrl === cmdOrCtrl) &&
       shortcutModifiers.shift === modifiers.shift &&
       shortcutModifiers.alt === modifiers.alt
     );
+
+    if (shortcut.key.toLowerCase() === key.toLowerCase()) {
+      console.log(`[findShortcut] Checking shortcut:`, shortcut, `shortcutModifiers=`, shortcutModifiers, `matches=${matches}`);
+    }
+
+    return matches;
   });
 }
 
