@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import type React from "react";
-import { Button } from '@/ui/primitives/button';
+import { Button } from '@/ui/primitives/Button';
 import {
   DropdownMenu,
   DropdownMenuContent,

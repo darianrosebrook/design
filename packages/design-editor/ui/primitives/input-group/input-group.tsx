@@ -1,8 +1,8 @@
 "use client";
 
 import { cva, type VariantProps } from "class-variance-authority";
-import { Button } from '@/ui/primitives/button';
-import { Input } from '@/ui/primitives/input';
+import { Button } from '@/ui/primitives/Button';
+import { Input } from '@/ui/primitives/Input';
 import { Textarea } from '@/ui/primitives/textarea';
 import { cn } from "@/lib/utils";
 

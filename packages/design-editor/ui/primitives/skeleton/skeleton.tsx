@@ -1,16 +1,18 @@
-import { cn } from '@/lib/utils'
-import styles from './${componentName}.module.scss'
+import { cn } from "@/lib/utils";
+import styles from "./skeleton.module.scss";
 
-function Skeleton({ className, ...props }: React.ComponentProps<'div'>) {
+function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="skeleton"
-      className={cn('bg-accent animate-pulse rounded-md', className)}
+      // Original Tailwind classes (commented for reference):
+      // "bg-accent animate-pulse rounded-md"
+      className={cn(styles.skeleton, className)}
       {...props}
     />
-  )
+  );
 }
 
 // Component implementation
 
-export { Skeleton }
+export { Skeleton };

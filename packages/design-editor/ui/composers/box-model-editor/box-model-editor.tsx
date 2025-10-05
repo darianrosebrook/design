@@ -3,8 +3,8 @@
 import { Link2, Unlink } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import { Button } from '@/ui/primitives/button';
-import { Input } from '@/ui/primitives/input';
+import { Button } from '@/ui/primitives/Button';
+import { Input } from '@/ui/primitives/Input';
 import { Label } from '@/ui/primitives/label';
 import type { CanvasObject } from "@/lib/types";
 

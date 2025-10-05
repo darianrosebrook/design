@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import { ScrollArea } from '@/ui/primitives/scroll-area';
+import { ScrollArea } from "@/ui/primitives/ScrollArea";
 import {
   ComponentRenderer,
   getAvailableComponents,
   getComponentMetadata,
-} from '@/ui/composers/component-renderer';
+} from "@/ui/composers/component-renderer";
 import { useCanvas } from "@/lib/canvas-context";
 
 interface ComponentLibraryProps {

@@ -3,9 +3,9 @@
 import { useState, useMemo } from "react";
 import type React from "react";
 import { FileText, X, Library } from "lucide-react";
-import { Button } from '@/ui/primitives/button';
-import { ScrollArea } from '@/ui/primitives/scroll-area';
-import { Tabs, TabsList, TabsTrigger } from '@/ui/primitives/Tabs';
+import { Button } from "@/ui/primitives/Button";
+import { ScrollArea } from "@/ui/primitives/ScrollArea";
+import { Tabs, TabsList, TabsTrigger } from "@/ui/primitives/Tabs";
 import { Component, LayersIcon, Square } from "@/lib/components/icons";
 import { DesignSystemSearch } from "@/lib/components/design-system-search";
 import { DesignSystemItem as DesignSystemItemComponent } from "@/lib/components/design-system-item";

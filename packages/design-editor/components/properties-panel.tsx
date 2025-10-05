@@ -46,7 +46,7 @@ import {
 import { Slider } from "@/ui/primitives/Slider";
 import { useCanvas, findObject } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
-import { CanvasBackgroundControls } from "./canvas-background-controls";
+import { CanvasBackgroundControls } from "@/ui/composers/canvas-background-controls";
 // Component props panel temporarily removed
 
 interface PropertySection {

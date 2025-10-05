@@ -3,7 +3,7 @@
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { KeyboardShortcutsModal } from '@/ui/composers/keyboard-shortcuts-modal';
-import { Button } from '@/ui/primitives/button';
+import { Button } from '@/ui/primitives/Button';
 import {
   DropdownMenu,
   DropdownMenuContent,

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { LayersIcon, Library } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/ui/primitives/Tabs';
-import { FileMetadata } from '@/ui/compounds/file-metadata';
-import { LayersList } from '@/ui/assemblies/layers-list';
-import { LibrarySection } from '@/ui/assemblies/library-section';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/primitives/Tabs";
+import { FileMetadata } from "@/ui/compounds/file-metadata";
+import { LayersList } from "@/ui/assemblies/layers-list";
+import { LibrarySection } from "@/ui/assemblies/library-section";
 import { useCanvas } from "@/lib/canvas-context";
 
 interface FileDetailsPanelProps {

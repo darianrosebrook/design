@@ -2,17 +2,17 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
-import { Badge } from '@/ui/primitives/badge';
+import { Badge } from "@/ui/primitives/Badge";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/ui/primitives/dialog';
-import { Input } from '@/ui/primitives/input';
-import { ScrollArea } from '@/ui/primitives/scroll-area';
-import { Separator } from '@/ui/primitives/separator';
+} from "@/ui/primitives/dialog";
+import { Input } from "@/ui/primitives/Input";
+import { ScrollArea } from "@/ui/primitives/ScrollArea";
+import { Separator } from "@/ui/primitives/separator";
 import {
   getShortcutsByCategory,
   formatShortcut,

@@ -8,7 +8,7 @@ import {
 import * as React from "react";
 import type { DayButton } from "react-day-picker";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
-import { Button, buttonVariants } from '@/ui/primitives/button';
+import { Button, buttonVariants } from '@/ui/primitives/Button';
 import { cn } from "@/lib/utils";
 
 function Calendar({

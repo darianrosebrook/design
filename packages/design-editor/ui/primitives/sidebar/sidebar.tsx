@@ -5,8 +5,8 @@ import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 import { PanelLeftIcon } from "lucide-react";
 import * as React from "react";
-import { Button } from '@/ui/primitives/button';
-import { Input } from '@/ui/primitives/input';
+import { Button } from '@/ui/primitives/Button';
+import { Input } from '@/ui/primitives/Input';
 import { Separator } from '@/ui/primitives/separator';
 import {
   Sheet,
