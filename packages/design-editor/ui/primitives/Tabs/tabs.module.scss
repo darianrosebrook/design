@@ -1,7 +1,88 @@
-// tabs primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Tabs component styles
+// Migrated from Tailwind to SCSS with design tokens
 
 .tabs {
-  // Placeholder for future SCSS implementation
-  // Will contain tabs-specific styles when migrating from Tailwind
+  // Base tabs container styles (equivalent to flex flex-col gap-2)
+  display: flex; // equivalent to flex
+  flex-direction: column; // equivalent to flex-col
+  gap: 8px; // equivalent to gap-2
+}
+
+.tabsList {
+  // Tab list container styles (equivalent to bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px])
+  background-color: hsl(var(--muted)); // equivalent to bg-muted
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  display: inline-flex; // equivalent to inline-flex
+  height: 36px; // equivalent to h-9
+  width: fit-content; // equivalent to w-fit
+  align-items: center; // equivalent to items-center
+  justify-content: center; // equivalent to justify-center
+  border-radius: 8px; // equivalent to rounded-lg
+  padding: 3px; // equivalent to p-[3px]
+}
+
+.tabsTrigger {
+  // Tab trigger styles (equivalent to data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm)
+  color: hsl(var(--foreground)); // equivalent to text-foreground
+  display: inline-flex; // equivalent to inline-flex
+  height: calc(100% - 1px); // equivalent to h-[calc(100%-1px)]
+  flex: 1; // equivalent to flex-1
+  align-items: center; // equivalent to items-center
+  justify-content: center; // equivalent to justify-center
+  gap: 6px; // equivalent to gap-1.5
+  border-radius: 6px; // equivalent to rounded-md
+  border: 1px solid transparent; // equivalent to border border-transparent
+  padding: 4px 8px; // equivalent to px-2 py-1
+  font-size: 14px; // equivalent to text-sm
+  font-weight: 500; // equivalent to font-medium
+  white-space: nowrap; // equivalent to whitespace-nowrap
+  transition: color 150ms ease-in-out, box-shadow 150ms ease-in-out; // equivalent to transition-[color,box-shadow]
+  outline: none; // equivalent to focus-visible:outline-1
+
+  // Dark mode colors
+  .dark & {
+    color: hsl(var(--muted-foreground)); // equivalent to dark:text-muted-foreground
+  }
+
+  // SVG icon styles (equivalent to [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4)
+  svg {
+    pointer-events: none;
+    flex-shrink: 0;
+
+    &:not([class*="size-"]) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  // Active state (equivalent to data-[state=active]:bg-background dark:data-[state=active]:text-foreground dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 data-[state=active]:shadow-sm)
+  &[data-state="active"] {
+    background-color: hsl(var(--background)); // equivalent to data-[state=active]:bg-background
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); // equivalent to data-[state=active]:shadow-sm
+
+    .dark & {
+      color: hsl(var(--foreground)); // equivalent to dark:data-[state=active]:text-foreground
+      border-color: hsl(var(--input)); // equivalent to dark:data-[state=active]:border-input
+      background-color: hsl(var(--input) / 0.3); // equivalent to dark:data-[state=active]:bg-input/30
+    }
+  }
+
+  // Focus visible styles (equivalent to focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:outline-ring)
+  &:focus-visible {
+    border-color: hsl(var(--ring));
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5);
+    outline: 1px solid hsl(var(--ring)); // equivalent to focus-visible:outline-ring
+  }
+
+  // Disabled state (equivalent to disabled:pointer-events-none disabled:opacity-50)
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+.tabsContent {
+  // Tab content styles (equivalent to flex-1 outline-none)
+  flex: 1; // equivalent to flex-1
+  outline: none; // equivalent to outline-none
 }

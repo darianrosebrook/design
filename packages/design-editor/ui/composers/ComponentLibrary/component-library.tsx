@@ -6,7 +6,7 @@ import {
   ComponentRenderer,
   getAvailableComponents,
   getComponentMetadata,
-} from "@/ui/composers/component-renderer";
+} from "@/ui/composers/ComponentRenderer";
 import { useCanvas } from "@/lib/canvas-context";
 
 interface ComponentLibraryProps {

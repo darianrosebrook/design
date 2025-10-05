@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { ActionBar } from "@/ui/assemblies/action-bar";
-import { CanvasArea } from "@/ui/assemblies/canvas-area";
-import { ContextMenu } from "@/ui/primitives/context-menu";
-import { DesignSystemOverlay } from "@/ui/assemblies/design-system-overlay";
-import { PanelContainer } from "@/ui/assemblies/panel-container";
-import { TopNavigation } from "@/ui/assemblies/top-navigation";
+import { ActionBar } from "@/ui/assemblies/ActionBar";
+import { CanvasArea } from "@/ui/assemblies/CanvasArea";
+import { ContextMenu } from "@/ui/primitives/ContextMenu";
+import { DesignSystemOverlay } from "@/ui/assemblies/DesignSystemOverlay";
+import { PanelContainer } from "@/ui/assemblies/PanelContainer";
+import { TopNavigation } from "@/ui/assemblies/TopNavigation";
 import { CanvasProvider } from "@/lib/canvas-context";
 import { GlobalShortcutsProvider } from "@/lib/global-shortcuts-provider";
 import { DevTools } from "@/lib/dev-tools";

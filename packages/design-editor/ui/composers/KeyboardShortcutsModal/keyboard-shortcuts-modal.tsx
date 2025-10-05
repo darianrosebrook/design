@@ -9,10 +9,10 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/ui/primitives/dialog";
+} from "@/ui/primitives/Dialog";
 import { Input } from "@/ui/primitives/Input";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
-import { Separator } from "@/ui/primitives/separator";
+import { Separator } from "@/ui/primitives/Separator";
 import {
   getShortcutsByCategory,
   formatShortcut,

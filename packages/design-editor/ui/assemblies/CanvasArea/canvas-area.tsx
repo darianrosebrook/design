@@ -4,8 +4,8 @@ import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
-import { ZoomControls } from "@/ui/composers/zoom-controls";
-import { ComponentRenderer } from "@/ui/composers/component-renderer";
+import { ZoomControls } from "@/ui/composers/ZoomControls";
+import { ComponentRenderer } from "@/ui/composers/ComponentRenderer";
 
 type ResizeHandle = "nw" | "ne" | "sw" | "se" | "n" | "e" | "s" | "w";
 

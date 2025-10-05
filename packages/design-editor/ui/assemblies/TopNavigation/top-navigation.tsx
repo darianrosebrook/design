@@ -2,7 +2,7 @@
 
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
-import { KeyboardShortcutsModal } from '@/ui/composers/keyboard-shortcuts-modal';
+import { KeyboardShortcutsModal } from '@/ui/composers/KeyboardShortcutsModal';
 import { Button } from '@/ui/primitives/Button';
 import {
   DropdownMenu,
@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/ui/primitives/dropdown-menu';
+} from '@/ui/primitives/DropdownMenu';
 
 export function TopNavigation() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);

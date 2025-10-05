@@ -19,7 +19,7 @@ import { convertLibraryItemToCanvasObject } from "@/lib/utils/library-to-canvas"
 import {
   getAvailableComponents,
   getComponentMetadata,
-} from "@/ui/composers/component-renderer";
+} from "@/ui/composers/ComponentRenderer";
 import type React from "react";
 
 interface LibraryItem {

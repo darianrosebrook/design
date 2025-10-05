@@ -25,7 +25,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/ui/primitives/dropdown-menu";
+} from "@/ui/primitives/DropdownMenu";
 import { useCanvas, type CanvasTool } from "@/lib/canvas-context";
 import styles from "./ActionBar.module.scss";
 

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CollapsiblePanel } from '@/ui/composers/collapsible-panel';
-import { FileDetailsPanel } from '@/ui/assemblies/file-details-panel';
-import { PropertiesPanel } from '@/ui/assemblies/properties-panel';
-import { PropertiesPanelCollapsed } from '@/ui/assemblies/properties-panel-collapsed';
-import { ResizablePanel } from '@/ui/composers/resizable-panel';
+import { CollapsiblePanel } from '@/ui/composers/CollapsiblePanel';
+import { FileDetailsPanel } from '@/ui/assemblies/FileDetailsPanel';
+import { PropertiesPanel } from '@/ui/assemblies/PropertiesPanel';
+import { PropertiesPanelCollapsed } from '@/ui/assemblies/PropertiesPanelCollapsed';
+import { ResizablePanel } from '@/ui/composers/ResizablePanel';
 import { useCanvas } from "@/lib/canvas-context";
 import { findObject } from "@/lib/canvas-context";
 

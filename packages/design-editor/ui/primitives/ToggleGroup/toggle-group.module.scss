@@ -1,0 +1,51 @@
+// ToggleGroup component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.toggleGroup {
+  // Base group styles (equivalent to group/toggle-group flex w-fit items-center rounded-md)
+  display: flex; // equivalent to flex
+  width: fit-content; // equivalent to w-fit
+  align-items: center; // equivalent to items-center
+  border-radius: 6px; // equivalent to rounded-md
+
+  // Outline variant shadow (equivalent to data-[variant=outline]:shadow-xs)
+  &[data-variant="outline"] {
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); // equivalent to shadow-xs
+  }
+}
+
+.toggleGroupItem {
+  // Base item styles (equivalent to min-w-0 flex-1 shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10)
+  min-width: 0; // equivalent to min-w-0
+  flex: 1; // equivalent to flex-1
+  flex-shrink: 0; // equivalent to shrink-0
+  border-radius: 0; // equivalent to rounded-none
+  box-shadow: none; // equivalent to shadow-none
+
+  // First item rounded left (equivalent to first:rounded-l-md)
+  &:first-child {
+    border-top-left-radius: 6px; // equivalent to rounded-l-md
+    border-bottom-left-radius: 6px;
+  }
+
+  // Last item rounded right (equivalent to last:rounded-r-md)
+  &:last-child {
+    border-top-right-radius: 6px; // equivalent to rounded-r-md
+    border-bottom-right-radius: 6px;
+  }
+
+  // Focus states (equivalent to focus:z-10 focus-visible:z-10)
+  &:focus,
+  &:focus-visible {
+    z-index: 10; // equivalent to z-10
+  }
+
+  // Outline variant border adjustments (equivalent to data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l)
+  &[data-variant="outline"] {
+    border-left: 0; // equivalent to border-l-0
+
+    &:first-child {
+      border-left: 1px solid hsl(var(--border)); // equivalent to first:border-l
+    }
+  }
+}

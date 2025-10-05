@@ -1,7 +1,7 @@
 "use client";
 
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
-import { LayerItem } from "@/ui/assemblies/layer-item";
+import { LayerItem } from "@/ui/assemblies/LayerItem";
 import { useMultiSelection } from "@/lib/hooks/use-multi-selection";
 import { useLayerDragDrop } from "@/lib/hooks/use-layer-drag-drop";
 import { useCanvas } from "@/lib/canvas-context";
