@@ -36,29 +36,10 @@ const extensionConfig = {
   logLevel: "info",
 };
 
-/**
- * Build configuration for React bundle (shared across webviews)
- */
-const reactBundleConfig = {
-  entryPoints: ["./webviews/canvas/react-bundle.ts"],
-  bundle: true,
-  outfile: "./dist/webviews/react.js",
-  platform: "browser",
-  target: "es2020",
-  format: "iife",
-  sourcemap: !isProduction,
-  minify: isProduction,
-  define: {
-    "process.env.NODE_ENV": JSON.stringify(
-      process.env.NODE_ENV || "development"
-    ),
-  },
-  globalName: "ReactBundle",
-  logLevel: "info",
-};
+// React bundle config removed - using single-file bundle approach
 
 /**
- * Build configuration for the canvas webview bundle
+ * Build configuration for the canvas webview bundle (single-file with React)
  */
 const canvasWebviewConfig = {
   entryPoints: ["./webviews/canvas/index.tsx"],
@@ -74,7 +55,7 @@ const canvasWebviewConfig = {
       process.env.NODE_ENV || "development"
     ),
   },
-  external: ["react", "react-dom"], // Externalize React to prevent multiple instances
+  // Include React and ReactDOM in the bundle - no externals for single-file approach
   loader: {
     ".css": "text",
     ".svg": "text",
@@ -130,23 +111,7 @@ async function buildExtension() {
   }
 }
 
-/**
- * Build the React bundle
- */
-async function buildReactBundle() {
-  try {
-    console.info("🚀 Building React bundle...");
-
-    const result = await esbuild.build(reactBundleConfig);
-
-    console.info("✅ React bundle built successfully");
-
-    return result;
-  } catch (error) {
-    console.error("❌ React bundle build failed:", error);
-    throw error;
-  }
-}
+// React bundle function removed - using single-file approach
 
 /**
  * Build the canvas webview
@@ -202,25 +167,7 @@ async function watchMode() {
     contexts.push(extensionContext);
   }
 
-  // Watch React bundle
-  const reactContext = await esbuild.context({
-    ...reactBundleConfig,
-    plugins: [
-      {
-        name: "react-rebuild-notify",
-        setup(build) {
-          build.onEnd((result) => {
-            if (result.errors.length === 0) {
-              console.info("✅ React bundle rebuilt");
-            } else {
-              console.error("❌ React bundle rebuild failed");
-            }
-          });
-        },
-      },
-    ],
-  });
-  contexts.push(reactContext);
+  // React bundle context removed - using single-file approach
 
   // Watch webview code
   const webviewContext = await esbuild.context({
@@ -261,8 +208,7 @@ if (isWatch) {
         await buildExtension();
       }
 
-      // Build React bundle and webview
-      await buildReactBundle();
+      // Build canvas webview (single-file bundle with React)
       await buildCanvasWebview();
 
       console.info("🎉 All builds completed successfully!");

@@ -299,6 +299,7 @@ export class CanvasWebviewProvider {
 
       let duration: number | undefined;
       let finalDocument: CanvasDocumentType | null = null;
+      let operationEnded = false;
 
       try {
         if (!validation.success) {
@@ -372,6 +373,7 @@ export class CanvasWebviewProvider {
 
         // End performance monitoring for document load
         duration = monitor.endOperation(operationId);
+        operationEnded = true;
 
         // Record memory usage estimate
         if (validation.performance) {
@@ -399,19 +401,23 @@ export class CanvasWebviewProvider {
         }
       } finally {
         // Ensure operation is always ended, even on exceptions
-        try {
-          monitor.endOperation(operationId);
-        } catch (endError) {
-          // If ending operation fails, log but don't throw
-          this._observability.log(
-            "warn",
-            "canvas_webview.end_operation_failed",
-            {
-              operationId,
-              error:
-                endError instanceof Error ? endError.message : "Unknown error",
-            }
-          );
+        if (!operationEnded) {
+          try {
+            monitor.endOperation(operationId);
+          } catch (endError) {
+            // If ending operation fails, log but don't throw
+            this._observability.log(
+              "warn",
+              "canvas_webview.end_operation_failed",
+              {
+                operationId,
+                error:
+                  endError instanceof Error
+                    ? endError.message
+                    : "Unknown error",
+              }
+            );
+          }
         }
       }
 
@@ -579,8 +585,8 @@ export class CanvasWebviewProvider {
   public setViewMode(mode: "canvas" | "code"): void {
     if (this._panel && this._isReady) {
       this._panel.webview.postMessage({
-        command: "setViewMode",
-        mode,
+        command: "viewModeChange",
+        mode: mode,
       });
     }
   }
@@ -610,20 +616,26 @@ export class CanvasWebviewProvider {
 
         this._applySelectionModeSettings();
 
-        // Send current document and selection
+        // Send current document and selection first
         if (this._document && this._panel) {
           await this._panel.webview.postMessage({
             command: "setDocument",
             document: this._document,
           });
+          console.info("Sent document to webview");
 
           if (this._selection) {
             await this._panel.webview.postMessage({
               command: "setSelection",
               selection: this._selection,
             });
+            console.info("Sent selection to webview");
           }
         }
+
+        // Set default view mode to canvas after document is sent
+        this.setViewMode("canvas");
+        console.info("Set initial view mode to canvas");
         break;
 
       case "selectionChange":
@@ -741,8 +753,71 @@ export class CanvasWebviewProvider {
         break;
 
       case "viewModeChange":
-        // Handle view mode change
-        console.info("View mode change:", message.payload.mode);
+        // Handle view mode change request from webview
+        console.info("View mode change requested:", message.payload.mode);
+
+        // Respond by setting the requested view mode
+        if (this._panel && this._isReady) {
+          this._panel.webview.postMessage({
+            command: "viewModeChange",
+            mode: message.payload.mode,
+          });
+          console.info(
+            "Sent view mode change command to webview:",
+            message.payload.mode
+          );
+        }
+        break;
+
+      case "canvasClick":
+        console.info("Canvas clicked:", message.payload);
+        // TODO: Handle canvas click for selection
+        break;
+
+      case "createNode":
+        console.info("Creating node:", message.payload);
+
+        if (this._document && this._documentFilePath) {
+          try {
+            // Add the new node to the document
+            const newNode = {
+              id: message.payload.id,
+              type: message.payload.type,
+              x: message.payload.x,
+              y: message.payload.y,
+              width: message.payload.width,
+              height: message.payload.height,
+              properties: message.payload.properties,
+              children: [],
+            };
+
+            // Add to the first artboard's children (assuming single artboard for now)
+            if (
+              this._document.artboards &&
+              this._document.artboards.length > 0
+            ) {
+              const artboard = this._document.artboards[0];
+              if (!artboard.children) {
+                artboard.children = [];
+              }
+              artboard.children.push(newNode);
+
+              // Save the updated document
+              await this._documentStore.saveDocument();
+
+              console.info("Node created and document saved:", newNode.id);
+
+              // Update the selection to the new node
+              const newSelection = {
+                selectedNodeIds: [newNode.id],
+                focusedNodeId: newNode.id,
+              };
+              this.setSelection(newSelection);
+            }
+          } catch (error) {
+            console.error("Failed to create node:", error);
+          }
+        }
         break;
 
       case "wrapModeChange":
@@ -913,15 +988,6 @@ export class CanvasWebviewProvider {
       )
     );
 
-    const reactUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(
-        this.context.extensionUri,
-        "dist",
-        "webviews",
-        "react.js"
-      )
-    );
-
     const nonce = this._getNonce();
 
     return `<!DOCTYPE html>
@@ -939,8 +1005,15 @@ export class CanvasWebviewProvider {
   <title>Canvas Designer</title>
 </head>
 <body>
-  <div id="root"></div>
-  <script nonce="${nonce}" src="${reactUri}"></script>
+  <div id="root">
+    <!-- Placeholder content for debugging -->
+    <div class="canvas-webview">
+      <div class="canvas-layout">
+        <div class="top-navigation">Loading...</div>
+        <div class="main-content" data-debug="main-content-canvas">Loading...</div>
+      </div>
+    </div>
+  </div>
   <script nonce="${nonce}" src="${scriptUri}"></script>
 </body>
 </html>`;

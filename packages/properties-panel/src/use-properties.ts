@@ -5,13 +5,13 @@
 
 import type { NodeType } from "@paths-design/canvas-schema";
 import { useState, useEffect, useCallback } from "react";
-import { PropertiesService } from "./properties-service";
+import { PropertiesService } from "./properties-service.js";
 // import { getApplicablePropertiesForNode } from "./property-utils"; // TODO: Remove if not needed
 import type {
   SelectionState,
   PropertyChangeEvent,
   PropertyValue,
-} from "./types";
+} from "./types.js";
 
 /**
  * Hook for integrating with the properties service

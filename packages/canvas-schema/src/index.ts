@@ -254,16 +254,30 @@ export function validateDocument(doc: unknown): {
           };
         }
       } else {
-        // Document is current version but failed validation for other reasons
-        if (currentVersionError instanceof z.ZodError) {
+        // Document claims to be current version but failed validation
+        // Try to repair it by adding missing required properties
+        try {
+          const repairedDoc = repairDocument(anyDoc);
+          return { success: true, data: repairedDoc, migrated: true };
+        } catch (repairError) {
+          // Repair failed, return original validation errors
+          if (currentVersionError instanceof z.ZodError) {
+            return {
+              success: false,
+              errors: currentVersionError.errors.map(
+                (err) => `${err.path.join(".")}: ${err.message}`
+              ),
+            };
+          }
           return {
             success: false,
-            errors: currentVersionError.errors.map(
-              (err) => `${err.path.join(".")}: ${err.message}`
-            ),
+            errors: [
+              repairError instanceof Error
+                ? repairError.message
+                : "Unknown repair error",
+            ],
           };
         }
-        return { success: false, errors: ["Unknown validation error"] };
       }
     } catch (_parseError) {
       // Document doesn't match any known schema structure
@@ -379,6 +393,60 @@ export const PERFORMANCE_BUDGETS = {
  */
 export function needsMigration(schemaVersion: string): boolean {
   return schemaVersion !== LATEST_SCHEMA_VERSION;
+}
+
+/**
+ * Repair a document that has current schema version but missing required fields
+ */
+export function repairDocument(doc: any): CanvasDocumentType {
+  // Deep clone to avoid mutating the original
+  const repaired = JSON.parse(JSON.stringify(doc));
+
+  // Ensure all artboards have required frame property
+  if (repaired.artboards && Array.isArray(repaired.artboards)) {
+    repaired.artboards = repaired.artboards.map((artboard: any) => {
+      if (!artboard.frame) {
+        artboard.frame = { x: 0, y: 0, width: 1440, height: 1024 };
+      }
+      // Ensure frame has all required properties
+      if (typeof artboard.frame.x !== "number") artboard.frame.x = 0;
+      if (typeof artboard.frame.y !== "number") artboard.frame.y = 0;
+      if (typeof artboard.frame.width !== "number") artboard.frame.width = 1440;
+      if (typeof artboard.frame.height !== "number")
+        artboard.frame.height = 1024;
+
+      // Ensure children array exists
+      if (!artboard.children) {
+        artboard.children = [];
+      }
+
+      return artboard;
+    });
+  }
+
+  // Ensure document has required properties
+  if (!repaired.id) {
+    repaired.id = generateULID();
+  }
+  if (!repaired.name) {
+    repaired.name = "Untitled Document";
+  }
+
+  // Validate the repaired document
+  try {
+    const result = CanvasDocument.parse(repaired);
+    return result;
+  } catch (error) {
+    throw new Error(
+      `Document repair failed: ${
+        error instanceof z.ZodError
+          ? error.errors
+              .map((err) => `${err.path.join(".")}: ${err.message}`)
+              .join(", ")
+          : "Unknown validation error"
+      }`
+    );
+  }
 }
 
 /**

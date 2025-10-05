@@ -4,13 +4,13 @@
  */
 
 // Components
-export { PropertiesPanel } from "./PropertiesPanel";
-export { PropertySectionComponent } from "./PropertySection";
-export { PropertyEditor } from "./PropertyEditor";
+export { PropertiesPanel } from "./PropertiesPanel.js";
+export { PropertySectionComponent } from "./PropertySection.js";
+export { PropertyEditor } from "./PropertyEditor.js";
 
 // Services & Hooks
-export { PropertiesService } from "./properties-service";
-export { useProperties, usePropertyEditor } from "./use-properties";
+export { PropertiesService } from "./properties-service.js";
+export { useProperties, usePropertyEditor } from "./use-properties.js";
 
 // Types
 export type {
@@ -24,12 +24,14 @@ export type {
   PropertiesPanelProps,
   PropertyEditorProps,
   PropertySectionProps,
-} from "./types";
+  FontMetadata,
+  FontVariant,
+} from "./types.js";
 
 export type {
   PropertyChangeCallback,
   SelectionChangeCallback,
-} from "./properties-service";
+} from "./properties-service.js";
 
 // Utilities
 export {
@@ -38,10 +40,10 @@ export {
   getApplicablePropertiesForNode,
   validatePropertyValue,
   formatPropertyValue,
-} from "./property-utils";
-export { PropertyRegistry } from "./property-registry";
+} from "./property-utils.js";
+export { PropertyRegistry } from "./property-registry.js";
 
 // Styles
-export { propertiesPanelStyles } from "./PropertiesPanel";
-export { propertySectionStyles } from "./PropertySection";
-export { propertyEditorStyles } from "./PropertyEditor";
+export { propertiesPanelStyles } from "./PropertiesPanel.js";
+export { propertySectionStyles } from "./PropertySection.js";
+export { propertyEditorStyles } from "./PropertyEditor.js";

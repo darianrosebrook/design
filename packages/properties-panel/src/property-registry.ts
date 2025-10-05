@@ -7,7 +7,7 @@ import type {
   PropertySection,
   PropertyDefinition,
   FontMetadata,
-} from "./types";
+} from "./types.js";
 
 /**
  * Registry of all available properties for different node types

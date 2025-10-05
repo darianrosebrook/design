@@ -22,7 +22,6 @@ export default tseslint.config(
       "**/.ignored/**",
       "**/examples/**",
       "**/prototypes/**",
-      "**/webviews/**", // Webview bundles
       "apps/tools/caws/**", // CAWS tools have their own rules
       "docs/**", // Documentation and experiments
       "**/*.test.ts",

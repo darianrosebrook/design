@@ -24,7 +24,9 @@ export { ColorField } from "./compounds/ColorField";
 export { PropertiesPanel } from "./composers/PropertiesPanel";
 export { Tooltip } from "./composers/Tooltip";
 export { Modal } from "./composers/Modal";
+export { Popover } from "./composers/Popover";
+export { ToggleButton } from "./composers/ToggleButton";
 
 // Export design tokens (re-export for convenience)
-export { defaultTokens as tokens } from "@paths-design/design-tokens";
-export type { DesignTokens } from "@paths-design/design-tokens";
+export { defaultTokens as tokens } from "./tokens.js";
+export type { DesignTokens } from "./tokens.js";

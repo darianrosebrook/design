@@ -3,17 +3,19 @@
  * @author @darianrosebrook
  */
 
-import React, { useMemo } from "react";
-import { PropertiesService } from "./properties-service";
-import { PropertyRegistry } from "./property-registry";
-import { PropertySectionComponent } from "./PropertySection";
+// Use global React object if available (for webview context)
+const React = (globalThis as any).React || require("react");
+const { useMemo } = React;
+import { PropertiesService } from "./properties-service.js";
+import { PropertyRegistry } from "./property-registry.js";
+import { PropertySectionComponent } from "./PropertySection.js";
 import type {
   PropertiesPanelProps,
-  // PropertySectionProps, // TODO: Remove if not needed
-  // PropertySection, // TODO: Remove if not needed
-} from "./types";
-import { useProperties } from "./use-properties";
-import { VirtualizedList } from "./VirtualizedList";
+  PropertySection,
+  PropertySectionProps,
+} from "./types.js";
+import { useProperties } from "./use-properties.js";
+import { VirtualizedList } from "./VirtualizedList.js";
 
 /**
  * Main properties panel component
@@ -45,7 +47,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
     []
   );
   const [showAdvanced, setShowAdvanced] = React.useState(
-    () => propertiesService.getUIState<boolean>("showAdvanced") ?? false
+    () => (propertiesService.getUIState("showAdvanced") as boolean) ?? false
   );
 
   // Persist advanced toggle state changes
@@ -59,7 +61,9 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
 
   // Determine if we should use virtualization (more than 10 sections total)
   const shouldVirtualize = useMemo(() => {
-    if (currentSelection.selectedNodeIds.length === 0) {return false;}
+    if (currentSelection.selectedNodeIds.length === 0) {
+      return false;
+    }
     const allSections = PropertyRegistry.getSections();
     return allSections.length > 10;
   }, [currentSelection.selectedNodeIds.length]);
@@ -171,7 +175,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             items={[
               ...sections.primary,
               ...(showAdvanced
-                ? sections.advanced.map((section) => ({
+                ? sections.advanced.map((section: PropertySection) => ({
                     ...section,
                     defaultCollapsed: true,
                   }))
@@ -179,7 +183,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             ]}
             itemHeight={120} // Estimated height per section
             containerHeight={400} // Container height for virtualization
-            renderItem={(section) => (
+            renderItem={(section: PropertySection) => (
               <PropertySectionComponent
                 key={`${section.id}`}
                 section={section}
@@ -195,7 +199,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           />
         ) : (
           <>
-            {sections.primary.map((section) => (
+            {sections.primary.map((section: PropertySection) => (
               <PropertySectionComponent
                 key={`primary-${section.id}`}
                 section={section}
@@ -237,7 +241,7 @@ export const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 </button>
 
                 {showAdvanced &&
-                  sections.advanced.map((section) => (
+                  sections.advanced.map((section: PropertySection) => (
                     <PropertySectionComponent
                       key={`advanced-${section.id}`}
                       section={{

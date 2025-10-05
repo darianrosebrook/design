@@ -3,7 +3,7 @@
  * @author @darianrosebrook
  */
 
-import { defaultTokens as tokens } from "@paths-design/design-tokens";
+import { defaultTokens as tokens } from "../tokens.js";
 import React from "react";
 
 export interface ButtonProps {

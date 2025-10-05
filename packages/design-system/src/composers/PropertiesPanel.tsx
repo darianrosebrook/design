@@ -3,7 +3,7 @@
  * @author @darianrosebrook
  */
 
-import { defaultTokens as tokens } from "@paths-design/design-tokens";
+import { defaultTokens as tokens } from "../tokens.js";
 import React, { useMemo } from "react";
 import { Button } from "../primitives/Button";
 

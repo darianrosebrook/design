@@ -947,6 +947,7 @@ export class CanvasDOMRenderer implements CanvasRenderer {
    * Set selection mode
    */
   setSelectionMode(mode: SelectionMode): void {
+    console.log("[CanvasRenderer] Setting selection mode to:", mode);
     this.selectionMode = mode;
     this.options.onSelectionModeChange(mode);
     this.observability.logger.info(

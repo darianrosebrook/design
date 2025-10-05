@@ -7,7 +7,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import * as os from "node:os";
-import { ComponentScanner, discoverComponents } from "../src/scanner.js";
+import { ComponentScanner, discoverComponents } from "../dist/scanner.js";
 
 describe("ComponentScanner", () => {
   let tempDir: string;
@@ -44,6 +44,8 @@ export function Button(props: ButtonProps): JSX.Element {
 
       const scanner = new ComponentScanner();
       const result = await scanner.discover({ rootDir: tempDir });
+
+      console.log("Test result:", JSON.stringify(result, null, 2));
 
       expect(result.components).toHaveLength(1);
       expect(result.components[0].name).toBe("Button");

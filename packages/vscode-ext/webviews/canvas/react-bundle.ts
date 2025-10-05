@@ -7,31 +7,73 @@
  */
 
 import React from "react";
+import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
+
+console.log("[react-bundle] start");
 
 // Make React available globally immediately
 const globalWindow = window as any;
 
-// Set up React globally before any other modules load
-Object.defineProperty(globalWindow, "React", {
-  value: React,
-  writable: false,
-  configurable: false,
+console.info("[react-bundle] React imports loaded:", {
+  React: !!React,
+  ReactDOM: !!ReactDOM,
+  createRoot: !!createRoot,
 });
 
-Object.defineProperty(globalWindow, "ReactDOM", {
-  value: { createRoot },
-  writable: false,
-  configurable: false,
-});
+// Set up React globally before any other modules load
+try {
+  // Use direct assignment first, then Object.defineProperty as backup
+  globalWindow.React = React;
+  globalWindow.ReactDOM = ReactDOM;
+  globalWindow.ReactDOMClient = { createRoot };
+
+  // Also set using Object.defineProperty for additional protection
+  Object.defineProperty(globalWindow, "React", {
+    value: React,
+    writable: false,
+    configurable: false,
+  });
+
+  Object.defineProperty(globalWindow, "ReactDOM", {
+    value: ReactDOM,
+    writable: false,
+    configurable: false,
+  });
+
+  Object.defineProperty(globalWindow, "ReactDOMClient", {
+    value: { createRoot },
+    writable: false,
+    configurable: false,
+  });
+
+  console.log("[react-bundle] React globals set:", {
+    React: !!globalWindow.React,
+    ReactDOM: !!globalWindow.ReactDOM,
+    ReactDOMClient: !!globalWindow.ReactDOMClient,
+    ReactDOMClientCreateRoot: !!globalWindow.ReactDOMClient?.createRoot,
+    ReactDOMRender: !!globalWindow.ReactDOM?.render,
+  });
+
+  console.info("[react-bundle] ready - globals available for canvas.js");
+} catch (error) {
+  console.error("[react-bundle] Failed to set React globals:", error);
+}
 
 // Override any existing require function or create one
 const originalRequire = globalWindow.require;
 globalWindow.require = function (id: string) {
   // If it's React or ReactDOM, return the global object
   if (id === "react" || id === "react-dom" || id === "react-dom/client") {
-    if (id === "react" || id === "react-dom") {return React;}
-    if (id === "react-dom/client") {return { createRoot };}
+    if (id === "react") {
+      return React;
+    }
+    if (id === "react-dom") {
+      return ReactDOM;
+    }
+    if (id === "react-dom/client") {
+      return { createRoot };
+    }
   }
 
   // Handle React JSX runtime

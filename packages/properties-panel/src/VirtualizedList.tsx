@@ -3,7 +3,7 @@
  * @author @darianrosebrook
  */
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 
 export interface VirtualizedListProps<T> {
   items: T[];
@@ -66,9 +66,11 @@ export function VirtualizedList<T>({
             right: 0,
           }}
         >
-          {visibleItems.map((item, index) =>
-            renderItem(item, visibleRange.startIndex + index)
-          )}
+          {visibleItems.map((item, index) => (
+            <div key={`virtual-item-${visibleRange.startIndex + index}`}>
+              {renderItem(item, visibleRange.startIndex + index)}
+            </div>
+          ))}
         </div>
       </div>
     </div>

@@ -2,11 +2,16 @@
   "name": "@paths-design/websocket-server",
   "version": "0.1.0",
   "description": "WebSocket server for real-time collaboration in Designer",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "bin": {
+    "designer-websocket": "dist/cli.js"
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
+    "start": "node dist/cli.js",
     "test": "vitest run",
     "test:watch": "vitest"
   },

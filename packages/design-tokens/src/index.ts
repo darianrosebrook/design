@@ -4,7 +4,11 @@
  */
 
 // Export tokens and schema
-export { DesignTokensSchema, defaultTokens, type DesignTokens } from "./tokens";
+export {
+  DesignTokensSchema,
+  defaultTokens,
+  type DesignTokens,
+} from "./tokens.js";
 
 // Export utilities
 export {
@@ -15,7 +19,7 @@ export {
   validateTokens,
   mergeTokens,
   tokensToTypes,
-} from "./utils";
+} from "./utils.js";
 
 // Export resolver
 export {
@@ -30,7 +34,7 @@ export {
   getTokenDependencies,
   type ResolveOptions,
   type ValidationResult,
-} from "./resolver";
+} from "./resolver.js";
 
 // Export watcher
 export {
@@ -38,7 +42,7 @@ export {
   watchTokensSimple,
   type WatcherOptions,
   type WatcherInstance,
-} from "./watcher";
+} from "./watcher.js";
 
 // Export migrations
 export {
@@ -54,6 +58,6 @@ export {
   type TokenSchemaVersion,
   type MigrationResult,
   type CompatibilityReport,
-} from "./migrations";
+} from "./migrations.js";
 
 // Note: generate-css.js is a CLI script, not exported as library code

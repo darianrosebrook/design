@@ -2393,7 +2393,9 @@ ${
                 typeof source[key] === "object" &&
                 !Array.isArray(source[key])
               ) {
-                if (!target[key]) {target[key] = {};}
+                if (!target[key]) {
+                  target[key] = {};
+                }
                 mergeObject(target[key], source[key]);
               } else {
                 target[key] = source[key];
@@ -2585,7 +2587,9 @@ ${
       } else {
         let matches = 0;
         for (let i = 0; i < Math.min(name1.length, name2.length); i++) {
-          if (name1[i] === name2[i]) {matches++;}
+          if (name1[i] === name2[i]) {
+            matches++;
+          }
         }
         scores.name = matches / maxLength;
       }
@@ -2901,7 +2905,7 @@ ${
         args.designSystemPath,
         "utf-8"
       );
-      const designSystem = JSON.parse(designSystemContent);
+      const _designSystem = JSON.parse(designSystemContent);
 
       const content = fs.readFileSync(args.documentPath, "utf-8");
       const document = JSON.parse(content) as CanvasDocumentType;
@@ -3030,9 +3034,9 @@ ${
           const { traverseDocument } = await import(
             "@paths-design/canvas-engine"
           );
-          let nodeCount = 0;
+          let _nodeCount = 0;
           for (const _ of traverseDocument(document)) {
-            nodeCount++;
+            _nodeCount++;
           }
           break;
 
@@ -3060,7 +3064,7 @@ ${
       }
 
       return performance.now() - startTime;
-    } catch (error) {
+    } catch (_error) {
       return performance.now() - startTime;
     }
   }

@@ -671,8 +671,7 @@
 
 > **Source: goal.md §0 (Non-Goals v0)**
 > ```
-> * Real-time multi-user CRDT sync (pave path via Y.js but not required).
-> * Full Figma parity; start with **SVG import** and **basic shapes/text**.
+> * Real-time multi-user CRDT sync (pave path via Y.js but not required). 
 > * Arbitrary framework generation; begin with **React + CSS Modules** (clear, readable output).
 > ```
 
@@ -691,7 +690,7 @@
 > ```
 > * v0.2: Cursor MCP parity; JSON Patch over webview; SVG paste-in.
 > * v0.3: Y.js CRDT opt-in; visual diff in PR; component instance → prop mapping UI.
-> * v0.4: Figma plugin (export subset → canvas.json); React Native adapter.
+> * v0.4: Plugin SDK (export subset → canvas.json); React Native adapter.
 > * v1.0: Plugin SDK for custom emitters; a11y & i18n linters; perf profiles.
 > ```
 

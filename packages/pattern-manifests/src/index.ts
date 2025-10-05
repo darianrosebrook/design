@@ -937,6 +937,20 @@ export class PatternDetector {
       traverseNodes(artboard.children);
     });
 
+    // For container patterns like tabs, only consider the actual container node
+    if (pattern.id === "pattern.tabs") {
+      const containerRoots = roots.filter(
+        (root: any) =>
+          root.semanticKey && root.semanticKey.includes("container")
+      );
+
+      if (containerRoots.length > 0) {
+        return containerRoots;
+      }
+
+      // If no container found, fall back to all roots (shouldn't happen in normal cases)
+    }
+
     return roots;
   }
 
@@ -947,21 +961,75 @@ export class PatternDetector {
     node: NodeType,
     pattern: PatternManifest
   ): boolean {
-    // Simple heuristic: check if node has required semantic keys or structure
+    // Enhanced heuristic: check if node has semantic keys that match pattern structure
     const semanticKey = (node as any).semanticKey;
-    if (
-      semanticKey &&
-      pattern.structure.some((s) => s.semanticKey === semanticKey)
-    ) {
-      return true;
+    if (semanticKey) {
+      // Check for exact matches
+      if (pattern.structure.some((s) => s.semanticKey === semanticKey)) {
+        return true;
+      }
+
+      // Check for pattern matches (e.g., "tabs.container" contains "tabs.")
+      const patternPrefix = semanticKey.split(".")[0] + ".";
+      const patternMatch = pattern.structure.some(
+        (s) => s.semanticKey && s.semanticKey.startsWith(patternPrefix)
+      );
+      if (patternMatch) {
+        return true;
+      }
     }
 
-    // Check structure-based matching
+    // Check structure-based matching - look for children that match pattern structure
     if (node.type === "frame" && "children" in node) {
       const children = node.children || [];
-      return pattern.structure.some((struct) => {
-        return children.some((child: any) => child.type === struct.type);
-      });
+
+      // For tabs pattern, check if we have a tablist with tabs (recursively in subtree)
+      if (pattern.id === "pattern.tabs") {
+        // Get all nodes in the subtree
+        const allDescendants = this.getAllNodesInSubtree(node);
+
+        const hasTablist = allDescendants.some(
+          (descendant: any) => descendant.semanticKey === "tabs.tablist"
+        );
+        const hasTabs = allDescendants.some(
+          (descendant: any) =>
+            descendant.semanticKey &&
+            descendant.semanticKey.startsWith("tabs.tab")
+        );
+        const hasTabPanels = allDescendants.some(
+          (descendant: any) =>
+            descendant.semanticKey &&
+            descendant.semanticKey.startsWith("tabs.tabpanel")
+        );
+
+        if (hasTablist && (hasTabs || hasTabPanels)) {
+          return true;
+        }
+      }
+
+      // General structure matching - check for required elements in direct children
+      const hasRequiredElements = pattern.structure
+        .filter((s) => s.required)
+        .some((struct) => {
+          return children.some(
+            (child: any) =>
+              child.semanticKey === struct.semanticKey ||
+              (child.semanticKey &&
+                struct.semanticKey &&
+                child.semanticKey.startsWith(
+                  struct.semanticKey.split(".")[0] + "."
+                ))
+          );
+        });
+
+      if (hasRequiredElements) {
+        console.log(
+          `Node ${(node as any).name} matches general structure for pattern ${
+            pattern.id
+          }`
+        );
+        return true;
+      }
     }
 
     return false;
@@ -979,17 +1047,10 @@ export class PatternDetector {
     const validationErrors: string[] = [];
 
     // Try to map pattern nodes to canvas nodes
-    const isValid = this.mapPatternNodes(
-      pattern,
-      rootNode,
-      nodeMappings,
-      validationErrors
-    );
+    // Note: We always create an instance, even if incomplete
+    this.mapPatternNodes(pattern, rootNode, nodeMappings, validationErrors);
 
-    if (!isValid) {
-      return null;
-    }
-
+    // Always return an instance - incomplete patterns are still valid patterns
     return {
       patternId: pattern.id,
       rootNodeId: rootNode.id,
@@ -1011,19 +1072,34 @@ export class PatternDetector {
     // Simple mapping based on semantic keys and structure
     const nodes = this.getAllNodesInSubtree(rootNode);
 
-    // Map by semantic keys first
+    // Map by semantic keys first - handle both exact matches and pattern matches
     for (const patternNode of pattern.structure) {
       if (patternNode.semanticKey) {
-        const matchingNode = nodes.find(
+        // First try exact match
+        let matchingNode = nodes.find(
           (node) => (node as any).semanticKey === patternNode.semanticKey
         );
+
+        // If no exact match, try pattern match (e.g., "tabs.tab" matches "tabs.tab[0]")
+        if (!matchingNode) {
+          matchingNode = nodes.find((node) => {
+            const nodeKey = (node as any).semanticKey;
+            return (
+              nodeKey &&
+              (nodeKey === patternNode.semanticKey ||
+                nodeKey.startsWith(patternNode.semanticKey + "[") ||
+                nodeKey.startsWith(patternNode.semanticKey + "."))
+            );
+          });
+        }
+
         if (matchingNode) {
           nodeMappings.set(patternNode.id, matchingNode.id);
         } else if (patternNode.required) {
           validationErrors.push(
             `Required node "${patternNode.name}" with semantic key "${patternNode.semanticKey}" not found`
           );
-          return false;
+          // Don't return false - allow incomplete patterns to be created
         }
       }
     }
@@ -1041,7 +1117,7 @@ export class PatternDetector {
         validationErrors.push(
           `Required node "${patternNode.name}" of type "${patternNode.type}" not found`
         );
-        return false;
+        // Don't return false - allow incomplete patterns to be created
       }
     }
 

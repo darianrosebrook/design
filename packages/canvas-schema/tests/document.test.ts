@@ -8,6 +8,8 @@ import {
   createEmptyDocument,
   canonicalizeDocument,
   validateCanvasDocument,
+  validateDocument,
+  repairDocument,
   migrateDocument,
   needsMigration,
   LATEST_SCHEMA_VERSION,
@@ -367,5 +369,81 @@ describe("Component Library Management", () => {
     const validation = validateComponentLibrary(invalidLibrary);
     expect(validation.success).toBe(false);
     expect(validation.errors).toBeDefined();
+  });
+});
+
+describe("Document Repair", () => {
+  it("repairs document with missing frame in artboard", () => {
+    const malformedDoc = {
+      schemaVersion: "0.1.0",
+      id: "01JF2PZV9G2WR5C3W7P0YHNX9D",
+      name: "Test Document",
+      artboards: [
+        {
+          id: "01JF2Q02Q3MZ3Q9J7HB3X6N9QB",
+          name: "Artboard 1",
+          // Missing frame property
+          children: [],
+        },
+      ],
+    };
+
+    const result = validateDocument(malformedDoc);
+    expect(result.success).toBe(true);
+    expect(result.migrated).toBe(true);
+    expect(result.data).toBeDefined();
+    expect(result.data!.artboards[0].frame).toEqual({
+      x: 0,
+      y: 0,
+      width: 1440,
+      height: 1024,
+    });
+  });
+
+  it("repairs document with incomplete frame properties", () => {
+    const malformedDoc = {
+      schemaVersion: "0.1.0",
+      id: "01JF2PZV9G2WR5C3W7P0YHNX9D",
+      name: "Test Document",
+      artboards: [
+        {
+          id: "01JF2Q02Q3MZ3Q9J7HB3X6N9QB",
+          name: "Artboard 1",
+          frame: { x: 100, y: 200 }, // Missing width and height
+          children: [],
+        },
+      ],
+    };
+
+    const result = validateDocument(malformedDoc);
+    expect(result.success).toBe(true);
+    expect(result.migrated).toBe(true);
+    expect(result.data!.artboards[0].frame).toEqual({
+      x: 100,
+      y: 200,
+      width: 1440,
+      height: 1024,
+    });
+  });
+
+  it("fails to repair document with unrepairable issues", () => {
+    const malformedDoc = {
+      schemaVersion: "0.1.0",
+      id: "01JF2PZV9G2WR5C3W7P0YHNX9D",
+      name: "Test Document",
+      artboards: [
+        {
+          // Missing required id
+          name: "Artboard 1",
+          frame: { x: 0, y: 0, width: 800, height: 600 },
+          children: [],
+        },
+      ],
+    };
+
+    const result = validateDocument(malformedDoc);
+    expect(result.success).toBe(false);
+    expect(result.errors).toBeDefined();
+    expect(result.errors!.length).toBeGreaterThan(0);
   });
 });

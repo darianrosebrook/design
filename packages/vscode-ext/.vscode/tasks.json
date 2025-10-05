@@ -24,7 +24,10 @@
         "owner": "typescript",
         "source": "ts",
         "applyTo": "closedDocuments",
-        "fileLocation": ["relative", "${cwd}"],
+        "fileLocation": [
+          "relative",
+          "${cwd}"
+        ],
         "pattern": "$tsc",
         "background": {
           "activeOnStart": true,
@@ -36,6 +39,14 @@
           }
         }
       }
+    },
+    {
+      "type": "npm",
+      "script": "build:webview",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "npm: build:webview",
+      "detail": "node esbuild.config.js --webview-only"
     }
   ]
 }

@@ -7,10 +7,8 @@ import { EventEmitter } from "node:events";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import semver from "semver";
-import { z } from "zod";
-import {
-  PluginMetadataSchema,
-} from "./types.js";
+import { z as _z } from "zod";
+import { PluginMetadataSchema } from "./types.js";
 import type {
   Plugin,
   PluginMetadata,
@@ -18,12 +16,12 @@ import type {
   PluginSearchFilters,
   PluginSearchResult,
   PluginInstallation,
-  PluginRegistryEvent,
+  PluginRegistryEvent as _PluginRegistryEvent,
   PluginRegistryEventData,
   PluginCompatibilityResult,
-  PluginSecurityScan,
-  PluginReview,
-  PluginAnalytics,
+  PluginSecurityScan as _PluginSecurityScan,
+  PluginReview as _PluginReview,
+  PluginAnalytics as _PluginAnalytics,
 } from "./types.js";
 
 /**
@@ -97,7 +95,11 @@ export class PluginRegistry extends EventEmitter {
 
       return plugin;
     } catch (error) {
-      throw new Error(`Failed to register plugin: ${error instanceof Error ? error.message : "Unknown error"}`);
+      throw new Error(
+        `Failed to register plugin: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
@@ -112,9 +114,8 @@ export class PluginRegistry extends EventEmitter {
       skipDependencies?: boolean;
     } = {}
   ): Promise<Plugin> {
+    let pluginMetadata: PluginMetadata | undefined;
     try {
-      let pluginMetadata: PluginMetadata;
-
       // Determine source type and fetch metadata
       if (source.startsWith("http://") || source.startsWith("https://")) {
         pluginMetadata = await this.fetchPluginFromUrl(source);
@@ -127,17 +128,24 @@ export class PluginRegistry extends EventEmitter {
       // Check compatibility
       const compatibility = await this.checkCompatibility(pluginMetadata);
       if (!compatibility.compatible) {
-        throw new Error(`Plugin incompatible: ${compatibility.issues.join(", ")}`);
+        throw new Error(
+          `Plugin incompatible: ${compatibility.issues.join(", ")}`
+        );
       }
 
       // Check if already installed
       const existingPlugin = this.plugins.get(pluginMetadata.id);
       if (existingPlugin && !options.force) {
-        throw new Error(`Plugin ${pluginMetadata.id} is already installed. Use force=true to reinstall.`);
+        throw new Error(
+          `Plugin ${pluginMetadata.id} is already installed. Use force=true to reinstall.`
+        );
       }
 
       // Download and extract plugin
-      const installPath = path.join(this.config.localStoragePath!, pluginMetadata.id);
+      const installPath = path.join(
+        this.config.localStoragePath!,
+        pluginMetadata.id
+      );
       await this.downloadPlugin(pluginMetadata, installPath);
 
       // Install dependencies if needed
@@ -211,7 +219,11 @@ export class PluginRegistry extends EventEmitter {
         version: plugin.metadata.version,
       } as PluginRegistryEventData);
     } catch (error) {
-      throw new Error(`Failed to uninstall plugin ${pluginId}: ${error instanceof Error ? error.message : "Unknown error"}`);
+      throw new Error(
+        `Failed to uninstall plugin ${pluginId}: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
@@ -248,7 +260,11 @@ export class PluginRegistry extends EventEmitter {
         version: plugin.metadata.version,
       } as PluginRegistryEventData);
     } catch (error) {
-      throw new Error(`Failed to load plugin ${pluginId}: ${error instanceof Error ? error.message : "Unknown error"}`);
+      throw new Error(
+        `Failed to load plugin ${pluginId}: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
@@ -257,7 +273,10 @@ export class PluginRegistry extends EventEmitter {
    */
   async unloadPlugin(pluginId: string): Promise<void> {
     const plugin = this.plugins.get(pluginId);
-    if (!plugin || !plugin.isLoaded) {
+    if (!plugin) {
+      throw new Error(`Plugin ${pluginId} is not registered`);
+    }
+    if (!plugin.isLoaded) {
       return;
     }
 
@@ -275,7 +294,11 @@ export class PluginRegistry extends EventEmitter {
         version: plugin.metadata.version,
       } as PluginRegistryEventData);
     } catch (error) {
-      throw new Error(`Failed to unload plugin ${pluginId}: ${error instanceof Error ? error.message : "Unknown error"}`);
+      throw new Error(
+        `Failed to unload plugin ${pluginId}: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
@@ -305,7 +328,9 @@ export class PluginRegistry extends EventEmitter {
         (plugin) =>
           plugin.metadata.name.toLowerCase().includes(query) ||
           plugin.metadata.description.toLowerCase().includes(query) ||
-          plugin.metadata.keywords?.some((keyword) => keyword.toLowerCase().includes(query))
+          plugin.metadata.keywords?.some((keyword) =>
+            keyword.toLowerCase().includes(query)
+          )
       );
     }
 
@@ -316,14 +341,16 @@ export class PluginRegistry extends EventEmitter {
     }
 
     if (filters.author) {
-      filteredPlugins = filteredPlugins.filter(
-        (plugin) => plugin.metadata.author.name.toLowerCase().includes(filters.author!.toLowerCase())
+      filteredPlugins = filteredPlugins.filter((plugin) =>
+        plugin.metadata.author.name
+          .toLowerCase()
+          .includes(filters.author!.toLowerCase())
       );
     }
 
     if (filters.installed !== undefined) {
       filteredPlugins = filteredPlugins.filter(
-        (plugin) => plugin.installedPath !== undefined === filters.installed
+        (plugin) => (plugin.installedPath !== undefined) === filters.installed
       );
     }
 
@@ -348,13 +375,18 @@ export class PluginRegistry extends EventEmitter {
           comparison = a.metadata.name.localeCompare(b.metadata.name);
           break;
         case "downloads":
-          comparison = (b.metadata as any).downloads || 0 - ((a.metadata as any).downloads || 0);
+          comparison =
+            (b.metadata as any).downloads ||
+            0 - ((a.metadata as any).downloads || 0);
           break;
         case "rating":
-          comparison = (b.metadata as any).rating || 0 - ((a.metadata as any).rating || 0);
+          comparison =
+            (b.metadata as any).rating || 0 - ((a.metadata as any).rating || 0);
           break;
         case "updated":
-          comparison = new Date(b.metadata as any).getTime() - new Date(a.metadata as any).getTime();
+          comparison =
+            new Date(b.metadata as any).getTime() -
+            new Date(a.metadata as any).getTime();
           break;
       }
 
@@ -394,21 +426,27 @@ export class PluginRegistry extends EventEmitter {
    * Get installed plugins
    */
   getInstalledPlugins(): Plugin[] {
-    return Array.from(this.plugins.values()).filter((plugin) => plugin.installedPath !== undefined);
+    return Array.from(this.plugins.values()).filter(
+      (plugin) => plugin.installedPath !== undefined
+    );
   }
 
   /**
    * Get enabled plugins
    */
   getEnabledPlugins(): Plugin[] {
-    return Array.from(this.plugins.values()).filter((plugin) => plugin.isEnabled);
+    return Array.from(this.plugins.values()).filter(
+      (plugin) => plugin.isEnabled
+    );
   }
 
   /**
    * Get loaded plugins
    */
   getLoadedPlugins(): Plugin[] {
-    return Array.from(this.plugins.values()).filter((plugin) => plugin.isLoaded);
+    return Array.from(this.plugins.values()).filter(
+      (plugin) => plugin.isLoaded
+    );
   }
 
   /**
@@ -448,14 +486,20 @@ export class PluginRegistry extends EventEmitter {
       const data = await response.json();
       return PluginMetadataSchema.parse(data);
     } catch (error) {
-      throw new Error(`Failed to fetch plugin from ${url}: ${error instanceof Error ? error.message : "Unknown error"}`);
+      throw new Error(
+        `Failed to fetch plugin from ${url}: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
   /**
    * Fetch plugin metadata from NPM
    */
-  private async fetchPluginFromNpm(packageSpec: string): Promise<PluginMetadata> {
+  private async fetchPluginFromNpm(
+    packageSpec: string
+  ): Promise<PluginMetadata> {
     try {
       const [packageName, version] = packageSpec.split("@");
       const response = await fetch(`https://registry.npmjs.org/${packageName}`);
@@ -468,7 +512,9 @@ export class PluginRegistry extends EventEmitter {
       const targetVersion = version || packageData["dist-tags"].latest;
 
       if (!packageData.versions[targetVersion]) {
-        throw new Error(`Version ${targetVersion} not found for package ${packageName}`);
+        throw new Error(
+          `Version ${targetVersion} not found for package ${packageName}`
+        );
       }
 
       const versionData = packageData.versions[targetVersion];
@@ -479,16 +525,19 @@ export class PluginRegistry extends EventEmitter {
         name: packageData.name,
         version: targetVersion,
         description: versionData.description || "",
-        category: this.inferCategoryFromKeywords(versionData.keywords) || "utility",
+        category: (this.inferCategoryFromKeywords(versionData.keywords) ||
+          "utility") as PluginMetadata["category"],
         author: {
           name: versionData.author?.name || "Unknown",
           email: versionData.author?.email,
           website: versionData.author?.url,
         },
-        repository: versionData.repository ? {
-          type: "git",
-          url: versionData.repository.url,
-        } : undefined,
+        repository: versionData.repository
+          ? {
+              type: "git",
+              url: versionData.repository.url,
+            }
+          : undefined,
         compatibility: {
           minDesignerVersion: versionData.engines?.designer || "0.1.0",
           supportedPlatforms: ["web", "desktop"],
@@ -502,14 +551,20 @@ export class PluginRegistry extends EventEmitter {
 
       return PluginMetadataSchema.parse(metadata);
     } catch (error) {
-      throw new Error(`Failed to fetch plugin from NPM: ${error instanceof Error ? error.message : "Unknown error"}`);
+      throw new Error(
+        `Failed to fetch plugin from NPM: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
   /**
    * Fetch plugin metadata from local path
    */
-  private async fetchPluginFromLocal(localPath: string): Promise<PluginMetadata> {
+  private async fetchPluginFromLocal(
+    localPath: string
+  ): Promise<PluginMetadata> {
     try {
       const packageJsonPath = path.join(localPath, "package.json");
       if (!fs.existsSync(packageJsonPath)) {
@@ -524,16 +579,19 @@ export class PluginRegistry extends EventEmitter {
         name: packageJson.name,
         version: packageJson.version,
         description: packageJson.description || "",
-        category: this.inferCategoryFromKeywords(packageJson.keywords) || "utility",
+        category: (this.inferCategoryFromKeywords(packageJson.keywords) ||
+          "utility") as PluginMetadata["category"],
         author: {
           name: packageJson.author?.name || "Unknown",
           email: packageJson.author?.email,
           website: packageJson.author?.url,
         },
-        repository: packageJson.repository ? {
-          type: "local",
-          localPath,
-        } : undefined,
+        repository: packageJson.repository
+          ? {
+              type: "local",
+              localPath,
+            }
+          : undefined,
         compatibility: {
           minDesignerVersion: packageJson.engines?.designer || "0.1.0",
           supportedPlatforms: ["web", "desktop"],
@@ -547,14 +605,20 @@ export class PluginRegistry extends EventEmitter {
 
       return PluginMetadataSchema.parse(metadata);
     } catch (error) {
-      throw new Error(`Failed to load plugin from ${localPath}: ${error instanceof Error ? error.message : "Unknown error"}`);
+      throw new Error(
+        `Failed to load plugin from ${localPath}: ${
+          error instanceof Error ? error.message : "Unknown error"
+        }`
+      );
     }
   }
 
   /**
    * Infer plugin category from keywords
    */
-  private inferCategoryFromKeywords(keywords: string[] = []): string | undefined {
+  private inferCategoryFromKeywords(
+    keywords: string[] = []
+  ): string | undefined {
     const categoryKeywords: Record<string, string[]> = {
       design: ["design", "ui", "ux", "interface"],
       development: ["dev", "development", "coding", "programming"],
@@ -567,9 +631,11 @@ export class PluginRegistry extends EventEmitter {
     };
 
     for (const [category, categoryWords] of Object.entries(categoryKeywords)) {
-      if (keywords.some((keyword) =>
-        categoryWords.some((word) => keyword.toLowerCase().includes(word))
-      )) {
+      if (
+        keywords.some((keyword) =>
+          categoryWords.some((word) => keyword.toLowerCase().includes(word))
+        )
+      ) {
         return category;
       }
     }
@@ -580,7 +646,9 @@ export class PluginRegistry extends EventEmitter {
   /**
    * Check plugin compatibility
    */
-  private async checkCompatibility(metadata: PluginMetadata): Promise<PluginCompatibilityResult> {
+  private async checkCompatibility(
+    metadata: PluginMetadata
+  ): Promise<PluginCompatibilityResult> {
     const issues: string[] = [];
     const warnings: string[] = [];
 
@@ -590,17 +658,23 @@ export class PluginRegistry extends EventEmitter {
     const maxVersion = metadata.compatibility.maxDesignerVersion;
 
     if (!semver.satisfies(currentVersion, `>=${minVersion}`)) {
-      issues.push(`Requires Designer version >=${minVersion}, but current version is ${currentVersion}`);
+      issues.push(
+        `Requires Designer version >=${minVersion}, but current version is ${currentVersion}`
+      );
     }
 
     if (maxVersion && !semver.satisfies(currentVersion, `<=${maxVersion}`)) {
-      issues.push(`Requires Designer version <=${maxVersion}, but current version is ${currentVersion}`);
+      issues.push(
+        `Requires Designer version <=${maxVersion}, but current version is ${currentVersion}`
+      );
     }
 
     // Check platform compatibility
     const currentPlatform = process.platform;
     if (!metadata.compatibility.supportedPlatforms.includes(currentPlatform)) {
-      warnings.push(`Plugin may not be compatible with platform ${currentPlatform}`);
+      warnings.push(
+        `Plugin may not be compatible with platform ${currentPlatform}`
+      );
     }
 
     return {
@@ -613,7 +687,10 @@ export class PluginRegistry extends EventEmitter {
   /**
    * Download plugin to local storage
    */
-  private async downloadPlugin(metadata: PluginMetadata, installPath: string): Promise<void> {
+  private async downloadPlugin(
+    metadata: PluginMetadata,
+    installPath: string
+  ): Promise<void> {
     // For local plugins, just copy the directory
     if (metadata.repository?.localPath) {
       await this.copyDirectory(metadata.repository.localPath, installPath);
@@ -628,7 +705,10 @@ export class PluginRegistry extends EventEmitter {
   /**
    * Install plugin dependencies
    */
-  private async installPluginDependencies(installPath: string, metadata: PluginMetadata): Promise<void> {
+  private async installPluginDependencies(
+    _installPath: string,
+    _metadata: PluginMetadata
+  ): Promise<void> {
     // Would implement npm install or similar dependency management
     // For now, just a placeholder
   }
@@ -733,7 +813,11 @@ export class PluginRegistry extends EventEmitter {
   /**
    * Set cached data
    */
-  private setCached<T>(key: string, data: T, ttl: number = this.config.cacheTimeout): void {
+  private setCached<T>(
+    key: string,
+    data: T,
+    ttl: number = this.config.cacheTimeout
+  ): void {
     this.cache.set(key, data);
     this.cacheExpiry.set(key, Date.now() + ttl);
   }

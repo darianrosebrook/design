@@ -28,6 +28,7 @@ export class ComponentScanner {
   async discover(options: DiscoveryOptions): Promise<DiscoveryResult> {
     console.log("=== DISCOVER METHOD CALLED ===");
     console.log("Options:", options);
+    console.log("Root dir exists:", fs.existsSync(options.rootDir));
     const startTime = Date.now();
     const components: ComponentEntry[] = [];
     const errors: Array<{ file: string; error: string }> = [];
@@ -49,6 +50,7 @@ export class ComponentScanner {
           filesScanned++;
           try {
             console.log(`About to scan file: ${sourceFile.fileName}`);
+            console.log(`File exists: ${fs.existsSync(sourceFile.fileName)}`);
             const fileComponents = this.scanFile(sourceFile);
             console.log(
               `Scanned file ${sourceFile.fileName}, found ${fileComponents.length} components`
@@ -56,6 +58,10 @@ export class ComponentScanner {
             components.push(...fileComponents);
           } catch (error) {
             console.error(`Error scanning file ${sourceFile.fileName}:`, error);
+            console.error(
+              `Error stack:`,
+              error instanceof Error ? error.stack : "No stack"
+            );
             errors.push({
               file: sourceFile.fileName,
               error: error instanceof Error ? error.message : String(error),
@@ -210,7 +216,11 @@ export class ComponentScanner {
 
         try {
           // Look for function declarations, arrow functions, and class declarations
-          if (this.isReactComponent(node)) {
+          const isReact = this.isReactComponent(node);
+          console.log(
+            `Node ${ts.SyntaxKind[node.kind]} is React component: ${isReact}`
+          );
+          if (isReact) {
             console.log(
               `Found React component in ${sourceFile.fileName}:`,
               this.getComponentName(node)
@@ -262,6 +272,118 @@ export class ComponentScanner {
       );
       throw error; // Re-throw so we can see the full stack trace
     }
+  }
+
+  /**
+   * Resolve properties from a type reference (interface/type alias)
+   */
+  private resolveTypeReferenceProps(
+    typeReferenceNode: ts.TypeReferenceNode
+  ): RawComponentMetadata["props"] {
+    const props: RawComponentMetadata["props"] = [];
+
+    try {
+      if (!this.checker) {
+        return props;
+      }
+
+      // Get the type from the type reference
+      const type = this.checker.getTypeAtLocation(typeReferenceNode);
+      if (!type) {
+        console.log("Could not resolve type from type reference");
+        return props;
+      }
+
+      // Get properties of the type
+      const typeProperties = this.checker.getPropertiesOfType(type);
+      if (!typeProperties || typeProperties.length === 0) {
+        console.log("No properties found in resolved type");
+        return props;
+      }
+
+      console.log(
+        `Found ${
+          typeProperties.length
+        } properties in type ${this.checker.typeToString(type)}`
+      );
+
+      // Process each property
+      for (const prop of typeProperties) {
+        if (!prop || !prop.name) {
+          continue;
+        }
+
+        try {
+          // Get the property's type
+          const propType = this.checker.getTypeOfSymbolAtLocation(
+            prop,
+            typeReferenceNode
+          );
+          const required = !(prop.flags & ts.SymbolFlags.Optional);
+
+          // Try to get JSDoc from the property declaration
+          let description: string | undefined;
+          const designTags: Record<string, string> = {};
+
+          if (prop.valueDeclaration) {
+            const jsDoc = (prop.valueDeclaration as any).jsDoc;
+            if (jsDoc && jsDoc.length > 0) {
+              description = this.getJSDocComment(jsDoc[0]);
+
+              const tags = jsDoc[0].tags;
+              if (tags) {
+                for (const tag of tags) {
+                  if (
+                    tag?.tagName &&
+                    typeof tag.tagName === "object" &&
+                    tag.tagName.text
+                  ) {
+                    const tagName = tag.tagName.text;
+                    if (
+                      tagName === "designControl" ||
+                      tagName === "designOptions"
+                    ) {
+                      designTags[tagName] = this.getJSDocComment(tag);
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          // Safely get the type string
+          let typeString = "unknown";
+          try {
+            typeString = this.checker.typeToString(propType);
+          } catch (typeError) {
+            console.warn(
+              `Could not get type string for property ${prop.name}:`,
+              typeError
+            );
+          }
+
+          props.push({
+            name: prop.name,
+            type: typeString,
+            required,
+            description,
+            designTags:
+              Object.keys(designTags).length > 0 ? designTags : undefined,
+          });
+
+          console.log(
+            `Successfully extracted property: ${prop.name} (${typeString})`
+          );
+        } catch (propError) {
+          console.warn(`Error processing property ${prop.name}:`, propError);
+          // Continue with other properties instead of failing completely
+        }
+      }
+    } catch (error) {
+      console.error("Error in resolveTypeReferenceProps:", error);
+    }
+
+    return props;
   }
 
   /**
@@ -471,12 +593,20 @@ export class ComponentScanner {
         ) {
           // Check if this is part of an assignment: Component.SubComponent = ...
           let current: ts.Node = node;
-          while (current && !ts.isBinaryExpression(current)) {
+          while (
+            current &&
+            !ts.isBinaryExpression(current) &&
+            !ts.isJsxElement(current) &&
+            !ts.isJsxSelfClosingElement(current) &&
+            !ts.isJsxFragment(current)
+          ) {
             current = current.parent;
           }
 
           if (
+            current &&
             ts.isBinaryExpression(current) &&
+            current.operatorToken &&
             current.operatorToken.kind === ts.SyntaxKind.EqualsToken
           ) {
             const baseComponentName = node.expression.text;
@@ -654,34 +784,37 @@ export class ComponentScanner {
       // }
 
       // Extract props from first parameter (for function components)
-      // Temporarily disabled to debug the issue
-      // if (
-      //   ts.isFunctionDeclaration(node) ||
-      //   ts.isArrowFunction(node) ||
-      //   ts.isFunctionExpression(node)
-      // ) {
-      //   const firstParam = node.parameters?.[0];
-      //   if (firstParam?.type) {
-      //     console.log("Extracting props from function parameter");
-      //     props = this.extractPropsFromType(firstParam.type);
-      //     console.log(`Extracted ${props.length} props from function parameter`);
-      //   }
-      // } else if (ts.isVariableStatement(node)) {
-      //   // Handle arrow function assigned to variable
-      //   const declaration = node.declarationList?.declarations?.[0];
-      //   if (
-      //     declaration?.initializer &&
-      //     (ts.isArrowFunction(declaration.initializer) ||
-      //       ts.isFunctionExpression(declaration.initializer))
-      //   ) {
-      //     const firstParam = declaration.initializer.parameters?.[0];
-      //     if (firstParam?.type) {
-      //       console.log("Extracting props from variable declaration parameter");
-      //       props = this.extractPropsFromType(firstParam.type);
-      //       console.log(`Extracted ${props.length} props from variable declaration parameter`);
-      //     }
-      //   }
-      // }
+      if (
+        ts.isFunctionDeclaration(node) ||
+        ts.isArrowFunction(node) ||
+        ts.isFunctionExpression(node)
+      ) {
+        const firstParam = node.parameters?.[0];
+        if (firstParam?.type) {
+          console.log("Extracting props from function parameter");
+          props = this.extractPropsFromType(firstParam.type);
+          console.log(
+            `Extracted ${props.length} props from function parameter`
+          );
+        }
+      } else if (ts.isVariableStatement(node)) {
+        // Handle arrow function assigned to variable
+        const declaration = node.declarationList?.declarations?.[0];
+        if (
+          declaration?.initializer &&
+          (ts.isArrowFunction(declaration.initializer) ||
+            ts.isFunctionExpression(declaration.initializer))
+        ) {
+          const firstParam = declaration.initializer.parameters?.[0];
+          if (firstParam?.type) {
+            console.log("Extracting props from variable declaration parameter");
+            props = this.extractPropsFromType(firstParam.type);
+            console.log(
+              `Extracted ${props.length} props from variable declaration parameter`
+            );
+          }
+        }
+      }
 
       // Extract props from class component
       if (ts.isClassDeclaration(node) && node.heritageClauses) {
@@ -773,7 +906,7 @@ export class ComponentScanner {
           }
         }
       } else if (ts.isTypeReferenceNode(typeNode)) {
-        // Handle interface/type references
+        // Handle interface/type references with improved error handling
         try {
           console.log("Processing type reference node");
           if (!this.checker) {
@@ -781,79 +914,11 @@ export class ComponentScanner {
             return props;
           }
 
-          console.log("Getting type at location...");
-          const type = this.checker.getTypeAtLocation(typeNode);
-          if (!type) {
-            console.log("No type found at location");
-            return props;
-          }
-
-          console.log("Getting properties of type...");
-          const typeProperties = this.checker.getPropertiesOfType(type);
-          if (!typeProperties) {
-            console.log("No properties found for type");
-            return props;
-          }
-
-          console.log(`Found ${typeProperties.length} properties`);
-          for (const prop of typeProperties) {
-            if (!prop) {
-              console.log("Skipping null property");
-              continue;
-            }
-
-            console.log(`Processing property: ${prop.name}`);
-            try {
-              const propType = this.checker.getTypeOfSymbolAtLocation(
-                prop,
-                typeNode
-              );
-              const required = !(prop.flags & ts.SymbolFlags.Optional);
-
-              // Try to get JSDoc from the property declaration
-              const declaration = prop.valueDeclaration;
-              let description: string | undefined;
-              const designTags: Record<string, string> = {};
-
-              if (declaration) {
-                console.log(`Getting JSDoc for property ${prop.name}...`);
-                const jsDoc = (declaration as any).jsDoc;
-                if (jsDoc && jsDoc.length > 0) {
-                  description = this.getJSDocComment(jsDoc[0]);
-
-                  const tags = jsDoc[0].tags;
-                  if (tags) {
-                    for (const tag of tags) {
-                      if (tag?.tagName) {
-                        const tagName = tag.tagName.text;
-                        if (
-                          tagName === "designControl" ||
-                          tagName === "designOptions"
-                        ) {
-                          designTags[tagName] = this.getJSDocComment(tag);
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-
-              props.push({
-                name: prop.name,
-                type: this.checker.typeToString(propType),
-                required,
-                description,
-                designTags:
-                  Object.keys(designTags).length > 0 ? designTags : undefined,
-              });
-              console.log(`Added property ${prop.name} to props`);
-            } catch (propError) {
-              console.error(
-                `Error processing property ${prop.name}:`,
-                propError
-              );
-            }
-          }
+          const resolvedProps = this.resolveTypeReferenceProps(typeNode);
+          props.push(...resolvedProps);
+          console.log(
+            `Added ${resolvedProps.length} props from type reference`
+          );
         } catch (error) {
           console.error("Error extracting props from type reference:", error);
           // Return empty props instead of throwing

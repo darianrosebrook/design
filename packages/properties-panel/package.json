@@ -2,6 +2,7 @@
   "name": "@paths-design/properties-panel",
   "version": "0.1.0",
   "description": "Interactive properties panel for Designer canvas editor",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -24,6 +25,7 @@
     "@paths-design/canvas-schema": "file:../canvas-schema",
     "@paths-design/component-indexer": "file:../component-indexer",
     "@paths-design/design-tokens": "file:../design-tokens",
+    "@paths-design/design-system": "file:../design-system",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

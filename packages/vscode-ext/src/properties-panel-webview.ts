@@ -29,6 +29,8 @@ export class PropertiesPanelWebviewProvider
   private _propertyValues: Map<string, Map<string, unknown>> = new Map(); // nodeId -> propertyKey -> value
   private _documentFilePath?: vscode.Uri; // Track the original file path
   private _fonts: Array<{ label: string; value: string }> = []; // Available fonts for typography
+  private _pendingDocument?: CanvasDocumentType; // Document waiting for webview to be available
+  private _pendingFilePath?: vscode.Uri; // File path for pending document
 
   constructor(private context: vscode.ExtensionContext) {
     // Get reference to the extension instance for communication
@@ -54,8 +56,16 @@ export class PropertiesPanelWebviewProvider
         command: "setDocument",
         document,
       });
+      // Clear any pending document since we successfully sent it
+      this._pendingDocument = undefined;
+      this._pendingFilePath = undefined;
     } else {
-      console.warn("[PropertiesPanel] No webview available to send document");
+      console.warn(
+        "[PropertiesPanel] No webview available to send document, storing for later"
+      );
+      // Store the document for when the webview becomes available
+      this._pendingDocument = document;
+      this._pendingFilePath = filePath;
     }
   }
 
@@ -450,8 +460,18 @@ export class PropertiesPanelWebviewProvider
     }
 
     try {
-      // Send current document if available
-      if (this._document) {
+      // Send pending document if available (takes priority over current document)
+      if (this._pendingDocument) {
+        console.log("[PropertiesPanel] Sending pending document to webview");
+        this._view.webview.postMessage({
+          command: "setDocument",
+          document: this._pendingDocument,
+        });
+        this._pendingDocument = undefined;
+        this._pendingFilePath = undefined;
+      }
+      // Send current document if available and no pending document
+      else if (this._document) {
         this._view.webview.postMessage({
           command: "setDocument",
           document: this._document,

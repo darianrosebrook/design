@@ -3,12 +3,22 @@
  * @author @darianrosebrook
  */
 
-import type { DesignTokens } from "@paths-design/design-tokens";
 import React, { useState, useCallback } from "react";
-import { formatPropertyValue, validatePropertyValue } from "./property-utils";
-import { TokenPill } from "./TokenPill";
-import { TokenSelector } from "./TokenSelector";
-import type { PropertyEditorProps, PropertyValue } from "./types";
+import {
+  formatPropertyValue,
+  validatePropertyValue,
+} from "./property-utils.js";
+import { TokenPill } from "./TokenPill.js";
+import { TokenSelector } from "./TokenSelector.js";
+import {
+  Input,
+  Select,
+  Checkbox,
+  TextField,
+  NumberField,
+  ColorField,
+} from "@paths-design/design-system";
+import type { PropertyEditorProps, PropertyValue } from "./types.js";
 
 /**
  * Type guard to safely convert unknown to PropertyValue
@@ -84,16 +94,25 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
     | "spacing"
     | "radius"
     | "shadow" => {
-    if (definition.type === "color") {return "color";}
-    if (definition.key.startsWith("textStyle.")) {return "typography";}
+    if (definition.type === "color") {
+      return "color";
+    }
+    if (definition.key.startsWith("textStyle.")) {
+      return "typography";
+    }
     if (
       definition.key.includes("spacing") ||
       definition.key.includes("padding") ||
       definition.key.includes("margin")
-    )
-      {return "spacing";}
-    if (definition.key.includes("radius")) {return "radius";}
-    if (definition.key.includes("shadow")) {return "shadow";}
+    ) {
+      return "spacing";
+    }
+    if (definition.key.includes("radius")) {
+      return "radius";
+    }
+    if (definition.key.includes("shadow")) {
+      return "shadow";
+    }
     return "typography"; // default
   };
 
@@ -131,28 +150,30 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
   const renderInput = () => {
     switch (definition.type) {
       case "string":
-        return (
-          <input
+        return definition.multiline ? (
+          <textarea
+            value={(inputValue as string) || ""}
+            onChange={(e) => handleChange(e.target.value)}
+            placeholder={definition.placeholder}
+            disabled={disabled || isMixed}
+            className={`property-input multiline`}
+            style={{ minHeight: "60px", resize: "vertical" }}
+          />
+        ) : (
+          <Input
             type="text"
             value={(inputValue as string) || ""}
             onChange={(e) => handleChange(e.target.value)}
             placeholder={definition.placeholder}
             disabled={disabled || isMixed}
-            className={`property-input ${
-              definition.multiline ? "multiline" : ""
-            }`}
-            style={
-              definition.multiline
-                ? { minHeight: "60px", resize: "vertical" }
-                : undefined
-            }
+            className="property-input"
           />
         );
 
       case "number":
         return (
           <div className="number-input-container">
-            <input
+            <Input
               type="number"
               value={(inputValue as number) || ""}
               onChange={(e) => handleChange(parseFloat(e.target.value) || 0)}
@@ -171,15 +192,12 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
 
       case "boolean":
         return (
-          <label className="checkbox-container">
-            <input
-              type="checkbox"
-              checked={(inputValue as boolean) || false}
-              onChange={(e) => handleChange(e.target.checked)}
-              disabled={disabled || isMixed}
-            />
-            <span className="checkmark"></span>
-          </label>
+          <Checkbox
+            checked={(inputValue as boolean) || false}
+            onChange={(checked) => handleChange(checked)}
+            disabled={disabled || isMixed}
+            className="checkbox-container"
+          />
         );
 
       case "select":
@@ -190,46 +208,36 @@ export const PropertyEditor: React.FC<PropertyEditorProps> = ({
             ? fonts.map((font) => ({ label: font.family, value: font.family }))
             : definition.options || [];
 
+        // Add placeholder as first option if needed
+        const allOptions = definition.placeholder
+          ? [{ label: definition.placeholder, value: "" }, ...selectOptions]
+          : selectOptions;
+
         return (
-          <select
+          <Select
+            options={allOptions}
             value={(inputValue as string) || ""}
-            onChange={(e) => handleChange(e.target.value)}
+            onChange={(value) => handleChange(value)}
             disabled={disabled || isMixed}
             className="property-select"
-          >
-            <option value="">{definition.placeholder || "Select..."}</option>
-            {selectOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
+            placeholder={definition.placeholder || "Select..."}
+          />
         );
 
       case "color":
         return (
-          <div className="color-input-container">
-            <input
-              type="color"
-              value={typeof inputValue === "string" ? inputValue : "#000000"}
-              onChange={(e) => handleChange(e.target.value)}
-              disabled={disabled || isMixed}
-              className="color-input"
-            />
-            <input
-              type="text"
-              value={displayValue}
-              onChange={(e) => handleChange(e.target.value)}
-              placeholder="#000000"
-              disabled={disabled || isMixed}
-              className="color-text-input"
-            />
-          </div>
+          <ColorField
+            value={typeof inputValue === "string" ? inputValue : "#000000"}
+            onChange={(value) => handleChange(value || "#000000")}
+            disabled={disabled || isMixed}
+            showTextInput={true}
+            className="color-input-container"
+          />
         );
 
       default:
         return (
-          <input
+          <Input
             type="text"
             value={displayValue}
             onChange={(e) => handleChange(e.target.value)}

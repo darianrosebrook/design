@@ -196,7 +196,9 @@ describe("PluginRegistry", () => {
       });
 
       expect(results.plugins.length).toBeGreaterThan(0);
-      expect(results.plugins.some(p => p.metadata.id === "design-plugin")).toBe(true);
+      expect(
+        results.plugins.some((p) => p.metadata.id === "design-plugin")
+      ).toBe(true);
     });
 
     it("should search plugins by category", async () => {
@@ -260,7 +262,7 @@ describe("PluginRegistry", () => {
             name: "",
             version: "",
             description: "",
-            category: "utility" as const,
+            category: "invalid" as any, // Invalid category
             author: {
               name: "",
             },
@@ -275,7 +277,9 @@ describe("PluginRegistry", () => {
     });
 
     it("should handle non-existent plugin operations", async () => {
-      await expect(registry.setPluginEnabled("non-existent", true)).rejects.toThrow();
+      await expect(
+        registry.setPluginEnabled("non-existent", true)
+      ).rejects.toThrow();
       await expect(registry.unloadPlugin("non-existent")).rejects.toThrow();
     });
   });

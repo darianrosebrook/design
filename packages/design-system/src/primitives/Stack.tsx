@@ -3,7 +3,7 @@
  * @author @darianrosebrook
  */
 
-import { defaultTokens as tokens } from "@paths-design/design-tokens";
+import { defaultTokens as tokens } from "../tokens.js";
 import React from "react";
 import { Box } from "./Box";
 
@@ -14,6 +14,7 @@ export interface StackProps {
   align?: "start" | "center" | "end" | "stretch";
   justify?: "start" | "center" | "end" | "between" | "around" | "evenly";
   wrap?: boolean;
+  wrapChildren?: boolean;
   as?: keyof JSX.IntrinsicElements;
   className?: string;
   style?: React.CSSProperties;
@@ -38,6 +39,7 @@ export const Stack: React.FC<StackProps> = ({
   align = "stretch",
   justify = "start",
   wrap = false,
+  wrapChildren = false,
   as: Component = "div",
   className = "",
   style = {},
@@ -64,11 +66,17 @@ export const Stack: React.FC<StackProps> = ({
   };
 
   const childrenArray = React.Children.toArray(children);
-  const wrappedChildren = childrenArray.map((child, index) => (
-    <Box key={index} style={{ flexShrink: 0 }}>
-      {child}
-    </Box>
-  ));
+
+  let finalChildren;
+  if (wrapChildren) {
+    finalChildren = childrenArray.map((child, index) => (
+      <Box key={index} style={{ flexShrink: 0 }}>
+        {child}
+      </Box>
+    ));
+  } else {
+    finalChildren = childrenArray;
+  }
 
   return (
     <Component
@@ -77,7 +85,7 @@ export const Stack: React.FC<StackProps> = ({
       } ${className}`}
       style={containerStyles}
     >
-      {wrappedChildren}
+      {finalChildren}
     </Component>
   );
 };

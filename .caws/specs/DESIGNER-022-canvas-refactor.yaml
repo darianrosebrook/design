@@ -1,0 +1,150 @@
+id: DESIGNER-022
+in:
+- packages/canvas-engine/
+- packages/canvas-renderer-dom/
+- packages/vscode-ext/
+- packages/properties-panel/
+- packages/canvas-schema/
+out:
+- packages/design-tokens/
+- packages/design-system/
+- packages/component-discovery/
+
+
+invariants:
+- Unified canvas host (renderer + properties + interactions) in a single webview
+- One React root, one JS IIFE bundle; **no reliance on window.React***
+- All cross‑boundary messages validated (Zod), exhaustive switches
+- Coordinate system is **document‑space**; pan/zoom via world transform; HiDPI scaling correct
+- Engine mutations are pure + immutable; deterministic rendering
+- Dirty‑region rendering; draw loop driven by RAF or explicit invalidation
+- Webview starts without network; CSP strict and nonce‑based
+- Accessibility: keyboard focus order deterministic; SR announcements for selection
+- Memory usage grows ~linearly with node count; no growth over idle (8h)
+- Bundle cap: <= 2.5 MB gzipped (target 2.0 MB), source map excluded
+
+
+acceptance:
+  - id: A1
+    given: User opens Designer canvas command
+    when: Extension activates and webview loads
+    then: Unified canvas shell (topbar/left/canvas/right/actionbar) visible in <1000ms (M1); <800ms (M2)
+  - id: A2
+    given: Canvas document with 500 nodes
+    when: Renderer performs first paint
+    then: Initial paint <150ms (M1), <100ms (M2); interactions maintain 60fps p95 during pan/zoom
+  - id: A3
+    given: User single‑clicks a node
+    when: Selection event propagates
+    then: Properties panel reflects selection within 50ms p95; overlay aligns within 1px @ 200% zoom
+  - id: A4
+    given: User edits a property
+    when: Mutation dispatches through engine
+    then: State updates immutably; only dirty regions re‑draw; no dropped frames p95
+  - id: A5
+    given: Nested transforms on HiDPI display
+    when: Render + interact
+    then: Text/lines crisp; hit testing accurate across zoom (Δ <= 0.5px in world coords)
+  - id: A6
+    given: User saves after edits
+    when: Extension persists
+    then: File written canonically; load‑save round‑trip is lossless
+  - id: A7
+    given: Malformed webview message
+    when: Extension validates
+    then: Message rejected with error posted back; extension/webview remain healthy
+  - id: A8
+    given: Keyboard navigation on canvas
+    when: Focus moves between nodes
+    then: Visible focus ring; SR announces role/name; predictable order
+  - id: A9
+    given: Production build
+    when: CI validates
+    then: Deterministic bundle hash; CSP passes; size <= 2.5 MB gz (target 2.0 MB)
+  - id: A10
+    given: Long session (8h)
+    when: Memory sampled every 5min
+    then: No leak trend; memory within 10% of moving average for stable workloads
+
+
+non_functional:
+a11y:
+- Canvas root has role="application" with aria‑label
+- Keyboard traps prevented; Esc returns focus to canvas root
+- SR announces selection count and primary selection name
+- High‑contrast tokens mapped to canvas colors
+perf:
+activation_ms: 1000
+initial_render_ms: 150
+render_frame_ms: 16 (p95)
+message_roundtrip_ms: 50 (p95)
+additional:
+- Dirty tracking reduces re‑paint area by >= 85% for single‑node edits
+- Memory < 100MB @ 1000 nodes (M1); < 70MB (M2)
+- GC pause <10ms p95
+- Hit testing <8ms p95 @ 1000 nodes
+security:
+- CSP: default-src 'none'; script-src ${webview.cspSource} 'nonce-…'; style-src ${webview.cspSource} 'unsafe-inline'
+- No eval/Function constructor; no dynamic import at runtime
+- Paths validated within workspace
+- All messages validated with Zod; unknown ignored
+- Renderer sandboxed entirely within webview
+
+
+contracts:
+  - type: typescript
+    path: packages/canvas-engine/src/types.ts
+  - type: typescript
+    path: packages/canvas-renderer-dom/src/types.ts
+  - type: typescript
+    path: packages/vscode-ext/src/protocol/message-types.ts
+  - type: json
+    path: packages/canvas-schema/schemas/canvas-0.1.json
+  - type: typescript
+    path: packages/vscode-ext/src/webview/bridge.ts
+
+
+observability:
+  logs:
+    - name: canvas.unified.activate
+      fields: { documentId, nodeCount, t_ms }
+    - name: canvas.render.frame
+      fields: { t_ms, nodesDrawn, dirtyRects }
+    - name: canvas.selection.change
+      fields: { size, focusedNodeId }
+    - name: canvas.property.edit
+      fields: { key, valid }
+    - name: canvas.error
+      fields: { code, message, where }
+  metrics:
+  - canvas_activation_duration_ms: histogram
+  - canvas_render_frame_duration_ms: histogram
+  - canvas_selection_changes_total: counter
+  - canvas_property_edits_total: counter{key}
+  - canvas_memory_usage_mb: gauge
+  - canvas_bundle_size_bytes: gauge
+  traces:
+  - canvas.lifecycle
+  - canvas.render.pipeline
+  - canvas.interaction.pipeline
+  - canvas.mutation.pipeline
+
+
+migrations:
+- No persistent data migrations required
+- Engine ops backward compatible; schema validator handles versioning
+
+
+rollback:
+- Feature flag `designer.canvas.unified` gates the new UI
+- Fallback to properties‑only panel if disabled or failures exceed SLOs
+- VSIX revert path documented; document state preserved
+
+
+implementation_blueprint:
+title: "VS Code Canvas Webview – from‑scratch blueprint + working minimal canvas"
+description: "Single IIFE bundle; real <canvas>; typed bridge; pan/zoom; dbl‑click create; select"
+milestones:
+- m1: shell + pan/zoom + create/select + typed bridge + save
+- m2: lasso/rect selection, dirty tracking, properties integration
+- m3: perf hardening (R‑tree hit test, pooling), a11y polish

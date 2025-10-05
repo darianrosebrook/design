@@ -304,6 +304,10 @@ export class SelectionModesCoordinator {
 
     // Traverse all artboards
     for (const artboard of this.document.artboards) {
+      // Include artboard itself as selectable (artboards are always visible and unlocked)
+      nodes.push(artboard);
+
+      // Include artboard children
       if (artboard.children) {
         traverse(artboard.children);
       }

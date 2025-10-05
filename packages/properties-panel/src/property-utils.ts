@@ -4,7 +4,7 @@
  */
 
 import type { NodeType, TextNodeType } from "@paths-design/canvas-schema";
-import type { PropertyValue, PropertyDefinition } from "./types";
+import type { PropertyValue, PropertyDefinition } from "./types.js";
 
 /**
  * Type guard to safely convert unknown to PropertyValue

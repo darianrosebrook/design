@@ -6,7 +6,7 @@
 import { ulid } from "ulid";
 import type {
   WebSocketMessage,
-  WebSocketMessageType,
+  WebSocketMessageType as _WebSocketMessageType,
   WebSocketServerConfig,
   ClientConnection,
   DocumentSession,
@@ -45,10 +45,9 @@ export class CollaborationServer {
 
   private async initializeWebSocketServer(): Promise<void> {
     try {
-      const wsModule = await import("ws");
-      const WSClass = wsModule.default;
+      const { WebSocketServer } = await import("ws");
 
-      this.wss = new (WSClass as any).Server({
+      this.wss = new WebSocketServer({
         port: this.config.port,
         host: this.config.host,
         perMessageDeflate: this.config.enableCompression,
@@ -68,7 +67,9 @@ export class CollaborationServer {
    * Set up WebSocket event handlers
    */
   private setupEventHandlers(): void {
-    if (!this.wss) {return;}
+    if (!this.wss) {
+      return;
+    }
 
     this.wss.on("connection", (ws: any, request: any) => {
       this.handleConnection(ws, request);
@@ -506,8 +507,8 @@ export class CollaborationServer {
    */
   private handleDisconnection(
     connection: ClientConnection,
-    code: number,
-    reason: Buffer
+    _code: number,
+    _reason: Buffer
   ): void {
     console.info(
       `Client disconnected: ${connection.id} (${connection.userId})`
@@ -608,7 +609,7 @@ export class CollaborationServer {
   /**
    * Extract user ID from request (simplified)
    */
-  private extractUserId(request: any): string | null {
+  private extractUserId(_request: any): string | null {
     // In a real implementation, this would parse authentication tokens
     // For now, return null to use generated ID
     return null;

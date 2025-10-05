@@ -9,14 +9,14 @@ import {
   getNodeProperty,
   setNodeProperty,
   getApplicablePropertiesForNode,
-} from "./property-utils";
+} from "./property-utils.js";
 import type {
   PropertyChangeEvent,
   SelectionState,
   PropertyValue,
   PropertyDefinition,
   // ComponentContractProperty, // TODO: Remove if not needed
-} from "./types";
+} from "./types.js";
 
 // Type for component from component index
 interface ComponentIndexComponent {

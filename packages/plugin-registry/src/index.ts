@@ -3,6 +3,7 @@
  * @author @darianrosebrook
  */
 
+import { PluginRegistry } from "./registry.js";
 export { PluginRegistry } from "./registry.js";
 export type {
   Plugin,
@@ -29,6 +30,8 @@ export type {
 /**
  * Create a new plugin registry instance
  */
-export function createPluginRegistry(config?: Partial<import("./types.js").PluginRegistryConfig>): PluginRegistry {
+export function createPluginRegistry(
+  config?: Partial<import("./types.js").PluginRegistryConfig>
+): PluginRegistry {
   return new PluginRegistry(config);
 }

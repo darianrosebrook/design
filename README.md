@@ -76,7 +76,7 @@ Designer is a **design-in-IDE** tool that brings visual design capabilities dire
 ### 🚀 Why This Matters
 
 Traditional design tools create a **separation** between design and development:
-- Designs live in proprietary formats (`.fig`, `.sketch`, `.xd`)
+- Designs live in proprietary formats
 - Design-to-code handoff requires manual translation
 - Design changes often break existing implementations
 - No direct feedback loop between code changes and design updates

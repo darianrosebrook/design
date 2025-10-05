@@ -1,7 +1,7 @@
 # Designer Canvas Remediation Guide
 
 ## Context
-The current VS Code integration renders only the placeholder properties webview while leaving the actual design surface unhosted. Core canvas packages (`canvas-engine`, `canvas-renderer-dom`, `properties-panel`, `mcp-adapter`) are present but wired together minimally, which blocks the Figma-like workflow shown in `examples/Screenshot 2025-10-01 at 10.22.32 AM.png`. This guide documents the work needed to deliver a performant, deterministic, and agent-friendly canvas experience inside VS Code/Cursor.
+The current VS Code integration renders only the placeholder properties webview while leaving the actual design surface unhosted. Core canvas packages (`canvas-engine`, `canvas-renderer-dom`, `properties-panel`, `mcp-adapter`) are present but wired together minimally, which blocks the design canvas workflow shown in `examples/Screenshot 2025-10-01 at 10.22.32 AM.png`. This guide documents the work needed to deliver a performant, deterministic, and agent-friendly canvas experience inside VS Code/Cursor.
 
 Each section below covers: objective, concrete steps, pitfalls, and code references or pseudocode for implementation.
 
@@ -244,4 +244,4 @@ it("renders rover dashboard frame deterministically", () => {
 4. Wire MCP bridge with feature flag, asynchronous feedback, and conflict-safe mutation queueing.
 5. Expand testing, property coverage, and observability to protect determinism and performance regressions.
 
-Shipping these milestones aligns the Designer IDE experience with Figma-class expectations while preserving determinism, git friendliness, and agent interoperability.
+Shipping these milestones aligns the Designer IDE experience with modern design tool expectations while preserving determinism, git friendliness, and agent interoperability.

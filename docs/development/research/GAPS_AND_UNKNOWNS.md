@@ -89,7 +89,7 @@ RQ-003:
   experiments:
     - Analyze real design file precision requirements
     - Test rounding errors across 1000s of operations
-    - Compare with Figma/Sketch precision handling
+    - Compare with industry-standard design tool precision handling
 ```
 
 ### Proposed Resolution Path
@@ -588,7 +588,7 @@ RQ-021:
 
 1. **SVG feature analysis** - Catalog what we need to support
 2. **Prototype converter** - Build SVG → Canvas converter
-3. **Test with real assets** - Import from Figma/Sketch/Illustrator
+3. **Test with real assets** - Import from industry-standard design tools
 4. **Document SVG support** in `docs/svg-import.md`
 
 **Owner**: TBD  
@@ -803,7 +803,7 @@ RQ-028:
   experiments:
     - Test with NVDA, JAWS, VoiceOver
     - Prototype keyboard navigation
-    - Study Figma's accessibility model
+    - Study industry-standard accessibility patterns
 
 RQ-029:
   title: "Implement contrast computation engine"
