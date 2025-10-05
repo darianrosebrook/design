@@ -4,6 +4,7 @@ import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
+import { ZoomControls } from "./zoom-controls";
 
 type ResizeHandle = "nw" | "ne" | "sw" | "se" | "n" | "e" | "s" | "w";
 
@@ -23,6 +24,12 @@ export function CanvasArea() {
     _sendBackward,
     _selectAll,
     zoom,
+    viewportX,
+    viewportY,
+    panViewport,
+    cursorX,
+    cursorY,
+    setCursorPosition,
   } = useCanvas();
 
   const [isDragging, setIsDragging] = useState(false);
@@ -35,6 +42,9 @@ export function CanvasArea() {
     width: 0,
     height: 0,
   });
+  const [isPanning, setIsPanning] = useState(false);
+  const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+  const [isSpacePressed, setIsSpacePressed] = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const handleContextMenu = (e: React.MouseEvent, objectId?: string) => {
@@ -52,6 +62,62 @@ export function CanvasArea() {
       setSelectedId(null);
     }
     setContextMenu(null);
+  };
+
+  // Keyboard event handlers
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === "Space" && !isSpacePressed) {
+        e.preventDefault();
+        setIsSpacePressed(true);
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.code === "Space") {
+        setIsSpacePressed(false);
+        setIsPanning(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [isSpacePressed]);
+
+  // Mouse event handlers for panning
+  const handleCanvasMouseDown = (e: React.MouseEvent) => {
+    if (isSpacePressed && !isDragging && !isResizing) {
+      e.preventDefault();
+      setIsPanning(true);
+      setPanStart({ x: e.clientX, y: e.clientY });
+    }
+  };
+
+  const handleCanvasMouseMove = (e: React.MouseEvent) => {
+    // Update cursor position
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (rect) {
+      const canvasX = (e.clientX - rect.left - viewportX) / (zoom / 100);
+      const canvasY = (e.clientY - rect.top - viewportY) / (zoom / 100);
+      setCursorPosition(canvasX, canvasY);
+    }
+
+    if (isPanning) {
+      e.preventDefault();
+      const deltaX = e.clientX - panStart.x;
+      const deltaY = e.clientY - panStart.y;
+      panViewport(deltaX, deltaY);
+      setPanStart({ x: e.clientX, y: e.clientY });
+    }
+  };
+
+  const handleCanvasMouseUp = () => {
+    setIsPanning(false);
   };
 
   const handleObjectMouseDown = (e: React.MouseEvent, obj: CanvasObject) => {
@@ -101,8 +167,8 @@ export function CanvasArea() {
     // Prevent text selection during resize
     document.body.style.userSelect = "none";
     document.body.style.webkitUserSelect = "none";
-    document.body.style.mozUserSelect = "none";
-    document.body.style.msUserSelect = "none";
+    (document.body.style as any).mozUserSelect = "none";
+    (document.body.style as any).msUserSelect = "none";
 
     setIsResizing(true);
     setResizeHandle(handle);
@@ -188,8 +254,8 @@ export function CanvasArea() {
       // Restore text selection
       document.body.style.userSelect = "";
       document.body.style.webkitUserSelect = "";
-      document.body.style.mozUserSelect = "";
-      document.body.style.msUserSelect = "";
+      (document.body.style as any).mozUserSelect = "";
+      (document.body.style as any).msUserSelect = "";
 
       setIsDragging(false);
       setIsResizing(false);
@@ -244,7 +310,9 @@ export function CanvasArea() {
       cursor: activeTool === "select" && !obj.locked ? "move" : "default",
       border: "none",
       outline: "none",
-      pointerEvents: obj.locked ? "none" : "auto",
+      pointerEvents: (obj.locked
+        ? "none"
+        : "auto") as React.CSSProperties["pointerEvents"],
     };
 
     const handleClick = (e: React.MouseEvent) => {
@@ -335,7 +403,7 @@ export function CanvasArea() {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                pointerEvents: "none",
+                pointerEvents: "none" as React.CSSProperties["pointerEvents"],
               }}
             />
           </div>
@@ -486,8 +554,13 @@ export function CanvasArea() {
       ref={canvasRef}
       className={`canvas-area relative w-full h-full overflow-hidden focus:outline-none ${
         isDragging || isResizing ? "no-select" : ""
+      } ${isSpacePressed ? "cursor-grab" : ""} ${
+        isPanning ? "cursor-grabbing" : ""
       }`}
       onClick={handleCanvasClick}
+      onMouseDown={handleCanvasMouseDown}
+      onMouseMove={handleCanvasMouseMove}
+      onMouseUp={handleCanvasMouseUp}
       tabIndex={0}
       style={getBackgroundStyle()}
     >
@@ -495,7 +568,9 @@ export function CanvasArea() {
       <div
         className="relative w-full h-full p-8"
         style={{
-          transform: `scale(${zoom / 100})`,
+          transform: `scale(${
+            zoom / 100
+          }) translate(${viewportX}px, ${viewportY}px)`,
           transformOrigin: "top left",
         }}
       >
@@ -507,9 +582,19 @@ export function CanvasArea() {
         {renderBoundingBoxOverlay()}
       </div>
 
-      {/* Zoom indicator */}
-      <div className="absolute bottom-4 right-4 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-medium">
-        {zoom}%
+      {/* Map-like UI controls */}
+      <div className="absolute bottom-4 left-4 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-medium">
+        <div>
+          Cursor: {Math.round(cursorX)}, {Math.round(cursorY)}
+        </div>
+        <div>
+          Viewport: {Math.round(viewportX)}, {Math.round(viewportY)}
+        </div>
+      </div>
+
+      {/* Zoom controls */}
+      <div className="absolute bottom-4 right-4">
+        <ZoomControls />
       </div>
     </div>
   );

@@ -191,13 +191,15 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
 
   // Zoom
   {
-    key: "+",
+    key: "=",
+    modifiers: { ctrl: true },
     action: "zoom-in",
     description: "Zoom In",
     category: "zoom",
   },
   {
     key: "-",
+    modifiers: { ctrl: true },
     action: "zoom-out",
     description: "Zoom Out",
     category: "zoom",

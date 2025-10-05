@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
+import type React from "react";
 import type { CanvasObject } from "./types";
 
 export type CanvasTool =
@@ -52,6 +53,15 @@ interface CanvasContextType {
   zoomToFit: () => void;
   zoomToSelection: () => void;
   zoomTo100: () => void;
+  // Viewport panning
+  viewportX: number;
+  viewportY: number;
+  setViewport: (x: number, y: number) => void;
+  panViewport: (deltaX: number, deltaY: number) => void;
+  // Cursor tracking
+  cursorX: number;
+  cursorY: number;
+  setCursorPosition: (x: number, y: number) => void;
   reorderLayers: (fromIndex: number, toIndex: number) => void;
   duplicateObject: (id: string) => void;
   deleteObject: (id: string) => void;
@@ -80,6 +90,14 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   const [canvasBackgroundColor, setCanvasBackgroundColor] =
     useState<string>("#18181b");
   const [zoom, setZoom] = useState<number>(100);
+
+  // Viewport panning state
+  const [viewportX, setViewportX] = useState<number>(0);
+  const [viewportY, setViewportY] = useState<number>(0);
+
+  // Cursor tracking state
+  const [cursorX, setCursorX] = useState<number>(0);
+  const [cursorY, setCursorY] = useState<number>(0);
 
   // Multi-selection helpers
   const addToSelection = (id: string) => {
@@ -450,19 +468,108 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   };
 
   const zoomToFit = () => {
-    // For now, just reset to 100%
-    // TODO: Calculate actual fit based on canvas content
-    setZoom(100);
+    // Calculate bounds of all objects
+    if (objects.length === 0) {
+      setZoom(100);
+      setViewport(0, 0);
+      return;
+    }
+
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+    objects.forEach((obj) => {
+      minX = Math.min(minX, obj.x);
+      minY = Math.min(minY, obj.y);
+      maxX = Math.max(maxX, obj.x + obj.width);
+      maxY = Math.max(maxY, obj.y + obj.height);
+    });
+
+    const contentWidth = maxX - minX;
+    const contentHeight = maxY - minY;
+
+    // Add some padding
+    const padding = 50;
+    const targetWidth = contentWidth + padding * 2;
+    const targetHeight = contentHeight + padding * 2;
+
+    // Calculate zoom to fit (assuming viewport is 800x600 for now)
+    const viewportWidth = 800;
+    const viewportHeight = 600;
+    const zoomX = (viewportWidth / targetWidth) * 100;
+    const zoomY = (viewportHeight / targetHeight) * 100;
+    const fitZoom = Math.min(zoomX, zoomY, 100); // Don't zoom in beyond 100%
+
+    setZoom(Math.max(fitZoom, 10)); // Min 10%
+
+    // Center the content
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+    setViewport(
+      viewportWidth / 2 - centerX * (fitZoom / 100),
+      viewportHeight / 2 - centerY * (fitZoom / 100)
+    );
   };
 
   const zoomToSelection = () => {
-    // For now, just reset to 100%
-    // TODO: Calculate zoom to fit selected objects
-    setZoom(100);
+    if (!selectedId) {
+      zoomToFit();
+      return;
+    }
+
+    const selectedObject = objects.find((obj) => obj.id === selectedId);
+    if (!selectedObject) {
+      zoomToFit();
+      return;
+    }
+
+    const contentWidth = selectedObject.width;
+    const contentHeight = selectedObject.height;
+
+    // Add some padding
+    const padding = 50;
+    const targetWidth = contentWidth + padding * 2;
+    const targetHeight = contentHeight + padding * 2;
+
+    // Calculate zoom to fit (assuming viewport is 800x600 for now)
+    const viewportWidth = 800;
+    const viewportHeight = 600;
+    const zoomX = (viewportWidth / targetWidth) * 100;
+    const zoomY = (viewportHeight / targetHeight) * 100;
+    const fitZoom = Math.min(zoomX, zoomY, 200); // Allow zooming in up to 200%
+
+    setZoom(Math.max(fitZoom, 10)); // Min 10%
+
+    // Center the selected object
+    const centerX = selectedObject.x + selectedObject.width / 2;
+    const centerY = selectedObject.y + selectedObject.height / 2;
+    setViewport(
+      viewportWidth / 2 - centerX * (fitZoom / 100),
+      viewportHeight / 2 - centerY * (fitZoom / 100)
+    );
   };
 
   const zoomTo100 = () => {
     setZoom(100);
+  };
+
+  // Viewport panning functions
+  const setViewport = (x: number, y: number) => {
+    setViewportX(x);
+    setViewportY(y);
+  };
+
+  const panViewport = (deltaX: number, deltaY: number) => {
+    setViewportX((prev) => prev + deltaX);
+    setViewportY((prev) => prev + deltaY);
+  };
+
+  // Cursor tracking functions
+  const setCursorPosition = (x: number, y: number) => {
+    setCursorX(x);
+    setCursorY(y);
   };
 
   return (
@@ -493,6 +600,15 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         zoomToFit,
         zoomToSelection,
         zoomTo100,
+        // Viewport panning
+        viewportX,
+        viewportY,
+        setViewport,
+        panViewport,
+        // Cursor tracking
+        cursorX,
+        cursorY,
+        setCursorPosition,
         reorderLayers,
         duplicateObject,
         deleteObject,
