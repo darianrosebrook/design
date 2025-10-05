@@ -14,6 +14,7 @@ export interface KeyboardShortcut {
   action: string;
   description: string;
   category: ShortcutCategory;
+  implemented?: boolean; // Whether this shortcut is currently implemented
 }
 
 export type ShortcutCategory =
@@ -60,18 +61,21 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "select-tool",
     description: "Move Tool",
     category: "tools",
+    implemented: true,
   },
   {
     key: "f",
     action: "frame-tool",
     description: "Frame Tool",
     category: "tools",
+    implemented: true,
   },
   {
     key: "p",
     action: "pen-tool",
     description: "Pen Tool",
     category: "tools",
+    implemented: true,
   },
   {
     key: "p",
@@ -79,30 +83,35 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "pencil-tool",
     description: "Pencil Tool",
     category: "tools",
+    implemented: true,
   },
   {
     key: "t",
     action: "text-tool",
     description: "Text Tool",
     category: "tools",
+    implemented: true,
   },
   {
     key: "r",
     action: "rectangle-tool",
     description: "Rectangle Tool",
     category: "tools",
+    implemented: true,
   },
   {
     key: "o",
     action: "ellipse-tool",
     description: "Ellipse Tool",
     category: "tools",
+    implemented: true,
   },
   {
     key: "l",
     action: "line-tool",
     description: "Line Tool",
     category: "tools",
+    implemented: true,
   },
   {
     key: "l",
@@ -110,6 +119,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "arrow-tool",
     description: "Arrow Tool",
     category: "tools",
+    implemented: true,
   },
   {
     key: "c",
@@ -196,6 +206,15 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "zoom-in",
     description: "Zoom In",
     category: "zoom",
+    implemented: true,
+  },
+  {
+    key: "+",
+    modifiers: { ctrl: true },
+    action: "zoom-in",
+    description: "Zoom In",
+    category: "zoom",
+    implemented: true,
   },
   {
     key: "-",
@@ -203,6 +222,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "zoom-out",
     description: "Zoom Out",
     category: "zoom",
+    implemented: true,
   },
   {
     key: "0",
@@ -210,6 +230,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "zoom-to-100",
     description: "Zoom to 100%",
     category: "zoom",
+    implemented: true,
   },
   {
     key: "1",
@@ -217,6 +238,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "zoom-to-fit",
     description: "Zoom to Fit",
     category: "zoom",
+    implemented: true,
   },
   {
     key: "2",
@@ -224,6 +246,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "zoom-to-selection",
     description: "Zoom to Selection",
     category: "zoom",
+    implemented: true,
   },
   {
     key: "n",
@@ -270,6 +293,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "text-bold",
     description: "Bold",
     category: "text",
+    implemented: true,
   },
   {
     key: "i",
@@ -298,6 +322,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "text-align-left",
     description: "Text Align Left",
     category: "text",
+    implemented: true,
   },
   {
     key: "t",
@@ -305,6 +330,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "text-align-center",
     description: "Text Align Center",
     category: "text",
+    implemented: true,
   },
   {
     key: "r",
@@ -312,6 +338,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "text-align-right",
     description: "Text Align Right",
     category: "text",
+    implemented: true,
   },
   {
     key: "j",
@@ -328,12 +355,14 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "remove-fill",
     description: "Remove Fill",
     category: "shape",
+    implemented: true,
   },
   {
     key: "/",
     action: "remove-stroke",
     description: "Remove Stroke",
     category: "shape",
+    implemented: true,
   },
   {
     key: "x",
@@ -350,6 +379,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "select-all",
     description: "Select All",
     category: "selection",
+    implemented: true,
   },
   {
     key: "a",
@@ -363,18 +393,21 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "select-none",
     description: "Select None",
     category: "selection",
+    implemented: true,
   },
   {
     key: "Delete",
     action: "delete",
     description: "Delete Selection",
     category: "selection",
+    implemented: true,
   },
   {
     key: "Backspace",
     action: "delete",
     description: "Delete Selection",
     category: "selection",
+    implemented: true,
   },
   {
     key: "Enter",
@@ -429,6 +462,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "show-hide-selection",
     description: "Show/Hide Selection",
     category: "selection",
+    implemented: true,
   },
   {
     key: "l",
@@ -436,6 +470,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "lock-unlock-selection",
     description: "Lock/Unlock Selection",
     category: "selection",
+    implemented: true,
   },
 
   // Edit
@@ -473,6 +508,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "duplicate",
     description: "Duplicate Selection in Place",
     category: "edit",
+    implemented: true,
   },
   {
     key: "r",
@@ -536,18 +572,21 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "opacity-10",
     description: "Set Opacity to 10%",
     category: "transform",
+    implemented: true,
   },
   {
     key: "5",
     action: "opacity-50",
     description: "Set Opacity to 50%",
     category: "transform",
+    implemented: true,
   },
   {
     key: "0",
     action: "opacity-100",
     description: "Set Opacity to 100%",
     category: "transform",
+    implemented: true,
   },
 
   // Arrange
@@ -557,6 +596,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "bring-forward",
     description: "Bring Forward",
     category: "arrange",
+    implemented: true,
   },
   {
     key: "[",
@@ -564,6 +604,7 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     action: "send-backward",
     description: "Send Backward",
     category: "arrange",
+    implemented: true,
   },
   {
     key: "]",

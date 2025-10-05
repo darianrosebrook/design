@@ -56,14 +56,17 @@ export function GlobalShortcutsProvider({
       switch (shortcut.action) {
         // Essential
         case "toggle-ui":
+          // TODO: Implement UI toggle functionality
           console.log("Toggle UI - not implemented yet");
           break;
 
         case "pick-color":
+          // TODO: Implement color picker tool
           console.log("Pick Color - not implemented yet");
           break;
 
         case "search-menu":
+          // TODO: Implement global search menu
           console.log("Search Menu - not implemented yet");
           break;
 
@@ -105,6 +108,7 @@ export function GlobalShortcutsProvider({
           break;
 
         case "add-comments":
+          // TODO: Implement comments system
           console.log("Add Comments - not implemented yet");
           break;
 
@@ -134,26 +138,32 @@ export function GlobalShortcutsProvider({
           break;
 
         case "zoom-to-previous-frame":
+          // TODO: Implement frame-based zoom navigation
           console.log("Zoom to Previous Frame - not implemented yet");
           break;
 
         case "zoom-to-next-frame":
+          // TODO: Implement frame-based zoom navigation
           console.log("Zoom to Next Frame - not implemented yet");
           break;
 
         case "previous-page":
+          // TODO: Implement multi-page navigation
           console.log("Previous Page - not implemented yet");
           break;
 
         case "next-page":
+          // TODO: Implement multi-page navigation
           console.log("Next Page - not implemented yet");
           break;
 
         case "find-previous-frame":
+          // TODO: Implement frame navigation
           console.log("Find Previous Frame - not implemented yet");
           break;
 
         case "find-next-frame":
+          // TODO: Implement frame navigation
           console.log("Find Next Frame - not implemented yet");
           break;
 
@@ -229,6 +239,7 @@ export function GlobalShortcutsProvider({
           break;
 
         case "select-inverse":
+          // TODO: Implement inverse selection functionality
           console.log("Select Inverse - not implemented yet");
           break;
 
@@ -298,18 +309,22 @@ export function GlobalShortcutsProvider({
 
         // Edit
         case "copy":
+          // TODO: Implement clipboard copy functionality
           console.log("Copy - not implemented yet");
           break;
 
         case "cut":
+          // TODO: Implement clipboard cut functionality
           console.log("Cut - not implemented yet");
           break;
 
         case "paste":
+          // TODO: Implement clipboard paste functionality
           console.log("Paste - not implemented yet");
           break;
 
         case "paste-over-selection":
+          // TODO: Implement paste over selection functionality
           console.log("Paste Over Selection - not implemented yet");
           break;
 
@@ -482,16 +497,38 @@ export function GlobalShortcutsProvider({
       const shortcut = findShortcut(e.key, modifiers);
 
       if (shortcut) {
+        console.log(`[Shortcut] Detected: ${shortcut.action} (${e.key})`);
         e.preventDefault(); // This is crucial for preventing browser zoom
         e.stopPropagation();
         handleShortcut(shortcut);
       }
     };
 
+    // Mouse wheel zoom functionality
+    const handleWheel = (e: WheelEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        console.log(`[Wheel Zoom] Detected: deltaY=${e.deltaY}`);
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (e.deltaY < 0) {
+          // Scrolling up = zoom in
+          zoomIn();
+        } else if (e.deltaY > 0) {
+          // Scrolling down = zoom out
+          zoomOut();
+        }
+      }
+    };
+
     // Use capture phase to intercept before browser handles it
     document.addEventListener("keydown", handleKeyDown, true);
-    return () => document.removeEventListener("keydown", handleKeyDown, true);
-  }, [handleShortcut]);
+    document.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown, true);
+      document.removeEventListener("wheel", handleWheel);
+    };
+  }, [handleShortcut, zoomIn, zoomOut]);
 
   const contextValue: GlobalShortcutsContextType = {
     handleShortcut,
