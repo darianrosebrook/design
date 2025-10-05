@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
 import { ZoomControls } from "./zoom-controls";
+import { ComponentRenderer } from "./component-renderer";
 
 type ResizeHandle = "nw" | "ne" | "sw" | "se" | "n" | "e" | "s" | "w";
 
@@ -490,6 +491,14 @@ export function CanvasArea() {
           </div>
         );
 
+      case "component":
+        return (
+          <ComponentRenderer
+            key={obj.id}
+            object={obj}
+          />
+        );
+
       default:
         return null;
     }
@@ -651,7 +660,7 @@ export function CanvasArea() {
         }}
       >
         {objects.map((obj) => renderObject(obj))}
-        
+
         {/* Bounding box overlay - inside transformed container */}
         <div className="absolute inset-0 pointer-events-none p-8">
           {renderBoundingBoxOverlay()}

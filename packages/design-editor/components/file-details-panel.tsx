@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileMetadata } from "@/components/file-metadata";
 import { LayersList } from "@/components/layers-list";
 import { LibrarySection } from "@/components/library-section";
+import { ComponentLibrary } from "@/components/component-library";
 import { useCanvas } from "@/lib/canvas-context";
 
 interface FileDetailsPanelProps {
@@ -56,7 +57,7 @@ export function FileDetailsPanel({
         value={activeTab}
         onValueChange={(value) => setActiveTab(value as "layers" | "library")}
       >
-        <TabsList className="grid w-full grid-cols-2 mx-3 mt-2">
+        <TabsList className="grid w-full grid-cols-2 mx-3 mt-2 h-9">
           <TabsTrigger value="layers" className="text-xs">
             <LayersIcon className="h-3 w-3 mr-1" />
             Layers
@@ -74,11 +75,7 @@ export function FileDetailsPanel({
 
         {/* Library Tab */}
         <TabsContent value="library" className="flex-1 m-0">
-          <LibrarySection
-            title="Design System"
-            items={[]} // Will be populated with real data
-            onOpenDesignSystem={onOpenDesignSystem}
-          />
+          <ComponentLibrary />
         </TabsContent>
       </Tabs>
     </div>

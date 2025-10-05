@@ -4,7 +4,8 @@ export type ObjectType =
   | "text"
   | "image"
   | "group"
-  | "frame";
+  | "frame"
+  | "component";
 
 export interface CanvasObject {
   id: string;
@@ -33,6 +34,9 @@ export interface CanvasObject {
   letterSpacing?: number;
   // Image properties
   src?: string;
+  // Component properties
+  componentType?: string; // e.g., "Button", "Box", "TextField"
+  componentProps?: Record<string, any>; // Props to pass to the component
   // Group/Frame properties
   children?: CanvasObject[];
   expanded?: boolean;
