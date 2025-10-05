@@ -30,20 +30,20 @@ import {
   Settings,
   Info,
 } from "@/lib/components/icons";
-import type React from "react";
+import React from "react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/ui/primitives/button";
+import { Input } from "@/ui/primitives/input";
+import { Label } from "@/ui/primitives/label";
+import { ScrollArea } from "@/ui/primitives/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
+} from "@/ui/primitives/select";
+import { Slider } from "@/ui/primitives/slider";
 import { useCanvas, findObject } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
 import { CanvasBackgroundControls } from "./canvas-background-controls";

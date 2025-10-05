@@ -1,6 +1,6 @@
 "use client";
 
-import type React from "react";
+import React from "react";
 import { useState, useRef, useEffect } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
@@ -18,6 +18,7 @@ export function CanvasArea() {
     setSelectedIds,
     setContextMenu,
     updateObject,
+    addObject,
     activeTool,
     canvasBackground,
     canvasBackgroundColor,
@@ -132,7 +133,7 @@ export function CanvasArea() {
       if (rect) {
         const x = (e.clientX - rect.left - 32) / (zoom / 100) - viewportX; // Adjust for zoom and viewport
         const y = (e.clientY - rect.top - 32) / (zoom / 100) - viewportY;
-        
+
         const newComponent = {
           id: `component-${Date.now()}`,
           type: "component" as const,
