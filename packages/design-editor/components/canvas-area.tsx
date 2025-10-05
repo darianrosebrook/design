@@ -12,7 +12,9 @@ export function CanvasArea() {
   const {
     objects,
     selectedId,
+    selectedIds,
     setSelectedId,
+    setSelectedIds,
     setContextMenu,
     updateObject,
     activeTool,
@@ -60,6 +62,7 @@ export function CanvasArea() {
   const handleCanvasClick = () => {
     if (activeTool === "select") {
       setSelectedId(null);
+      setSelectedIds(new Set());
     }
     setContextMenu(null);
   };
@@ -121,12 +124,44 @@ export function CanvasArea() {
   };
 
   const handleObjectMouseDown = (e: React.MouseEvent, obj: CanvasObject) => {
-    if (activeTool !== "select" || obj.locked) {
+    if (activeTool !== "select" || obj.locked || obj.name === "Background") {
       return;
     }
 
     e.stopPropagation();
-    setSelectedId(obj.id);
+
+    // Handle multi-selection based on modifier keys
+    if (e.metaKey || e.ctrlKey) {
+      // Cmd/Ctrl click: toggle selection
+      if (selectedIds.has(obj.id)) {
+        const newSet = new Set(selectedIds);
+        newSet.delete(obj.id);
+        setSelectedIds(newSet);
+        // If this was the primary selection, update it
+        if (selectedId === obj.id) {
+          const remainingIds = Array.from(selectedIds).filter(
+            (id) => id !== obj.id
+          );
+          setSelectedId(remainingIds.length > 0 ? remainingIds[0] : null);
+        }
+      } else {
+        const newSet = new Set(selectedIds);
+        newSet.add(obj.id);
+        setSelectedIds(newSet);
+        setSelectedId(obj.id);
+      }
+    } else if (e.shiftKey && selectedId) {
+      // Shift click: add to selection
+      const newSet = new Set(selectedIds);
+      newSet.add(obj.id);
+      setSelectedIds(newSet);
+      setSelectedId(obj.id);
+    } else {
+      // Regular click: single selection
+      setSelectedIds(new Set([obj.id]));
+      setSelectedId(obj.id);
+    }
+
     setIsDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
     setObjectStart({
@@ -299,6 +334,11 @@ export function CanvasArea() {
   }, [selectedId, _deleteObject]);
 
   const renderObject = (obj: CanvasObject) => {
+    // Don't render if object is not visible
+    if (!obj.visible) {
+      return null;
+    }
+
     const commonStyles = {
       position: "absolute" as const,
       left: obj.x,
@@ -307,10 +347,13 @@ export function CanvasArea() {
       height: obj.height,
       transform: `rotate(${obj.rotation}deg)`,
       opacity: obj.opacity / 100,
-      cursor: activeTool === "select" && !obj.locked ? "move" : "default",
+      cursor:
+        activeTool === "select" && !obj.locked && obj.name !== "Background"
+          ? "move"
+          : "default",
       border: "none",
       outline: "none",
-      pointerEvents: (obj.locked
+      pointerEvents: (obj.locked || obj.name === "Background"
         ? "none"
         : "auto") as React.CSSProperties["pointerEvents"],
     };
@@ -337,7 +380,11 @@ export function CanvasArea() {
             }}
             onClick={handleClick}
             onMouseDown={(e) => handleObjectMouseDown(e, obj)}
-            onContextMenu={(e) => handleContextMenu(e, obj.id)}
+            onContextMenu={(e) =>
+              obj.name !== "Background"
+                ? handleContextMenu(e, obj.id)
+                : undefined
+            }
           />
         );
 
@@ -355,7 +402,11 @@ export function CanvasArea() {
             }}
             onClick={handleClick}
             onMouseDown={(e) => handleObjectMouseDown(e, obj)}
-            onContextMenu={(e) => handleContextMenu(e, obj.id)}
+            onContextMenu={(e) =>
+              obj.name !== "Background"
+                ? handleContextMenu(e, obj.id)
+                : undefined
+            }
           />
         );
 
@@ -377,7 +428,11 @@ export function CanvasArea() {
             }}
             onClick={handleClick}
             onMouseDown={(e) => handleObjectMouseDown(e, obj)}
-            onContextMenu={(e) => handleContextMenu(e, obj.id)}
+            onContextMenu={(e) =>
+              obj.name !== "Background"
+                ? handleContextMenu(e, obj.id)
+                : undefined
+            }
           >
             {obj.text}
           </div>
@@ -394,7 +449,11 @@ export function CanvasArea() {
             }}
             onClick={handleClick}
             onMouseDown={(e) => handleObjectMouseDown(e, obj)}
-            onContextMenu={(e) => handleContextMenu(e, obj.id)}
+            onContextMenu={(e) =>
+              obj.name !== "Background"
+                ? handleContextMenu(e, obj.id)
+                : undefined
+            }
           >
             <img
               src={obj.src || "/placeholder.svg"}
@@ -421,7 +480,11 @@ export function CanvasArea() {
             }}
             onClick={handleClick}
             onMouseDown={(e) => handleObjectMouseDown(e, obj)}
-            onContextMenu={(e) => handleContextMenu(e, obj.id)}
+            onContextMenu={(e) =>
+              obj.name !== "Background"
+                ? handleContextMenu(e, obj.id)
+                : undefined
+            }
           >
             {obj.children?.map((child) => renderObject(child))}
           </div>
@@ -461,14 +524,9 @@ export function CanvasArea() {
     }
   };
 
-  // Render bounding box overlay for selected element
+  // Render bounding box overlay for selected elements
   const renderBoundingBoxOverlay = () => {
-    if (!selectedId || activeTool !== "select") {
-      return null;
-    }
-
-    const selectedObj = objects.find((obj) => obj.id === selectedId);
-    if (!selectedObj) {
+    if (selectedIds.size === 0 || activeTool !== "select") {
       return null;
     }
 
@@ -484,68 +542,86 @@ export function CanvasArea() {
     ];
 
     return (
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          left: selectedObj.x - 2, // Account for border width
-          top: selectedObj.y - 2,
-          width: selectedObj.width + 4,
-          height: selectedObj.height + 4,
-          border: "2px solid #4a9eff",
-          borderRadius:
-            selectedObj.type === "circle"
-              ? "50%"
-              : selectedObj.cornerRadius || 0,
-          transform: `rotate(${selectedObj.rotation}deg)`,
-          zIndex: 10, // Lower z-index to not interfere with panels
-          boxShadow: "0 0 0 1px rgba(255, 255, 255, 0.3)", // Subtle white outline for better visibility
-        }}
-      >
-        {/* Render resize handles as part of the bounding box */}
-        {handles.map((handle) => {
-          const handleStyle: React.CSSProperties = {
-            position: "absolute",
-            width: "8px",
-            height: "8px",
-            backgroundColor: "#4a9eff",
-            border: "1px solid white",
-            borderRadius: "2px",
-            cursor: getResizeCursor(handle),
-            zIndex: 11, // Above the bounding box
-          };
+      <>
+        {Array.from(selectedIds).map((id) => {
+          const selectedObj = objects.find((obj) => obj.id === id);
+          if (!selectedObj) {
+            return null;
+          }
 
-          // Position handles relative to the bounding box
-          if (handle.includes("n")) {
-            handleStyle.top = "-6px"; // -4px for handle center + -2px for border
-          }
-          if (handle.includes("s")) {
-            handleStyle.bottom = "-6px";
-          }
-          if (handle.includes("w")) {
-            handleStyle.left = "-6px";
-          }
-          if (handle.includes("e")) {
-            handleStyle.right = "-6px";
-          }
-          if (handle === "n" || handle === "s") {
-            handleStyle.left = "50%";
-            handleStyle.transform = "translateX(-50%)";
-          }
-          if (handle === "e" || handle === "w") {
-            handleStyle.top = "50%";
-            handleStyle.transform = "translateY(-50%)";
-          }
+          const isPrimary = id === selectedId;
 
           return (
             <div
-              key={handle}
-              className="resize-handle pointer-events-auto"
-              style={handleStyle}
-              onMouseDown={(e) => handleResizeMouseDown(e, handle, selectedObj)}
-            />
+              key={id}
+              className="absolute pointer-events-none"
+              style={{
+                left: selectedObj.x - 2, // Account for border width
+                top: selectedObj.y - 2,
+                width: selectedObj.width + 4,
+                height: selectedObj.height + 4,
+                border: isPrimary ? "2px solid #4a9eff" : "2px solid #4a9eff",
+                borderRadius:
+                  selectedObj.type === "circle"
+                    ? "50%"
+                    : selectedObj.cornerRadius || 0,
+                transform: `rotate(${selectedObj.rotation}deg)`,
+                zIndex: 10, // Lower z-index to not interfere with panels
+                boxShadow: "0 0 0 1px rgba(255, 255, 255, 0.3)", // Subtle white outline for better visibility
+                opacity: isPrimary ? 1 : 0.7, // Dim non-primary selections
+              }}
+            >
+              {/* Render resize handles only for primary selection */}
+              {isPrimary &&
+                handles.map((handle) => {
+                  const handleStyle: React.CSSProperties = {
+                    position: "absolute",
+                    width: "8px",
+                    height: "8px",
+                    backgroundColor: "#4a9eff",
+                    border: "1px solid white",
+                    borderRadius: "2px",
+                    cursor: getResizeCursor(handle),
+                    zIndex: 11, // Above the bounding box
+                  };
+
+                  // Position handles relative to the bounding box
+                  if (handle.includes("n")) {
+                    handleStyle.top = "-6px"; // -4px for handle center + -2px for border
+                  }
+                  if (handle.includes("s")) {
+                    handleStyle.bottom = "-6px";
+                  }
+                  if (handle.includes("w")) {
+                    handleStyle.left = "-6px";
+                  }
+                  if (handle.includes("e")) {
+                    handleStyle.right = "-6px";
+                  }
+                  if (handle === "n" || handle === "s") {
+                    handleStyle.left = "50%";
+                    handleStyle.transform = "translateX(-50%)";
+                  }
+                  if (handle === "e" || handle === "w") {
+                    handleStyle.top = "50%";
+                    handleStyle.transform = "translateY(-50%)";
+                  }
+
+                  return (
+                    <div
+                      key={handle}
+                      className="resize-handle pointer-events-auto"
+                      style={handleStyle}
+                      onMouseDown={(e) =>
+                        handleResizeMouseDown(e, handle, selectedObj)
+                      }
+                    />
+                  );
+                })}
+            </div>
           );
         })}
-      </div>
+      </>
     );
   };
 
@@ -575,11 +651,11 @@ export function CanvasArea() {
         }}
       >
         {objects.map((obj) => renderObject(obj))}
-      </div>
-
-      {/* Bounding box overlay - always on top */}
-      <div className="absolute inset-0 pointer-events-none p-8">
-        {renderBoundingBoxOverlay()}
+        
+        {/* Bounding box overlay - inside transformed container */}
+        <div className="absolute inset-0 pointer-events-none p-8">
+          {renderBoundingBoxOverlay()}
+        </div>
       </div>
 
       {/* Map-like UI controls */}
