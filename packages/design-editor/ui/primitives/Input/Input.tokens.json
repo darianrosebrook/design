@@ -1,0 +1,112 @@
+{
+  "Input": {
+    "borderRadius": {
+      "value": "6px",
+      "description": "Border radius for input corners"
+    },
+    "fontSize": {
+      "base": {
+        "value": "16px",
+        "description": "Base font size for input text"
+      },
+      "md": {
+        "value": "14px",
+        "description": "Font size for medium screens and up"
+      }
+    },
+    "height": {
+      "value": "36px",
+      "description": "Height of the input field"
+    },
+    "padding": {
+      "horizontal": {
+        "value": "12px",
+        "description": "Horizontal padding"
+      },
+      "vertical": {
+        "value": "4px",
+        "description": "Vertical padding"
+      }
+    },
+    "border": {
+      "width": {
+        "value": "1px",
+        "description": "Border width"
+      },
+      "color": {
+        "default": {
+          "value": "hsl(var(--input))",
+          "description": "Default border color"
+        },
+        "focus": {
+          "value": "hsl(var(--ring))",
+          "description": "Border color on focus"
+        },
+        "invalid": {
+          "value": "hsl(var(--destructive))",
+          "description": "Border color when invalid"
+        }
+      }
+    },
+    "backgroundColor": {
+      "default": {
+        "value": "transparent",
+        "description": "Default background color"
+      },
+      "dark": {
+        "value": "hsl(var(--input) / 0.3)",
+        "description": "Background color in dark mode"
+      }
+    },
+    "textColor": {
+      "value": "inherit",
+      "description": "Text color"
+    },
+    "placeholderColor": {
+      "value": "hsl(var(--muted-foreground))",
+      "description": "Placeholder text color"
+    },
+    "selection": {
+      "backgroundColor": {
+        "value": "hsl(var(--primary))",
+        "description": "Background color for selected text"
+      },
+      "color": {
+        "value": "hsl(var(--primary-foreground))",
+        "description": "Text color for selected text"
+      }
+    },
+    "shadow": {
+      "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "description": "Box shadow for input"
+    },
+    "transition": {
+      "properties": {
+        "value": "color, box-shadow",
+        "description": "CSS properties to transition"
+      },
+      "duration": {
+        "value": "150ms",
+        "description": "Transition duration"
+      }
+    },
+    "focus": {
+      "ring": {
+        "color": {
+          "value": "hsl(var(--ring) / 0.5)",
+          "description": "Focus ring color"
+        },
+        "width": {
+          "value": "3px",
+          "description": "Focus ring width"
+        }
+      }
+    },
+    "disabled": {
+      "opacity": {
+        "value": "0.5",
+        "description": "Opacity when disabled"
+      }
+    }
+  }
+}

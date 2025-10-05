@@ -1,8 +1,8 @@
 "use client";
 
 import type React from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from '@/ui/primitives/badge';
+import { Button } from '@/ui/primitives/button';
 import {
   Star,
   Bookmark,

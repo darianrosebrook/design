@@ -1,0 +1,54 @@
+// ZoomControls composer component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.zoomControls {
+  // Base container styles (equivalent to flex items-center gap-1 bg-card border border-border rounded-lg p-1)
+  display: flex;
+  align-items: center;
+  gap: 4px; // equivalent to gap-1
+  background-color: hsl(var(--card)); // equivalent to bg-card
+  border: 1px solid hsl(var(--border)); // equivalent to border border-border
+  border-radius: 8px; // equivalent to rounded-lg
+  padding: 4px; // equivalent to p-1
+}
+
+.zoomControlsButton {
+  // Button styles (equivalent to h-8 w-8 p-0)
+  height: 32px; // equivalent to h-8
+  width: 32px; // equivalent to w-8
+  padding: 0; // equivalent to p-0
+}
+
+.zoomControlsIcon {
+  // Icon styles (equivalent to h-4 w-4)
+  width: 16px; // equivalent to w-4
+  height: 16px; // equivalent to h-4
+}
+
+.zoomControlsDisplay {
+  // Zoom percentage display styles (equivalent to px-2 text-xs font-medium min-w-[3rem] text-center)
+  padding: 0 8px; // equivalent to px-2
+  font-size: 12px; // equivalent to text-xs
+  font-weight: 500; // equivalent to font-medium
+  min-width: 3rem; // equivalent to min-w-[3rem]
+  text-align: center; // equivalent to text-center
+}
+
+.zoomControlsSeparator {
+  // Separator styles (equivalent to w-px h-6 bg-border mx-1)
+  width: 1px; // equivalent to w-px
+  height: 24px; // equivalent to h-6
+  background-color: hsl(var(--border)); // equivalent to bg-border
+  margin: 0 4px; // equivalent to mx-1
+}
+
+.zoomControlsSelectionIcon {
+  // Selection icon styles (equivalent to h-4 w-4 flex items-center justify-center text-xs font-bold)
+  width: 16px; // equivalent to w-4
+  height: 16px; // equivalent to h-4
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px; // equivalent to text-xs
+  font-weight: 700; // equivalent to font-bold
+}

@@ -64,6 +64,20 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     implemented: true,
   },
   {
+    key: "h",
+    action: "hand-tool",
+    description: "Hand Tool",
+    category: "tools",
+    implemented: true,
+  },
+  {
+    key: "k",
+    action: "scale-tool",
+    description: "Scale Tool",
+    category: "tools",
+    implemented: true,
+  },
+  {
     key: "f",
     action: "frame-tool",
     description: "Frame Tool",
@@ -93,6 +107,13 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     implemented: true,
   },
   {
+    key: "i",
+    action: "image-tool",
+    description: "Image Tool",
+    category: "tools",
+    implemented: true,
+  },
+  {
     key: "r",
     action: "rectangle-tool",
     description: "Rectangle Tool",
@@ -103,6 +124,13 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     key: "o",
     action: "ellipse-tool",
     description: "Ellipse Tool",
+    category: "tools",
+    implemented: true,
+  },
+  {
+    key: "e",
+    action: "ellipse-tool",
+    description: "Ellipse Tool (Alt)",
     category: "tools",
     implemented: true,
   },
@@ -705,8 +733,7 @@ export function findShortcut(
   mods: { ctrl?: boolean; cmd?: boolean; shift?: boolean; alt?: boolean }
 ): KeyboardShortcut | undefined {
   const isMac = /Mac|iPhone|iPad/.test(navigator.platform);
-  const normalizedKey =
-    key.length === 1 ? key.toLowerCase() : key; // keep "PageUp", "Home", etc.
+  const normalizedKey = key.length === 1 ? key.toLowerCase() : key; // keep "PageUp", "Home", etc.
 
   return KEYBOARD_SHORTCUTS.find((s) => {
     const skey = s.key.length === 1 ? s.key.toLowerCase() : s.key;

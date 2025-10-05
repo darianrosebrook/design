@@ -1,0 +1,45 @@
+// ResizablePanel composer component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.resizablePanel {
+  // Base panel styles (equivalent to relative bg-card border border-border rounded-2xl overflow-hidden)
+  position: relative; // equivalent to relative
+  background-color: hsl(var(--card)); // equivalent to bg-card
+  border: 1px solid hsl(var(--border)); // equivalent to border border-border
+  border-radius: 16px; // equivalent to rounded-2xl
+  overflow: hidden; // equivalent to overflow-hidden
+
+  // Width is set via inline style: style={{ width: `${width}px` }}
+}
+
+.resizablePanelHandle {
+  // Handle base styles (equivalent to absolute top-0 w-1 h-full cursor-col-resize hover:bg-primary/50 transition-colors group)
+  position: absolute; // equivalent to absolute
+  top: 0; // equivalent to top-0
+  width: 4px; // equivalent to w-1
+  height: 100%; // equivalent to h-full
+  cursor: col-resize; // equivalent to cursor-col-resize
+  transition: background-color 150ms ease-in-out; // equivalent to transition-colors
+
+  &:hover {
+    background-color: hsl(var(--primary) / 0.5); // equivalent to hover:bg-primary/50
+  }
+
+  // Positioning based on side
+  &--left {
+    right: 0; // equivalent to right-0
+  }
+
+  &--right {
+    left: 0; // equivalent to left-0
+  }
+}
+
+.resizablePanelHandleArea {
+  // Handle interaction area (equivalent to absolute inset-y-0 -inset-x-1)
+  position: absolute; // equivalent to absolute
+  top: 0; // equivalent to inset-y-0
+  bottom: 0; // equivalent to inset-y-0
+  left: -4px; // equivalent to -inset-x-1
+  right: -4px; // equivalent to -inset-x-1
+}

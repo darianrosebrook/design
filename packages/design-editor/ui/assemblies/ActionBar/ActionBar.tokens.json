@@ -1,0 +1,160 @@
+{
+  "ActionBar": {
+    "position": {
+      "bottom": {
+        "value": "24px",
+        "description": "Distance from bottom of viewport"
+      },
+      "left": {
+        "value": "50%",
+        "description": "Horizontal positioning (centered)"
+      },
+      "transform": {
+        "value": "translateX(-50%)",
+        "description": "Transform to center horizontally"
+      }
+    },
+    "zIndex": {
+      "value": "50",
+      "description": "Z-index for action bar layering"
+    },
+    "backgroundColor": {
+      "value": "#27272a",
+      "description": "Background color (zinc-800)"
+    },
+    "border": {
+      "color": {
+        "value": "#3f3f46",
+        "description": "Border color (zinc-700)"
+      },
+      "width": {
+        "value": "1px",
+        "description": "Border width"
+      },
+      "radius": {
+        "value": "16px",
+        "description": "Border radius for rounded corners"
+      }
+    },
+    "shadow": {
+      "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+      "description": "Box shadow for depth"
+    },
+    "padding": {
+      "horizontal": {
+        "value": "8px",
+        "description": "Horizontal padding"
+      },
+      "vertical": {
+        "value": "8px",
+        "description": "Vertical padding"
+      }
+    },
+    "gap": {
+      "value": "4px",
+      "description": "Gap between buttons"
+    },
+    "button": {
+      "height": {
+        "value": "32px",
+        "description": "Height of action bar buttons"
+      },
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for buttons"
+        }
+      },
+      "backgroundColor": {
+        "hover": {
+          "value": "#3f3f46",
+          "description": "Background color on hover (zinc-700)"
+        },
+        "active": {
+          "value": "#3f3f46",
+          "description": "Background color when active (zinc-700)"
+        }
+      },
+      "textColor": {
+        "default": {
+          "value": "#d4d4d8",
+          "description": "Default text color (zinc-300)"
+        },
+        "hover": {
+          "value": "#f4f4f5",
+          "description": "Text color on hover (zinc-100)"
+        },
+        "active": {
+          "value": "#f4f4f5",
+          "description": "Text color when active (zinc-100)"
+        }
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Icon size"
+        }
+      }
+    },
+    "toggle": {
+      "backgroundColor": {
+        "value": "#27272a",
+        "description": "Background color for toggle button"
+      },
+      "border": {
+        "color": {
+          "value": "#3f3f46",
+          "description": "Border color for toggle button"
+        }
+      },
+      "borderRadius": {
+        "value": "16px",
+        "description": "Border radius for toggle button"
+      }
+    },
+    "separator": {
+      "width": {
+        "value": "1px",
+        "description": "Width of separator line"
+      },
+      "height": {
+        "value": "24px",
+        "description": "Height of separator line"
+      },
+      "backgroundColor": {
+        "value": "#52525b",
+        "description": "Background color for separator (zinc-600)"
+      },
+      "margin": {
+        "horizontal": {
+          "value": "4px",
+          "description": "Horizontal margin for separator"
+        }
+      }
+    },
+    "transition": {
+      "duration": {
+        "value": "300ms",
+        "description": "Transition duration for show/hide animations"
+      },
+      "easing": {
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "description": "Easing function for transitions"
+      }
+    },
+    "dropdown": {
+      "backgroundColor": {
+        "value": "#27272a",
+        "description": "Background color for dropdown menus"
+      },
+      "borderColor": {
+        "value": "#3f3f46",
+        "description": "Border color for dropdown menus"
+      },
+      "textColor": {
+        "value": "#f4f4f5",
+        "description": "Text color for dropdown items"
+      }
+    }
+  }
+}

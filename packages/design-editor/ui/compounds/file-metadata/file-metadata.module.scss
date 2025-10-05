@@ -1,0 +1,46 @@
+// FileMetadata compound component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.fileMetadata {
+  // Base container styles (equivalent to px-3 py-2 border-b border-border)
+  padding: 8px 12px; // equivalent to px-3 py-2
+  border-bottom: 1px solid hsl(var(--border)); // equivalent to border-b border-border
+}
+
+.fileMetadataHeader {
+  // Header styles (equivalent to flex items-center justify-between mb-2)
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px; // equivalent to mb-2
+}
+
+.fileMetadataTitle {
+  // Title styles (equivalent to text-sm font-semibold)
+  font-size: 14px; // equivalent to text-sm
+  font-weight: 600; // equivalent to font-semibold
+}
+
+.fileMetadataContent {
+  // Content styles (equivalent to text-xs text-muted-foreground space-y-1)
+  font-size: 12px; // equivalent to text-xs
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+}
+
+.fileMetadataContent > * + * {
+  margin-top: 4px; // equivalent to space-y-1
+}
+
+.fileMetadataRow {
+  // Row styles (equivalent to flex items-center gap-2)
+  display: flex;
+  align-items: center;
+  gap: 8px; // equivalent to gap-2
+}
+
+.fileMetadataStats {
+  // Stats row styles (equivalent to flex items-center gap-4)
+  display: flex;
+  align-items: center;
+  gap: 16px; // equivalent to gap-4
+}

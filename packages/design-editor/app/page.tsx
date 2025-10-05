@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { ActionBar } from "@/components/action-bar";
-import { CanvasArea } from "@/components/canvas-area";
-import { ContextMenu } from "@/components/context-menu";
-import { DesignSystemOverlay } from "@/components/design-system-overlay";
-import { PanelContainer } from "@/components/panel-container";
-import { TopNavigation } from "@/components/top-navigation";
+import { ActionBar } from "@/ui/assemblies/action-bar";
+import { CanvasArea } from "@/ui/assemblies/canvas-area";
+import { ContextMenu } from "@/ui/primitives/context-menu";
+import { DesignSystemOverlay } from "@/ui/assemblies/design-system-overlay";
+import { PanelContainer } from "@/ui/assemblies/panel-container";
+import { TopNavigation } from "@/ui/assemblies/top-navigation";
 import { CanvasProvider } from "@/lib/canvas-context";
 import { GlobalShortcutsProvider } from "@/lib/global-shortcuts-provider";
+import { DevTools } from "@/lib/dev-tools";
 
 export default function DesignEditor() {
   const [isDesignSystemOpen, setIsDesignSystemOpen] = useState(false);
@@ -21,6 +22,7 @@ export default function DesignEditor() {
 
   return (
     <CanvasProvider>
+      <DevTools />
       <GlobalShortcutsProvider>
         <div className="h-screen flex flex-col bg-background dark relative">
           {/* Top Navigation */}

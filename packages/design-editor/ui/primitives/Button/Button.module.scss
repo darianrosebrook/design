@@ -1,0 +1,188 @@
+// Button component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+// Base button styles (equivalent to Tailwind base classes)
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; // equivalent to gap-2
+  white-space: nowrap;
+  border-radius: 6px; // equivalent to rounded-md
+  font-size: 14px; // equivalent to text-sm
+  font-weight: 500; // equivalent to font-medium
+  line-height: 1.2;
+  transition: all 150ms ease-in-out; // equivalent to transition-all
+
+  // SVG icon styles
+  svg {
+    pointer-events: none;
+    width: 16px; // equivalent to size-4
+    height: 16px;
+    flex-shrink: 0;
+
+    &:not([class*="size-"]) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  // Disabled state
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5; // equivalent to disabled:opacity-50
+  }
+
+  // Focus visible styles
+  &:focus-visible {
+    outline: none;
+    border-color: hsl(var(--ring));
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5); // equivalent to focus-visible:ring-[3px]
+  }
+
+  // Invalid state
+  &[aria-invalid="true"] {
+    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2); // equivalent to aria-invalid:ring-destructive/20
+    border-color: hsl(var(--destructive));
+
+    .dark & {
+      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4); // equivalent to dark:aria-invalid:ring-destructive/40
+    }
+  }
+}
+
+// Size variants
+.button--size-default {
+  height: 36px; // equivalent to h-9
+  padding: 8px 16px; // equivalent to py-2 px-4
+
+  // Adjust padding when there's an SVG
+  &:has(> svg) {
+    padding-left: 12px; // equivalent to px-3
+    padding-right: 12px;
+  }
+}
+
+.button--size-sm {
+  height: 32px; // equivalent to h-8
+  border-radius: 6px; // rounded-md
+  gap: 6px; // gap-1.5
+  padding: 6px 12px; // equivalent to py-1.5 px-3
+
+  // Adjust padding when there's an SVG
+  &:has(> svg) {
+    padding-left: 10px; // equivalent to px-2.5
+    padding-right: 10px;
+  }
+}
+
+.button--size-lg {
+  height: 40px; // equivalent to h-10
+  border-radius: 6px; // rounded-md
+  padding: 10px 24px; // equivalent to py-2.5 px-6
+
+  // Adjust padding when there's an SVG
+  &:has(> svg) {
+    padding-left: 16px; // equivalent to px-4
+    padding-right: 16px;
+  }
+}
+
+.button--size-icon {
+  width: 36px; // equivalent to size-9
+  height: 36px;
+  padding: 0;
+}
+
+.button--size-icon-sm {
+  width: 32px; // equivalent to size-8
+  height: 32px;
+  padding: 0;
+}
+
+.button--size-icon-lg {
+  width: 40px; // equivalent to size-10
+  height: 40px;
+  padding: 0;
+}
+
+// Variant styles
+.button--variant-default {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+
+  &:hover {
+    background-color: hsl(var(--primary) / 0.9);
+  }
+}
+
+.button--variant-destructive {
+  background-color: hsl(var(--destructive));
+  color: #ffffff;
+
+  &:hover {
+    background-color: hsl(var(--destructive) / 0.9);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2);
+
+    .dark & {
+      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4);
+    }
+  }
+
+  .dark & {
+    background-color: hsl(var(--destructive) / 0.6);
+  }
+}
+
+.button--variant-outline {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border)); // equivalent to border
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); // equivalent to shadow-xs
+
+  &:hover {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+
+  .dark & {
+    background-color: hsl(var(--input) / 0.3);
+    border-color: hsl(var(--input));
+
+    &:hover {
+      background-color: hsl(var(--input) / 0.5);
+    }
+  }
+}
+
+.button--variant-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+
+  &:hover {
+    background-color: hsl(var(--secondary) / 0.8);
+  }
+}
+
+.button--variant-ghost {
+  &:hover {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+
+    .dark & {
+      background-color: hsl(var(--accent) / 0.5);
+    }
+  }
+}
+
+.button--variant-link {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 4px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

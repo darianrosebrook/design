@@ -16,12 +16,12 @@ interface ComponentSlotProps {
  * Placeholder slot for composer components that can be filled with other components
  * @author @darianrosebrook
  */
-export function ComponentSlot({ 
-  parentId, 
-  slotIndex = 0, 
-  className = "", 
+export function ComponentSlot({
+  parentId,
+  slotIndex = 0,
+  className = "",
   style = {},
-  onDrop 
+  onDrop,
 }: ComponentSlotProps) {
   const { addObjectToParent } = useCanvas();
 
@@ -42,7 +42,7 @@ export function ComponentSlot({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     e.currentTarget.classList.remove("bg-orange-100", "border-orange-300");
-    
+
     const componentType = e.dataTransfer.getData("component-type");
     if (componentType) {
       const metadata = getComponentMetadata(componentType as any);
@@ -87,13 +87,13 @@ export function ComponentSlot({
 /**
  * Slot container that manages multiple slots for composer components
  */
-export function SlotContainer({ 
-  children, 
-  parentId, 
-  maxSlots = 10 
-}: { 
-  children: React.ReactNode; 
-  parentId: string; 
+export function SlotContainer({
+  children,
+  parentId,
+  maxSlots = 10,
+}: {
+  children: React.ReactNode;
+  parentId: string;
   maxSlots?: number;
 }) {
   const slots = Array.from({ length: maxSlots }, (_, index) => (

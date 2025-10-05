@@ -1,9 +1,9 @@
 "use client";
 
 import type React from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { Input } from '@/ui/primitives/input';
+import { Label } from '@/ui/primitives/label';
+import { Button } from '@/ui/primitives/button';
 import { ChevronUp, ChevronDown } from "lucide-react";
 
 interface NumberInputProps {

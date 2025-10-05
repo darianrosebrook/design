@@ -1,0 +1,106 @@
+// ButtonGroup compound component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.buttonGroup {
+  // Base styles (equivalent to flex w-fit items-stretch)
+  display: flex;
+  width: fit-content;
+  align-items: stretch;
+
+  // Focus management (equivalent to [&>*]:focus-visible:z-10 [&>*]:focus-visible:relative)
+  & > * {
+    &:focus-visible {
+      z-index: 10;
+      position: relative;
+    }
+  }
+
+  // Select trigger width handling (equivalent to [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit)
+  & > [data-slot="select-trigger"]:not([class*="w-"]) {
+    width: fit-content;
+  }
+
+  // Input flex handling (equivalent to [&>input]:flex-1)
+  & > input {
+    flex: 1;
+  }
+
+  // Complex selector for select trigger rounding (equivalent to has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md)
+  &:has(select[aria-hidden="true"]:last-child) > [data-slot="select-trigger"]:last-of-type {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+
+  // Nested button group gap (equivalent to has-[>[data-slot=button-group]]:gap-2)
+  &:has(> [data-slot="button-group"]) {
+    gap: 8px; // equivalent to gap-2
+  }
+}
+
+// Orientation variants
+.buttonGroup--orientation-horizontal {
+  // Horizontal styles (equivalent to [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none)
+  & > *:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+  }
+
+  & > *:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.buttonGroup--orientation-vertical {
+  // Vertical styles (equivalent to flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none)
+  flex-direction: column;
+
+  & > *:not(:first-child) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: 0;
+  }
+
+  & > *:not(:last-child) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.buttonGroupText {
+  // Text component styles (equivalent to bg-muted flex items-center gap-2 rounded-md border px-4 text-sm font-medium shadow-xs)
+  background-color: hsl(var(--muted));
+  display: flex;
+  align-items: center;
+  gap: 8px; // equivalent to gap-2
+  border-radius: 6px; // equivalent to rounded-md
+  border: 1px solid hsl(var(--border)); // equivalent to border
+  padding: 0 16px; // equivalent to px-4
+  font-size: 14px; // equivalent to text-sm
+  font-weight: 500; // equivalent to font-medium
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); // equivalent to shadow-xs
+
+  // SVG icon styles (equivalent to [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4)
+  svg {
+    pointer-events: none;
+
+    &:not([class*="size-"]) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+.buttonGroupSeparator {
+  // Separator component styles (equivalent to bg-input relative !m-0 self-stretch data-[orientation=vertical]:h-auto)
+  background-color: hsl(var(--input));
+  position: relative;
+  margin: 0; // equivalent to !m-0
+  align-self: stretch;
+
+  // Vertical orientation adjustment (equivalent to data-[orientation=vertical]:h-auto)
+  &[data-orientation="vertical"] {
+    height: auto;
+  }
+}

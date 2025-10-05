@@ -18,8 +18,9 @@ export interface DesignSystemItem {
   accessibility: "basic" | "enhanced" | "full";
 }
 
+// MOCK DATA: Placeholder design system items for demonstration purposes
 export const mockDesignSystemItems: DesignSystemItem[] = [
-  // Components
+  // MOCK DATA: Components showcase
   {
     id: "button-primary",
     name: "Primary Button",
@@ -111,7 +112,7 @@ export const mockDesignSystemItems: DesignSystemItem[] = [
     accessibility: "full",
   },
 
-  // Snippets
+  // MOCK DATA: Snippets showcase
   {
     id: "color-palette",
     name: "Color Palette",
@@ -165,7 +166,7 @@ export const mockDesignSystemItems: DesignSystemItem[] = [
     accessibility: "basic",
   },
 
-  // Pages
+  // MOCK DATA: Pages showcase
   {
     id: "landing-page",
     name: "Landing Page",
@@ -201,7 +202,7 @@ export const mockDesignSystemItems: DesignSystemItem[] = [
     accessibility: "enhanced",
   },
 
-  // Icons
+  // MOCK DATA: Icons showcase
   {
     id: "icon-set-basic",
     name: "Basic Icons",

@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 import type React from "react";
 import type { CanvasObject } from "./types";
 
@@ -69,7 +75,11 @@ interface CanvasContextType {
   sendBackward: (id: string) => void;
   selectAll: () => void;
   addObject: (object: CanvasObject) => void;
-  addObjectToParent: (parentId: string, object: CanvasObject, slotIndex?: number) => void;
+  addObjectToParent: (
+    parentId: string,
+    object: CanvasObject,
+    slotIndex?: number
+  ) => void;
   // Aliases for linting purposes
   _duplicateObject: (id: string) => void;
   _deleteObject: (id: string) => void;
@@ -215,21 +225,6 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         },
       ],
     },
-    {
-      id: "rect-2",
-      type: "rectangle",
-      name: "Background",
-      x: 50,
-      y: 50,
-      width: 900,
-      height: 700,
-      rotation: 0,
-      visible: true,
-      locked: true,
-      opacity: 100,
-      fill: "#0a0a0a",
-      cornerRadius: 0,
-    },
   ]);
 
   const updateObject = (id: string, updates: Partial<CanvasObject>) => {
@@ -289,28 +284,6 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
     const duplicatedObject = duplicateObjectRecursive(originalObject);
 
-    const addObjectToParent = (
-      objs: CanvasObject[],
-      targetId: string,
-      newObj: CanvasObject
-    ): CanvasObject[] => {
-      return objs.map((obj) => {
-        if (obj.id === targetId) {
-          return {
-            ...obj,
-            children: obj.children ? [...obj.children, newObj] : [newObj],
-          };
-        }
-        if (obj.children) {
-          return {
-            ...obj,
-            children: addObjectToParent(obj.children, targetId, newObj),
-          };
-        }
-        return obj;
-      });
-    };
-
     // Check if the object is inside another object
     const isInsideObject = (
       objs: CanvasObject[],
@@ -351,7 +324,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       };
       parentId = findParent(objects, id);
       if (parentId) {
-        setObjects(addObjectToParent(objects, parentId, duplicatedObject));
+        addObjectToParent(parentId, duplicatedObject);
       }
     } else {
       // Add to root level
@@ -462,6 +435,39 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
   const addObject = (object: CanvasObject) => {
     setObjects((prev) => [...prev, object]);
+    // Select the newly added object
+    setSelectedId(object.id);
+    setSelectedIds(new Set([object.id]));
+  };
+
+  const addObjectToParent = (
+    parentId: string,
+    object: CanvasObject,
+    slotIndex?: number
+  ) => {
+    setObjects((prev) => {
+      const addToParent = (objs: CanvasObject[]): CanvasObject[] => {
+        return objs.map((obj) => {
+          if (obj.id === parentId) {
+            const children = obj.children || [];
+            const newChildren =
+              slotIndex !== undefined
+                ? [
+                    ...children.slice(0, slotIndex),
+                    object,
+                    ...children.slice(slotIndex),
+                  ]
+                : [...children, object];
+            return { ...obj, children: newChildren };
+          }
+          if (obj.children) {
+            return { ...obj, children: addToParent(obj.children) };
+          }
+          return obj;
+        });
+      };
+      return addToParent(prev);
+    });
     // Select the newly added object
     setSelectedId(object.id);
     setSelectedIds(new Set([object.id]));

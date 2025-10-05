@@ -1,0 +1,144 @@
+{
+  "Button": {
+    "borderRadius": {
+      "value": "6px",
+      "description": "Border radius for button corners"
+    },
+    "fontSize": {
+      "value": "14px",
+      "description": "Base font size for button text"
+    },
+    "fontWeight": {
+      "value": "500",
+      "description": "Font weight for button text"
+    },
+    "lineHeight": {
+      "value": "1.2",
+      "description": "Line height for button text"
+    },
+    "padding": {
+      "horizontal": {
+        "default": {
+          "value": "16px",
+          "description": "Horizontal padding for default size"
+        },
+        "sm": {
+          "value": "12px",
+          "description": "Horizontal padding for small size"
+        },
+        "lg": {
+          "value": "24px",
+          "description": "Horizontal padding for large size"
+        }
+      },
+      "vertical": {
+        "default": {
+          "value": "8px",
+          "description": "Vertical padding for default size"
+        },
+        "sm": {
+          "value": "6px",
+          "description": "Vertical padding for small size"
+        },
+        "lg": {
+          "value": "10px",
+          "description": "Vertical padding for large size"
+        }
+      }
+    },
+    "height": {
+      "default": {
+        "value": "36px",
+        "description": "Height for default size"
+      },
+      "sm": {
+        "value": "32px",
+        "description": "Height for small size"
+      },
+      "lg": {
+        "value": "40px",
+        "description": "Height for large size"
+      },
+      "icon": {
+        "default": {
+          "value": "36px",
+          "description": "Height for icon buttons (default)"
+        },
+        "sm": {
+          "value": "32px",
+          "description": "Height for icon buttons (small)"
+        },
+        "lg": {
+          "value": "40px",
+          "description": "Height for icon buttons (large)"
+        }
+      }
+    },
+    "variants": {
+      "default": {
+        "backgroundColor": {
+          "value": "hsl(var(--primary))",
+          "description": "Background color for default variant"
+        },
+        "color": {
+          "value": "hsl(var(--primary-foreground))",
+          "description": "Text color for default variant"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "hsl(var(--primary) / 0.9)",
+            "description": "Background color on hover for default variant"
+          }
+        }
+      },
+      "destructive": {
+        "backgroundColor": {
+          "value": "hsl(var(--destructive))",
+          "description": "Background color for destructive variant"
+        },
+        "color": {
+          "value": "#ffffff",
+          "description": "Text color for destructive variant"
+        }
+      },
+      "outline": {
+        "backgroundColor": {
+          "value": "hsl(var(--background))",
+          "description": "Background color for outline variant"
+        },
+        "borderColor": {
+          "value": "hsl(var(--border))",
+          "description": "Border color for outline variant"
+        }
+      },
+      "secondary": {
+        "backgroundColor": {
+          "value": "hsl(var(--secondary))",
+          "description": "Background color for secondary variant"
+        },
+        "color": {
+          "value": "hsl(var(--secondary-foreground))",
+          "description": "Text color for secondary variant"
+        }
+      },
+      "ghost": {
+        "hover": {
+          "backgroundColor": {
+            "value": "hsl(var(--accent))",
+            "description": "Background color on hover for ghost variant"
+          },
+          "color": {
+            "value": "hsl(var(--accent-foreground))",
+            "description": "Text color on hover for ghost variant"
+          }
+        }
+      },
+      "link": {
+        "color": {
+          "value": "hsl(var(--primary))",
+          "description": "Text color for link variant"
+        }
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { LayersIcon, Library } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/primitives/Tabs";
 import { FileMetadata } from "@/components/file-metadata";
 import { LayersList } from "@/components/layers-list";
 import { LibrarySection } from "@/components/library-section";
@@ -76,7 +76,7 @@ export function FileDetailsPanel({
         <TabsContent value="library" className="flex-1 m-0">
           <LibrarySection
             title="Design System"
-            items={[]} // Empty array to use real design system components
+            items={[]} // MOCK DATA: Library section will use internal mock data for demonstration
             onOpenDesignSystem={onOpenDesignSystem}
           />
         </TabsContent>

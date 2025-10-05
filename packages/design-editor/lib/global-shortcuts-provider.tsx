@@ -75,6 +75,14 @@ export function GlobalShortcutsProvider({
           setActiveTool("select");
           break;
 
+        case "hand-tool":
+          setActiveTool("hand");
+          break;
+
+        case "scale-tool":
+          setActiveTool("scale");
+          break;
+
         case "frame-tool":
           setActiveTool("frame");
           break;
@@ -89,6 +97,10 @@ export function GlobalShortcutsProvider({
 
         case "text-tool":
           setActiveTool("text");
+          break;
+
+        case "image-tool":
+          setActiveTool("image");
           break;
 
         case "rectangle-tool":
@@ -478,9 +490,17 @@ export function GlobalShortcutsProvider({
     const handleKeyDown = (e: KeyboardEvent) => {
       // ignore text inputs
       const t = e.target as HTMLElement;
-      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+      if (
+        t &&
+        (t.tagName === "INPUT" ||
+          t.tagName === "TEXTAREA" ||
+          t.isContentEditable)
+      )
+        return;
 
-      const isPrimary = navigator.platform.toUpperCase().includes("MAC") ? e.metaKey : e.ctrlKey;
+      const isPrimary = navigator.platform.toUpperCase().includes("MAC")
+        ? e.metaKey
+        : e.ctrlKey;
 
       // Hard block page zoom/reset first (works in browsers)
       if (isPrimary && blocklist.has(e.key)) {
@@ -489,8 +509,12 @@ export function GlobalShortcutsProvider({
       }
 
       const modifiers = {
-        ctrl: !navigator.platform.toUpperCase().includes("MAC") ? e.ctrlKey : false,
-        cmd:  navigator.platform.toUpperCase().includes("MAC") ? e.metaKey : false,
+        ctrl: !navigator.platform.toUpperCase().includes("MAC")
+          ? e.ctrlKey
+          : false,
+        cmd: navigator.platform.toUpperCase().includes("MAC")
+          ? e.metaKey
+          : false,
         shift: e.shiftKey,
         alt: e.altKey,
       };
@@ -518,12 +542,20 @@ export function GlobalShortcutsProvider({
 
     window.addEventListener("keydown", handleKeyDown, { capture: true });
     window.addEventListener("wheel", handleWheel, { passive: false });
-    window.addEventListener("gesturestart", preventGesture as any, { passive: false });
-    window.addEventListener("gesturechange", preventGesture as any, { passive: false });
-    window.addEventListener("gestureend", preventGesture as any, { passive: false });
+    window.addEventListener("gesturestart", preventGesture as any, {
+      passive: false,
+    });
+    window.addEventListener("gesturechange", preventGesture as any, {
+      passive: false,
+    });
+    window.addEventListener("gestureend", preventGesture as any, {
+      passive: false,
+    });
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown, { capture: true } as any);
+      window.removeEventListener("keydown", handleKeyDown, {
+        capture: true,
+      } as any);
       window.removeEventListener("wheel", handleWheel as any);
       window.removeEventListener("gesturestart", preventGesture as any);
       window.removeEventListener("gesturechange", preventGesture as any);

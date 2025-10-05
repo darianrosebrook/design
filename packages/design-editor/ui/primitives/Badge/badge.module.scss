@@ -1,0 +1,111 @@
+// Badge component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.badge {
+  // Base badge styles (equivalent to inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0)
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px; // equivalent to rounded-md
+  border: 1px solid transparent; // equivalent to border
+  padding: 2px 8px; // equivalent to px-2 py-0.5
+  font-size: 12px; // equivalent to text-xs
+  font-weight: 500; // equivalent to font-medium
+  width: fit-content; // equivalent to w-fit
+  white-space: nowrap; // equivalent to whitespace-nowrap
+  flex-shrink: 0; // equivalent to shrink-0
+
+  // SVG icon styles (equivalent to [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none)
+  svg {
+    width: 12px; // equivalent to size-3
+    height: 12px;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  gap: 4px; // equivalent to gap-1
+
+  // Focus visible styles (equivalent to focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px])
+  &:focus-visible {
+    border-color: hsl(var(--ring));
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5);
+  }
+
+  // Invalid state (equivalent to aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive)
+  &[aria-invalid="true"] {
+    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2);
+    border-color: hsl(var(--destructive));
+
+    .dark & {
+      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4);
+    }
+  }
+
+  // Transition (equivalent to transition-[color,box-shadow])
+  transition: color 150ms ease-in-out, box-shadow 150ms ease-in-out;
+
+  // Overflow (equivalent to overflow-hidden)
+  overflow: hidden;
+}
+
+// Variant styles
+.badge--variant-default {
+  // Default variant (equivalent to border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90)
+  border-color: transparent;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+
+  // Link hover styles
+  &[href]:hover {
+    background-color: hsl(var(--primary) / 0.9);
+  }
+}
+
+.badge--variant-secondary {
+  // Secondary variant (equivalent to border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90)
+  border-color: transparent;
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+
+  // Link hover styles
+  &[href]:hover {
+    background-color: hsl(var(--secondary) / 0.8);
+  }
+}
+
+.badge--variant-destructive {
+  // Destructive variant (equivalent to border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60)
+  border-color: transparent;
+  background-color: hsl(var(--destructive));
+  color: #ffffff;
+
+  // Link hover styles
+  &[href]:hover {
+    background-color: hsl(var(--destructive) / 0.9);
+  }
+
+  // Focus visible override
+  &:focus-visible {
+    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2);
+
+    .dark & {
+      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4);
+    }
+  }
+
+  // Dark mode background
+  .dark & {
+    background-color: hsl(var(--destructive) / 0.6);
+  }
+}
+
+.badge--variant-outline {
+  // Outline variant (equivalent to text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground)
+  color: hsl(var(--foreground));
+
+  // Link hover styles
+  &[href]:hover {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+  }
+}

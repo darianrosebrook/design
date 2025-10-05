@@ -1,7 +1,7 @@
 "use client";
 
 import { useCanvas } from "@/lib/canvas-context";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/ui/primitives/Button";
 import { ZoomIn, ZoomOut, Maximize } from "lucide-react";
 
 /**
@@ -24,7 +24,7 @@ export function ZoomControls() {
       </Button>
 
       <div className="px-2 text-xs font-medium min-w-[3rem] text-center">
-        {zoom.toFixed(2)}%
+        {Math.floor(zoom)}%
       </div>
 
       <Button

@@ -1,0 +1,106 @@
+// Empty component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.empty {
+  // Base empty styles (equivalent to flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12)
+  display: flex; // equivalent to flex
+  min-width: 0; // equivalent to min-w-0
+  flex: 1; // equivalent to flex-1
+  flex-direction: column; // equivalent to flex-col
+  align-items: center; // equivalent to items-center
+  justify-content: center; // equivalent to justify-center
+  gap: 24px; // equivalent to gap-6
+  border-radius: 8px; // equivalent to rounded-lg
+  border: 1px dashed hsl(var(--border)); // equivalent to border-dashed
+  padding: 24px; // equivalent to p-6
+  text-align: center; // equivalent to text-center
+  text-wrap: balance; // equivalent to text-balance
+
+  @media (min-width: 768px) {
+    padding: 48px; // equivalent to md:p-12
+  }
+}
+
+.emptyHeader {
+  // Header styles (equivalent to flex max-w-sm flex-col items-center gap-2 text-center)
+  display: flex; // equivalent to flex
+  max-width: 24rem; // equivalent to max-w-sm
+  flex-direction: column; // equivalent to flex-col
+  align-items: center; // equivalent to items-center
+  gap: 8px; // equivalent to gap-2
+  text-align: center; // equivalent to text-center
+}
+
+.emptyMedia {
+  // Base media styles (equivalent to flex shrink-0 items-center justify-center mb-2 [&_svg]:pointer-events-none [&_svg]:shrink-0)
+  display: flex; // equivalent to flex
+  flex-shrink: 0; // equivalent to shrink-0
+  align-items: center; // equivalent to items-center
+  justify-content: center; // equivalent to justify-center
+  margin-bottom: 8px; // equivalent to mb-2
+
+  & svg {
+    pointer-events: none; // equivalent to [&_svg]:pointer-events-none
+    flex-shrink: 0; // equivalent to [&_svg]:shrink-0
+  }
+}
+
+// Media variants
+.emptyMedia--variant-default {
+  // Default variant (equivalent to bg-transparent)
+  background-color: transparent; // equivalent to bg-transparent
+}
+
+.emptyMedia--variant-icon {
+  // Icon variant (equivalent to bg-muted text-foreground flex size-10 shrink-0 items-center justify-center rounded-lg [&_svg:not([class*='size-'])]:size-6)
+  background-color: hsl(var(--muted)); // equivalent to bg-muted
+  color: hsl(var(--foreground)); // equivalent to text-foreground
+  display: flex; // equivalent to flex
+  width: 40px; // equivalent to size-10
+  height: 40px; // equivalent to size-10
+  flex-shrink: 0; // equivalent to shrink-0
+  align-items: center; // equivalent to items-center
+  justify-content: center; // equivalent to justify-center
+  border-radius: 8px; // equivalent to rounded-lg
+
+  & svg:not([class*="size-"]) {
+    width: 24px; // equivalent to size-6
+    height: 24px;
+  }
+}
+
+.emptyTitle {
+  // Title styles (equivalent to text-lg font-medium tracking-tight)
+  font-size: 18px; // equivalent to text-lg
+  font-weight: 500; // equivalent to font-medium
+  letter-spacing: -0.025em; // equivalent to tracking-tight
+}
+
+.emptyDescription {
+  // Description styles (equivalent to text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4)
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  font-size: 14px; // equivalent to text-sm
+  line-height: 1.625; // equivalent to relaxed
+
+  & > a {
+    text-decoration: underline; // equivalent to [&>a]:underline
+    text-underline-offset: 4px; // equivalent to [&>a]:underline-offset-4
+
+    &:hover {
+      color: hsl(var(--primary)); // equivalent to [&>a:hover]:text-primary
+    }
+  }
+}
+
+.emptyContent {
+  // Content styles (equivalent to flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance)
+  display: flex; // equivalent to flex
+  width: 100%; // equivalent to w-full
+  max-width: 24rem; // equivalent to max-w-sm
+  min-width: 0; // equivalent to min-w-0
+  flex-direction: column; // equivalent to flex-col
+  align-items: center; // equivalent to items-center
+  gap: 16px; // equivalent to gap-4
+  font-size: 14px; // equivalent to text-sm
+  text-wrap: balance; // equivalent to text-balance
+}

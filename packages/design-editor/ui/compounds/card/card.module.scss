@@ -1,0 +1,75 @@
+// Card compound component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.card {
+  // Base card styles (equivalent to bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm)
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  display: flex;
+  flex-direction: column;
+  gap: 24px; // equivalent to gap-6
+  border-radius: 12px; // equivalent to rounded-xl
+  border: 1px solid hsl(var(--border));
+  padding: 24px 0; // equivalent to py-6, horizontal padding handled by sub-components
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); // equivalent to shadow-sm
+}
+
+.cardHeader {
+  // Header styles (equivalent to @container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6)
+  container-type: inline-size;
+  container-name: card-header;
+  display: grid;
+  grid-auto-rows: min-content;
+  grid-template-rows: auto auto;
+  align-items: start;
+  gap: 8px; // equivalent to gap-2
+  padding: 0 24px; // equivalent to px-6
+
+  // Grid columns when card action is present (equivalent to has-data-[slot=card-action]:grid-cols-[1fr_auto])
+  &:has([data-slot="card-action"]) {
+    grid-template-columns: 1fr auto;
+  }
+
+  // Bottom border spacing (equivalent to [.border-b]:pb-6)
+  .border-b & {
+    padding-bottom: 24px; // equivalent to pb-6
+  }
+}
+
+.cardTitle {
+  // Title styles (equivalent to leading-none font-semibold)
+  line-height: 1; // equivalent to leading-none
+  font-weight: 600; // equivalent to font-semibold
+}
+
+.cardDescription {
+  // Description styles (equivalent to text-muted-foreground text-sm)
+  color: hsl(var(--muted-foreground));
+  font-size: 14px; // equivalent to text-sm
+}
+
+.cardAction {
+  // Action styles (equivalent to col-start-2 row-span-2 row-start-1 self-start justify-self-end)
+  grid-column-start: 2;
+  grid-row: span 2;
+  grid-row-start: 1;
+  align-self: start;
+  justify-self: end;
+}
+
+.cardContent {
+  // Content styles (equivalent to px-6)
+  padding: 0 24px; // equivalent to px-6
+}
+
+.cardFooter {
+  // Footer styles (equivalent to flex items-center px-6 [.border-t]:pt-6)
+  display: flex;
+  align-items: center;
+  padding: 0 24px; // equivalent to px-6
+
+  // Top border spacing (equivalent to [.border-t]:pt-6)
+  .border-t & {
+    padding-top: 24px; // equivalent to pt-6
+  }
+}

@@ -1,0 +1,76 @@
+// Switch component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.switch {
+  // Base switch styles (equivalent to inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none)
+  display: inline-flex;
+  height: 1.15rem; // equivalent to h-[1.15rem]
+  width: 32px; // equivalent to w-8
+  flex-shrink: 0;
+  align-items: center;
+  border-radius: 9999px; // equivalent to rounded-full
+  border: 1px solid transparent; // equivalent to border border-transparent
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); // equivalent to shadow-xs
+  transition: all 150ms ease-in-out; // equivalent to transition-all
+  outline: none; // equivalent to outline-none
+
+  // Peer styles (equivalent to peer)
+  // (This is handled by the peer-disabled styles below)
+
+  // Checked state (equivalent to data-[state=checked]:bg-primary)
+  &[data-state="checked"] {
+    background-color: hsl(var(--primary));
+  }
+
+  // Unchecked state (equivalent to data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80)
+  &[data-state="unchecked"] {
+    background-color: hsl(var(--input));
+
+    .dark & {
+      background-color: hsl(var(--input) / 0.8);
+    }
+  }
+
+  // Focus visible styles (equivalent to focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px])
+  &:focus-visible {
+    border-color: hsl(var(--ring));
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5);
+  }
+
+  // Disabled state (equivalent to disabled:cursor-not-allowed disabled:opacity-50)
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.switchThumb {
+  // Thumb styles (equivalent to pointer-events-none block size-4 rounded-full ring-0 transition-transform)
+  pointer-events: none; // equivalent to pointer-events-none
+  display: block; // equivalent to block
+  width: 16px; // equivalent to size-4
+  height: 16px; // equivalent to size-4
+  border-radius: 9999px; // equivalent to rounded-full
+  box-shadow: 0 0 0 0 transparent; // equivalent to ring-0
+  transition: transform 150ms ease-in-out; // equivalent to transition-transform
+
+  // Background colors (equivalent to bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground)
+  background-color: hsl(var(--background));
+
+  .dark &[data-state="unchecked"] {
+    background-color: hsl(var(--foreground));
+  }
+
+  .dark &[data-state="checked"] {
+    background-color: hsl(var(--primary-foreground));
+  }
+
+  // Transform states (equivalent to data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0)
+  &[data-state="checked"] {
+    transform: translateX(calc(100% - 2px));
+  }
+
+  &[data-state="unchecked"] {
+    transform: translateX(0);
+  }
+}

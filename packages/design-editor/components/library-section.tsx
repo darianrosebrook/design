@@ -10,13 +10,16 @@ import {
   Plus,
 } from "lucide-react";
 import { useState, useMemo } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Badge } from "@/ui/primitives/Badge";
+import { Button } from "@/ui/primitives/Button";
+import { Input } from "@/ui/primitives/Input";
+import { ScrollArea } from "@/ui/primitives/ScrollArea";
 import { useCanvas } from "@/lib/canvas-context";
 import { convertLibraryItemToCanvasObject } from "@/lib/utils/library-to-canvas";
-import { getAvailableComponents, getComponentMetadata } from "./component-renderer";
+import {
+  getAvailableComponents,
+  getComponentMetadata,
+} from "./component-renderer";
 import type React from "react";
 
 interface LibraryItem {
@@ -40,10 +43,10 @@ interface LibrarySectionProps {
 // Convert design system components to library items
 const getDesignSystemLibraryItems = (): LibraryItem[] => {
   const availableComponents = getAvailableComponents();
-  
+
   return availableComponents.map((componentType) => {
     const metadata = getComponentMetadata(componentType);
-    
+
     return {
       id: `ds-${componentType.toLowerCase()}`,
       name: metadata.name,
@@ -75,11 +78,12 @@ export function LibrarySection({
 
   const handleInsertItem = (item: LibraryItem) => {
     // Check if this is a design system component
-    if (item.id.startsWith('ds-')) {
-      const componentType = item.id.replace('ds-', '').toLowerCase();
-      const capitalizedType = componentType.charAt(0).toUpperCase() + componentType.slice(1);
+    if (item.id.startsWith("ds-")) {
+      const componentType = item.id.replace("ds-", "").toLowerCase();
+      const capitalizedType =
+        componentType.charAt(0).toUpperCase() + componentType.slice(1);
       const metadata = getComponentMetadata(capitalizedType as any);
-      
+
       // Create component object directly
       const componentObject = {
         id: `component-${Date.now()}`,
@@ -112,7 +116,8 @@ export function LibrarySection({
   };
 
   const filteredItems = useMemo(() => {
-    const itemsToFilter = initialItems.length > 0 ? initialItems : designSystemItems;
+    const itemsToFilter =
+      initialItems.length > 0 ? initialItems : designSystemItems;
 
     if (!searchQuery) {
       return itemsToFilter;
@@ -278,41 +283,31 @@ export function LibrarySection({
           {/* Interactive Components */}
           {renderLibrarySection(
             "Interactive",
-            filteredItems.filter(
-              (item) => item.tags.includes("interactive")
-            ),
+            filteredItems.filter((item) => item.tags.includes("interactive")),
             "interactive"
           )}
           {/* Layout Components */}
           {renderLibrarySection(
             "Layout",
-            filteredItems.filter(
-              (item) => item.tags.includes("layout")
-            ),
+            filteredItems.filter((item) => item.tags.includes("layout")),
             "layout"
           )}
           {/* Form Components */}
           {renderLibrarySection(
             "Form",
-            filteredItems.filter(
-              (item) => item.tags.includes("form")
-            ),
+            filteredItems.filter((item) => item.tags.includes("form")),
             "form"
           )}
           {/* Typography Components */}
           {renderLibrarySection(
             "Typography",
-            filteredItems.filter(
-              (item) => item.tags.includes("typography")
-            ),
+            filteredItems.filter((item) => item.tags.includes("typography")),
             "typography"
           )}
           {/* Media Components */}
           {renderLibrarySection(
             "Media",
-            filteredItems.filter(
-              (item) => item.tags.includes("media")
-            ),
+            filteredItems.filter((item) => item.tags.includes("media")),
             "media"
           )}
         </div>

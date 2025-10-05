@@ -1,0 +1,24 @@
+// Progress component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.progress {
+  // Base progress styles (equivalent to bg-primary/20 relative h-2 w-full overflow-hidden rounded-full)
+  background-color: hsl(var(--primary) / 0.2);
+  position: relative;
+  height: 8px; // equivalent to h-2
+  width: 100%; // equivalent to w-full
+  overflow: hidden; // equivalent to overflow-hidden
+  border-radius: 9999px; // equivalent to rounded-full
+}
+
+.progressIndicator {
+  // Indicator styles (equivalent to bg-primary h-full w-full flex-1 transition-all)
+  background-color: hsl(var(--primary));
+  height: 100%; // equivalent to h-full
+  width: 100%; // equivalent to w-full
+  flex: 1; // equivalent to flex-1
+  transition: all 150ms ease-in-out; // equivalent to transition-all
+
+  // Transform is applied via inline style in the component
+  // style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
+}

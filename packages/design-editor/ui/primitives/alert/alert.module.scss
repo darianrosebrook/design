@@ -1,0 +1,87 @@
+// Alert component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.alert {
+  // Base alert styles (equivalent to relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current)
+  position: relative;
+  width: 100%; // equivalent to w-full
+  border-radius: 8px; // equivalent to rounded-lg
+  border: 1px solid hsl(var(--border));
+  padding: 12px 16px; // equivalent to px-4 py-3
+  font-size: 14px; // equivalent to text-sm
+  display: grid;
+  align-items: start;
+
+  // Default grid when no SVG (equivalent to grid-cols-[0_1fr])
+  grid-template-columns: 0 1fr;
+
+  // Gap between rows (equivalent to gap-y-0.5)
+  gap: 2px; // equivalent to gap-y-0.5
+
+  // Styles when there's an SVG icon (equivalent to has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[>svg]:gap-x-3)
+  &:has(> svg) {
+    grid-template-columns: calc(16px) 1fr; // equivalent to calc(var(--spacing)*4)_1fr (assuming 4px spacing unit)
+    column-gap: 12px; // equivalent to gap-x-3
+  }
+
+  // SVG icon styles (equivalent to [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current)
+  > svg {
+    width: 16px; // equivalent to size-4
+    height: 16px;
+    transform: translateY(2px); // equivalent to translate-y-0.5
+    color: currentColor; // equivalent to text-current
+  }
+}
+
+// Variant styles
+.alert--variant-default {
+  // Default variant (equivalent to bg-card text-card-foreground)
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+}
+
+.alert--variant-destructive {
+  // Destructive variant (equivalent to text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90)
+  color: hsl(var(--destructive));
+  background-color: hsl(var(--card));
+
+  // SVG text color
+  > svg {
+    color: currentColor;
+  }
+
+  // Description text color override (equivalent to *:data-[slot=alert-description]:text-destructive/90)
+  :global(*) [data-slot="alert-description"] {
+    color: hsl(var(--destructive) / 0.9);
+  }
+}
+
+.alertTitle {
+  // Title styles (equivalent to col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight)
+  grid-column-start: 2;
+  line-clamp: 1;
+  min-height: 16px; // equivalent to min-h-4
+  font-weight: 500; // equivalent to font-medium
+  letter-spacing: -0.025em; // equivalent to tracking-tight
+
+  // Webkit line clamp
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.alertDescription {
+  // Description styles (equivalent to text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed)
+  color: hsl(var(--muted-foreground));
+  grid-column-start: 2;
+  display: grid;
+  justify-items: start;
+  gap: 4px; // equivalent to gap-1
+  font-size: 14px; // equivalent to text-sm
+
+  // Paragraph line height (equivalent to [&_p]:leading-relaxed)
+  p {
+    line-height: 1.625; // equivalent to leading-relaxed
+  }
+}
