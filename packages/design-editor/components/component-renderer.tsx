@@ -2,7 +2,6 @@
 
 import React from "react";
 import type { CanvasObject } from "@/lib/types";
-import { ComponentSlot } from "./component-slot";
 
 // Import all design system components
 import {
@@ -135,8 +134,8 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
               object.children.map((child) => {
                 // Simple child rendering without recursion to avoid circular dependencies
                 return (
-                  <div key={child.id} style={{ position: 'relative' }}>
-                    {child.type === 'component' ? (
+                  <div key={child.id} style={{ position: "relative" }}>
+                    {child.type === "component" ? (
                       <ComponentRenderer object={child} />
                     ) : (
                       <div>Child: {child.name}</div>
@@ -145,7 +144,11 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
                 );
               })
             ) : (
-              <ComponentSlot parentId={object.id} />
+              <div className="border-2 border-dashed border-orange-300 bg-orange-50 bg-opacity-50 rounded-md flex items-center justify-center cursor-pointer hover:bg-orange-100 hover:border-orange-400 transition-colors min-h-[40px]">
+                <div className="text-orange-600 text-sm font-medium opacity-70">
+                  ◇ Slot
+                </div>
+              </div>
             )}
           </Component>
         </div>
@@ -203,8 +206,8 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
               object.children.map((child) => {
                 // Simple child rendering without recursion to avoid circular dependencies
                 return (
-                  <div key={child.id} style={{ position: 'relative' }}>
-                    {child.type === 'component' ? (
+                  <div key={child.id} style={{ position: "relative" }}>
+                    {child.type === "component" ? (
                       <ComponentRenderer object={child} />
                     ) : (
                       <div>Child: {child.name}</div>
@@ -213,7 +216,11 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
                 );
               })
             ) : (
-              <ComponentSlot parentId={object.id} />
+              <div className="border-2 border-dashed border-orange-300 bg-orange-50 bg-opacity-50 rounded-md flex items-center justify-center cursor-pointer hover:bg-orange-100 hover:border-orange-400 transition-colors min-h-[40px]">
+                <div className="text-orange-600 text-sm font-medium opacity-70">
+                  ◇ Slot
+                </div>
+              </div>
             )}
           </Component>
         </div>
