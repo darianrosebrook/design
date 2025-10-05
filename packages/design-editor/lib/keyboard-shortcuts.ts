@@ -199,17 +199,9 @@ export const KEYBOARD_SHORTCUTS: KeyboardShortcut[] = [
     category: "view",
   },
 
-  // Zoom
+  // Zoom shortcuts: one entry each is enough
   {
     key: "=",
-    modifiers: { ctrl: true },
-    action: "zoom-in",
-    description: "Zoom In",
-    category: "zoom",
-    implemented: true,
-  },
-  {
-    key: "+",
     modifiers: { ctrl: true },
     action: "zoom-in",
     description: "Zoom In",
@@ -710,32 +702,29 @@ export function getAllShortcuts(): KeyboardShortcut[] {
  */
 export function findShortcut(
   key: string,
-  modifiers: { ctrl?: boolean; cmd?: boolean; shift?: boolean; alt?: boolean }
+  mods: { ctrl?: boolean; cmd?: boolean; shift?: boolean; alt?: boolean }
 ): KeyboardShortcut | undefined {
-  const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-  const cmdOrCtrl = isMac ? modifiers.cmd : modifiers.ctrl;
+  const isMac = /Mac|iPhone|iPad/.test(navigator.platform);
+  const normalizedKey =
+    key.length === 1 ? key.toLowerCase() : key; // keep "PageUp", "Home", etc.
 
-  console.log(`[findShortcut] Looking for: key="${key}", modifiers=`, modifiers, `isMac=${isMac}, cmdOrCtrl=${cmdOrCtrl}`);
+  return KEYBOARD_SHORTCUTS.find((s) => {
+    const skey = s.key.length === 1 ? s.key.toLowerCase() : s.key;
+    if (skey !== normalizedKey) return false;
 
-  return KEYBOARD_SHORTCUTS.find((shortcut) => {
-    const shortcutModifiers = { ...shortcut.modifiers };
-    if (isMac && shortcutModifiers.ctrl) {
-      shortcutModifiers.cmd = shortcutModifiers.ctrl;
-      delete shortcutModifiers.ctrl;
-    }
+    // Primary modifier: "ctrl" in the table means Ctrl on Win/Linux, Command on macOS
+    const requirePrimary = !!(s.modifiers?.ctrl || s.modifiers?.cmd);
+    const eventPrimary = isMac ? !!mods.cmd : !!mods.ctrl;
+    if (requirePrimary && !eventPrimary) return false;
 
-    const matches = (
-      shortcut.key.toLowerCase() === key.toLowerCase() &&
-      (isMac ? shortcutModifiers.cmd === cmdOrCtrl : shortcutModifiers.ctrl === cmdOrCtrl) &&
-      shortcutModifiers.shift === modifiers.shift &&
-      shortcutModifiers.alt === modifiers.alt
-    );
+    // If the shortcut explicitly asks for cmd (rare), enforce meta too
+    if (s.modifiers?.cmd && !mods.cmd) return false;
 
-    if (shortcut.key.toLowerCase() === key.toLowerCase()) {
-      console.log(`[findShortcut] Checking shortcut:`, shortcut, `shortcutModifiers=`, shortcutModifiers, `matches=${matches}`);
-    }
+    // Only enforce shift/alt if explicitly required by the shortcut
+    if (s.modifiers?.shift && !mods.shift) return false;
+    if (s.modifiers?.alt && !mods.alt) return false;
 
-    return matches;
+    return true;
   });
 }
 

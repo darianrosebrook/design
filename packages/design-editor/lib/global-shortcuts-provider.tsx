@@ -474,59 +474,60 @@ export function GlobalShortcutsProvider({
   );
 
   useEffect(() => {
+    const blocklist = new Set(["=", "+", "-", "0"]);
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't handle shortcuts if user is typing in an input
-      const target = e.target as HTMLElement;
-      if (
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA" ||
-        target.tagName === "SELECT" ||
-        target.contentEditable === "true"
-      ) {
-        return;
+      // ignore text inputs
+      const t = e.target as HTMLElement;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+
+      const isPrimary = navigator.platform.toUpperCase().includes("MAC") ? e.metaKey : e.ctrlKey;
+
+      // Hard block page zoom/reset first (works in browsers)
+      if (isPrimary && blocklist.has(e.key)) {
+        e.preventDefault();
+        e.stopPropagation();
       }
 
-      const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
       const modifiers = {
-        ctrl: isMac ? false : e.ctrlKey,
-        cmd: isMac ? e.metaKey : false,
+        ctrl: !navigator.platform.toUpperCase().includes("MAC") ? e.ctrlKey : false,
+        cmd:  navigator.platform.toUpperCase().includes("MAC") ? e.metaKey : false,
         shift: e.shiftKey,
         alt: e.altKey,
       };
 
       const shortcut = findShortcut(e.key, modifiers);
-
       if (shortcut) {
-        console.log(`[Shortcut] Detected: ${shortcut.action} (${e.key})`);
-        e.preventDefault(); // This is crucial for preventing browser zoom
+        e.preventDefault();
         e.stopPropagation();
         handleShortcut(shortcut);
       }
     };
 
-    // Mouse wheel zoom functionality
     const handleWheel = (e: WheelEvent) => {
+      // Prevent Ctrl/⌘ + wheel zoom
       if (e.ctrlKey || e.metaKey) {
-        console.log(`[Wheel Zoom] Detected: deltaY=${e.deltaY}`);
         e.preventDefault();
         e.stopPropagation();
-        
-        if (e.deltaY < 0) {
-          // Scrolling up = zoom in
-          zoomIn();
-        } else if (e.deltaY > 0) {
-          // Scrolling down = zoom out
-          zoomOut();
-        }
+        if (e.deltaY < 0) zoomIn();
+        else if (e.deltaY > 0) zoomOut();
       }
     };
 
-    // Use capture phase to intercept before browser handles it
-    document.addEventListener("keydown", handleKeyDown, true);
-    document.addEventListener("wheel", handleWheel, { passive: false });
+    // Safari pinch-zoom (non-standard) – prevents viewport scaling
+    const preventGesture = (e: Event) => e.preventDefault();
+
+    window.addEventListener("keydown", handleKeyDown, { capture: true });
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("gesturestart", preventGesture as any, { passive: false });
+    window.addEventListener("gesturechange", preventGesture as any, { passive: false });
+    window.addEventListener("gestureend", preventGesture as any, { passive: false });
+
     return () => {
-      document.removeEventListener("keydown", handleKeyDown, true);
-      document.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("keydown", handleKeyDown, { capture: true } as any);
+      window.removeEventListener("wheel", handleWheel as any);
+      window.removeEventListener("gesturestart", preventGesture as any);
+      window.removeEventListener("gesturechange", preventGesture as any);
+      window.removeEventListener("gestureend", preventGesture as any);
     };
   }, [handleShortcut, zoomIn, zoomOut]);
 
