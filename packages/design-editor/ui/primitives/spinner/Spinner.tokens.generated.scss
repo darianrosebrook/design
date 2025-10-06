@@ -1,0 +1,28 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Spinner/spinner.tokens.json
+ */
+@mixin vars {
+  /* === Size Tokens === */
+  --spinner-size-default-value: 16px;
+  --spinner-size-default-description: Default size for spinner;
+  --spinner-size-sm-value: 12px;
+  --spinner-size-sm-description: Small size for spinner;
+  --spinner-size-md-value: 16px;
+  --spinner-size-md-description: Medium size for spinner;
+  --spinner-size-lg-value: 20px;
+  --spinner-size-lg-description: Large size for spinner;
+  --spinner-size-xl-value: 24px;
+  --spinner-size-xl-description: Extra large size for spinner;
+
+  /* === Color Tokens === */
+  --spinner-color-value: var(--semantic-color-action-foreground-primary-default);
+  --spinner-color-description: Color for spinner;
+
+  /* === Animation Tokens === */
+  --spinner-animation-duration-value: 1s;
+  --spinner-animation-duration-description: Animation duration for spinner;
+  --spinner-animation-timingFunction-value: linear;
+  --spinner-animation-timingFunction-description: Animation timing function for spinner;
+  --spinner-animation-iterationCount-value: infinite;
+  --spinner-animation-iterationCount-description: Animation iteration count for spinner;
+}

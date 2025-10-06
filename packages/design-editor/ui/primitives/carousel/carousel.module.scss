@@ -1,7 +1,93 @@
-// carousel primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Carousel primitive component styles
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Carousel.tokens.generated.scss' as carouselTokens;
+
+// Include the generated variables mixin
+@include carouselTokens.vars;
+
+// Main carousel container
 .carousel {
-  // Placeholder for future SCSS implementation
-  // Will contain carousel-specific styles when migrating from Tailwind
+  position: var(--carousel-container-position-value);
+}
+
+// Carousel content wrapper (overflow hidden container)
+.carousel-content {
+  overflow: var(--carousel-content-overflow-value);
+}
+
+// Carousel items container (flex container for slides)
+.carousel-items {
+  display: var(--carousel-content-display-value);
+
+  // Horizontal orientation (default)
+  &:not(.carousel-items--vertical) {
+    margin-left: var(--carousel-content-gap-horizontal-value);
+  }
+
+  // Vertical orientation
+  &.carousel-items--vertical {
+    flex-direction: var(--carousel-content-flexDirection-vertical-value);
+    margin-top: var(--carousel-content-gap-vertical-value);
+  }
+}
+
+// Individual carousel item
+.carousel-item {
+  flex: var(--carousel-item-flex-value);
+  min-width: var(--carousel-item-minWidth-value);
+
+  // Horizontal orientation (default)
+  &:not(.carousel-item--vertical) {
+    padding-left: var(--carousel-item-padding-horizontal-value);
+  }
+
+  // Vertical orientation
+  &.carousel-item--vertical {
+    padding-top: var(--carousel-item-padding-vertical-value);
+  }
+}
+
+// Navigation buttons base styles
+.carousel-button {
+  position: var(--carousel-navigation-button-position-value);
+  z-index: var(--carousel-navigation-button-zIndex-value);
+  width: var(--carousel-navigation-button-size-value);
+  height: var(--carousel-navigation-button-size-value);
+  border-radius: var(--carousel-navigation-button-borderRadius-value);
+}
+
+// Previous button
+.carousel-previous {
+  // Horizontal orientation (default)
+  &:not(.carousel-previous--vertical) {
+    top: var(--carousel-navigation-previous-position-horizontal-top-value);
+    left: var(--carousel-navigation-previous-position-horizontal-left-value);
+    transform: var(--carousel-navigation-previous-position-horizontal-transform-value);
+  }
+
+  // Vertical orientation
+  &.carousel-previous--vertical {
+    top: var(--carousel-navigation-previous-position-vertical-top-value);
+    left: var(--carousel-navigation-previous-position-vertical-left-value);
+    transform: var(--carousel-navigation-previous-position-vertical-transform-value);
+  }
+}
+
+// Next button
+.carousel-next {
+  // Horizontal orientation (default)
+  &:not(.carousel-next--vertical) {
+    top: var(--carousel-navigation-next-position-horizontal-top-value);
+    right: var(--carousel-navigation-next-position-horizontal-right-value);
+    transform: var(--carousel-navigation-next-position-horizontal-transform-value);
+  }
+
+  // Vertical orientation
+  &.carousel-next--vertical {
+    bottom: var(--carousel-navigation-next-position-vertical-bottom-value);
+    left: var(--carousel-navigation-next-position-vertical-left-value);
+    transform: var(--carousel-navigation-next-position-vertical-transform-value);
+  }
 }

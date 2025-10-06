@@ -1,3 +1,151 @@
 {
-  "scroll-area": {}
+  "prefix": "scroll-area",
+  "tokens": {
+      "root": {
+        "position": {
+          "value": "relative",
+          "description": "Position for scroll area root container"
+        }
+      },
+      "viewport": {
+        "width": {
+          "value": "100%",
+          "description": "Width for scroll area viewport"
+        },
+        "height": {
+          "value": "100%",
+          "description": "Height for scroll area viewport"
+        },
+        "borderRadius": {
+          "value": "inherit",
+          "description": "Border radius for scroll area viewport"
+        },
+        "transition": {
+          "value": "color, box-shadow",
+          "description": "Transition properties for scroll area viewport"
+        },
+        "transitionDuration": {
+          "value": "{semantic.motion.interaction.hover.duration}",
+          "description": "Transition duration for scroll area viewport"
+        },
+        "transitionEasing": {
+          "value": "{semantic.motion.interaction.hover.easing}",
+          "description": "Transition easing for scroll area viewport"
+        },
+        "outline": {
+          "value": "none",
+          "description": "Outline for scroll area viewport"
+        },
+        "focusVisible": {
+          "boxShadow": {
+            "value": "0 0 0 3px rgba({semantic.color.action.border.primary.focus}, 0.5)",
+            "description": "Box shadow for focus visible state"
+          },
+          "outline": {
+            "value": "1px solid transparent",
+            "description": "Outline for focus visible state"
+          }
+        }
+      },
+      "scrollbar": {
+        "display": {
+          "value": "flex",
+          "description": "Display for scrollbar"
+        },
+        "touchAction": {
+          "value": "none",
+          "description": "Touch action for scrollbar"
+        },
+        "padding": {
+          "value": "1px",
+          "description": "Padding for scrollbar"
+        },
+        "transition": {
+          "value": "colors",
+          "description": "Transition for scrollbar"
+        },
+        "transitionDuration": {
+          "value": "{semantic.motion.interaction.hover.duration}",
+          "description": "Transition duration for scrollbar"
+        },
+        "transitionEasing": {
+          "value": "{semantic.motion.interaction.hover.easing}",
+          "description": "Transition easing for scrollbar"
+        },
+        "userSelect": {
+          "value": "none",
+          "description": "User select for scrollbar"
+        },
+        "vertical": {
+          "width": {
+            "value": "10px",
+            "description": "Width for vertical scrollbar"
+          },
+          "height": {
+            "value": "100%",
+            "description": "Height for vertical scrollbar"
+          },
+          "borderLeft": {
+            "width": {
+              "value": "1px",
+              "description": "Border left width for vertical scrollbar"
+            },
+            "style": {
+              "value": "solid",
+              "description": "Border left style for vertical scrollbar"
+            },
+            "color": {
+              "value": "transparent",
+              "description": "Border left color for vertical scrollbar"
+            }
+          }
+        },
+        "horizontal": {
+          "width": {
+            "value": "100%",
+            "description": "Width for horizontal scrollbar"
+          },
+          "height": {
+            "value": "10px",
+            "description": "Height for horizontal scrollbar"
+          },
+          "flexDirection": {
+            "value": "column",
+            "description": "Flex direction for horizontal scrollbar"
+          },
+          "borderTop": {
+            "width": {
+              "value": "1px",
+              "description": "Border top width for horizontal scrollbar"
+            },
+            "style": {
+              "value": "solid",
+              "description": "Border top style for horizontal scrollbar"
+            },
+            "color": {
+              "value": "transparent",
+              "description": "Border top color for horizontal scrollbar"
+            }
+          }
+        }
+      },
+      "thumb": {
+        "backgroundColor": {
+          "value": "{semantic.color.action.border.secondary.default}",
+          "description": "Background color for scrollbar thumb"
+        },
+        "position": {
+          "value": "relative",
+          "description": "Position for scrollbar thumb"
+        },
+        "flex": {
+          "value": "1",
+          "description": "Flex for scrollbar thumb"
+        },
+        "borderRadius": {
+          "value": "{semantic.border.radius.full}",
+          "description": "Border radius for scrollbar thumb"
+        }
+      }
+  }
 }

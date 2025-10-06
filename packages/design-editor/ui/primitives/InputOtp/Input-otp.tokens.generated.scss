@@ -1,0 +1,98 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/InputOtp/input-otp.tokens.json
+ */
+@mixin vars {
+  /* === Container Tokens === */
+  --input-otp-container-display-value: flex;
+  --input-otp-container-display-description: Display for OTP input container;
+  --input-otp-container-alignItems-value: center;
+  --input-otp-container-alignItems-description: Align items for OTP input container;
+  --input-otp-container-gap-value: var(--semantic-spacing-gap-grid-small);
+  --input-otp-container-gap-description: Gap between OTP input elements;
+  --input-otp-container-disabled-opacity-value: var(--semantic-opacity-disabled);
+  --input-otp-container-disabled-opacity-description: Opacity for disabled OTP input;
+
+  /* === Input Tokens === */
+  --input-otp-input-cursor-disabled-value: not-allowed;
+  --input-otp-input-cursor-disabled-description: Cursor for disabled OTP input;
+
+  /* === Group Tokens === */
+  --input-otp-group-display-value: flex;
+  --input-otp-group-display-description: Display for OTP input group;
+  --input-otp-group-alignItems-value: center;
+  --input-otp-group-alignItems-description: Align items for OTP input group;
+
+  /* === Slot Tokens === */
+  --input-otp-slot-display-value: flex;
+  --input-otp-slot-display-description: Display for OTP slot;
+  --input-otp-slot-alignItems-value: center;
+  --input-otp-slot-alignItems-description: Align items for OTP slot;
+  --input-otp-slot-justifyContent-value: center;
+  --input-otp-slot-justifyContent-description: Justify content for OTP slot;
+  --input-otp-slot-position-value: relative;
+  --input-otp-slot-position-description: Position for OTP slot;
+  --input-otp-slot-width-value: 36px;
+  --input-otp-slot-width-description: Width for OTP slot;
+  --input-otp-slot-height-value: 36px;
+  --input-otp-slot-height-description: Height for OTP slot;
+  --input-otp-slot-fontSize-value: var(--semantic-typography-font-size-sm);
+  --input-otp-slot-fontSize-description: Font size for OTP slot;
+  --input-otp-slot-border-width-value: 1px;
+  --input-otp-slot-border-width-description: Border width for OTP slot;
+  --input-otp-slot-border-style-value: solid;
+  --input-otp-slot-border-style-description: Border style for OTP slot;
+  --input-otp-slot-border-color-value: var(--semantic-color-action-border-secondary-default);
+  --input-otp-slot-border-color-description: Border color for OTP slot;
+  --input-otp-slot-border-radius-first-value: var(--semantic-border-radius-md);
+  --input-otp-slot-border-radius-first-description: Border radius for first slot;
+  --input-otp-slot-border-radius-last-value: var(--semantic-border-radius-md);
+  --input-otp-slot-border-radius-last-description: Border radius for last slot;
+  --input-otp-slot-boxShadow-value: var(--semantic-elevation-default);
+  --input-otp-slot-boxShadow-description: Box shadow for OTP slot;
+  --input-otp-slot-transition-value: all;
+  --input-otp-slot-transition-description: Transition for OTP slot;
+  --input-otp-slot-transitionDuration-value: var(--semantic-motion-interaction-hover-duration);
+  --input-otp-slot-transitionDuration-description: Transition duration for OTP slot;
+  --input-otp-slot-transitionEasing-value: var(--semantic-motion-interaction-hover-easing);
+  --input-otp-slot-transitionEasing-description: Transition easing for OTP slot;
+  --input-otp-slot-outline-value: none;
+  --input-otp-slot-outline-description: Outline for OTP slot;
+  --input-otp-slot-zIndex-active-value: 10;
+  --input-otp-slot-zIndex-active-description: Z-index for active slot;
+  --input-otp-slot-states-active-borderColor-value: var(--semantic-color-action-border-primary-focus);
+  --input-otp-slot-states-active-borderColor-description: Border color for active slot;
+  --input-otp-slot-states-active-boxShadow-value: 0 0 0 3px rgba({semantic.color.action.border.primary.focus}, 0.5);
+  --input-otp-slot-states-active-boxShadow-description: Box shadow for active slot;
+  --input-otp-slot-states-active-invalid-boxShadow-value: 0 0 0 3px rgba({semantic.color.feedback.foreground.danger.default}, 0.2);
+  --input-otp-slot-states-active-invalid-boxShadow-description: Box shadow for active invalid slot;
+  --input-otp-slot-states-active-invalid-borderColor-value: var(--semantic-color-feedback-foreground-danger-default);
+  --input-otp-slot-states-active-invalid-borderColor-description: Border color for active invalid slot;
+  --input-otp-slot-states-active-invalid-dark-boxShadow-value: 0 0 0 3px rgba({semantic.color.feedback.foreground.danger.default}, 0.4);
+  --input-otp-slot-states-active-invalid-dark-boxShadow-description: Box shadow for active invalid slot in dark mode;
+  --input-otp-slot-states-invalid-borderColor-value: var(--semantic-color-feedback-foreground-danger-default);
+  --input-otp-slot-states-invalid-borderColor-description: Border color for invalid slot;
+
+  /* === Caret Tokens === */
+  --input-otp-caret-backgroundColor-value: var(--semantic-color-text-foreground-primary-default);
+  --input-otp-caret-backgroundColor-description: Background color for caret;
+  --input-otp-caret-width-value: 1px;
+  --input-otp-caret-width-description: Width for caret;
+  --input-otp-caret-height-value: 16px;
+  --input-otp-caret-height-description: Height for caret;
+  --input-otp-caret-position-value: absolute;
+  --input-otp-caret-position-description: Position for caret;
+  --input-otp-caret-inset-value: 0;
+  --input-otp-caret-inset-description: Inset for caret;
+  --input-otp-caret-display-value: flex;
+  --input-otp-caret-display-description: Display for caret;
+  --input-otp-caret-alignItems-value: center;
+  --input-otp-caret-alignItems-description: Align items for caret;
+  --input-otp-caret-justifyContent-value: center;
+  --input-otp-caret-justifyContent-description: Justify content for caret;
+  --input-otp-caret-pointerEvents-value: none;
+  --input-otp-caret-pointerEvents-description: Pointer events for caret;
+  --input-otp-caret-animation-name-value: caret-blink;
+  --input-otp-caret-animation-name-description: Animation name for caret;
+  --input-otp-caret-animation-duration-value: 1s;
+  --input-otp-caret-animation-duration-description: Animation duration for caret;
+}

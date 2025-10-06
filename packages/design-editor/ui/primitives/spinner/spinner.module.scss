@@ -1,7 +1,52 @@
-// spinner primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Spinner primitive component styles
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Spinner.tokens.generated.scss' as spinnerTokens;
+
+// Include the generated variables mixin
+@include spinnerTokens.vars;
+
+// Base spinner styles
 .spinner {
-  // Placeholder for future SCSS implementation
-  // Will contain spinner-specific styles when migrating from Tailwind
+  color: var(--spinner-color-value);
+  animation: var(--spinner-animation-iterationCount-value) var(--spinner-animation-timingFunction-value) var(--spinner-animation-duration-value) spin;
+  flex-shrink: 0;
+
+  // Size variants
+  &--size-sm {
+    width: var(--spinner-size-sm-value);
+    height: var(--spinner-size-sm-value);
+  }
+
+  &--size-md {
+    width: var(--spinner-size-md-value);
+    height: var(--spinner-size-md-value);
+  }
+
+  &--size-lg {
+    width: var(--spinner-size-lg-value);
+    height: var(--spinner-size-lg-value);
+  }
+
+  &--size-xl {
+    width: var(--spinner-size-xl-value);
+    height: var(--spinner-size-xl-value);
+  }
+}
+
+// Default size (md)
+.spinner:not(&--size-sm):not(&--size-lg):not(&--size-xl) {
+  width: var(--spinner-size-default-value);
+  height: var(--spinner-size-default-value);
+}
+
+// Spin animation keyframes
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

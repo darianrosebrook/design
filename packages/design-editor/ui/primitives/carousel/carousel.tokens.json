@@ -1,3 +1,141 @@
 {
-  "carousel": {}
+  "prefix": "carousel",
+  "tokens": {
+      "container": {
+        "position": {
+          "value": "relative",
+          "description": "Position for carousel container"
+        }
+      },
+      "content": {
+        "overflow": {
+          "value": "hidden",
+          "description": "Overflow for carousel content wrapper"
+        },
+        "display": {
+          "value": "flex",
+          "description": "Display for carousel items container"
+        },
+        "gap": {
+          "horizontal": {
+            "value": "-16px",
+            "description": "Negative margin for horizontal carousel to create gap illusion"
+          },
+          "vertical": {
+            "value": "-16px",
+            "description": "Negative margin for vertical carousel to create gap illusion"
+          }
+        },
+        "flexDirection": {
+          "vertical": {
+            "value": "column",
+            "description": "Flex direction for vertical carousel"
+          }
+        }
+      },
+      "item": {
+        "flex": {
+          "value": "0 0 100%",
+          "description": "Flex properties for carousel item (no grow, no shrink, full width)"
+        },
+        "minWidth": {
+          "value": "0",
+          "description": "Minimum width for carousel item"
+        },
+        "padding": {
+          "horizontal": {
+            "value": "16px",
+            "description": "Padding for horizontal carousel items"
+          },
+          "vertical": {
+            "value": "16px",
+            "description": "Padding for vertical carousel items"
+          }
+        }
+      },
+      "navigation": {
+        "button": {
+          "size": {
+            "value": "32px",
+            "description": "Size for navigation buttons"
+          },
+          "borderRadius": {
+            "value": "{semantic.border.radius.full}",
+            "description": "Border radius for navigation buttons"
+          },
+          "position": {
+            "value": "absolute",
+            "description": "Position for navigation buttons"
+          },
+          "zIndex": {
+            "value": "10",
+            "description": "Z-index for navigation buttons"
+          }
+        },
+        "previous": {
+          "position": {
+            "horizontal": {
+              "top": {
+                "value": "50%",
+                "description": "Top position for horizontal previous button"
+              },
+              "left": {
+                "value": "-48px",
+                "description": "Left position for horizontal previous button"
+              },
+              "transform": {
+                "value": "translateY(-50%)",
+                "description": "Transform for horizontal previous button"
+              }
+            },
+            "vertical": {
+              "top": {
+                "value": "-48px",
+                "description": "Top position for vertical previous button"
+              },
+              "left": {
+                "value": "50%",
+                "description": "Left position for vertical previous button"
+              },
+              "transform": {
+                "value": "translateX(-50%) rotate(90deg)",
+                "description": "Transform for vertical previous button"
+              }
+            }
+          }
+        },
+        "next": {
+          "position": {
+            "horizontal": {
+              "top": {
+                "value": "50%",
+                "description": "Top position for horizontal next button"
+              },
+              "right": {
+                "value": "-48px",
+                "description": "Right position for horizontal next button"
+              },
+              "transform": {
+                "value": "translateY(-50%)",
+                "description": "Transform for horizontal next button"
+              }
+            },
+            "vertical": {
+              "bottom": {
+                "value": "-48px",
+                "description": "Bottom position for vertical next button"
+              },
+              "left": {
+                "value": "50%",
+                "description": "Left position for vertical next button"
+              },
+              "transform": {
+                "value": "translateX(-50%) rotate(90deg)",
+                "description": "Transform for vertical next button"
+              }
+            }
+          }
+        }
+      }
+  }
 }

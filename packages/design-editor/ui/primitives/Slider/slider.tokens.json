@@ -1,3 +1,209 @@
 {
-  "slider": {}
-}
+  "prefix": "slider",
+  "tokens": { 
+      "root": {
+        "position": {
+          "value": "relative",
+          "description": "Position for slider root container"
+        },
+        "display": {
+          "value": "flex",
+          "description": "Display type for slider root"
+        },
+        "width": {
+          "value": "100%",
+          "description": "Width for slider root"
+        },
+        "touchAction": {
+          "value": "none",
+          "description": "Touch action to prevent scrolling"
+        },
+        "alignItems": {
+          "value": "center",
+          "description": "Align items for slider root"
+        },
+        "userSelect": {
+          "value": "none",
+          "description": "User select for slider root"
+        },
+        "disabled": {
+          "opacity": {
+            "value": "{semantic.opacity.disabled}",
+            "description": "Opacity for disabled slider"
+          }
+        },
+        "orientation": {
+          "vertical": {
+            "height": {
+              "value": "100%",
+              "description": "Height for vertical slider"
+            },
+            "minHeight": {
+              "value": "176px",
+              "description": "Minimum height for vertical slider"
+            },
+            "width": {
+              "value": "auto",
+              "description": "Width for vertical slider"
+            },
+            "flexDirection": {
+              "value": "column",
+              "description": "Flex direction for vertical slider"
+            }
+          }
+        }
+      },
+      "track": {
+        "backgroundColor": {
+          "value": "{semantic.color.action.background.secondary.default}",
+          "description": "Background color for slider track"
+        },
+        "position": {
+          "value": "relative",
+          "description": "Position for slider track"
+        },
+        "flexGrow": {
+          "value": "1",
+          "description": "Flex grow for slider track"
+        },
+        "overflow": {
+          "value": "hidden",
+          "description": "Overflow for slider track"
+        },
+        "borderRadius": {
+          "value": "{semantic.border.radius.full}",
+          "description": "Border radius for slider track"
+        },
+        "orientation": {
+          "horizontal": {
+            "height": {
+              "value": "6px",
+              "description": "Height for horizontal track"
+            },
+            "width": {
+              "value": "100%",
+              "description": "Width for horizontal track"
+            }
+          },
+          "vertical": {
+            "height": {
+              "value": "100%",
+              "description": "Height for vertical track"
+            },
+            "width": {
+              "value": "6px",
+              "description": "Width for vertical track"
+            }
+          }
+        }
+      },
+      "range": {
+        "backgroundColor": {
+          "value": "{semantic.color.action.background.primary.default}",
+          "description": "Background color for slider range"
+        },
+        "position": {
+          "value": "absolute",
+          "description": "Position for slider range"
+        },
+        "orientation": {
+          "horizontal": {
+            "height": {
+              "value": "100%",
+              "description": "Height for horizontal range"
+            }
+          },
+          "vertical": {
+            "width": {
+              "value": "100%",
+              "description": "Width for vertical range"
+            }
+          }
+        }
+      },
+      "thumb": {
+        "display": {
+          "value": "block",
+          "description": "Display for slider thumb"
+        },
+        "width": {
+          "value": "16px",
+          "description": "Width for slider thumb"
+        },
+        "height": {
+          "value": "16px",
+          "description": "Height for slider thumb"
+        },
+        "flexShrink": {
+          "value": "0",
+          "description": "Flex shrink for slider thumb"
+        },
+        "borderRadius": {
+          "value": "{semantic.border.radius.full}",
+          "description": "Border radius for slider thumb"
+        },
+        "border": {
+          "width": {
+            "value": "1px",
+            "description": "Border width for slider thumb"
+          },
+          "style": {
+            "value": "solid",
+            "description": "Border style for slider thumb"
+          },
+          "color": {
+            "value": "{semantic.color.action.border.primary.default}",
+            "description": "Border color for slider thumb"
+          }
+        },
+        "backgroundColor": {
+          "value": "{color.palette.neutral.0}",
+          "description": "Background color for slider thumb"
+        },
+        "boxShadow": {
+          "value": "{semantic.elevation.default}",
+          "description": "Box shadow for slider thumb"
+        },
+        "transition": {
+          "value": "{semantic.motion.interaction.hover.duration} {semantic.motion.interaction.hover.easing}",
+          "description": "Transition for slider thumb"
+        },
+        "transitionProperties": {
+          "value": "color, box-shadow",
+          "description": "Transition properties for slider thumb"
+        },
+        "outline": {
+          "value": "none",
+          "description": "Outline for slider thumb"
+        },
+        "disabled": {
+          "pointerEvents": {
+            "value": "none",
+            "description": "Pointer events for disabled thumb"
+          },
+          "opacity": {
+            "value": "{semantic.opacity.disabled}",
+            "description": "Opacity for disabled thumb"
+          }
+        },
+        "states": {
+          "hover": {
+            "boxShadow": {
+              "value": "0 0 0 16px rgba({semantic.color.action.border.primary.focus}, 0.5)",
+              "description": "Box shadow for hover state"
+            }
+          },
+          "focusVisible": {
+            "boxShadow": {
+              "value": "0 0 0 16px rgba({semantic.color.action.border.primary.focus}, 0.5)",
+              "description": "Box shadow for focus visible state"
+            },
+            "outline": {
+              "value": "none",
+              "description": "Outline for focus visible state"
+            }
+          }
+        }
+      }
+    }
+  } 

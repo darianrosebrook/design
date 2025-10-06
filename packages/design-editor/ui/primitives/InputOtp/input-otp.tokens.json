@@ -1,3 +1,205 @@
 {
-  "input-otp": {}
+  "prefix": "input-otp",
+  "tokens": {
+    "container": {
+      "display": {
+        "value": "flex",
+        "description": "Display for OTP input container"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for OTP input container"
+      },
+      "gap": {
+        "value": "{semantic.spacing.gap.grid.small}",
+        "description": "Gap between OTP input elements"
+      },
+      "disabled": {
+        "opacity": {
+          "value": "{semantic.opacity.disabled}",
+          "description": "Opacity for disabled OTP input"
+        }
+      }
+    },
+    "input": {
+      "cursor": {
+        "disabled": {
+          "value": "not-allowed",
+          "description": "Cursor for disabled OTP input"
+        }
+      }
+    },
+    "group": {
+      "display": {
+        "value": "flex",
+        "description": "Display for OTP input group"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for OTP input group"
+      }
+    },
+    "slot": {
+      "display": {
+        "value": "flex",
+        "description": "Display for OTP slot"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for OTP slot"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for OTP slot"
+      },
+      "position": {
+        "value": "relative",
+        "description": "Position for OTP slot"
+      },
+      "width": {
+        "value": "36px",
+        "description": "Width for OTP slot"
+      },
+      "height": {
+        "value": "36px",
+        "description": "Height for OTP slot"
+      },
+      "fontSize": {
+        "value": "{semantic.typography.fontSize.sm}",
+        "description": "Font size for OTP slot"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for OTP slot"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for OTP slot"
+        },
+        "color": {
+          "value": "{semantic.color.action.border.secondary.default}",
+          "description": "Border color for OTP slot"
+        },
+        "radius": {
+          "first": {
+            "value": "{semantic.border.radius.md}",
+            "description": "Border radius for first slot"
+          },
+          "last": {
+            "value": "{semantic.border.radius.md}",
+            "description": "Border radius for last slot"
+          }
+        }
+      },
+      "boxShadow": {
+        "value": "{semantic.elevation.default}",
+        "description": "Box shadow for OTP slot"
+      },
+      "transition": {
+        "value": "all",
+        "description": "Transition for OTP slot"
+      },
+      "transitionDuration": {
+        "value": "{semantic.motion.interaction.hover.duration}",
+        "description": "Transition duration for OTP slot"
+      },
+      "transitionEasing": {
+        "value": "{semantic.motion.interaction.hover.easing}",
+        "description": "Transition easing for OTP slot"
+      },
+      "outline": {
+        "value": "none",
+        "description": "Outline for OTP slot"
+      },
+      "zIndex": {
+        "active": {
+          "value": "10",
+          "description": "Z-index for active slot"
+        }
+      },
+      "states": {
+        "active": {
+          "borderColor": {
+            "value": "{semantic.color.action.border.primary.focus}",
+            "description": "Border color for active slot"
+          },
+          "boxShadow": {
+            "value": "0 0 0 3px rgba({semantic.color.action.border.primary.focus}, 0.5)",
+            "description": "Box shadow for active slot"
+          },
+          "invalid": {
+            "boxShadow": {
+              "value": "0 0 0 3px rgba({semantic.color.feedback.foreground.danger.default}, 0.2)",
+              "description": "Box shadow for active invalid slot"
+            },
+            "borderColor": {
+              "value": "{semantic.color.feedback.foreground.danger.default}",
+              "description": "Border color for active invalid slot"
+            },
+            "dark": {
+              "boxShadow": {
+                "value": "0 0 0 3px rgba({semantic.color.feedback.foreground.danger.default}, 0.4)",
+                "description": "Box shadow for active invalid slot in dark mode"
+              }
+            }
+          }
+        },
+        "invalid": {
+          "borderColor": {
+            "value": "{semantic.color.feedback.foreground.danger.default}",
+            "description": "Border color for invalid slot"
+          }
+        }
+      }
+    },
+    "caret": {
+      "backgroundColor": {
+        "value": "{semantic.color.text.foreground.primary.default}",
+        "description": "Background color for caret"
+      },
+      "width": {
+        "value": "1px",
+        "description": "Width for caret"
+      },
+      "height": {
+        "value": "16px",
+        "description": "Height for caret"
+      },
+      "position": {
+        "value": "absolute",
+        "description": "Position for caret"
+      },
+      "inset": {
+        "value": "0",
+        "description": "Inset for caret"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display for caret"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for caret"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for caret"
+      },
+      "pointerEvents": {
+        "value": "none",
+        "description": "Pointer events for caret"
+      },
+      "animation": {
+        "name": {
+          "value": "caret-blink",
+          "description": "Animation name for caret"
+        },
+        "duration": {
+          "value": "1s",
+          "description": "Animation duration for caret"
+        }
+      }
+    }
+  }
 }

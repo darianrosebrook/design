@@ -1,7 +1,31 @@
-// collapsible primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Collapsible primitive component styles
+// Migrated from Tailwind to SCSS with design tokens
 
-.collapsible {
-  // Placeholder for future SCSS implementation
-  // Will contain collapsible-specific styles when migrating from Tailwind
+// Import generated token variables
+@use './Collapsible.tokens.generated.scss' as collapsibleTokens;
+
+// Include the generated variables mixin
+
+// Collapsible content with slide animation
+.collapsible-content {
+  @include collapsibleTokens.vars;
+  overflow: var(--collapsible-content-overflow-value);
+
+  &[data-state="open"] {
+    animation: var(--collapsible-content-animation-name-value) var(--collapsible-animation-duration-value) var(--collapsible-animation-easing-value) var(--collapsible-content-animation-fillMode-value);
+  }
+
+  &[data-state="closed"] {
+    animation: var(--collapsible-content-animation-name-value) var(--collapsible-animation-duration-value) var(--collapsible-animation-easing-value) var(--collapsible-content-animation-fillMode-value) reverse;
+  }
+}
+
+// Slide down animation keyframes
+@keyframes collapsible-slide-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+  }
 }

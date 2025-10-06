@@ -1,0 +1,76 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/ScrollArea/scroll-area.tokens.json
+ */
+@mixin vars {
+  /* === Root Tokens === */
+  --scroll-area-root-position-value: relative;
+  --scroll-area-root-position-description: Position for scroll area root container;
+
+  /* === Viewport Tokens === */
+  --scroll-area-viewport-width-value: 100%;
+  --scroll-area-viewport-width-description: Width for scroll area viewport;
+  --scroll-area-viewport-height-value: 100%;
+  --scroll-area-viewport-height-description: Height for scroll area viewport;
+  --scroll-area-viewport-borderRadius-value: inherit;
+  --scroll-area-viewport-borderRadius-description: Border radius for scroll area viewport;
+  --scroll-area-viewport-transition-value: color, box-shadow;
+  --scroll-area-viewport-transition-description: Transition properties for scroll area viewport;
+  --scroll-area-viewport-transitionDuration-value: var(--semantic-motion-interaction-hover-duration);
+  --scroll-area-viewport-transitionDuration-description: Transition duration for scroll area viewport;
+  --scroll-area-viewport-transitionEasing-value: var(--semantic-motion-interaction-hover-easing);
+  --scroll-area-viewport-transitionEasing-description: Transition easing for scroll area viewport;
+  --scroll-area-viewport-outline-value: none;
+  --scroll-area-viewport-outline-description: Outline for scroll area viewport;
+  --scroll-area-viewport-focusVisible-boxShadow-value: 0 0 0 3px rgba({semantic.color.action.border.primary.focus}, 0.5);
+  --scroll-area-viewport-focusVisible-boxShadow-description: Box shadow for focus visible state;
+  --scroll-area-viewport-focusVisible-outline-value: 1px solid transparent;
+  --scroll-area-viewport-focusVisible-outline-description: Outline for focus visible state;
+
+  /* === Scrollbar Tokens === */
+  --scroll-area-scrollbar-display-value: flex;
+  --scroll-area-scrollbar-display-description: Display for scrollbar;
+  --scroll-area-scrollbar-touchAction-value: none;
+  --scroll-area-scrollbar-touchAction-description: Touch action for scrollbar;
+  --scroll-area-scrollbar-padding-value: 1px;
+  --scroll-area-scrollbar-padding-description: Padding for scrollbar;
+  --scroll-area-scrollbar-transition-value: colors;
+  --scroll-area-scrollbar-transition-description: Transition for scrollbar;
+  --scroll-area-scrollbar-transitionDuration-value: var(--semantic-motion-interaction-hover-duration);
+  --scroll-area-scrollbar-transitionDuration-description: Transition duration for scrollbar;
+  --scroll-area-scrollbar-transitionEasing-value: var(--semantic-motion-interaction-hover-easing);
+  --scroll-area-scrollbar-transitionEasing-description: Transition easing for scrollbar;
+  --scroll-area-scrollbar-userSelect-value: none;
+  --scroll-area-scrollbar-userSelect-description: User select for scrollbar;
+  --scroll-area-scrollbar-vertical-width-value: 10px;
+  --scroll-area-scrollbar-vertical-width-description: Width for vertical scrollbar;
+  --scroll-area-scrollbar-vertical-height-value: 100%;
+  --scroll-area-scrollbar-vertical-height-description: Height for vertical scrollbar;
+  --scroll-area-scrollbar-vertical-borderLeft-width-value: 1px;
+  --scroll-area-scrollbar-vertical-borderLeft-width-description: Border left width for vertical scrollbar;
+  --scroll-area-scrollbar-vertical-borderLeft-style-value: solid;
+  --scroll-area-scrollbar-vertical-borderLeft-style-description: Border left style for vertical scrollbar;
+  --scroll-area-scrollbar-vertical-borderLeft-color-value: transparent;
+  --scroll-area-scrollbar-vertical-borderLeft-color-description: Border left color for vertical scrollbar;
+  --scroll-area-scrollbar-horizontal-width-value: 100%;
+  --scroll-area-scrollbar-horizontal-width-description: Width for horizontal scrollbar;
+  --scroll-area-scrollbar-horizontal-height-value: 10px;
+  --scroll-area-scrollbar-horizontal-height-description: Height for horizontal scrollbar;
+  --scroll-area-scrollbar-horizontal-flexDirection-value: column;
+  --scroll-area-scrollbar-horizontal-flexDirection-description: Flex direction for horizontal scrollbar;
+  --scroll-area-scrollbar-horizontal-borderTop-width-value: 1px;
+  --scroll-area-scrollbar-horizontal-borderTop-width-description: Border top width for horizontal scrollbar;
+  --scroll-area-scrollbar-horizontal-borderTop-style-value: solid;
+  --scroll-area-scrollbar-horizontal-borderTop-style-description: Border top style for horizontal scrollbar;
+  --scroll-area-scrollbar-horizontal-borderTop-color-value: transparent;
+  --scroll-area-scrollbar-horizontal-borderTop-color-description: Border top color for horizontal scrollbar;
+
+  /* === Thumb Tokens === */
+  --scroll-area-thumb-backgroundColor-value: var(--semantic-color-action-border-secondary-default);
+  --scroll-area-thumb-backgroundColor-description: Background color for scrollbar thumb;
+  --scroll-area-thumb-position-value: relative;
+  --scroll-area-thumb-position-description: Position for scrollbar thumb;
+  --scroll-area-thumb-flex-value: 1;
+  --scroll-area-thumb-flex-description: Flex for scrollbar thumb;
+  --scroll-area-thumb-borderRadius-value: var(--semantic-border-radius-full);
+  --scroll-area-thumb-borderRadius-description: Border radius for scrollbar thumb;
+}

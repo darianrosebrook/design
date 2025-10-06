@@ -1,3 +1,31 @@
 {
-  "collapsible": {}
+  "prefix": "collapsible",
+  "tokens": { 
+      "content": {
+        "overflow": {
+          "value": "hidden",
+          "description": "Overflow for collapsible content"
+        },
+        "animation": {
+          "name": {
+            "value": "collapsible-slide-down",
+            "description": "Animation name for slide down"
+          },
+          "fillMode": {
+            "value": "forwards",
+            "description": "Animation fill mode"
+          }
+        }
+      },
+      "animation": {
+        "duration": {
+          "value": "150ms",
+          "description": "Animation duration for collapsible transitions"
+        },
+        "easing": {
+          "value": "ease-out",
+          "description": "Animation easing for collapsible transitions"
+        }
+      }
+    } 
 }

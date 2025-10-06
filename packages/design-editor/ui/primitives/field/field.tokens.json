@@ -1,3 +1,251 @@
 {
-  "field": {}
+  "prefix": "field",
+  "tokens": {
+      "spacing": {
+        "gap": {
+          "default": {
+            "value": "{semantic.spacing.gap.grid.large}",
+            "description": "Default gap between field elements"
+          },
+          "compact": {
+            "value": "{semantic.spacing.gap.grid.small}",
+            "description": "Compact gap for checkbox/radio groups"
+          },
+          "group": {
+            "value": "28px",
+            "description": "Gap between field groups"
+          },
+          "content": {
+            "value": "6px",
+            "description": "Gap within field content"
+          }
+        },
+        "margin": {
+          "legend": {
+            "bottom": {
+              "value": "12px",
+              "description": "Bottom margin for legends"
+            }
+          },
+          "separator": {
+            "vertical": {
+              "value": "-8px",
+              "description": "Vertical margin for separators"
+            }
+          }
+        },
+        "padding": {
+          "label": {
+            "value": "16px",
+            "description": "Padding for labels with nested fields"
+          }
+        }
+      },
+      "typography": {
+        "legend": {
+          "fontSize": {
+            "legend": {
+              "value": "{semantic.typography.fontSize.base}",
+              "description": "Font size for legend variant"
+            },
+            "label": {
+              "value": "{semantic.typography.fontSize.sm}",
+              "description": "Font size for label variant"
+            }
+          },
+          "fontWeight": {
+            "value": "{semantic.typography.fontWeight.medium}",
+            "description": "Font weight for legends"
+          },
+          "lineHeight": {
+            "value": "{semantic.typography.lineHeight.snug}",
+            "description": "Line height for legends"
+          }
+        },
+        "title": {
+          "fontSize": {
+            "value": "{semantic.typography.fontSize.sm}",
+            "description": "Font size for field titles"
+          },
+          "fontWeight": {
+            "value": "{semantic.typography.fontWeight.medium}",
+            "description": "Font weight for field titles"
+          },
+          "lineHeight": {
+            "value": "{semantic.typography.lineHeight.snug}",
+            "description": "Line height for field titles"
+          }
+        },
+        "description": {
+          "fontSize": {
+            "value": "{semantic.typography.fontSize.sm}",
+            "description": "Font size for field descriptions"
+          },
+          "fontWeight": {
+            "value": "{semantic.typography.fontWeight.normal}",
+            "description": "Font weight for field descriptions"
+          },
+          "lineHeight": {
+            "value": "{semantic.typography.lineHeight.normal}",
+            "description": "Line height for field descriptions"
+          },
+          "color": {
+            "value": "{semantic.color.text.foreground.secondary.default}",
+            "description": "Color for field descriptions"
+          }
+        },
+        "error": {
+          "fontSize": {
+            "value": "{semantic.typography.fontSize.sm}",
+            "description": "Font size for field errors"
+          },
+          "fontWeight": {
+            "value": "{semantic.typography.fontWeight.normal}",
+            "description": "Font weight for field errors"
+          },
+          "color": {
+            "value": "{semantic.color.feedback.foreground.danger.default}",
+            "description": "Color for field errors"
+          }
+        }
+      },
+      "layout": {
+        "field": {
+          "display": {
+            "value": "flex",
+            "description": "Display for field container"
+          },
+          "width": {
+            "value": "100%",
+            "description": "Width for field container"
+          },
+          "flexDirection": {
+            "vertical": {
+              "value": "column",
+              "description": "Flex direction for vertical fields"
+            },
+            "horizontal": {
+              "value": "row",
+              "description": "Flex direction for horizontal fields"
+            }
+          },
+          "alignItems": {
+            "horizontal": {
+              "value": "center",
+              "description": "Align items for horizontal fields"
+            }
+          }
+        },
+        "fieldset": {
+          "display": {
+            "value": "flex",
+            "description": "Display for fieldset"
+          },
+          "flexDirection": {
+            "value": "column",
+            "description": "Flex direction for fieldset"
+          }
+        },
+        "group": {
+          "display": {
+            "value": "flex",
+            "description": "Display for field group"
+          },
+          "width": {
+            "value": "100%",
+            "description": "Width for field group"
+          },
+          "flexDirection": {
+            "value": "column",
+            "description": "Flex direction for field group"
+          }
+        },
+        "content": {
+          "display": {
+            "value": "flex",
+            "description": "Display for field content"
+          },
+          "flexDirection": {
+            "value": "column",
+            "description": "Flex direction for field content"
+          },
+          "flex": {
+            "value": "1",
+            "description": "Flex grow for field content"
+          }
+        },
+        "label": {
+          "display": {
+            "value": "flex",
+            "description": "Display for field label"
+          },
+          "width": {
+            "value": "fit-content",
+            "description": "Width for field label"
+          },
+          "alignItems": {
+            "value": "center",
+            "description": "Align items for field label"
+          }
+        }
+      },
+      "colors": {
+        "invalid": {
+          "color": {
+            "value": "{semantic.color.feedback.foreground.danger.default}",
+            "description": "Color for invalid fields"
+          }
+        },
+        "disabled": {
+          "opacity": {
+            "value": "{semantic.opacity.disabled}",
+            "description": "Opacity for disabled field elements"
+          }
+        },
+        "separator": {
+          "content": {
+            "backgroundColor": {
+              "value": "{semantic.color.palette.neutral.0}",
+              "description": "Background color for separator content"
+            },
+            "color": {
+              "value": "{semantic.color.text.foreground.secondary.default}",
+              "description": "Color for separator content text"
+            },
+            "padding": {
+              "horizontal": {
+                "value": "{semantic.spacing.padding.grid.small}",
+                "description": "Horizontal padding for separator content"
+              }
+            }
+          }
+        }
+      },
+      "states": {
+        "checked": {
+          "backgroundColor": {
+            "light": {
+              "value": "rgba({semantic.color.action.background.primary.default}, 0.05)",
+              "description": "Background color for checked state in light mode"
+            },
+            "dark": {
+              "value": "rgba({semantic.color.action.background.primary.default}, 0.1)",
+              "description": "Background color for checked state in dark mode"
+            }
+          },
+          "borderColor": {
+            "value": "{semantic.color.action.border.primary.default}",
+            "description": "Border color for checked state"
+          }
+        }
+      },
+      "responsive": {
+        "container": {
+          "query": {
+            "value": "@md/field-group",
+            "description": "Container query for responsive behavior"
+          }
+        }
+      }
+  }
 }

@@ -1,0 +1,108 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Field/field.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --field-spacing-gap-default-value: var(--semantic-spacing-gap-grid-large);
+  --field-spacing-gap-default-description: Default gap between field elements;
+  --field-spacing-gap-compact-value: var(--semantic-spacing-gap-grid-small);
+  --field-spacing-gap-compact-description: Compact gap for checkbox/radio groups;
+  --field-spacing-gap-group-value: 28px;
+  --field-spacing-gap-group-description: Gap between field groups;
+  --field-spacing-gap-content-value: 6px;
+  --field-spacing-gap-content-description: Gap within field content;
+  --field-spacing-margin-legend-bottom-value: 12px;
+  --field-spacing-margin-legend-bottom-description: Bottom margin for legends;
+  --field-spacing-margin-separator-vertical-value: -8px;
+  --field-spacing-margin-separator-vertical-description: Vertical margin for separators;
+  --field-spacing-padding-label-value: 16px;
+  --field-spacing-padding-label-description: Padding for labels with nested fields;
+
+  /* === Typography Tokens === */
+  --field-typography-legend-fontSize-legend-value: var(--semantic-typography-font-size-base);
+  --field-typography-legend-fontSize-legend-description: Font size for legend variant;
+  --field-typography-legend-fontSize-label-value: var(--semantic-typography-font-size-sm);
+  --field-typography-legend-fontSize-label-description: Font size for label variant;
+  --field-typography-legend-fontWeight-value: var(--semantic-typography-font-weight-medium);
+  --field-typography-legend-fontWeight-description: Font weight for legends;
+  --field-typography-legend-lineHeight-value: var(--semantic-typography-line-height-snug);
+  --field-typography-legend-lineHeight-description: Line height for legends;
+  --field-typography-title-fontSize-value: var(--semantic-typography-font-size-sm);
+  --field-typography-title-fontSize-description: Font size for field titles;
+  --field-typography-title-fontWeight-value: var(--semantic-typography-font-weight-medium);
+  --field-typography-title-fontWeight-description: Font weight for field titles;
+  --field-typography-title-lineHeight-value: var(--semantic-typography-line-height-snug);
+  --field-typography-title-lineHeight-description: Line height for field titles;
+  --field-typography-description-fontSize-value: var(--semantic-typography-font-size-sm);
+  --field-typography-description-fontSize-description: Font size for field descriptions;
+  --field-typography-description-fontWeight-value: var(--semantic-typography-font-weight-normal);
+  --field-typography-description-fontWeight-description: Font weight for field descriptions;
+  --field-typography-description-lineHeight-value: var(--semantic-typography-line-height-normal);
+  --field-typography-description-lineHeight-description: Line height for field descriptions;
+  --field-typography-description-color-value: var(--semantic-color-text-foreground-secondary-default);
+  --field-typography-description-color-description: Color for field descriptions;
+  --field-typography-error-fontSize-value: var(--semantic-typography-font-size-sm);
+  --field-typography-error-fontSize-description: Font size for field errors;
+  --field-typography-error-fontWeight-value: var(--semantic-typography-font-weight-normal);
+  --field-typography-error-fontWeight-description: Font weight for field errors;
+  --field-typography-error-color-value: var(--semantic-color-feedback-foreground-danger-default);
+  --field-typography-error-color-description: Color for field errors;
+
+  /* === Layout Tokens === */
+  --field-layout-field-display-value: flex;
+  --field-layout-field-display-description: Display for field container;
+  --field-layout-field-width-value: 100%;
+  --field-layout-field-width-description: Width for field container;
+  --field-layout-field-flexDirection-vertical-value: column;
+  --field-layout-field-flexDirection-vertical-description: Flex direction for vertical fields;
+  --field-layout-field-flexDirection-horizontal-value: row;
+  --field-layout-field-flexDirection-horizontal-description: Flex direction for horizontal fields;
+  --field-layout-field-alignItems-horizontal-value: center;
+  --field-layout-field-alignItems-horizontal-description: Align items for horizontal fields;
+  --field-layout-fieldset-display-value: flex;
+  --field-layout-fieldset-display-description: Display for fieldset;
+  --field-layout-fieldset-flexDirection-value: column;
+  --field-layout-fieldset-flexDirection-description: Flex direction for fieldset;
+  --field-layout-group-display-value: flex;
+  --field-layout-group-display-description: Display for field group;
+  --field-layout-group-width-value: 100%;
+  --field-layout-group-width-description: Width for field group;
+  --field-layout-group-flexDirection-value: column;
+  --field-layout-group-flexDirection-description: Flex direction for field group;
+  --field-layout-content-display-value: flex;
+  --field-layout-content-display-description: Display for field content;
+  --field-layout-content-flexDirection-value: column;
+  --field-layout-content-flexDirection-description: Flex direction for field content;
+  --field-layout-content-flex-value: 1;
+  --field-layout-content-flex-description: Flex grow for field content;
+  --field-layout-label-display-value: flex;
+  --field-layout-label-display-description: Display for field label;
+  --field-layout-label-width-value: fit-content;
+  --field-layout-label-width-description: Width for field label;
+  --field-layout-label-alignItems-value: center;
+  --field-layout-label-alignItems-description: Align items for field label;
+
+  /* === Colors Tokens === */
+  --field-colors-invalid-color-value: var(--semantic-color-feedback-foreground-danger-default);
+  --field-colors-invalid-color-description: Color for invalid fields;
+  --field-colors-disabled-opacity-value: var(--semantic-opacity-disabled);
+  --field-colors-disabled-opacity-description: Opacity for disabled field elements;
+  --field-colors-separator-content-backgroundColor-value: var(--semantic-color-palette-neutral-0);
+  --field-colors-separator-content-backgroundColor-description: Background color for separator content;
+  --field-colors-separator-content-color-value: var(--semantic-color-text-foreground-secondary-default);
+  --field-colors-separator-content-color-description: Color for separator content text;
+  --field-colors-separator-content-padding-horizontal-value: var(--semantic-spacing-padding-grid-small);
+  --field-colors-separator-content-padding-horizontal-description: Horizontal padding for separator content;
+
+  /* === States Tokens === */
+  --field-states-checked-backgroundColor-light-value: rgba({semantic.color.action.background.primary.default}, 0.05);
+  --field-states-checked-backgroundColor-light-description: Background color for checked state in light mode;
+  --field-states-checked-backgroundColor-dark-value: rgba({semantic.color.action.background.primary.default}, 0.1);
+  --field-states-checked-backgroundColor-dark-description: Background color for checked state in dark mode;
+  --field-states-checked-borderColor-value: var(--semantic-color-action-border-primary-default);
+  --field-states-checked-borderColor-description: Border color for checked state;
+
+  /* === Responsive Tokens === */
+  --field-responsive-container-query-value: @md/field-group;
+  --field-responsive-container-query-description: Container query for responsive behavior;
+}

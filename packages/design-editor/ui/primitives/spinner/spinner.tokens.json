@@ -1,3 +1,45 @@
 {
-  "spinner": {}
+  "prefix": "spinner",
+  "tokens": {
+    "size": {
+      "default": {
+        "value": "16px",
+        "description": "Default size for spinner"
+      },
+      "sm": {
+        "value": "12px",
+        "description": "Small size for spinner"
+      },
+      "md": {
+        "value": "16px",
+        "description": "Medium size for spinner"
+      },
+      "lg": {
+        "value": "20px",
+        "description": "Large size for spinner"
+      },
+      "xl": {
+        "value": "24px",
+        "description": "Extra large size for spinner"
+      }
+    },
+    "color": {
+      "value": "{semantic.color.action.foreground.primary.default}",
+      "description": "Color for spinner"
+    },
+    "animation": {
+      "duration": {
+        "value": "1s",
+        "description": "Animation duration for spinner"
+      },
+      "timingFunction": {
+        "value": "linear",
+        "description": "Animation timing function for spinner"
+      },
+      "iterationCount": {
+        "value": "infinite",
+        "description": "Animation iteration count for spinner"
+      }
+    }
+  }
 }

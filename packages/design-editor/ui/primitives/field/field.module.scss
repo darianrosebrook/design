@@ -1,7 +1,291 @@
-// field primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Field primitive component styles
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Field.tokens.generated.scss' as fieldTokens;
+
+// Fieldset container
+.field-set {
+  // Include the generated variables mixin within the component scope
+  @include fieldTokens.vars;
+  display: var(--field-fieldset-display-value);
+  flex-direction: var(--field-fieldset-flexDirection-value);
+
+  // Gap adjustments for different group types
+  gap: var(--field-spacing-gap-default-value);
+
+  &:has([data-slot="checkbox-group"]),
+  &:has([data-slot="radio-group"]) {
+    gap: var(--field-spacing-gap-compact-value);
+  }
+}
+
+// Field legend
+.field-legend {
+  margin-bottom: var(--field-spacing-margin-legend-bottom-value);
+  font-weight: var(--field-typography-legend-fontWeight-value);
+  line-height: var(--field-typography-legend-lineHeight-value);
+
+  // Legend variants
+  &[data-variant="legend"] {
+    font-size: var(--field-typography-legend-fontSize-legend-value);
+  }
+
+  &[data-variant="label"] {
+    font-size: var(--field-typography-legend-fontSize-label-value);
+  }
+}
+
+// Field group container
+.field-group {
+  display: var(--field-layout-group-display-value);
+  width: var(--field-layout-group-width-value);
+  flex-direction: var(--field-layout-group-flexDirection-value);
+  gap: var(--field-spacing-gap-group-value);
+
+  // Nested group spacing
+  [data-slot="field-group"] {
+    gap: calc(var(--field-spacing-gap-group-value) - var(--field-spacing-gap-default-value));
+  }
+}
+
+// Main field container
 .field {
-  // Placeholder for future SCSS implementation
-  // Will contain field-specific styles when migrating from Tailwind
+  display: var(--field-layout-field-display-value);
+  width: var(--field-layout-field-width-value);
+  gap: var(--field-spacing-gap-default-value);
+
+  // Invalid state
+  &[data-invalid="true"] {
+    color: var(--field-colors-invalid-color-value);
+  }
+
+  // Orientation variants
+  &[data-orientation="vertical"] {
+    flex-direction: var(--field-layout-field-flexDirection-vertical-value);
+
+    // Make all children full width
+    > * {
+      width: 100%;
+    }
+
+    // Labels should not be full width in vertical layout
+    > [data-slot="field-label"] {
+      width: auto;
+    }
+  }
+
+  &[data-orientation="horizontal"] {
+    flex-direction: var(--field-layout-field-flexDirection-horizontal-value);
+    align-items: var(--field-layout-field-alignItems-horizontal-value);
+
+    // Label gets flex auto, content takes remaining space
+    > [data-slot="field-label"] {
+      flex: 1 1 auto;
+    }
+
+    // Items with content should align to start
+    &:has(> [data-slot="field-content"]) {
+      align-items: flex-start;
+
+      // Adjust checkbox/radio positioning
+      [role="checkbox"],
+      [role="radio"] {
+        margin-top: 2px;
+      }
+    }
+  }
+
+  &[data-orientation="responsive"] {
+    flex-direction: var(--field-layout-field-flexDirection-vertical-value);
+
+    // All children full width in mobile
+    > * {
+      width: 100%;
+    }
+
+    // Labels should not be full width in mobile
+    > [data-slot="field-label"] {
+      width: auto;
+    }
+
+    // Responsive breakpoint
+    @container (min-width: 768px) {
+      flex-direction: var(--field-layout-field-flexDirection-horizontal-value);
+      align-items: var(--field-layout-field-alignItems-horizontal-value);
+
+      > * {
+        width: auto;
+      }
+
+      > [data-slot="field-label"] {
+        flex: 1 1 auto;
+      }
+
+      &:has(> [data-slot="field-content"]) {
+        align-items: flex-start;
+
+        [role="checkbox"],
+        [role="radio"] {
+          margin-top: 2px;
+        }
+      }
+    }
+  }
+
+  // Disabled state
+  &[data-disabled="true"] {
+    [data-slot="field-label"] {
+      opacity: var(--field-colors-disabled-opacity-value);
+    }
+  }
+}
+
+// Field content wrapper
+.field-content {
+  display: var(--field-layout-content-display-value);
+  flex-direction: var(--field-layout-content-flexDirection-value);
+  flex: var(--field-layout-content-flex-value);
+  gap: var(--field-spacing-gap-content-value);
+  line-height: 1.375; // Equivalent to leading-snug
+}
+
+// Field label
+.field-label {
+  display: var(--field-layout-label-display-value);
+  width: var(--field-layout-label-width-value);
+  align-items: var(--field-layout-label-alignItems-value);
+  gap: var(--field-spacing-gap-compact-value);
+  line-height: 1.375; // Equivalent to leading-snug
+  opacity: 1;
+
+  // Disabled state
+  .field[data-disabled="true"] & {
+    opacity: var(--field-colors-disabled-opacity-value);
+  }
+
+  // Labels containing nested fields
+  &:has(> [data-slot="field"]) {
+    width: 100%;
+    flex-direction: column;
+    border-radius: var(--semantic-border-radius-md);
+    border: 1px solid transparent;
+
+    > [data-slot="field"] {
+      padding: var(--field-spacing-padding-label-value);
+    }
+  }
+
+  // Checked state styling
+  [data-state="checked"] & {
+    background-color: var(--field-states-checked-backgroundColor-light-value);
+    border-color: var(--field-states-checked-borderColor-value);
+
+    // Dark mode
+    .dark & {
+      background-color: var(--field-states-checked-backgroundColor-dark-value);
+    }
+  }
+}
+
+// Field title
+.field-title {
+  display: flex;
+  align-items: center;
+  gap: var(--field-spacing-gap-compact-value);
+  font-size: var(--field-typography-title-fontSize-value);
+  font-weight: var(--field-typography-title-fontWeight-value);
+  line-height: var(--field-typography-title-lineHeight-value);
+
+  // Disabled state
+  .field[data-disabled="true"] & {
+    opacity: var(--field-colors-disabled-opacity-value);
+  }
+}
+
+// Field description
+.field-description {
+  color: var(--field-typography-description-color-value);
+  font-size: var(--field-typography-description-fontSize-value);
+  font-weight: var(--field-typography-description-fontWeight-value);
+  line-height: var(--field-typography-description-lineHeight-value);
+
+  // Links within descriptions
+  a {
+    color: var(--semantic-color-action-background-primary-default);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--semantic-link-decoration-color);
+
+    &:hover {
+      color: var(--semantic-link-hover-text);
+    }
+  }
+
+  // Balance text in horizontal layout
+  .field[data-orientation="horizontal"] & {
+    text-wrap: balance;
+  }
+
+  // Adjust margins
+  &:last-child {
+    margin-top: 0;
+  }
+
+  &:nth-last-child(2) {
+    margin-top: calc(var(--field-spacing-gap-content-value) * -1);
+  }
+
+  // Adjust margin when following a legend
+  [data-variant="legend"] + & {
+    margin-top: calc(var(--field-spacing-margin-legend-bottom-value) * -1.5);
+  }
+}
+
+// Field error
+.field-error {
+  color: var(--field-typography-error-color-value);
+  font-size: var(--field-typography-error-fontSize-value);
+  font-weight: var(--field-typography-error-fontWeight-value);
+
+  // Error list styling
+  ul {
+    margin-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    list-style-type: disc;
+  }
+}
+
+// Field separator
+.field-separator {
+  position: relative;
+  height: 20px;
+  margin: var(--field-spacing-margin-separator-vertical-value) 0;
+
+  // Content variant
+  &[data-content] {
+    span {
+      background-color: var(--field-colors-separator-content-backgroundColor-value);
+      color: var(--field-colors-separator-content-color-value);
+      position: relative;
+      margin: 0 auto;
+      display: block;
+      width: fit-content;
+      padding: 0 var(--field-colors-separator-content-padding-horizontal-value);
+    }
+  }
+}
+
+// Separator content text
+.field-separator-content {
+  background-color: var(--field-colors-separator-content-backgroundColor-value);
+  color: var(--field-colors-separator-content-color-value);
+  position: relative;
+  margin: 0 auto;
+  display: block;
+  width: fit-content;
+  padding: 0 var(--field-colors-separator-content-padding-horizontal-value);
 }

@@ -1,7 +1,114 @@
-// input-otp primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// InputOtp primitive component styles
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Input-otp.tokens.generated.scss' as inputOtpTokens;
+
+// Include the generated variables mixin
+
+// OTP input container
+.input-otp-container {
+  @include inputOtpTokens.vars;
+  display: var(--input-otp-input-otp-container-display-value);
+  align-items: var(--input-otp-input-otp-container-alignItems-value);
+  gap: var(--input-otp-input-otp-container-gap-value);
+
+  &.input-otp-container--disabled {
+    opacity: var(--input-otp-input-otp-container-disabled-opacity-value);
+  }
+}
+
+// OTP input element
 .input-otp {
-  // Placeholder for future SCSS implementation
-  // Will contain input-otp-specific styles when migrating from Tailwind
+  &.input-otp--disabled {
+    cursor: var(--input-otp-input-otp-input-cursor-disabled-value);
+  }
+}
+
+// OTP input group
+.input-otp-group {
+  display: var(--input-otp-input-otp-group-display-value);
+  align-items: var(--input-otp-input-otp-group-alignItems-value);
+}
+
+// OTP input slot
+.input-otp-slot {
+  display: var(--input-otp-input-otp-slot-display-value);
+  align-items: var(--input-otp-input-otp-slot-alignItems-value);
+  justify-content: var(--input-otp-input-otp-slot-justifyContent-value);
+  position: var(--input-otp-input-otp-slot-position-value);
+  width: var(--input-otp-input-otp-slot-width-value);
+  height: var(--input-otp-input-otp-slot-height-value);
+  font-size: var(--input-otp-input-otp-slot-fontSize-value);
+  border: var(--input-otp-input-otp-slot-border-width-value) var(--input-otp-input-otp-slot-border-style-value) var(--input-otp-input-otp-slot-border-color-value);
+  box-shadow: var(--input-otp-input-otp-slot-boxShadow-value);
+  transition: var(--input-otp-input-otp-slot-transition-value) var(--input-otp-input-otp-slot-transitionDuration-value) var(--input-otp-input-otp-slot-transitionEasing-value);
+  outline: var(--input-otp-input-otp-slot-outline-value);
+
+  // First slot
+  &:first-child {
+    border-radius: var(--input-otp-input-otp-slot-border-radius-first-value);
+    border-left-width: var(--input-otp-input-otp-slot-border-width-value);
+  }
+
+  // Last slot
+  &:last-child {
+    border-radius: var(--input-otp-input-otp-slot-border-radius-last-value);
+  }
+
+  // Middle slots
+  &:not(:first-child):not(:last-child) {
+    border-left-width: 0;
+    border-radius: 0;
+  }
+
+  // Active state
+  &[data-active="true"] {
+    border-color: var(--input-otp-input-otp-slot-states-active-borderColor-value);
+    box-shadow: var(--input-otp-input-otp-slot-states-active-boxShadow-value);
+    z-index: var(--input-otp-input-otp-slot-zIndex-active-value);
+
+    // Invalid active state
+    &[aria-invalid="true"] {
+      box-shadow: var(--input-otp-input-otp-slot-states-active-invalid-boxShadow-value);
+      border-color: var(--input-otp-input-otp-slot-states-active-invalid-borderColor-value);
+
+      // Dark mode
+      .dark & {
+        box-shadow: var(--input-otp-input-otp-slot-states-active-invalid-dark-boxShadow-value);
+      }
+    }
+  }
+
+  // Invalid state (not active)
+  &[aria-invalid="true"] {
+    border-color: var(--input-otp-input-otp-slot-states-invalid-borderColor-value);
+  }
+}
+
+// OTP caret (blinking cursor)
+.input-otp-caret {
+  position: var(--input-otp-input-otp-caret-position-value);
+  inset: var(--input-otp-input-otp-caret-inset-value);
+  display: var(--input-otp-input-otp-caret-display-value);
+  align-items: var(--input-otp-input-otp-caret-alignItems-value);
+  justify-content: var(--input-otp-input-otp-caret-justifyContent-value);
+  pointer-events: var(--input-otp-input-otp-caret-pointerEvents-value);
+
+  .input-otp-caret-line {
+    background-color: var(--input-otp-input-otp-caret-backgroundColor-value);
+    width: var(--input-otp-input-otp-caret-width-value);
+    height: var(--input-otp-input-otp-caret-height-value);
+    animation: var(--input-otp-input-otp-caret-animation-name-value) var(--input-otp-input-otp-caret-animation-duration-value) infinite;
+  }
+}
+
+// Caret blink animation
+@keyframes caret-blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
 }

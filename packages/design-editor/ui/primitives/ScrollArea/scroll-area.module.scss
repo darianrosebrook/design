@@ -1,7 +1,58 @@
-// scroll-area primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// ScrollArea primitive component styles
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Scroll-area.tokens.generated.scss' as scrollAreaTokens;
+
+// ScrollArea root container
 .scroll-area {
-  // Placeholder for future SCSS implementation
-  // Will contain scroll-area-specific styles when migrating from Tailwind
+  // Include the generated variables mixin within the component scope
+  @include scrollAreaTokens.vars;
+  position: var(--scroll-area-root-position-value);
+}
+
+// ScrollArea viewport
+.scroll-area-viewport {
+  width: var(--scroll-area-viewport-width-value);
+  height: var(--scroll-area-viewport-height-value);
+  border-radius: var(--scroll-area-viewport-borderRadius-value);
+  transition: var(--scroll-area-viewport-transition-value) var(--scroll-area-viewport-transitionDuration-value) var(--scroll-area-viewport-transitionEasing-value);
+  outline: var(--scroll-area-viewport-outline-value);
+
+  &:focus-visible {
+    box-shadow: var(--scroll-area-viewport-focusVisible-boxShadow-value);
+    outline: var(--scroll-area-viewport-focusVisible-outline-value);
+  }
+}
+
+// ScrollArea scrollbar
+.scroll-area-scrollbar {
+  display: var(--scroll-area-scrollbar-display-value);
+  touch-action: var(--scroll-area-scrollbar-touchAction-value);
+  padding: var(--scroll-area-scrollbar-padding-value);
+  transition: var(--scroll-area-scrollbar-transition-value) var(--scroll-area-scrollbar-transitionDuration-value) var(--scroll-area-scrollbar-transitionEasing-value);
+  user-select: var(--scroll-area-scrollbar-userSelect-value);
+
+  // Vertical scrollbar
+  &[data-orientation="vertical"] {
+    width: var(--scroll-area-scrollbar-vertical-width-value);
+    height: var(--scroll-area-scrollbar-vertical-height-value);
+    border-left: var(--scroll-area-scrollbar-vertical-borderLeft-width-value) var(--scroll-area-scrollbar-vertical-borderLeft-style-value) var(--scroll-area-scrollbar-vertical-borderLeft-color-value);
+  }
+
+  // Horizontal scrollbar
+  &[data-orientation="horizontal"] {
+    width: var(--scroll-area-scrollbar-horizontal-width-value);
+    height: var(--scroll-area-scrollbar-horizontal-height-value);
+    flex-direction: var(--scroll-area-scrollbar-horizontal-flexDirection-value);
+    border-top: var(--scroll-area-scrollbar-horizontal-borderTop-width-value) var(--scroll-area-scrollbar-horizontal-borderTop-style-value) var(--scroll-area-scrollbar-horizontal-borderTop-color-value);
+  }
+}
+
+// ScrollArea thumb
+.scroll-area-thumb {
+  background-color: var(--scroll-area-thumb-backgroundColor-value);
+  position: var(--scroll-area-thumb-position-value);
+  flex: var(--scroll-area-thumb-flex-value);
+  border-radius: var(--scroll-area-thumb-borderRadius-value);
 }
