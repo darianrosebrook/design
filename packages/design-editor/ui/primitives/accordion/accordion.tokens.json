@@ -3,7 +3,7 @@
   "tokens": {
     "item": {
       "borderColor": {
-        "value": "{color.action.border.secondary.default}",
+        "value": "{semantic.color.action.border.secondary.default}",
         "description": "Border color for accordion item separators"
       },
       "borderWidth": {
@@ -31,15 +31,15 @@
         "description": "Border radius for accordion trigger"
       },
       "fontSize": {
-        "value": "{typography.body.02}",
+        "value": "{semantic.typography.body.02}",
         "description": "Font size for accordion trigger text"
       },
       "fontWeight": {
-        "value": "{typography.fontWeight.medium}",
+        "value": "{semantic.typography.button.fontWeight}",
         "description": "Font weight for accordion trigger text"
       },
       "lineHeight": {
-        "value": "{typography.lineHeight.tight}",
+        "value": "{semantic.typography.lineHeight.tight}",
         "description": "Line height for accordion trigger text"
       },
       "icon": {
@@ -60,11 +60,11 @@
       },
       "focus": {
         "borderColor": {
-          "value": "{color.action.border.primary.focus}",
+          "value": "{semantic.color.action.border.primary.focus}",
           "description": "Border color on focus for accordion trigger"
         },
         "ringColor": {
-          "value": "{color.action.border.primary.focus}",
+          "value": "{semantic.color.action.border.primary.focus}",
           "opacity": 0.5,
           "description": "Ring color on focus for accordion trigger"
         },
@@ -76,7 +76,7 @@
     },
     "content": {
       "fontSize": {
-        "value": "{typography.body.02}",
+        "value": "{semantic.typography.body.02}",
         "description": "Font size for accordion content text"
       },
       "padding": {

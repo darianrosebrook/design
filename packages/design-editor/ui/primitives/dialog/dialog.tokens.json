@@ -82,7 +82,7 @@
           "description": "Border style for dialog content"
         },
         "color": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border color for dialog content"
         }
       },
@@ -95,7 +95,7 @@
         "description": "Box shadow for dialog content"
       },
       "backgroundColor": {
-        "value": "{color.mode.white}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Background color for dialog content"
       },
       "animation": {
@@ -167,7 +167,7 @@
       "focus": {
         "ring": {
           "color": {
-            "value": "{color.action.border.primary.focus}",
+            "value": "{semantic.color.action.border.primary.focus}",
             "description": "Focus ring color for dialog close button"
           },
           "width": {
@@ -183,11 +183,11 @@
       "states": {
         "open": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.hover}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color when dialog is open"
           },
           "color": {
-            "value": "{color.palette.neutral.500}",
+            "value": "{semantic.color.navigation.foreground.secondary}",
             "description": "Color when dialog is open"
           }
         }
@@ -259,7 +259,7 @@
     },
     "description": {
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for dialog description"
       },
       "fontSize": {

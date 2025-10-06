@@ -1,30 +1,30 @@
 // FileMetadata compound component styles
-// Migrated from Tailwind to SCSS with design tokens
+// Direct CSS equivalents of original Tailwind classes
 
 .fileMetadata {
-  // Base container styles (equivalent to px-3 py-2 border-b border-border)
-  padding: var(--fileMetadata-padding-vertical) var(--fileMetadata-padding-horizontal);
-  border-bottom: 1px solid var(--fileMetadata-borderColor);
+  // Base container styles - equivalent to px-3 py-2 border-b border-border
+  padding: 8px 12px; // px-3 py-2
+  border-bottom: 1px solid #3f3f46; // zinc-700 (border)
 }
 
 .fileMetadataHeader {
-  // Header styles (equivalent to flex items-center justify-between mb-2)
+  // Header styles - equivalent to flex items-center justify-between mb-2
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--fileMetadata-header-marginBottom);
+  margin-bottom: 8px; // mb-2
 }
 
 .fileMetadataTitle {
-  // Title styles (equivalent to text-sm font-semibold)
-  font-size: var(--fileMetadata-title-fontSize);
-  font-weight: var(--fileMetadata-title-fontWeight);
+  // Title styles - equivalent to text-sm font-semibold
+  font-size: 14px; // text-sm
+  font-weight: 600; // font-semibold
 }
 
 .fileMetadataContent {
-  // Content styles (equivalent to text-xs text-muted-foreground space-y-1)
-  font-size: var(--fileMetadata-content-fontSize);
-  color: var(--fileMetadata-content-color);
+  // Content styles - equivalent to text-xs text-muted-foreground space-y-1
+  font-size: 12px; // text-xs
+  color: #a1a1aa; // zinc-400 (muted-foreground)
 }
 
 .fileMetadataContent > * + * {
@@ -32,17 +32,17 @@
 }
 
 .fileMetadataRow {
-  // Row styles (equivalent to flex items-center gap-2)
+  // Row styles - equivalent to flex items-center gap-2
   display: flex;
   align-items: center;
-  gap: var(--fileMetadata-row-gap);
+  gap: 8px; // gap-2
 }
 
 .fileMetadataStats {
-  // Stats row styles (equivalent to flex items-center gap-4)
+  // Stats row styles - equivalent to flex items-center gap-4
   display: flex;
   align-items: center;
-  gap: var(--fileMetadata-stats-gap);
+  gap: 16px; // gap-4
 }
 
 .icon {

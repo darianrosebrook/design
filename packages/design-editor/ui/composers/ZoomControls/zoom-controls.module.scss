@@ -1,54 +1,54 @@
 // ZoomControls composer component styles
-// Migrated from Tailwind to SCSS with design tokens
+// Direct CSS equivalents of original Tailwind classes
 
 .zoomControls {
-  // Base container styles
+  // Base container styles - equivalent to flex items-center gap-1 bg-background border border-border rounded-md px-1
   display: flex;
   align-items: center;
-  gap: var(--zoomControls-spacing-gap);
-  background-color: var(--zoomControls-backgroundColor);
-  border: 1px solid var(--zoomControls-borderColor);
-  border-radius: var(--zoomControls-borderRadius);
-  padding: var(--zoomControls-spacing-container);
+  gap: 4px;
+  background-color: #27272a; // zinc-800 (background)
+  border: 1px solid #3f3f46; // zinc-700 (border)
+  border-radius: 6px; // rounded-md
+  padding: 4px; // px-1
 }
 
 .zoomControlsButton {
-  // Button styles
-  height: var(--zoomControls-layout-button-size);
-  width: var(--zoomControls-layout-button-size);
-  padding: var(--semantic-spacing-padding-none);
+  // Button styles - equivalent to h-8 w-8 p-0
+  height: 32px;
+  width: 32px;
+  padding: 0;
 }
 
 .zoomControlsIcon {
-  // Icon styles
-  width: var(--zoomControls-layout-icon-size);
-  height: var(--zoomControls-layout-icon-size);
+  // Icon styles - equivalent to h-4 w-4
+  width: 16px;
+  height: 16px;
 }
 
 .zoomControlsDisplay {
-  // Zoom percentage display styles
-  padding: 0 var(--zoomControls-layout-display-padding-horizontal);
-  font-size: var(--zoomControls-typography-display-fontSize);
-  font-weight: var(--zoomControls-typography-display-fontWeight);
-  min-width: var(--zoomControls-layout-display-minWidth);
-  text-align: var(--zoomControls-typography-display-textAlign);
+  // Zoom percentage display styles - equivalent to px-2 text-xs font-medium min-w-12 text-center
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 48px; // 3rem
+  text-align: center;
 }
 
 .zoomControlsSeparator {
-  // Separator styles
-  width: var(--zoomControls-layout-separator-width);
-  height: var(--zoomControls-layout-separator-height);
-  background-color: var(--zoomControls-borderColor);
-  margin: 0 var(--zoomControls-spacing-separator-margin);
+  // Separator styles - equivalent to w-px h-6 bg-border mx-1
+  width: 1px;
+  height: 24px;
+  background-color: #3f3f46; // zinc-700 (border)
+  margin: 0 4px; // mx-1
 }
 
 .zoomControlsSelectionIcon {
-  // Selection icon styles
-  width: var(--zoomControls-layout-selectionIcon-size);
-  height: var(--zoomControls-layout-selectionIcon-size);
+  // Selection icon styles - equivalent to h-4 w-4 flex items-center justify-center text-xs font-semibold
+  width: 16px;
+  height: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--zoomControls-typography-selectionIcon-fontSize);
-  font-weight: var(--zoomControls-typography-selectionIcon-fontWeight);
+  font-size: 12px;
+  font-weight: 600;
 }

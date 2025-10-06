@@ -3,7 +3,7 @@
   "tokens": {
     "calendar": {
       "backgroundColor": {
-        "value": "{color.mode.light}",
+        "value": "{semantic.color.action.background.secondary.default}",
         "description": "Background color for calendar container"
       },
       "padding": {
@@ -188,7 +188,7 @@
           "description": "Border style for dropdown root"
         },
         "color": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border color for dropdown root"
         }
       },
@@ -202,11 +202,11 @@
       },
       "focus": {
         "borderColor": {
-          "value": "{color.palette.blue.500}",
+          "value": "{semantic.color.feedback.foreground.info.default}",
           "description": "Border color on focus"
         },
         "ringColor": {
-          "value": "{color.palette.blue.500}",
+          "value": "{semantic.color.feedback.foreground.info.default}",
           "opacity": 0.5,
           "description": "Ring color on focus"
         },
@@ -226,7 +226,7 @@
         "description": "Inset for dropdown"
       },
       "backgroundColor": {
-        "value": "{color.palette.neutral.0}",
+        "value": "{semantic.color.action.background.secondary.default}",
         "description": "Background color for dropdown"
       },
       "opacity": {
@@ -280,7 +280,7 @@
         },
         "icon": {
           "color": {
-            "value": "{color.palette.neutral.500}",
+            "value": "{semantic.color.navigation.foreground.secondary}",
             "description": "Icon color for button-style caption label"
           },
           "size": {
@@ -308,7 +308,7 @@
     },
     "weekday": {
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for weekday"
       },
       "borderRadius": {
@@ -386,7 +386,7 @@
         "description": "User select for week number"
       },
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for week number"
       }
     },
@@ -421,11 +421,11 @@
       },
       "focused": {
         "borderColor": {
-          "value": "{color.palette.blue.500}",
+          "value": "{semantic.color.feedback.foreground.info.default}",
           "description": "Border color when focused"
         },
         "ringColor": {
-          "value": "{color.palette.blue.500}",
+          "value": "{semantic.color.feedback.foreground.info.default}",
           "opacity": 0.5,
           "description": "Ring color when focused"
         },
@@ -448,7 +448,7 @@
           "description": "Border radius for range start"
         },
         "backgroundColor": {
-          "value": "{color.palette.neutral.100}",
+          "value": "{semantic.color.action.background.secondary.hover}",
           "description": "Background color for range start"
         }
       },
@@ -464,17 +464,17 @@
           "description": "Border radius for range end"
         },
         "backgroundColor": {
-          "value": "{color.palette.neutral.100}",
+          "value": "{semantic.color.action.background.secondary.hover}",
           "description": "Background color for range end"
         }
       },
       "today": {
         "backgroundColor": {
-          "value": "{color.palette.neutral.100}",
+          "value": "{semantic.color.action.background.secondary.hover}",
           "description": "Background color for today"
         },
         "color": {
-          "value": "{color.palette.neutral.900}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Color for today"
         },
         "borderRadius": {
@@ -490,19 +490,19 @@
       },
       "outside": {
         "color": {
-          "value": "{color.palette.neutral.500}",
+          "value": "{semantic.color.navigation.foreground.secondary}",
           "description": "Color for outside days"
         },
         "selected": {
           "color": {
-            "value": "{color.palette.neutral.500}",
+            "value": "{semantic.color.navigation.foreground.secondary}",
             "description": "Color for selected outside days"
           }
         }
       },
       "disabled": {
         "color": {
-          "value": "{color.palette.neutral.500}",
+          "value": "{semantic.color.navigation.foreground.secondary}",
           "description": "Color for disabled days"
         },
         "opacity": {
@@ -563,22 +563,22 @@
       "selected": {
         "single": {
           "backgroundColor": {
-            "value": "{color.palette.blue.600}",
+            "value": "{semantic.color.feedback.background.info.strong}",
             "description": "Background color for single selected day"
           },
           "color": {
-            "value": "{color.palette.white}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Color for single selected day"
           }
         },
         "range": {
           "start": {
             "backgroundColor": {
-              "value": "{color.palette.blue.600}",
+              "value": "{semantic.color.feedback.background.info.strong}",
               "description": "Background color for range start"
             },
             "color": {
-              "value": "{color.palette.white}",
+              "value": "{semantic.color.action.foreground.primary.default}",
               "description": "Color for range start"
             },
             "borderRadius": {
@@ -588,11 +588,11 @@
           },
           "end": {
             "backgroundColor": {
-              "value": "{color.palette.blue.600}",
+              "value": "{semantic.color.feedback.background.info.strong}",
               "description": "Background color for range end"
             },
             "color": {
-              "value": "{color.palette.white}",
+              "value": "{semantic.color.action.foreground.primary.default}",
               "description": "Color for range end"
             },
             "borderRadius": {
@@ -602,11 +602,11 @@
           },
           "middle": {
             "backgroundColor": {
-              "value": "{color.palette.neutral.100}",
+              "value": "{semantic.color.action.background.secondary.hover}",
               "description": "Background color for range middle"
             },
             "color": {
-              "value": "{color.palette.neutral.900}",
+              "value": "{semantic.color.action.foreground.primary.default}",
               "description": "Color for range middle"
             },
             "borderRadius": {

@@ -157,7 +157,7 @@
           }
         },
         "backgroundColor": {
-          "value": "{color.palette.neutral.0}",
+          "value": "{semantic.color.action.background.secondary.default}",
           "description": "Background color for slider thumb"
         },
         "boxShadow": {

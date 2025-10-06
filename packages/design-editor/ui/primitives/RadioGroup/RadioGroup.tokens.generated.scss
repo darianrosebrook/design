@@ -9,15 +9,15 @@
   /* === Item Tokens === */
   --radioGroup-item-border-width: 1px;
   --radioGroup-item-border-style: solid;
-  --radioGroup-item-border-color-default: var(--color-palette-neutral-200);
+  --radioGroup-item-border-color-default: var(--semantic-color-action-background-secondary-active);
   --radioGroup-item-size: 16px;
   --radioGroup-item-borderRadius: 9999px;
   --radioGroup-item-boxShadow: var(--elevation-level-1);
   --radioGroup-item-transition-duration: 150ms;
   --radioGroup-item-transition-easing: ease-in-out;
   --radioGroup-item-backgroundColor-default: transparent;
-  --radioGroup-item-backgroundColor-dark: var(--color-palette-neutral-200);
-  --radioGroup-item-color: var(--color-action-background-primary-default);
+  --radioGroup-item-backgroundColor-dark: var(--semantic-color-action-background-secondary-active);
+  --radioGroup-item-color: var(--semantic-color-action-background-primary-default);
   --radioGroup-item-states-disabled-opacity: 0.5;
 
   /* === Indicator Tokens === */
@@ -25,7 +25,7 @@
   --radioGroup-indicator-display: flex;
   --radioGroup-indicator-alignItems: center;
   --radioGroup-indicator-justifyContent: center;
-  --radioGroup-indicator-icon-fill: var(--color-action-background-primary-default);
+  --radioGroup-indicator-icon-fill: var(--semantic-color-action-background-primary-default);
   --radioGroup-indicator-icon-position: absolute;
   --radioGroup-indicator-icon-top: 50%;
   --radioGroup-indicator-icon-left: 50%;

@@ -20,9 +20,17 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}
+        className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased min-h-screen m-0 p-0`}
       >
-        <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        <Suspense
+          fallback={
+            <div className="flex items-center justify-center min-h-screen text-lg text-muted-foreground">
+              Loading...
+            </div>
+          }
+        >
+          {children}
+        </Suspense>
         <Analytics debug={false} />
       </body>
     </html>

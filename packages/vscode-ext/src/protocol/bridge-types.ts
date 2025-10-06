@@ -350,7 +350,7 @@ export function createBridgeMessage<TType extends OutgoingMessageType["type"]>(
   type: TType,
   payload: Omit<
     Extract<OutgoingMessageType, { type: TType }>,
-    "id" | "version" | "timestamp"
+    "id" | "version" | "timestamp" | "type"
   >
 ): OutgoingMessageType {
   return {
@@ -475,7 +475,7 @@ export const CanvasSurfaceProps = z.object({
           x: z.number(),
           y: z.number(),
         })
-        .and(z.partial(SceneNode))
+        .and(SceneNode.partial())
     )
     .returns(z.void()),
 });

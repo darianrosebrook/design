@@ -5,8 +5,8 @@
   /* === Progress Tokens === */
   --progress-Progress-height: 8px;
   --progress-Progress-borderRadius: 9999px;
-  --progress-Progress-backgroundColor: var(--color-action-background-primary-default);
-  --progress-Progress-indicator-backgroundColor: var(--color-action-background-primary-default);
+  --progress-Progress-backgroundColor: var(--semantic-color-action-background-primary-default);
+  --progress-Progress-indicator-backgroundColor: var(--semantic-color-action-background-primary-default);
   --progress-Progress-indicator-transition-duration: 150ms;
   --progress-Progress-indicator-transition-easing: var(--motion-interaction-hover-easing);
 }

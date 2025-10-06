@@ -5,10 +5,12 @@
 @use './Chart.tokens.generated.scss' as chartTokens;
 
 // Include the generated variables mixin
-@include chartTokens.vars;
 
 // Chart container
 .chart {
+  // Include the generated variables mixin within the component scope
+  @include chartTokens.vars;
+
   display: var(--chart-container-display);
   aspect-ratio: var(--chart-container-aspectRatio);
   justify-content: var(--chart-container-justifyContent);

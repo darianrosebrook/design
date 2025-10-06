@@ -70,11 +70,11 @@
       },
       "focusVisible": {
         "borderColor": {
-          "value": "{color.palette.blue.500}",
+          "value": "{semantic.color.feedback.foreground.info.default}",
           "description": "Border color on focus for item"
         },
         "ringColor": {
-          "value": "{color.palette.blue.500}",
+          "value": "{semantic.color.feedback.foreground.info.default}",
           "opacity": 0.5,
           "description": "Ring color on focus for item"
         },
@@ -92,13 +92,13 @@
         },
         "outline": {
           "borderColor": {
-            "value": "{color.palette.neutral.200}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Border color for outline variant"
           }
         },
         "muted": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "opacity": 0.5,
             "description": "Background color for muted variant"
           }
@@ -141,7 +141,7 @@
       "link": {
         "hover": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "opacity": 0.5,
             "description": "Background color on hover for links"
           }
@@ -201,7 +201,7 @@
               "description": "Border style for icon media variant"
             },
             "color": {
-              "value": "{color.palette.neutral.200}",
+              "value": "{semantic.color.action.background.secondary.active}",
               "description": "Border color for icon media variant"
             }
           },
@@ -210,7 +210,7 @@
             "description": "Border radius for icon media variant"
           },
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color for icon media variant"
           },
           "icon": {
@@ -308,7 +308,7 @@
     },
     "description": {
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for description"
       },
       "lineClamp": {
@@ -334,7 +334,7 @@
       "link": {
         "hover": {
           "color": {
-            "value": "{color.palette.blue.600}",
+            "value": "{semantic.color.feedback.background.info.strong}",
             "description": "Color for links on hover"
           }
         },

@@ -21,7 +21,7 @@
     },
     "handle": {
       "backgroundColor": {
-        "value": "{semantic.color.display.border.subtle}",
+        "value": "{core.color.display.border.subtle}",
         "description": "Background color for resize handle"
       },
       "focus": {
@@ -85,7 +85,7 @@
     },
     "handleGrip": {
       "backgroundColor": {
-        "value": "{semantic.color.display.border.subtle}",
+        "value": "{core.color.display.border.subtle}",
         "description": "Background color for handle grip"
       },
       "borderRadius": {

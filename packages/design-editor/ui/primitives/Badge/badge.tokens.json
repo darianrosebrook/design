@@ -30,7 +30,7 @@
       "description": "Font size for badge text"
     },
     "fontWeight": {
-      "value": "{typography.fontWeight.medium}",
+      "value": "{semantic.typography.button.fontWeight}",
       "description": "Font weight for badge text"
     },
     "gap": {
@@ -66,16 +66,16 @@
           "description": "Border color for default badge variant"
         },
         "backgroundColor": {
-          "value": "{color.action.background.primary.default}",
+          "value": "{semantic.color.action.background.primary.default}",
           "description": "Background color for default badge variant"
         },
         "color": {
-          "value": "{color.action.foreground.primary.default}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Text color for default badge variant"
         },
         "hover": {
           "backgroundColor": {
-            "value": "{color.action.background.primary.default}",
+            "value": "{semantic.color.action.background.primary.default}",
             "opacity": 0.9,
             "description": "Hover background color for default badge variant"
           }
@@ -87,16 +87,16 @@
           "description": "Border color for secondary badge variant"
         },
         "backgroundColor": {
-          "value": "{color.action.background.secondary.default}",
+          "value": "{semantic.color.action.background.secondary.default}",
           "description": "Background color for secondary badge variant"
         },
         "color": {
-          "value": "{color.action.foreground.secondary.default}",
+          "value": "{semantic.color.action.foreground.secondary.default}",
           "description": "Text color for secondary badge variant"
         },
         "hover": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.default}",
+            "value": "{semantic.color.action.background.secondary.default}",
             "opacity": 0.7,
             "description": "Hover background color for secondary badge variant"
           }
@@ -108,23 +108,23 @@
           "description": "Border color for destructive badge variant"
         },
         "backgroundColor": {
-          "value": "{color.action.background.danger.default}",
+          "value": "{semantic.color.action.background.danger.default}",
           "description": "Background color for destructive badge variant"
         },
         "color": {
-          "value": "{color.action.foreground.danger.default}",
+          "value": "{semantic.color.action.foreground.danger.default}",
           "description": "Text color for destructive badge variant"
         },
         "hover": {
           "backgroundColor": {
-            "value": "{color.action.background.danger.default}",
+            "value": "{semantic.color.action.background.danger.default}",
             "opacity": 0.9,
             "description": "Hover background color for destructive badge variant"
           }
         },
         "dark": {
           "backgroundColor": {
-            "value": "{color.action.background.danger.default}",
+            "value": "{semantic.color.action.background.danger.default}",
             "opacity": 0.6,
             "description": "Dark mode background color for destructive badge variant"
           }
@@ -132,12 +132,12 @@
       },
       "outline": {
         "color": {
-          "value": "{color.mode.dark}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Text color for outline badge variant"
         },
         "hover": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Hover background color for outline badge variant"
           }
         }

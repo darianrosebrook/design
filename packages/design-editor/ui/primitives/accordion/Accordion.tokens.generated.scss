@@ -3,7 +3,7 @@
  */
 @mixin vars {
   /* === Item Tokens === */
-  --accordion-item-borderColor: var(--color-action-border-secondary-default);
+  --accordion-item-borderColor: var(--semantic-color-action-border-secondary-default);
   --accordion-item-borderWidth: 1px;
 
   /* === Trigger Tokens === */
@@ -11,18 +11,18 @@
   --accordion-trigger-padding-vertical: var(--components-action-padding-vertical-default);
   --accordion-trigger-padding-horizontal: var(--spacing-padding-card);
   --accordion-trigger-borderRadius: var(--shape-control-radius-default);
-  --accordion-trigger-fontSize: var(--typography-body-02);
-  --accordion-trigger-fontWeight: var(--typography-font-weight-medium);
-  --accordion-trigger-lineHeight: var(--typography-line-height-tight);
+  --accordion-trigger-fontSize: var(--semantic-typography-body-02);
+  --accordion-trigger-fontWeight: var(--semantic-typography-button-font-weight);
+  --accordion-trigger-lineHeight: var(--semantic-typography-line-height-tight);
   --accordion-trigger-icon-color: var(--color-display-foreground-tertiary);
   --accordion-trigger-icon-size: var(--components-action-gap-icon);
   --accordion-trigger-icon-transform-translateY: 2px;
-  --accordion-trigger-focus-borderColor: var(--color-action-border-primary-focus);
-  --accordion-trigger-focus-ringColor: var(--color-action-border-primary-focus);
+  --accordion-trigger-focus-borderColor: var(--semantic-color-action-border-primary-focus);
+  --accordion-trigger-focus-ringColor: var(--semantic-color-action-border-primary-focus);
   --accordion-trigger-focus-ringWidth: 3px;
 
   /* === Content Tokens === */
-  --accordion-content-fontSize: var(--typography-body-02);
+  --accordion-content-fontSize: var(--semantic-typography-body-02);
   --accordion-content-padding-top: 0px;
   --accordion-content-padding-bottom: var(--components-action-padding-vertical-default);
   --accordion-content-animation-enter-duration: var(--motion-interaction-enter-duration);

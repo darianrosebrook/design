@@ -20,4 +20,10 @@
   --collapsiblePanel-interactive-toggle-backgroundColor: var(--semantic-color-display-background-primary);
   --collapsiblePanel-interactive-toggle-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
   --collapsiblePanel-interactive-shadow: var(--semantic-elevation-surface-raised);
+
+
+  /* === General Tokens === */
+  --collapsiblePanel-backgroundColor: var(--semantic-color-display-background-primary);
+  --collapsiblePanel-borderColor: var(--semantic-color-display-border-subtle);
+  --collapsiblePanel-borderRadius: var(--semantic-shape-radius-extra-large);
 }

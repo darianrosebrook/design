@@ -45,11 +45,11 @@
         "legend": {
           "fontSize": {
             "legend": {
-              "value": "{semantic.typography.fontSize.base}",
+              "value": "{core.typography.ramp.4}",
               "description": "Font size for legend variant"
             },
             "label": {
-              "value": "{semantic.typography.fontSize.sm}",
+              "value": "{core.typography.ramp.2}",
               "description": "Font size for label variant"
             }
           },
@@ -64,7 +64,7 @@
         },
         "title": {
           "fontSize": {
-            "value": "{semantic.typography.fontSize.sm}",
+            "value": "{core.typography.ramp.2}",
             "description": "Font size for field titles"
           },
           "fontWeight": {
@@ -78,7 +78,7 @@
         },
         "description": {
           "fontSize": {
-            "value": "{semantic.typography.fontSize.sm}",
+            "value": "{core.typography.ramp.2}",
             "description": "Font size for field descriptions"
           },
           "fontWeight": {
@@ -96,7 +96,7 @@
         },
         "error": {
           "fontSize": {
-            "value": "{semantic.typography.fontSize.sm}",
+            "value": "{core.typography.ramp.2}",
             "description": "Font size for field errors"
           },
           "fontWeight": {

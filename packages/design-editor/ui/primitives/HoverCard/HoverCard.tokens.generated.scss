@@ -20,4 +20,13 @@
   --hoverCard-animation-easing: var(--semantic-animation-easing-default);
   --hoverCard-animation-zoom-scale: 0.95;
   --hoverCard-animation-slide-distance: var(--semantic-spacing-gap-grid-xsmall);
+
+
+  /* === General Tokens === */
+  --hoverCard-backgroundColor: var(--core-color-display-background-primary);
+  --hoverCard-foregroundColor: var(--core-color-display-foreground-primary);
+  --hoverCard-borderColor: var(--core-color-display-border-subtle);
+  --hoverCard-borderWidth: var(--semantic-shape-border-width-default);
+  --hoverCard-borderRadius: var(--semantic-shape-control-radius-default);
+  --hoverCard-shadow: var(--semantic-effect-shadow-medium);
 }

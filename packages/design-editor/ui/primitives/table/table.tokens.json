@@ -41,7 +41,7 @@
             "description": "Border bottom style for header rows"
           },
           "color": {
-            "value": "{color.palette.neutral.200}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Border bottom color for header rows"
           }
         }
@@ -59,7 +59,7 @@
     },
     "footer": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.100}",
+        "value": "{semantic.color.action.background.secondary.hover}",
         "opacity": 0.5,
         "description": "Background color for table footer"
       },
@@ -73,7 +73,7 @@
           "description": "Border top style for footer"
         },
         "color": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border top color for footer"
         }
       },
@@ -101,7 +101,7 @@
           "description": "Border bottom style for table rows"
         },
         "color": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border bottom color for table rows"
         }
       },
@@ -122,14 +122,14 @@
       "states": {
         "hover": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "opacity": 0.5,
             "description": "Background color on hover for table rows"
           }
         },
         "selected": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color when selected for table rows"
           }
         }
@@ -137,7 +137,7 @@
     },
     "head": {
       "color": {
-        "value": "{color.mode.dark}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Color for table head cells"
       },
       "height": {
@@ -205,7 +205,7 @@
     },
     "caption": {
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for table caption"
       },
       "marginTop": {

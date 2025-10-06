@@ -7,6 +7,8 @@
 .radiogroup {
   // Include the generated variables mixin within the component scope
   @include radioGroupTokens.vars;
+
+  // Include the generated variables mixin within the component scope
   // Base radio group styles (equivalent to grid gap-3)
   display: var(--radioGroup-container-display);
   gap: var(--radioGroup-container-gap); // equivalent to gap-3

@@ -30,4 +30,9 @@
   /* === Animation Tokens === */
   --componentRenderer-animation-transition-duration: 150ms;
   --componentRenderer-animation-transition-easing: ease-in-out;
+
+
+  /* === General Tokens === */
+  --componentRenderer-backgroundColor: var(--semantic-color-display-background-primary);
+  --componentRenderer-borderColor: var(--semantic-color-display-border-subtle);
 }

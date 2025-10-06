@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useCanvas , findObject } from "@/lib/canvas-context";
+import { useCanvas, findObject } from "@/lib/canvas-context";
 import { FileDetailsPanel } from "@/ui/assemblies/FileDetailsPanel";
 import { PropertiesPanel } from "@/ui/assemblies/PropertiesPanel";
 import { PropertiesPanelCollapsed } from "@/ui/assemblies/PropertiesPanelCollapsed";
@@ -48,7 +48,7 @@ export function PanelContainer({ onOpenDesignSystem }: PanelContainerProps) {
   return (
     <>
       {/* Left Panel - Layers */}
-      <div className="absolute left-4 top-16 bottom-4 z-10">
+      <div className="absolute left-4 top-16 bottom-0">
         <CollapsiblePanel
           side="left"
           defaultCollapsed={leftPanelCollapsed}
@@ -67,7 +67,7 @@ export function PanelContainer({ onOpenDesignSystem }: PanelContainerProps) {
       </div>
 
       {/* Right Panel - Properties */}
-      <div className="absolute right-4 top-16 bottom-4 z-10">
+      <div className="absolute right-4 top-16 bottom-0">
         <CollapsiblePanel
           side="right"
           defaultCollapsed={rightPanelCollapsed}

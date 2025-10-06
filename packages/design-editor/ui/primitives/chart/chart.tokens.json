@@ -28,7 +28,7 @@
         "tick": {
           "text": {
             "fill": {
-              "value": "{color.palette.neutral.500}",
+              "value": "{semantic.color.navigation.foreground.secondary}",
               "description": "Fill color for axis tick text"
             }
           }
@@ -37,7 +37,7 @@
       "grid": {
         "line": {
           "stroke": {
-            "value": "{color.palette.neutral.200}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "opacity": 0.5,
             "description": "Stroke color for grid lines"
           }
@@ -46,21 +46,21 @@
       "tooltip": {
         "cursor": {
           "stroke": {
-            "value": "{color.palette.neutral.200}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Stroke color for tooltip cursor"
           }
         }
       },
       "polarGrid": {
         "stroke": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Stroke color for polar grid"
         }
       },
       "radialBar": {
         "backgroundSector": {
           "fill": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Fill color for radial bar background sector"
           }
         }
@@ -68,14 +68,14 @@
       "rectangle": {
         "tooltipCursor": {
           "fill": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Fill color for rectangle tooltip cursor"
           }
         }
       },
       "referenceLine": {
         "stroke": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Stroke color for reference lines"
         }
       },
@@ -110,7 +110,7 @@
       "curve": {
         "tooltipCursor": {
           "stroke": {
-            "value": "{color.palette.neutral.200}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Stroke color for curve tooltip cursor"
           }
         }
@@ -147,7 +147,7 @@
           },
           "color": {
             "muted": {
-              "value": "{color.palette.neutral.500}",
+              "value": "{semantic.color.navigation.foreground.secondary}",
               "description": "Muted color for tooltip indicators"
             }
           },
@@ -198,7 +198,7 @@
         },
         "value": {
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Color for tooltip values"
           },
           "fontFamily": {
@@ -237,14 +237,14 @@
           },
           "indicator": {
             "color": {
-              "value": "{color.palette.neutral.500}",
+              "value": "{semantic.color.navigation.foreground.secondary}",
               "description": "Color for tooltip item indicators"
             }
           }
         },
         "text": {
           "color": {
-            "value": "{color.palette.neutral.500}",
+            "value": "{semantic.color.navigation.foreground.secondary}",
             "description": "Color for tooltip item text"
           }
         },
@@ -316,7 +316,7 @@
         },
         "icon": {
           "color": {
-            "value": "{color.palette.neutral.500}",
+            "value": "{semantic.color.navigation.foreground.secondary}",
             "description": "Color for legend item icons"
           },
           "size": {

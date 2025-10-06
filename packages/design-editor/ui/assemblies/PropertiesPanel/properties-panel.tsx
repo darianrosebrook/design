@@ -6,13 +6,15 @@ import { LayoutSection } from "./components/LayoutSection";
 import { PositionSection } from "./components/PositionSection";
 import { PropertiesPanelHeader } from "./components/PropertiesPanelHeader";
 import { PropertiesPanelSection } from "./components/PropertiesPanelSection";
-import styles from "./properties-panel.module.scss";
+import { ComponentPropsPanel } from "./components/ComponentPropsPanel";
+import { PrimitivePropsPanel } from "./components/PrimitivePropsPanel";
 import { useCanvas, findObject } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
-import { cn } from "@/lib/utils";
 import { CanvasBackgroundControls } from "@/ui/composers/CanvasBackgroundControls";
+import { AlignmentGrid } from "@/ui/composers/AlignmentGrid";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
-// Component props panel temporarily removed
+import { Button } from "@/ui/primitives/Button";
+import { Plus } from "lucide-react";
 
 interface PropertySection {
   id: string;
@@ -25,13 +27,13 @@ export function PropertiesPanel() {
   const [sections, setSections] = useState<PropertySection[]>([
     { id: "layout", title: "Layout", expanded: true },
     { id: "position", title: "Position", expanded: true },
+    { id: "alignment", title: "Alignment", expanded: true },
     { id: "appearance", title: "Appearance", expanded: true },
     { id: "typography", title: "Typography", expanded: false },
     { id: "effects", title: "Effects", expanded: false },
   ]);
 
   const [aspectLocked, setAspectLocked] = useState(true);
-  const [cornerLocked, setCornerLocked] = useState(true);
 
   // Find selected object
   const selectedObject = selectedId ? findObject(objects, selectedId) : null;
@@ -46,17 +48,16 @@ export function PropertiesPanel() {
     );
   };
 
+
   if (!selectedObject) {
     return (
-      <div className="/* flex */ /* flex-col */ /* h-full */">
-        <div className="/* flex */ /* items-center */ /* justify-between */ /* px-3 */ /* py-2 */ /* border-b */ /* border-border */">
-          <h2 className="/* text-sm */ /* font-semibold */">Properties</h2>
-          <span className="/* text-xs */ /* text-muted-foreground */">
-            Canvas
-          </span>
+      <div className="h-full flex flex-col">
+        <div className="p-4 border-b border-border">
+          <h2 className="text-lg font-semibold">Properties</h2>
+          <span className="text-sm text-muted-foreground">Canvas</span>
         </div>
-        <ScrollArea className="/* flex-1 */">
-          <div className="/* p-3 */">
+        <ScrollArea className="flex-1">
+          <div className="p-4">
             <CanvasBackgroundControls />
           </div>
         </ScrollArea>
@@ -65,356 +66,124 @@ export function PropertiesPanel() {
   }
 
   return (
-    <div className={cn(styles.propertiespanel, cn(styles.propertiesPanel))}>
+    <div className="h-full flex flex-col">
       <PropertiesPanelHeader selectedObjectType={selectedObject.type} />
-      <ScrollArea
-        className={cn(styles.propertiespanel, styles.propertiesPanelScrollArea)}
-      >
-        <div
-          className={cn(styles.propertiespanel, styles.propertiesPanelContent)}
-        >
-          {/* Component Props Panel - Temporarily disabled */}
+      <ScrollArea className="flex-1">
+        <div className="p-4 space-y-4">
+          {/* Component Props Panel */}
           {selectedObject.type === "component" && (
-            <div className="/* p-3 */ /* text-sm */ /* text-muted-foreground */">
-              Component properties panel temporarily disabled
-            </div>
+            <PropertiesPanelSection
+              id="component-props"
+              title="Component Properties"
+              expanded={true}
+              onToggle={toggleSection}
+            >
+              <ComponentPropsPanel
+                object={selectedObject}
+                onUpdateProps={(props) =>
+                  updateObject(selectedObject.id, {
+                    componentProps: {
+                      ...selectedObject.componentProps,
+                      ...props,
+                    },
+                  })
+                }
+              />
+            </PropertiesPanelSection>
           )}
 
           {/* Position Section */}
-          {renderSection(
-            sections.find((s) => s.id === "position")!,
-            0,
-            <div className="space-y-2">
-              <div className="/* grid */ /* grid-cols-2 */ /* gap-2 */">
-                <div>
-                  <Label className="/* text-xs */ /* text-muted-foreground */">
-                    X
-                  </Label>
-                  <Input
-                    type="number"
-                    value={selectedObject.x}
-                    onChange={(e) =>
-                      updateObject(selectedObject.id, {
-                        x: Number(e.target.value),
-                      })
-                    }
-                    className="/* h-8 */ /* text-sm */"
-                  />
-                </div>
-                <div>
-                  <Label className="/* text-xs */ /* text-muted-foreground */">
-                    Y
-                  </Label>
-                  <Input
-                    type="number"
-                    value={selectedObject.y}
-                    onChange={(e) =>
-                      updateObject(selectedObject.id, {
-                        y: Number(e.target.value),
-                      })
-                    }
-                    className="/* h-8 */ /* text-sm */"
-                  />
-                </div>
-              </div>
-              <div className="/* grid */ /* grid-cols-[1fr_auto_1fr] */ /* gap-2 */ /* items-end */">
-                <div>
-                  <Label className="/* text-xs */ /* text-muted-foreground */">
-                    W
-                  </Label>
-                  <Input
-                    type="number"
-                    value={selectedObject.width}
-                    onChange={(e) =>
-                      updateObject(selectedObject.id, {
-                        width: Number(e.target.value),
-                      })
-                    }
-                    className="/* h-8 */ /* text-sm */"
-                  />
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="// h-8 w-8 mb-0"
-                  onClick={() => setAspectLocked(!aspectLocked)}
-                >
-                  {aspectLocked ? (
-                    <Link2 className="// h-3.5 w-3.5" />
-                  ) : (
-                    <Unlink className="// h-3.5 w-3.5" />
-                  )}
-                </Button>
-                <div>
-                  <Label className="/* text-xs */ /* text-muted-foreground */">
-                    H
-                  </Label>
-                  <Input
-                    type="number"
-                    value={selectedObject.height}
-                    onChange={(e) =>
-                      updateObject(selectedObject.id, {
-                        height: Number(e.target.value),
-                      })
-                    }
-                    className="/* h-8 */ /* text-sm */"
-                  />
-                </div>
-              </div>
-              <div className="space-y-1">
-                <Label className="/* text-xs */ /* text-muted-foreground */">
-                  Rotation
-                </Label>
-                <Input
-                  type="number"
-                  value={selectedObject.rotation}
-                  onChange={(e) =>
-                    updateObject(selectedObject.id, {
-                      rotation: Number(e.target.value),
-                    })
-                  }
-                  className="/* h-8 */ /* text-sm */"
-                />
-              </div>
-            </div>
-          )}
+          <PropertiesPanelSection
+            id="position"
+            title="Position"
+            expanded={sections.find((s) => s.id === "position")!.expanded}
+            onToggle={toggleSection}
+          >
+            <PositionSection
+              x={selectedObject.x}
+              y={selectedObject.y}
+              onXChange={(value) => updateObject(selectedObject.id, { x: value })}
+              onYChange={(value) => updateObject(selectedObject.id, { y: value })}
+            />
+          </PropertiesPanelSection>
 
           {/* Layout Section */}
-          {renderSection(
-            sections.find((s) => s.id === "layout")!,
-            1,
-            <div className="space-y-2">
-              <div className="space-y-1">
-                <Label className="/* text-xs */ /* text-muted-foreground */">
-                  Auto Layout
-                </Label>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="/* w-full */ /* h-8 */ /* text-xs */"
-                  onClick={() => {
-                    // TODO: Implement auto layout toggle
-                    console.log("Auto layout toggle not implemented");
-                  }}
-                >
-                  Enable Auto Layout
-                </Button>
-              </div>
-            </div>
-          )}
+          <PropertiesPanelSection
+            id="layout"
+            title="Layout"
+            expanded={sections.find((s) => s.id === "layout")!.expanded}
+            onToggle={toggleSection}
+          >
+            <LayoutSection
+              width={selectedObject.width}
+              height={selectedObject.height}
+              aspectLocked={aspectLocked}
+              onWidthChange={(value) => updateObject(selectedObject.id, { width: value })}
+              onHeightChange={(value) => updateObject(selectedObject.id, { height: value })}
+              onAspectLockToggle={() => setAspectLocked(!aspectLocked)}
+            />
+          </PropertiesPanelSection>
 
-          {/* Appearance Section */}
-          {renderSection(
-            sections.find((s) => s.id === "appearance")!,
-            2,
-            <div className="space-y-3">
-              <div className="space-y-2">
-                <Label className="/* text-xs */ /* text-muted-foreground */">
-                  Opacity
-                </Label>
-                <div className="/* flex */ /* items-center */ /* gap-2 */">
-                  <Slider
-                    value={[selectedObject.opacity]}
-                    onValueChange={([value]) =>
-                      updateObject(selectedObject.id, { opacity: value })
-                    }
-                    max={100}
-                    step={1}
-                    className="/* flex-1 */"
-                  />
-                  <span className="/* text-xs */ /* text-muted-foreground */ /* w-10 */ /* text-right */">
-                    {selectedObject.opacity}%
-                  </span>
-                </div>
-              </div>
-              {selectedObject.cornerRadius !== undefined && (
-                <div className="space-y-2">
-                  <div className="/* flex */ /* items-center */ /* justify-between */">
-                    <Label className="/* text-xs */ /* text-muted-foreground */">
-                      Corner Radius
-                    </Label>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="// h-5 w-5"
-                      onClick={() => setCornerLocked(!cornerLocked)}
-                    >
-                      {cornerLocked ? (
-                        <Link2 className="// h-3 w-3" />
-                      ) : (
-                        <Unlink className="// h-3 w-3" />
-                      )}
-                    </Button>
-                  </div>
-                  {cornerLocked ? (
-                    <Input
-                      type="number"
-                      value={selectedObject.cornerRadius}
-                      onChange={(e) =>
-                        updateObject(selectedObject.id, {
-                          cornerRadius: Number(e.target.value),
-                        })
-                      }
-                      className="/* h-8 */ /* text-sm */"
-                    />
-                  ) : (
-                    <div className="/* grid */ /* grid-cols-2 */ /* gap-2 */">
-                      {["TL", "TR", "BR", "BL"].map((corner) => (
-                        <div key={corner} className="space-y-1">
-                          <Label className="/* text-xs */ /* text-muted-foreground */">
-                            {corner}
-                          </Label>
-                          <Input
-                            type="number"
-                            defaultValue={selectedObject.cornerRadius}
-                            className="/* h-8 */ /* text-sm */"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+          {/* Alignment Section */}
+          <PropertiesPanelSection
+            id="alignment"
+            title="Alignment"
+            expanded={sections.find((s) => s.id === "alignment")!.expanded}
+            onToggle={toggleSection}
+          >
+            <AlignmentGrid
+              onAlign={(alignment) => {
+                console.log("Alignment:", alignment);
+                // TODO: Implement alignment logic
+              }}
+              currentAlignment={{
+                horizontal: "left",
+                vertical: "top",
+              }}
+            />
+          </PropertiesPanelSection>
+
+          {/* Primitive Properties Section */}
+          {selectedObject.type !== "component" && (
+            <PropertiesPanelSection
+              id="primitive-props"
+              title="Properties"
+              expanded={true}
+              onToggle={toggleSection}
+            >
+              <PrimitivePropsPanel
+                object={selectedObject}
+                onUpdateProps={(props) => updateObject(selectedObject.id, props)}
+              />
+            </PropertiesPanelSection>
           )}
 
           {/* Typography Section */}
-          {selectedObject.type === "text" &&
-            renderSection(
-              sections.find((s) => s.id === "typography")!,
-              3,
-              <div className="space-y-3">
-                <div className="space-y-1">
-                  <Label className="/* text-xs */ /* text-muted-foreground */">
-                    Font Family
-                  </Label>
-                  <Select
-                    value={selectedObject.fontFamily}
-                    onValueChange={(value) =>
-                      updateObject(selectedObject.id, { fontFamily: value })
-                    }
-                  >
-                    <SelectTrigger className="/* h-8 */ /* text-sm */">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Inter">Inter</SelectItem>
-                      <SelectItem value="Roboto">Roboto</SelectItem>
-                      <SelectItem value="Arial">Arial</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="/* grid */ /* grid-cols-2 */ /* gap-2 */">
-                  <div className="space-y-1">
-                    <Label className="/* text-xs */ /* text-muted-foreground */">
-                      Size
-                    </Label>
-                    <Input
-                      type="number"
-                      value={selectedObject.fontSize}
-                      onChange={(e) =>
-                        updateObject(selectedObject.id, {
-                          fontSize: Number(e.target.value),
-                        })
-                      }
-                      className="/* h-8 */ /* text-sm */"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="/* text-xs */ /* text-muted-foreground */">
-                      Weight
-                    </Label>
-                    <Select
-                      value={selectedObject.fontWeight}
-                      onValueChange={(value) =>
-                        updateObject(selectedObject.id, { fontWeight: value })
-                      }
-                    >
-                      <SelectTrigger className="/* h-8 */ /* text-sm */">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="400">Regular</SelectItem>
-                        <SelectItem value="500">Medium</SelectItem>
-                        <SelectItem value="600">Semibold</SelectItem>
-                        <SelectItem value="700">Bold</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="/* grid */ /* grid-cols-2 */ /* gap-2 */">
-                  <div className="space-y-1">
-                    <Label className="/* text-xs */ /* text-muted-foreground */">
-                      Line Height
-                    </Label>
-                    <Input
-                      type="number"
-                      value={selectedObject.lineHeight}
-                      onChange={(e) =>
-                        updateObject(selectedObject.id, {
-                          lineHeight: Number(e.target.value),
-                        })
-                      }
-                      className="/* h-8 */ /* text-sm */"
-                      step="0.1"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="/* text-xs */ /* text-muted-foreground */">
-                      Letter Spacing
-                    </Label>
-                    <Input
-                      type="number"
-                      value={selectedObject.letterSpacing}
-                      onChange={(e) =>
-                        updateObject(selectedObject.id, {
-                          letterSpacing: Number(e.target.value),
-                        })
-                      }
-                      className="/* h-8 */ /* text-sm */"
-                      step="0.01"
-                    />
-                  </div>
-                </div>
-                <div className="/* flex */ /* gap-1 */">
-                  {["left", "center", "right"].map((align) => (
-                    <Button
-                      key={align}
-                      variant={
-                        selectedObject.textAlign === align
-                          ? "default"
-                          : "outline"
-                      }
-                      size="sm"
-                      className="/* flex-1 */ /* h-8 */ /* text-xs */ /* capitalize */"
-                      onClick={() =>
-                        updateObject(selectedObject.id, {
-                          textAlign: align as any,
-                        })
-                      }
-                    >
-                      {align}
-                    </Button>
-                  ))}
-                </div>
+          {selectedObject.type === "text" && (
+            <PropertiesPanelSection
+              id="typography"
+              title="Typography"
+              expanded={sections.find((s) => s.id === "typography")!.expanded}
+              onToggle={toggleSection}
+            >
+              <div className="p-4 text-center text-muted-foreground text-sm">
+                Typography controls (coming soon)
               </div>
-            )}
+            </PropertiesPanelSection>
+          )}
 
           {/* Effects Section */}
-          {renderSection(
-            sections.find((s) => s.id === "effects")!,
-            4,
-            <div className="space-y-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="/* w-full */ /* h-8 */ /* text-xs */ /* bg-transparent */"
-              >
-                <Plus className="// h-3 w-3 mr-1" />
-                Add Effect
-              </Button>
-            </div>
-          )}
+          <PropertiesPanelSection
+            id="effects"
+            title="Effects"
+            expanded={sections.find((s) => s.id === "effects")!.expanded}
+            onToggle={toggleSection}
+          >
+            <Button variant="outline" size="sm" className="w-full">
+              <Plus className="h-4 w-4 mr-2" />
+              Add Effect
+            </Button>
+          </PropertiesPanelSection>
         </div>
       </ScrollArea>
     </div>

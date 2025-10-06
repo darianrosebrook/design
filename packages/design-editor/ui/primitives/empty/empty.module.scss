@@ -8,6 +8,8 @@
   // Include the generated variables mixin within the component scope
   @include emptyTokens.vars;
 
+  // Include the generated variables mixin within the component scope
+
   // Base empty styles (equivalent to flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12)
   display: var(--empty-container-display); // equivalent to flex
   min-width: var(--empty-container-minWidth); // equivalent to min-w-0

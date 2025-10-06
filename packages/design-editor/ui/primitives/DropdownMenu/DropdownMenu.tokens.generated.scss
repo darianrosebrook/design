@@ -3,15 +3,15 @@
  */
 @mixin vars {
   /* === Content Tokens === */
-  --dropdownMenu-content-backgroundColor: var(--color-mode-white);
-  --dropdownMenu-content-color: var(--color-mode-dark);
+  --dropdownMenu-content-backgroundColor: var(--semantic-color-background-secondary);
+  --dropdownMenu-content-color: var(--semantic-color-action-foreground-primary-default);
   --dropdownMenu-content-zIndex: 50;
   --dropdownMenu-content-maxHeight: var(--radix-dropdown-menu-content-available-height);
   --dropdownMenu-content-minWidth: 128px;
   --dropdownMenu-content-borderRadius: 6px;
   --dropdownMenu-content-border-width: 1px;
   --dropdownMenu-content-border-style: solid;
-  --dropdownMenu-content-border-color: var(--color-palette-neutral-200);
+  --dropdownMenu-content-border-color: var(--semantic-color-action-background-secondary-active);
   --dropdownMenu-content-padding: 4px;
   --dropdownMenu-content-boxShadow: var(--elevation-level-3);
   --dropdownMenu-content-overflow-x: hidden;
@@ -29,19 +29,19 @@
   --dropdownMenu-item-fontSize: 14px;
   --dropdownMenu-item-outline: none;
   --dropdownMenu-item-userSelect: none;
-  --dropdownMenu-item-states-focus-backgroundColor: var(--color-action-background-secondary-hover);
-  --dropdownMenu-item-states-focus-color: var(--color-action-foreground-secondary-default);
+  --dropdownMenu-item-states-focus-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --dropdownMenu-item-states-focus-color: var(--semantic-color-action-foreground-secondary-default);
   --dropdownMenu-item-states-disabled-pointerEvents: none;
   --dropdownMenu-item-states-disabled-opacity: 0.5;
-  --dropdownMenu-item-variants-destructive-color: var(--color-action-foreground-danger-default);
-  --dropdownMenu-item-variants-destructive-focus-backgroundColor: var(--color-action-background-danger-hover);
-  --dropdownMenu-item-variants-destructive-focus-color: var(--color-action-foreground-danger-default);
-  --dropdownMenu-item-variants-destructive-iconColor: var(--color-action-foreground-danger-default);
+  --dropdownMenu-item-variants-destructive-color: var(--semantic-color-action-foreground-danger-default);
+  --dropdownMenu-item-variants-destructive-focus-backgroundColor: var(--semantic-color-action-background-danger-hover);
+  --dropdownMenu-item-variants-destructive-focus-color: var(--semantic-color-action-foreground-danger-default);
+  --dropdownMenu-item-variants-destructive-iconColor: var(--semantic-color-action-foreground-danger-default);
   --dropdownMenu-item-variants-inset-paddingLeft: 32px;
   --dropdownMenu-item-icon-pointerEvents: none;
   --dropdownMenu-item-icon-flexShrink: 0;
   --dropdownMenu-item-icon-size: 16px;
-  --dropdownMenu-item-icon-color-default: var(--color-palette-neutral-500);
+  --dropdownMenu-item-icon-color-default: var(--semantic-color-navigation-foreground-secondary);
 
   /* === CheckboxItem Tokens === */
   --dropdownMenu-checkboxItem-paddingLeft: 32px;
@@ -71,10 +71,10 @@
   --dropdownMenu-label-padding-vertical: 6px;
   --dropdownMenu-label-fontSize: 12px;
   --dropdownMenu-label-fontWeight: 600;
-  --dropdownMenu-label-color: var(--color-palette-neutral-500);
+  --dropdownMenu-label-color: var(--semantic-color-navigation-foreground-secondary);
 
   /* === Separator Tokens === */
-  --dropdownMenu-separator-backgroundColor: var(--color-palette-neutral-200);
+  --dropdownMenu-separator-backgroundColor: var(--semantic-color-action-background-secondary-active);
   --dropdownMenu-separator-margin-horizontal: -4px;
   --dropdownMenu-separator-margin-vertical: 4px;
   --dropdownMenu-separator-height: 1px;
@@ -83,7 +83,7 @@
   --dropdownMenu-shortcut-marginLeft: auto;
   --dropdownMenu-shortcut-fontSize: 12px;
   --dropdownMenu-shortcut-fontWeight: 500;
-  --dropdownMenu-shortcut-color: var(--color-palette-neutral-500);
+  --dropdownMenu-shortcut-color: var(--semantic-color-navigation-foreground-secondary);
   --dropdownMenu-shortcut-opacity: 0.6;
 
   /* === SubTrigger Tokens === */

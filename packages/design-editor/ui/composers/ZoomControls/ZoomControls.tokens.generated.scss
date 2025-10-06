@@ -25,4 +25,10 @@
 
   /* === Interactive Tokens === */
   --zoomControls-interactive-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+
+
+  /* === General Tokens === */
+  --zoomControls-backgroundColor: var(--semantic-color-display-background-primary);
+  --zoomControls-borderColor: var(--semantic-color-display-border-subtle);
+  --zoomControls-borderRadius: var(--semantic-shape-control-radius-default);
 }

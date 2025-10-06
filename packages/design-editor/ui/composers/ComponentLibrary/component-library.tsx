@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import styles from "./component-library.module.scss";
+// Removed SCSS module import - using Tailwind classes
 import { useCanvas } from "@/lib/canvas-context";
 import {
   ComponentRenderer,
@@ -28,8 +28,8 @@ export function ComponentLibrary({ className }: ComponentLibraryProps) {
       id: `component-${Date.now()}`,
       type: "component" as const,
       name: `${componentType} Component`,
-      x: 100 + Math.random() * 200, // Random position for demo
-      y: 100 + Math.random() * 200,
+      x: 150, // Fixed position to prevent hydration mismatch
+      y: 150, // Fixed position to prevent hydration mismatch
       width: componentType === "Button" ? 120 : 200,
       height: componentType === "Button" ? 40 : 60,
       rotation: 0,
@@ -56,23 +56,23 @@ export function ComponentLibrary({ className }: ComponentLibraryProps) {
   }, {} as Record<string, Array<{ type: string; name: string; description: string; icon: string }>>);
 
   return (
-    <div className={`${styles.componentLibrary} ${className || ""}`}>
-      <div className={styles.componentLibraryHeader}>
-        <h2 className={styles.componentLibraryHeaderTitle}>Components</h2>
-        <span className={styles.componentLibraryHeaderCount}>
+    <div className={`h-full flex flex-col ${className || ""}`}>
+      <div className="p-4 border-b border-border">
+        <h2 className="text-lg font-semibold">Components</h2>
+        <span className="text-sm text-muted-foreground">
           {availableComponents.length} components
         </span>
       </div>
 
-      <ScrollArea className={styles.componentLibraryContent}>
-        <div className={styles.componentLibraryContent}>
+      <ScrollArea className="flex-1">
+        <div className="p-4">
           {Object.entries(groupedComponents).map(([category, components]) => (
-            <div key={category} className={styles.componentLibraryCategory}>
-              <h3 className={styles.componentLibraryCategoryHeader}>
+            <div key={category} className="mb-6">
+              <h3 className="text-sm font-medium text-muted-foreground mb-3">
                 {category}
               </h3>
 
-              <div className={styles.componentLibraryGrid}>
+              <div className="grid grid-cols-1 gap-2">
                 {components.map(({ type, name, description, icon }) => (
                   <button
                     key={type}
@@ -82,17 +82,15 @@ export function ComponentLibrary({ className }: ComponentLibraryProps) {
                       e.dataTransfer.setData("component-type", type);
                       e.dataTransfer.effectAllowed = "copy";
                     }}
-                    className={styles.componentLibraryItem}
+                    className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-accent/50 transition-colors text-left w-full"
                     title={`${description} - Click to insert or drag to canvas`}
                   >
-                    <div className={styles.componentLibraryItemIcon}>
+                    <div className="w-8 h-8 flex items-center justify-center bg-muted rounded-md flex-shrink-0">
                       {icon}
                     </div>
-                    <div className={styles.componentLibraryItemContent}>
-                      <div className={styles.componentLibraryItemName}>
-                        {name}
-                      </div>
-                      <div className={styles.componentLibraryItemDescription}>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm font-medium truncate">{name}</div>
+                      <div className="text-xs text-muted-foreground truncate">
                         {description}
                       </div>
                     </div>
@@ -136,7 +134,10 @@ export function ComponentPreview({
   };
 
   return (
-    <div className={styles.componentLibraryPreview} style={{ width, height }}>
+    <div
+      className="border border-border rounded-lg overflow-hidden bg-background"
+      style={{ width, height }}
+    >
       <ComponentRenderer object={mockObject} />
     </div>
   );

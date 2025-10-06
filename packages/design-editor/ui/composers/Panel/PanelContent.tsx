@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import styles from "./Panel.module.scss";
+import { ScrollArea } from "@/ui/primitives/ScrollArea";
 
 interface PanelContentProps {
   children: React.ReactNode;
@@ -16,19 +16,26 @@ export function PanelContent({
   padding = "md",
   className,
 }: PanelContentProps) {
-  const paddingClass = styles[`panelContent--padding-${padding}`];
-  const scrollableClass = scrollable ? styles["panelContent--scrollable"] : "";
-  const contentClass = `${
-    styles.panelContent
-  } ${paddingClass} ${scrollableClass} ${className || ""}`;
+  const paddingClasses = {
+    none: "",
+    sm: "p-2",
+    md: "p-4",
+    lg: "p-6",
+  };
 
   if (scrollable) {
     return (
-      <div className={contentClass}>
-        <div className={styles.panelContentScrollArea}>{children}</div>
-      </div>
+      <ScrollArea
+        className={`flex-1 ${paddingClasses[padding]} ${className || ""}`}
+      >
+        {children}
+      </ScrollArea>
     );
   }
 
-  return <div className={contentClass}>{children}</div>;
+  return (
+    <div className={`${paddingClasses[padding]} ${className || ""}`}>
+      {children}
+    </div>
+  );
 }

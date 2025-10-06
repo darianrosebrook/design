@@ -78,16 +78,16 @@
     "variants": {
       "default": {
         "backgroundColor": {
-          "value": "{color.action.background.primary.default}",
+          "value": "{semantic.color.action.background.primary.default}",
           "description": "Background color for default variant"
         },
         "color": {
-          "value": "{color.action.foreground.primary.default}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Text color for default variant"
         },
         "hover": {
           "backgroundColor": {
-            "value": "{color.action.background.primary.default}",
+            "value": "{semantic.color.action.background.primary.default}",
             "opacity": 0.9,
             "description": "Background color on hover for default variant"
           }
@@ -95,49 +95,49 @@
       },
       "destructive": {
         "backgroundColor": {
-          "value": "{color.action.background.danger.default}",
+          "value": "{semantic.color.action.background.danger.default}",
           "description": "Background color for destructive variant"
         },
         "color": {
-          "value": "{color.action.foreground.danger.default}",
+          "value": "{semantic.color.action.foreground.danger.default}",
           "description": "Text color for destructive variant"
         }
       },
       "outline": {
         "backgroundColor": {
-          "value": "{color.mode.light}",
+          "value": "{semantic.color.action.background.secondary.default}",
           "description": "Background color for outline variant"
         },
         "borderColor": {
-          "value": "{color.action.border.secondary.default}",
+          "value": "{semantic.color.action.border.secondary.default}",
           "description": "Border color for outline variant"
         }
       },
       "secondary": {
         "backgroundColor": {
-          "value": "{color.action.background.secondary.default}",
+          "value": "{semantic.color.action.background.secondary.default}",
           "description": "Background color for secondary variant"
         },
         "color": {
-          "value": "{color.action.foreground.secondary.default}",
+          "value": "{semantic.color.action.foreground.secondary.default}",
           "description": "Text color for secondary variant"
         }
       },
       "ghost": {
         "hover": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on hover for ghost variant"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Text color on hover for ghost variant"
           }
         }
       },
       "link": {
         "color": {
-          "value": "{color.action.background.primary.default}",
+          "value": "{semantic.color.action.background.primary.default}",
           "description": "Text color for link variant"
         }
       }

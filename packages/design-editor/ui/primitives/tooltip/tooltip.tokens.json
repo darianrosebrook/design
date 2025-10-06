@@ -48,29 +48,29 @@
     "variants": {
       "default": {
         "backgroundColor": {
-          "value": "{color.palette.neutral.900}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Background color for default variant"
         },
         "color": {
-          "value": "{color.palette.neutral.50}",
+          "value": "{semantic.color.feedback.background.info.subtle}",
           "description": "Text color for default variant"
         },
         "borderColor": {
-          "value": "{color.palette.neutral.800}",
+          "value": "{semantic.color.action.background.primary.default}",
           "description": "Border color for default variant"
         }
       },
       "light": {
         "backgroundColor": {
-          "value": "{color.palette.neutral.50}",
+          "value": "{semantic.color.feedback.background.info.subtle}",
           "description": "Background color for light variant"
         },
         "color": {
-          "value": "{color.palette.neutral.900}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Text color for light variant"
         },
         "borderColor": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border color for light variant"
         }
       }

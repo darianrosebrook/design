@@ -5,7 +5,6 @@
 @use './Popover.tokens.generated.scss' as popoverTokens;
 
 // Include the generated variables mixin
-@include popoverTokens.vars;
 
 // Animation keyframes for popover transitions
 @keyframes popover-show {
@@ -76,6 +75,9 @@
 
 // Popover content styles
 .popover-content {
+  // Include the generated variables mixin within the component scope
+  @include popoverTokens.vars;
+
   background-color: var(--popover-backgroundColor);
   color: var(--popover-color);
   z-index: var(--popover-zIndex);

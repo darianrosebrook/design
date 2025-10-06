@@ -10,8 +10,8 @@
   --alertDialog-overlay-animation-easing: var(--semantic-animation-easing-default);
 
   /* === Content Tokens === */
-  --alertDialog-content-backgroundColor: var(--semantic-color-display-background-primary);
-  --alertDialog-content-borderColor: var(--semantic-color-display-border-subtle);
+  --alertDialog-content-backgroundColor: var(--core-color-display-background-primary);
+  --alertDialog-content-borderColor: var(--core-color-display-border-subtle);
   --alertDialog-content-borderWidth: var(--semantic-shape-border-width-default);
   --alertDialog-content-borderRadius: var(--semantic-shape-control-radius-default);
   --alertDialog-content-shadow: var(--semantic-effect-shadow-large);
@@ -41,11 +41,11 @@
   --alertDialog-footer-layout-desktop-justifyContent: flex-end;
 
   /* === Title Tokens === */
-  --alertDialog-title-color: var(--semantic-color-display-foreground-primary);
+  --alertDialog-title-color: var(--core-color-display-foreground-primary);
   --alertDialog-title-fontSize: var(--semantic-typography-heading-04);
   --alertDialog-title-fontWeight: var(--semantic-typography-font-weight-semibold);
 
   /* === Description Tokens === */
-  --alertDialog-description-color: var(--semantic-color-display-foreground-secondary);
+  --alertDialog-description-color: var(--core-color-display-foreground-secondary);
   --alertDialog-description-fontSize: var(--semantic-typography-body-03);
 }

@@ -7,11 +7,7 @@ import React, { useMemo } from "react";
 import { PropertiesService } from "./properties-service.js";
 import { PropertyRegistry } from "./property-registry.js";
 import { PropertySectionComponent } from "./PropertySection.js";
-import type {
-  PropertiesPanelProps,
-  PropertySection,
-  PropertySectionProps,
-} from "./types.js";
+import type { PropertiesPanelProps, PropertySection } from "./types.js";
 import { useProperties } from "./use-properties.js";
 import { VirtualizedList } from "./VirtualizedList.js";
 

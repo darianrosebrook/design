@@ -5,10 +5,12 @@
 @use './Sidebar.tokens.generated.scss' as sidebarTokens;
 
 // Include the generated variables mixin
-@include sidebarTokens.vars;
 
 // Provider styles
 .sidebarProvider {
+  // Include the generated variables mixin within the component scope
+  @include sidebarTokens.vars;
+
   display: var(--sidebar-provider-display);
   flex-direction: var(--sidebar-provider-flexDirection);
   min-height: var(--sidebar-provider-minHeight);

@@ -66,3 +66,30 @@
   width: 12px; // equivalent to w-3
   height: 12px; // equivalent to h-3
 }
+
+.fileDetailsPanelTabsList {
+  // Tabs list styles (equivalent to grid w-full grid-cols-2 mx-3 mt-2 h-9)
+  display: grid;
+  width: 100%; // equivalent to w-full
+  grid-template-columns: repeat(2, 1fr); // equivalent to grid-cols-2
+  margin: 8px 12px 0 12px; // equivalent to mx-3 mt-2 (ml-3 mr-3 mt-2)
+  height: 36px; // equivalent to h-9
+}
+
+.fileDetailsPanelTabsTrigger {
+  // Tabs trigger styles (equivalent to text-xs)
+  font-size: 12px; // equivalent to text-xs
+}
+
+.fileDetailsPanelTabsIcon {
+  // Tabs icon styles (equivalent to h-3 w-3 mr-1)
+  width: 12px; // equivalent to w-3
+  height: 12px; // equivalent to h-3
+  margin-right: 4px; // equivalent to mr-1
+}
+
+.fileDetailsPanelTabsContent {
+  // Tabs content styles (equivalent to flex-1 m-0)
+  flex: 1; // equivalent to flex-1
+  margin: 0; // equivalent to m-0
+}

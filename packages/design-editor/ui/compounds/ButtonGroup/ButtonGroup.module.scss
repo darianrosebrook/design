@@ -1,7 +1,8 @@
 // ButtonGroup compound component styles
-// Migrated from Tailwind to SCSS with semantic design tokens
+// Direct CSS equivalents of original Tailwind classes
 
 .buttonGroup {
+  
   // Base styles (equivalent to flex w-fit items-stretch)
   display: flex;
   width: fit-content;
@@ -69,34 +70,34 @@
 }
 
 .buttonGroupText {
-  // Text component styles (equivalent to bg-muted flex items-center gap-2 rounded-md border px-4 text-sm font-medium shadow-xs)
-  background-color: var(--buttonGroup-text-backgroundColor);
+  // Text component styles - equivalent to bg-muted flex items-center gap-2 rounded-md border px-4 text-sm font-medium shadow-xs
+  background-color: #3f3f46; // zinc-700 (muted background)
   display: flex;
   align-items: center;
-  gap: var(--buttonGroup-spacing-gap);
-  border-radius: var(--buttonGroup-text-borderRadius);
-  border: 1px solid var(--buttonGroup-separator-backgroundColor);
-  padding: 0 var(--buttonGroup-text-padding-horizontal);
-  font-size: var(--buttonGroup-text-fontSize);
-  font-weight: var(--buttonGroup-text-fontWeight);
-  box-shadow: var(--semantic-elevation-default);
+  gap: 8px; // gap-2
+  border-radius: 6px; // rounded-md
+  border: 1px solid #3f3f46; // zinc-700 (border)
+  padding: 0 16px; // px-4
+  font-size: 14px; // text-sm
+  font-weight: 500; // font-medium
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); // shadow-xs
 
   // SVG icon styles (equivalent to [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4)
   svg {
     pointer-events: none;
 
     &:not([class*="size-"]) {
-      width: var(--semantic-components-action-gap-icon);
-      height: var(--semantic-components-action-gap-icon);
+      width: 16px; // size-4
+      height: 16px; // size-4
     }
   }
 }
 
 .buttonGroupSeparator {
-  // Separator component styles (equivalent to bg-input relative !m-0 self-stretch data-[orientation=vertical]:h-auto)
-  background-color: var(--buttonGroup-separator-backgroundColor);
+  // Separator component styles - equivalent to bg-input relative !m-0 self-stretch data-[orientation=vertical]:h-auto
+  background-color: #3f3f46; // zinc-700 (input background)
   position: relative;
-  margin: var(--buttonGroup-separator-margin);
+  margin: 0; // !m-0
   align-self: stretch;
 
   // Vertical orientation adjustment (equivalent to data-[orientation=vertical]:h-auto)
@@ -104,3 +105,5 @@
     height: auto;
   }
 }
+
+

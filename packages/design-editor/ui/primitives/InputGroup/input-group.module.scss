@@ -5,10 +5,12 @@
 @use './InputGroup.tokens.generated.scss' as inputGroupTokens;
 
 // Include the generated variables mixin
-@include inputGroupTokens.vars;
 
 // Input group container
 .input-group {
+  // Include the generated variables mixin within the component scope
+  @include inputGroupTokens.vars;
+
   display: var(--inputGroup-container-display);
   width: var(--inputGroup-container-width);
   position: var(--inputGroup-container-position);

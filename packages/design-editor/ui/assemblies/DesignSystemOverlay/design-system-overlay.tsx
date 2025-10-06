@@ -3,6 +3,7 @@
 import { FileText, X, Library } from "lucide-react";
 import { useState, useMemo } from "react";
 import type React from "react";
+// import styles from "./design-system-overlay.module.scss";
 import { useCanvas } from "@/lib/canvas-context";
 import { DesignSystemItem as DesignSystemItemComponent } from "@/lib/components/design-system-item";
 import { DesignSystemSearch } from "@/lib/components/design-system-search";
@@ -121,22 +122,22 @@ export function DesignSystemOverlay({
   }
 
   return (
-    <div className="// fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <div className="// bg-card border border-border rounded-xl shadow-2xl w-full max-w-6xl h-[80vh] flex flex-col">
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+      <div className="bg-background border border-border rounded-lg shadow-lg w-full max-w-6xl max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="// flex items-center justify-between p-6 border-b border-border">
+        <div className="flex items-start justify-between p-6 border-b border-border">
           <div>
-            <h2 className="// text-xl font-semibold">Design System Library</h2>
-            <p className="// text-sm text-muted-foreground">
+            <h2 className="text-lg font-semibold">Design System Library</h2>
+            <p className="text-sm text-muted-foreground mt-1">
               Browse and insert components, snippets, and templates
             </p>
             {/* MOCK DATA: This modal showcases placeholder design system content */}
-            <p className="// text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-2">
               Demo content - showing mock design system items
             </p>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="// h-5 w-5" />
+            <X className="h-4 w-4" />
           </Button>
         </div>
 
@@ -145,29 +146,32 @@ export function DesignSystemOverlay({
           value={activeTab}
           onValueChange={(value) => setActiveTab(value as any)}
         >
-          <div className="// px-6 py-4 border-b border-border">
-            <TabsList className="// grid w-full grid-cols-4">
-              <TabsTrigger value="components">
-                <Component className="// h-4 w-4 mr-2" />
+          <div className="px-6 pt-4">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger
+                value="components"
+                className="flex items-center gap-2"
+              >
+                <Component className="h-4 w-4" />
                 Components
               </TabsTrigger>
-              <TabsTrigger value="snippets">
-                <LayersIcon className="// h-4 w-4 mr-2" />
+              <TabsTrigger value="snippets" className="flex items-center gap-2">
+                <LayersIcon className="h-4 w-4" />
                 Snippets
               </TabsTrigger>
-              <TabsTrigger value="pages">
-                <FileText className="// h-4 w-4 mr-2" />
+              <TabsTrigger value="pages" className="flex items-center gap-2">
+                <FileText className="h-4 w-4" />
                 Pages
               </TabsTrigger>
-              <TabsTrigger value="icons">
-                <Square className="// h-4 w-4 mr-2" />
+              <TabsTrigger value="icons" className="flex items-center gap-2">
+                <Square className="h-4 w-4" />
                 Icons
               </TabsTrigger>
             </TabsList>
           </div>
 
           {/* Content */}
-          <div className="// flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col">
             <DesignSystemSearch
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
@@ -183,13 +187,13 @@ export function DesignSystemOverlay({
             />
 
             {/* Items grid/list */}
-            <ScrollArea className="// flex-1">
+            <ScrollArea className="flex-1">
               <div
-                className={`// p-6 ${
+                className={
                   viewMode === "grid"
-                    ? "// grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-                    : "// space-y-4"
-                }`}
+                    ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4"
+                    : "space-y-2 p-4"
+                }
               >
                 {filteredItems.map((item) => (
                   <DesignSystemItemComponent
@@ -209,12 +213,10 @@ export function DesignSystemOverlay({
                 ))}
               </div>
               {filteredItems.length === 0 && (
-                <div className="// flex flex-col items-center justify-center py-12 text-center">
-                  <Library className="// h-12 w-12 text-muted-foreground mb-4" />
-                  <h3 className="// text-lg font-medium mb-2">
-                    No items found
-                  </h3>
-                  <p className="// text-sm text-muted-foreground">
+                <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                  <Library className="h-12 w-12 text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">No items found</h3>
+                  <p className="text-sm text-muted-foreground">
                     Try adjusting your search or filter criteria
                   </p>
                 </div>

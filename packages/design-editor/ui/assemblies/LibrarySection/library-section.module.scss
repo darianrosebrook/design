@@ -1,7 +1,291 @@
 // library-section composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Direct CSS equivalents of original Tailwind classes
 
-.library-section {
-  // Placeholder for future SCSS implementation
-  // Will contain library-section-specific styles when migrating from Tailwind
+// Icon container (text-lg equivalent)
+.libraryIcon {
+  font-size: 1.125rem; // 18px, equivalent to text-lg
+  line-height: 1.75rem; // 28px
+}
+
+// Library item card (group p-3 rounded-lg border border-border hover:border-blue-500 hover:shadow-sm transition-all cursor-pointer)
+.libraryItem {
+  padding: 0.75rem; // 12px, equivalent to p-3
+  border-radius: 0.5rem; // 8px, equivalent to rounded-lg
+  border: 1px solid #3f3f46; // zinc-700 (border)
+  transition: all 0.15s ease-in-out; // equivalent to transition-all
+  cursor: pointer; // equivalent to cursor-pointer
+
+  &:hover {
+    border-color: #3b82f6; // blue-500 (keeping blue for hover accent)
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); // equivalent to shadow-sm
+  }
+}
+
+// Item content layout (flex items-start gap-3)
+.libraryItemContent {
+  display: flex;
+  align-items: flex-start; // equivalent to items-start
+  gap: 0.75rem; // 12px, equivalent to gap-3
+}
+
+// Icon background (p-2 rounded-md bg-muted)
+.libraryItemIconBg {
+  padding: 0.5rem; // 8px, equivalent to p-2
+  border-radius: 0.375rem; // 6px, equivalent to rounded-md
+  background-color: #3f3f46; // zinc-700 (muted background)
+}
+
+// Icon size (h-4 w-4)
+.libraryItemIcon {
+  width: 1rem; // 16px, equivalent to w-4
+  height: 1rem; // 16px, equivalent to h-4
+  flex-shrink: 0; // equivalent to shrink-0
+}
+
+// Content container (flex-1 min-w-0)
+.libraryItemContentContainer {
+  flex: 1; // equivalent to flex-1
+  min-width: 0; // equivalent to min-w-0
+}
+
+// Header layout (flex items-center gap-2 mb-1)
+.libraryItemHeader {
+  display: flex;
+  align-items: center; // equivalent to items-center
+  gap: 0.5rem; // 8px, equivalent to gap-2
+  margin-bottom: 0.25rem; // 4px, equivalent to mb-1
+}
+
+// Title (font-medium text-sm truncate)
+.libraryItemTitle {
+  font-weight: 500; // equivalent to font-medium
+  font-size: 0.875rem; // 14px, equivalent to text-sm
+  line-height: 1.25rem; // 20px
+  overflow: hidden;
+  text-overflow: ellipsis; // equivalent to truncate
+  white-space: nowrap;
+}
+
+// Badge text (text-xs)
+.libraryItemBadge {
+  font-size: 0.75rem; // 12px, equivalent to text-xs
+  line-height: 1rem; // 16px
+}
+
+// Description (text-xs text-muted-foreground mb-2 line-clamp-2)
+.libraryItemDescription {
+  font-size: 0.75rem; // 12px, equivalent to text-xs
+  line-height: 1rem; // 16px
+  color: #a1a1aa; // zinc-400 (muted-foreground)
+  margin-bottom: 0.5rem; // 8px, equivalent to mb-2
+
+  // Line clamp equivalent
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Metadata (flex items-center gap-2 text-xs text-muted-foreground)
+.libraryItemMetadata {
+  display: flex;
+  align-items: center; // equivalent to items-center
+  gap: 0.5rem; // 8px, equivalent to gap-2
+  font-size: 0.75rem; // 12px, equivalent to text-xs
+  color: #a1a1aa; // zinc-400 (muted-foreground)
+}
+
+// Tags container (flex flex-wrap gap-1 mt-2)
+.libraryItemTags {
+  display: flex;
+  flex-wrap: wrap; // equivalent to flex-wrap
+  gap: 0.25rem; // 4px, equivalent to gap-1
+  margin-top: 0.5rem; // 8px, equivalent to mt-2
+}
+
+// Tag badge (text-xs)
+.libraryItemTag {
+  font-size: 0.75rem; // 12px, equivalent to text-xs
+  line-height: 1rem; // 16px
+}
+
+// Add button (h-8 w-8 opacity-0 group-hover:opacity-100)
+.libraryItemAddButton {
+  width: 2rem; // 32px, equivalent to w-8
+  height: 2rem; // 32px, equivalent to h-8
+  opacity: 0; // equivalent to opacity-0
+  transition: opacity 0.15s ease-in-out;
+
+  .libraryItem:hover & {
+    opacity: 1; // equivalent to group-hover:opacity-100
+  }
+}
+
+// Add icon (h-4 w-4)
+.libraryItemAddIcon {
+  width: 1rem; // 16px, equivalent to w-4
+  height: 1rem; // 16px, equivalent to h-4
+}
+
+// Folder button (flex items-center gap-2 w-full text-left hover:bg-accent rounded-lg px-2 py-1.5 transition-colors)
+.libraryFolderButton {
+  display: flex;
+  align-items: center; // equivalent to items-center
+  gap: 0.5rem; // 8px, equivalent to gap-2
+  width: 100%; // equivalent to w-full
+  text-align: left; // equivalent to text-left
+  padding: 0.375rem 0.5rem; // 6px 8px, equivalent to px-2 py-1.5
+  border-radius: 0.5rem; // 8px, equivalent to rounded-lg
+  transition: background-color 0.15s ease-in-out; // equivalent to transition-colors
+
+  &:hover {
+    background-color: #3f3f46; // zinc-700 (accent)
+  }
+}
+
+// Chevron (h-4 w-4 transition-transform)
+.libraryChevron {
+  width: 1rem; // 16px, equivalent to w-4
+  height: 1rem; // 16px, equivalent to h-4
+  transition: transform 0.15s ease-in-out; // equivalent to transition-transform
+  flex-shrink: 0;
+}
+
+.libraryChevronExpanded {
+  transform: rotate(90deg);
+}
+
+// Folder icon (h-4 w-4)
+.libraryFolderIcon {
+  width: 1rem; // 16px, equivalent to w-4
+  height: 1rem; // 16px, equivalent to h-4
+  flex-shrink: 0;
+}
+
+// Folder title (font-medium text-sm)
+.libraryFolderTitle {
+  font-weight: 500; // equivalent to font-medium
+  font-size: 0.875rem; // 14px, equivalent to text-sm
+  line-height: 1.25rem; // 20px
+}
+
+// Count badge (ml-auto text-xs)
+.libraryCountBadge {
+  margin-left: auto; // equivalent to ml-auto
+  font-size: 0.75rem; // 12px, equivalent to text-xs
+  line-height: 1rem; // 16px
+}
+
+// Main container (flex flex-col h-full)
+.libraryMainContainer {
+  display: flex;
+  flex-direction: column; // equivalent to flex-col
+  height: 100%; // equivalent to h-full
+}
+
+// Header (p-3 space-y-3 border-b border-border)
+.libraryHeader {
+  padding: 0.75rem; // 12px, equivalent to p-3
+  border-bottom: 1px solid #3f3f46; // zinc-700 (border)
+
+  // Space between children (equivalent to space-y-3)
+  > * + * {
+    margin-top: 0.75rem; // 12px, equivalent to space-y-3
+  }
+}
+
+// Search icon (absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground)
+.librarySearchIcon {
+  position: absolute;
+  left: 0.75rem; // 12px, equivalent to left-3
+  top: 50%;
+  transform: translateY(-50%); // equivalent to top-1/2 -translate-y-1/2
+  width: 1rem; // 16px, equivalent to w-4
+  height: 1rem; // 16px, equivalent to h-4
+  color: #a1a1aa; // zinc-400 (muted-foreground)
+}
+
+// Search input (pl-9 h-8 text-sm)
+.librarySearchInput {
+  padding-left: 2.25rem; // 36px, equivalent to pl-9
+  height: 2rem; // 32px, equivalent to h-8
+  font-size: 0.875rem; // 14px, equivalent to text-sm
+  line-height: 1.25rem; // 20px
+}
+
+// Controls (flex items-center justify-between)
+.libraryControls {
+  display: flex;
+  align-items: center; // equivalent to items-center
+  justify-content: space-between; // equivalent to justify-between
+}
+
+// View toggle group (flex items-center gap-2)
+.libraryViewToggles {
+  display: flex;
+  align-items: center; // equivalent to items-center
+  gap: 0.5rem; // 8px, equivalent to gap-2
+}
+
+// View buttons (h-7 w-7)
+.libraryViewButton {
+  width: 1.75rem; // 28px, equivalent to w-7
+  height: 1.75rem; // 28px, equivalent to h-7
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.libraryViewButtonActive {
+  background-color: #3f3f46; // zinc-700 (accent)
+}
+
+// View icons (h-3 w-3)
+.libraryViewIcon {
+  width: 0.75rem; // 12px, equivalent to w-3
+  height: 0.75rem; // 12px, equivalent to h-3
+}
+
+// Create button (h-7 text-xs)
+.libraryCreateButton {
+  height: 1.75rem; // 28px, equivalent to h-7
+  font-size: 0.75rem; // 12px, equivalent to text-xs
+  line-height: 1rem; // 16px
+}
+
+// Create icon (h-3 w-3 mr-1)
+.libraryCreateIcon {
+  width: 0.75rem; // 12px, equivalent to w-3
+  height: 0.75rem; // 12px, equivalent to h-3
+  margin-right: 0.25rem; // 4px, equivalent to mr-1
+}
+
+// Refresh button (h-7 w-7)
+.libraryRefreshButton {
+  width: 1.75rem; // 28px, equivalent to w-7
+  height: 1.75rem; // 28px, equivalent to h-7
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Refresh icon (h-3 w-3)
+.libraryRefreshIcon {
+  width: 0.75rem; // 12px, equivalent to w-3
+  height: 0.75rem; // 12px, equivalent to h-3
+}
+
+// Content scroll area (flex-1)
+.libraryContentScroll {
+  flex: 1; // equivalent to flex-1
+}
+
+// Content container (p-3 space-y-4)
+.libraryContentContainer {
+  padding: 0.75rem; // 12px, equivalent to p-3
+
+  // Space between children (equivalent to space-y-4)
+  > * + * {
+    margin-top: 1rem; // 16px, equivalent to space-y-4
+  }
 }

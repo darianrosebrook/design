@@ -16,16 +16,23 @@
   --toggle-group-height-lg: 40px;
 
   /* === Variants Tokens === */
-  --toggle-group-variants-default-backgroundColor: var(--color-action-background-secondary-default);
-  --toggle-group-variants-default-color: var(--color-action-foreground-secondary-default);
-  --toggle-group-variants-default-borderColor: var(--color-action-border-secondary-default);
-  --toggle-group-variants-default-hover-backgroundColor: var(--color-action-background-secondary-hover);
-  --toggle-group-variants-default-selected-backgroundColor: var(--color-action-background-primary-default);
-  --toggle-group-variants-default-selected-color: var(--color-action-foreground-primary-default);
-  --toggle-group-variants-outline-backgroundColor: var(--color-mode-light);
-  --toggle-group-variants-outline-borderColor: var(--color-action-border-secondary-default);
-  --toggle-group-variants-outline-color: var(--color-action-foreground-secondary-default);
-  --toggle-group-variants-outline-hover-backgroundColor: var(--color-action-background-secondary-hover);
-  --toggle-group-variants-outline-selected-backgroundColor: var(--color-action-background-primary-default);
-  --toggle-group-variants-outline-selected-color: var(--color-action-foreground-primary-default);
+  --toggle-group-variants-default-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --toggle-group-variants-default-color: var(--semantic-color-action-foreground-secondary-default);
+  --toggle-group-variants-default-borderColor: var(--semantic-color-action-border-secondary-default);
+  --toggle-group-variants-default-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --toggle-group-variants-default-selected-backgroundColor: var(--semantic-color-action-background-primary-default);
+  --toggle-group-variants-default-selected-color: var(--semantic-color-action-foreground-primary-default);
+  --toggle-group-variants-outline-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --toggle-group-variants-outline-borderColor: var(--semantic-color-action-border-secondary-default);
+  --toggle-group-variants-outline-color: var(--semantic-color-action-foreground-secondary-default);
+  --toggle-group-variants-outline-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --toggle-group-variants-outline-selected-backgroundColor: var(--semantic-color-action-background-primary-default);
+  --toggle-group-variants-outline-selected-color: var(--semantic-color-action-foreground-primary-default);
+
+
+  /* === General Tokens === */
+  --toggle-group-borderRadius: 6px;
+  --toggle-group-fontSize: 14px;
+  --toggle-group-fontWeight: 500;
+  --toggle-group-lineHeight: 1.2;
 }

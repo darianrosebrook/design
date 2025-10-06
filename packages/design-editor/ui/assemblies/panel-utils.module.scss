@@ -1,0 +1,217 @@
+// Panel utilities - common semantic classes for all panels
+// Based on Tailwind equivalents from webviews implementation
+
+// Base panel container (equivalent to flex flex-col h-full)
+.panelBase {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// Panel header (equivalent to flex items-center justify-between px-3 py-2 border-b border-border)
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px; // px-3 py-2
+  border-bottom: 1px solid #3f3f46; // zinc-700 (border)
+}
+
+// Panel title (equivalent to text-sm font-semibold)
+.panelTitle {
+  font-size: 14px; // text-sm
+  font-weight: 600; // font-semibold
+  color: #f4f4f5; // zinc-100
+}
+
+// Panel header button (equivalent to h-6 w-6)
+.panelHeaderButton {
+  width: 24px; // w-6
+  height: 24px; // h-6
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Panel header icon (equivalent to h-4 w-4)
+.panelHeaderIcon {
+  width: 16px; // w-4
+  height: 16px; // h-4
+}
+
+// Panel scroll area (equivalent to flex-1)
+.panelScrollArea {
+  flex: 1;
+}
+
+// Panel content (equivalent to p-2 space-y-0.5)
+.panelContent {
+  padding: 8px; // p-2
+
+  // Space between children
+  > * + * {
+    margin-top: 2px; // space-y-0.5
+  }
+}
+
+// Panel section (equivalent to space-y-2)
+.panelSection {
+  margin-bottom: 8px; // space-y-2
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Panel section header (equivalent to flex items-center justify-between w-full text-sm font-medium border-none bg-none cursor-pointer p-0)
+.panelSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 14px; // text-sm
+  font-weight: 500; // font-medium
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover {
+    color: #f4f4f5; // zinc-100
+    opacity: 0.8;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #3b82f6; // blue-500
+    outline-offset: 2px;
+  }
+}
+
+// Panel section content (equivalent to pl-4)
+.panelSectionContent {
+  padding-left: 16px; // pl-4
+}
+
+// Panel field (equivalent to space-y-1)
+.panelField {
+  margin-bottom: 4px; // space-y-1
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Panel label (equivalent to text-xs text-muted-foreground)
+.panelLabel {
+  font-size: 12px; // text-xs
+  color: #a1a1aa; // zinc-400 (muted-foreground)
+}
+
+// Panel input (equivalent to h-8 text-sm)
+.panelInput {
+  height: 32px; // h-8
+  font-size: 14px; // text-sm
+}
+
+// Panel select (equivalent to h-8 text-sm)
+.panelSelect {
+  height: 32px; // h-8
+  font-size: 14px; // text-sm
+}
+
+// Panel button (equivalent to h-8 text-xs)
+.panelButton {
+  height: 32px; // h-8
+  font-size: 12px; // text-xs
+}
+
+// Panel grid (equivalent to grid gap-2)
+.panelGrid {
+  display: grid;
+  gap: 8px; // gap-2
+}
+
+// Panel grid 2 columns (equivalent to grid-cols-2)
+.panelGrid2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+// Panel grid 3 columns (equivalent to grid-cols-3)
+.panelGrid3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+// Panel actions (equivalent to flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity)
+.panelActions {
+  display: flex;
+  align-items: center;
+  gap: 2px; // gap-0.5
+  opacity: 0; // opacity-0
+  transition: opacity 0.2s ease-in-out; // transition-opacity
+}
+
+// Panel item hover (show actions on hover)
+.panelItem:hover .panelActions {
+  opacity: 1; // group-hover:opacity-100
+}
+
+// Panel action button (equivalent to h-6 w-6 p-0)
+.panelActionButton {
+  width: 24px; // w-6
+  height: 24px; // h-6
+  padding: 0; // p-0
+}
+
+// Panel action icon (equivalent to h-3.5 w-3.5)
+.panelActionIcon {
+  width: 14px; // w-3.5
+  height: 14px; // h-3.5
+}
+
+// Panel action icon hidden (equivalent to h-3.5 w-3.5 opacity-30)
+.panelActionIconHidden {
+  width: 14px; // w-3.5
+  height: 14px; // h-3.5
+  opacity: 0.3; // opacity-30
+}
+
+// Panel drop indicator (equivalent to h-0.5 bg-blue-500 mx-2 mb-1)
+.panelDropIndicator {
+  height: 2px;
+  background-color: #3b82f6; // blue-500
+  margin: 0 8px 4px; // mx-2 mb-1
+}
+
+// Panel item container (equivalent to group flex items-center gap-1 px-2 py-1.5 hover:bg-accent rounded-lg cursor-pointer transition-transform)
+.panelItem {
+  display: flex;
+  align-items: center;
+  gap: 4px; // gap-1
+  padding: 6px 8px; // px-2 py-1.5
+  border-radius: 8px; // rounded-lg
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out; // transition-transform
+
+  &:hover {
+    background-color: #3f3f46; // zinc-700 (accent)
+
+    .panelActions {
+      opacity: 1; // group-hover:opacity-100
+    }
+  }
+
+  // Selected state
+  &[data-selected="true"] {
+    background-color: #3f3f46; // zinc-700 (accent)
+  }
+
+  // Dragging state
+  &[data-dragging="true"] {
+    opacity: 0.5; // opacity-50
+  }
+
+  // Primary selected state
+  &[data-primary-selected="true"] {
+    box-shadow: 0 0 0 1px #3b82f6; // blue-500 ring
+  }
+}

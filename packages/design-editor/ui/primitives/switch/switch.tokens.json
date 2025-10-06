@@ -1,13 +1,12 @@
 {
   "prefix": "switch",
-  "tokens": {
-    "Switch": {
+  "tokens": { 
       "height": {
         "value": "1.15rem",
         "description": "Height of the switch component"
       },
       "width": {
-        "value": "{components.action.height.small}",
+        "value": "{semantic.components.action.height.small}",
         "description": "Width of the switch component"
       },
       "borderRadius": {
@@ -25,7 +24,7 @@
         }
       },
       "boxShadow": {
-        "value": "{elevation.level.1}",
+        "value": "{semantic.component.elevation.level.1}",
         "description": "Box shadow for switch"
       },
       "transition": {
@@ -34,7 +33,7 @@
           "description": "Transition duration for switch interactions"
         },
         "easing": {
-          "value": "{motion.interaction.hover.easing}",
+          "value": "{semantic.motion.interaction.hover.easing}",
           "description": "Transition easing for switch interactions"
         }
       },
@@ -49,15 +48,15 @@
         },
         "backgroundColor": {
           "default": {
-            "value": "{color.mode.white}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Default background color for switch thumb"
           },
           "uncheckedDark": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Background color for unchecked thumb in dark mode"
           },
           "checkedDark": {
-            "value": "{color.action.foreground.primary.default}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Background color for checked thumb in dark mode"
           }
         },
@@ -75,18 +74,18 @@
       "states": {
         "checked": {
           "backgroundColor": {
-            "value": "{color.action.background.primary.default}",
+            "value": "{semantic.color.action.background.primary.default}",
             "description": "Background color for checked state"
           }
         },
         "unchecked": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.200}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Background color for unchecked state"
           },
           "dark": {
             "backgroundColor": {
-              "value": "{color.palette.neutral.200}",
+              "value": "{semantic.color.action.background.secondary.active}",
               "opacity": 0.7,
               "description": "Dark mode background color for unchecked state"
             }
@@ -100,5 +99,4 @@
         }
       }
     }
-  }
-}
+  } 

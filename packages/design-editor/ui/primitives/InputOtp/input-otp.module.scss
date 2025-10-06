@@ -8,7 +8,9 @@
 
 // OTP input container
 .input-otp-container {
+  // Include the generated variables mixin within the component scope
   @include inputOtpTokens.vars;
+
   display: var(--input-otp-container-display);
   align-items: var(--input-otp-container-alignItems);
   gap: var(--input-otp-container-gap);

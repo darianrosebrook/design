@@ -5,10 +5,12 @@
 @use './Slider.tokens.generated.scss' as sliderTokens;
 
 // Include the generated variables mixin
-@include sliderTokens.vars;
 
 // Slider root container
 .slider {
+  // Include the generated variables mixin within the component scope
+  @include sliderTokens.vars;
+
   position: var(--slider-slider-root-position);
   display: var(--slider-slider-root-display);
   width: var(--slider-slider-root-width);

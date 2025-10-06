@@ -13,7 +13,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
 
-// @ts-ignore - CommonJS compatibility
+// @ts-expect-error - CommonJS compatibility
 const __filename = require.main?.filename || __filename;
 const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, "..", "..");

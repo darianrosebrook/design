@@ -71,7 +71,7 @@
         }
       },
       "color": {
-        "value": "{color.palette.neutral.600}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for breadcrumb link"
       },
       "fontSize": {
@@ -99,13 +99,13 @@
       "states": {
         "hover": {
           "color": {
-            "value": "{color.palette.neutral.900}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Color on hover for breadcrumb link"
           }
         },
         "focus": {
           "outline": {
-            "value": "2px solid {color.palette.blue.500}",
+            "value": "2px solid {semantic.color.feedback.foreground.info.default}",
             "description": "Outline on focus for breadcrumb link"
           },
           "outlineOffset": {
@@ -117,7 +117,7 @@
     },
     "page": {
       "color": {
-        "value": "{color.palette.neutral.900}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Color for breadcrumb page"
       },
       "fontSize": {
@@ -135,7 +135,7 @@
     },
     "separator": {
       "color": {
-        "value": "{color.palette.neutral.400}",
+        "value": "{semantic.color.action.border.secondary.hover}",
         "description": "Color for breadcrumb separator"
       },
       "display": {
@@ -183,7 +183,7 @@
         "description": "Border radius for breadcrumb ellipsis"
       },
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for breadcrumb ellipsis"
       },
       "icon": {
@@ -195,17 +195,17 @@
       "states": {
         "hover": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on hover for breadcrumb ellipsis"
           }
         },
         "focus": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on focus for breadcrumb ellipsis"
           },
           "outline": {
-            "value": "2px solid {color.palette.blue.500}",
+            "value": "2px solid {semantic.color.feedback.foreground.info.default}",
             "description": "Outline on focus for breadcrumb ellipsis"
           },
           "outlineOffset": {

@@ -21,19 +21,19 @@
   --item-item-transition-duration: 100ms;
   --item-item-flexWrap: wrap;
   --item-item-outline: none;
-  --item-item-focusVisible-borderColor: var(--color-palette-blue-500);
-  --item-item-focusVisible-ringColor: var(--color-palette-blue-500);
+  --item-item-focusVisible-borderColor: var(--semantic-color-feedback-foreground-info-default);
+  --item-item-focusVisible-ringColor: var(--semantic-color-feedback-foreground-info-default);
   --item-item-focusVisible-ringWidth: 3px;
   --item-item-variants-default-backgroundColor: transparent;
-  --item-item-variants-outline-borderColor: var(--color-palette-neutral-200);
-  --item-item-variants-muted-backgroundColor: var(--color-palette-neutral-100);
+  --item-item-variants-outline-borderColor: var(--semantic-color-action-background-secondary-active);
+  --item-item-variants-muted-backgroundColor: var(--semantic-color-action-background-secondary-hover);
   --item-item-sizes-default-padding-vertical: 16px;
   --item-item-sizes-default-padding-horizontal: 16px;
   --item-item-sizes-default-gap: 16px;
   --item-item-sizes-sm-padding-vertical: 12px;
   --item-item-sizes-sm-padding-horizontal: 16px;
   --item-item-sizes-sm-gap: 10px;
-  --item-item-link-hover-backgroundColor: var(--color-palette-neutral-100);
+  --item-item-link-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
 
   /* === Media Tokens === */
   --item-media-display: flex;
@@ -47,9 +47,9 @@
   --item-media-variants-icon-size: 32px;
   --item-media-variants-icon-border-width: 1px;
   --item-media-variants-icon-border-style: solid;
-  --item-media-variants-icon-border-color: var(--color-palette-neutral-200);
+  --item-media-variants-icon-border-color: var(--semantic-color-action-background-secondary-active);
   --item-media-variants-icon-borderRadius: 4px;
-  --item-media-variants-icon-backgroundColor: var(--color-palette-neutral-100);
+  --item-media-variants-icon-backgroundColor: var(--semantic-color-action-background-secondary-hover);
   --item-media-variants-icon-icon-size: 16px;
   --item-media-variants-image-size: 40px;
   --item-media-variants-image-borderRadius: 4px;
@@ -75,13 +75,13 @@
   --item-title-fontWeight: 500;
 
   /* === Description Tokens === */
-  --item-description-color: var(--color-palette-neutral-500);
+  --item-description-color: var(--semantic-color-navigation-foreground-secondary);
   --item-description-lineClamp: 2;
   --item-description-fontSize: 14px;
   --item-description-lineHeight: 1.428;
   --item-description-fontWeight: 400;
   --item-description-textBalance: balance;
-  --item-description-link-hover-color: var(--color-palette-blue-600);
+  --item-description-link-hover-color: var(--semantic-color-feedback-background-info-strong);
   --item-description-link-textDecoration: underline;
   --item-description-link-underlineOffset: 4px;
 

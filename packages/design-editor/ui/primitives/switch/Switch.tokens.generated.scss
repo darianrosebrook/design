@@ -2,24 +2,33 @@
  * Source: ui/primitives/Switch/switch.tokens.json
  */
 @mixin vars {
-  /* === Switch Tokens === */
-  --switch-Switch-height: 1.15rem;
-  --switch-Switch-width: var(--components-action-height-small);
-  --switch-Switch-borderRadius: 9999px;
-  --switch-Switch-border-width: 1px;
-  --switch-Switch-border-style: solid;
-  --switch-Switch-boxShadow: var(--elevation-level-1);
-  --switch-Switch-transition-duration: 150ms;
-  --switch-Switch-transition-easing: var(--motion-interaction-hover-easing);
-  --switch-Switch-thumb-size: 16px;
-  --switch-Switch-thumb-borderRadius: 9999px;
-  --switch-Switch-thumb-backgroundColor-default: var(--color-mode-white);
-  --switch-Switch-thumb-backgroundColor-uncheckedDark: var(--color-mode-dark);
-  --switch-Switch-thumb-backgroundColor-checkedDark: var(--color-action-foreground-primary-default);
-  --switch-Switch-thumb-transform-checked: translateX(calc(100% - 2px));
-  --switch-Switch-thumb-transform-unchecked: translateX(0);
-  --switch-Switch-states-checked-backgroundColor: var(--color-action-background-primary-default);
-  --switch-Switch-states-unchecked-backgroundColor: var(--color-palette-neutral-200);
-  --switch-Switch-states-unchecked-dark-backgroundColor: var(--color-palette-neutral-200);
-  --switch-Switch-states-disabled-opacity: 0.5;
+  /* === Border Tokens === */
+  --switch-border-width: 1px;
+  --switch-border-style: solid;
+
+  /* === Transition Tokens === */
+  --switch-transition-duration: 150ms;
+  --switch-transition-easing: var(--semantic-motion-interaction-hover-easing);
+
+  /* === Thumb Tokens === */
+  --switch-thumb-size: 16px;
+  --switch-thumb-borderRadius: 9999px;
+  --switch-thumb-backgroundColor-default: var(--semantic-color-action-foreground-primary-default);
+  --switch-thumb-backgroundColor-uncheckedDark: var(--semantic-color-action-foreground-primary-default);
+  --switch-thumb-backgroundColor-checkedDark: var(--semantic-color-action-foreground-primary-default);
+  --switch-thumb-transform-checked: translateX(calc(100% - 2px));
+  --switch-thumb-transform-unchecked: translateX(0);
+
+  /* === States Tokens === */
+  --switch-states-checked-backgroundColor: var(--semantic-color-action-background-primary-default);
+  --switch-states-unchecked-backgroundColor: var(--semantic-color-action-background-secondary-active);
+  --switch-states-unchecked-dark-backgroundColor: var(--semantic-color-action-background-secondary-active);
+  --switch-states-disabled-opacity: 0.5;
+
+
+  /* === General Tokens === */
+  --switch-height: 1.15rem;
+  --switch-width: var(--semantic-components-action-height-small);
+  --switch-borderRadius: 9999px;
+  --switch-boxShadow: var(--semantic-component-elevation-level-1);
 }

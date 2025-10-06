@@ -1,7 +1,158 @@
 // design-system-overlay composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
-.design-system-overlay {
-  // Placeholder for future SCSS implementation
-  // Will contain design-system-overlay-specific styles when migrating from Tailwind
+.designSystemOverlayBackdrop {
+  // Overlay backdrop styles (equivalent to fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4)
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: rgba(0, 0, 0, 0.5); // equivalent to bg-black/50
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px; // equivalent to p-4
+}
+
+.designSystemOverlayModal {
+  // Modal container styles (equivalent to bg-card border border-border rounded-xl shadow-2xl w-full max-w-6xl h-[80vh] flex flex-col)
+  background-color: hsl(var(--card)); // equivalent to bg-card
+  border: 1px solid hsl(var(--border)); // equivalent to border border-border
+  border-radius: 12px; // equivalent to rounded-xl
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); // equivalent to shadow-2xl
+  width: 100%; // equivalent to w-full
+  max-width: 72rem; // equivalent to max-w-6xl (1152px)
+  height: 80vh; // equivalent to h-[80vh]
+  display: flex;
+  flex-direction: column;
+}
+
+.designSystemOverlayHeader {
+  // Header styles (equivalent to flex items-center justify-between p-6 border-b border-border)
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px; // equivalent to p-6
+  border-bottom: 1px solid hsl(var(--border)); // equivalent to border-b border-border
+}
+
+.designSystemOverlayTitle {
+  // Title styles (equivalent to text-xl font-semibold)
+  font-size: 20px; // equivalent to text-xl
+  font-weight: 600; // equivalent to font-semibold
+  margin: 0;
+}
+
+.designSystemOverlaySubtitle {
+  // Subtitle styles (equivalent to text-sm text-muted-foreground)
+  font-size: 14px; // equivalent to text-sm
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  margin: 0;
+}
+
+.designSystemOverlayVersion {
+  // Version styles (equivalent to text-xs text-muted-foreground mt-1)
+  font-size: 12px; // equivalent to text-xs
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  margin: 4px 0 0 0; // equivalent to mt-1
+}
+
+.designSystemOverlayCloseButton {
+  // Close button styles (equivalent to h-5 w-5)
+  width: 20px; // equivalent to w-5
+  height: 20px; // equivalent to h-5
+}
+
+.designSystemOverlayContent {
+  // Content area styles (equivalent to px-6 py-4 border-b border-border)
+  padding: 16px 24px; // equivalent to px-6 py-4
+  border-bottom: 1px solid hsl(var(--border)); // equivalent to border-b border-border
+}
+
+.designSystemOverlayTabsList {
+  // Tabs list styles (equivalent to grid w-full grid-cols-4)
+  display: grid;
+  width: 100%; // equivalent to w-full
+  grid-template-columns: repeat(4, 1fr); // equivalent to grid-cols-4
+}
+
+.designSystemOverlayTabIcon {
+  // Tab icon styles (equivalent to h-4 w-4 mr-2)
+  width: 16px; // equivalent to w-4
+  height: 16px; // equivalent to h-4
+  margin-right: 8px; // equivalent to mr-2
+}
+
+.designSystemOverlayMainContent {
+  // Main content styles (equivalent to flex-1 flex flex-col)
+  flex: 1; // equivalent to flex-1
+  display: flex;
+  flex-direction: column;
+}
+
+.designSystemOverlayScrollArea {
+  // Scroll area styles (equivalent to flex-1)
+  flex: 1; // equivalent to flex-1
+}
+
+.designSystemOverlayEmptyState {
+  // Empty state container styles (equivalent to flex flex-col items-center justify-center py-12 text-center)
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 0; // equivalent to py-12
+  text-align: center;
+}
+
+.designSystemOverlayEmptyIcon {
+  // Empty state icon styles (equivalent to h-12 w-12 text-muted-foreground mb-4)
+  width: 48px; // equivalent to w-12
+  height: 48px; // equivalent to h-12
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  margin-bottom: 16px; // equivalent to mb-4
+}
+
+.designSystemOverlayEmptyTitle {
+  // Empty state title styles (equivalent to text-lg font-medium mb-2)
+  font-size: 18px; // equivalent to text-lg
+  font-weight: 500; // equivalent to font-medium
+  margin-bottom: 8px; // equivalent to mb-2
+  margin: 0 0 8px 0;
+}
+
+.designSystemOverlayEmptyText {
+  // Empty state text styles (equivalent to text-sm text-muted-foreground)
+  font-size: 14px; // equivalent to text-sm
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  margin: 0;
+}
+
+// Grid layout for items
+.designSystemOverlayGrid {
+  // Grid layout equivalent to p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4
+  padding: 24px; // equivalent to p-6
+  display: grid;
+  gap: 16px; // equivalent to gap-4
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr); // equivalent to md:grid-cols-2
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr); // equivalent to lg:grid-cols-3
+  }
+
+  @media (min-width: 1280px) {
+    grid-template-columns: repeat(4, 1fr); // equivalent to xl:grid-cols-4
+  }
+}
+
+// List layout for items
+.designSystemOverlayList {
+  // List layout equivalent to p-6 flex flex-col space-y-4
+  padding: 24px; // equivalent to p-6
+  display: flex;
+  flex-direction: column;
+  gap: 16px; // equivalent to space-y-4
 }

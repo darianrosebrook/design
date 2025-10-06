@@ -8,6 +8,8 @@
 .scroll-area {
   // Include the generated variables mixin within the component scope
   @include scrollAreaTokens.vars;
+
+  // Include the generated variables mixin within the component scope
   position: var(--scroll-area-root-position);
 }
 

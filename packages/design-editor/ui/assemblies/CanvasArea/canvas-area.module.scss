@@ -1,7 +1,40 @@
 // canvas-area composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
-.canvas-area {
-  // Placeholder for future SCSS implementation
-  // Will contain canvas-area-specific styles when migrating from Tailwind
+.canvasAreaContent {
+  // Canvas content container styles (equivalent to relative w-full h-full p-8)
+  position: relative; // equivalent to relative
+  width: 100%; // equivalent to w-full
+  height: 100%; // equivalent to h-full
+  padding: 32px; // equivalent to p-8 (2rem = 32px)
+}
+
+.canvasAreaOverlay {
+  // Bounding box overlay styles (equivalent to absolute inset-0 pointer-events-none p-8)
+  position: absolute; // equivalent to absolute
+  inset: 0; // equivalent to inset-0
+  pointer-events: none; // equivalent to pointer-events-none
+  padding: 32px; // equivalent to p-8 (2rem = 32px)
+}
+
+.canvasAreaControls {
+  // Map-like UI controls styles (equivalent to absolute bottom-4 left-4 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-medium z-[100])
+  position: absolute; // equivalent to absolute
+  bottom: 16px; // equivalent to bottom-4
+  left: 16px; // equivalent to left-4
+  background-color: hsl(var(--card)); // equivalent to bg-card
+  border: 1px solid hsl(var(--border)); // equivalent to border border-border
+  border-radius: 8px; // equivalent to rounded-lg
+  padding: 6px 12px; // equivalent to px-3 py-1.5
+  font-size: 12px; // equivalent to text-xs
+  font-weight: 500; // equivalent to font-medium
+  z-index: 100; // equivalent to z-[100]
+}
+
+.canvasAreaZoomControls {
+  // Zoom controls container styles (equivalent to absolute bottom-4 right-4 z-[100])
+  position: absolute; // equivalent to absolute
+  bottom: 16px; // equivalent to bottom-4
+  right: 16px; // equivalent to right-4
+  z-index: 100; // equivalent to z-[100]
 }

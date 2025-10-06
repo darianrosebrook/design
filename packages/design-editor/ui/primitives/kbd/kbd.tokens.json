@@ -3,11 +3,11 @@
   "tokens": {
     "container": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.100}",
+        "value": "{semantic.color.action.background.secondary.hover}",
         "description": "Background color for keyboard shortcut display"
       },
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Text color for keyboard shortcut display"
       },
       "width": {
@@ -77,17 +77,17 @@
     },
     "tooltip": {
       "backgroundColor": {
-        "value": "{color.mode.white}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "opacity": 0.2,
         "description": "Background color for keyboard shortcut in tooltip"
       },
       "color": {
-        "value": "{color.mode.white}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Text color for keyboard shortcut in tooltip"
       },
       "dark": {
         "backgroundColor": {
-          "value": "{color.mode.white}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "opacity": 0.1,
           "description": "Dark mode background color for keyboard shortcut in tooltip"
         }

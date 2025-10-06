@@ -47,7 +47,7 @@ export interface ValidationResult {
 }
 
 // Get project paths
-// @ts-ignore - CommonJS compatibility for import.meta.url
+// @ts-expect-error - CommonJS compatibility for import.meta.url
 const __filename =
   typeof require !== "undefined" && require.main
     ? require.main.filename
@@ -174,7 +174,9 @@ export function extractTokenPaths(obj: TokenGroup, prefix = ""): string[] {
   const paths: string[] = [];
 
   for (const [key, value] of Object.entries(obj)) {
-    if (key.startsWith("$")) {continue;} // Skip metadata
+    if (key.startsWith("$")) {
+      continue;
+    } // Skip metadata
 
     const currentPath = prefix ? `${prefix}.${key}` : key;
 
@@ -199,7 +201,9 @@ export function deepMerge<T extends Record<string, any>>(
   target: T,
   source: Partial<T>
 ): T {
-  if (!source) {return target;}
+  if (!source) {
+    return target;
+  }
 
   const result = { ...target };
 

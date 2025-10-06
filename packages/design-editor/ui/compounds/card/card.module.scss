@@ -1,29 +1,29 @@
 // Card compound component styles
-// Migrated from Tailwind to SCSS with design tokens
+// Direct CSS equivalents of original Tailwind classes
 
 .card {
-  // Base card styles (equivalent to bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm)
-  background-color: var(--card-backgroundColor);
-  color: var(--semantic-color-display-foreground-primary);
+  // Base card styles - equivalent to bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm
+  background-color: #27272a; // zinc-800 (card background)
+  color: #f4f4f5; // zinc-100 (card-foreground)
   display: flex;
   flex-direction: column;
-  gap: var(--card-gap);
-  border-radius: var(--card-borderRadius);
-  border: var(--card-border-width) var(--card-border-style) var(--card-border-color);
-  padding: var(--card-padding) 0; // equivalent to py-6, horizontal padding handled by sub-components
-  box-shadow: var(--card-shadow);
+  gap: 24px; // gap-6
+  border-radius: 12px; // rounded-xl
+  border: 1px solid #3f3f46; // zinc-700 (border)
+  padding: 24px 0; // py-6
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); // shadow-sm
 }
 
 .cardHeader {
-  // Header styles (equivalent to @container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6)
+  // Header styles - equivalent to @container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6
   container-type: inline-size;
   container-name: card-header;
   display: grid;
   grid-auto-rows: min-content;
   grid-template-rows: auto auto;
   align-items: start;
-  gap: var(--card-header-gap);
-  padding: 0 var(--card-header-padding-horizontal);
+  gap: 8px; // gap-2
+  padding: 0 24px; // px-6
 
   // Grid columns when card action is present (equivalent to has-data-[slot=card-action]:grid-cols-[1fr_auto])
   &:has([data-slot="card-action"]) {
@@ -32,20 +32,20 @@
 
   // Bottom border spacing (equivalent to [.border-b]:pb-6)
   .border-b & {
-    padding-bottom: var(--card-padding);
+    padding-bottom: 24px; // pb-6
   }
 }
 
 .cardTitle {
-  // Title styles (equivalent to leading-none font-semibold)
-  line-height: 1; // equivalent to leading-none
-  font-weight: var(--semantic-typography-font-weight-semibold);
+  // Title styles - equivalent to leading-none font-semibold
+  line-height: 1; // leading-none
+  font-weight: 600; // font-semibold
 }
 
 .cardDescription {
-  // Description styles (equivalent to text-muted-foreground text-sm)
-  color: var(--semantic-color-display-foreground-secondary);
-  font-size: var(--semantic-typography-body-03);
+  // Description styles - equivalent to text-muted-foreground text-sm
+  color: #a1a1aa; // zinc-400 (muted-foreground)
+  font-size: 14px; // text-sm
 }
 
 .cardAction {
@@ -58,18 +58,18 @@
 }
 
 .cardContent {
-  // Content styles (equivalent to px-6)
-  padding: 0 var(--card-content-padding-horizontal);
+  // Content styles - equivalent to px-6
+  padding: 0 24px; // px-6
 }
 
 .cardFooter {
-  // Footer styles (equivalent to flex items-center px-6 [.border-t]:pt-6)
+  // Footer styles - equivalent to flex items-center px-6 [.border-t]:pt-6
   display: flex;
   align-items: center;
-  padding: 0 var(--card-footer-padding-horizontal);
+  padding: 0 24px; // px-6
 
   // Top border spacing (equivalent to [.border-t]:pt-6)
   .border-t & {
-    padding-top: var(--card-padding);
+    padding-top: 24px; // pt-6
   }
 }

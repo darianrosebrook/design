@@ -16,7 +16,7 @@
         },
         "color": {
           "default": {
-            "value": "{color.palette.neutral.200}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Default border color for alerts"
           }
         }
@@ -61,7 +61,7 @@
           "description": "Font size for alert title"
         },
         "fontWeight": {
-          "value": "{typography.fontWeight.medium}",
+          "value": "{semantic.typography.button.fontWeight}",
           "description": "Font weight for alert title"
         },
         "letterSpacing": {
@@ -90,25 +90,25 @@
       "variants": {
         "default": {
           "backgroundColor": {
-            "value": "{color.mode.light}",
+            "value": "{semantic.color.action.background.secondary.default}",
             "description": "Background color for default alert variant"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Text color for default alert variant"
           }
         },
         "destructive": {
           "backgroundColor": {
-            "value": "{color.mode.light}",
+            "value": "{semantic.color.action.background.secondary.default}",
             "description": "Background color for destructive alert variant"
           },
           "color": {
-            "value": "{color.action.background.danger.default}",
+            "value": "{semantic.color.action.background.danger.default}",
             "description": "Text color for destructive alert variant"
           },
           "descriptionColor": {
-            "value": "{color.action.background.danger.default}",
+            "value": "{semantic.color.action.background.danger.default}",
             "opacity": 0.9,
             "description": "Description text color for destructive alert variant"
           }

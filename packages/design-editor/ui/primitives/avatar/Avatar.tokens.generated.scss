@@ -22,8 +22,8 @@
   --avatar-avatar-sizes-xl-fontSize: 24px;
   --avatar-avatar-sizes-2xl-size: 120px;
   --avatar-avatar-sizes-2xl-fontSize: 32px;
-  --avatar-avatar-colors-background-muted: var(--color-palette-neutral-100);
-  --avatar-avatar-colors-foreground-muted: var(--color-palette-neutral-600);
+  --avatar-avatar-colors-background-muted: var(--semantic-color-action-background-secondary-hover);
+  --avatar-avatar-colors-foreground-muted: var(--semantic-color-navigation-foreground-secondary);
 
   /* === Image Tokens === */
   --avatar-image-aspectRatio: 1;
@@ -40,7 +40,7 @@
   --avatar-fallback-fontSize: 14px;
   --avatar-fallback-fontWeight: 500;
   --avatar-fallback-lineHeight: 1;
-  --avatar-fallback-color: var(--color-palette-neutral-600);
-  --avatar-fallback-backgroundColor: var(--color-palette-neutral-100);
+  --avatar-fallback-color: var(--semantic-color-navigation-foreground-secondary);
+  --avatar-fallback-backgroundColor: var(--semantic-color-action-background-secondary-hover);
   --avatar-fallback-borderRadius: inherit;
 }

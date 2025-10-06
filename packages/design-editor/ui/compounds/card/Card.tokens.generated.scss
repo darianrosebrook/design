@@ -16,4 +16,12 @@
 
   /* === Footer Tokens === */
   --card-footer-padding-horizontal: var(--semantic-spacing-padding-grid-large);
+
+
+  /* === General Tokens === */
+  --card-backgroundColor: var(--semantic-color-display-background-primary);
+  --card-borderRadius: var(--semantic-shape-control-radius-large);
+  --card-padding: var(--semantic-spacing-padding-grid-large);
+  --card-gap: var(--semantic-spacing-gap-grid-large);
+  --card-shadow: var(--semantic-elevation-default);
 }

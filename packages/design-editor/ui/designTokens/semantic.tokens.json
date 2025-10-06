@@ -6,30 +6,153 @@
   },
 
   "color": {
+    "foreground": {
+      "primary": {
+        "$type": "color",
+        "$value": "{core.color.mode.dark}",
+        "$extensions": {
+          "design.paths.light": "{core.color.mode.dark}",
+          "design.paths.dark": "{core.color.mode.light}"
+        },
+        "$description": "Primary foreground color"
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "{core.color.palette.neutral.600}",
+        "$extensions": {
+          "design.paths.light": "{core.color.palette.neutral.600}",
+          "design.paths.dark": "{core.color.palette.neutral.400}"
+        },
+        "$description": "Secondary foreground color"
+      },
+      "tertiary": {
+        "$type": "color",
+        "$value": "{core.color.palette.neutral.700}",
+        "$extensions": {
+          "design.paths.light": "{core.color.palette.neutral.700}",
+          "design.paths.dark": "{core.color.palette.neutral.300}"
+        },
+        "$description": "Tertiary foreground color"
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{core.color.palette.neutral.400}",
+        "$extensions": {
+          "design.paths.light": "{core.color.palette.neutral.400}",
+          "design.paths.dark": "{core.color.palette.neutral.600}"
+        },
+        "$description": "Disabled foreground color"
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{core.color.mode.light}",
+        "$extensions": {
+          "design.paths.light": "{core.color.mode.light}",
+          "design.paths.dark": "{core.color.mode.dark}"
+        },
+        "$description": "Inverse foreground color"
+      }
+    },
+    "background": {
+      "primary": {
+        "$type": "color",
+        "$value": "{core.color.mode.light}",
+        "$extensions": {
+          "design.paths.light": "{core.color.mode.light}",
+          "design.paths.dark": "{core.color.mode.dark}"
+        },
+        "$description": "Primary background color"
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "{core.color.palette.neutral.100}",
+        "$extensions": {
+          "design.paths.light": "{core.color.palette.neutral.100}",
+          "design.paths.dark": "{core.color.palette.neutral.800}"
+        },
+        "$description": "Secondary background color"
+      },
+      "tertiary": {
+        "$type": "color",
+        "$value": "{core.color.palette.neutral.200}",
+        "$extensions": {
+          "design.paths.light": "{core.color.palette.neutral.200}",
+          "design.paths.dark": "{core.color.palette.neutral.700}"
+        },
+        "$description": "Tertiary background color"
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{core.color.palette.neutral.200}",
+        "$extensions": {
+          "design.paths.light": "{core.color.palette.neutral.200}",
+          "design.paths.dark": "{core.color.palette.neutral.700}"
+        },
+        "$description": "Disabled background color"
+      },
+      "inverse": {
+        "$type": "color",
+        "$value": "{core.color.mode.dark}",
+        "$extensions": {
+          "design.paths.light": "{core.color.mode.dark}",
+          "design.paths.dark": "{core.color.mode.light}"
+        },
+        "$description": "Inverse background color"
+      }
+    },
+    "border": {
+      "primary": {
+        "$type": "color",
+        "$value": "{core.color.palette.neutral.500}",
+        "$extensions": {
+          "design.paths.light": "{core.color.palette.neutral.500}",
+          "design.paths.dark": "{core.color.palette.neutral.600}"
+        },
+        "$description": "Primary border color"
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "{core.color.palette.neutral.500}",
+        "$extensions": {
+          "design.paths.light": "{core.color.palette.neutral.500}",
+          "design.paths.dark": "{core.color.palette.neutral.600}"
+        },
+        "$description": "Secondary border color"
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "{core.color.palette.neutral.200}",
+        "$extensions": {
+          "design.paths.light": "{core.color.palette.neutral.200}",
+          "design.paths.dark": "{core.color.palette.neutral.700}"
+        },
+        "$description": "Disabled border color"
+      }
+    },
     "action": {
       "background": {
         "primary": {
           "default": {
             "$type": "color",
-            "$value": "{color.palette.brand.primary.500}",
+            "$value": "{core.color.palette.brand.primary.500}",
             "$description": "Primary action background"
           },
           "hover": {
             "$type": "color",
-            "$value": "{color.palette.brand.primary.600}",
+            "$value": "{core.color.palette.brand.primary.600}",
             "$description": "Primary action hover state"
           },
           "active": {
             "$type": "color",
-            "$value": "{color.palette.brand.primary.700}",
+            "$value": "{core.color.palette.brand.primary.700}",
             "$description": "Primary action active state"
           },
           "disabled": {
             "$type": "color",
-            "$value": "{color.palette.neutral.200}",
+            "$value": "{core.color.palette.neutral.200}",
             "$extensions": {
-              "design.paths.light": "{color.palette.neutral.200}",
-              "design.paths.dark": "{color.palette.neutral.700}"
+              "design.paths.light": "{core.color.palette.neutral.200}",
+              "design.paths.dark": "{core.color.palette.neutral.700}"
             },
             "$description": "Primary action disabled state"
           }
@@ -37,46 +160,34 @@
         "secondary": {
           "default": {
             "$type": "color",
-            "$value": "{color.mode.light}",
-            "$extensions": {
-              "design.paths.light": "{color.mode.light}",
-              "design.paths.dark": "{color.mode.dark}"
-            },
+            "$value": "{semantic.color.background.primary}",
             "$description": "Secondary action background"
           },
           "hover": {
             "$type": "color",
-            "$value": "{color.palette.neutral.100}",
-            "$extensions": {
-              "design.paths.light": "{color.palette.neutral.100}",
-              "design.paths.dark": "{color.palette.neutral.800}"
-            },
+            "$value": "{semantic.color.background.secondary}",
             "$description": "Secondary action hover state"
           },
           "active": {
             "$type": "color",
-            "$value": "{color.palette.neutral.200}",
-            "$extensions": {
-              "design.paths.light": "{color.palette.neutral.200}",
-              "design.paths.dark": "{color.palette.neutral.700}"
-            },
+            "$value": "{semantic.color.background.tertiary}",
             "$description": "Secondary action active state"
           }
         },
         "danger": {
           "default": {
             "$type": "color",
-            "$value": "{color.palette.red.500}",
+            "$value": "{core.color.palette.red.500}",
             "$description": "Destructive action background"
           },
           "hover": {
             "$type": "color",
-            "$value": "{color.palette.red.600}",
+            "$value": "{core.color.palette.red.600}",
             "$description": "Destructive action hover state"
           },
           "active": {
             "$type": "color",
-            "$value": "{color.palette.red.700}",
+            "$value": "{core.color.palette.red.700}",
             "$description": "Destructive action active state"
           }
         }
@@ -85,22 +196,22 @@
         "primary": {
           "default": {
             "$type": "color",
-            "$value": "{color.mode.white}",
+            "$value": "{semantic.color.foreground.inverse}",
             "$description": "Primary action text"
           },
           "disabled": {
             "$type": "color",
-            "$value": "{color.palette.neutral.400}",
+            "$value": "{semantic.color.foreground.disabled}",
             "$description": "Primary action disabled text"
           }
         },
         "secondary": {
           "default": {
             "$type": "color",
-            "$value": "{color.mode.dark}",
+            "$value": "{core.color.mode.light}",
             "$extensions": {
-              "design.paths.light": "{color.mode.dark}",
-              "design.paths.dark": "{color.mode.light}"
+              "design.paths.light": "{core.color.mode.light}",
+              "design.paths.dark": "{core.color.mode.dark}"
             },
             "$description": "Secondary action text"
           }
@@ -108,7 +219,7 @@
         "danger": {
           "default": {
             "$type": "color",
-            "$value": "{color.mode.white}",
+            "$value": "{semantic.color.foreground.inverse}",
             "$description": "Destructive action text"
           }
         }
@@ -117,39 +228,31 @@
         "primary": {
           "default": {
             "$type": "color",
-            "$value": "{color.palette.brand.primary.500}",
+            "$value": "{core.color.palette.brand.primary.500}",
             "$description": "Primary action border"
           },
           "focus": {
             "$type": "color",
-            "$value": "{color.palette.brand.primary.400}",
+            "$value": "{core.color.palette.brand.primary.400}",
             "$description": "Primary action focus ring"
           }
         },
         "secondary": {
           "default": {
             "$type": "color",
-            "$value": "{color.palette.neutral.300}",
-            "$extensions": {
-              "design.paths.light": "{color.palette.neutral.300}",
-              "design.paths.dark": "{color.palette.neutral.600}"
-            },
+            "$value": "{semantic.color.border.primary}",
             "$description": "Secondary action border"
           },
           "hover": {
             "$type": "color",
-            "$value": "{color.palette.neutral.400}",
-            "$extensions": {
-              "design.paths.light": "{color.palette.neutral.400}",
-              "design.paths.dark": "{color.palette.neutral.500}"
-            },
+            "$value": "{semantic.color.border.secondary}",
             "$description": "Secondary action border hover"
           }
         },
         "danger": {
           "default": {
             "$type": "color",
-            "$value": "{color.palette.red.500}",
+            "$value": "{core.color.palette.red.500}",
             "$description": "Destructive action border"
           }
         }
@@ -161,15 +264,15 @@
         "success": {
           "strong": {
             "$type": "color",
-            "$value": "{color.palette.green.600}",
+            "$value": "{core.color.palette.green.600}",
             "$description": "Strong success background"
           },
           "subtle": {
             "$type": "color",
-            "$value": "{color.palette.green.100}",
+            "$value": "{core.color.palette.green.100}",
             "$extensions": {
-              "design.paths.light": "{color.palette.green.100}",
-              "design.paths.dark": "{color.palette.green.800}"
+              "design.paths.light": "{core.color.palette.green.100}",
+              "design.paths.dark": "{core.color.palette.green.800}"
             },
             "$description": "Subtle success background"
           }
@@ -177,19 +280,19 @@
         "warning": {
           "strong": {
             "$type": "color",
-            "$value": "{color.palette.orange.400}",
+            "$value": "{core.color.palette.orange.400}",
             "$extensions": {
-              "design.paths.light": "{color.palette.orange.400}",
-              "design.paths.dark": "{color.palette.orange.600}"
+              "design.paths.light": "{core.color.palette.orange.400}",
+              "design.paths.dark": "{core.color.palette.orange.600}"
             },
             "$description": "Strong warning background"
           },
           "subtle": {
             "$type": "color",
-            "$value": "{color.palette.orange.100}",
+            "$value": "{core.color.palette.orange.100}",
             "$extensions": {
-              "design.paths.light": "{color.palette.orange.100}",
-              "design.paths.dark": "{color.palette.orange.800}"
+              "design.paths.light": "{core.color.palette.orange.100}",
+              "design.paths.dark": "{core.color.palette.orange.800}"
             },
             "$description": "Subtle warning background"
           }
@@ -197,15 +300,15 @@
         "danger": {
           "strong": {
             "$type": "color",
-            "$value": "{color.palette.red.600}",
+            "$value": "{core.color.palette.red.600}",
             "$description": "Strong danger background"
           },
           "subtle": {
             "$type": "color",
-            "$value": "{color.palette.red.100}",
+            "$value": "{core.color.palette.red.100}",
             "$extensions": {
-              "design.paths.light": "{color.palette.red.100}",
-              "design.paths.dark": "{color.palette.red.800}"
+              "design.paths.light": "{core.color.palette.red.100}",
+              "design.paths.dark": "{core.color.palette.red.800}"
             },
             "$description": "Subtle danger background"
           }
@@ -213,15 +316,15 @@
         "info": {
           "strong": {
             "$type": "color",
-            "$value": "{color.palette.blue.600}",
+            "$value": "{core.color.palette.blue.600}",
             "$description": "Strong info background"
           },
           "subtle": {
             "$type": "color",
-            "$value": "{color.palette.blue.100}",
+            "$value": "{core.color.palette.blue.100}",
             "$extensions": {
-              "design.paths.light": "{color.palette.blue.100}",
-              "design.paths.dark": "{color.palette.blue.800}"
+              "design.paths.light": "{core.color.palette.blue.100}",
+              "design.paths.dark": "{core.color.palette.blue.800}"
             },
             "$description": "Subtle info background"
           }
@@ -231,19 +334,19 @@
         "success": {
           "default": {
             "$type": "color",
-            "$value": "{color.palette.green.500}",
+            "$value": "{core.color.palette.green.500}",
             "$extensions": {
-              "design.paths.light": "{color.palette.green.500}",
-              "design.paths.dark": "{color.palette.green.400}"
+              "design.paths.light": "{core.color.palette.green.500}",
+              "design.paths.dark": "{core.color.palette.green.400}"
             },
             "$description": "Success text color"
           },
           "onSubtle": {
             "$type": "color",
-            "$value": "{color.palette.green.700}",
+            "$value": "{core.color.palette.green.700}",
             "$extensions": {
-              "design.paths.light": "{color.palette.green.700}",
-              "design.paths.dark": "{color.palette.green.200}"
+              "design.paths.light": "{core.color.palette.green.700}",
+              "design.paths.dark": "{core.color.palette.green.200}"
             },
             "$description": "Success text on subtle background"
           }
@@ -251,19 +354,19 @@
         "warning": {
           "default": {
             "$type": "color",
-            "$value": "{color.palette.orange.500}",
+            "$value": "{core.color.palette.orange.500}",
             "$extensions": {
-              "design.paths.light": "{color.palette.orange.500}",
-              "design.paths.dark": "{color.palette.orange.400}"
+              "design.paths.light": "{core.color.palette.orange.500}",
+              "design.paths.dark": "{core.color.palette.orange.400}"
             },
             "$description": "Warning text color"
           },
           "onSubtle": {
             "$type": "color",
-            "$value": "{color.palette.orange.700}",
+            "$value": "{core.color.palette.orange.700}",
             "$extensions": {
-              "design.paths.light": "{color.palette.orange.700}",
-              "design.paths.dark": "{color.palette.orange.200}"
+              "design.paths.light": "{core.color.palette.orange.700}",
+              "design.paths.dark": "{core.color.palette.orange.200}"
             },
             "$description": "Warning text on subtle background"
           }
@@ -271,19 +374,19 @@
         "danger": {
           "default": {
             "$type": "color",
-            "$value": "{color.palette.red.500}",
+            "$value": "{core.color.palette.red.500}",
             "$extensions": {
-              "design.paths.light": "{color.palette.red.500}",
-              "design.paths.dark": "{color.palette.red.400}"
+              "design.paths.light": "{core.color.palette.red.500}",
+              "design.paths.dark": "{core.color.palette.red.400}"
             },
             "$description": "Danger text color"
           },
           "onSubtle": {
             "$type": "color",
-            "$value": "{color.palette.red.700}",
+            "$value": "{core.color.palette.red.700}",
             "$extensions": {
-              "design.paths.light": "{color.palette.red.700}",
-              "design.paths.dark": "{color.palette.red.200}"
+              "design.paths.light": "{core.color.palette.red.700}",
+              "design.paths.dark": "{core.color.palette.red.200}"
             },
             "$description": "Danger text on subtle background"
           }
@@ -291,19 +394,19 @@
         "info": {
           "default": {
             "$type": "color",
-            "$value": "{color.palette.blue.500}",
+            "$value": "{core.color.palette.blue.500}",
             "$extensions": {
-              "design.paths.light": "{color.palette.blue.500}",
-              "design.paths.dark": "{color.palette.blue.400}"
+              "design.paths.light": "{core.color.palette.blue.500}",
+              "design.paths.dark": "{core.color.palette.blue.400}"
             },
             "$description": "Info text color"
           },
           "onSubtle": {
             "$type": "color",
-            "$value": "{color.palette.blue.700}",
+            "$value": "{core.color.palette.blue.700}",
             "$extensions": {
-              "design.paths.light": "{color.palette.blue.700}",
-              "design.paths.dark": "{color.palette.blue.200}"
+              "design.paths.light": "{core.color.palette.blue.700}",
+              "design.paths.dark": "{core.color.palette.blue.200}"
             },
             "$description": "Info text on subtle background"
           }
@@ -312,22 +415,22 @@
       "border": {
         "success": {
           "$type": "color",
-          "$value": "{color.palette.green.600}",
+          "$value": "{core.color.palette.green.600}",
           "$description": "Success border color"
         },
         "warning": {
           "$type": "color",
-          "$value": "{color.palette.orange.600}",
+          "$value": "{core.color.palette.orange.600}",
           "$description": "Warning border color"
         },
         "danger": {
           "$type": "color",
-          "$value": "{color.palette.red.600}",
+          "$value": "{core.color.palette.red.600}",
           "$description": "Danger border color"
         },
         "info": {
           "$type": "color",
-          "$value": "{color.palette.blue.600}",
+          "$value": "{core.color.palette.blue.600}",
           "$description": "Info border color"
         }
       }
@@ -337,57 +440,49 @@
       "background": {
         "primary": {
           "$type": "color",
-          "$value": "{color.mode.light}",
+          "$value": "{semantic.color.background.primary}",
           "$extensions": {
-            "design.paths.light": "{color.mode.light}",
-            "design.paths.dark": "{color.mode.dark}"
+            "design.paths.light": "{core.color.mode.light}",
+            "design.paths.dark": "{core.color.mode.dark}"
           },
           "$description": "Primary navigation background"
         },
         "secondary": {
           "$type": "color",
-          "$value": "{color.palette.neutral.100}",
-          "$extensions": {
-            "design.paths.light": "{color.palette.neutral.100}",
-            "design.paths.dark": "{color.palette.neutral.800}"
-          },
+          "$value": "{semantic.color.background.secondary}",
           "$description": "Secondary navigation background"
         }
       },
       "foreground": {
         "primary": {
           "$type": "color",
-          "$value": "{color.mode.dark}",
+          "$value": "{semantic.color.foreground.primary}",
           "$extensions": {
-            "design.paths.light": "{color.mode.dark}",
-            "design.paths.dark": "{color.mode.light}"
+            "design.paths.light": "{semantic.color.foreground.primary}",
+            "design.paths.dark": "{semantic.color.foreground.primary}"
           },
           "$description": "Primary navigation text"
         },
         "secondary": {
           "$type": "color",
-          "$value": "{color.palette.neutral.600}",
-          "$extensions": {
-            "design.paths.light": "{color.palette.neutral.600}",
-            "design.paths.dark": "{color.palette.neutral.300}"
-          },
+          "$value": "{semantic.color.foreground.secondary}",
           "$description": "Secondary navigation text"
         },
         "active": {
           "$type": "color",
-          "$value": "{color.palette.red.500}",
+          "$value": "{core.color.palette.red.500}",
           "$extensions": {
-            "design.paths.light": "{color.palette.red.500}",
-            "design.paths.dark": "{color.palette.red.400}"
+            "design.paths.light": "{core.color.palette.red.500}",
+            "design.paths.dark": "{core.color.palette.red.400}"
           },
           "$description": "Active navigation item"
         },
         "hover": {
           "$type": "color",
-          "$value": "{color.palette.neutral.700}",
+          "$value": "{core.color.palette.neutral.700}",
           "$extensions": {
-            "design.paths.light": "{color.palette.neutral.700}",
-            "design.paths.dark": "{color.palette.neutral.300}"
+            "design.paths.light": "{core.color.palette.neutral.700}",
+            "design.paths.dark": "{core.color.palette.neutral.300}"
           },
           "$description": "Navigation item hover state"
         }
@@ -395,10 +490,10 @@
       "border": {
         "primary": {
           "$type": "color",
-          "$value": "{color.palette.neutral.300}",
+          "$value": "{core.color.palette.neutral.300}",
           "$extensions": {
-            "design.paths.light": "{color.palette.neutral.300}",
-            "design.paths.dark": "{color.palette.neutral.600}"
+            "design.paths.light": "{core.color.palette.neutral.300}",
+            "design.paths.dark": "{core.color.palette.neutral.600}"
           },
           "$description": "Navigation border"
         }
@@ -483,10 +578,10 @@
       },
       "string": {
         "$type": "color",
-        "$value": "{color.palette.blue.700}",
+        "$value": "{core.color.palette.blue.700}",
         "$extensions": {
-          "design.paths.light": "{color.palette.blue.700}",
-          "design.paths.dark": "{color.palette.blue.400}"
+          "design.paths.light": "{core.color.palette.blue.700}",
+          "design.paths.dark": "{core.color.palette.blue.400}"
         },
         "$description": "String syntax color"
       }
@@ -496,22 +591,22 @@
       "trend": {
         "default": {
           "$type": "color",
-          "$value": "{color.palette.blue.400}",
+          "$value": "{core.color.palette.blue.400}",
           "$description": "Default trend indicator"
         },
         "up": {
           "$type": "color",
-          "$value": "{color.palette.green.500}",
+          "$value": "{core.color.palette.green.500}",
           "$description": "Positive trend indicator"
         },
         "down": {
           "$type": "color",
-          "$value": "{color.palette.red.500}",
+          "$value": "{core.color.palette.red.500}",
           "$description": "Negative trend indicator"
         },
         "neutral": {
           "$type": "color",
-          "$value": "{color.palette.neutral.500}",
+          "$value": "{core.color.palette.neutral.500}",
           "$description": "Neutral trend indicator"
         }
       }
@@ -521,7 +616,7 @@
       "brand": {
         "primary": {
           "$type": "gradient",
-          "$value": "{color.palette.brand.primary.400}",
+          "$value": "{core.color.palette.brand.primary.400}",
           "$description": "Primary brand gradient"
         }
       }
@@ -782,14 +877,6 @@
     }
   },
 
-  "elevation": {
-    "default": { "$type": "shadow", "$value": "{elevation.level.1}" },
-    "depth": { "$type": "number", "$value": "{elevation.depth.0}" },
-    "surface": {
-      "raised": { "$type": "shadow", "$value": "{elevation.level.1}" },
-      "floating": { "$type": "shadow", "$value": "{elevation.level.2}" }
-    }
-  },
 
   "opacity": {
     "disabled": { "$type": "opacity", "$value": "{opacity.400}" },
@@ -1459,37 +1546,37 @@
     "background": {
       "hover": {
         "$type": "color",
-        "$value": "{color.palette.neutral.100}",
+        "$value": "{core.color.palette.neutral.100}",
         "$extensions": {
-          "design.paths.light": "{color.palette.neutral.100}",
-          "design.paths.dark": "{color.palette.neutral.800}"
+          "design.paths.light": "{core.color.palette.neutral.100}",
+          "design.paths.dark": "{core.color.palette.neutral.800}"
         },
         "$description": "Secondary action hover state"
       },
       "active": {
         "$type": "color",
-        "$value": "{color.palette.neutral.200}",
+        "$value": "{core.color.palette.neutral.200}",
         "$extensions": {
-          "design.paths.light": "{color.palette.neutral.200}",
-          "design.paths.dark": "{color.palette.neutral.700}"
+          "design.paths.light": "{core.color.palette.neutral.200}",
+          "design.paths.dark": "{core.color.palette.neutral.700}"
         },
         "$description": "Secondary action active state"
       },
       "selected": {
         "$type": "color",
-        "$value": "{color.palette.blue.200}",
+        "$value": "{core.color.palette.blue.200}",
         "$extensions": {
-          "design.paths.light": "{color.palette.blue.200}",
-          "design.paths.dark": "{color.palette.blue.800}"
+          "design.paths.light": "{core.color.palette.blue.200}",
+          "design.paths.dark": "{core.color.palette.blue.800}"
         },
         "$description": "Highlight background for selections"
       },
       "disabled": {
         "$type": "color",
-        "$value": "{color.palette.neutral.200}",
+        "$value": "{core.color.palette.neutral.200}",
         "$extensions": {
-          "design.paths.light": "{color.palette.neutral.200}",
-          "design.paths.dark": "{color.palette.neutral.700}"
+          "design.paths.light": "{core.color.palette.neutral.200}",
+          "design.paths.dark": "{core.color.palette.neutral.700}"
         },
         "$description": "Primary action disabled state"
       }
@@ -1497,10 +1584,10 @@
     "border": {
       "hover": {
         "$type": "color",
-        "$value": "{color.palette.neutral.400}",
+        "$value": "{core.color.palette.neutral.400}",
         "$extensions": {
-          "design.paths.light": "{color.palette.neutral.400}",
-          "design.paths.dark": "{color.palette.neutral.500}"
+          "design.paths.light": "{core.color.palette.neutral.400}",
+          "design.paths.dark": "{core.color.palette.neutral.500}"
         },
         "$description": "Secondary action border hover"
       },
@@ -1627,12 +1714,12 @@
 
   "datavis": {
     "onFill": {
-      "default": { "$type": "color", "$value": "{color.mode.white}" },
-      "muted": { "$type": "color", "$value": "{color.palette.neutral.100}" }
+      "default": { "$type": "color", "$value": "{core.color.mode.white}" },
+      "muted": { "$type": "color", "$value": "{core.color.palette.neutral.100}" }
     },
     "gridline": {
-      "major": { "$type": "color", "$value": "{color.palette.neutral.300}" },
-      "minor": { "$type": "color", "$value": "{color.palette.neutral.200}" }
+      "major": { "$type": "color", "$value": "{core.color.palette.neutral.300}" },
+      "minor": { "$type": "color", "$value": "{core.color.palette.neutral.200}" }
     },
     "strokeWidth": {
       "series": { "$type": "dimension", "$value": "2px" },
@@ -1707,6 +1794,259 @@
       "path": { "$type": "string", "$value": "test-path" },
       "typeWghtHeading": { "$type": "number", "$value": 700 },
       "typeWdthResponsive": { "$type": "number", "$value": 100 }
+    },
+
+    "zIndex": {
+      "dropdown": {
+        "$type": "number",
+        "$value": "{core.zIndex.dropdown}",
+        "$description": "Z-index for dropdown menus"
+      },
+      "sticky": {
+        "$type": "number",
+        "$value": "{core.zIndex.sticky}",
+        "$description": "Z-index for sticky elements"
+      },
+      "fixed": {
+        "$type": "number",
+        "$value": "{core.zIndex.fixed}",
+        "$description": "Z-index for fixed elements"
+      },
+      "modal": {
+        "$type": "number",
+        "$value": "{core.zIndex.modal}",
+        "$description": "Z-index for modal dialogs"
+      },
+      "popover": {
+        "$type": "number",
+        "$value": "{core.zIndex.popover}",
+        "$description": "Z-index for popover elements"
+      },
+      "tooltip": {
+        "$type": "number",
+        "$value": "{core.zIndex.tooltip}",
+        "$description": "Z-index for tooltips"
+      },
+      "overlay": {
+        "$type": "number",
+        "$value": 50,
+        "$description": "Z-index for overlay elements"
+      }
+    },
+
+    "animation": {
+      "duration": {
+        "instant": {
+          "$type": "duration",
+          "$value": "0ms",
+          "$description": "Instant animation duration"
+        },
+        "fast": {
+          "$type": "duration",
+          "$value": "{core.motion.duration.short1}",
+          "$description": "Fast animation duration"
+        },
+        "normal": {
+          "$type": "duration",
+          "$value": "{core.motion.duration.medium1}",
+          "$description": "Normal animation duration"
+        },
+        "slow": {
+          "$type": "duration",
+          "$value": "{core.motion.duration.long1}",
+          "$description": "Slow animation duration"
+        }
+      },
+      "easing": {
+        "default": {
+          "$type": "cubicBezier",
+          "$value": "{core.motion.easing.standard}",
+          "$description": "Default animation easing"
+        },
+        "enter": {
+          "$type": "cubicBezier",
+          "$value": "{core.motion.easing.soft.enter}",
+          "$description": "Animation easing for entering elements"
+        },
+        "exit": {
+          "$type": "cubicBezier",
+          "$value": "{core.motion.easing.soft.exit}",
+          "$description": "Animation easing for exiting elements"
+        }
+      }
+    },
+
+    "typography": {
+      "fontWeight": {
+        "thin": {
+          "$type": "fontWeight",
+          "$value": "{core.typography.weight.thin}",
+          "$description": "Thin font weight"
+        },
+        "light": {
+          "$type": "fontWeight",
+          "$value": "{core.typography.weight.light}",
+          "$description": "Light font weight"
+        },
+        "normal": {
+          "$type": "fontWeight",
+          "$value": "{core.typography.weight.regular}",
+          "$description": "Normal font weight"
+        },
+        "medium": {
+          "$type": "fontWeight",
+          "$value": "{core.typography.weight.medium}",
+          "$description": "Medium font weight"
+        },
+        "semibold": {
+          "$type": "fontWeight",
+          "$value": "{core.typography.weight.semibold}",
+          "$description": "Semibold font weight"
+        },
+        "bold": {
+          "$type": "fontWeight",
+          "$value": "{core.typography.weight.bold}",
+          "$description": "Bold font weight"
+        },
+        "black": {
+          "$type": "fontWeight",
+          "$value": "{core.typography.weight.black}",
+          "$description": "Black font weight"
+        }
+      },
+      "fontSize": {
+        "xs": {
+          "$type": "dimension",
+          "$value": "{core.typography.ramp.1}",
+          "$description": "Extra small font size"
+        },
+        "sm": {
+          "$type": "dimension",
+          "$value": "{core.typography.ramp.2}",
+          "$description": "Small font size"
+        },
+        "base": {
+          "$type": "dimension",
+          "$value": "{core.typography.ramp.4}",
+          "$description": "Base font size"
+        },
+        "lg": {
+          "$type": "dimension",
+          "$value": "{core.typography.ramp.5}",
+          "$description": "Large font size"
+        },
+        "xl": {
+          "$type": "dimension",
+          "$value": "{core.typography.ramp.6}",
+          "$description": "Extra large font size"
+        }
+      },
+      "lineHeight": {
+        "tight": {
+          "$type": "number",
+          "$value": "{core.typography.lineHeight.tight}",
+          "$description": "Tight line height"
+        },
+        "snug": {
+          "$type": "number",
+          "$value": 1.375,
+          "$description": "Snug line height"
+        },
+        "normal": {
+          "$type": "number",
+          "$value": "{core.typography.lineHeight.normal}",
+          "$description": "Normal line height"
+        },
+        "loose": {
+          "$type": "number",
+          "$value": "{core.typography.lineHeight.loose}",
+          "$description": "Loose line height"
+        }
+      }
+    },
+
+    "border": {
+      "radius": {
+        "none": {
+          "$type": "borderRadius",
+          "$value": "{core.shape.radius.none}",
+          "$description": "No border radius"
+        },
+        "xs": {
+          "$type": "borderRadius",
+          "$value": "{core.shape.radius.01}",
+          "$description": "Extra small border radius"
+        },
+        "sm": {
+          "$type": "borderRadius",
+          "$value": "{core.shape.radius.02}",
+          "$description": "Small border radius"
+        },
+        "md": {
+          "$type": "borderRadius",
+          "$value": "{core.shape.radius.03}",
+          "$description": "Medium border radius"
+        },
+        "lg": {
+          "$type": "borderRadius",
+          "$value": "{core.shape.radius.04}",
+          "$description": "Large border radius"
+        },
+        "xl": {
+          "$type": "borderRadius",
+          "$value": "{core.shape.radius.05}",
+          "$description": "Extra large border radius"
+        },
+        "full": {
+          "$type": "borderRadius",
+          "$value": "{core.shape.radius.full}",
+          "$description": "Full border radius (pill shape)"
+        }
+      }
+    },
+
+    "opacity": {
+      "disabled": {
+        "$type": "opacity",
+        "$value": 0.5,
+        "$description": "Opacity for disabled elements"
+      }
+    },
+
+
+    "components": {
+      "action": {
+        "height": {
+          "small": {
+            "$type": "dimension",
+            "$value": "{core.spacing.size.07}",
+            "$description": "Small action component height"
+          },
+          "default": {
+            "$type": "dimension",
+            "$value": "{core.spacing.size.08}",
+            "$description": "Default action component height"
+          },
+          "large": {
+            "$type": "dimension",
+            "$value": "{core.spacing.size.09}",
+            "$description": "Large action component height"
+          }
+        }
+      }
+    },
+
+
+    "motion": {
+      "interaction": {
+        "hover": {
+          "easing": {
+            "$type": "cubicBezier",
+            "$value": "{core.motion.easing.soft.enter}",
+            "$description": "Easing for hover interactions"
+          }
+        }
+      }
     }
   }
 }

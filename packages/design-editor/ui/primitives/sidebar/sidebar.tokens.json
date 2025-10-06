@@ -17,11 +17,11 @@
     },
     "container": {
       "backgroundColor": {
-        "value": "{color.action.background.secondary.default}",
+        "value": "{semantic.color.action.background.secondary.default}",
         "description": "Background color for sidebar container"
       },
       "color": {
-        "value": "{color.action.foreground.secondary.default}",
+        "value": "{semantic.color.action.foreground.secondary.default}",
         "description": "Text color for sidebar container"
       },
       "width": {
@@ -67,7 +67,7 @@
     },
     "input": {
       "backgroundColor": {
-        "value": "{color.mode.white}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Background color for sidebar input"
       },
       "height": {
@@ -121,7 +121,7 @@
     },
     "separator": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.200}",
+        "value": "{semantic.color.action.background.secondary.active}",
         "description": "Background color for sidebar separator"
       },
       "margin": {
@@ -289,7 +289,7 @@
         "description": "Outline for sidebar menu button"
       },
       "ring": {
-        "value": "2px solid {color.action.border.primary.focus}",
+        "value": "2px solid {semantic.color.action.border.primary.focus}",
         "description": "Ring for sidebar menu button"
       },
       "transition": {
@@ -309,21 +309,21 @@
       "states": {
         "hover": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.hover}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on hover for sidebar menu button"
           },
           "color": {
-            "value": "{color.action.foreground.secondary.default}",
+            "value": "{semantic.color.action.foreground.secondary.default}",
             "description": "Color on hover for sidebar menu button"
           }
         },
         "active": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.active}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Background color when active for sidebar menu button"
           },
           "color": {
-            "value": "{color.action.foreground.secondary.default}",
+            "value": "{semantic.color.action.foreground.secondary.default}",
             "description": "Color when active for sidebar menu button"
           },
           "fontWeight": {
@@ -345,24 +345,24 @@
       "variants": {
         "outline": {
           "backgroundColor": {
-            "value": "{color.mode.white}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Background color for outline variant"
           },
           "boxShadow": {
-            "value": "0 0 0 1px {color.palette.neutral.200}",
+            "value": "0 0 0 1px {semantic.color.action.background.secondary.active}",
             "description": "Box shadow for outline variant"
           },
           "hover": {
             "backgroundColor": {
-              "value": "{color.action.background.secondary.hover}",
+              "value": "{semantic.color.action.background.secondary.hover}",
               "description": "Hover background color for outline variant"
             },
             "color": {
-              "value": "{color.action.foreground.secondary.default}",
+              "value": "{semantic.color.action.foreground.secondary.default}",
               "description": "Hover color for outline variant"
             },
             "boxShadow": {
-              "value": "0 0 0 1px {color.action.background.secondary.hover}",
+              "value": "0 0 0 1px {semantic.color.action.background.secondary.hover}",
               "description": "Hover box shadow for outline variant"
             }
           }
@@ -481,21 +481,21 @@
       "states": {
         "hover": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.hover}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on hover for sidebar menu sub button"
           },
           "color": {
-            "value": "{color.action.foreground.secondary.default}",
+            "value": "{semantic.color.action.foreground.secondary.default}",
             "description": "Color on hover for sidebar menu sub button"
           }
         },
         "active": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.active}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Background color when active for sidebar menu sub button"
           },
           "color": {
-            "value": "{color.action.foreground.secondary.default}",
+            "value": "{semantic.color.action.foreground.secondary.default}",
             "description": "Color when active for sidebar menu sub button"
           }
         }
@@ -565,7 +565,7 @@
       "states": {
         "hover": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.hover}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on hover for sidebar rail"
           }
         }

@@ -3,7 +3,6 @@
 import { ChevronUp, ChevronDown } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import styles from "./collapsible-panel.module.scss";
 import { Button } from "@/ui/primitives/Button";
 
 interface CollapsiblePanelProps {
@@ -32,21 +31,17 @@ export function CollapsiblePanel({
   };
 
   return (
-    <div className={`${styles.collapsiblePanel} ${className || ""}`}>
+    <div className={`relative ${className || ""}`}>
       {/* Panel Container */}
       <div
-        className={`${styles.collapsiblePanelContainer} ${
-          isCollapsed
-            ? styles["collapsiblePanelContainer--collapsed"]
-            : styles["collapsiblePanelContainer--expanded"]
+        className={`relative transition-all duration-300 ease-in-out ${
+          isCollapsed ? "w-16" : "w-full"
         }`}
       >
         {/* Main Content */}
         <div
-          className={`${styles.collapsiblePanelContent} ${
-            isCollapsed
-              ? styles["collapsiblePanelContent--collapsed"]
-              : styles["collapsiblePanelContent--expanded"]
+          className={`transition-all duration-300 ease-in-out ${
+            isCollapsed ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >
           {children}
@@ -54,10 +49,10 @@ export function CollapsiblePanel({
 
         {/* Collapsed Content */}
         <div
-          className={`${styles.collapsiblePanelCollapsedContent} ${
+          className={`absolute inset-0 transition-all duration-300 ease-in-out ${
             isCollapsed
-              ? styles["collapsiblePanelCollapsedContent--visible"]
-              : styles["collapsiblePanelCollapsedContent--hidden"]
+              ? "opacity-100 pointer-events-auto"
+              : "opacity-0 pointer-events-none"
           }`}
         >
           {collapsedContent}
@@ -68,13 +63,15 @@ export function CollapsiblePanel({
           variant="ghost"
           size="icon"
           onClick={toggleCollapsed}
-          className={styles.collapsiblePanelToggle}
+          className={`absolute top-2 transition-all duration-300 ease-in-out ${
+            isCollapsed ? "left-2" : "right-2"
+          } h-8 w-8`}
           title={isCollapsed ? "Expand Panel" : "Collapse Panel"}
         >
           {isCollapsed ? (
-            <ChevronDown className={styles.collapsiblePanelToggleIcon} />
+            <ChevronDown className="h-4 w-4" />
           ) : (
-            <ChevronUp className={styles.collapsiblePanelToggleIcon} />
+            <ChevronUp className="h-4 w-4" />
           )}
         </Button>
       </div>

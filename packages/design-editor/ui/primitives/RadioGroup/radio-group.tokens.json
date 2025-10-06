@@ -23,7 +23,7 @@
         },
         "color": {
           "default": {
-            "value": "{color.palette.neutral.200}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Default border color for radio items"
           }
         }
@@ -56,13 +56,13 @@
           "description": "Default background color for radio items"
         },
         "dark": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "opacity": 0.3,
           "description": "Dark mode background color for radio items"
         }
       },
       "color": {
-        "value": "{color.action.background.primary.default}",
+        "value": "{semantic.color.action.background.primary.default}",
         "description": "Color for radio items"
       },
       "states": {
@@ -93,7 +93,7 @@
       },
       "icon": {
         "fill": {
-          "value": "{color.action.background.primary.default}",
+          "value": "{semantic.color.action.background.primary.default}",
           "description": "Fill color for radio indicator icons"
         },
         "position": {

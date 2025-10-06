@@ -6,15 +6,15 @@
   --tabs-container-gap: 8px;
 
   /* === List Tokens === */
-  --tabs-list-backgroundColor: var(--color-palette-neutral-100);
-  --tabs-list-color: var(--color-palette-neutral-500);
+  --tabs-list-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --tabs-list-color: var(--semantic-color-navigation-foreground-secondary);
   --tabs-list-height: 36px;
   --tabs-list-borderRadius: 8px;
   --tabs-list-padding: 3px;
 
   /* === Trigger Tokens === */
-  --tabs-trigger-color-default: var(--color-mode-dark);
-  --tabs-trigger-color-dark: var(--color-palette-neutral-500);
+  --tabs-trigger-color-default: var(--semantic-color-action-foreground-primary-default);
+  --tabs-trigger-color-dark: var(--semantic-color-navigation-foreground-secondary);
   --tabs-trigger-height: calc(100% - 1px);
   --tabs-trigger-borderRadius: 6px;
   --tabs-trigger-border-width: 1px;
@@ -26,11 +26,11 @@
   --tabs-trigger-gap: 6px;
   --tabs-trigger-transition-duration: 150ms;
   --tabs-trigger-transition-easing: ease-in-out;
-  --tabs-trigger-states-active-backgroundColor: var(--color-mode-white);
+  --tabs-trigger-states-active-backgroundColor: var(--semantic-color-action-foreground-primary-default);
   --tabs-trigger-states-active-boxShadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --tabs-trigger-states-active-dark-color: var(--color-mode-dark);
-  --tabs-trigger-states-active-dark-borderColor: var(--color-palette-neutral-200);
-  --tabs-trigger-states-active-dark-backgroundColor: var(--color-palette-neutral-200);
+  --tabs-trigger-states-active-dark-color: var(--semantic-color-action-foreground-primary-default);
+  --tabs-trigger-states-active-dark-borderColor: var(--semantic-color-action-background-secondary-active);
+  --tabs-trigger-states-active-dark-backgroundColor: var(--semantic-color-action-background-secondary-active);
   --tabs-trigger-states-disabled-opacity: 0.5;
 
   /* === Content Tokens === */

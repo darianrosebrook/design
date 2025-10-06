@@ -3,11 +3,11 @@
   "tokens": {
     "content": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.0}",
+        "value": "{semantic.color.action.background.secondary.default}",
         "description": "Background color for context menu content"
       },
       "color": {
-        "value": "{color.mode.dark}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Text color for context menu content"
       },
       "zIndex": {
@@ -46,7 +46,7 @@
           "description": "Border style for context menu content"
         },
         "color": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border color for context menu content"
         }
       },
@@ -71,11 +71,11 @@
     },
     "subContent": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.0}",
+        "value": "{semantic.color.action.background.secondary.default}",
         "description": "Background color for submenu content"
       },
       "color": {
-        "value": "{color.mode.dark}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Text color for submenu content"
       },
       "zIndex": {
@@ -104,7 +104,7 @@
           "description": "Border style for submenu content"
         },
         "color": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border color for submenu content"
         }
       },
@@ -173,11 +173,11 @@
       "states": {
         "focus": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on focus"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Text color on focus"
           }
         },
@@ -195,22 +195,22 @@
       "variants": {
         "destructive": {
           "color": {
-            "value": "{color.palette.red.600}",
+            "value": "{semantic.color.action.background.danger.hover}",
             "description": "Text color for destructive variant"
           },
           "focus": {
             "backgroundColor": {
-              "value": "{color.palette.red.50}",
+              "value": "{semantic.color.feedback.background.danger.subtle}",
               "description": "Background color on focus for destructive"
             },
             "color": {
-              "value": "{color.palette.red.700}",
+              "value": "{semantic.color.action.background.danger.active}",
               "description": "Text color on focus for destructive"
             }
           },
           "icon": {
             "color": {
-              "value": "{color.palette.red.600}",
+              "value": "{semantic.color.action.background.danger.hover}",
               "description": "Icon color for destructive variant"
             }
           }
@@ -230,7 +230,7 @@
           "description": "Size for item icons"
         },
         "color": {
-          "value": "{color.palette.neutral.500}",
+          "value": "{semantic.color.navigation.foreground.secondary}",
           "description": "Color for item icons"
         }
       }
@@ -283,21 +283,21 @@
       "states": {
         "focus": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on focus"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Text color on focus"
           }
         },
         "open": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color when open"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Text color when open"
           }
         }
@@ -379,11 +379,11 @@
       "states": {
         "focus": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on focus"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Text color on focus"
           }
         },
@@ -507,11 +507,11 @@
       "states": {
         "focus": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on focus"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Text color on focus"
           }
         },
@@ -583,7 +583,7 @@
     },
     "label": {
       "color": {
-        "value": "{color.mode.dark}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Color for context menu labels"
       },
       "padding": {
@@ -613,7 +613,7 @@
     },
     "separator": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.200}",
+        "value": "{semantic.color.action.background.secondary.active}",
         "description": "Background color for separator"
       },
       "margin": {
@@ -633,7 +633,7 @@
     },
     "shortcut": {
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for keyboard shortcuts"
       },
       "marginLeft": {

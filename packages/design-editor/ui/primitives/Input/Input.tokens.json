@@ -36,15 +36,15 @@
       },
       "color": {
         "default": {
-          "value": "{color.action.border.secondary.default}",
+          "value": "{semantic.color.action.border.secondary.default}",
           "description": "Default border color"
         },
         "focus": {
-          "value": "{color.action.border.primary.focus}",
+          "value": "{semantic.color.action.border.primary.focus}",
           "description": "Border color on focus"
         },
         "invalid": {
-          "value": "{color.action.background.danger.default}",
+          "value": "{semantic.color.action.background.danger.default}",
           "description": "Border color when invalid"
         }
       }
@@ -55,7 +55,7 @@
         "description": "Default background color"
       },
       "dark": {
-        "value": "{color.action.border.secondary.default}",
+        "value": "{semantic.color.action.border.secondary.default}",
         "opacity": 0.3,
         "description": "Background color in dark mode"
       }
@@ -65,16 +65,16 @@
       "description": "Text color"
     },
     "placeholderColor": {
-      "value": "{color.palette.neutral.500}",
+      "value": "{semantic.color.navigation.foreground.secondary}",
       "description": "Placeholder text color"
     },
     "selection": {
       "backgroundColor": {
-        "value": "{color.action.background.primary.default}",
+        "value": "{semantic.color.action.background.primary.default}",
         "description": "Background color for selected text"
       },
       "color": {
-        "value": "{color.action.foreground.primary.default}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Text color for selected text"
       }
     },
@@ -95,7 +95,7 @@
     "focus": {
       "ring": {
         "color": {
-          "value": "{color.action.border.primary.focus}",
+          "value": "{semantic.color.action.border.primary.focus}",
           "opacity": 0.5,
           "description": "Focus ring color"
         },

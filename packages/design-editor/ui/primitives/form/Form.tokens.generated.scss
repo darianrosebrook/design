@@ -7,8 +7,8 @@
   --form-item-gap: 8px;
 
   /* === Label Tokens === */
-  --form-label-color-default: var(--color-mode-dark);
-  --form-label-color-error: var(--color-palette-red-600);
+  --form-label-color-default: var(--semantic-color-action-foreground-primary-default);
+  --form-label-color-error: var(--semantic-color-action-background-danger-hover);
 
   /* === Control Tokens === */
   --form-control-id: auto;
@@ -18,11 +18,11 @@
   --form-control-ariaInvalid-valid: false;
 
   /* === Description Tokens === */
-  --form-description-color: var(--color-palette-neutral-500);
+  --form-description-color: var(--semantic-color-navigation-foreground-secondary);
   --form-description-fontSize: 14px;
 
   /* === Message Tokens === */
-  --form-message-color: var(--color-palette-red-600);
+  --form-message-color: var(--semantic-color-action-background-danger-hover);
   --form-message-fontSize: 14px;
   --form-message-display: block;
   --form-message-hidden: none;

@@ -113,8 +113,11 @@ export const NumberField: React.FC<NumberFieldProps> = ({
     }
   };
 
-  const fieldId =
-    id || `number-field-${Math.random().toString(36).substr(2, 9)}`;
+  const [fieldId] = React.useState(
+    () =>
+      id ||
+      `number-field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+  );
   const helperId = `${fieldId}-helper`;
   const errorId = `${fieldId}-error`;
 

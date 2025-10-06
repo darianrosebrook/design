@@ -15,31 +15,31 @@
   /* === Header Tokens === */
   --table-header-row-borderBottom-width: 1px;
   --table-header-row-borderBottom-style: solid;
-  --table-header-row-borderBottom-color: var(--color-palette-neutral-200);
+  --table-header-row-borderBottom-color: var(--semantic-color-action-background-secondary-active);
 
   /* === Body Tokens === */
   --table-body-row-last-borderBottom: none;
 
   /* === Footer Tokens === */
-  --table-footer-backgroundColor: var(--color-palette-neutral-100);
+  --table-footer-backgroundColor: var(--semantic-color-action-background-secondary-hover);
   --table-footer-borderTop-width: 1px;
   --table-footer-borderTop-style: solid;
-  --table-footer-borderTop-color: var(--color-palette-neutral-200);
+  --table-footer-borderTop-color: var(--semantic-color-action-background-secondary-active);
   --table-footer-fontWeight: 500;
   --table-footer-row-last-borderBottom: none;
 
   /* === Row Tokens === */
   --table-row-borderBottom-width: 1px;
   --table-row-borderBottom-style: solid;
-  --table-row-borderBottom-color: var(--color-palette-neutral-200);
+  --table-row-borderBottom-color: var(--semantic-color-action-background-secondary-active);
   --table-row-transition-property: background-color;
   --table-row-transition-duration: 150ms;
   --table-row-transition-easing: var(--motion-interaction-hover-easing);
-  --table-row-states-hover-backgroundColor: var(--color-palette-neutral-100);
-  --table-row-states-selected-backgroundColor: var(--color-palette-neutral-100);
+  --table-row-states-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --table-row-states-selected-backgroundColor: var(--semantic-color-action-background-secondary-hover);
 
   /* === Head Tokens === */
-  --table-head-color: var(--color-mode-dark);
+  --table-head-color: var(--semantic-color-action-foreground-primary-default);
   --table-head-height: 40px;
   --table-head-padding-horizontal: 8px;
   --table-head-textAlign: left;
@@ -57,7 +57,7 @@
   --table-cell-checkbox-translateY: 2px;
 
   /* === Caption Tokens === */
-  --table-caption-color: var(--color-palette-neutral-500);
+  --table-caption-color: var(--semantic-color-navigation-foreground-secondary);
   --table-caption-marginTop: 16px;
   --table-caption-fontSize: 14px;
   --table-caption-textAlign: center;

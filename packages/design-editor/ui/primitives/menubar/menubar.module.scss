@@ -5,10 +5,12 @@
 @use './Menubar.tokens.generated.scss' as menubarTokens;
 
 // Include the generated variables mixin
-@include menubarTokens.vars;
 
 // Root menubar styles
 .menubar {
+  // Include the generated variables mixin within the component scope
+  @include menubarTokens.vars;
+
   background-color: var(--menubar-root-backgroundColor);
   display: var(--menubar-root-display);
   height: var(--menubar-root-height);

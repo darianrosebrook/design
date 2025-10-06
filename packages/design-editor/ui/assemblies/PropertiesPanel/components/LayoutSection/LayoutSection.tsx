@@ -3,8 +3,7 @@
 import { Label } from "@paths-design/design-system";
 import type React from "react";
 import { useState } from "react";
-import styles from "./LayoutSection.module.scss";
-import { Link2, Unlink } from "@/lib/components/icons";
+import { Link2, Unlink } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/ui/primitives/Button";
 import { Input } from "@/ui/primitives/Input";
@@ -47,44 +46,42 @@ export function LayoutSection({
   };
 
   return (
-    <div className={cn(styles.layoutSection, className)}>
-      <div className={styles.layoutSectionGrid}>
-        <div className={styles.layoutSectionField}>
-          <Label className={styles.layoutSectionLabel}>Width</Label>
+    <div className={`space-y-4 ${className || ""}`}>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-1">
+          <Label className="text-xs text-muted-foreground">Width</Label>
           <Input
             type="number"
             value={Math.round(width)}
             onChange={(e) => handleWidthChange(Number(e.target.value))}
-            className={styles.layoutSectionInput}
+            className="h-8 text-sm"
           />
         </div>
-        <div className={styles.layoutSectionField}>
-          <Label className={styles.layoutSectionLabel}>Height</Label>
+        <div className="space-y-1">
+          <Label className="text-xs text-muted-foreground">Height</Label>
           <Input
             type="number"
             value={Math.round(height)}
             onChange={(e) => handleHeightChange(Number(e.target.value))}
-            className={styles.layoutSectionInput}
+            className="h-8 text-sm"
           />
         </div>
       </div>
 
-      <div className={styles.layoutSectionAspectRatio}>
-        <Label className={styles.layoutSectionLabel}>Aspect Ratio</Label>
-        <div className={styles.layoutSectionAspectRatioControls}>
-          <span className={styles.layoutSectionAspectRatioValue}>
-            {aspectRatio.toFixed(2)}:1
-          </span>
+      <div className="space-y-2">
+        <Label className="text-xs text-muted-foreground">Aspect Ratio</Label>
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-mono">{aspectRatio.toFixed(2)}:1</span>
           <Button
             variant="ghost"
             size="sm"
             onClick={onAspectLockToggle}
-            className={styles.layoutSectionAspectRatioButton}
+            className="h-8 w-8 p-0"
           >
             {aspectLocked ? (
-              <Link2 className={styles.layoutSectionAspectRatioIcon} />
+              <Link2 className="h-4 w-4" />
             ) : (
-              <Unlink className={styles.layoutSectionAspectRatioIcon} />
+              <Unlink className="h-4 w-4" />
             )}
           </Button>
         </div>

@@ -8,8 +8,9 @@ import {
 import * as React from "react";
 import type { DayButton } from "react-day-picker";
 import { DayPicker, getDefaultClassNames } from "react-day-picker";
+import styles from "./calendar.module.scss";
 import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from '@/ui/primitives/Button';
+import { Button, buttonVariants } from "@/ui/primitives/Button";
 
 function Calendar({
   className,
@@ -159,9 +160,7 @@ function Calendar({
         WeekNumber: ({ children, ...props }) => {
           return (
             <td {...props}>
-              <div className="flex size-(--cell-size) items-center justify-center text-center">
-                {children}
-              </div>
+              <div className={styles.calendarWeekNumber}>{children}</div>
             </td>
           );
         },

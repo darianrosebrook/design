@@ -7,6 +7,8 @@
 .progress {
   // Include the generated variables mixin within the component scope
   @include progressTokens.vars;
+
+  // Include the generated variables mixin within the component scope
   // Base progress styles (equivalent to bg-primary/20 relative h-2 w-full overflow-hidden rounded-full)
   background-color: var(--progress-backgroundColor);
   opacity: var(--progress-backgroundColor-opacity);

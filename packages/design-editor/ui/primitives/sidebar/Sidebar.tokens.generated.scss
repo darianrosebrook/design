@@ -8,8 +8,8 @@
   --sidebar-width-icon: 3rem;
 
   /* === Container Tokens === */
-  --sidebar-container-backgroundColor: var(--color-action-background-secondary-default);
-  --sidebar-container-color: var(--color-action-foreground-secondary-default);
+  --sidebar-container-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --sidebar-container-color: var(--semantic-color-action-foreground-secondary-default);
   --sidebar-container-width: var(--sidebar-width);
   --sidebar-container-padding: 0px;
 
@@ -25,7 +25,7 @@
   --sidebar-insets-flex: 1;
 
   /* === Input Tokens === */
-  --sidebar-input-backgroundColor: var(--color-mode-white);
+  --sidebar-input-backgroundColor: var(--semantic-color-action-foreground-primary-default);
   --sidebar-input-height: 32px;
   --sidebar-input-width: 100%;
   --sidebar-input-boxShadow: none;
@@ -43,7 +43,7 @@
   --sidebar-footer-padding: 8px;
 
   /* === Separator Tokens === */
-  --sidebar-separator-backgroundColor: var(--color-palette-neutral-200);
+  --sidebar-separator-backgroundColor: var(--semantic-color-action-background-secondary-active);
   --sidebar-separator-margin-horizontal: 8px;
   --sidebar-separator-width: auto;
 
@@ -95,22 +95,22 @@
   --sidebar-menuButton-textAlign: left;
   --sidebar-menuButton-fontSize: 14px;
   --sidebar-menuButton-outline: none;
-  --sidebar-menuButton-ring: 2px solid {color.action.border.primary.focus};
+  --sidebar-menuButton-ring: 2px solid {semantic.color.action.border.primary.focus};
   --sidebar-menuButton-transition-properties: width, height, padding;
   --sidebar-menuButton-transition-duration: 150ms;
   --sidebar-menuButton-transition-easing: var(--motion-interaction-hover-easing);
-  --sidebar-menuButton-states-hover-backgroundColor: var(--color-action-background-secondary-hover);
-  --sidebar-menuButton-states-hover-color: var(--color-action-foreground-secondary-default);
-  --sidebar-menuButton-states-active-backgroundColor: var(--color-action-background-secondary-active);
-  --sidebar-menuButton-states-active-color: var(--color-action-foreground-secondary-default);
+  --sidebar-menuButton-states-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --sidebar-menuButton-states-hover-color: var(--semantic-color-action-foreground-secondary-default);
+  --sidebar-menuButton-states-active-backgroundColor: var(--semantic-color-action-background-secondary-active);
+  --sidebar-menuButton-states-active-color: var(--semantic-color-action-foreground-secondary-default);
   --sidebar-menuButton-states-active-fontWeight: 500;
   --sidebar-menuButton-states-disabled-pointerEvents: none;
   --sidebar-menuButton-states-disabled-opacity: 0.5;
-  --sidebar-menuButton-variants-outline-backgroundColor: var(--color-mode-white);
-  --sidebar-menuButton-variants-outline-boxShadow: 0 0 0 1px {color.palette.neutral.200};
-  --sidebar-menuButton-variants-outline-hover-backgroundColor: var(--color-action-background-secondary-hover);
-  --sidebar-menuButton-variants-outline-hover-color: var(--color-action-foreground-secondary-default);
-  --sidebar-menuButton-variants-outline-hover-boxShadow: 0 0 0 1px {color.action.background.secondary.hover};
+  --sidebar-menuButton-variants-outline-backgroundColor: var(--semantic-color-action-foreground-primary-default);
+  --sidebar-menuButton-variants-outline-boxShadow: 0 0 0 1px {semantic.color.action.background.secondary.active};
+  --sidebar-menuButton-variants-outline-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --sidebar-menuButton-variants-outline-hover-color: var(--semantic-color-action-foreground-secondary-default);
+  --sidebar-menuButton-variants-outline-hover-boxShadow: 0 0 0 1px {semantic.color.action.background.secondary.hover};
   --sidebar-menuButton-sizes-default-height: 32px;
   --sidebar-menuButton-sizes-default-fontSize: 14px;
   --sidebar-menuButton-sizes-sm-height: 28px;
@@ -140,10 +140,10 @@
   --sidebar-menuSubButton-fontSize: 14px;
   --sidebar-menuSubButton-transition-duration: 150ms;
   --sidebar-menuSubButton-transition-easing: var(--motion-interaction-hover-easing);
-  --sidebar-menuSubButton-states-hover-backgroundColor: var(--color-action-background-secondary-hover);
-  --sidebar-menuSubButton-states-hover-color: var(--color-action-foreground-secondary-default);
-  --sidebar-menuSubButton-states-active-backgroundColor: var(--color-action-background-secondary-active);
-  --sidebar-menuSubButton-states-active-color: var(--color-action-foreground-secondary-default);
+  --sidebar-menuSubButton-states-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --sidebar-menuSubButton-states-hover-color: var(--semantic-color-action-foreground-secondary-default);
+  --sidebar-menuSubButton-states-active-backgroundColor: var(--semantic-color-action-background-secondary-active);
+  --sidebar-menuSubButton-states-active-color: var(--semantic-color-action-foreground-secondary-default);
   --sidebar-menuSubButton-icon-size: 16px;
   --sidebar-menuSubButton-icon-borderRadius: 4px;
   --sidebar-menuSubButton-skeleton-height: 16px;
@@ -161,5 +161,5 @@
   --sidebar-rail-padding: 8px;
   --sidebar-rail-transition-duration: 150ms;
   --sidebar-rail-transition-easing: var(--motion-interaction-hover-easing);
-  --sidebar-rail-states-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --sidebar-rail-states-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
 }

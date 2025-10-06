@@ -5,10 +5,12 @@
 @use './Spinner.tokens.generated.scss' as spinnerTokens;
 
 // Include the generated variables mixin
-@include spinnerTokens.vars;
 
 // Base spinner styles
 .spinner {
+  // Include the generated variables mixin within the component scope
+  @include spinnerTokens.vars;
+
   color: var(--spinner-color);
   animation: var(--spinner-animation-iterationCount) var(--spinner-animation-timingFunction) var(--spinner-animation-duration) spin;
   flex-shrink: 0;

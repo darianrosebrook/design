@@ -5,10 +5,12 @@
 @use './Calendar.tokens.generated.scss' as calendarTokens;
 
 // Include the generated variables mixin
-@include calendarTokens.vars;
 
 // Calendar root container
 .calendar {
+  // Include the generated variables mixin within the component scope
+  @include calendarTokens.vars;
+
   background-color: var(--calendar-calendar-backgroundColor);
   padding: var(--calendar-calendar-padding);
   width: var(--calendar-calendar-width);

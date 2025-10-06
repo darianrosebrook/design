@@ -1,8 +1,10 @@
 packages:
-  - 'packages/*'
-  - 'packages/websocket-server'
-  - 'packages/plugin-registry'
-  - 'packages/visual-debug'
-  - 'packages/plugin-testing'
-  - 'apps/*'
+  - packages/*
+  - packages/websocket-server
+  - packages/plugin-registry
+  - packages/visual-debug
+  - packages/plugin-testing
+  - apps/*
 
+onlyBuiltDependencies:
+  - esbuild

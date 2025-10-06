@@ -15,7 +15,7 @@
   --drawer-content-zIndex: 1050;
   --drawer-content-display: flex;
   --drawer-content-flexDirection: column;
-  --drawer-content-backgroundColor: var(--color-mode-light);
+  --drawer-content-backgroundColor: var(--semantic-color-action-background-secondary-default);
   --drawer-content-borderRadius: 8px;
   --drawer-content-animation-duration: 400ms;
   --drawer-content-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
@@ -28,7 +28,7 @@
   --drawer-content-directions-top-maxHeight: 80vh;
   --drawer-content-directions-top-borderBottom-width: 1px;
   --drawer-content-directions-top-borderBottom-style: solid;
-  --drawer-content-directions-top-borderBottom-color: var(--color-palette-neutral-200);
+  --drawer-content-directions-top-borderBottom-color: var(--semantic-color-action-background-secondary-active);
   --drawer-content-directions-top-borderRadiusBottom: 8px;
   --drawer-content-directions-bottom-inset: 0;
   --drawer-content-directions-bottom-top: auto;
@@ -39,7 +39,7 @@
   --drawer-content-directions-bottom-maxHeight: 80vh;
   --drawer-content-directions-bottom-borderTop-width: 1px;
   --drawer-content-directions-bottom-borderTop-style: solid;
-  --drawer-content-directions-bottom-borderTop-color: var(--color-palette-neutral-200);
+  --drawer-content-directions-bottom-borderTop-color: var(--semantic-color-action-background-secondary-active);
   --drawer-content-directions-bottom-borderRadiusTop: 8px;
   --drawer-content-directions-left-inset: 0;
   --drawer-content-directions-left-top: 0;
@@ -50,7 +50,7 @@
   --drawer-content-directions-left-maxWidth: 384px;
   --drawer-content-directions-left-borderRight-width: 1px;
   --drawer-content-directions-left-borderRight-style: solid;
-  --drawer-content-directions-left-borderRight-color: var(--color-palette-neutral-200);
+  --drawer-content-directions-left-borderRight-color: var(--semantic-color-action-background-secondary-active);
   --drawer-content-directions-right-inset: 0;
   --drawer-content-directions-right-top: 0;
   --drawer-content-directions-right-bottom: 0;
@@ -60,11 +60,11 @@
   --drawer-content-directions-right-maxWidth: 384px;
   --drawer-content-directions-right-borderLeft-width: 1px;
   --drawer-content-directions-right-borderLeft-style: solid;
-  --drawer-content-directions-right-borderLeft-color: var(--color-palette-neutral-200);
+  --drawer-content-directions-right-borderLeft-color: var(--semantic-color-action-background-secondary-active);
 
   /* === Handle Tokens === */
   --drawer-handle-display: none;
-  --drawer-handle-backgroundColor: var(--color-palette-neutral-100);
+  --drawer-handle-backgroundColor: var(--semantic-color-action-background-secondary-hover);
   --drawer-handle-margin-horizontal: auto;
   --drawer-handle-marginTop: 16px;
   --drawer-handle-height: 8px;
@@ -91,10 +91,10 @@
   --drawer-footer-padding: 16px;
 
   /* === Title Tokens === */
-  --drawer-title-color: var(--color-mode-dark);
+  --drawer-title-color: var(--semantic-color-action-foreground-primary-default);
   --drawer-title-fontWeight: 600;
 
   /* === Description Tokens === */
-  --drawer-description-color: var(--color-palette-neutral-500);
+  --drawer-description-color: var(--semantic-color-navigation-foreground-secondary);
   --drawer-description-fontSize: 14px;
 }

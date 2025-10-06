@@ -5,10 +5,12 @@
 @use './Command.tokens.generated.scss' as commandTokens;
 
 // Include the generated variables mixin
-@include commandTokens.vars;
 
 // Command main container
 .command {
+  // Include the generated variables mixin within the component scope
+  @include commandTokens.vars;
+
   background-color: var(--command-command-backgroundColor);
   color: var(--command-command-color);
   display: var(--command-command-display);

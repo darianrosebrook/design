@@ -3,15 +3,15 @@
 import { Label } from "@paths-design/design-system";
 import { cva, type VariantProps } from "class-variance-authority";
 import { useMemo } from "react";
+// No SCSS module import needed - using Tailwind classes
 import { cn } from "@/lib/utils";
 import { Separator } from "@/ui/primitives/Separator";
-import styles from "./field.module.scss";
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (
     <fieldset
       data-slot="field-set"
-      className={cn(styles["field-set"], className)}
+      className={cn("space-y-2", className)}
       {...props}
     />
   );
@@ -26,7 +26,10 @@ function FieldLegend({
     <legend
       data-slot="field-legend"
       data-variant={variant}
-      className={cn(styles["field-legend"], className)}
+      className={cn(
+        "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+        className
+      )}
       {...props}
     />
   );
@@ -36,13 +39,13 @@ function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="field-group"
-      className={cn(styles["field-group"], className)}
+      className={cn("space-y-2", className)}
       {...props}
     />
   );
 }
 
-const fieldVariants = cva(styles.field);
+const fieldVariants = cva("space-y-2");
 
 function Field({
   className,
@@ -66,7 +69,7 @@ function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="field-content"
-      className={cn(styles["field-content"], className)}
+      className={cn("grid gap-2", className)}
       {...props}
     />
   );
@@ -79,7 +82,10 @@ function FieldLabel({
   return (
     <Label
       data-slot="field-label"
-      className={cn(styles["field-label"], className)}
+      className={cn(
+        "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+        className
+      )}
       {...props}
     />
   );
@@ -89,7 +95,7 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="field-label"
-      className={cn(styles["field-title"], className)}
+      className={cn("text-sm font-medium", className)}
       {...props}
     />
   );
@@ -99,7 +105,7 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
       data-slot="field-description"
-      className={cn(styles["field-description"], className)}
+      className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
   );
@@ -116,13 +122,13 @@ function FieldSeparator({
     <div
       data-slot="field-separator"
       data-content={!!children}
-      className={cn(styles["field-separator"], className)}
+      className={cn("relative", className)}
       {...props}
     >
       <Separator className="absolute inset-0 top-1/2" />
       {children && (
         <span
-          className={styles["field-separator-content"]}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground"
           data-slot="field-separator-content"
         >
           {children}
@@ -154,7 +160,7 @@ function FieldError({
     }
 
     return (
-      <ul className="ml-4 flex list-disc flex-col gap-1">
+      <ul className="list-disc space-y-1 pl-4">
         {errors.map(
           (error, index) =>
             error?.message && <li key={index}>{error.message}</li>
@@ -171,7 +177,7 @@ function FieldError({
     <div
       role="alert"
       data-slot="field-error"
-      className={cn(styles["field-error"], className)}
+      className={cn("text-sm text-destructive", className)}
       {...props}
     >
       {content}

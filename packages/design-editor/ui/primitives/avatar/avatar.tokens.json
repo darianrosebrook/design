@@ -95,13 +95,13 @@
       "colors": {
         "background": {
           "muted": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color for muted avatar"
           }
         },
         "foreground": {
           "muted": {
-            "value": "{color.palette.neutral.600}",
+            "value": "{semantic.color.navigation.foreground.secondary}",
             "description": "Foreground color for muted avatar"
           }
         }
@@ -159,11 +159,11 @@
         "description": "Line height for avatar fallback"
       },
       "color": {
-        "value": "{color.palette.neutral.600}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for avatar fallback text"
       },
       "backgroundColor": {
-        "value": "{color.palette.neutral.100}",
+        "value": "{semantic.color.action.background.secondary.hover}",
         "description": "Background color for avatar fallback"
       },
       "borderRadius": {

@@ -10,19 +10,19 @@
   --chart-container-padding: 12px;
 
   /* === Recharts Tokens === */
-  --chart-recharts-axis-tick-text-fill: var(--color-palette-neutral-500);
-  --chart-recharts-grid-line-stroke: var(--color-palette-neutral-200);
-  --chart-recharts-tooltip-cursor-stroke: var(--color-palette-neutral-200);
-  --chart-recharts-polarGrid-stroke: var(--color-palette-neutral-200);
-  --chart-recharts-radialBar-backgroundSector-fill: var(--color-palette-neutral-100);
-  --chart-recharts-rectangle-tooltipCursor-fill: var(--color-palette-neutral-100);
-  --chart-recharts-referenceLine-stroke: var(--color-palette-neutral-200);
+  --chart-recharts-axis-tick-text-fill: var(--semantic-color-navigation-foreground-secondary);
+  --chart-recharts-grid-line-stroke: var(--semantic-color-action-background-secondary-active);
+  --chart-recharts-tooltip-cursor-stroke: var(--semantic-color-action-background-secondary-active);
+  --chart-recharts-polarGrid-stroke: var(--semantic-color-action-background-secondary-active);
+  --chart-recharts-radialBar-backgroundSector-fill: var(--semantic-color-action-background-secondary-hover);
+  --chart-recharts-rectangle-tooltipCursor-fill: var(--semantic-color-action-background-secondary-hover);
+  --chart-recharts-referenceLine-stroke: var(--semantic-color-action-background-secondary-active);
   --chart-recharts-dot-stroke: transparent;
   --chart-recharts-sector-outline: none;
   --chart-recharts-sector-stroke: transparent;
   --chart-recharts-surface-outline: none;
   --chart-recharts-layer-outline: none;
-  --chart-recharts-curve-tooltipCursor-stroke: var(--color-palette-neutral-200);
+  --chart-recharts-curve-tooltipCursor-stroke: var(--semantic-color-action-background-secondary-active);
 
   /* === Tooltip Tokens === */
   --chart-tooltip-content: [object Object];
@@ -38,7 +38,7 @@
   --chart-legend-item-display: flex;
   --chart-legend-item-alignItems: center;
   --chart-legend-item-gap: 6px;
-  --chart-legend-item-icon-color: var(--color-palette-neutral-500);
+  --chart-legend-item-icon-color: var(--semantic-color-navigation-foreground-secondary);
   --chart-legend-item-icon-size: 12px;
   --chart-legend-item-icon-indicator-size: 8px;
   --chart-legend-item-icon-indicator-borderRadius: 2px;

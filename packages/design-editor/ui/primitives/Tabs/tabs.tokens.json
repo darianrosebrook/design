@@ -9,11 +9,11 @@
     },
     "list": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.100}",
+        "value": "{semantic.color.action.background.secondary.hover}",
         "description": "Background color for tabs list"
       },
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Text color for tabs list"
       },
       "height": {
@@ -32,11 +32,11 @@
     "trigger": {
       "color": {
         "default": {
-          "value": "{color.mode.dark}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Default text color for tab triggers"
         },
         "dark": {
-          "value": "{color.palette.neutral.500}",
+          "value": "{semantic.color.navigation.foreground.secondary}",
           "description": "Dark mode text color for tab triggers"
         }
       },
@@ -93,7 +93,7 @@
       "states": {
         "active": {
           "backgroundColor": {
-            "value": "{color.mode.white}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Background color for active tab trigger"
           },
           "boxShadow": {
@@ -102,15 +102,15 @@
           },
           "dark": {
             "color": {
-              "value": "{color.mode.dark}",
+              "value": "{semantic.color.action.foreground.primary.default}",
               "description": "Dark mode text color for active tab trigger"
             },
             "borderColor": {
-              "value": "{color.palette.neutral.200}",
+              "value": "{semantic.color.action.background.secondary.active}",
               "description": "Dark mode border color for active tab trigger"
             },
             "backgroundColor": {
-              "value": "{color.palette.neutral.200}",
+              "value": "{semantic.color.action.background.secondary.active}",
               "opacity": 0.3,
               "description": "Dark mode background color for active tab trigger"
             }

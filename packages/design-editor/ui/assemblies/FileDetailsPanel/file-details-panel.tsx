@@ -2,9 +2,7 @@
 
 import { LayersIcon, Library } from "lucide-react";
 import { useState } from "react";
-import styles from "./file-details-panel.module.scss";
 import { useCanvas } from "@/lib/canvas-context";
-import { cn } from "@/lib/utils";
 import { LayersList } from "@/ui/assemblies/LayersList";
 import { LibrarySection } from "@/ui/assemblies/LibrarySection";
 import { Panel, PanelContent } from "@/ui/composers/Panel";
@@ -34,15 +32,15 @@ export function FileDetailsPanel({
   // If collapsed, show compact view
   if (isCollapsed) {
     return (
-      <div className={styles.fileDetailsPanelCollapsed}>
-        <div className={styles.fileDetailsPanelCollapsedName}>
+      <div className="flex flex-col items-center gap-2 p-3 text-center">
+        <div className="text-sm font-medium truncate w-full">
           {fileMetadata.name}
         </div>
-        <div className={styles.fileDetailsPanelCollapsedStats}>
-          <LayersIcon className={styles.fileDetailsPanelCollapsedIcon} />
+        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+          <LayersIcon className="h-3 w-3" />
           <span>{fileMetadata.layers}</span>
         </div>
-        <div className={styles.fileDetailsPanelCollapsedTime}>
+        <div className="text-xs text-muted-foreground">
           {fileMetadata.lastModified}
         </div>
       </div>
@@ -59,26 +57,25 @@ export function FileDetailsPanel({
         <Tabs
           value={activeTab}
           onValueChange={(value) => setActiveTab(value as "layers" | "library")}
-          className={styles.fileDetailsPanelTabs}
         >
-          <TabsList className="// grid w-full grid-cols-2 mx-3 mt-2 h-9">
-            <TabsTrigger value="layers" className="// text-xs">
-              <LayersIcon className="// h-3 w-3 mr-1" />
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="layers" className="flex items-center gap-2">
+              <LayersIcon className="h-4 w-4" />
               Layers
             </TabsTrigger>
-            <TabsTrigger value="library" className="// text-xs">
-              <Library className="// h-3 w-3 mr-1" />
+            <TabsTrigger value="library" className="flex items-center gap-2">
+              <Library className="h-4 w-4" />
               Library
             </TabsTrigger>
           </TabsList>
 
           {/* Layers Tab */}
-          <TabsContent value="layers" className="// flex-1 m-0">
+          <TabsContent value="layers" className="mt-4">
             <LayersList objects={objects} />
           </TabsContent>
 
           {/* Library Tab */}
-          <TabsContent value="library" className="// flex-1 m-0">
+          <TabsContent value="library" className="mt-4">
             <LibrarySection
               title="Design System"
               items={[]} // MOCK DATA: Library section will use internal mock data for demonstration

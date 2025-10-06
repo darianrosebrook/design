@@ -1,7 +1,280 @@
-// properties-panel assemblie component styles
-// Migrated from Tailwind to SCSS with design tokens
+// PropertiesPanel assembly component styles
+// Direct CSS equivalents of original Tailwind classes
 
-.propertiespanel {
-  // Base component styles
-  // TODO: Add converted Tailwind styles here
+// Main panel container
+.propertiesPanel {
+  // Direct equivalent of: flex flex-col h-full
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// Panel header section
+.propertiesPanelHeader {
+  // Direct equivalent of: flex items-center justify-between px-3 py-2 border-b border-border
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #3f3f46; // zinc-700 (border)
+}
+
+// Panel title
+.propertiesPanelTitle {
+  // Direct equivalent of: text-sm font-semibold
+  font-size: 14px;
+  font-weight: 600;
+}
+
+// Panel subtitle
+.propertiesPanelSubtitle {
+  // Direct equivalent of: text-xs text-muted-foreground
+  font-size: 12px;
+  color: #a1a1aa; // zinc-400 (muted-foreground)
+}
+
+// Scroll area container
+.propertiesPanelScrollArea {
+  // Scroll area equivalent to flex-1
+  flex: 1;
+}
+
+// Content area
+.propertiesPanelContent {
+  // Direct equivalent of: p-3
+  padding: 12px;
+}
+
+// Section containers
+.propertiesPanelSection {
+  // Direct equivalent of: space-y-2 (margin-bottom: 8px on all but last child)
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Section header
+.propertiesPanelSectionHeader {
+  // Direct equivalent of: mb-2
+  margin-bottom: 8px;
+}
+
+// Form field containers
+.propertiesPanelField {
+  // Direct equivalent of: space-y-1 (margin-bottom: 4px on all but last child)
+  margin-bottom: 4px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Field labels
+.propertiesPanelLabel {
+  // Direct equivalent of: text-xs text-muted-foreground
+  font-size: 12px;
+  color: #a1a1aa; // zinc-400 (muted-foreground)
+}
+
+// Input controls
+.propertiesPanelInput {
+  // Direct equivalent of: h-8 text-sm
+  height: 32px;
+  font-size: 14px;
+}
+
+// Select controls
+.propertiesPanelSelect {
+  // Direct equivalent of: h-8 text-sm
+  height: 32px;
+  font-size: 14px;
+}
+
+// Button controls
+.propertiesPanelButton {
+  // Direct equivalent of: h-8 text-xs
+  height: 32px;
+  font-size: 12px;
+}
+
+// Grid layouts
+.propertiesPanelGrid {
+  // Base grid layout
+  display: grid;
+  gap: 8px; // equivalent to gap-2
+}
+
+.propertiesPanelGrid2 {
+  // 2-column grid equivalent to grid-cols-2
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.propertiesPanelGrid3 {
+  // 3-column grid equivalent to grid-cols-[1fr_auto_1fr]
+  grid-template-columns: 1fr auto 1fr;
+  align-items: end; // equivalent to items-end
+}
+
+// Control groups
+.propertiesPanelControls {
+  // Control group layout equivalent to flex gap-1
+  display: flex;
+  gap: 4px; // equivalent to gap-1
+}
+
+// Empty state
+.propertiesPanelEmpty {
+  // Empty state layout equivalent to flex flex-col h-full
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// Empty state header
+.propertiesPanelEmptyHeader {
+  // Direct equivalent of: flex items-center justify-between px-3 py-2 border-b border-border
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid #3f3f46; // zinc-700 (border)
+}
+
+// Empty state content
+.propertiesPanelEmptyContent {
+  // Empty content equivalent to p-3
+  padding: 12px; // equivalent to p-3
+  flex: 1;
+}
+
+// Slider controls
+.propertiesPanelSlider {
+  // Slider container equivalent to flex-1
+  flex: 1;
+}
+
+.propertiesPanelSliderValue {
+  // Direct equivalent of: text-xs text-muted-foreground w-10 text-right
+  font-size: 12px;
+  color: #a1a1aa; // zinc-400 (muted-foreground)
+  width: 40px;
+  text-align: right;
+}
+
+// Text alignment controls
+.propertiesPanelTextAlign {
+  // Text align button group equivalent to flex gap-1
+  display: flex;
+  gap: 4px; // equivalent to gap-1
+}
+
+.propertiesPanelTextAlignButton {
+  // Text align buttons equivalent to flex-1 h-8 text-xs capitalize
+  flex: 1;
+  height: 32px; // equivalent to h-8
+  font-size: 12px; // equivalent to text-xs
+  text-transform: capitalize;
+}
+
+// Corner radius controls
+.propertiesPanelCornerRadius {
+  // Corner radius section equivalent to space-y-2
+  margin-top: 8px; // equivalent to space-y-2
+}
+
+.propertiesPanelCornerRadiusHeader {
+  // Corner radius header equivalent to flex items-center justify-between
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.propertiesPanelCornerRadiusGrid {
+  // Corner radius grid equivalent to grid grid-cols-2 gap-2
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px; // equivalent to gap-2
+}
+
+// Typography section
+.propertiesPanelTypography {
+  // Typography section equivalent to space-y-3
+  margin-top: 12px; // equivalent to space-y-3
+}
+
+.propertiesPanelTypographyGrid {
+  // Typography grid equivalent to grid grid-cols-2 gap-2
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px; // equivalent to gap-2
+}
+
+// Effects section
+.propertiesPanelEffects {
+  // Effects section equivalent to space-y-2
+  margin-top: 8px; // equivalent to space-y-2
+}
+
+// Component props section (temporarily disabled)
+.propertiesPanelComponentProps {
+  // Direct equivalent of: p-3 text-sm text-muted-foreground
+  padding: 12px;
+  font-size: 14px;
+  color: #a1a1aa; // zinc-400 (muted-foreground)
+}
+
+// Layout section
+.propertiesPanelLayout {
+  // Layout section equivalent to space-y-2
+  margin-top: 8px; // equivalent to space-y-2
+}
+
+// Position section
+.propertiesPanelPosition {
+  // Position section equivalent to space-y-2
+  margin-top: 8px; // equivalent to space-y-2
+}
+
+.propertiesPanelPositionGrid {
+  // Position grid equivalent to grid grid-cols-2 gap-2
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px; // equivalent to gap-2
+}
+
+.propertiesPanelPositionLock {
+  // Position lock button equivalent to grid-cols-[1fr_auto_1fr] gap-2 items-end
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px; // equivalent to gap-2
+  align-items: end; // equivalent to items-end
+}
+
+// Appearance section
+.propertiesPanelAppearance {
+  // Appearance section equivalent to space-y-3
+  margin-top: 12px; // equivalent to space-y-3
+}
+
+// Auto layout section
+.propertiesPanelAutoLayout {
+  // Auto layout section equivalent to space-y-1
+  margin-bottom: 4px; // equivalent to space-y-1
+}
+
+// Two-column layout for properties panel
+.propertiesPanelColumns {
+  // Two-column grid layout equivalent to grid grid-cols-2 gap-4
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px; // equivalent to gap-4
+}
+
+.propertiesPanelColumn {
+  // Column container equivalent to flex flex-col space-y-3
+  display: flex;
+  flex-direction: column;
+  gap: 12px; // equivalent to space-y-3
 }

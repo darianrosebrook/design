@@ -3,11 +3,11 @@
   "tokens": {
     "content": {
       "backgroundColor": {
-        "value": "{color.mode.white}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Background color for dropdown menu content"
       },
       "color": {
-        "value": "{color.mode.dark}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Text color for dropdown menu content"
       },
       "zIndex": {
@@ -36,7 +36,7 @@
           "description": "Border style for dropdown menu content"
         },
         "color": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border color for dropdown menu content"
         }
       },
@@ -109,11 +109,11 @@
       "states": {
         "focus": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.hover}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on focus for dropdown menu items"
           },
           "color": {
-            "value": "{color.action.foreground.secondary.default}",
+            "value": "{semantic.color.action.foreground.secondary.default}",
             "description": "Color on focus for dropdown menu items"
           }
         },
@@ -131,21 +131,21 @@
       "variants": {
         "destructive": {
           "color": {
-            "value": "{color.action.foreground.danger.default}",
+            "value": "{semantic.color.action.foreground.danger.default}",
             "description": "Color for destructive variant items"
           },
           "focus": {
             "backgroundColor": {
-              "value": "{color.action.background.danger.hover}",
+              "value": "{semantic.color.action.background.danger.hover}",
               "description": "Background color on focus for destructive variant"
             },
             "color": {
-              "value": "{color.action.foreground.danger.default}",
+              "value": "{semantic.color.action.foreground.danger.default}",
               "description": "Color on focus for destructive variant"
             }
           },
           "iconColor": {
-            "value": "{color.action.foreground.danger.default}",
+            "value": "{semantic.color.action.foreground.danger.default}",
             "description": "Icon color for destructive variant"
           }
         },
@@ -171,7 +171,7 @@
         },
         "color": {
           "default": {
-            "value": "{color.palette.neutral.500}",
+            "value": "{semantic.color.navigation.foreground.secondary}",
             "description": "Default color for item icons"
           }
         }
@@ -281,13 +281,13 @@
         "description": "Font weight for dropdown menu labels"
       },
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for dropdown menu labels"
       }
     },
     "separator": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.200}",
+        "value": "{semantic.color.action.background.secondary.active}",
         "description": "Background color for dropdown menu separators"
       },
       "margin": {
@@ -319,7 +319,7 @@
         "description": "Font weight for dropdown menu shortcuts"
       },
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for dropdown menu shortcuts"
       },
       "opacity": {

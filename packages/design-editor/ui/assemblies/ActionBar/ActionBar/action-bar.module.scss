@@ -1,0 +1,138 @@
+// ActionBar assembly component styles
+// Direct CSS equivalents of original Tailwind classes
+
+// Container positioning and layout
+.actionBarContainer {
+  // Direct equivalent of: fixed bottom-6 left-1/2 -translate-x-1/2 z-50
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+}
+
+// Main action bar container
+.actionBar {
+  // Direct equivalent of: flex items-center gap-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-2 py-2 shadow-2xl
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #27272a; // zinc-800
+  border: 1px solid #3f3f46; // zinc-700
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+// Toggle button (shown when action bar is hidden)
+.actionBarToggleButton {
+  // Direct equivalent of: bg-zinc-800 border border-zinc-700 rounded-2xl shadow-2xl text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100 h-8 px-2
+  background-color: #27272a; // zinc-800
+  border: 1px solid #3f3f46; // zinc-700
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  color: #d4d4d8; // zinc-300
+  height: 32px;
+  padding: 8px;
+
+  &:hover {
+    background-color: #3f3f46; // zinc-700
+    color: #f4f4f5; // zinc-100
+  }
+}
+
+// Tool buttons (individual buttons in the action bar)
+.actionBarButton {
+  // Direct equivalent of: text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100 h-8 px-2
+  color: #d4d4d8; // zinc-300
+  height: 32px;
+  padding: 8px;
+
+  &:hover {
+    background-color: #3f3f46; // zinc-700
+    color: #f4f4f5; // zinc-100
+  }
+}
+
+// Active tool button state
+.actionBarButtonActive {
+  // Direct equivalent of: bg-zinc-700 text-zinc-100
+  background-color: #3f3f46; // zinc-700
+  color: #f4f4f5; // zinc-100
+}
+
+// Icons (standard size - equivalent to h-4 w-4)
+.actionBarIcon {
+  // Icon size - 16px for standard icons
+  width: 16px;
+  height: 16px;
+}
+
+// Small icons (chevron, etc. - equivalent to h-3 w-3)
+.actionBarIconSmall {
+  // Small icon size - 12px for small icons
+  width: 12px;
+  height: 12px;
+}
+
+// Divider between tools and hide button
+.actionBarDivider {
+  // Direct equivalent of: w-px h-6 bg-zinc-600 mx-1
+  width: 1px;
+  height: 24px;
+  background-color: #52525b; // zinc-600
+  margin: 0 4px;
+}
+
+// Visibility states for show/hide transitions
+.actionBarVisible {
+  // Visible state equivalent to opacity-100 transform translate-y-0
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.actionBarHidden {
+  // Hidden state equivalent to opacity-0 transform translate-y-4 pointer-events-none
+  opacity: 0;
+  transform: translateY(16px); // equivalent to translate-y-4
+  pointer-events: none;
+}
+
+// Transition for visibility changes
+.actionBarTransition {
+  // Transition equivalent to transition-all duration-300 ease-in-out
+  transition: all 300ms ease-in-out;
+}
+
+// Dropdown menu content
+.actionBarDropdown {
+  // Direct equivalent of: bg-zinc-800 border-zinc-700 text-zinc-100
+  background-color: #27272a; // zinc-800
+  border-color: #3f3f46; // zinc-700
+  color: #f4f4f5; // zinc-100
+}
+
+// Dropdown menu items
+.actionBarDropdownItem {
+  // Direct equivalent of: gap-2 hover:bg-zinc-700 cursor-pointer
+  gap: 8px;
+
+  &:hover {
+    background-color: #3f3f46; // zinc-700
+  }
+
+  cursor: pointer;
+
+  // Active item background
+  &.actionBarDropdownItemActive {
+    background-color: #3f3f46; // zinc-700
+  }
+}
+
+// Dropdown item shortcut text
+.actionBarDropdownShortcut {
+  // Direct equivalent of: ml-auto text-xs text-zinc-500
+  margin-left: auto;
+  font-size: 12px;
+  color: #71717a; // zinc-500
+}

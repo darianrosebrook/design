@@ -5,7 +5,7 @@
   /* === Border Tokens === */
   --alert-border-width: 1px;
   --alert-border-style: solid;
-  --alert-border-color-default: var(--color-palette-neutral-200);
+  --alert-border-color-default: var(--semantic-color-action-background-secondary-active);
 
   /* === Padding Tokens === */
   --alert-padding-horizontal: 16px;
@@ -21,7 +21,7 @@
 
   /* === Title Tokens === */
   --alert-title-fontSize: 14px;
-  --alert-title-fontWeight: var(--typography-font-weight-medium);
+  --alert-title-fontWeight: var(--semantic-typography-button-font-weight);
   --alert-title-letterSpacing: -0.025em;
   --alert-title-lineHeight: 1.25;
   --alert-title-minHeight: 20px;
@@ -31,9 +31,14 @@
   --alert-description-lineHeight: 1.625;
 
   /* === Variants Tokens === */
-  --alert-variants-default-backgroundColor: var(--color-mode-light);
-  --alert-variants-default-color: var(--color-mode-dark);
-  --alert-variants-destructive-backgroundColor: var(--color-mode-light);
-  --alert-variants-destructive-color: var(--color-action-background-danger-default);
-  --alert-variants-destructive-descriptionColor: var(--color-action-background-danger-default);
+  --alert-variants-default-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --alert-variants-default-color: var(--semantic-color-action-foreground-primary-default);
+  --alert-variants-destructive-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --alert-variants-destructive-color: var(--semantic-color-action-background-danger-default);
+  --alert-variants-destructive-descriptionColor: var(--semantic-color-action-background-danger-default);
+
+
+  /* === General Tokens === */
+  --alert-borderRadius: 8px;
+  --alert-fontSize: 14px;
 }

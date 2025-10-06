@@ -2,7 +2,6 @@
 
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
 import * as React from "react";
-import styles from "./separator.module.scss";
 import { cn } from "@/lib/utils";
 
 function Separator({
@@ -16,7 +15,11 @@ function Separator({
       data-slot="separator"
       decorative={decorative}
       orientation={orientation}
-      className={cn(styles.separator, className)}
+      className={cn(
+        "bg-border shrink-0",
+        orientation === "horizontal" ? "h-px w-full" : "h-full w-px",
+        className
+      )}
       {...props}
     />
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import styles from "./Panel.module.scss";
 
 interface PanelHeaderProps {
   title: string;
@@ -18,16 +17,35 @@ export function PanelHeader({
   variant = "default",
   className,
 }: PanelHeaderProps) {
-  const variantClass = variant === "compact" ? styles.panelHeader_compact : "";
   return (
-    <div className={`${styles.panelHeader} ${variantClass} ${className || ""}`}>
-      <div className={styles.panelHeaderContent}>
-        <h2 className={styles.panelHeaderTitle}>{title}</h2>
+    <div
+      className={`flex items-center justify-between p-4 border-b border-border ${
+        className || ""
+      }`}
+    >
+      <div
+        className={`flex flex-col gap-1 ${
+          variant === "compact" ? "gap-0" : ""
+        }`}
+      >
+        <h2
+          className={`text-sm font-semibold ${
+            variant === "compact" ? "text-xs" : ""
+          }`}
+        >
+          {title}
+        </h2>
         {subtitle && (
-          <span className={styles.panelHeaderSubtitle}>{subtitle}</span>
+          <span
+            className={`text-xs text-muted-foreground ${
+              variant === "compact" ? "hidden" : ""
+            }`}
+          >
+            {subtitle}
+          </span>
         )}
       </div>
-      {actions && <div className={styles.panelHeaderActions}>{actions}</div>}
+      {actions && <div className="flex items-center gap-2">{actions}</div>}
     </div>
   );
 }

@@ -2,7 +2,6 @@
 
 import type React from "react";
 import { useState, useRef, useEffect } from "react";
-import styles from "./resizable-panel.module.scss";
 
 interface ResizablePanelProps {
   children: React.ReactNode;
@@ -60,19 +59,21 @@ export function ResizablePanel({
   return (
     <div
       ref={panelRef}
-      className={styles.resizablePanel}
+      className="relative bg-card border border-border rounded-lg shadow-sm overflow-hidden h-full"
       style={{ width: `${width}px` }}
     >
       {children}
       <div
-        className={`${styles.resizablePanelHandle} ${
-          side === "left"
-            ? styles["resizablePanelHandle--left"]
-            : styles["resizablePanelHandle--right"]
+        className={`absolute top-0 bottom-0 w-1 bg-border hover:bg-primary cursor-col-resize transition-colors ${
+          side === "left" ? "right-0" : "left-0"
         }`}
         onMouseDown={() => setIsResizing(true)}
       >
-        <div className={styles.resizablePanelHandleArea} />
+        <div
+          className={`absolute inset-0 ${
+            side === "left" ? "-right-1" : "-left-1"
+          }`}
+        />
       </div>
     </div>
   );

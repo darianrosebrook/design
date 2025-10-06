@@ -21,7 +21,7 @@
         },
         "color": {
           "default": {
-            "value": "{color.palette.neutral.200}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Default border color for checkbox"
           }
         }
@@ -46,7 +46,7 @@
           "description": "Default background color for checkbox"
         },
         "dark": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "opacity": 0.3,
           "description": "Dark mode background color for checkbox"
         }
@@ -54,20 +54,20 @@
       "states": {
         "checked": {
           "backgroundColor": {
-            "value": "{color.action.background.primary.default}",
+            "value": "{semantic.color.action.background.primary.default}",
             "description": "Background color for checked state"
           },
           "color": {
-            "value": "{color.action.foreground.primary.default}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Text color for checked state"
           },
           "borderColor": {
-            "value": "{color.action.background.primary.default}",
+            "value": "{semantic.color.action.background.primary.default}",
             "description": "Border color for checked state"
           },
           "dark": {
             "backgroundColor": {
-              "value": "{color.action.background.primary.default}",
+              "value": "{semantic.color.action.background.primary.default}",
               "description": "Dark mode background color for checked state"
             }
           }

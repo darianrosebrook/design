@@ -8,6 +8,8 @@
 .tooltip {
   // Include the generated variables mixin within the component scope
   @include tooltipTokens.vars;
+
+  // Include the generated variables mixin within the component scope
   z-index: var(--tooltip-zIndex);
   overflow: hidden;
   border-radius: var(--tooltip-borderRadius);

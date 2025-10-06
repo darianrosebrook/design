@@ -16,7 +16,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// @ts-ignore - CommonJS compatibility for import.meta.url
+// @ts-expect-error - CommonJS compatibility for import.meta.url
 const __filename =
   typeof require !== "undefined" && require.main
     ? require.main.filename

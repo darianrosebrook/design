@@ -32,17 +32,17 @@
           "description": "Border style for input group container"
         },
         "color": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border color for input group container"
         }
       },
       "backgroundColor": {
-        "value": "{color.palette.neutral.0}",
+        "value": "{semantic.color.action.background.secondary.default}",
         "description": "Background color for input group container"
       },
       "dark": {
         "backgroundColor": {
-          "value": "{color.palette.neutral.0}",
+          "value": "{semantic.color.action.background.secondary.default}",
           "opacity": 0.3,
           "description": "Background color for input group container in dark mode"
         }
@@ -82,12 +82,12 @@
       "states": {
         "focus": {
           "borderColor": {
-            "value": "{color.palette.blue.500}",
+            "value": "{semantic.color.feedback.foreground.info.default}",
             "description": "Border color when focused"
           },
           "ring": {
             "color": {
-              "value": "{color.palette.blue.500}",
+              "value": "{semantic.color.feedback.foreground.info.default}",
               "opacity": 0.5,
               "description": "Ring color when focused"
             },
@@ -100,20 +100,20 @@
         "error": {
           "ring": {
             "color": {
-              "value": "{color.palette.red.600}",
+              "value": "{semantic.color.action.background.danger.hover}",
               "opacity": 0.2,
               "description": "Ring color when in error state"
             },
             "dark": {
               "color": {
-                "value": "{color.palette.red.600}",
+                "value": "{semantic.color.action.background.danger.hover}",
                 "opacity": 0.4,
                 "description": "Ring color when in error state in dark mode"
               }
             }
           },
           "borderColor": {
-            "value": "{color.palette.red.600}",
+            "value": "{semantic.color.action.background.danger.hover}",
             "description": "Border color when in error state"
           }
         }
@@ -209,7 +209,7 @@
         "description": "Font weight for addon elements"
       },
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for addon elements"
       },
       "userSelect": {
@@ -499,7 +499,7 @@
     },
     "text": {
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for text elements"
       },
       "display": {

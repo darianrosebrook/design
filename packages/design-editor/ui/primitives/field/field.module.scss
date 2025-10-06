@@ -7,7 +7,8 @@
 // Fieldset container
 .field-set {
   // Include the generated variables mixin within the component scope
-  @include fieldTokens.vars;
+@include fieldTokens.vars;
+
   display: var(--field-fieldset-display);
   flex-direction: var(--field-fieldset-flexDirection);
 
@@ -288,4 +289,14 @@
   display: block;
   width: fit-content;
   padding: 0 var(--field-colors-separator-content-padding-horizontal);
+}
+
+// Error messages list (equivalent to ml-4 flex list-disc flex-col gap-1)
+.field-error-list {
+  margin-left: 1rem; // 16px, equivalent to ml-4
+  display: flex;
+  flex-direction: column; // equivalent to flex-col
+  gap: 0.25rem; // 4px, equivalent to gap-1
+  list-style-type: disc; // equivalent to list-disc
+  padding-left: 1rem; // Standard list padding
 }

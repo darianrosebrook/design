@@ -34,6 +34,7 @@ export function GlobalShortcutsProvider({
     selectedId,
     setSelectedId,
     objects,
+    setObjects,
     updateObject,
     activeTool,
     setActiveTool,
@@ -42,11 +43,16 @@ export function GlobalShortcutsProvider({
     bringForward,
     sendBackward,
     selectAll,
+    zoom,
+    setZoom,
     zoomIn,
     zoomOut,
     zoomToFit,
     zoomToSelection,
     zoomTo100,
+    copyToClipboard,
+    pasteFromClipboard,
+    cutToClipboard,
   } = useCanvas();
 
   const handleShortcut = useCallback(
@@ -188,13 +194,32 @@ export function GlobalShortcutsProvider({
 
         case "text-italic":
           if (selectedId) {
-            console.log("Text Italic - not implemented yet");
+            const selectedObject =
+              objects.find((obj) => obj.id === selectedId) ||
+              objects
+                .flatMap((obj) => obj.children || [])
+                .find((obj) => obj.id === selectedId);
+            if (selectedObject && selectedObject.type === "text") {
+              const currentStyle = selectedObject.fontStyle || "normal";
+              const newStyle = currentStyle === "italic" ? "normal" : "italic";
+              updateObject(selectedId, { fontStyle: newStyle });
+            }
           }
           break;
 
         case "text-underline":
           if (selectedId) {
-            console.log("Text Underline - not implemented yet");
+            const selectedObject =
+              objects.find((obj) => obj.id === selectedId) ||
+              objects
+                .flatMap((obj) => obj.children || [])
+                .find((obj) => obj.id === selectedId);
+            if (selectedObject && selectedObject.type === "text") {
+              const currentDecoration = selectedObject.textDecoration || "none";
+              const newDecoration =
+                currentDecoration === "underline" ? "none" : "underline";
+              updateObject(selectedId, { textDecoration: newDecoration });
+            }
           }
           break;
 
@@ -222,7 +247,14 @@ export function GlobalShortcutsProvider({
 
         case "text-align-justified":
           if (selectedId) {
-            console.log("Text Align Justified - not implemented yet");
+            const selectedObject =
+              objects.find((obj) => obj.id === selectedId) ||
+              objects
+                .flatMap((obj) => obj.children || [])
+                .find((obj) => obj.id === selectedId);
+            if (selectedObject && selectedObject.type === "text") {
+              updateObject(selectedId, { textAlign: "justify" });
+            }
           }
           break;
 
@@ -321,18 +353,19 @@ export function GlobalShortcutsProvider({
 
         // Edit
         case "copy":
-          // TODO: Implement clipboard copy functionality
-          console.log("Copy - not implemented yet");
+          if (selectedId) {
+            copyToClipboard([selectedId]);
+          }
           break;
 
         case "cut":
-          // TODO: Implement clipboard cut functionality
-          console.log("Cut - not implemented yet");
+          if (selectedId) {
+            cutToClipboard([selectedId]);
+          }
           break;
 
         case "paste":
-          // TODO: Implement clipboard paste functionality
-          console.log("Paste - not implemented yet");
+          pasteFromClipboard();
           break;
 
         case "paste-over-selection":
@@ -347,7 +380,12 @@ export function GlobalShortcutsProvider({
           break;
 
         case "rename":
-          console.log("Rename - not implemented yet");
+          if (selectedId) {
+            const newName = prompt("Enter new name:");
+            if (newName !== null && newName.trim() !== "") {
+              updateObject(selectedId, { name: newName.trim() });
+            }
+          }
           break;
 
         case "export":
@@ -365,13 +403,29 @@ export function GlobalShortcutsProvider({
         // Transform
         case "flip-horizontal":
           if (selectedId) {
-            console.log("Flip Horizontal - not implemented yet");
+            const selectedObject =
+              objects.find((obj) => obj.id === selectedId) ||
+              objects
+                .flatMap((obj) => obj.children || [])
+                .find((obj) => obj.id === selectedId);
+            if (selectedObject) {
+              const currentScaleX = selectedObject.scaleX || 1;
+              updateObject(selectedId, { scaleX: -currentScaleX });
+            }
           }
           break;
 
         case "flip-vertical":
           if (selectedId) {
-            console.log("Flip Vertical - not implemented yet");
+            const selectedObject =
+              objects.find((obj) => obj.id === selectedId) ||
+              objects
+                .flatMap((obj) => obj.children || [])
+                .find((obj) => obj.id === selectedId);
+            if (selectedObject) {
+              const currentScaleY = selectedObject.scaleY || 1;
+              updateObject(selectedId, { scaleY: -currentScaleY });
+            }
           }
           break;
 
@@ -417,11 +471,29 @@ export function GlobalShortcutsProvider({
           break;
 
         case "bring-to-front":
-          console.log("Bring to Front - not implemented yet");
+          if (selectedId) {
+            // Find the object and move it to the end of the objects array (top layer)
+            const objectIndex = objects.findIndex(
+              (obj) => obj.id === selectedId
+            );
+            if (objectIndex !== -1) {
+              const [object] = objects.splice(objectIndex, 1);
+              setObjects([...objects, object]);
+            }
+          }
           break;
 
         case "send-to-back":
-          console.log("Send to Back - not implemented yet");
+          if (selectedId) {
+            // Find the object and move it to the beginning of the objects array (bottom layer)
+            const objectIndex = objects.findIndex(
+              (obj) => obj.id === selectedId
+            );
+            if (objectIndex !== -1) {
+              const [object] = objects.splice(objectIndex, 1);
+              setObjects([object, ...objects]);
+            }
+          }
           break;
 
         case "align-left":
@@ -469,6 +541,7 @@ export function GlobalShortcutsProvider({
       selectedId,
       setSelectedId,
       objects,
+      setObjects,
       updateObject,
       activeTool,
       setActiveTool,
@@ -477,11 +550,16 @@ export function GlobalShortcutsProvider({
       bringForward,
       sendBackward,
       selectAll,
+      zoom,
+      setZoom,
       zoomIn,
       zoomOut,
       zoomToFit,
       zoomToSelection,
       zoomTo100,
+      copyToClipboard,
+      pasteFromClipboard,
+      cutToClipboard,
     ]
   );
 
@@ -495,8 +573,9 @@ export function GlobalShortcutsProvider({
         (t.tagName === "INPUT" ||
           t.tagName === "TEXTAREA" ||
           t.isContentEditable)
-      )
-        {return;}
+      ) {
+        return;
+      }
 
       const isPrimary = navigator.platform.toUpperCase().includes("MAC")
         ? e.metaKey
@@ -532,8 +611,15 @@ export function GlobalShortcutsProvider({
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
         e.stopPropagation();
-        if (e.deltaY < 0) {zoomIn();}
-        else if (e.deltaY > 0) {zoomOut();}
+
+        // Calculate zoom factor based on scroll delta for smoother zooming
+        const zoomFactor = Math.pow(0.999, e.deltaY); // Exponential scaling for smooth zoom
+        const newZoom = Math.max(10, Math.min(500, zoom * zoomFactor)); // Clamp between 10% and 500%
+
+        // Only update if the zoom actually changed (prevents unnecessary re-renders)
+        if (Math.abs(newZoom - zoom) > 0.01) {
+          setZoom(Math.round(newZoom * 100) / 100); // Clamp to 2 decimal places
+        }
       }
     };
 
@@ -561,7 +647,7 @@ export function GlobalShortcutsProvider({
       window.removeEventListener("gesturechange", preventGesture as any);
       window.removeEventListener("gestureend", preventGesture as any);
     };
-  }, [handleShortcut, zoomIn, zoomOut]);
+  }, [handleShortcut, zoom, setZoom]);
 
   const contextValue: GlobalShortcutsContextType = {
     handleShortcut,

@@ -32,4 +32,9 @@
   /* === Interactive Tokens === */
   --componentLibrary-interactive-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
   --componentLibrary-interactive-borderRadius: var(--semantic-shape-control-radius-default);
+
+
+  /* === General Tokens === */
+  --componentLibrary-backgroundColor: var(--semantic-color-display-background-primary);
+  --componentLibrary-borderColor: var(--semantic-color-display-border-subtle);
 }

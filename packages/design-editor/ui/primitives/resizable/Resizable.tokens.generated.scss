@@ -7,7 +7,7 @@
   --resizable-panelGroup-layout-direction-vertical-flexDirection: column;
 
   /* === Handle Tokens === */
-  --resizable-handle-backgroundColor: var(--semantic-color-display-border-subtle);
+  --resizable-handle-backgroundColor: var(--core-color-display-border-subtle);
   --resizable-handle-focus-ring-color: var(--semantic-color-action-border-primary-focus);
   --resizable-handle-focus-ring-width: 1px;
   --resizable-handle-focus-ring-offset: 1px;
@@ -21,7 +21,7 @@
   --resizable-handle-layout-indicator-position-vertical-translateY: -50%;
 
   /* === HandleGrip Tokens === */
-  --resizable-handleGrip-backgroundColor: var(--semantic-color-display-border-subtle);
+  --resizable-handleGrip-backgroundColor: var(--core-color-display-border-subtle);
   --resizable-handleGrip-borderRadius: var(--semantic-shape-control-radius-xsmall);
   --resizable-handleGrip-layout-width: 12px;
   --resizable-handleGrip-layout-height: 16px;

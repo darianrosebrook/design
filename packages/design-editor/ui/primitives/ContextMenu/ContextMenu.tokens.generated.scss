@@ -3,8 +3,8 @@
  */
 @mixin vars {
   /* === Content Tokens === */
-  --contextMenu-content-backgroundColor: var(--color-palette-neutral-0);
-  --contextMenu-content-color: var(--color-mode-dark);
+  --contextMenu-content-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --contextMenu-content-color: var(--semantic-color-action-foreground-primary-default);
   --contextMenu-content-zIndex: 1050;
   --contextMenu-content-maxHeight: var(--radix-context-menu-content-available-height);
   --contextMenu-content-minWidth: 128px;
@@ -13,22 +13,22 @@
   --contextMenu-content-borderRadius: 6px;
   --contextMenu-content-border-width: 1px;
   --contextMenu-content-border-style: solid;
-  --contextMenu-content-border-color: var(--color-palette-neutral-200);
+  --contextMenu-content-border-color: var(--semantic-color-action-background-secondary-active);
   --contextMenu-content-padding: 4px;
   --contextMenu-content-boxShadow: var(--elevation-medium);
   --contextMenu-content-animation-duration: 200ms;
   --contextMenu-content-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* === SubContent Tokens === */
-  --contextMenu-subContent-backgroundColor: var(--color-palette-neutral-0);
-  --contextMenu-subContent-color: var(--color-mode-dark);
+  --contextMenu-subContent-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --contextMenu-subContent-color: var(--semantic-color-action-foreground-primary-default);
   --contextMenu-subContent-zIndex: 1050;
   --contextMenu-subContent-minWidth: 128px;
   --contextMenu-subContent-overflow: hidden;
   --contextMenu-subContent-borderRadius: 6px;
   --contextMenu-subContent-border-width: 1px;
   --contextMenu-subContent-border-style: solid;
-  --contextMenu-subContent-border-color: var(--color-palette-neutral-200);
+  --contextMenu-subContent-border-color: var(--semantic-color-action-background-secondary-active);
   --contextMenu-subContent-padding: 4px;
   --contextMenu-subContent-boxShadow: var(--elevation-large);
 
@@ -45,18 +45,18 @@
   --contextMenu-item-outline: none;
   --contextMenu-item-userSelect: none;
   --contextMenu-item-inset-paddingLeft: 32px;
-  --contextMenu-item-states-focus-backgroundColor: var(--color-palette-neutral-100);
-  --contextMenu-item-states-focus-color: var(--color-mode-dark);
+  --contextMenu-item-states-focus-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --contextMenu-item-states-focus-color: var(--semantic-color-action-foreground-primary-default);
   --contextMenu-item-states-disabled-pointerEvents: none;
   --contextMenu-item-states-disabled-opacity: 0.5;
-  --contextMenu-item-variants-destructive-color: var(--color-palette-red-600);
-  --contextMenu-item-variants-destructive-focus-backgroundColor: var(--color-palette-red-50);
-  --contextMenu-item-variants-destructive-focus-color: var(--color-palette-red-700);
-  --contextMenu-item-variants-destructive-icon-color: var(--color-palette-red-600);
+  --contextMenu-item-variants-destructive-color: var(--semantic-color-action-background-danger-hover);
+  --contextMenu-item-variants-destructive-focus-backgroundColor: var(--semantic-color-feedback-background-danger-subtle);
+  --contextMenu-item-variants-destructive-focus-color: var(--semantic-color-action-background-danger-active);
+  --contextMenu-item-variants-destructive-icon-color: var(--semantic-color-action-background-danger-hover);
   --contextMenu-item-icon-pointerEvents: none;
   --contextMenu-item-icon-flexShrink: 0;
   --contextMenu-item-icon-size: 16px;
-  --contextMenu-item-icon-color: var(--color-palette-neutral-500);
+  --contextMenu-item-icon-color: var(--semantic-color-navigation-foreground-secondary);
 
   /* === SubTrigger Tokens === */
   --contextMenu-subTrigger-display: flex;
@@ -69,10 +69,10 @@
   --contextMenu-subTrigger-outline: none;
   --contextMenu-subTrigger-userSelect: none;
   --contextMenu-subTrigger-inset-paddingLeft: 32px;
-  --contextMenu-subTrigger-states-focus-backgroundColor: var(--color-palette-neutral-100);
-  --contextMenu-subTrigger-states-focus-color: var(--color-mode-dark);
-  --contextMenu-subTrigger-states-open-backgroundColor: var(--color-palette-neutral-100);
-  --contextMenu-subTrigger-states-open-color: var(--color-mode-dark);
+  --contextMenu-subTrigger-states-focus-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --contextMenu-subTrigger-states-focus-color: var(--semantic-color-action-foreground-primary-default);
+  --contextMenu-subTrigger-states-open-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --contextMenu-subTrigger-states-open-color: var(--semantic-color-action-foreground-primary-default);
   --contextMenu-subTrigger-icon-marginLeft: auto;
   --contextMenu-subTrigger-icon-pointerEvents: none;
   --contextMenu-subTrigger-icon-flexShrink: 0;
@@ -92,8 +92,8 @@
   --contextMenu-checkboxItem-fontSize: 14px;
   --contextMenu-checkboxItem-outline: none;
   --contextMenu-checkboxItem-userSelect: none;
-  --contextMenu-checkboxItem-states-focus-backgroundColor: var(--color-palette-neutral-100);
-  --contextMenu-checkboxItem-states-focus-color: var(--color-mode-dark);
+  --contextMenu-checkboxItem-states-focus-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --contextMenu-checkboxItem-states-focus-color: var(--semantic-color-action-foreground-primary-default);
   --contextMenu-checkboxItem-states-disabled-pointerEvents: none;
   --contextMenu-checkboxItem-states-disabled-opacity: 0.5;
   --contextMenu-checkboxItem-indicator-position: absolute;
@@ -122,8 +122,8 @@
   --contextMenu-radioItem-fontSize: 14px;
   --contextMenu-radioItem-outline: none;
   --contextMenu-radioItem-userSelect: none;
-  --contextMenu-radioItem-states-focus-backgroundColor: var(--color-palette-neutral-100);
-  --contextMenu-radioItem-states-focus-color: var(--color-mode-dark);
+  --contextMenu-radioItem-states-focus-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --contextMenu-radioItem-states-focus-color: var(--semantic-color-action-foreground-primary-default);
   --contextMenu-radioItem-states-disabled-pointerEvents: none;
   --contextMenu-radioItem-states-disabled-opacity: 0.5;
   --contextMenu-radioItem-indicator-position: absolute;
@@ -140,7 +140,7 @@
   --contextMenu-radioItem-icon-size: 16px;
 
   /* === Label Tokens === */
-  --contextMenu-label-color: var(--color-mode-dark);
+  --contextMenu-label-color: var(--semantic-color-action-foreground-primary-default);
   --contextMenu-label-padding-horizontal: 8px;
   --contextMenu-label-padding-vertical: 6px;
   --contextMenu-label-fontSize: 14px;
@@ -148,13 +148,13 @@
   --contextMenu-label-inset-paddingLeft: 32px;
 
   /* === Separator Tokens === */
-  --contextMenu-separator-backgroundColor: var(--color-palette-neutral-200);
+  --contextMenu-separator-backgroundColor: var(--semantic-color-action-background-secondary-active);
   --contextMenu-separator-margin-horizontal: -4px;
   --contextMenu-separator-margin-vertical: 4px;
   --contextMenu-separator-height: 1px;
 
   /* === Shortcut Tokens === */
-  --contextMenu-shortcut-color: var(--color-palette-neutral-500);
+  --contextMenu-shortcut-color: var(--semantic-color-navigation-foreground-secondary);
   --contextMenu-shortcut-marginLeft: auto;
   --contextMenu-shortcut-fontSize: 12px;
   --contextMenu-shortcut-letterSpacing: 0.05em;

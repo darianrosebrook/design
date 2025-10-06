@@ -1,47 +1,19 @@
 "use client";
 
-import {
-  Button,
-  Box,
-  Input,
-  Select,
-  Checkbox,
-  Label,
-  Icon,
-  Stack,
-  Flex,
-  Slider,
-  TextField,
-  NumberField,
-  ColorField,
-} from "@paths-design/design-system";
 import React from "react";
 import styles from "./component-renderer.module.scss";
 import type { CanvasObject } from "@/lib/types";
+import {
+  getComponent,
+  getAvailableComponents,
+  getComponentMetadata,
+  initializeRegistry,
+} from "@/lib/utils/dynamic-component-registry";
 
-// Import all design system components
+// Initialize the registry on module load
+initializeRegistry().catch(console.error);
 
-/**
- * Component registry mapping component names to actual components
- * @author @darianrosebrook
- */
-const COMPONENT_REGISTRY = {
-  Button,
-  Box,
-  Input,
-  Select,
-  Checkbox,
-  Label,
-  Icon,
-  Stack,
-  Flex,
-  Slider,
-  TextField,
-  NumberField,
-  ColorField,
-} as const;
-
-type ComponentName = keyof typeof COMPONENT_REGISTRY;
+type ComponentName = string;
 
 interface ComponentRendererProps {
   object: CanvasObject;
@@ -57,7 +29,7 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
   }
 
   const ComponentName = object.componentType as ComponentName;
-  const Component = COMPONENT_REGISTRY[ComponentName];
+  const Component = getComponent(ComponentName);
 
   if (!Component) {
     console.warn(`Component "${ComponentName}" not found in registry`);

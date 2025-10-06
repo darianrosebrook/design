@@ -3,7 +3,7 @@
  */
 @mixin vars {
   /* === Toast Tokens === */
-  --sonner-toast-backgroundColor: var(--semantic-color-display-background-popover);
-  --sonner-toast-foregroundColor: var(--semantic-color-display-foreground-popover);
-  --sonner-toast-borderColor: var(--semantic-color-display-border-subtle);
+  --sonner-toast-backgroundColor: var(--core-color-display-background-primary);
+  --sonner-toast-foregroundColor: var(--core-color-display-foreground-primary);
+  --sonner-toast-borderColor: var(--core-color-display-border-subtle);
 }

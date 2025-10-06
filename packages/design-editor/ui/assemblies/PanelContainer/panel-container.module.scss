@@ -1,7 +1,21 @@
 // panel-container composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
-.panel-container {
-  // Placeholder for future SCSS implementation
-  // Will contain panel-container-specific styles when migrating from Tailwind
+// Panel wrapper base styles (absolute positioning with z-index)
+.panel-wrapper-left,
+.panel-wrapper-right {
+  position: absolute;
+  top: 4rem; // 64px
+  bottom: 1rem; // 16px
+  z-index: 10;
+}
+
+// Left panel wrapper positioning
+.panel-wrapper-left {
+  left: 1rem; // 16px
+}
+
+// Right panel wrapper positioning
+.panel-wrapper-right {
+  right: 1rem; // 16px
 }

@@ -10,9 +10,9 @@
   --inputGroup-container-borderRadius: 6px;
   --inputGroup-container-border-width: 1px;
   --inputGroup-container-border-style: solid;
-  --inputGroup-container-border-color: var(--color-palette-neutral-200);
-  --inputGroup-container-backgroundColor: var(--color-palette-neutral-0);
-  --inputGroup-container-dark-backgroundColor: var(--color-palette-neutral-0);
+  --inputGroup-container-border-color: var(--semantic-color-action-background-secondary-active);
+  --inputGroup-container-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --inputGroup-container-dark-backgroundColor: var(--semantic-color-action-background-secondary-default);
   --inputGroup-container-boxShadow: var(--elevation-small);
   --inputGroup-container-transition-property: color, box-shadow;
   --inputGroup-container-transition-duration: 200ms;
@@ -20,12 +20,12 @@
   --inputGroup-container-height-default: 36px;
   --inputGroup-container-height-textarea: auto;
   --inputGroup-container-outline: none;
-  --inputGroup-container-states-focus-borderColor: var(--color-palette-blue-500);
-  --inputGroup-container-states-focus-ring-color: var(--color-palette-blue-500);
+  --inputGroup-container-states-focus-borderColor: var(--semantic-color-feedback-foreground-info-default);
+  --inputGroup-container-states-focus-ring-color: var(--semantic-color-feedback-foreground-info-default);
   --inputGroup-container-states-focus-ring-width: 3px;
-  --inputGroup-container-states-error-ring-color: var(--color-palette-red-600);
-  --inputGroup-container-states-error-ring-dark-color: var(--color-palette-red-600);
-  --inputGroup-container-states-error-borderColor: var(--color-palette-red-600);
+  --inputGroup-container-states-error-ring-color: var(--semantic-color-action-background-danger-hover);
+  --inputGroup-container-states-error-ring-dark-color: var(--semantic-color-action-background-danger-hover);
+  --inputGroup-container-states-error-borderColor: var(--semantic-color-action-background-danger-hover);
   --inputGroup-container-alignment-inlineStart-padding-left: 8px;
   --inputGroup-container-alignment-inlineEnd-padding-right: 8px;
   --inputGroup-container-alignment-blockStart-flexDirection: column;
@@ -45,7 +45,7 @@
   --inputGroup-addon-padding-vertical: 6px;
   --inputGroup-addon-fontSize: 14px;
   --inputGroup-addon-fontWeight: 500;
-  --inputGroup-addon-color: var(--color-palette-neutral-500);
+  --inputGroup-addon-color: var(--semantic-color-navigation-foreground-secondary);
   --inputGroup-addon-userSelect: none;
   --inputGroup-addon-icon-size: 16px;
   --inputGroup-addon-icon-pointerEvents: none;
@@ -100,7 +100,7 @@
   --inputGroup-button-sizes-iconSm-icon-padding: 0px;
 
   /* === Text Tokens === */
-  --inputGroup-text-color: var(--color-palette-neutral-500);
+  --inputGroup-text-color: var(--semantic-color-navigation-foreground-secondary);
   --inputGroup-text-display: flex;
   --inputGroup-text-alignItems: center;
   --inputGroup-text-gap: 8px;

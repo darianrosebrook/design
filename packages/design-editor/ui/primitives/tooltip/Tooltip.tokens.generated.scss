@@ -11,13 +11,22 @@
   --tooltip-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* === Variants Tokens === */
-  --tooltip-variants-default-backgroundColor: var(--color-palette-neutral-900);
-  --tooltip-variants-default-color: var(--color-palette-neutral-50);
-  --tooltip-variants-default-borderColor: var(--color-palette-neutral-800);
-  --tooltip-variants-light-backgroundColor: var(--color-palette-neutral-50);
-  --tooltip-variants-light-color: var(--color-palette-neutral-900);
-  --tooltip-variants-light-borderColor: var(--color-palette-neutral-200);
+  --tooltip-variants-default-backgroundColor: var(--semantic-color-action-foreground-primary-default);
+  --tooltip-variants-default-color: var(--semantic-color-feedback-background-info-subtle);
+  --tooltip-variants-default-borderColor: var(--semantic-color-action-background-primary-default);
+  --tooltip-variants-light-backgroundColor: var(--semantic-color-feedback-background-info-subtle);
+  --tooltip-variants-light-color: var(--semantic-color-action-foreground-primary-default);
+  --tooltip-variants-light-borderColor: var(--semantic-color-action-background-secondary-active);
 
   /* === Arrow Tokens === */
   --tooltip-arrow-size: 4px;
+
+
+  /* === General Tokens === */
+  --tooltip-borderRadius: 6px;
+  --tooltip-fontSize: 12px;
+  --tooltip-fontWeight: 400;
+  --tooltip-lineHeight: 1.4;
+  --tooltip-maxWidth: 200px;
+  --tooltip-zIndex: 1060;
 }

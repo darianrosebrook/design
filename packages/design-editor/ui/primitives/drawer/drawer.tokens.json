@@ -47,7 +47,7 @@
         "description": "Flex direction for drawer content"
       },
       "backgroundColor": {
-        "value": "{color.mode.light}",
+        "value": "{semantic.color.action.background.secondary.default}",
         "description": "Background color for drawer content"
       },
       "borderRadius": {
@@ -104,7 +104,7 @@
               "description": "Border bottom style for top direction"
             },
             "color": {
-              "value": "{color.palette.neutral.200}",
+              "value": "{semantic.color.action.background.secondary.active}",
               "description": "Border bottom color for top direction"
             }
           },
@@ -152,7 +152,7 @@
               "description": "Border top style for bottom direction"
             },
             "color": {
-              "value": "{color.palette.neutral.200}",
+              "value": "{semantic.color.action.background.secondary.active}",
               "description": "Border top color for bottom direction"
             }
           },
@@ -200,7 +200,7 @@
               "description": "Border right style for left direction"
             },
             "color": {
-              "value": "{color.palette.neutral.200}",
+              "value": "{semantic.color.action.background.secondary.active}",
               "description": "Border right color for left direction"
             }
           }
@@ -244,7 +244,7 @@
               "description": "Border left style for right direction"
             },
             "color": {
-              "value": "{color.palette.neutral.200}",
+              "value": "{semantic.color.action.background.secondary.active}",
               "description": "Border left color for right direction"
             }
           }
@@ -257,7 +257,7 @@
         "description": "Default display for handle"
       },
       "backgroundColor": {
-        "value": "{color.palette.neutral.100}",
+        "value": "{semantic.color.action.background.secondary.hover}",
         "description": "Background color for handle"
       },
       "margin": {
@@ -357,7 +357,7 @@
     },
     "title": {
       "color": {
-        "value": "{color.mode.dark}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Color for title"
       },
       "fontWeight": {
@@ -367,7 +367,7 @@
     },
     "description": {
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for description"
       },
       "fontSize": {

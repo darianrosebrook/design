@@ -13,7 +13,7 @@
   --empty-container-borderRadius: 8px;
   --empty-container-border-width: 1px;
   --empty-container-border-style: dashed;
-  --empty-container-border-color: var(--core-color-palette-neutral-200);
+  --empty-container-border-color: var(--semantic-color-action-background-secondary-active);
   --empty-container-padding-default: 24px;
   --empty-container-padding-medium: 48px;
   --empty-container-textAlign: center;
@@ -33,8 +33,8 @@
   --empty-media-alignItems: center;
   --empty-media-justifyContent: center;
   --empty-media-marginBottom: 8px;
-  --empty-media-variants-icon-backgroundColor: var(--core-color-palette-neutral-100);
-  --empty-media-variants-icon-color: var(--core-color-mode-dark);
+  --empty-media-variants-icon-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --empty-media-variants-icon-color: var(--semantic-color-action-foreground-primary-default);
   --empty-media-variants-icon-size: 40px;
   --empty-media-variants-icon-borderRadius: 8px;
   --empty-media-variants-icon-iconSize: 24px;
@@ -46,7 +46,7 @@
   --empty-title-letterSpacing: -0.025em;
 
   /* === Description Tokens === */
-  --empty-description-color: var(--core-color-palette-neutral-500);
+  --empty-description-color: var(--semantic-color-navigation-foreground-secondary);
   --empty-description-fontSize: 14px;
   --empty-description-lineHeight: 1.625;
   --empty-description-link-textDecoration: underline;

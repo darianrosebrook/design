@@ -5,10 +5,12 @@
 @use './Carousel.tokens.generated.scss' as carouselTokens;
 
 // Include the generated variables mixin
-@include carouselTokens.vars;
 
 // Main carousel container
 .carousel {
+  // Include the generated variables mixin within the component scope
+  @include carouselTokens.vars;
+
   position: var(--carousel-container-position);
 }
 

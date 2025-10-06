@@ -1,8 +1,8 @@
 // Panel composer component styles
-// Shared components for all panels in the application
+// Direct CSS equivalents of original Tailwind classes
 
 .panel {
-  // Main panel container styles
+  // Main panel container styles - equivalent to flex flex-col h-full
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -10,62 +10,62 @@
 
 // Panel Header
 .panelHeader {
-  // Base header styles
+  // Base header styles - equivalent to flex items-center justify-between px-3 py-2 border-b border-border
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--panel-spacing-header-vertical) var(--panel-spacing-header-horizontal);
-  border-bottom: 1px solid var(--panel-borderColor);
+  padding: 8px 12px;
+  border-bottom: 1px solid #3f3f46; // zinc-700 (border)
 }
 
 .panelHeader_compact {
-  // Compact variant
-  padding: calc(var(--panel-spacing-header-vertical) * 0.75) calc(var(--panel-spacing-header-horizontal) * 0.67);
+  // Compact variant - equivalent to reduced padding
+  padding: 6px 8px;
 }
 
 .panelHeaderContent {
-  // Header content container
+  // Header content container - equivalent to flex flex-col gap-1
   display: flex;
   flex-direction: column;
-  gap: var(--panel-spacing-gap-xs);
+  gap: 4px;
 }
 
 .panelHeaderTitle {
-  // Title styles
-  font-size: var(--panel-typography-title-fontSize);
-  font-weight: var(--panel-typography-title-fontWeight);
-  color: var(--panel-typography-title-color);
+  // Title styles - equivalent to text-sm font-semibold text-foreground
+  font-size: 14px;
+  font-weight: 600;
+  color: #f4f4f5; // zinc-100 (foreground)
 }
 
 .panelHeaderSubtitle {
-  // Subtitle styles
-  font-size: var(--panel-typography-subtitle-fontSize);
-  color: var(--panel-typography-subtitle-color);
+  // Subtitle styles - equivalent to text-xs text-muted-foreground
+  font-size: 12px;
+  color: #a1a1aa; // zinc-400 (muted-foreground)
 }
 
 .panelHeaderActions {
-  // Actions container
+  // Actions container - equivalent to flex items-center gap-1
   display: flex;
   align-items: center;
-  gap: var(--panel-spacing-gap-xs);
+  gap: 4px;
 }
 
 // Panel Section
 .panelSection {
-  // Section container styles
+  // Section container styles - equivalent to flex flex-col gap-2
   display: flex;
   flex-direction: column;
-  gap: var(--panel-spacing-gap-sm);
+  gap: 8px;
 }
 
 .panelSectionHeader {
-  // Section header button styles
+  // Section header button styles - equivalent to flex items-center justify-between w-full text-sm font-medium border-none bg-none cursor-pointer p-0
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  font-size: var(--panel-typography-section-fontSize);
-  font-weight: var(--panel-typography-section-fontWeight);
+  font-size: 14px;
+  font-weight: 500;
   border: none;
   background: none;
   cursor: pointer;
@@ -73,65 +73,66 @@
   color: inherit;
 
   &:hover {
-    color: hsl(var(--panel-typography-title-color) / var(--panel-interactive-hover-opacity));
+    color: #f4f4f5; // zinc-100 (foreground) with hover opacity
+    opacity: 0.8;
   }
 
   &:focus-visible {
-    outline: var(--panel-interactive-focus-ring-width) solid var(--panel-interactive-focus-ring-color);
-    outline-offset: var(--panel-interactive-focus-ring-offset);
+    outline: 2px solid #3b82f6; // blue-500 (focus ring)
+    outline-offset: 2px;
   }
 }
 
 .panelSectionHeaderContent {
-  // Header content styles
+  // Header content styles - equivalent to flex items-center gap-2
   display: flex;
   align-items: center;
-  gap: var(--panel-spacing-gap-sm);
+  gap: 8px;
 }
 
 .panelSectionIcon {
-  // Icon container styles
+  // Icon container styles - equivalent to flex items-center justify-center h-4 w-4 text-muted-foreground hover:text-foreground
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--panel-layout-icon-size);
-  height: var(--panel-layout-icon-size);
-  color: var(--panel-typography-subtitle-color);
+  width: 16px;
+  height: 16px;
+  color: #a1a1aa; // zinc-400 (muted-foreground)
 
   &:hover {
-    color: var(--panel-typography-title-color);
+    color: #f4f4f5; // zinc-100 (foreground)
   }
 }
 
 .panelSectionTitle {
-  // Title text styles
+  // Title text styles - equivalent to text-inherit
   color: inherit;
 }
 
 .panelSectionHeaderEnd {
-  // Header end container (chevron and actions)
+  // Header end container (chevron and actions) - equivalent to flex items-center gap-1
   display: flex;
   align-items: center;
-  gap: var(--panel-spacing-gap-xs);
+  gap: 4px;
 }
 
 .panelSectionChevron {
-  // Chevron icon styles
-  width: var(--panel-layout-chevron-size);
-  height: var(--panel-layout-chevron-size);
+  // Chevron icon styles - equivalent to h-4 w-4 transition-transform text-muted-foreground
+  width: 16px;
+  height: 16px;
   transition: transform 150ms ease-in-out;
-  color: var(--panel-typography-subtitle-color);
+  color: #a1a1aa; // zinc-400 (muted-foreground)
 }
 
 .panelSectionChevron--expanded {
-  // Expanded chevron rotation
+  // Expanded chevron rotation - equivalent to rotate-90 text-foreground
   transform: rotate(90deg);
-  color: var(--panel-typography-title-color);
+  color: #f4f4f5; // zinc-100 (foreground)
 }
 
 .panelSectionContent {
-  // Content container styles
-  padding-left: var(--panel-layout-section-padding-left);
+  // Content container styles - equivalent to pl-4
+  padding-left: 16px;
 }
 
 // Panel Content
@@ -177,3 +178,4 @@
   border-top: 1px solid var(--panel-borderColor);
   padding: var(--panel-spacing-padding-md);
 }
+

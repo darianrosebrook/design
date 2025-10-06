@@ -3,7 +3,7 @@
  */
 @mixin vars {
   /* === Root Tokens === */
-  --menubar-root-backgroundColor: var(--color-mode-white);
+  --menubar-root-backgroundColor: var(--semantic-color-action-foreground-primary-default);
   --menubar-root-display: flex;
   --menubar-root-height: 36px;
   --menubar-root-alignItems: center;
@@ -11,7 +11,7 @@
   --menubar-root-borderRadius: 6px;
   --menubar-root-border-width: 1px;
   --menubar-root-border-style: solid;
-  --menubar-root-border-color: var(--color-palette-neutral-200);
+  --menubar-root-border-color: var(--semantic-color-action-background-secondary-active);
   --menubar-root-padding: 4px;
   --menubar-root-boxShadow: var(--elevation-level-1);
 
@@ -25,20 +25,20 @@
   --menubar-trigger-fontWeight: 500;
   --menubar-trigger-outline: none;
   --menubar-trigger-userSelect: none;
-  --menubar-trigger-states-focus-backgroundColor: var(--color-action-background-secondary-hover);
-  --menubar-trigger-states-focus-color: var(--color-action-foreground-secondary-default);
-  --menubar-trigger-states-open-backgroundColor: var(--color-action-background-secondary-hover);
-  --menubar-trigger-states-open-color: var(--color-action-foreground-secondary-default);
+  --menubar-trigger-states-focus-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --menubar-trigger-states-focus-color: var(--semantic-color-action-foreground-secondary-default);
+  --menubar-trigger-states-open-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --menubar-trigger-states-open-color: var(--semantic-color-action-foreground-secondary-default);
 
   /* === Content Tokens === */
-  --menubar-content-backgroundColor: var(--color-mode-white);
-  --menubar-content-color: var(--color-mode-dark);
+  --menubar-content-backgroundColor: var(--semantic-color-action-foreground-primary-default);
+  --menubar-content-color: var(--semantic-color-action-foreground-primary-default);
   --menubar-content-zIndex: 50;
   --menubar-content-minWidth: 192px;
   --menubar-content-borderRadius: 6px;
   --menubar-content-border-width: 1px;
   --menubar-content-border-style: solid;
-  --menubar-content-border-color: var(--color-palette-neutral-200);
+  --menubar-content-border-color: var(--semantic-color-action-background-secondary-active);
   --menubar-content-padding: 4px;
   --menubar-content-boxShadow: var(--elevation-level-3);
   --menubar-content-overflow: hidden;
@@ -51,16 +51,16 @@
   --menubar-item-padding-vertical: 6px;
   --menubar-item-fontSize: 14px;
   --menubar-item-outline: none;
-  --menubar-item-states-focus-backgroundColor: var(--color-action-background-secondary-hover);
-  --menubar-item-states-focus-color: var(--color-action-foreground-secondary-default);
+  --menubar-item-states-focus-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --menubar-item-states-focus-color: var(--semantic-color-action-foreground-secondary-default);
   --menubar-item-states-disabled-pointerEvents: none;
   --menubar-item-states-disabled-opacity: 0.5;
-  --menubar-item-variants-destructive-color: var(--color-action-foreground-danger-default);
-  --menubar-item-variants-destructive-focus-backgroundColor: var(--color-action-background-danger-hover);
-  --menubar-item-variants-destructive-focus-color: var(--color-action-foreground-danger-default);
+  --menubar-item-variants-destructive-color: var(--semantic-color-action-foreground-danger-default);
+  --menubar-item-variants-destructive-focus-backgroundColor: var(--semantic-color-action-background-danger-hover);
+  --menubar-item-variants-destructive-focus-color: var(--semantic-color-action-foreground-danger-default);
 
   /* === Separator Tokens === */
-  --menubar-separator-backgroundColor: var(--color-palette-neutral-200);
+  --menubar-separator-backgroundColor: var(--semantic-color-action-background-secondary-active);
   --menubar-separator-margin-horizontal: -4px;
   --menubar-separator-margin-vertical: 4px;
   --menubar-separator-height: 1px;
@@ -70,7 +70,7 @@
   --menubar-label-padding-vertical: 6px;
   --menubar-label-fontSize: 12px;
   --menubar-label-fontWeight: 600;
-  --menubar-label-color: var(--color-palette-neutral-500);
+  --menubar-label-color: var(--semantic-color-navigation-foreground-secondary);
 
   /* === CheckboxItem Tokens === */
   --menubar-checkboxItem-indicator-position: absolute;

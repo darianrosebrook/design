@@ -14,11 +14,11 @@
     "label": {
       "color": {
         "default": {
-          "value": "{color.mode.dark}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Default color for form labels"
         },
         "error": {
-          "value": "{color.palette.red.600}",
+          "value": "{semantic.color.action.background.danger.hover}",
           "description": "Color for labels when there's an error"
         }
       }
@@ -51,7 +51,7 @@
     },
     "description": {
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for form descriptions"
       },
       "fontSize": {
@@ -61,7 +61,7 @@
     },
     "message": {
       "color": {
-        "value": "{color.palette.red.600}",
+        "value": "{semantic.color.action.background.danger.hover}",
         "description": "Color for form error messages"
       },
       "fontSize": {

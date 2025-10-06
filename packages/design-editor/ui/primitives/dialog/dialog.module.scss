@@ -4,9 +4,6 @@
 // Import generated token variables
 @use './Dialog.tokens.generated.scss' as dialogTokens;
 
-// Include the generated variables mixin
-@include dialogTokens.vars;
-
 // Animation keyframes for dialog transitions
 @keyframes dialog-overlay-show {
   from {
@@ -50,6 +47,9 @@
 
 // Dialog overlay styles
 .dialog-overlay {
+  // Include the generated variables mixin within the component scope
+  @include dialogTokens.vars;
+
   position: var(--dialog-overlay-position);
   inset: var(--dialog-overlay-inset);
   z-index: var(--dialog-overlay-zIndex);

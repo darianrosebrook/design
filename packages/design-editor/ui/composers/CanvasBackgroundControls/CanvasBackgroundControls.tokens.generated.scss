@@ -50,4 +50,9 @@
   --canvasBackgroundControls-icon-color-selected: var(--semantic-color-display-foreground-primary);
   --canvasBackgroundControls-icon-color-unselected: var(--semantic-color-display-foreground-secondary);
   --canvasBackgroundControls-icon-color-hover: var(--semantic-color-display-foreground-primary);
+
+
+  /* === General Tokens === */
+  --canvasBackgroundControls-backgroundColor: var(--semantic-color-display-background-primary);
+  --canvasBackgroundControls-borderColor: var(--semantic-color-display-border-subtle);
 }

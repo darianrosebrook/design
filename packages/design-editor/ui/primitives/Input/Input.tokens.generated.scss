@@ -12,26 +12,34 @@
 
   /* === Border Tokens === */
   --input-border-width: 1px;
-  --input-border-color-default: var(--color-action-border-secondary-default);
-  --input-border-color-focus: var(--color-action-border-primary-focus);
-  --input-border-color-invalid: var(--color-action-background-danger-default);
+  --input-border-color-default: var(--semantic-color-action-border-secondary-default);
+  --input-border-color-focus: var(--semantic-color-action-border-primary-focus);
+  --input-border-color-invalid: var(--semantic-color-action-background-danger-default);
 
   /* === BackgroundColor Tokens === */
   --input-backgroundColor-default: transparent;
-  --input-backgroundColor-dark: var(--color-action-border-secondary-default);
+  --input-backgroundColor-dark: var(--semantic-color-action-border-secondary-default);
 
   /* === Selection Tokens === */
-  --input-selection-backgroundColor: var(--color-action-background-primary-default);
-  --input-selection-color: var(--color-action-foreground-primary-default);
+  --input-selection-backgroundColor: var(--semantic-color-action-background-primary-default);
+  --input-selection-color: var(--semantic-color-action-foreground-primary-default);
 
   /* === Transition Tokens === */
   --input-transition-properties: color, box-shadow;
   --input-transition-duration: 150ms;
 
   /* === Focus Tokens === */
-  --input-focus-ring-color: var(--color-action-border-primary-focus);
+  --input-focus-ring-color: var(--semantic-color-action-border-primary-focus);
   --input-focus-ring-width: 3px;
 
   /* === Disabled Tokens === */
   --input-disabled-opacity: 0.5;
+
+
+  /* === General Tokens === */
+  --input-borderRadius: 6px;
+  --input-height: 36px;
+  --input-textColor: inherit;
+  --input-placeholderColor: var(--semantic-color-navigation-foreground-secondary);
+  --input-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }

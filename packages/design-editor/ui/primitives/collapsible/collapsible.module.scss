@@ -8,7 +8,9 @@
 
 // Collapsible content with slide animation
 .collapsible-content {
+  // Include the generated variables mixin within the component scope
   @include collapsibleTokens.vars;
+
   overflow: var(--collapsible-content-overflow);
 
   &[data-state="open"] {

@@ -8,6 +8,8 @@
   // Include the generated variables mixin within the component scope
   @include tabsTokens.vars;
 
+  // Include the generated variables mixin within the component scope
+
   // Base tabs container styles (equivalent to flex flex-col gap-2)
   display: flex; // equivalent to flex
   flex-direction: column; // equivalent to flex-col

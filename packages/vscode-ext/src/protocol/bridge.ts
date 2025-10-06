@@ -9,6 +9,8 @@
 import type {
   IncomingMessageType,
   OutgoingMessageType,
+} from "./bridge-types.js";
+import {
   createBridgeMessage,
   validateIncomingMessage,
   validateOutgoingMessage,
@@ -89,7 +91,7 @@ export class CanvasBridge {
     type: TType,
     payload: Omit<
       Extract<OutgoingMessageType, { type: TType }>,
-      "id" | "version" | "timestamp"
+      "id" | "version" | "timestamp" | "type"
     >
   ): void {
     const message = createBridgeMessage(type, payload);

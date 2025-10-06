@@ -1,23 +1,23 @@
 // CollapsiblePanel composer component styles
-// Migrated from Tailwind to SCSS with semantic design tokens
+// Direct CSS equivalents of original Tailwind classes
 
 .collapsiblePanel {
   // Base container styles
   position: relative;
-  transition: var(--collapsiblePanel-animation-duration) var(--collapsiblePanel-animation-easing);
+  transition: 400ms ease-in-out; // modal enter duration/easing
 }
 
 .collapsiblePanelContainer {
-  // Panel container styles
-  background-color: var(--collapsiblePanel-backgroundColor);
-  border: 1px solid var(--collapsiblePanel-borderColor);
-  border-radius: var(--collapsiblePanel-borderRadius);
+  // Panel container styles - equivalent to bg-background border border-border rounded-xl overflow-hidden
+  background-color: #27272a; // zinc-800 (background)
+  border: 1px solid #3f3f46; // zinc-700 (border)
+  border-radius: 12px; // rounded-xl
   overflow: hidden;
-  transition: var(--collapsiblePanel-animation-duration) var(--collapsiblePanel-animation-easing);
+  transition: 400ms ease-in-out;
 
   // Collapsed state height
   &.collapsiblePanelContainer--collapsed {
-    height: var(--collapsiblePanel-layout-collapsed-height);
+    height: 36px; // input height default
   }
 
   &.collapsiblePanelContainer--expanded {
@@ -27,7 +27,7 @@
 
 .collapsiblePanelContent {
   // Main content styles
-  transition: var(--collapsiblePanel-animation-duration) var(--collapsiblePanel-animation-easing);
+  transition: 400ms ease-in-out;
 
   // Collapsed state
   &.collapsiblePanelContent--collapsed {
@@ -53,7 +53,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--collapsiblePanel-animation-duration) var(--collapsiblePanel-animation-easing);
+  transition: 400ms ease-in-out;
 
   // Collapsed state
   &.collapsiblePanelCollapsedContent--visible {
@@ -70,26 +70,26 @@
 }
 
 .collapsiblePanelToggle {
-  // Toggle button styles
+  // Toggle button styles - equivalent to absolute top-2 right-2 h-6 w-6 z-20 bg-background border border-border shadow-md rounded-full
   position: absolute;
-  top: var(--collapsiblePanel-spacing-toggle-offset);
-  right: var(--collapsiblePanel-spacing-toggle-offset);
-  height: var(--collapsiblePanel-layout-toggle-size);
-  width: var(--collapsiblePanel-layout-toggle-size);
+  top: 8px;
+  right: 8px;
+  height: 24px;
+  width: 24px;
   z-index: 20;
-  background-color: var(--collapsiblePanel-interactive-toggle-backgroundColor);
-  border: 1px solid var(--collapsiblePanel-borderColor);
-  box-shadow: var(--collapsiblePanel-interactive-shadow);
-  border-radius: var(--semantic-shape-radius-full);
-  transition: var(--collapsiblePanel-animation-hover-duration) var(--collapsiblePanel-animation-hover-easing);
+  background-color: #27272a; // zinc-800 (background)
+  border: 1px solid #3f3f46; // zinc-700 (border)
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); // shadow-md
+  border-radius: 9999px; // rounded-full
+  transition: 200ms ease-in-out; // hover duration/easing
 
   &:hover {
-    background-color: var(--collapsiblePanel-interactive-toggle-hover-backgroundColor);
+    background-color: #3f3f46; // zinc-700 (hover background)
   }
 }
 
 .collapsiblePanelToggleIcon {
-  // Toggle icon styles
-  width: var(--collapsiblePanel-layout-toggleIcon-size);
-  height: var(--collapsiblePanel-layout-toggleIcon-size);
+  // Toggle icon styles - equivalent to h-3 w-3
+  width: 12px;
+  height: 12px;
 }

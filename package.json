@@ -12,11 +12,12 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:packages": "pnpm -r run lint",
+    "accessibility": "cd packages/design-editor && pnpm run accessibility",
     "start:mcp": "pnpm --filter @paths-design/mcp-adapter run start",
     "start:websocket": "pnpm --filter @paths-design/websocket-server run start",
     "start:servers": "concurrently \"pnpm run start:mcp\" \"pnpm run start:websocket\"",
     "dev:extension": "echo 'Open packages/vscode-ext in VS Code and press F5'",
-    "verify": "pnpm run typecheck && pnpm run lint && pnpm run test"
+    "verify": "pnpm run typecheck && pnpm run lint && pnpm run accessibility && pnpm run test"
   },
   "keywords": [],
   "author": "",

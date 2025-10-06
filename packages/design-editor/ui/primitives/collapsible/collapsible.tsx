@@ -1,7 +1,6 @@
 "use client";
 
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
-import styles from "./collapsible.module.scss";
 import { cn } from "@/lib/utils";
 
 function Collapsible({
@@ -28,7 +27,10 @@ function CollapsibleContent({
   return (
     <CollapsiblePrimitive.CollapsibleContent
       data-slot="collapsible-content"
-      className={cn(styles["collapsible-content"], className)}
+      className={cn(
+        "data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up overflow-hidden transition-all",
+        className
+      )}
       {...props}
     />
   );

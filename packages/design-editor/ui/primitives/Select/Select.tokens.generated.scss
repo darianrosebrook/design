@@ -14,18 +14,18 @@
 
   /* === Trigger Tokens === */
   --select-trigger-backgroundColor: transparent;
-  --select-trigger-borderColor: var(--color-action-border-secondary-default);
-  --select-trigger-color: var(--color-action-foreground-secondary-default);
-  --select-trigger-hover-borderColor: var(--color-action-border-secondary-hover);
-  --select-trigger-focus-borderColor: var(--color-action-border-primary-focus);
-  --select-trigger-focus-ringColor: var(--color-action-border-primary-focus);
+  --select-trigger-borderColor: var(--semantic-color-action-border-secondary-default);
+  --select-trigger-color: var(--semantic-color-action-foreground-secondary-default);
+  --select-trigger-hover-borderColor: var(--semantic-color-action-border-secondary-hover);
+  --select-trigger-focus-borderColor: var(--semantic-color-action-border-primary-focus);
+  --select-trigger-focus-ringColor: var(--semantic-color-action-border-primary-focus);
   --select-trigger-disabled-opacity: 0.5;
   --select-trigger-disabled-cursor: not-allowed;
 
   /* === Content Tokens === */
-  --select-content-backgroundColor: var(--color-mode-light);
-  --select-content-borderColor: var(--color-action-border-secondary-default);
-  --select-content-color: var(--color-action-foreground-secondary-default);
+  --select-content-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --select-content-borderColor: var(--semantic-color-action-border-secondary-default);
+  --select-content-color: var(--semantic-color-action-foreground-secondary-default);
   --select-content-maxHeight: 240px;
   --select-content-minWidth: 128px;
   --select-content-zIndex: 1050;
@@ -34,15 +34,22 @@
   --select-item-padding-horizontal: 8px;
   --select-item-padding-vertical: 6px;
   --select-item-borderRadius: 4px;
-  --select-item-hover-backgroundColor: var(--color-action-background-secondary-hover);
-  --select-item-hover-color: var(--color-action-foreground-secondary-default);
-  --select-item-selected-backgroundColor: var(--color-action-background-primary-default);
-  --select-item-selected-color: var(--color-action-foreground-primary-default);
+  --select-item-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --select-item-hover-color: var(--semantic-color-action-foreground-secondary-default);
+  --select-item-selected-backgroundColor: var(--semantic-color-action-background-primary-default);
+  --select-item-selected-color: var(--semantic-color-action-foreground-primary-default);
   --select-item-disabled-opacity: 0.5;
   --select-item-disabled-pointerEvents: none;
 
   /* === Icon Tokens === */
   --select-icon-size: 16px;
-  --select-icon-color: var(--color-action-foreground-tertiary-default);
+  --select-icon-color: var(--semantic-color-action-foreground-tertiary-default);
   --select-icon-opacity: 0.5;
+
+
+  /* === General Tokens === */
+  --select-borderRadius: 6px;
+  --select-fontSize: 14px;
+  --select-fontWeight: 400;
+  --select-lineHeight: 1.2;
 }

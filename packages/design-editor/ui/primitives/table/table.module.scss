@@ -5,10 +5,12 @@
 @use './Table.tokens.generated.scss' as tableTokens;
 
 // Include the generated variables mixin
-@include tableTokens.vars;
 
 // Table container styles
 .table-container {
+  // Include the generated variables mixin within the component scope
+  @include tableTokens.vars;
+
   position: var(--table-container-position);
   width: var(--table-container-width);
   overflow-x: var(--table-container-overflowX);

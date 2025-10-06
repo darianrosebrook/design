@@ -10,7 +10,7 @@
   flex-direction: column;
 
   /* Background from design tokens */
-  background-color: var(--core-color-display-background-primary);
+  background-color: var(--semantic-color-background-primary);
 
   /* Dark mode support */
   @media (prefers-color-scheme: dark) {
@@ -28,7 +28,7 @@
   top: 3rem; /* 12 in Tailwind = 3rem */
 
   /* Canvas background */
-  background-color: var(--core-color-display-background-primary);
+  background-color: var(--semantic-color-background-primary);
 
   @media (prefers-color-scheme: dark) {
     background-color: var(--core-color-mode-dark);

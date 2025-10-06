@@ -3,7 +3,7 @@
   "tokens": {
     "root": {
       "backgroundColor": {
-        "value": "{color.mode.white}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Background color for menubar root"
       },
       "display": {
@@ -36,7 +36,7 @@
           "description": "Border style for menubar root"
         },
         "color": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border color for menubar root"
         }
       },
@@ -91,21 +91,21 @@
       "states": {
         "focus": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.hover}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on focus for menubar trigger"
           },
           "color": {
-            "value": "{color.action.foreground.secondary.default}",
+            "value": "{semantic.color.action.foreground.secondary.default}",
             "description": "Color on focus for menubar trigger"
           }
         },
         "open": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.hover}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color when open for menubar trigger"
           },
           "color": {
-            "value": "{color.action.foreground.secondary.default}",
+            "value": "{semantic.color.action.foreground.secondary.default}",
             "description": "Color when open for menubar trigger"
           }
         }
@@ -113,11 +113,11 @@
     },
     "content": {
       "backgroundColor": {
-        "value": "{color.mode.white}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Background color for menubar content"
       },
       "color": {
-        "value": "{color.mode.dark}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Text color for menubar content"
       },
       "zIndex": {
@@ -142,7 +142,7 @@
           "description": "Border style for menubar content"
         },
         "color": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border color for menubar content"
         }
       },
@@ -193,11 +193,11 @@
       "states": {
         "focus": {
           "backgroundColor": {
-            "value": "{color.action.background.secondary.hover}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color on focus for menubar item"
           },
           "color": {
-            "value": "{color.action.foreground.secondary.default}",
+            "value": "{semantic.color.action.foreground.secondary.default}",
             "description": "Color on focus for menubar item"
           }
         },
@@ -215,16 +215,16 @@
       "variants": {
         "destructive": {
           "color": {
-            "value": "{color.action.foreground.danger.default}",
+            "value": "{semantic.color.action.foreground.danger.default}",
             "description": "Color for destructive variant"
           },
           "focus": {
             "backgroundColor": {
-              "value": "{color.action.background.danger.hover}",
+              "value": "{semantic.color.action.background.danger.hover}",
               "description": "Background color on focus for destructive variant"
             },
             "color": {
-              "value": "{color.action.foreground.danger.default}",
+              "value": "{semantic.color.action.foreground.danger.default}",
               "description": "Color on focus for destructive variant"
             }
           }
@@ -233,7 +233,7 @@
     },
     "separator": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.200}",
+        "value": "{semantic.color.action.background.secondary.active}",
         "description": "Background color for menubar separator"
       },
       "margin": {
@@ -271,7 +271,7 @@
         "description": "Font weight for menubar label"
       },
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for menubar label"
       }
     },

@@ -11,13 +11,22 @@
   --popover-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* === Variants Tokens === */
-  --popover-variants-default-backgroundColor: var(--color-mode-light);
-  --popover-variants-default-color: var(--color-action-foreground-secondary-default);
-  --popover-variants-default-borderColor: var(--color-action-border-secondary-default);
-  --popover-variants-dark-backgroundColor: var(--color-mode-dark);
-  --popover-variants-dark-color: var(--color-action-foreground-secondary-default);
-  --popover-variants-dark-borderColor: var(--color-action-border-secondary-default);
+  --popover-variants-default-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --popover-variants-default-color: var(--semantic-color-action-foreground-secondary-default);
+  --popover-variants-default-borderColor: var(--semantic-color-action-border-secondary-default);
+  --popover-variants-dark-backgroundColor: var(--semantic-color-action-foreground-primary-default);
+  --popover-variants-dark-color: var(--semantic-color-action-foreground-secondary-default);
+  --popover-variants-dark-borderColor: var(--semantic-color-action-border-secondary-default);
 
   /* === Arrow Tokens === */
   --popover-arrow-size: 6px;
+
+
+  /* === General Tokens === */
+  --popover-borderRadius: 8px;
+  --popover-fontSize: 14px;
+  --popover-fontWeight: 400;
+  --popover-lineHeight: 1.4;
+  --popover-maxWidth: 320px;
+  --popover-zIndex: 1050;
 }

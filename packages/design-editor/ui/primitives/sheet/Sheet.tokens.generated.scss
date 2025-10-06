@@ -10,8 +10,8 @@
   --sheet-overlay-animation-easing: var(--semantic-animation-easing-default);
 
   /* === Content Tokens === */
-  --sheet-content-backgroundColor: var(--semantic-color-display-background-primary);
-  --sheet-content-borderColor: var(--semantic-color-display-border-subtle);
+  --sheet-content-backgroundColor: var(--core-color-display-background-primary);
+  --sheet-content-borderColor: var(--core-color-display-border-subtle);
   --sheet-content-borderWidth: var(--semantic-shape-border-width-default);
   --sheet-content-shadow: var(--semantic-effect-shadow-large);
   --sheet-content-zIndex: var(--semantic-z-index-modal);
@@ -51,10 +51,10 @@
   --sheet-footer-marginTop: auto;
 
   /* === Title Tokens === */
-  --sheet-title-color: var(--semantic-color-display-foreground-primary);
+  --sheet-title-color: var(--core-color-display-foreground-primary);
   --sheet-title-fontWeight: var(--semantic-typography-font-weight-semibold);
 
   /* === Description Tokens === */
-  --sheet-description-color: var(--semantic-color-display-foreground-secondary);
+  --sheet-description-color: var(--core-color-display-foreground-secondary);
   --sheet-description-fontSize: var(--semantic-typography-body-03);
 }

@@ -5,10 +5,12 @@
 @use './Pagination.tokens.generated.scss' as paginationTokens;
 
 // Include the generated variables mixin
-@include paginationTokens.vars;
 
 // Navigation container styles
 .pagination {
+  // Include the generated variables mixin within the component scope
+  @include paginationTokens.vars;
+
   display: var(--pagination-nav-display);
   width: var(--pagination-nav-width);
   margin: 0 var(--pagination-nav-margin-horizontal);

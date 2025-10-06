@@ -3,8 +3,8 @@
  */
 @mixin vars {
   /* === Command Tokens === */
-  --command-command-backgroundColor: var(--color-palette-neutral-0);
-  --command-command-color: var(--color-mode-dark);
+  --command-command-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --command-command-color: var(--semantic-color-action-foreground-primary-default);
   --command-command-display: flex;
   --command-command-height: 100%;
   --command-command-width: 100%;
@@ -23,7 +23,7 @@
   --command-input-wrapper-gap: 8px;
   --command-input-wrapper-borderBottom-width: 1px;
   --command-input-wrapper-borderBottom-style: solid;
-  --command-input-wrapper-borderBottom-color: var(--color-palette-neutral-200);
+  --command-input-wrapper-borderBottom-color: var(--semantic-color-action-background-secondary-active);
   --command-input-wrapper-padding-horizontal: 12px;
   --command-input-icon-size: 16px;
   --command-input-icon-opacity: 0.5;
@@ -36,7 +36,7 @@
   --command-input-element-padding-vertical: 12px;
   --command-input-element-fontSize: 14px;
   --command-input-element-outline: none;
-  --command-input-element-placeholder-color: var(--color-palette-neutral-500);
+  --command-input-element-placeholder-color: var(--semantic-color-navigation-foreground-secondary);
   --command-input-element-disabled-cursor: not-allowed;
   --command-input-element-disabled-opacity: 0.5;
 
@@ -52,10 +52,10 @@
   --command-empty-fontSize: 14px;
 
   /* === Group Tokens === */
-  --command-group-color: var(--color-mode-dark);
+  --command-group-color: var(--semantic-color-action-foreground-primary-default);
   --command-group-overflow: hidden;
   --command-group-padding: 4px;
-  --command-group-heading-color: var(--color-palette-neutral-500);
+  --command-group-heading-color: var(--semantic-color-navigation-foreground-secondary);
   --command-group-heading-padding-horizontal: 8px;
   --command-group-heading-padding-vertical: 6px;
   --command-group-heading-fontSize: 12px;
@@ -63,7 +63,7 @@
   --command-group-spacing-top: 0px;
 
   /* === Separator Tokens === */
-  --command-separator-backgroundColor: var(--color-palette-neutral-200);
+  --command-separator-backgroundColor: var(--semantic-color-action-background-secondary-active);
   --command-separator-margin-horizontal: -4px;
   --command-separator-height: 1px;
 
@@ -82,14 +82,14 @@
   --command-item-icon-pointerEvents: none;
   --command-item-icon-flexShrink: 0;
   --command-item-icon-size: 16px;
-  --command-item-icon-color: var(--color-palette-neutral-500);
-  --command-item-states-selected-backgroundColor: var(--color-palette-neutral-100);
-  --command-item-states-selected-color: var(--color-mode-dark);
+  --command-item-icon-color: var(--semantic-color-navigation-foreground-secondary);
+  --command-item-states-selected-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --command-item-states-selected-color: var(--semantic-color-action-foreground-primary-default);
   --command-item-states-disabled-pointerEvents: none;
   --command-item-states-disabled-opacity: 0.5;
 
   /* === Shortcut Tokens === */
-  --command-shortcut-color: var(--color-palette-neutral-500);
+  --command-shortcut-color: var(--semantic-color-navigation-foreground-secondary);
   --command-shortcut-marginLeft: auto;
   --command-shortcut-fontSize: 12px;
   --command-shortcut-letterSpacing: 0.05em;

@@ -6,8 +6,8 @@
 
 // Base button styles (equivalent to Tailwind base classes)
 .button {
-  // Include the generated variables mixin within the component scope
   @include buttonTokens.vars;
+  // Include the generated variables mixin within the component scope
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -22,13 +22,13 @@
   // SVG icon styles
   svg {
     pointer-events: none;
-    width: var(--semantic-components-action-gap-icon); // 8px * 2
-    height: var(--semantic-components-action-gap-icon); // 8px * 2
+    width: var(--semantic-components-action-height-small); // 8px * 2
+    height: var(--semantic-components-action-height-small); // 8px * 2
     flex-shrink: 0;
 
     &:not([class*="size-"]) {
-      width: var(--semantic-components-action-gap-icon); // 8px * 2
-      height: var(--semantic-components-action-gap-icon); // 8px * 2
+      width: var(--semantic-components-action-height-small); // 8px * 2
+      height: var(--semantic-components-action-height-small); // 8px * 2
     }
   }
 
@@ -38,20 +38,19 @@
     opacity: var(--semantic-opacity-disabled);
   }
 
-  // Focus visible styles
+  // Focus visible styles - equivalent to focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
   &:focus-visible {
     outline: none;
-    border-color: var(--semantic-color-action-border-primary-focus);
-    box-shadow: 0 0 0 3px rgba(var(--semantic-color-action-border-primary-focus), 0.5);
+    box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px #ffffff; // ring-2 blue-500, ring-offset-2 white
   }
 
-  // Invalid state
+  // Invalid state - equivalent to aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive
   &[aria-invalid="true"] {
-    box-shadow: 0 0 0 3px rgba(var(--semantic-color-feedback-foreground-danger-default), 0.2);
-    border-color: var(--semantic-color-feedback-foreground-danger-default);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2); // red-600 with 20% opacity
+    border-color: #dc2626; // red-600
 
     .dark & {
-      box-shadow: 0 0 0 3px rgba(var(--semantic-color-feedback-foreground-danger-default), 0.4);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.4); // red-600 with 40% opacity
     }
   }
 }

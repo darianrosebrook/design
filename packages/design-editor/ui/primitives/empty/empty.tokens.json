@@ -44,7 +44,7 @@
           "description": "Border style for empty container"
         },
         "color": {
-          "value": "{core.color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Border color for empty container"
         }
       },
@@ -117,11 +117,11 @@
       "variants": {
         "icon": {
           "backgroundColor": {
-          "value": "{core.color.palette.neutral.100}",
+          "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color for icon variant"
           },
           "color": {
-          "value": "{core.color.mode.dark}",
+          "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Color for icon variant"
           },
           "size": {
@@ -161,7 +161,7 @@
     },
     "description": {
       "color": {
-        "value": "{core.color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for empty description"
       },
       "fontSize": {

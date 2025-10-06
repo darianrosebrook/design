@@ -1,83 +1,78 @@
 // Input component styles
-// Migrated from Tailwind to SCSS with semantic design tokens
-
-// Import generated token variables
-@use './Input.tokens.generated.scss' as inputTokens;
+// Direct CSS equivalents of original Tailwind classes
 
 .input {
-  // Include the generated variables mixin within the component scope
-  @include inputTokens.vars;
   // File input text color (equivalent to file:text-foreground)
   &[type="file"] {
-    color: var(--semantic-color-display-foreground-primary);
+    color: #f4f4f5; // zinc-100 (foreground)
   }
 
   // Placeholder text color (equivalent to placeholder:text-muted-foreground)
   &::placeholder {
-    color: var(--input-placeholderColor);
+    color: #a1a1aa; // zinc-400 (muted-foreground)
   }
 
   // Selection colors (equivalent to selection:bg-primary selection:text-primary-foreground)
   &::selection {
-    background-color: var(--input-selection-backgroundColor);
-    color: var(--input-selection-color);
+    background-color: #0a65fe; // blue-500 (primary)
+    color: #ffffff; // white (primary-foreground)
   }
 
   // Dark mode background (equivalent to dark:bg-input/30)
   .dark & {
-    background-color: rgba(var(--input-backgroundColor-dark), var(--input-backgroundColor-dark-opacity));
+    background-color: rgba(63, 63, 70, 0.3); // zinc-700 with 30% opacity
   }
 
-  // Base input styles (equivalent to border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none)
+  // Base input styles - equivalent to border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none
   color: inherit;
-  border: var(--input-border-width) solid var(--input-border-color-default);
-  height: var(--input-height);
+  border: 1px solid #3f3f46; // zinc-700 (input border)
+  height: 36px; // h-9
   width: 100%;
   min-width: 0;
-  border-radius: var(--input-borderRadius);
-  background-color: var(--input-backgroundColor-default);
-  padding: var(--input-padding-vertical) var(--input-padding-horizontal);
-  font-size: var(--input-fontSize-base);
-  box-shadow: var(--semantic-elevation-default);
-  transition: var(--semantic-motion-interaction-focus-duration) var(--semantic-motion-interaction-focus-easing);
+  border-radius: 6px; // rounded-md
+  background-color: transparent; // bg-transparent
+  padding: 4px 12px; // px-3 py-1
+  font-size: 16px; // text-base
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); // shadow-xs
+  transition: color 150ms ease-in-out, box-shadow 150ms ease-in-out; // transition-[color,box-shadow]
   outline: none;
 
-  // File input specific styles (equivalent to file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium)
+  // File input specific styles - equivalent to file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium
   &[type="file"] {
     display: inline-flex;
     align-items: center;
-    height: calc(var(--semantic-components-input-height-small) - var(--semantic-shape-border-width-hairline));
+    height: 28px; // h-7 (28px)
     border: 0;
     background-color: transparent;
-    font-size: var(--semantic-typography-input-02);
-    font-weight: var(--semantic-typography-font-weight-medium);
+    font-size: 14px; // text-sm
+    font-weight: 500; // font-medium
   }
 
   // Disabled state (equivalent to disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50)
   &:disabled {
     pointer-events: none;
     cursor: not-allowed;
-    opacity: var(--semantic-opacity-disabled);
+    opacity: 0.5; // disabled:opacity-50
   }
 
   // Medium screen text size (equivalent to md:text-sm)
-  @media (min-width: var(--semantic-dimension-breakpoint-md)) {
-    font-size: var(--semantic-typography-input-02);
+  @media (min-width: 768px) {
+    font-size: 14px; // text-sm
   }
 
   // Focus visible styles (equivalent to focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px])
   &:focus-visible {
-    border-color: var(--input-border-color-focus);
-    box-shadow: 0 0 0 var(--input-focus-ring-width) rgba(var(--input-focus-ring-color), var(--input-focus-ring-color-opacity));
+    border-color: #3b82f6; // blue-500 (ring)
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); // blue-500 with 50% opacity
   }
 
   // Invalid state (equivalent to aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive)
   &[aria-invalid="true"] {
-    box-shadow: 0 0 0 var(--input-focus-ring-width) rgba(var(--input-border-color-invalid), 0.2);
-    border-color: var(--input-border-color-invalid);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2); // red-600 with 20% opacity
+    border-color: #dc2626; // red-600 (destructive)
 
     .dark & {
-      box-shadow: 0 0 0 var(--input-focus-ring-width) rgba(var(--input-border-color-invalid), 0.4);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.4); // red-600 with 40% opacity
     }
   }
 }

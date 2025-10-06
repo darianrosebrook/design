@@ -29,11 +29,11 @@
     },
     "content": {
       "backgroundColor": {
-        "value": "{semantic.color.display.background.primary}",
+        "value": "{core.color.display.background.primary}",
         "description": "Background color for sheet content"
       },
       "borderColor": {
-        "value": "{semantic.color.display.border.subtle}",
+        "value": "{core.color.display.border.subtle}",
         "description": "Border color for sheet content"
       },
       "borderWidth": {
@@ -191,7 +191,7 @@
     },
     "title": {
       "color": {
-        "value": "{semantic.color.display.foreground.primary}",
+        "value": "{core.color.display.foreground.primary}",
         "description": "Text color for sheet title"
       },
       "fontWeight": {
@@ -201,7 +201,7 @@
     },
     "description": {
       "color": {
-        "value": "{semantic.color.display.foreground.secondary}",
+        "value": "{core.color.display.foreground.secondary}",
         "description": "Text color for sheet description"
       },
       "fontSize": {

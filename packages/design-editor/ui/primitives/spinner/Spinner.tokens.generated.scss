@@ -13,4 +13,8 @@
   --spinner-animation-duration: 1s;
   --spinner-animation-timingFunction: linear;
   --spinner-animation-iterationCount: infinite;
+
+
+  /* === General Tokens === */
+  --spinner-color: var(--semantic-color-action-foreground-primary-default);
 }

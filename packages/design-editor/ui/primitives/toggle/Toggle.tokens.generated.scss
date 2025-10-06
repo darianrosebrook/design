@@ -16,19 +16,26 @@
   --toggle-height-lg: 40px;
 
   /* === Variants Tokens === */
-  --toggle-variants-default-backgroundColor: var(--color-action-background-secondary-default);
-  --toggle-variants-default-color: var(--color-action-foreground-secondary-default);
-  --toggle-variants-default-borderColor: var(--color-action-border-secondary-default);
-  --toggle-variants-default-hover-backgroundColor: var(--color-action-background-secondary-hover);
-  --toggle-variants-default-pressed-backgroundColor: var(--color-action-background-secondary-active);
-  --toggle-variants-outline-backgroundColor: var(--color-mode-light);
-  --toggle-variants-outline-borderColor: var(--color-action-border-secondary-default);
-  --toggle-variants-outline-color: var(--color-action-foreground-secondary-default);
-  --toggle-variants-outline-hover-backgroundColor: var(--color-action-background-secondary-hover);
-  --toggle-variants-secondary-backgroundColor: var(--color-action-background-secondary-default);
-  --toggle-variants-secondary-color: var(--color-action-foreground-secondary-default);
-  --toggle-variants-secondary-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --toggle-variants-default-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --toggle-variants-default-color: var(--semantic-color-action-foreground-secondary-default);
+  --toggle-variants-default-borderColor: var(--semantic-color-action-border-secondary-default);
+  --toggle-variants-default-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --toggle-variants-default-pressed-backgroundColor: var(--semantic-color-action-background-secondary-active);
+  --toggle-variants-outline-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --toggle-variants-outline-borderColor: var(--semantic-color-action-border-secondary-default);
+  --toggle-variants-outline-color: var(--semantic-color-action-foreground-secondary-default);
+  --toggle-variants-outline-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --toggle-variants-secondary-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --toggle-variants-secondary-color: var(--semantic-color-action-foreground-secondary-default);
+  --toggle-variants-secondary-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
   --toggle-variants-ghost-backgroundColor: transparent;
-  --toggle-variants-ghost-color: var(--color-action-foreground-secondary-default);
-  --toggle-variants-ghost-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --toggle-variants-ghost-color: var(--semantic-color-action-foreground-secondary-default);
+  --toggle-variants-ghost-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+
+
+  /* === General Tokens === */
+  --toggle-borderRadius: 6px;
+  --toggle-fontSize: 14px;
+  --toggle-fontWeight: 500;
+  --toggle-lineHeight: 1.2;
 }

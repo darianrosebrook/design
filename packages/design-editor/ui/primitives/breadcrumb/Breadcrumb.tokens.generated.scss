@@ -24,24 +24,24 @@
   --breadcrumb-link-borderRadius: 4px;
   --breadcrumb-link-padding-horizontal: 4px;
   --breadcrumb-link-padding-vertical: 2px;
-  --breadcrumb-link-color: var(--color-palette-neutral-600);
+  --breadcrumb-link-color: var(--semantic-color-navigation-foreground-secondary);
   --breadcrumb-link-fontSize: 14px;
   --breadcrumb-link-lineHeight: 1.4;
   --breadcrumb-link-transition-property: color;
   --breadcrumb-link-transition-duration: 200ms;
   --breadcrumb-link-transition-easing: ease-in-out;
-  --breadcrumb-link-states-hover-color: var(--color-palette-neutral-900);
-  --breadcrumb-link-states-focus-outline: 2px solid {color.palette.blue.500};
+  --breadcrumb-link-states-hover-color: var(--semantic-color-action-foreground-primary-default);
+  --breadcrumb-link-states-focus-outline: 2px solid {semantic.color.feedback.foreground.info.default};
   --breadcrumb-link-states-focus-outlineOffset: 2px;
 
   /* === Page Tokens === */
-  --breadcrumb-page-color: var(--color-palette-neutral-900);
+  --breadcrumb-page-color: var(--semantic-color-action-foreground-primary-default);
   --breadcrumb-page-fontSize: 14px;
   --breadcrumb-page-lineHeight: 1.4;
   --breadcrumb-page-fontWeight: 500;
 
   /* === Separator Tokens === */
-  --breadcrumb-separator-color: var(--color-palette-neutral-400);
+  --breadcrumb-separator-color: var(--semantic-color-action-border-secondary-hover);
   --breadcrumb-separator-display: flex;
   --breadcrumb-separator-alignItems: center;
   --breadcrumb-separator-justifyContent: center;
@@ -54,10 +54,10 @@
   --breadcrumb-ellipsis-height: 20px;
   --breadcrumb-ellipsis-width: 20px;
   --breadcrumb-ellipsis-borderRadius: 4px;
-  --breadcrumb-ellipsis-color: var(--color-palette-neutral-500);
+  --breadcrumb-ellipsis-color: var(--semantic-color-navigation-foreground-secondary);
   --breadcrumb-ellipsis-icon-size: 14px;
-  --breadcrumb-ellipsis-states-hover-backgroundColor: var(--color-palette-neutral-100);
-  --breadcrumb-ellipsis-states-focus-backgroundColor: var(--color-palette-neutral-100);
-  --breadcrumb-ellipsis-states-focus-outline: 2px solid {color.palette.blue.500};
+  --breadcrumb-ellipsis-states-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --breadcrumb-ellipsis-states-focus-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --breadcrumb-ellipsis-states-focus-outline: 2px solid {semantic.color.feedback.foreground.info.default};
   --breadcrumb-ellipsis-states-focus-outlineOffset: 2px;
 }

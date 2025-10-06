@@ -69,7 +69,9 @@ export const TextField: React.FC<TextFieldProps> = ({
   id,
   name,
 }) => {
-  const fieldId = id || `field-${Math.random().toString(36).substr(2, 9)}`;
+  const [fieldId] = React.useState(
+    () => id || `field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+  );
   const helperId = `${fieldId}-helper`;
   const errorId = `${fieldId}-error`;
 

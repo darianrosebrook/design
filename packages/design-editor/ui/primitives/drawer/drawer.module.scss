@@ -5,10 +5,12 @@
 @use './Drawer.tokens.generated.scss' as drawerTokens;
 
 // Include the generated variables mixin
-@include drawerTokens.vars;
 
 // Drawer overlay
 .drawer-overlay {
+  // Include the generated variables mixin within the component scope
+  @include drawerTokens.vars;
+
   position: var(--drawer-overlay-position);
   inset: var(--drawer-overlay-inset);
   z-index: var(--drawer-overlay-zIndex);

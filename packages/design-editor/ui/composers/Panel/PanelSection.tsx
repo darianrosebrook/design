@@ -1,8 +1,7 @@
 "use client";
 
 import type React from "react";
-import styles from "./Panel.module.scss";
-import { ChevronRight } from "@/lib/components/icons";
+import { ChevronRight } from "lucide-react";
 
 interface PanelSectionProps {
   id: string;
@@ -25,26 +24,26 @@ export function PanelSection({
   actions,
   className,
 }: PanelSectionProps) {
-  const chevronClass = expanded
-    ? `${styles.panelSectionChevron} ${styles["panelSectionChevron--expanded"]}`
-    : styles.panelSectionChevron;
-
   return (
-    <div className={`${styles.panelSection} ${className || ""}`}>
+    <div className={`${className || ""}`}>
       <button
         onClick={() => onToggle(id)}
-        className={styles.panelSectionHeader}
+        className="flex items-center justify-between w-full p-3 text-left hover:bg-accent/50 rounded-md transition-colors"
       >
-        <div className={styles.panelSectionHeaderContent}>
-          {icon && <div className={styles.panelSectionIcon}>{icon}</div>}
-          <span className={styles.panelSectionTitle}>{title}</span>
+        <div className="flex items-center gap-2">
+          {icon}
+          <span className="text-sm font-medium">{title}</span>
         </div>
-        <div className={styles.panelSectionHeaderEnd}>
+        <div className="flex items-center gap-2">
           {actions}
-          <ChevronRight className={chevronClass} />
+          <ChevronRight
+            className={`h-4 w-4 transition-transform ${
+              expanded ? "rotate-90" : ""
+            }`}
+          />
         </div>
       </button>
-      {expanded && <div className={styles.panelSectionContent}>{children}</div>}
+      {expanded && <div className="mt-2">{children}</div>}
     </div>
   );
 }

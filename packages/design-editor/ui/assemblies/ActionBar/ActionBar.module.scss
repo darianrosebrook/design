@@ -1,27 +1,193 @@
 // ActionBar composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with semantic design tokens
 
 .actionBar {
   // Main action bar container styles
-  // Fixed positioning, background, border, shadow, etc.
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+
+  // Background, border, shadow equivalent to bg-zinc-800 border border-zinc-700 shadow-2xl
+  background-color: var(--semantic-color-background-tertiary);
+  border: 1px solid var(--semantic-color-border-bold);
+  border-radius: var(--semantic-shape-radius-04);
+  box-shadow: var(--semantic-elevation-level-3);
+
+  // Layout equivalent to flex items-center gap-1 px-2 py-2
+  display: flex;
+  align-items: center;
+  gap: var(--semantic-spacing-size-03);
+  padding: var(--semantic-spacing-size-02);
+
+  // Button styles within action bar
+  .actionBarButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    padding: 0 8px;
+    border-radius: var(--semantic-shape-radius-02);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    transition: all 150ms ease-in-out;
+    cursor: pointer;
+    border: none;
+    outline: none;
+
+    // Base colors equivalent to text-zinc-300 hover:text-zinc-100
+    color: var(--semantic-color-foreground-secondary);
+    background-color: transparent;
+
+    &:hover {
+      background-color: var(--semantic-color-background-secondary);
+      color: var(--semantic-color-foreground-primary);
+    }
+
+    // Active state equivalent to bg-zinc-700 text-zinc-100
+    &.isActive {
+      background-color: var(--semantic-color-background-secondary);
+      color: var(--semantic-color-foreground-primary);
+    }
+  }
+
+  // Dropdown menu styles
+  .actionBarDropdown {
+    position: relative;
+
+    .dropdownTrigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 32px;
+      padding: 0 8px;
+      gap: 4px;
+      border-radius: var(--semantic-shape-radius-02);
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all 150ms ease-in-out;
+      color: var(--semantic-color-foreground-secondary);
+
+      &:hover {
+        background-color: var(--semantic-color-background-secondary);
+        color: var(--semantic-color-foreground-primary);
+      }
+
+      &.isActive {
+        background-color: var(--semantic-color-background-secondary);
+        color: var(--semantic-color-foreground-primary);
+      }
+
+      svg {
+        width: 16px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+    }
+
+    .dropdownContent {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: 8px;
+      background-color: var(--semantic-color-background-tertiary);
+      border: 1px solid var(--semantic-color-border-bold);
+      border-radius: var(--semantic-shape-radius-03);
+      padding: 4px;
+      min-width: 120px;
+      box-shadow: var(--semantic-elevation-level-3);
+      z-index: 60;
+
+      .dropdownItem {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: var(--semantic-shape-radius-02);
+        cursor: pointer;
+        transition: all 150ms ease-in-out;
+        color: var(--semantic-color-foreground-primary);
+
+        &:hover {
+          background-color: var(--semantic-color-background-secondary);
+        }
+
+        &.isActive {
+          background-color: var(--semantic-color-background-secondary);
+        }
+
+        svg {
+          width: 16px;
+          height: 16px;
+          flex-shrink: 0;
+        }
+
+        .shortcut {
+          margin-left: auto;
+          font-size: 12px;
+          color: var(--semantic-color-foreground-tertiary);
+        }
+      }
+    }
+  }
+
+  // Separator styles
+  .actionBarSeparator {
+    width: 1px;
+    height: 24px;
+    background-color: var(--semantic-color-border-subtle);
+    margin: 0 4px;
+  }
 }
 
 .actionBarToggle {
   // Toggle button styles when action bar is hidden
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+
+  background-color: var(--semantic-color-background-tertiary);
+  border: 1px solid var(--semantic-color-border-bold);
+  border-radius: var(--semantic-shape-radius-04);
+  box-shadow: var(--semantic-elevation-level-3);
+  height: 32px;
+  padding: 0 8px;
+  color: var(--semantic-color-foreground-secondary);
+
+  &:hover {
+    background-color: var(--semantic-color-background-secondary);
+    color: var(--semantic-color-foreground-primary);
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .actionBarMain {
   // Main action bar layout and transitions
-}
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  transition: all 300ms ease-in-out;
 
-.actionBarButton {
-  // Individual button styles within the action bar
-}
+  &.isVisible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 
-.actionBarDropdown {
-  // Dropdown menu styles for overflow options
-}
-
-.actionBarSeparator {
-  // Separator styles between sections
+  &.isHidden {
+    opacity: 0;
+    transform: translateX(-50%) translateY(16px);
+    pointer-events: none;
+  }
 }

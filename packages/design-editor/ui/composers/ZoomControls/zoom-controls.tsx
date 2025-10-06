@@ -1,7 +1,6 @@
 "use client";
 
 import { ZoomIn, ZoomOut, Maximize } from "lucide-react";
-import styles from "./zoom-controls.module.scss";
 import { useCanvas } from "@/lib/canvas-context";
 import { Button } from "@/ui/primitives/Button";
 
@@ -13,49 +12,51 @@ export function ZoomControls() {
   const { zoom, zoomIn, zoomOut, zoomToFit, zoomToSelection } = useCanvas();
 
   return (
-    <div className={styles.zoomControls}>
+    <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
       <Button
         variant="ghost"
         size="sm"
         onClick={zoomOut}
-        className={styles.zoomControlsButton}
+        className="h-8 w-8 p-0"
         title="Zoom Out (Ctrl+-)"
       >
-        <ZoomOut className={styles.zoomControlsIcon} />
+        <ZoomOut className="h-4 w-4" />
       </Button>
 
-      <div className={styles.zoomControlsDisplay}>{Math.floor(zoom)}%</div>
+      <div className="px-2 text-sm font-medium min-w-[3rem] text-center">
+        {Math.floor(zoom)}%
+      </div>
 
       <Button
         variant="ghost"
         size="sm"
         onClick={zoomIn}
-        className={styles.zoomControlsButton}
+        className="h-8 w-8 p-0"
         title="Zoom In (Ctrl+=)"
       >
-        <ZoomIn className={styles.zoomControlsIcon} />
+        <ZoomIn className="h-4 w-4" />
       </Button>
 
-      <div className={styles.zoomControlsSeparator} />
+      <div className="w-px h-6 bg-border mx-1" />
 
       <Button
         variant="ghost"
         size="sm"
         onClick={zoomToFit}
-        className={styles.zoomControlsButton}
+        className="h-8 w-8 p-0"
         title="Zoom to Fit (Shift+1)"
       >
-        <Maximize className={styles.zoomControlsIcon} />
+        <Maximize className="h-4 w-4" />
       </Button>
 
       <Button
         variant="ghost"
         size="sm"
         onClick={zoomToSelection}
-        className={styles.zoomControlsButton}
+        className="h-8 w-8 p-0"
         title="Zoom to Selection (Shift+2)"
       >
-        <div className={styles.zoomControlsSelectionIcon}>S</div>
+        <div className="text-xs font-bold">S</div>
       </Button>
     </div>
   );

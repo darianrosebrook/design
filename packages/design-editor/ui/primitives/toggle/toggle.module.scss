@@ -8,6 +8,8 @@
 .toggle {
   // Include the generated variables mixin within the component scope
   @include toggleTokens.vars;
+
+  // Include the generated variables mixin within the component scope
   display: inline-flex;
   align-items: center;
   justify-content: center;

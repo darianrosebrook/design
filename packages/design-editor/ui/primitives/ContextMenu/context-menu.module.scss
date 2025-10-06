@@ -5,7 +5,6 @@
 @use './ContextMenu.tokens.generated.scss' as contextMenuTokens;
 
 // Include the generated variables mixin
-@include contextMenuTokens.vars;
 
 // Animation keyframes for context menu
 @keyframes context-menu-show {
@@ -76,6 +75,9 @@
 
 // Context menu content
 .context-menu-content {
+  // Include the generated variables mixin within the component scope
+  @include contextMenuTokens.vars;
+
   background-color: var(--contextMenu-content-backgroundColor);
   color: var(--contextMenu-content-color);
   z-index: var(--contextMenu-content-zIndex);

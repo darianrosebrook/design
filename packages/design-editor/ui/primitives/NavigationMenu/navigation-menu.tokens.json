@@ -86,7 +86,7 @@
       },
       "backgroundColor": {
         "default": {
-          "value": "{color.mode.white}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Default background color for navigation menu triggers"
         }
       },
@@ -121,27 +121,27 @@
       "states": {
         "hover": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Hover background color for navigation menu triggers"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Hover text color for navigation menu triggers"
           }
         },
         "focus": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Focus background color for navigation menu triggers"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Focus text color for navigation menu triggers"
           }
         },
         "open": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "opacity": 0.5,
             "description": "Open state background color for navigation menu triggers"
           }
@@ -237,11 +237,11 @@
           "description": "Transform origin for navigation menu viewport inner"
         },
         "backgroundColor": {
-          "value": "{color.mode.white}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Background color for navigation menu viewport inner"
         },
         "color": {
-          "value": "{color.mode.dark}",
+          "value": "{semantic.color.action.foreground.primary.default}",
           "description": "Text color for navigation menu viewport inner"
         },
         "position": {
@@ -269,7 +269,7 @@
           "description": "Border radius for navigation menu viewport inner"
         },
         "border": {
-          "value": "1px solid {color.palette.neutral.200}",
+          "value": "1px solid {semantic.color.action.background.secondary.active}",
           "description": "Border for navigation menu viewport inner"
         },
         "boxShadow": {
@@ -316,7 +316,7 @@
       "icon": {
         "color": {
           "default": {
-            "value": "{color.palette.neutral.500}",
+            "value": "{semantic.color.navigation.foreground.secondary}",
             "description": "Default color for navigation menu link icons"
           }
         },
@@ -328,32 +328,32 @@
       "states": {
         "hover": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Hover background color for navigation menu links"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Hover text color for navigation menu links"
           }
         },
         "focus": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Focus background color for navigation menu links"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Focus text color for navigation menu links"
           }
         },
         "active": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "opacity": 0.5,
             "description": "Active background color for navigation menu links"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Active text color for navigation menu links"
           }
         }
@@ -394,7 +394,7 @@
       },
       "arrow": {
         "backgroundColor": {
-          "value": "{color.palette.neutral.200}",
+          "value": "{semantic.color.action.background.secondary.active}",
           "description": "Background color for navigation menu indicator arrow"
         },
         "position": {

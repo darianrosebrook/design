@@ -3,7 +3,7 @@
  */
 @mixin vars {
   /* === Calendar Tokens === */
-  --calendar-calendar-backgroundColor: var(--color-mode-light);
+  --calendar-calendar-backgroundColor: var(--semantic-color-action-background-secondary-default);
   --calendar-calendar-padding: 12px;
   --calendar-calendar-width: fit-content;
   --calendar-calendar-cellSize: 32px;
@@ -58,17 +58,17 @@
   --calendar-dropdownRoot-position: relative;
   --calendar-dropdownRoot-border-width: 1px;
   --calendar-dropdownRoot-border-style: solid;
-  --calendar-dropdownRoot-border-color: var(--color-palette-neutral-200);
+  --calendar-dropdownRoot-border-color: var(--semantic-color-action-background-secondary-active);
   --calendar-dropdownRoot-boxShadow: var(--elevation-small);
   --calendar-dropdownRoot-borderRadius: 6px;
-  --calendar-dropdownRoot-focus-borderColor: var(--color-palette-blue-500);
-  --calendar-dropdownRoot-focus-ringColor: var(--color-palette-blue-500);
+  --calendar-dropdownRoot-focus-borderColor: var(--semantic-color-feedback-foreground-info-default);
+  --calendar-dropdownRoot-focus-ringColor: var(--semantic-color-feedback-foreground-info-default);
   --calendar-dropdownRoot-focus-ringWidth: 3px;
 
   /* === Dropdown Tokens === */
   --calendar-dropdown-position: absolute;
   --calendar-dropdown-inset: 0;
-  --calendar-dropdown-backgroundColor: var(--color-palette-neutral-0);
+  --calendar-dropdown-backgroundColor: var(--semantic-color-action-background-secondary-default);
   --calendar-dropdown-opacity: 0;
 
   /* === CaptionLabel Tokens === */
@@ -82,7 +82,7 @@
   --calendar-captionLabel-button-padding-horizontal: 8px;
   --calendar-captionLabel-button-padding-vertical: 2px;
   --calendar-captionLabel-button-height: 32px;
-  --calendar-captionLabel-button-icon-color: var(--color-palette-neutral-500);
+  --calendar-captionLabel-button-icon-color: var(--semantic-color-navigation-foreground-secondary);
   --calendar-captionLabel-button-icon-size: 14px;
 
   /* === Table Tokens === */
@@ -93,7 +93,7 @@
   --calendar-weekdays-display: flex;
 
   /* === Weekday Tokens === */
-  --calendar-weekday-color: var(--color-palette-neutral-500);
+  --calendar-weekday-color: var(--semantic-color-navigation-foreground-secondary);
   --calendar-weekday-borderRadius: 6px;
   --calendar-weekday-flex: 1;
   --calendar-weekday-fontWeight: 400;
@@ -117,7 +117,7 @@
   --calendar-weekNumber-textAlign: center;
   --calendar-weekNumber-fontSize: 0.8rem;
   --calendar-weekNumber-userSelect: none;
-  --calendar-weekNumber-color: var(--color-palette-neutral-500);
+  --calendar-weekNumber-color: var(--semantic-color-navigation-foreground-secondary);
 
   /* === Day Tokens === */
   --calendar-day-position: relative;
@@ -127,23 +127,23 @@
   --calendar-day-textAlign: center;
   --calendar-day-aspectRatio: 1;
   --calendar-day-userSelect: none;
-  --calendar-day-focused-borderColor: var(--color-palette-blue-500);
-  --calendar-day-focused-ringColor: var(--color-palette-blue-500);
+  --calendar-day-focused-borderColor: var(--semantic-color-feedback-foreground-info-default);
+  --calendar-day-focused-ringColor: var(--semantic-color-feedback-foreground-info-default);
   --calendar-day-focused-ringWidth: 3px;
   --calendar-day-focused-position: relative;
   --calendar-day-focused-zIndex: 10;
   --calendar-day-rangeStart-borderRadius: 6px 0 0 6px;
-  --calendar-day-rangeStart-backgroundColor: var(--color-palette-neutral-100);
+  --calendar-day-rangeStart-backgroundColor: var(--semantic-color-action-background-secondary-hover);
   --calendar-day-rangeMiddle-borderRadius: 0;
   --calendar-day-rangeEnd-borderRadius: 0 6px 6px 0;
-  --calendar-day-rangeEnd-backgroundColor: var(--color-palette-neutral-100);
-  --calendar-day-today-backgroundColor: var(--color-palette-neutral-100);
-  --calendar-day-today-color: var(--color-palette-neutral-900);
+  --calendar-day-rangeEnd-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --calendar-day-today-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --calendar-day-today-color: var(--semantic-color-action-foreground-primary-default);
   --calendar-day-today-borderRadius: 6px;
   --calendar-day-today-selected-borderRadius: 0;
-  --calendar-day-outside-color: var(--color-palette-neutral-500);
-  --calendar-day-outside-selected-color: var(--color-palette-neutral-500);
-  --calendar-day-disabled-color: var(--color-palette-neutral-500);
+  --calendar-day-outside-color: var(--semantic-color-navigation-foreground-secondary);
+  --calendar-day-outside-selected-color: var(--semantic-color-navigation-foreground-secondary);
+  --calendar-day-disabled-color: var(--semantic-color-navigation-foreground-secondary);
   --calendar-day-disabled-opacity: 0.5;
   --calendar-day-hidden-visibility: hidden;
 
@@ -158,16 +158,16 @@
   --calendar-dayButton-lineHeight: 1;
   --calendar-dayButton-fontWeight: 400;
   --calendar-dayButton-focusRing-width: 3px;
-  --calendar-dayButton-selected-single-backgroundColor: var(--color-palette-blue-600);
-  --calendar-dayButton-selected-single-color: var(--color-palette-white);
-  --calendar-dayButton-selected-range-start-backgroundColor: var(--color-palette-blue-600);
-  --calendar-dayButton-selected-range-start-color: var(--color-palette-white);
+  --calendar-dayButton-selected-single-backgroundColor: var(--semantic-color-feedback-background-info-strong);
+  --calendar-dayButton-selected-single-color: var(--semantic-color-action-foreground-primary-default);
+  --calendar-dayButton-selected-range-start-backgroundColor: var(--semantic-color-feedback-background-info-strong);
+  --calendar-dayButton-selected-range-start-color: var(--semantic-color-action-foreground-primary-default);
   --calendar-dayButton-selected-range-start-borderRadius: 6px 0 0 6px;
-  --calendar-dayButton-selected-range-end-backgroundColor: var(--color-palette-blue-600);
-  --calendar-dayButton-selected-range-end-color: var(--color-palette-white);
+  --calendar-dayButton-selected-range-end-backgroundColor: var(--semantic-color-feedback-background-info-strong);
+  --calendar-dayButton-selected-range-end-color: var(--semantic-color-action-foreground-primary-default);
   --calendar-dayButton-selected-range-end-borderRadius: 0 6px 6px 0;
-  --calendar-dayButton-selected-range-middle-backgroundColor: var(--color-palette-neutral-100);
-  --calendar-dayButton-selected-range-middle-color: var(--color-palette-neutral-900);
+  --calendar-dayButton-selected-range-middle-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --calendar-dayButton-selected-range-middle-color: var(--semantic-color-action-foreground-primary-default);
   --calendar-dayButton-selected-range-middle-borderRadius: 0;
   --calendar-dayButton-span-fontSize: 12px;
   --calendar-dayButton-span-opacity: 0.7;

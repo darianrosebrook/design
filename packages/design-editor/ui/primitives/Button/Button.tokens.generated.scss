@@ -19,16 +19,23 @@
   --button-height-icon-lg: 40px;
 
   /* === Variants Tokens === */
-  --button-variants-default-backgroundColor: var(--color-action-background-primary-default);
-  --button-variants-default-color: var(--color-action-foreground-primary-default);
-  --button-variants-default-hover-backgroundColor: var(--color-action-background-primary-default);
-  --button-variants-destructive-backgroundColor: var(--color-action-background-danger-default);
-  --button-variants-destructive-color: var(--color-action-foreground-danger-default);
-  --button-variants-outline-backgroundColor: var(--color-mode-light);
-  --button-variants-outline-borderColor: var(--color-action-border-secondary-default);
-  --button-variants-secondary-backgroundColor: var(--color-action-background-secondary-default);
-  --button-variants-secondary-color: var(--color-action-foreground-secondary-default);
-  --button-variants-ghost-hover-backgroundColor: var(--color-palette-neutral-100);
-  --button-variants-ghost-hover-color: var(--color-mode-dark);
-  --button-variants-link-color: var(--color-action-background-primary-default);
+  --button-variants-default-backgroundColor: var(--semantic-color-action-background-primary-default);
+  --button-variants-default-color: var(--semantic-color-action-foreground-primary-default);
+  --button-variants-default-hover-backgroundColor: var(--semantic-color-action-background-primary-default);
+  --button-variants-destructive-backgroundColor: var(--semantic-color-action-background-danger-default);
+  --button-variants-destructive-color: var(--semantic-color-action-foreground-danger-default);
+  --button-variants-outline-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --button-variants-outline-borderColor: var(--semantic-color-action-border-secondary-default);
+  --button-variants-secondary-backgroundColor: var(--semantic-color-action-background-secondary-default);
+  --button-variants-secondary-color: var(--semantic-color-action-foreground-secondary-default);
+  --button-variants-ghost-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --button-variants-ghost-hover-color: var(--semantic-color-action-foreground-primary-default);
+  --button-variants-link-color: var(--semantic-color-action-background-primary-default);
+
+
+  /* === General Tokens === */
+  --button-borderRadius: 6px;
+  --button-fontSize: 14px;
+  --button-fontWeight: 500;
+  --button-lineHeight: 1.2;
 }

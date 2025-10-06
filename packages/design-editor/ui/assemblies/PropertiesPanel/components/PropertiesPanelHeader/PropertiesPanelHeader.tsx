@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import styles from "./PropertiesPanelHeader.module.scss";
 import { cn } from "@/lib/utils";
 
 interface PropertiesPanelHeaderProps {
@@ -14,14 +13,19 @@ export function PropertiesPanelHeader({
   className,
 }: PropertiesPanelHeaderProps) {
   return (
-    <div className={cn(styles.propertiesPanelHeader, className)}>
-      <h2 className={styles.propertiesPanelHeaderTitle}>Properties</h2>
+    <div
+      className={cn(
+        "flex items-center justify-between p-4 border-b border-border",
+        className
+      )}
+    >
+      <h2 className="text-sm font-semibold">Properties</h2>
       {selectedObjectType ? (
-        <span className={styles.propertiesPanelHeaderType}>
+        <span className="text-xs text-muted-foreground capitalize">
           {selectedObjectType}
         </span>
       ) : (
-        <span className={styles.propertiesPanelHeaderType}>Canvas</span>
+        <span className="text-xs text-muted-foreground">Canvas</span>
       )}
     </div>
   );

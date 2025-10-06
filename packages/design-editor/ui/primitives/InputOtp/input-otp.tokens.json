@@ -65,7 +65,7 @@
         "description": "Height for OTP slot"
       },
       "fontSize": {
-        "value": "{semantic.typography.fontSize.sm}",
+        "value": "{core.typography.ramp.2}",
         "description": "Font size for OTP slot"
       },
       "border": {

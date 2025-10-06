@@ -7,6 +7,8 @@
 .navigationMenu {
   // Include the generated variables mixin within the component scope
   @include navigationMenuTokens.vars;
+
+  // Include the generated variables mixin within the component scope
   // Base navigation menu styles (equivalent to group/navigation-menu relative flex max-w-max flex-1 items-center justify-center)
   position: var(--navigationMenu-container-position); // equivalent to relative
   display: var(--navigationMenu-container-display); // equivalent to flex

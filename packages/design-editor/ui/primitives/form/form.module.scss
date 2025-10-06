@@ -5,10 +5,12 @@
 @use './Form.tokens.generated.scss' as formTokens;
 
 // Include the generated variables mixin
-@include formTokens.vars;
 
 // Form item container
 .form-item {
+  // Include the generated variables mixin within the component scope
+  @include formTokens.vars;
+
   display: var(--form-item-display);
   gap: var(--form-item-gap);
 }

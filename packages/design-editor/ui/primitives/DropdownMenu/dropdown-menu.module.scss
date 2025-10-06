@@ -5,10 +5,12 @@
 @use './DropdownMenu.tokens.generated.scss' as dropdownMenuTokens;
 
 // Include the generated variables mixin
-@include dropdownMenuTokens.vars;
 
 // Content styles
 .dropdown-menu-content {
+  // Include the generated variables mixin within the component scope
+  @include dropdownMenuTokens.vars;
+
   background-color: var(--dropdownMenu-content-backgroundColor);
   color: var(--dropdownMenu-content-color);
   z-index: var(--dropdownMenu-content-zIndex);

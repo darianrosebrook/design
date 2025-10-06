@@ -10,7 +10,7 @@ import {
   AlignHorizontalJustifyCenter,
 } from "lucide-react";
 import type React from "react";
-import styles from "./alignment-grid.module.scss";
+// Removed SCSS module import - using Tailwind classes
 import { cn } from "@/lib/utils";
 import { Button } from "@/ui/primitives/Button";
 
@@ -39,11 +39,11 @@ export function AlignmentGrid({
   ];
 
   return (
-    <div className={styles.alignmentGrid}>
-      <div className={styles.alignmentGridTitle}>Alignment</div>
+    <div className="space-y-3">
+      <div className="text-sm font-medium">Alignment</div>
 
       {/* Horizontal Alignment */}
-      <div className={styles.alignmentGridRow}>
+      <div className="flex gap-1">
         {horizontalAlignments.map(({ key, icon: Icon, label }) => (
           <Button
             key={key}
@@ -51,56 +51,52 @@ export function AlignmentGrid({
               currentAlignment?.horizontal === key ? "default" : "outline"
             }
             size="sm"
-            className={styles.alignmentGridButton}
+            className="h-8 w-8 p-0"
             onClick={() => onAlign(`horizontal-${key}`)}
             title={label}
           >
-            <Icon className={styles.alignmentGridIcon} />
+            <Icon className="h-4 w-4" />
           </Button>
         ))}
       </div>
 
       {/* Vertical Alignment */}
-      <div className={styles.alignmentGridRow}>
+      <div className="flex gap-1">
         {verticalAlignments.map(({ key, icon: Icon, label }) => (
           <Button
             key={key}
             variant={currentAlignment?.vertical === key ? "default" : "outline"}
             size="sm"
-            className={styles.alignmentGridButton}
+            className="h-8 w-8 p-0"
             onClick={() => onAlign(`vertical-${key}`)}
             title={label}
           >
-            <Icon className={styles.alignmentGridIcon} />
+            <Icon className="h-4 w-4" />
           </Button>
         ))}
       </div>
 
       {/* Distribution */}
-      <div className={styles.alignmentGridDistribution}>
-        <div className={styles.alignmentGridDistributionTitle}>
-          Distribution
-        </div>
-        <div className={styles.alignmentGridRow}>
+      <div className="space-y-3">
+        <div className="text-sm font-medium">Distribution</div>
+        <div className="flex gap-1">
           <Button
             variant="outline"
             size="sm"
-            className={styles.alignmentGridButton}
+            className="h-8 w-8 p-0"
             onClick={() => onAlign("distribute-horizontal")}
             title="Distribute Horizontally"
           >
-            <AlignHorizontalJustifyCenter
-              className={styles.alignmentGridIcon}
-            />
+            <AlignHorizontalJustifyCenter className="h-4 w-4" />
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className={styles.alignmentGridButton}
+            className="h-8 w-8 p-0"
             onClick={() => onAlign("distribute-vertical")}
             title="Distribute Vertically"
           >
-            <AlignVerticalJustifyCenter className={styles.alignmentGridIcon} />
+            <AlignVerticalJustifyCenter className="h-4 w-4" />
           </Button>
         </div>
       </div>

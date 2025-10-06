@@ -29,11 +29,11 @@
     },
     "content": {
       "backgroundColor": {
-        "value": "{semantic.color.display.background.primary}",
+        "value": "{core.color.display.background.primary}",
         "description": "Background color for alert dialog content"
       },
       "borderColor": {
-        "value": "{semantic.color.display.border.subtle}",
+        "value": "{core.color.display.border.subtle}",
         "description": "Border color for alert dialog content"
       },
       "borderWidth": {
@@ -155,7 +155,7 @@
     },
     "title": {
       "color": {
-        "value": "{semantic.color.display.foreground.primary}",
+        "value": "{core.color.display.foreground.primary}",
         "description": "Text color for alert dialog title"
       },
       "fontSize": {
@@ -169,7 +169,7 @@
     },
     "description": {
       "color": {
-        "value": "{semantic.color.display.foreground.secondary}",
+        "value": "{core.color.display.foreground.secondary}",
         "description": "Text color for alert dialog description"
       },
       "fontSize": {

@@ -11,3 +11,9 @@
   // Container styles
   gap: var(--toaster-container-gap);
 }
+
+.toasterContent {
+  // Content grid layout (equivalent to grid gap-1)
+  display: grid;
+  gap: 0.25rem; // 4px, equivalent to gap-1
+}

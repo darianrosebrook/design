@@ -30,4 +30,9 @@
   --panel-interactive-focus-ring-color: var(--semantic-color-action-border-primary-focus);
   --panel-interactive-focus-ring-width: 2px;
   --panel-interactive-focus-ring-offset: 2px;
+
+
+  /* === General Tokens === */
+  --panel-backgroundColor: var(--semantic-color-display-background-primary);
+  --panel-borderColor: var(--semantic-color-display-border-subtle);
 }

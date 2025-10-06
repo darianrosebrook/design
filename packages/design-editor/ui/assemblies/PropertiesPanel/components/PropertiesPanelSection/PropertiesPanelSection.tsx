@@ -1,8 +1,7 @@
 "use client";
 
 import type React from "react";
-import styles from "./PropertiesPanelSection.module.scss";
-import { ChevronRight, GripVertical } from "@/lib/components/icons";
+import { ChevronRight, GripVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface PropertiesPanelSectionProps {
@@ -23,25 +22,23 @@ export function PropertiesPanelSection({
   className,
 }: PropertiesPanelSectionProps) {
   return (
-    <div className={cn(styles.propertiesPanelSection, className)}>
+    <div className={cn("space-y-2", className)}>
       <button
         onClick={() => onToggle(id)}
-        className={styles.propertiesPanelSectionHeader}
+        className="flex items-center justify-between w-full p-3 text-left hover:bg-accent/50 rounded-md transition-colors"
       >
-        <div className={styles.propertiesPanelSectionHeaderContent}>
-          <GripVertical className={styles.propertiesPanelSectionGrip} />
-          <span>{title}</span>
+        <div className="flex items-center gap-2">
+          <GripVertical className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity cursor-grab" />
+          <span className="text-sm font-medium">{title}</span>
         </div>
         <ChevronRight
           className={cn(
-            styles.propertiesPanelSectionChevron,
-            expanded && styles["propertiesPanelSectionChevron--expanded"]
+            "h-4 w-4 transition-transform",
+            expanded && "rotate-90"
           )}
         />
       </button>
-      {expanded && (
-        <div className={styles.propertiesPanelSectionContent}>{children}</div>
-      )}
+      {expanded && <div className="ml-6">{children}</div>}
     </div>
   );
 }

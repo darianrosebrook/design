@@ -7,6 +7,8 @@
 .separator {
   // Include the generated variables mixin within the component scope
   @include separatorTokens.vars;
+
+  // Include the generated variables mixin within the component scope
   // Base separator styles (equivalent to bg-border shrink-0)
   background-color: var(--separator-backgroundColor); // equivalent to bg-border
   flex-shrink: 0; // equivalent to shrink-0

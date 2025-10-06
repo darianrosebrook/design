@@ -83,8 +83,11 @@ export const ColorField: React.FC<ColorFieldProps> = ({
     onChange?.(newValue);
   };
 
-  const fieldId =
-    id || `color-field-${Math.random().toString(36).substr(2, 9)}`;
+  const [fieldId] = React.useState(
+    () =>
+      id ||
+      `color-field-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+  );
   const helperId = `${fieldId}-helper`;
   const errorId = `${fieldId}-error`;
 

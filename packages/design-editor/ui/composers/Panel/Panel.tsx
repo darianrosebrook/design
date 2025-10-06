@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import styles from "./Panel.module.scss";
 
 interface PanelProps {
   children: React.ReactNode;
@@ -9,5 +8,13 @@ interface PanelProps {
 }
 
 export function Panel({ children, className }: PanelProps) {
-  return <div className={`${styles.panel} ${className || ""}`}>{children}</div>;
+  return (
+    <div
+      className={`bg-card border border-border rounded-lg shadow-sm h-full flex flex-col ${
+        className || ""
+      }`}
+    >
+      {children}
+    </div>
+  );
 }

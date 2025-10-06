@@ -1,0 +1,36 @@
+/**
+ * Root layout styles
+ * Uses design tokens instead of Tailwind classes
+ */
+
+.html {
+  /* Dark mode by default */
+  color-scheme: dark;
+}
+
+.body {
+  /* Font family from Geist fonts */
+  font-family: var(--core-typography-font-family-inter);
+
+  /* Font smoothing */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Reset margins and padding */
+  margin: 0;
+  padding: 0;
+
+  /* Full height */
+  min-height: 100vh;
+}
+
+.loading {
+  /* Loading fallback styles */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: var(--core-typography-font-family-inter);
+  font-size: var(--core-typography-ramp-04);
+  color: var(--semantic-color-foreground-primary);
+}

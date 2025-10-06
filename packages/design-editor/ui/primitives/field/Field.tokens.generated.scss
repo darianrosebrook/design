@@ -12,18 +12,18 @@
   --field-spacing-padding-label: 16px;
 
   /* === Typography Tokens === */
-  --field-typography-legend-fontSize-legend: var(--semantic-typography-font-size-base);
-  --field-typography-legend-fontSize-label: var(--semantic-typography-font-size-sm);
+  --field-typography-legend-fontSize-legend: var(--core-typography-ramp-4);
+  --field-typography-legend-fontSize-label: var(--core-typography-ramp-2);
   --field-typography-legend-fontWeight: var(--semantic-typography-font-weight-medium);
   --field-typography-legend-lineHeight: var(--semantic-typography-line-height-snug);
-  --field-typography-title-fontSize: var(--semantic-typography-font-size-sm);
+  --field-typography-title-fontSize: var(--core-typography-ramp-2);
   --field-typography-title-fontWeight: var(--semantic-typography-font-weight-medium);
   --field-typography-title-lineHeight: var(--semantic-typography-line-height-snug);
-  --field-typography-description-fontSize: var(--semantic-typography-font-size-sm);
+  --field-typography-description-fontSize: var(--core-typography-ramp-2);
   --field-typography-description-fontWeight: var(--semantic-typography-font-weight-normal);
   --field-typography-description-lineHeight: var(--semantic-typography-line-height-normal);
   --field-typography-description-color: var(--semantic-color-text-foreground-secondary-default);
-  --field-typography-error-fontSize: var(--semantic-typography-font-size-sm);
+  --field-typography-error-fontSize: var(--core-typography-ramp-2);
   --field-typography-error-fontWeight: var(--semantic-typography-font-weight-normal);
   --field-typography-error-color: var(--semantic-color-feedback-foreground-danger-default);
 

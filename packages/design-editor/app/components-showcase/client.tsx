@@ -7,9 +7,10 @@ import {
   TextField,
 } from "@paths-design/design-system";
 import Link from "next/link";
+// Removed unused import
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import styles from "./page.module.scss";
+// Removed unused SCSS import
 import { TopNavigation } from "@/ui/assemblies/TopNavigation";
 import { AlignmentGrid } from "@/ui/composers/AlignmentGrid";
 import { CollapsiblePanel } from "@/ui/composers/CollapsiblePanel";
@@ -199,7 +200,7 @@ import { Textarea } from "@/ui/primitives/Textarea";
 
 export function ComponentShowcaseClient() {
   const [shortcutsModalOpen, setShortcutsModalOpen] = useState(false);
-  const [collapsiblePanelOpen, setCollapsiblePanelOpen] = useState(true);
+  const [_collapsiblePanelOpen, setCollapsiblePanelOpen] = useState(true);
   const [alertDialogOpen, setAlertDialogOpen] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -214,6 +215,8 @@ export function ComponentShowcaseClient() {
   const [numberFieldValue, setNumberFieldValue] = useState<number>(42);
   const [textFieldValue, setTextFieldValue] = useState("Hello World");
 
+  const [colorModeValue, setColorModeValue] = useState("light");
+
   const form = useForm({
     defaultValues: {
       username: "",
@@ -222,34 +225,49 @@ export function ComponentShowcaseClient() {
     },
   });
 
+  const handleColorModeChange = (checked: boolean) => {
+    setColorModeValue(checked ? "dark" : "light");
+  };
+
   return (
-    <div className={styles.page}>
-      <div className={styles.container}>
+    <div className="min-h-screen bg-background p-8">
+      <div className="max-w-7xl mx-auto space-y-12">
         {/* Header */}
-        <div className={styles.header}>
-          <nav>
-            <Link href="/">Home</Link>
-            <Link href="/components-showcase">Component Showcase</Link>
+        <div className="text-center space-y-4">
+          <nav className="flex justify-between items-center">
+            <Link href="/" className="text-primary hover:underline">
+              Back to the design editor
+            </Link>
+            <Switch
+              checked={colorModeValue === "dark"}
+              onCheckedChange={handleColorModeChange}
+            />
           </nav>
-          <h1 className={styles.title}>Component Showcase</h1>
-          <p className={styles.description}>
-            Visual verification of all migrated SCSS components. Each section
-            displays component variants, states, and styling to ensure design
-            consistency.
+          <h1 className="text-4xl font-bold text-foreground">
+            Component Showcase
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Visual verification of all migrated Tailwind components. Each
+            section displays component variants, states, and styling to ensure
+            design consistency.
           </p>
         </div>
 
         {/* Primitives Section */}
-        <section className={styles.section}>
+        <section className="border-t border-border pt-8 space-y-8">
           <div>
-            <h2 className={styles.sectionHeader}>Primitives</h2>
-            <p className={styles.sectionDescription}>Basic building blocks</p>
+            <h2 className="text-2xl font-semibold text-foreground">
+              Primitives
+            </h2>
+            <p className="text-muted-foreground mt-2">Basic building blocks</p>
           </div>
 
           {/* Buttons */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Button Variants</h3>
-            <div className={styles.grid}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Button Variants
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               <Button variant="default">Default</Button>
               <Button variant="destructive">Destructive</Button>
               <Button variant="outline">Outline</Button>
@@ -260,9 +278,11 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Button Sizes */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Button Sizes</h3>
-            <div className={styles.buttonRow}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Button Sizes
+            </h3>
+            <div className="flex gap-4">
               <Button size="sm">Small</Button>
               <Button size="default">Default</Button>
               <Button size="lg">Large</Button>
@@ -285,59 +305,85 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Inputs */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Input States</h3>
-            <div className={styles.gridCols2}>
-              <div className={styles.spaceY4}>
-                <label className="text-sm font-medium">Default Input</label>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Input States
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">
+                  Default Input
+                </label>
                 <Input placeholder="Enter text..." />
               </div>
-              <div className={styles.spaceY4}>
-                <label className="text-sm font-medium">Disabled Input</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">
+                  Disabled Input
+                </label>
                 <Input placeholder="Disabled..." disabled />
               </div>
             </div>
-            <div className={styles.spaceY4}>
-              <label className="text-sm font-medium">Textarea</label>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Textarea
+              </label>
               <Textarea placeholder="Enter longer text..." />
             </div>
           </div>
 
           {/* Form Controls */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Form Controls</h3>
-            <div className={styles.gridCols2}>
-              <div className={styles.spaceY8}>
-                <h4 className="text-lg font-medium">Checkboxes</h4>
-                <div className={styles.spaceY4}>
-                  <div className={styles.checkboxRow}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Form Controls
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-8">
+                <h4 className="text-lg font-medium text-foreground">
+                  Checkboxes
+                </h4>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-2">
                     <Checkbox id="check1" />
-                    <label htmlFor="check1">Default checkbox</label>
+                    <label htmlFor="check1" className="text-sm font-medium">
+                      Default checkbox
+                    </label>
                   </div>
-                  <div className={styles.checkboxRow}>
+                  <div className="flex items-center space-x-2">
                     <Checkbox id="check2" defaultChecked />
-                    <label htmlFor="check2">Checked checkbox</label>
+                    <label htmlFor="check2" className="text-sm font-medium">
+                      Checked checkbox
+                    </label>
                   </div>
-                  <div className={styles.checkboxRow}>
+                  <div className="flex items-center space-x-2">
                     <Checkbox id="check3" disabled />
-                    <label htmlFor="check3">Disabled checkbox</label>
+                    <label htmlFor="check3" className="text-sm font-medium">
+                      Disabled checkbox
+                    </label>
                   </div>
                 </div>
               </div>
-              <div className={styles.spaceY8}>
-                <h4 className="text-lg font-medium">Switches</h4>
-                <div className={styles.spaceY4}>
-                  <div className={styles.checkboxRow}>
+              <div className="space-y-8">
+                <h4 className="text-lg font-medium text-foreground">
+                  Switches
+                </h4>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-2">
                     <Switch id="switch1" />
-                    <label htmlFor="switch1">Default switch</label>
+                    <label htmlFor="switch1" className="text-sm font-medium">
+                      Default switch
+                    </label>
                   </div>
-                  <div className={styles.checkboxRow}>
+                  <div className="flex items-center space-x-2">
                     <Switch id="switch2" defaultChecked />
-                    <label htmlFor="switch2">On switch</label>
+                    <label htmlFor="switch2" className="text-sm font-medium">
+                      On switch
+                    </label>
                   </div>
-                  <div className={styles.checkboxRow}>
+                  <div className="flex items-center space-x-2">
                     <Switch id="switch3" disabled />
-                    <label htmlFor="switch3">Disabled switch</label>
+                    <label htmlFor="switch3" className="text-sm font-medium">
+                      Disabled switch
+                    </label>
                   </div>
                 </div>
               </div>
@@ -345,20 +391,26 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Loading States */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Loading States</h3>
-            <div className={styles.gridCols2}>
-              <div className={styles.spaceY8}>
-                <h4 className="text-lg font-medium">Progress</h4>
-                <div className={styles.spaceY4}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Loading States
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-8">
+                <h4 className="text-lg font-medium text-foreground">
+                  Progress
+                </h4>
+                <div className="space-y-4">
                   <Progress value={33} className="w-full" />
                   <Progress value={66} className="w-full" />
                   <Progress value={100} className="w-full" />
                 </div>
               </div>
-              <div className={styles.spaceY8}>
-                <h4 className="text-lg font-medium">Skeleton</h4>
-                <div className={styles.spaceY4}>
+              <div className="space-y-8">
+                <h4 className="text-lg font-medium text-foreground">
+                  Skeleton
+                </h4>
+                <div className="space-y-4">
                   <Skeleton className="h-4 w-full" />
                   <Skeleton className="h-4 w-3/4" />
                   <Skeleton className="h-4 w-1/2" />
@@ -368,9 +420,11 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Alerts */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Alert Variants</h3>
-            <div className={styles.spaceY8}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Alert Variants
+            </h3>
+            <div className="space-y-8">
               <Alert>
                 <AlertTitle>Default Alert</AlertTitle>
                 <AlertDescription>
@@ -387,14 +441,16 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Avatar & Badge */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Avatar & Badge</h3>
-            <div className={styles.flex}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Avatar & Badge
+            </h3>
+            <div className="flex gap-8 items-center">
               <Avatar>
                 <AvatarImage src="https://github.com/darianrosebrook.png" />
                 <AvatarFallback>DR</AvatarFallback>
               </Avatar>
-              <div className={styles.flex}>
+              <div className="flex gap-2">
                 <Badge>Default</Badge>
                 <Badge variant="secondary">Secondary</Badge>
                 <Badge variant="destructive">Destructive</Badge>
@@ -404,11 +460,13 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Select */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Select</h3>
-            <div className={styles.gridCols2}>
-              <div className={styles.spaceY4}>
-                <label className="text-sm font-medium">Default Select</label>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Select</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">
+                  Default Select
+                </label>
                 <Select>
                   <SelectTrigger>
                     <SelectValue placeholder="Choose an option" />
@@ -420,8 +478,10 @@ export function ComponentShowcaseClient() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className={styles.spaceY4}>
-                <label className="text-sm font-medium">Disabled Select</label>
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-foreground">
+                  Disabled Select
+                </label>
                 <Select disabled>
                   <SelectTrigger>
                     <SelectValue placeholder="Disabled" />
@@ -432,25 +492,25 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Tabs */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Tabs</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Tabs</h3>
             <Tabs defaultValue="tab1" className="w-full">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="tab1">Tab 1</TabsTrigger>
                 <TabsTrigger value="tab2">Tab 2</TabsTrigger>
                 <TabsTrigger value="tab3">Tab 3</TabsTrigger>
               </TabsList>
-              <TabsContent value="tab1" className={styles.p8}>
+              <TabsContent value="tab1" className="p-8">
                 <p className="text-sm text-muted-foreground">
                   This is the content for Tab 1. You can put any content here.
                 </p>
               </TabsContent>
-              <TabsContent value="tab2" className={styles.p8}>
+              <TabsContent value="tab2" className="p-8">
                 <p className="text-sm text-muted-foreground">
                   This is the content for Tab 2. Different content for each tab.
                 </p>
               </TabsContent>
-              <TabsContent value="tab3" className={styles.p8}>
+              <TabsContent value="tab3" className="p-8">
                 <p className="text-sm text-muted-foreground">
                   This is the content for Tab 3. Tabs help organize content.
                 </p>
@@ -460,16 +520,20 @@ export function ComponentShowcaseClient() {
         </section>
 
         {/* Compounds Section */}
-        <section className={styles.section}>
+        <section className="border-t border-border pt-8 space-y-8">
           <div>
-            <h2 className={styles.sectionHeader}>Compounds</h2>
-            <p className={styles.sectionDescription}>Primitive groupings</p>
+            <h2 className="text-2xl font-semibold text-foreground">
+              Compounds
+            </h2>
+            <p className="text-muted-foreground mt-2">Primitive groupings</p>
           </div>
 
           {/* Card */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Card Variants</h3>
-            <div className={styles.gridCols3}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Card Variants
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <Card>
                 <CardHeader>
                   <CardTitle>Default Card</CardTitle>
@@ -486,11 +550,11 @@ export function ComponentShowcaseClient() {
                   <CardTitle>Card with Actions</CardTitle>
                   <CardDescription>Interactive card example</CardDescription>
                 </CardHeader>
-                <CardContent className={styles.spaceY8}>
+                <CardContent className="space-y-8">
                   <p className="text-sm text-muted-foreground">
                     This card demonstrates interactive elements.
                   </p>
-                  <div className={styles.flex}>
+                  <div className="flex gap-2">
                     <Button size="sm">Action 1</Button>
                     <Button size="sm" variant="outline">
                       Action 2
@@ -502,9 +566,11 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Button Group */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Button Group</h3>
-            <div className={styles.spaceY8}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Button Group
+            </h3>
+            <div className="space-y-8">
               <ButtonGroup orientation="horizontal">
                 <Button variant="outline">Left</Button>
                 <Button variant="outline">Center</Button>
@@ -519,9 +585,11 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* File Metadata */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>File Metadata</h3>
-            <div className={styles.flex}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              File Metadata
+            </h3>
+            <div className="flex justify-center">
               <FileMetadata
                 name="Design System Showcase"
                 layers={156}
@@ -532,9 +600,9 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Color Field */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Color Field</h3>
-            <div className={styles.gridCols2}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Color Field</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <ColorField
                 label="Primary Color"
                 value={colorFieldValue}
@@ -554,9 +622,11 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Number Field */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Number Field</h3>
-            <div className={styles.gridCols2}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Number Field
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <NumberField
                 label="Width"
                 value={numberFieldValue}
@@ -580,9 +650,9 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Text Field */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Text Field</h3>
-            <div className={styles.gridCols2}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Text Field</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <TextField
                 label="Email Address"
                 type="email"
@@ -602,16 +672,20 @@ export function ComponentShowcaseClient() {
         </section>
 
         {/* Composers Section */}
-        <section className={styles.section}>
+        <section className="border-t border-border pt-8 space-y-8">
           <div>
-            <h2 className={styles.sectionHeader}>Composers</h2>
-            <p className={styles.sectionDescription}>Reusable UI patterns</p>
+            <h2 className="text-2xl font-semibold text-foreground">
+              Composers
+            </h2>
+            <p className="text-muted-foreground mt-2">Reusable UI patterns</p>
           </div>
 
           {/* Alignment Grid */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Alignment Grid</h3>
-            <div className={styles.bgMuted20}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Alignment Grid
+            </h3>
+            <div className="bg-muted/20 p-8 rounded-lg">
               <AlignmentGrid
                 onAlign={(alignment) => console.info("Alignment:", alignment)}
                 currentAlignment={{ horizontal: "center", vertical: "middle" }}
@@ -620,21 +694,23 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Collapsible Panel */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Collapsible Panel</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Collapsible Panel
+            </h3>
             <CollapsiblePanel
               side="right"
               defaultCollapsed={false}
               onToggle={setCollapsiblePanelOpen}
-              collapsedContent={<div className={styles.p8}>Collapsed</div>}
+              collapsedContent={<div className="p-8">Collapsed</div>}
             >
-              <div className={styles.p8}>
+              <div className="p-8">
                 <h4 className="text-lg font-medium">Panel Content</h4>
                 <p className="text-muted-foreground">
                   This panel can be collapsed and expanded. It demonstrates the
                   collapsible composer pattern.
                 </p>
-                <div className={styles.gridCols2}>
+                <div className="grid grid-cols-2 gap-4">
                   <Button>Action 1</Button>
                   <Button variant="outline">Action 2</Button>
                 </div>
@@ -643,10 +719,12 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Zoom Controls */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Zoom Controls</h3>
-            <div className={styles.bgMuted20}>
-              <div className={styles.flex}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Zoom Controls
+            </h3>
+            <div className="bg-muted/20 p-8 rounded-lg">
+              <div className="flex items-center gap-4 justify-center">
                 <Button variant="ghost" size="sm">
                   <svg
                     className="w-4 h-4"
@@ -679,7 +757,7 @@ export function ComponentShowcaseClient() {
                   </svg>
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">
+              <p className="text-xs text-muted-foreground mt-2 text-center">
                 Note: Full ZoomControls component requires CanvasProvider
                 context
               </p>
@@ -687,8 +765,10 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Keyboard Shortcuts Modal Trigger */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Keyboard Shortcuts</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Keyboard Shortcuts
+            </h3>
             <Button onClick={() => setShortcutsModalOpen(true)}>
               Open Keyboard Shortcuts Modal
             </Button>
@@ -696,39 +776,51 @@ export function ComponentShowcaseClient() {
         </section>
 
         {/* Layout & Modals Section */}
-        <section className={styles.section}>
+        <section className="border-t border-border pt-8 space-y-8">
           <div>
-            <h2 className={styles.sectionHeader}>Layout & Modals</h2>
-            <p className={styles.sectionDescription}>
+            <h2 className="text-2xl font-semibold text-foreground">
+              Layout & Modals
+            </h2>
+            <p className="text-muted-foreground mt-2">
               Modal dialogs and overlays
             </p>
           </div>
 
           {/* Aspect Ratio */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Aspect Ratio</h3>
-            <div className={styles.gridCols3}>
-              <div className={styles.aspectRatioContainer}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Aspect Ratio
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="border-2 border-dashed border-border rounded-lg p-4 flex items-center justify-center">
                 <AspectRatio ratio={16 / 9}>
-                  <div className={styles.aspectRatioContent}>16:9</div>
+                  <div className="bg-muted text-muted-foreground p-2 rounded text-sm font-medium text-center flex items-center justify-center w-full h-full">
+                    16:9
+                  </div>
                 </AspectRatio>
               </div>
-              <div className={styles.aspectRatioContainer}>
+              <div className="border-2 border-dashed border-border rounded-lg p-4 flex items-center justify-center">
                 <AspectRatio ratio={4 / 3}>
-                  <div className={styles.aspectRatioContent}>4:3</div>
+                  <div className="bg-muted text-muted-foreground p-2 rounded text-sm font-medium text-center flex items-center justify-center w-full h-full">
+                    4:3
+                  </div>
                 </AspectRatio>
               </div>
-              <div className={styles.aspectRatioContainer}>
+              <div className="border-2 border-dashed border-border rounded-lg p-4 flex items-center justify-center">
                 <AspectRatio ratio={1}>
-                  <div className={styles.aspectRatioContent}>1:1</div>
+                  <div className="bg-muted text-muted-foreground p-2 rounded text-sm font-medium text-center flex items-center justify-center w-full h-full">
+                    1:1
+                  </div>
                 </AspectRatio>
               </div>
             </div>
           </div>
 
           {/* Alert Dialog */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Alert Dialog</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Alert Dialog
+            </h3>
             <AlertDialog
               open={alertDialogOpen}
               onOpenChange={setAlertDialogOpen}
@@ -753,8 +845,8 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Dialog */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Dialog</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Dialog</h3>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline">Open Dialog</Button>
@@ -767,12 +859,12 @@ export function ComponentShowcaseClient() {
                     done.
                   </DialogDescription>
                 </DialogHeader>
-                <div className={styles.spaceY8}>
-                  <div className={styles.spaceY4}>
+                <div className="space-y-8">
+                  <div className="space-y-2">
                     <label className="text-sm font-medium">Name</label>
                     <Input value="John Doe" />
                   </div>
-                  <div className={styles.spaceY4}>
+                  <div className="space-y-2">
                     <label className="text-sm font-medium">Email</label>
                     <Input value="john@example.com" />
                   </div>
@@ -785,8 +877,8 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Drawer */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Drawer</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Drawer</h3>
             <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
               <DrawerTrigger asChild>
                 <Button variant="outline">Open Drawer</Button>
@@ -798,8 +890,8 @@ export function ComponentShowcaseClient() {
                     Set your daily activity goal.
                   </DrawerDescription>
                 </DrawerHeader>
-                <div className={styles.p8}>
-                  <div className={styles.spaceY4}>
+                <div className="p-8">
+                  <div className="space-y-2">
                     <label className="text-sm font-medium">Goal</label>
                     <Input placeholder="Enter your goal..." />
                   </div>
@@ -815,8 +907,8 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Sheet */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Sheet</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Sheet</h3>
             <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger asChild>
                 <Button variant="outline">Open Sheet</Button>
@@ -829,8 +921,8 @@ export function ComponentShowcaseClient() {
                     your account and remove your data from our servers.
                   </SheetDescription>
                 </SheetHeader>
-                <div className={styles.spaceY8}>
-                  <div className={styles.spaceY4}>
+                <div className="space-y-8">
+                  <div className="space-y-2">
                     <label className="text-sm font-medium">Reason</label>
                     <Textarea placeholder="Please provide a reason..." />
                   </div>
@@ -847,18 +939,20 @@ export function ComponentShowcaseClient() {
         </section>
 
         {/* Navigation Section */}
-        <section className={styles.section}>
+        <section className="border-t border-border pt-8 space-y-8">
           <div>
-            <h2 className={styles.sectionHeader}>Navigation</h2>
-            <p className={styles.sectionDescription}>
+            <h2 className="text-2xl font-semibold text-foreground">
+              Navigation
+            </h2>
+            <p className="text-muted-foreground mt-2">
               Navigation and breadcrumb components
             </p>
           </div>
 
           {/* Breadcrumb */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Breadcrumb</h3>
-            <div className={styles.spaceY4}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Breadcrumb</h3>
+            <div className="space-y-4">
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem>
@@ -880,8 +974,10 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Navigation Menu */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Navigation Menu</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Navigation Menu
+            </h3>
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
@@ -984,8 +1080,8 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Pagination */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Pagination</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Pagination</h3>
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
@@ -1013,8 +1109,8 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Menubar */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Menubar</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Menubar</h3>
             <Menubar>
               <MenubarMenu>
                 <MenubarTrigger>File</MenubarTrigger>
@@ -1098,22 +1194,24 @@ export function ComponentShowcaseClient() {
         </section>
 
         {/* Forms Section */}
-        <section className={styles.section}>
+        <section className="border-t border-border pt-8 space-y-8">
           <div>
-            <h2 className={styles.sectionHeader}>Forms</h2>
-            <p className={styles.sectionDescription}>
+            <h2 className="text-2xl font-semibold text-foreground">Forms</h2>
+            <p className="text-muted-foreground mt-2">
               Form inputs and validation components
             </p>
           </div>
 
           {/* Form */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Form with Validation</h3>
-            <div className={styles.maxW2xl}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Form with Validation
+            </h3>
+            <div className="max-w-2xl">
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit((data) => console.info(data))}
-                  className={styles.spaceY6}
+                  className="space-y-6"
                 >
                   <FormField
                     control={form.control}
@@ -1174,9 +1272,9 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Field */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Field</h3>
-            <div className={styles.gridCols2}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Field</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <Field
                 label="Email Address"
                 description="We'll never share your email"
@@ -1193,9 +1291,9 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Input Group */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Input Group</h3>
-            <div className={styles.spaceY4}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Input Group</h3>
+            <div className="space-y-4">
               <InputGroup>
                 <span className="text-sm text-muted-foreground">$</span>
                 <Input placeholder="0.00" />
@@ -1208,9 +1306,9 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Input OTP */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Input OTP</h3>
-            <div className={styles.spaceY4}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Input OTP</h3>
+            <div className="space-y-4">
               <label className="text-sm font-medium">Verification Code</label>
               <InputOTP
                 value={inputOtpValue}
@@ -1233,53 +1331,49 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Radio Group */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Radio Group</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Radio Group</h3>
             <RadioGroup
               value={radioGroupValue}
               onValueChange={setRadioGroupValue}
             >
-              <div className={styles.flex}>
-                <div className={styles.flex}>
-                  <RadioGroupItem value="option1" id="option1" />
-                  <label htmlFor="option1" className="ml-2 text-sm font-medium">
-                    Option 1
-                  </label>
-                </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="option1" id="option1" />
+                <label htmlFor="option1" className="text-sm font-medium">
+                  Option 1
+                </label>
               </div>
-              <div className={styles.flex}>
-                <div className={styles.flex}>
-                  <RadioGroupItem value="option2" id="option2" />
-                  <label htmlFor="option2" className="ml-2 text-sm font-medium">
-                    Option 2
-                  </label>
-                </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="option2" id="option2" />
+                <label htmlFor="option2" className="text-sm font-medium">
+                  Option 2
+                </label>
               </div>
-              <div className={styles.flex}>
-                <div className={styles.flex}>
-                  <RadioGroupItem value="option3" id="option3" />
-                  <label htmlFor="option3" className="ml-2 text-sm font-medium">
-                    Option 3
-                  </label>
-                </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="option3" id="option3" />
+                <label htmlFor="option3" className="text-sm font-medium">
+                  Option 3
+                </label>
               </div>
             </RadioGroup>
           </div>
         </section>
 
         {/* Interaction Section */}
-        <section className={styles.section}>
+        <section className="border-t border-border pt-8 space-y-8">
           <div>
-            <h2 className={styles.sectionHeader}>Interaction</h2>
-            <p className={styles.sectionDescription}>
+            <h2 className="text-2xl font-semibold text-foreground">
+              Interaction
+            </h2>
+            <p className="text-muted-foreground mt-2">
               Interactive and layout components
             </p>
           </div>
 
           {/* Collapsible */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Collapsible</h3>
-            <div className={styles.spaceY4}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Collapsible</h3>
+            <div className="space-y-4">
               <Collapsible
                 open={collapsibleOpen}
                 onOpenChange={setCollapsibleOpen}
@@ -1289,13 +1383,13 @@ export function ComponentShowcaseClient() {
                     {collapsibleOpen ? "Hide" : "Show"} Content
                   </Button>
                 </CollapsibleTrigger>
-                <CollapsibleContent className={styles.spaceY4}>
-                  <div className={styles.p8}>
+                <CollapsibleContent className="space-y-4">
+                  <div className="p-8">
                     <p className="text-sm text-muted-foreground">
                       This content can be collapsed and expanded. It
                       demonstrates the collapsible primitive component.
                     </p>
-                    <div className={styles.gridCols2}>
+                    <div className="grid grid-cols-2 gap-4">
                       <Button size="sm">Action 1</Button>
                       <Button size="sm" variant="outline">
                         Action 2
@@ -1308,22 +1402,24 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Resizable - Temporarily disabled */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Resizable Panels</h3>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Resizable Panels
+            </h3>
             <div className="min-h-[200px] rounded-lg border p-8 text-center text-muted-foreground">
               Resizable panels component temporarily disabled
             </div>
           </div>
 
           {/* Scroll Area */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Scroll Area</h3>
-            <div className={styles.border}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Scroll Area</h3>
+            <div className="border rounded-lg">
               <ScrollArea className="h-[200px] w-full">
-                <div className={styles.p8}>
+                <div className="p-8">
                   <h4 className="font-medium mb-4">Scrollable Content</h4>
                   {Array.from({ length: 20 }, (_, i) => (
-                    <div key={i} className={styles.p4}>
+                    <div key={i} className="p-4">
                       <p className="text-sm">
                         This is scrollable content item {i + 1}. The scroll area
                         provides a custom scrollbar that matches the design
@@ -1337,12 +1433,12 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Separator */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Separator</h3>
-            <div className={styles.spaceY8}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Separator</h3>
+            <div className="space-y-8">
               <div>
                 <h4 className="font-medium">Horizontal Separator</h4>
-                <div className={styles.spaceY4}>
+                <div className="space-y-4">
                   <p className="text-sm text-muted-foreground">
                     Content above separator
                   </p>
@@ -1355,12 +1451,12 @@ export function ComponentShowcaseClient() {
 
               <div>
                 <h4 className="font-medium">Vertical Separator</h4>
-                <div className={styles.flex}>
-                  <div className={styles.p4}>
+                <div className="flex items-center gap-4">
+                  <div className="p-4">
                     <p className="text-sm">Left content</p>
                   </div>
                   <Separator orientation="vertical" className="h-8" />
-                  <div className={styles.p4}>
+                  <div className="p-4">
                     <p className="text-sm">Right content</p>
                   </div>
                 </div>
@@ -1369,26 +1465,26 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Popover */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Popover</h3>
-            <div className={styles.flex}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Popover</h3>
+            <div className="flex justify-center">
               <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
                 <PopoverTrigger asChild>
                   <Button variant="outline">Open popover</Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-80">
-                  <div className={styles.spaceY4}>
+                  <div className="space-y-4">
                     <h4 className="font-medium leading-none">Dimensions</h4>
                     <p className="text-sm text-muted-foreground">
                       Set the dimensions for the layer.
                     </p>
                   </div>
-                  <div className={styles.gridCols2}>
-                    <div className={styles.spaceY2}>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
                       <label className="text-sm font-medium">Width</label>
                       <Input value="100%" readOnly />
                     </div>
-                    <div className={styles.spaceY2}>
+                    <div className="space-y-2">
                       <label className="text-sm font-medium">Height</label>
                       <Input value="100%" readOnly />
                     </div>
@@ -1399,19 +1495,19 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Hover Card */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Hover Card</h3>
-            <div className={styles.flex}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Hover Card</h3>
+            <div className="flex justify-center">
               <HoverCard>
                 <HoverCardTrigger asChild>
                   <Button variant="link">@nextjs</Button>
                 </HoverCardTrigger>
                 <HoverCardContent className="w-80">
-                  <div className={styles.flex}>
+                  <div className="flex space-x-4">
                     <div className="space-y-1">
                       <h4 className="text-sm font-semibold">@nextjs</h4>
                       <p className="text-sm">The React Framework for the Web</p>
-                      <div className={styles.flex}>
+                      <div className="flex gap-2">
                         <Button size="sm" variant="outline">
                           View
                         </Button>
@@ -1424,9 +1520,11 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Context Menu */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Context Menu</h3>
-            <div className={styles.flex}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Context Menu
+            </h3>
+            <div className="flex justify-center">
               <ContextMenu>
                 <ContextMenuTrigger className="flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm">
                   Right click here
@@ -1452,9 +1550,11 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Dropdown Menu */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Dropdown Menu</h3>
-            <div className={styles.flex}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Dropdown Menu
+            </h3>
+            <div className="flex justify-center">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline">Open Menu</Button>
@@ -1492,18 +1592,20 @@ export function ComponentShowcaseClient() {
         </section>
 
         {/* Utilities Section */}
-        <section className={styles.section}>
+        <section className="border-t border-border pt-8 space-y-8">
           <div>
-            <h2 className={styles.sectionHeader}>Utilities</h2>
-            <p className={styles.sectionDescription}>
+            <h2 className="text-2xl font-semibold text-foreground">
+              Utilities
+            </h2>
+            <p className="text-muted-foreground mt-2">
               Utility components for content display
             </p>
           </div>
 
           {/* Empty */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Empty State</h3>
-            <div className={styles.flex}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Empty State</h3>
+            <div className="flex justify-center">
               <Empty className="w-full max-w-sm">
                 <EmptyContent>
                   <EmptyMedia variant="icon">
@@ -1534,9 +1636,9 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Item */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Item</h3>
-            <div className={styles.spaceY4}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">Item</h3>
+            <div className="space-y-4">
               <ItemGroup>
                 <Item>
                   <ItemMedia variant="icon">
@@ -1604,32 +1706,28 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Kbd */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Keyboard Shortcuts</h3>
-            <div className={styles.flex}>
-              <div className={styles.spaceY4}>
-                <div className={styles.flex}>
-                  <span className="text-sm text-muted-foreground mr-2">
-                    Save:
-                  </span>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Keyboard Shortcuts
+            </h3>
+            <div className="flex justify-center">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Save:</span>
                   <KbdGroup>
                     <Kbd>Ctrl</Kbd>
                     <Kbd>S</Kbd>
                   </KbdGroup>
                 </div>
-                <div className={styles.flex}>
-                  <span className="text-sm text-muted-foreground mr-2">
-                    Undo:
-                  </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Undo:</span>
                   <KbdGroup>
                     <Kbd>Ctrl</Kbd>
                     <Kbd>Z</Kbd>
                   </KbdGroup>
                 </div>
-                <div className={styles.flex}>
-                  <span className="text-sm text-muted-foreground mr-2">
-                    Copy:
-                  </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Copy:</span>
                   <KbdGroup>
                     <Kbd>Ctrl</Kbd>
                     <Kbd>C</Kbd>
@@ -1640,10 +1738,12 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Sonner Toaster */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Toast Notifications</h3>
-            <div className={styles.flex}>
-              <div className={styles.spaceY4}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Toast Notifications
+            </h3>
+            <div className="flex justify-center">
+              <div className="space-y-4">
                 <Button
                   onClick={() => {
                     // toast.success("Success message");
@@ -1671,30 +1771,34 @@ export function ComponentShowcaseClient() {
         </section>
 
         {/* Assemblies Section */}
-        <section className={styles.section}>
+        <section className="border-t border-border pt-8 space-y-8">
           <div>
-            <h2 className={styles.sectionHeader}>Assemblies</h2>
-            <p className={styles.sectionDescription}>App-specific flows</p>
+            <h2 className="text-2xl font-semibold text-foreground">
+              Assemblies
+            </h2>
+            <p className="text-muted-foreground mt-2">App-specific flows</p>
           </div>
 
           {/* Properties Panel */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Properties Panel</h3>
-            <div className={styles.border}>
-              <div className={styles.p8}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Properties Panel
+            </h3>
+            <div className="border rounded-lg">
+              <div className="p-8">
                 <h4 className="font-medium">Canvas Properties</h4>
-                <div className={styles.spaceY8}>
-                  <div className={styles.spaceY4}>
+                <div className="space-y-8">
+                  <div className="space-y-2">
                     <label className="text-sm font-medium">
                       Background Color
                     </label>
                     <Input value="#18181b" readOnly />
                   </div>
-                  <div className={styles.spaceY4}>
+                  <div className="space-y-2">
                     <label className="text-sm font-medium">
                       Background Type
                     </label>
-                    <div className={styles.flex}>
+                    <div className="flex gap-2">
                       <Button size="sm" variant="outline">
                         Solid
                       </Button>
@@ -1713,9 +1817,11 @@ export function ComponentShowcaseClient() {
           </div>
 
           {/* Top Navigation */}
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>Top Navigation</h3>
-            <div className={styles.border}>
+          <div className="space-y-8">
+            <h3 className="text-xl font-medium text-foreground">
+              Top Navigation
+            </h3>
+            <div className="border rounded-lg">
               <TopNavigation />
             </div>
           </div>

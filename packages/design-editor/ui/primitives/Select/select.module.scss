@@ -8,6 +8,8 @@
 .select {
   // Include the generated variables mixin within the component scope
   @include selectTokens.vars;
+
+  // Include the generated variables mixin within the component scope
   position: relative;
 }
 

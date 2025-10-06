@@ -1,0 +1,1 @@
+export { ComponentPropsPanel } from "./ComponentPropsPanel";

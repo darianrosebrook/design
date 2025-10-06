@@ -35,6 +35,11 @@
   }
 }
 
+// Accordion Header styles (equivalent to flex)
+.accordion-header {
+  display: flex;
+}
+
 // Accordion Trigger styles
 .accordion-trigger {
   // Base layout (equivalent to flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium)

@@ -12,7 +12,7 @@ export function ZoomControls() {
   const { zoom, zoomIn, zoomOut, zoomToFit, zoomToSelection } = useCanvas();
 
   return (
-    <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
+    <div className="absolute bottom-4 right-4 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-medium z-10 flex items-center gap-1">
       <Button
         variant="ghost"
         size="sm"

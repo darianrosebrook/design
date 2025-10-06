@@ -1,7 +1,68 @@
 // properties-panel-collapsed composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
-.properties-panel-collapsed {
-  // Placeholder for future SCSS implementation
-  // Will contain properties-panel-collapsed-specific styles when migrating from Tailwind
+.propertiesPanelCollapsedContainer {
+  // Main container styles (equivalent to flex items-center gap-3 px-3 py-2)
+  display: flex;
+  align-items: center;
+  gap: 12px; // equivalent to gap-3
+  padding: 8px 12px; // equivalent to px-3 py-2
+}
+
+.propertiesPanelCollapsedIcon {
+  // Properties/Settings icon styles (equivalent to h-4 w-4 text-muted-foreground shrink-0)
+  width: 16px; // equivalent to w-4
+  height: 16px; // equivalent to h-4
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  flex-shrink: 0; // equivalent to shrink-0
+}
+
+.propertiesPanelCollapsedSelection {
+  // Selection info container styles (equivalent to flex items-center gap-3 min-w-0 flex-1)
+  display: flex;
+  align-items: center;
+  gap: 12px; // equivalent to gap-3
+  min-width: 0; // equivalent to min-w-0
+  flex: 1; // equivalent to flex-1
+}
+
+.propertiesPanelCollapsedObjectIcon {
+  // Object type icon styles (equivalent to h-4 w-4 text-muted-foreground shrink-0)
+  width: 16px; // equivalent to w-4
+  height: 16px; // equivalent to h-4
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  flex-shrink: 0; // equivalent to shrink-0
+}
+
+.propertiesPanelCollapsedObjectName {
+  // Object name styles (equivalent to text-xs font-medium text-foreground truncate)
+  font-size: 12px; // equivalent to text-xs
+  font-weight: 500; // equivalent to font-medium
+  color: hsl(var(--foreground)); // equivalent to text-foreground
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; // equivalent to truncate
+}
+
+.propertiesPanelCollapsedTypeLabel {
+  // Type label styles (equivalent to text-xs text-muted-foreground capitalize shrink-0)
+  font-size: 12px; // equivalent to text-xs
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  text-transform: capitalize; // equivalent to capitalize
+  flex-shrink: 0; // equivalent to shrink-0
+}
+
+.propertiesPanelCollapsedNoSelectionIndicator {
+  // No selection indicator styles (equivalent to w-4 h-4 rounded-full bg-muted shrink-0)
+  width: 16px; // equivalent to w-4
+  height: 16px; // equivalent to h-4
+  border-radius: 50%; // equivalent to rounded-full
+  background-color: hsl(var(--muted)); // equivalent to bg-muted
+  flex-shrink: 0; // equivalent to shrink-0
+}
+
+.propertiesPanelCollapsedNoSelectionText {
+  // No selection text styles (equivalent to text-xs text-muted-foreground)
+  font-size: 12px; // equivalent to text-xs
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
 }

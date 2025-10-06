@@ -62,6 +62,11 @@ interface CanvasContextType {
   cursorX: number;
   cursorY: number;
   setCursorPosition: (x: number, y: number) => void;
+  // Clipboard functions
+  clipboard: CanvasObject[];
+  copyToClipboard: (objectIds: string[]) => void;
+  pasteFromClipboard: (offsetX?: number, offsetY?: number) => void;
+  cutToClipboard: (objectIds: string[]) => void;
   reorderLayers: (fromIndex: number, toIndex: number) => void;
   duplicateObject: (id: string) => void;
   deleteObject: (id: string) => void;
@@ -104,6 +109,9 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   // Cursor tracking state
   const [cursorX, setCursorX] = useState<number>(0);
   const [cursorY, setCursorY] = useState<number>(0);
+
+  // Clipboard state
+  const [clipboard, setClipboard] = useState<CanvasObject[]>([]);
 
   // Multi-selection helpers
   const addToSelection = (id: string) => {
@@ -583,6 +591,41 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
     setCursorY(y);
   };
 
+  // Clipboard functions
+  const copyToClipboard = (objectIds: string[]) => {
+    const objectsToCopy = objectIds
+      .map((id) => objects.find((obj) => obj.id === id))
+      .filter(Boolean) as CanvasObject[];
+    setClipboard(objectsToCopy);
+  };
+
+  const pasteFromClipboard = (offsetX = 10, offsetY = 10) => {
+    if (clipboard.length === 0) return;
+
+    const newObjects = clipboard.map((obj) => ({
+      ...obj,
+      id: `${obj.type}-${Date.now()}-${Math.random()
+        .toString(36)
+        .substr(2, 9)}`,
+      x: obj.x + offsetX,
+      y: obj.y + offsetY,
+    }));
+
+    setObjects((prev) => [...prev, ...newObjects]);
+
+    // Select the pasted objects
+    if (newObjects.length > 0) {
+      setSelectedId(newObjects[0].id);
+      setSelectedIds(new Set(newObjects.map((obj) => obj.id)));
+    }
+  };
+
+  const cutToClipboard = (objectIds: string[]) => {
+    copyToClipboard(objectIds);
+    // Remove the objects after copying
+    objectIds.forEach((id) => deleteObject(id));
+  };
+
   return (
     <CanvasContext.Provider
       value={{
@@ -620,6 +663,11 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         cursorX,
         cursorY,
         setCursorPosition,
+        // Clipboard functions
+        clipboard,
+        copyToClipboard,
+        pasteFromClipboard,
+        cutToClipboard,
         reorderLayers,
         duplicateObject,
         deleteObject,

@@ -3,15 +3,15 @@
   "tokens": {
     "toast": {
       "backgroundColor": {
-        "value": "{semantic.color.display.background.popover}",
+        "value": "{core.color.display.background.primary}",
         "description": "Background color for toast notifications"
       },
       "foregroundColor": {
-        "value": "{semantic.color.display.foreground.popover}",
+        "value": "{core.color.display.foreground.primary}",
         "description": "Text color for toast notifications"
       },
       "borderColor": {
-        "value": "{semantic.color.display.border.subtle}",
+        "value": "{core.color.display.border.subtle}",
         "description": "Border color for toast notifications"
       }
     }

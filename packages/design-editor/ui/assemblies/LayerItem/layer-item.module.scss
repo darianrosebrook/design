@@ -1,7 +1,124 @@
-// layer-item composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// LayerItem component styles
+// Direct CSS implementation of panel utilities for consistent styling
 
-.layer-item {
-  // Placeholder for future SCSS implementation
-  // Will contain layer-item-specific styles when migrating from Tailwind
+.layerItemDropIndicator {
+  // Drop indicator styles (equivalent to panelDropIndicator)
+  height: 2px;
+  background-color: #3b82f6; // blue-500
+  margin: 0 8px 4px; // mx-2 mb-1
+}
+
+.layerItemContainer {
+  // Panel item styles (equivalent to panelItem)
+  display: flex;
+  align-items: center;
+  gap: 4px; // gap-1
+  padding: 6px 8px; // px-2 py-1.5
+  border-radius: 8px; // rounded-lg
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out; // transition-transform
+
+  &:hover {
+    background-color: #3f3f46; // zinc-700 (accent)
+
+    .layerItemActions {
+      opacity: 1; // group-hover:opacity-100
+    }
+  }
+
+  // Selected state
+  &[data-selected="true"] {
+    background-color: #3f3f46; // zinc-700 (accent)
+  }
+
+  // Dragging state
+  &[data-dragging="true"] {
+    opacity: 0.5; // opacity-50
+  }
+
+  // Primary selected state
+  &[data-primary-selected="true"] {
+    box-shadow: 0 0 0 1px #3b82f6; // blue-500 ring
+  }
+}
+
+.layerItemExpandButton {
+  // Expand/collapse button (equivalent to h-4 w-4 p-0 hover:bg-transparent)
+  width: 16px; // w-4
+  height: 16px; // h-4
+  padding: 0; // p-0
+
+  &:hover {
+    background-color: transparent; // hover:bg-transparent
+  }
+}
+
+.layerItemChevronIcon {
+  // Chevron icon (equivalent to h-3 w-3 transition-transform)
+  width: 12px; // w-3
+  height: 12px; // h-3
+  transition: transform 0.2s ease-in-out; // transition-transform
+
+  // Expanded state
+  [data-expanded="true"] & {
+    transform: rotate(90deg); // rotate-90
+  }
+}
+
+.layerItemSpacer {
+  // Spacer for items without children (equivalent to w-4)
+  width: 16px; // w-4
+}
+
+.layerItemTypeIconContainer {
+  // Type icon container wrapper
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.layerItemTypeIcon {
+  // Type icon (equivalent to h-3.5 w-3.5 text-muted-foreground shrink-0)
+  width: 14px; // w-3.5
+  height: 14px; // h-3.5
+  color: #a1a1aa; // zinc-400 (muted-foreground)
+  flex-shrink: 0; // shrink-0
+}
+
+.layerItemName {
+  // Layer name text (equivalent to flex-1 text-sm truncate)
+  flex: 1; // flex-1
+  font-size: 14px; // text-sm
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; // truncate
+}
+
+.layerItemActions {
+  // Panel actions styles (equivalent to panelActions)
+  display: flex;
+  align-items: center;
+  gap: 2px; // gap-0.5
+  opacity: 0; // opacity-0
+  transition: opacity 0.2s ease-in-out; // transition-opacity
+}
+
+.layerItemActionButton {
+  // Panel action button styles (equivalent to panelActionButton)
+  width: 24px; // w-6
+  height: 24px; // h-6
+  padding: 0; // p-0
+}
+
+.layerItemActionIcon {
+  // Panel action icon styles (equivalent to panelActionIcon)
+  width: 14px; // w-3.5
+  height: 14px; // h-3.5
+}
+
+.layerItemActionIconHidden {
+  // Panel action icon hidden styles (equivalent to panelActionIconHidden)
+  width: 14px; // w-3.5
+  height: 14px; // h-3.5
+  opacity: 0.3; // opacity-30
 }

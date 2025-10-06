@@ -11,13 +11,13 @@
         "description": "Border radius for progress bar (fully rounded)"
       },
       "backgroundColor": {
-        "value": "{color.action.background.primary.default}",
+        "value": "{semantic.color.action.background.primary.default}",
         "opacity": 0.2,
         "description": "Background color for the progress track"
       },
       "indicator": {
         "backgroundColor": {
-          "value": "{color.action.background.primary.default}",
+          "value": "{semantic.color.action.background.primary.default}",
           "description": "Background color for the progress indicator"
         },
         "transition": {

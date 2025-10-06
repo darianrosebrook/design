@@ -3,11 +3,11 @@
   "tokens": {
     "command": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.0}",
+        "value": "{semantic.color.action.background.secondary.default}",
         "description": "Background color for command container"
       },
       "color": {
-        "value": "{color.mode.dark}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Text color for command container"
       },
       "display": {
@@ -75,7 +75,7 @@
             "description": "Border bottom style for input wrapper"
           },
           "color": {
-            "value": "{color.palette.neutral.200}",
+            "value": "{semantic.color.action.background.secondary.active}",
             "description": "Border bottom color for input wrapper"
           }
         },
@@ -137,7 +137,7 @@
         },
         "placeholder": {
           "color": {
-            "value": "{color.palette.neutral.500}",
+            "value": "{semantic.color.navigation.foreground.secondary}",
             "description": "Placeholder color for input element"
           }
         },
@@ -191,7 +191,7 @@
     },
     "group": {
       "color": {
-        "value": "{color.mode.dark}",
+        "value": "{semantic.color.action.foreground.primary.default}",
         "description": "Text color for command group"
       },
       "overflow": {
@@ -204,7 +204,7 @@
       },
       "heading": {
         "color": {
-          "value": "{color.palette.neutral.500}",
+          "value": "{semantic.color.navigation.foreground.secondary}",
           "description": "Color for group heading"
         },
         "padding": {
@@ -235,7 +235,7 @@
     },
     "separator": {
       "backgroundColor": {
-        "value": "{color.palette.neutral.200}",
+        "value": "{semantic.color.action.background.secondary.active}",
         "description": "Background color for separator"
       },
       "margin": {
@@ -310,18 +310,18 @@
           "description": "Size for item icons"
         },
         "color": {
-          "value": "{color.palette.neutral.500}",
+          "value": "{semantic.color.navigation.foreground.secondary}",
           "description": "Color for item icons"
         }
       },
       "states": {
         "selected": {
           "backgroundColor": {
-            "value": "{color.palette.neutral.100}",
+            "value": "{semantic.color.action.background.secondary.hover}",
             "description": "Background color when item is selected"
           },
           "color": {
-            "value": "{color.mode.dark}",
+            "value": "{semantic.color.action.foreground.primary.default}",
             "description": "Text color when item is selected"
           }
         },
@@ -339,7 +339,7 @@
     },
     "shortcut": {
       "color": {
-        "value": "{color.palette.neutral.500}",
+        "value": "{semantic.color.navigation.foreground.secondary}",
         "description": "Color for command shortcut"
       },
       "marginLeft": {

@@ -5,10 +5,12 @@
 @use './Item.tokens.generated.scss' as itemTokens;
 
 // Include the generated variables mixin
-@include itemTokens.vars;
 
 // Item group container
 .item-group {
+  // Include the generated variables mixin within the component scope
+  @include itemTokens.vars;
+
   display: var(--item-group-display);
   flex-direction: var(--item-group-flexDirection);
 }

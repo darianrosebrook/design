@@ -7,16 +7,16 @@
   --checkbox-Checkbox-borderRadius: 4px;
   --checkbox-Checkbox-border-width: 1px;
   --checkbox-Checkbox-border-style: solid;
-  --checkbox-Checkbox-border-color-default: var(--color-palette-neutral-200);
+  --checkbox-Checkbox-border-color-default: var(--semantic-color-action-background-secondary-active);
   --checkbox-Checkbox-boxShadow: var(--elevation-level-1);
   --checkbox-Checkbox-transition-duration: 150ms;
   --checkbox-Checkbox-transition-easing: var(--motion-interaction-hover-easing);
   --checkbox-Checkbox-backgroundColor-default: transparent;
-  --checkbox-Checkbox-backgroundColor-dark: var(--color-palette-neutral-200);
-  --checkbox-Checkbox-states-checked-backgroundColor: var(--color-action-background-primary-default);
-  --checkbox-Checkbox-states-checked-color: var(--color-action-foreground-primary-default);
-  --checkbox-Checkbox-states-checked-borderColor: var(--color-action-background-primary-default);
-  --checkbox-Checkbox-states-checked-dark-backgroundColor: var(--color-action-background-primary-default);
+  --checkbox-Checkbox-backgroundColor-dark: var(--semantic-color-action-background-secondary-active);
+  --checkbox-Checkbox-states-checked-backgroundColor: var(--semantic-color-action-background-primary-default);
+  --checkbox-Checkbox-states-checked-color: var(--semantic-color-action-foreground-primary-default);
+  --checkbox-Checkbox-states-checked-borderColor: var(--semantic-color-action-background-primary-default);
+  --checkbox-Checkbox-states-checked-dark-backgroundColor: var(--semantic-color-action-background-primary-default);
   --checkbox-Checkbox-states-disabled-opacity: 0.5;
   --checkbox-Checkbox-indicator-icon-size: 14px;
 }

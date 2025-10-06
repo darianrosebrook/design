@@ -23,11 +23,11 @@
   color: inherit;
 
   &:hover {
-    color: hsl(var(--foreground) / 0.8); // equivalent to hover:text-foreground/80
+    color: rgba(244, 244, 245, 0.8); // zinc-100 with 80% opacity (foreground/80)
   }
 
   &:focus-visible {
-    outline: 2px solid hsl(var(--ring));
+    outline: 2px solid #3b82f6; // blue-500 (ring)
     outline-offset: 2px;
   }
 }
@@ -40,16 +40,16 @@
 }
 
 .propertiesPanelSectionGrip {
-  // Grip icon styles (equivalent to h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity cursor-grab)
-  width: 14px; // equivalent to w-3.5
-  height: 14px; // equivalent to h-3.5
-  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  // Grip icon styles - equivalent to h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity cursor-grab
+  width: 14px; // w-3.5
+  height: 14px; // h-3.5
+  color: #a1a1aa; // zinc-400 (muted-foreground)
   opacity: 0;
-  transition: opacity 150ms ease-in-out; // equivalent to transition-opacity
+  transition: opacity 150ms ease-in-out; // transition-opacity
   cursor: grab;
 
   .propertiesPanelSectionHeader:hover & {
-    opacity: 1; // equivalent to group-hover:opacity-100
+    opacity: 1; // group-hover:opacity-100
   }
 }
 

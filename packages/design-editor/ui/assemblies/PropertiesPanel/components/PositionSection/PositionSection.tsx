@@ -2,7 +2,6 @@
 
 import { Label } from "@paths-design/design-system";
 import type React from "react";
-import styles from "./PositionSection.module.scss";
 import { cn } from "@/lib/utils";
 import { Input } from "@/ui/primitives/Input";
 
@@ -22,24 +21,24 @@ export function PositionSection({
   className,
 }: PositionSectionProps) {
   return (
-    <div className={cn(styles.positionSection, className)}>
-      <div className={styles.positionSectionGrid}>
-        <div className={styles.positionSectionField}>
-          <Label className={styles.positionSectionLabel}>X</Label>
+    <div className={cn("space-y-3", className)}>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="space-y-1">
+          <Label className="text-xs text-muted-foreground">X</Label>
           <Input
             type="number"
             value={x}
             onChange={(e) => onXChange(Number(e.target.value))}
-            className={styles.positionSectionInput}
+            className="h-8 text-sm"
           />
         </div>
-        <div className={styles.positionSectionField}>
-          <Label className={styles.positionSectionLabel}>Y</Label>
+        <div className="space-y-1">
+          <Label className="text-xs text-muted-foreground">Y</Label>
           <Input
             type="number"
             value={y}
             onChange={(e) => onYChange(Number(e.target.value))}
-            className={styles.positionSectionInput}
+            className="h-8 text-sm"
           />
         </div>
       </div>

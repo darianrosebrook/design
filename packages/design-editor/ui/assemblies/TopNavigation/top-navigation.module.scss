@@ -1,42 +1,43 @@
 // top-navigation assemblie component styles
-// Migrated from Tailwind to SCSS with semantic design tokens
+// Direct CSS equivalents of original Tailwind classes
 
 .topnavigation {
-  // Base navigation styles (equivalent to flex h-12 items-center gap-1 border-b border-border bg-card px-3)
+  // Direct equivalent of: flex h-12 items-center gap-1 border-b border-border bg-card px-3
   display: flex;
-  height: var(--semantic-components-navigation-height-bar);
+  height: 48px;
   align-items: center;
-  gap: var(--semantic-spacing-gap-grid-small);
-  border-bottom: var(--semantic-shape-control-border-default-width) var(--semantic-shape-control-border-default-style) var(--semantic-color-navigation-border-primary);
-  background-color: var(--semantic-color-navigation-background-primary);
-  padding: 0 var(--semantic-components-navigation-padding-item-horizontal);
+  gap: 4px;
+  border-bottom: 1px solid #3f3f46; // zinc-700 (border)
+  background-color: #27272a; // zinc-800 (card background)
+  padding: 0 12px;
+  color: var(--semantic-color-foreground-primary);
 
   // Logo and title container (equivalent to flex items-center gap-2 mr-4)
   .topnavigationLogoContainer {
     display: flex;
     align-items: center;
-    gap: var(--semantic-components-navigation-gap-icon);
-    margin-right: var(--semantic-spacing-gap-grid-medium);
+    gap: 8px;
+    margin-right: 16px;
 
     // Logo styles (equivalent to w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm)
     .topnavigationLogo {
       width: 32px;
       height: 32px;
-      border-radius: var(--semantic-shape-control-radius-default);
-      background-color: var(--semantic-color-navigation-foreground-active);
+      border-radius: 8px;
+      background-color: #0a65fe; // blue-500 (primary)
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--semantic-color-navigation-foreground-active);
-      font-weight: var(--semantic-typography-font-weight-bold);
-      font-size: var(--semantic-typography-body-03);
+      color: #ffffff; // white (primary-foreground)
+      font-weight: 700;
+      font-size: 14px;
     }
 
     // Title styles (equivalent to text-sm font-medium)
     .topnavigationTitle {
-      font-size: var(--semantic-typography-body-03);
-      font-weight: var(--semantic-typography-font-weight-medium);
-      color: var(--semantic-color-navigation-foreground-primary);
+      font-size: 14px;
+      font-weight: 500;
+      color: #f4f4f5; // zinc-100 (foreground)
     }
   }
 
@@ -44,25 +45,25 @@
   .topnavigationMenuContainer {
     display: flex;
     align-items: center;
-    gap: var(--semantic-spacing-gap-grid-small);
+    gap: 2px;
 
     // Menu button styles (equivalent to h-8 px-3 text-sm font-normal hover:bg-accent)
     .topnavigationMenuButton {
-      height: var(--semantic-components-action-height-small);
-      padding: 0 var(--semantic-components-action-padding-horizontal-small);
-      font-size: var(--semantic-typography-body-03);
-      font-weight: var(--semantic-typography-font-weight-regular);
+      height: 32px;
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: 400;
 
       &:hover {
-        background-color: var(--semantic-color-navigation-background-secondary);
+        background-color: #3f3f46; // zinc-700 (accent hover)
       }
 
       // Chevron icon styles (equivalent to ml-1 h-3 w-3 opacity-50)
       .topnavigationChevron {
-        margin-left: var(--semantic-spacing-gap-grid-small);
-        width: var(--semantic-components-action-gap-icon);
-        height: var(--semantic-components-action-gap-icon);
-        opacity: var(--semantic-opacity-disabled);
+        margin-left: 4px;
+        width: 12px;
+        height: 12px;
+        opacity: 0.5;
       }
     }
 
@@ -74,14 +75,19 @@
       cursor: pointer;
 
       &:hover {
-        background-color: var(--semantic-color-navigation-background-secondary);
+        background-color: #3f3f46; // zinc-700 (accent hover)
       }
 
       // Shortcut styles (equivalent to text-xs text-muted-foreground)
       .topnavigationShortcut {
-        font-size: var(--semantic-typography-caption-02);
-        color: var(--semantic-color-navigation-foreground-secondary);
+        font-size: 12px;
+        color: #a1a1aa; // zinc-400 (muted-foreground)
       }
+    }
+
+    // Dropdown menu content width (equivalent to w-56)
+    .topnavigationDropdownContent {
+      width: 14rem;
     }
   }
 
@@ -90,13 +96,13 @@
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: var(--semantic-components-action-gap-icon);
+    gap: 8px;
 
     // Share button styles (equivalent to h-8 px-3 text-sm)
     .topnavigationShareButton {
-      height: var(--semantic-components-action-height-small);
-      padding: 0 var(--semantic-components-action-padding-horizontal-small);
-      font-size: var(--semantic-typography-body-03);
+      height: 32px;
+      padding: 0 12px;
+      font-size: 14px;
     }
   }
 }

@@ -15,7 +15,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
 
-// @ts-ignore - CommonJS compatibility
+// @ts-expect-error - CommonJS compatibility
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const PROJECT_ROOT = path.resolve(__dirname, "..", "..", "..", "..");
@@ -146,7 +146,8 @@ function buildScssForComponent(config: {
   const { groups, flat } = tokenData;
   const lines: string[] = [];
 
-  // If we have groups, organize by groups with documentation
+  // Collect all tokens that are in groups
+  const groupedTokens = new Set<string>();
   if (Object.keys(groups).length > 0) {
     Object.entries(groups).forEach(([groupName, groupData]) => {
       // Add group documentation header
@@ -156,21 +157,31 @@ function buildScssForComponent(config: {
       // Add tokens for this group
       Object.entries(groupData.tokens).forEach(([name, raw]) => {
         lines.push(`  --${cssVarPrefix}-${name}: ${refToCssVar(raw)};`);
+        groupedTokens.add(name);
       });
 
       // Add spacing between groups
       lines.push("");
     });
+  }
 
-    // Remove the last empty line
-    if (lines[lines.length - 1] === "") {
-      lines.pop();
+  // Add any top-level tokens that weren't included in groups
+  const topLevelTokens = Object.entries(flat).filter(
+    ([name]) => !groupedTokens.has(name)
+  );
+  if (topLevelTokens.length > 0) {
+    if (lines.length > 0) {
+      lines.push(""); // Add spacing before top-level tokens
     }
-  } else {
-    // Fallback to flat structure if no groups detected
-    Object.entries(flat).forEach(([name, raw]) => {
+    lines.push(`  /* === General Tokens === */`);
+    topLevelTokens.forEach(([name, raw]) => {
       lines.push(`  --${cssVarPrefix}-${name}: ${refToCssVar(raw)};`);
     });
+  }
+
+  // Remove trailing empty lines
+  while (lines.length > 0 && lines[lines.length - 1] === "") {
+    lines.pop();
   }
 
   return `@mixin vars {\n${lines.join("\n")}\n}`;

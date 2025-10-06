@@ -7,8 +7,6 @@ import {
   Input,
   Select,
   Checkbox,
-  TextField,
-  NumberField,
   ColorField,
 } from "@paths-design/design-system";
 import React, { useState, useCallback } from "react";

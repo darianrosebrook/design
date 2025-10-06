@@ -16,4 +16,10 @@
   /* === Positioning Tokens === */
   --resizablePanel-positioning-left-right: 0;
   --resizablePanel-positioning-right-left: 0;
+
+
+  /* === General Tokens === */
+  --resizablePanel-backgroundColor: var(--semantic-color-display-background-primary);
+  --resizablePanel-borderColor: var(--semantic-color-display-border-subtle);
+  --resizablePanel-borderRadius: var(--semantic-shape-radius-extra-large);
 }

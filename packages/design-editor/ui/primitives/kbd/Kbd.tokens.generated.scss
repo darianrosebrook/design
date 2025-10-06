@@ -3,8 +3,8 @@
  */
 @mixin vars {
   /* === Container Tokens === */
-  --kbd-container-backgroundColor: var(--color-palette-neutral-100);
-  --kbd-container-color: var(--color-palette-neutral-500);
+  --kbd-container-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --kbd-container-color: var(--semantic-color-navigation-foreground-secondary);
   --kbd-container-width: fit-content;
   --kbd-container-pointerEvents: none;
   --kbd-container-display: inline-flex;
@@ -24,9 +24,9 @@
   --kbd-icon-size: 12px;
 
   /* === Tooltip Tokens === */
-  --kbd-tooltip-backgroundColor: var(--color-mode-white);
-  --kbd-tooltip-color: var(--color-mode-white);
-  --kbd-tooltip-dark-backgroundColor: var(--color-mode-white);
+  --kbd-tooltip-backgroundColor: var(--semantic-color-action-foreground-primary-default);
+  --kbd-tooltip-color: var(--semantic-color-action-foreground-primary-default);
+  --kbd-tooltip-dark-backgroundColor: var(--semantic-color-action-foreground-primary-default);
 
   /* === Group Tokens === */
   --kbd-group-display: inline-flex;
