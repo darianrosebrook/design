@@ -8,7 +8,8 @@ import {
 } from "@/lib/utils/dynamic-component-registry";
 import { Badge } from "@/ui/primitives/Badge";
 import { Separator } from "@/ui/primitives/Separator";
-import { Package, Code, Zap } from "lucide-react";
+import { Button } from "@/ui/primitives/Button";
+import { Package, Code, Zap, RotateCcw, Copy, Download } from "lucide-react";
 import { Input } from "@/ui/primitives/Input";
 import { Label } from "@paths-design/design-system";
 import {
@@ -46,7 +47,8 @@ export function ComponentPropsPanel({
   const componentInfo = allComponents.get(object.componentType.toLowerCase());
 
   const isLocalComponent = componentInfo?.source === "design-system";
-  const isPackageComponent = componentInfo && componentInfo.source !== "design-system";
+  const isPackageComponent =
+    componentInfo && componentInfo.source !== "design-system";
 
   const renderPropControl = (
     propName: string,
@@ -315,6 +317,13 @@ export function ComponentPropsPanel({
       {/* Component Source Info */}
       <div className="pb-3 border-b border-border">
         {renderComponentSource()}
+
+        {/* Component Description */}
+        {metadata?.description && (
+          <div className="mt-2 text-xs text-muted-foreground">
+            {metadata.description}
+          </div>
+        )}
       </div>
 
       {/* Component Properties */}
@@ -325,30 +334,100 @@ export function ComponentPropsPanel({
         </div>
 
         <div className="space-y-4">
-          {componentProps.map(([propName, defaultValue]) => (
-            <div key={propName} className="space-y-2">
-              <Label className="text-xs font-medium text-muted-foreground">
-                {getPropLabel(propName)}
-              </Label>
-              {renderPropControl(
-                propName,
-                getPropType(propName, defaultValue),
-                defaultValue
-              )}
-            </div>
-          ))}
+          {componentProps.map(([propName, defaultValue]) => {
+            const currentValue = currentProps[propName] ?? defaultValue;
+            const isModified =
+              JSON.stringify(currentValue) !== JSON.stringify(defaultValue);
+
+            return (
+              <div key={propName} className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Label className="text-xs font-medium text-muted-foreground">
+                    {getPropLabel(propName)}
+                  </Label>
+                  {isModified && (
+                    <div
+                      className="w-1.5 h-1.5 rounded-full bg-blue-500"
+                      title="Modified from default"
+                    />
+                  )}
+                </div>
+                {renderPropControl(
+                  propName,
+                  getPropType(propName, defaultValue),
+                  defaultValue
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Reset to Defaults */}
+      {/* Quick Actions */}
       <Separator />
-      <div className="pt-2">
-        <button
-          onClick={() => onUpdateProps(metadata?.defaultProps || {})}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors underline"
-        >
-          Reset to defaults
-        </button>
+      <div className="pt-3">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="h-2 w-2 rounded-full bg-green-500" />
+          <span className="text-sm font-medium">Quick Actions</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => onUpdateProps(metadata?.defaultProps || {})}
+            className="h-7 text-xs"
+          >
+            <RotateCcw className="h-3 w-3 mr-1" />
+            Reset
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const config = JSON.stringify(
+                {
+                  componentType: object.componentType,
+                  props: currentProps,
+                },
+                null,
+                2
+              );
+              navigator.clipboard.writeText(config);
+              // Could add a toast notification here
+            }}
+            className="h-7 text-xs"
+          >
+            <Copy className="h-3 w-3 mr-1" />
+            Copy Config
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const config = JSON.stringify(
+                {
+                  componentType: object.componentType,
+                  props: currentProps,
+                  name: object.name,
+                  source: componentInfo?.source,
+                },
+                null,
+                2
+              );
+              const blob = new Blob([config], { type: "application/json" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `${object.name || "component"}-config.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+            className="h-7 text-xs"
+          >
+            <Download className="h-3 w-3 mr-1" />
+            Export
+          </Button>
+        </div>
       </div>
     </div>
   );

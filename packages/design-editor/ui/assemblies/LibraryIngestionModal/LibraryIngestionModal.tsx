@@ -19,7 +19,7 @@ import {
 import { validatePackageName } from "@/lib/utils/component-parser";
 import { Button } from "@/ui/primitives/Button";
 import { Input } from "@/ui/primitives/Input";
-import { Label } from "@/ui/primitives/Input";
+import { Label } from "@paths-design/design-system";
 import {
   Dialog,
   DialogContent,
@@ -97,7 +97,6 @@ export function LibraryIngestionModal({
       error: null,
     }));
   }, []);
-
 
   const handleIngestPackage = useCallback(async () => {
     const validation = validatePackageName(state.packageName);

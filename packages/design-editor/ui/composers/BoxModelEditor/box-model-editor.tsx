@@ -7,7 +7,7 @@ import styles from "./box-model-editor.module.scss";
 import type { CanvasObject } from "@/lib/types";
 import { Button } from "@/ui/primitives/Button";
 import { Input } from "@/ui/primitives/Input";
-import { Label } from "@/ui/primitives/Label";
+import { Label } from "@paths-design/design-system";
 
 interface BoxModelEditorProps {
   object: CanvasObject;

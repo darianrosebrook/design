@@ -6,7 +6,7 @@ import { ChevronRight } from "@/lib/components/icons";
 import { CanvasBackgroundControls } from "@/ui/composers/CanvasBackgroundControls";
 import { Button } from "@/ui/primitives/Button";
 import { Input } from "@/ui/primitives/Input";
-import { Label } from "@/ui/primitives/Label";
+import { Label } from "@paths-design/design-system";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
 import {
   Select,
