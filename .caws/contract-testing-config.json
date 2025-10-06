@@ -1,0 +1,55 @@
+{
+  "contractTesting": {
+    "enabled": true,
+    "frameworks": {
+      "api": {
+        "type": "openapi",
+        "config": {
+          "baseUrl": "http://localhost:3000",
+          "timeout": 5000,
+          "retries": 3
+        }
+      },
+      "schema": {
+        "type": "typescript",
+        "config": {
+          "strict": true,
+          "additionalProperties": false
+        }
+      },
+      "component": {
+        "type": "react-testing-library",
+        "config": {
+          "renderTimeout": 1000,
+          "cleanup": true
+        }
+      }
+    },
+    "contracts": [
+      {
+        "name": "MCP API Contract",
+        "type": "openapi",
+        "path": "packages/mcp-adapter/schemas/api.yaml",
+        "tests": "packages/mcp-adapter/tests/**/*contract*.{test,spec}.{js,ts}"
+      },
+      {
+        "name": "Canvas Schema Contract",
+        "type": "typescript",
+        "path": "packages/canvas-schema/schemas/canvas.json",
+        "tests": "packages/canvas-schema/tests/**/*contract*.{test,spec}.{js,ts}"
+      },
+      {
+        "name": "Design System Contract",
+        "type": "component",
+        "path": "packages/design-system/src",
+        "tests": "packages/design-system/tests/**/*contract*.{test,spec}.{js,ts}"
+      }
+    ],
+    "pact": {
+      "enabled": true,
+      "brokerUrl": "http://localhost:9292",
+      "publishResults": true,
+      "tags": ["master", "develop"]
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "flakeDetection": {
+    "enabled": true,
+    "thresholds": {
+      "maxFlakeRate": 0.15,
+      "minRunsForDetection": 3,
+      "quarantineAfterFailures": 3,
+      "releaseAfterSuccesses": 5
+    },
+    "monitoring": {
+      "enabled": true,
+      "interval": "0 */6 * * *",
+      "historyRetentionDays": 30
+    },
+    "reporting": {
+      "generateHtmlReport": true,
+      "reportPath": "coverage/flake-report.html",
+      "includeTrendAnalysis": true
+    },
+    "integration": {
+      "ci": {
+        "failOnHighFlakeRate": true,
+        "quarantineFlakyTests": true
+      },
+      "github": {
+        "commentOnPR": true,
+        "labelFlakyTests": true
+      }
+    }
+  }
+}

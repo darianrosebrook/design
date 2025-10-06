@@ -11,11 +11,13 @@ The following canvas-related specifications have been archived and consolidated 
 ### Archived Specifications
 
 - **DESIGNER-002-canvas-schema.yaml** - Canvas Schema & Validation System
-- **DESIGNER-003-canvas-engine.yaml** - Canvas Engine - Scene Graph Operations  
+- **DESIGNER-003-canvas-engine.yaml** - Canvas Engine - Scene Graph Operations
 - **DESIGNER-005-canvas-renderer.yaml** - Canvas Renderer - DOM/2D Rendering Engine
 - **DESIGNER-007-vscode-ext.yaml** - VS Code Extension - Designer Webview Host
+- **DESIGNER-013-properties-panel.yaml** - Properties Panel - Interactive Property Editing
 - **DESIGNER-016-canvas-webview-host.yaml** - Canvas Webview Host Integration
 - **DESIGNER-018-renderer-interaction-layer.yaml** - Renderer Coordinate System & Interaction Layer
+- **DESIGNER-022-canvas-refactor.yaml** - Designer Canvas Engine - Complete Testing Suite Implementation
 
 ### Consolidation Rationale
 
@@ -67,6 +69,6 @@ DESIGNER-022 is marked as **Risk Tier 1** with a **30-minute rollback SLO**, ind
 
 ---
 
-**Archive Date**: October 3, 2025  
-**Replaced By**: DESIGNER-022-canvas-refactor.yaml  
-**Status**: Archived
+**Archive Date**: October 3, 2025 (Initial) | October 6, 2025 (Updated)
+**Replaced By**: DESIGNER-022-canvas-refactor.yaml and individual package implementations
+**Status**: Archived - All specs verified and implemented via CAWS framework

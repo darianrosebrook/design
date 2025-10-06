@@ -1,0 +1,53 @@
+{
+  "propertyTesting": {
+    "enabled": true,
+    "framework": "fast-check",
+    "globalConfig": {
+      "numRuns": 1000,
+      "maxSkipsPerRun": 100,
+      "timeout": 5000,
+      "verbose": false,
+      "seed": null
+    },
+    "arbitraries": {
+      "canvasDocument": {
+        "numRuns": 100,
+        "constraints": {
+          "maxNodes": 50,
+          "maxDepth": 10,
+          "maxProperties": 20
+        }
+      },
+      "designTokens": {
+        "numRuns": 200,
+        "constraints": {
+          "maxTokens": 100,
+          "maxReferences": 5
+        }
+      },
+      "componentProps": {
+        "numRuns": 500,
+        "constraints": {
+          "maxProps": 20,
+          "maxNestedObjects": 3
+        }
+      },
+      "websocketMessages": {
+        "numRuns": 100,
+        "constraints": {
+          "maxMessageSize": 1024,
+          "maxConcurrentConnections": 10
+        }
+      }
+    },
+    "testPatterns": [
+      "packages/**/tests/**/*property*.{test,spec}.{js,ts}",
+      "packages/**/tests/**/*pbt*.{test,spec}.{js,ts}"
+    ],
+    "exclusions": [
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/coverage/**"
+    ]
+  }
+}

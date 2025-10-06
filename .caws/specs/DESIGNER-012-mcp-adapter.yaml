@@ -1,16 +1,22 @@
 id: DESIGNER-012
-title: 'Cursor MCP Integration Adapter'
-risk_tier: 3
+title: 'MCP Bridge Integration for Agent Workflows'
+risk_tier: 2
 mode: feature
 change_budget:
-  max_files: 15
-  max_loc: 600
+  max_files: 25
+  max_loc: 1100
 blast_radius:
   modules:
     - packages/mcp-adapter
+    - packages/vscode-ext
   data_migration: false
-operational_rollback_slo: 5m
+operational_rollback_slo: 15m
 threats:
+  - 'MCP server spawn leaks processes when webview closes'
+  - 'Unauthenticated requests mutate documents outside workspace'
+  - 'Concurrent MCP edits conflict with local changes'
+  - 'Webview hangs waiting on MCP responses'
+  - 'Agent-produced mutations bypass validation and break determinism'
   - 'MCP protocol incompatibility with Cursor'
   - 'Security vulnerability in MCP server'
   - 'Performance issues with large messages'
@@ -20,9 +26,19 @@ scope:
     - packages/mcp-adapter/
     - packages/mcp-adapter/src/
     - packages/mcp-adapter/tests/
+    - packages/vscode-ext/src/mcp/
+    - packages/vscode-ext/webviews/canvas/
+    - packages/canvas-engine/src/operations.ts
   out:
-    - apps/vscode-ext/
+    - packages/canvas-renderer-dom/
+    - packages/design-tokens/
 invariants:
+  - 'MCP requests validated against protocol schemas before execution'
+  - 'MCP bridge enforces workspace-only file access and path whitelisting'
+  - 'Document mutations initiated by agents reuse deterministic pipeline'
+  - 'Feature flag gates MCP bridge and defaults to disabled'
+  - 'Child process lifecycle managed with explicit spawn/kill tied to webview'
+  - 'Telemetry emitted for every agent mutation, including provenance ID'
   - 'MCP server only accesses workspace files'
   - 'All messages validated with Zod schemas'
   - 'MCP operations are idempotent where applicable'

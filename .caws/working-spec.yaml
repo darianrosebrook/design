@@ -1,101 +1,116 @@
-id: DESIGNER-013
-title: 'Properties Panel - Interactive Design Property Editor'
+id: 'DESIGNER-022'
+title: 'Designer Canvas Engine - Complete Testing Suite Implementation'
 risk_tier: 2
-mode: feature
-change_budget:
-  max_files: 25
-  max_loc: 1000
-blast_radius:
-  modules:
-    - packages/properties-panel/
-    - packages/vscode-ext/
-  data_migration: false
-operational_rollback_slo: 5m
-threats:
-  - 'Properties panel becomes unresponsive with complex selections'
-  - 'Property changes not properly synchronized with canvas'
-  - 'Memory leaks from retained property editors'
-  - 'Inconsistent property display across node types'
-  - 'Accessibility issues with property controls'
 scope:
   in:
-    - packages/properties-panel/
-    - packages/properties-panel/src/
-    - packages/properties-panel/tests/
-    - packages/vscode-ext/src/properties-panel-webview.ts
+    - 'packages/canvas-engine/*'
+    - 'packages/canvas-renderer-dom/*'
+    - 'packages/canvas-schema/*'
+    - 'packages/codegen-react/*'
+    - 'packages/design-editor/*'
+    - 'packages/design-system/*'
+    - 'packages/design-tokens/*'
+    - 'packages/component-indexer/*'
+    - 'packages/properties-panel/*'
+    - 'packages/plugin-registry/*'
+    - 'packages/plugin-testing/*'
+    - 'packages/mcp-adapter/*'
+    - 'packages/websocket-server/*'
+    - 'packages/vscode-ext/*'
+    - 'packages/system-integration/*'
+    - 'apps/tools/caws/*'
   out:
-    - packages/canvas-renderer-dom/
-    - packages/canvas-engine/
+    - 'examples/*'
+    - 'docs/*'
+    - 'audit/*'
+    - 'prototypes/*'
 invariants:
-  - 'Property panel only shows properties applicable to selected node types'
-  - 'All property changes immediately reflected in canvas rendering'
-  - 'Property values validated before application'
-  - 'Panel handles mixed selections gracefully'
-  - 'Progressive disclosure keeps interface uncluttered'
+  - 'Canvas operations must be immutable and return new document instances'
+  - 'All canvas documents must pass schema validation before and after operations'
+  - 'Component rendering must be deterministic given the same input state'
+  - 'Plugin system must maintain backward compatibility across versions'
+  - 'Design tokens must resolve consistently across all packages'
+  - 'WebSocket connections must be properly established before canvas operations'
 acceptance:
   - id: A1
-    given: 'Single node selected in canvas'
-    when: 'Properties panel opens'
-    then: 'Shows only properties applicable to that node type'
+    given: 'A canvas document with nested components'
+    when: 'Applying transformation operations (move, resize, style changes)'
+    then: 'All operations succeed and return valid documents that pass schema validation'
   - id: A2
-    given: 'User changes property value'
-    when: 'Value is applied'
-    then: 'Canvas updates immediately and property panel reflects new value'
+    given: 'Multiple concurrent canvas sessions'
+    when: 'Applying conflicting operations simultaneously'
+    then: 'Operations are properly merged and conflicts are resolved deterministically'
   - id: A3
-    given: 'Multiple nodes selected with different properties'
-    when: 'Properties panel displays'
-    then: 'Shows mixed values appropriately and handles batch updates'
+    given: 'Component library with various component types'
+    when: 'Generating React code from canvas documents'
+    then: 'Generated code compiles without errors and matches design specifications'
   - id: A4
-    given: 'Text node selected'
-    when: 'Typography section expands'
-    then: 'Shows font family, size, weight, line height, letter spacing controls'
+    given: 'Design system with token dependencies'
+    when: 'Updating design tokens across packages'
+    then: 'All components update consistently and maintain visual coherence'
   - id: A5
-    given: 'Frame node selected'
-    when: 'Layout section shows'
-    then: 'Displays position, size, rotation, alignment, and constraint controls'
+    given: 'VS Code extension with active canvas session'
+    when: 'User performs selection and manipulation operations'
+    then: 'Operations execute within performance budgets and maintain responsive UI'
   - id: A6
-    given: 'Complex selection (10+ nodes)'
-    when: 'Properties panel renders'
-    then: 'Maintains responsive performance without blocking UI'
+    given: 'Plugin ecosystem with third-party extensions'
+    when: 'Loading and executing plugin operations'
+    then: 'Plugins integrate seamlessly and maintain system stability'
+  - id: A7
+    given: 'MCP server with multiple connected clients'
+    when: 'Broadcasting canvas state changes'
+    then: 'All clients receive updates in real-time with proper error handling'
+  - id: A8
+    given: 'WebSocket server under load'
+    when: 'Handling multiple concurrent canvas sessions'
+    then: 'Server maintains performance within specified budgets'
 non_functional:
   a11y:
-    - 'All property controls keyboard accessible'
-    - 'Screen reader announces property changes'
-    - 'High contrast mode supported'
-    - 'Focus management between canvas and panel'
+    - 'All interactive canvas elements must be keyboard accessible'
+    - 'Color contrast ratios must meet WCAG AA standards'
+    - 'Screen reader compatibility for all canvas operations'
   perf:
-    panel_render_ms: 100
-    property_sync_ms: 50
-    additional:
-      - 'Panel handles 100+ properties without performance degradation'
-      - 'Property changes sync within 50ms of canvas updates'
-      - 'Memory usage <20MB for typical usage'
+    api_p95_ms: 100
+    lcp_ms: 2000
+    canvas_render_ms: 16
+    websocket_latency_ms: 50
   security:
-    - 'Property values sanitized before display'
-    - 'No arbitrary code execution from property data'
-    - 'Panel respects workspace file boundaries'
+    - 'Canvas documents must not contain executable code'
+    - 'Plugin loading must validate against allowlist'
+    - 'WebSocket connections must use secure protocols'
+    - 'Design tokens must not expose sensitive information'
 contracts:
-  - type: graphql
-    path: packages/properties-panel/src/types.ts
-  - type: graphql
-    path: packages/properties-panel/src/property-registry.ts
+  - type: 'openapi'
+    path: 'packages/mcp-adapter/schemas/api.yaml'
+  - type: 'typescript'
+    path: 'packages/canvas-schema/schemas/canvas.json'
+  - type: 'component'
+    path: 'packages/design-system/src/**/*.tsx'
+  - type: 'plugin'
+    path: 'packages/plugin-registry/schemas/plugin.json'
 observability:
   logs:
-    - 'properties_panel.open with selection count'
-    - 'properties_panel.property_change with property key and value'
-    - 'properties_panel.section_toggle with section id'
-    - 'properties_panel.error with failure reason'
+    - 'Canvas operation performance metrics'
+    - 'Plugin loading and execution events'
+    - 'WebSocket connection lifecycle events'
+    - 'Schema validation failures'
+    - 'Error boundaries and recovery actions'
   metrics:
-    - 'properties_panel_render_duration_ms histogram'
-    - 'properties_panel_property_changes_total counter by property type'
-    - 'properties_panel_errors_total counter by error type'
+    - 'canvas_operations_per_second'
+    - 'plugin_load_time_ms'
+    - 'websocket_message_latency_ms'
+    - 'schema_validation_rate'
+    - 'error_recovery_rate'
   traces:
-    - 'properties_panel.lifecycle from mount to unmount'
-    - 'properties_panel.property_sync from change to canvas update'
+    - 'canvas_operation_execution'
+    - 'plugin_lifecycle'
+    - 'websocket_message_flow'
+    - 'schema_validation_chain'
 migrations:
-  - 'Initial release - no migrations required'
+  - 'Legacy canvas format migration to current schema version'
+  - 'Component property mapping updates for new design system'
+  - 'Plugin API compatibility layer for existing extensions'
 rollback:
-  - 'Properties panel can be disabled via VS Code setting'
-  - 'Canvas continues to function without properties panel'
-  - 'Property changes can be reverted via undo system'
-
+  - 'Revert to previous schema version if validation fails'
+  - 'Plugin allowlist reset to safe defaults'
+  - 'Design token fallback to hardcoded values'
