@@ -12,6 +12,8 @@ import {
   SelectValue,
 } from "@/ui/primitives/Select";
 import { Slider } from "@/ui/primitives/Slider";
+import { ColorPicker } from "@/ui/assemblies/ColorPicker";
+import { SliderWithInput } from "@/ui/assemblies/SliderWithInput";
 
 interface PrimitivePropsPanelProps {
   object: CanvasObject;
@@ -40,31 +42,14 @@ export function PrimitivePropsPanel({
 
         <div className="space-y-4">
           {/* Opacity */}
-          <div className="space-y-2">
-            <Label className="text-xs font-medium text-muted-foreground">
-              Opacity
-            </Label>
-            <div className="space-y-2">
-              <Slider
-                value={[object.opacity ?? 100]}
-                onValueChange={([value]) => handleUpdate({ opacity: value })}
-                min={0}
-                max={100}
-                step={1}
-                className="w-full"
-              />
-              <Input
-                type="number"
-                value={object.opacity ?? 100}
-                onChange={(e) =>
-                  handleUpdate({ opacity: Number(e.target.value) })
-                }
-                className="w-full"
-                min={0}
-                max={100}
-              />
-            </div>
-          </div>
+          <SliderWithInput
+            label="Opacity"
+            value={object.opacity ?? 100}
+            onChange={(value) => handleUpdate({ opacity: value })}
+            min={0}
+            max={100}
+            step={1}
+          />
 
           {/* Corner Radius (for shapes) */}
           {(object.type === "rectangle" || object.type === "frame") && (
@@ -92,19 +77,11 @@ export function PrimitivePropsPanel({
               <Label className="text-xs font-medium text-muted-foreground">
                 Fill Color
               </Label>
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-8 h-8 rounded-lg border border-border cursor-pointer"
-                  style={{ backgroundColor: object.fill || "#ffffff" }}
-                />
-                <Input
-                  type="text"
-                  value={object.fill || ""}
-                  onChange={(e) => handleUpdate({ fill: e.target.value })}
-                  placeholder="#ffffff"
-                  className="flex-1"
-                />
-              </div>
+              <ColorPicker
+                color={object.fill || "#ffffff"}
+                onChange={(color) => handleUpdate({ fill: color })}
+                selectedObject={object}
+              />
             </div>
           )}
 
@@ -115,19 +92,11 @@ export function PrimitivePropsPanel({
                 <Label className="text-xs font-medium text-muted-foreground">
                   Stroke Color
                 </Label>
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-8 h-8 rounded-lg border border-border cursor-pointer"
-                    style={{ backgroundColor: object.stroke || "transparent" }}
-                  />
-                  <Input
-                    type="text"
-                    value={object.stroke || ""}
-                    onChange={(e) => handleUpdate({ stroke: e.target.value })}
-                    placeholder="#000000"
-                    className="flex-1"
-                  />
-                </div>
+                <ColorPicker
+                  color={object.stroke || "#000000"}
+                  onChange={(color) => handleUpdate({ stroke: color })}
+                  selectedObject={object}
+                />
               </div>
               <div className="space-y-2">
                 <Label className="text-xs font-medium text-muted-foreground">
@@ -223,19 +192,11 @@ export function PrimitivePropsPanel({
                 <Label className="text-xs font-medium text-muted-foreground">
                   Text Color
                 </Label>
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-8 h-8 rounded-lg border border-border cursor-pointer"
-                    style={{ backgroundColor: object.fill || "#000000" }}
-                  />
-                  <Input
-                    type="text"
-                    value={object.fill || "#000000"}
-                    onChange={(e) => handleUpdate({ fill: e.target.value })}
-                    placeholder="#000000"
-                    className="flex-1"
-                  />
-                </div>
+                <ColorPicker
+                  color={object.fill || "#000000"}
+                  onChange={(color) => handleUpdate({ fill: color })}
+                  selectedObject={object}
+                />
               </div>
 
               <div className="space-y-2">

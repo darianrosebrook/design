@@ -20,6 +20,9 @@ export function PositionSection({
   onYChange,
   className,
 }: PositionSectionProps) {
+  // Provide safe defaults for NaN values
+  const safeX = isNaN(x) ? 0 : x;
+  const safeY = isNaN(y) ? 0 : y;
   return (
     <div className={cn("space-y-3", className)}>
       <div className="grid grid-cols-2 gap-3">
@@ -27,7 +30,7 @@ export function PositionSection({
           <Label className="text-xs text-muted-foreground">X</Label>
           <Input
             type="number"
-            value={x}
+            value={safeX}
             onChange={(e) => onXChange(Number(e.target.value))}
             className="h-8 text-sm"
           />
@@ -36,7 +39,7 @@ export function PositionSection({
           <Label className="text-xs text-muted-foreground">Y</Label>
           <Input
             type="number"
-            value={y}
+            value={safeY}
             onChange={(e) => onYChange(Number(e.target.value))}
             className="h-8 text-sm"
           />

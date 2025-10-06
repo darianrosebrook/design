@@ -70,6 +70,9 @@ export * from "./HoverCard";
 // Input
 export * from "./Input";
 
+// Label
+export * from "./Label";
+
 // InputGroup
 export * from "./InputGroup";
 

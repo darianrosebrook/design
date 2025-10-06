@@ -25,10 +25,16 @@ export function useGlobalShortcuts() {
 
 interface GlobalShortcutsProviderProps {
   children: React.ReactNode;
+  onUIToggle?: () => void;
+  onColorPickerOpen?: () => void;
+  onGlobalSearchOpen?: () => void;
 }
 
 export function GlobalShortcutsProvider({
   children,
+  onUIToggle,
+  onColorPickerOpen,
+  onGlobalSearchOpen,
 }: GlobalShortcutsProviderProps) {
   const {
     selectedId,
@@ -53,6 +59,7 @@ export function GlobalShortcutsProvider({
     copyToClipboard,
     pasteFromClipboard,
     cutToClipboard,
+    inverseSelection,
   } = useCanvas();
 
   const handleShortcut = useCallback(
@@ -62,18 +69,32 @@ export function GlobalShortcutsProvider({
       switch (shortcut.action) {
         // Essential
         case "toggle-ui":
-          // TODO: Implement UI toggle functionality
-          console.log("Toggle UI - not implemented yet");
+          // Toggle UI visibility for distraction-free mode
+          if (onUIToggle) {
+            onUIToggle();
+          } else {
+            console.log("Toggle UI - UI toggle callback not provided");
+          }
           break;
 
         case "pick-color":
-          // TODO: Implement color picker tool
-          console.log("Pick Color - not implemented yet");
+          // Open color picker tool
+          if (onColorPickerOpen) {
+            onColorPickerOpen();
+          } else {
+            console.log("Pick Color - color picker callback not provided");
+          }
           break;
 
         case "search-menu":
-          // TODO: Implement global search menu
-          console.log("Search Menu - not implemented yet");
+          // Open global search/command palette
+          // This would typically open a modal with searchable actions, components, etc.
+          // For now, we'll log the action - full implementation requires search modal component
+          if (onGlobalSearchOpen) {
+            onGlobalSearchOpen();
+          } else {
+            console.log("Search Menu - global search callback not provided");
+          }
           break;
 
         // Tools
@@ -283,8 +304,7 @@ export function GlobalShortcutsProvider({
           break;
 
         case "select-inverse":
-          // TODO: Implement inverse selection functionality
-          console.log("Select Inverse - not implemented yet");
+          inverseSelection();
           break;
 
         case "select-none":
@@ -369,8 +389,40 @@ export function GlobalShortcutsProvider({
           break;
 
         case "paste-over-selection":
-          // TODO: Implement paste over selection functionality
-          console.log("Paste Over Selection - not implemented yet");
+          if (clipboard.length > 0 && selectedIds.size > 0) {
+            // Get the position of the first selected object
+            const firstSelectedObject = objects.find(
+              (obj) => obj.id === Array.from(selectedIds)[0]
+            );
+            if (firstSelectedObject) {
+              // Calculate offset to paste at the same position
+              const baseX = firstSelectedObject.x;
+              const baseY = firstSelectedObject.y;
+
+              // Create new objects from clipboard with position offset
+              const pastedObjects = clipboard.map((obj, index) => ({
+                ...obj,
+                id: `${obj.id}-paste-${Date.now()}-${index}`,
+                x: baseX + (obj.x - clipboard[0].x), // Relative to first clipboard item
+                y: baseY + (obj.y - clipboard[0].y),
+              }));
+
+              // Remove currently selected objects
+              selectedIds.forEach((id) => deleteObject(id));
+
+              // Add new objects
+              setObjects((prev) => [...prev, ...pastedObjects]);
+
+              // Select the new objects
+              const newSelectedIds = new Set(
+                pastedObjects.map((obj) => obj.id)
+              );
+              setSelectedIds(newSelectedIds);
+              if (pastedObjects.length > 0) {
+                setSelectedId(pastedObjects[0].id);
+              }
+            }
+          }
           break;
 
         case "duplicate":
@@ -647,7 +699,14 @@ export function GlobalShortcutsProvider({
       window.removeEventListener("gesturechange", preventGesture as any);
       window.removeEventListener("gestureend", preventGesture as any);
     };
-  }, [handleShortcut, zoom, setZoom]);
+  }, [
+    handleShortcut,
+    zoom,
+    setZoom,
+    onUIToggle,
+    onColorPickerOpen,
+    onGlobalSearchOpen,
+  ]);
 
   const contextValue: GlobalShortcutsContextType = {
     handleShortcut,

@@ -21,6 +21,8 @@ import {
 } from "@/ui/primitives/Select";
 import { Slider } from "@/ui/primitives/Slider";
 import { Switch } from "@/ui/primitives/Switch";
+import { SimpleColorPicker } from "@/ui/assemblies/ColorPicker";
+import { SliderWithInput } from "@/ui/assemblies/SliderWithInput";
 
 interface ComponentPropsPanelProps {
   object: CanvasObject;
@@ -75,27 +77,13 @@ export function ComponentPropsPanel({
         const step = getNumberRange(propName).step;
 
         return (
-          <div className="space-y-2">
-            <Slider
-              value={[currentValue || 0]}
-              onValueChange={([value]) => onUpdateProps({ [propName]: value })}
-              min={min}
-              max={max}
-              step={step}
-              className="w-full"
-            />
-            <Input
-              type="number"
-              value={currentValue || 0}
-              onChange={(e) =>
-                onUpdateProps({ [propName]: Number(e.target.value) || 0 })
-              }
-              min={min}
-              max={max}
-              step={step}
-              className="w-full text-sm"
-            />
-          </div>
+          <SliderWithInput
+            value={currentValue || 0}
+            onChange={(value) => onUpdateProps({ [propName]: value })}
+            min={min}
+            max={max}
+            step={step}
+          />
         );
 
       case "boolean":
@@ -137,20 +125,12 @@ export function ComponentPropsPanel({
 
       case "color":
         return (
-          <div className="flex items-center gap-2">
-            <input
-              type="color"
-              value={currentValue || "#000000"}
-              onChange={(e) => onUpdateProps({ [propName]: e.target.value })}
-              className="w-8 h-8 rounded border border-border cursor-pointer"
-            />
-            <Input
-              value={currentValue || "#000000"}
-              onChange={(e) => onUpdateProps({ [propName]: e.target.value })}
-              className="flex-1 text-sm font-mono"
-              placeholder="#000000"
-            />
-          </div>
+          <SimpleColorPicker
+            color={currentValue || "#000000"}
+            onChange={(color) => onUpdateProps({ [propName]: color })}
+            showOpacity={false}
+            showDocumentColors={false}
+          />
         );
 
       default:

@@ -27,11 +27,18 @@ export function LayoutSection({
   onAspectLockToggle,
   className,
 }: LayoutSectionProps) {
-  const aspectRatio = width / height;
+  // Provide safe defaults for NaN values
+  const safeWidth =
+    isNaN(width) || width === null || width === undefined ? 0 : Number(width);
+  const safeHeight =
+    isNaN(height) || height === null || height === undefined
+      ? 0
+      : Number(height);
+  const aspectRatio = safeHeight > 0 ? safeWidth / safeHeight : 0;
 
   const handleWidthChange = (newWidth: number) => {
     onWidthChange(newWidth);
-    if (aspectLocked) {
+    if (aspectLocked && aspectRatio > 0) {
       const newHeight = newWidth / aspectRatio;
       onHeightChange(newHeight);
     }
@@ -39,7 +46,7 @@ export function LayoutSection({
 
   const handleHeightChange = (newHeight: number) => {
     onHeightChange(newHeight);
-    if (aspectLocked) {
+    if (aspectLocked && aspectRatio > 0) {
       const newWidth = newHeight * aspectRatio;
       onWidthChange(newWidth);
     }
@@ -52,7 +59,7 @@ export function LayoutSection({
           <Label className="text-xs text-muted-foreground">Width</Label>
           <Input
             type="number"
-            value={Math.round(width)}
+            value={isNaN(safeWidth) ? 0 : Math.round(safeWidth)}
             onChange={(e) => handleWidthChange(Number(e.target.value))}
             className="h-8 text-sm"
           />
@@ -61,7 +68,7 @@ export function LayoutSection({
           <Label className="text-xs text-muted-foreground">Height</Label>
           <Input
             type="number"
-            value={Math.round(height)}
+            value={isNaN(safeHeight) ? 0 : Math.round(safeHeight)}
             onChange={(e) => handleHeightChange(Number(e.target.value))}
             className="h-8 text-sm"
           />
@@ -71,7 +78,9 @@ export function LayoutSection({
       <div className="space-y-2">
         <Label className="text-xs text-muted-foreground">Aspect Ratio</Label>
         <div className="flex items-center justify-between">
-          <span className="text-sm font-mono">{aspectRatio.toFixed(2)}:1</span>
+          <span className="text-sm font-mono">
+            {isNaN(aspectRatio) ? "0.00" : aspectRatio.toFixed(2)}:1
+          </span>
           <Button
             variant="ghost"
             size="sm"

@@ -1,5 +1,6 @@
 "use client";
 
+import { Search, Package } from "lucide-react";
 import React, { useState } from "react";
 import {
   getComponentMetadata,
@@ -14,9 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/ui/primitives/Dialog";
-import { ScrollArea } from "@/ui/primitives/ScrollArea";
 import { Input } from "@/ui/primitives/Input";
-import { Search, Package } from "lucide-react";
+import { ScrollArea } from "@/ui/primitives/ScrollArea";
 
 interface ComponentSlotProps {
   parentId: string;

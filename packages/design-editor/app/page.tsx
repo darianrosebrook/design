@@ -4,14 +4,15 @@ import { useState } from "react";
 import { CanvasProvider, useCanvas } from "@/lib/canvas-context";
 import { DevTools } from "@/lib/dev-tools";
 import { GlobalShortcutsProvider } from "@/lib/global-shortcuts-provider";
+import type { DesignSystemItem } from "@/lib/data/design-system-items";
+import type { CanvasObject } from "@/lib/types";
 import { ActionBar } from "@/ui/assemblies/ActionBar";
 import { CanvasArea } from "@/ui/assemblies/CanvasArea";
 import { ContextMenu } from "@/ui/assemblies/ContextMenu";
 import { DesignSystemOverlay } from "@/ui/assemblies/DesignSystemOverlay";
 import { PanelContainer } from "@/ui/assemblies/PanelContainer";
 import { TopNavigation } from "@/ui/assemblies/TopNavigation";
-import type { DesignSystemItem } from "@/lib/data/design-system-items";
-import type { CanvasObject } from "@/lib/types";
+// import { ColorPicker } from "@/ui/assemblies/ColorPicker"; // TODO: Fix import paths
 
 /**
  * Converts a design system item to a canvas object for insertion
@@ -121,9 +122,34 @@ function convertDesignSystemItemToCanvasObject(
   }
 }
 
-function DesignEditorContent() {
+interface DesignEditorContentProps {
+  isUIToggled: boolean;
+  onUIToggle: () => void;
+  isColorPickerOpen: boolean;
+  currentColor: string;
+  onColorChange: (color: string) => void;
+  onColorPickerClose: () => void;
+  isGlobalSearchOpen: boolean;
+  onGlobalSearchClose: () => void;
+}
+
+function DesignEditorContent({
+  isUIToggled,
+  onUIToggle: _onUIToggle,
+  isColorPickerOpen: _isColorPickerOpen,
+  currentColor: _currentColor,
+  onColorChange: _onColorChange,
+  onColorPickerClose: _onColorPickerClose,
+  isGlobalSearchOpen,
+  onGlobalSearchClose: _onGlobalSearchClose,
+}: DesignEditorContentProps) {
   const [isDesignSystemOpen, setIsDesignSystemOpen] = useState(false);
-  const { addObject } = useCanvas();
+  const {
+    addObject,
+    updateObject: _updateObject,
+    selectedId: _selectedId,
+    objects: _objects,
+  } = useCanvas();
 
   const handleInsertItem = (item: DesignSystemItem) => {
     console.info("Inserting item:", item);
@@ -140,17 +166,23 @@ function DesignEditorContent() {
   return (
     <div className="h-screen flex flex-col bg-background">
       {/* Top Navigation */}
-      <TopNavigation />
+      {isUIToggled && <TopNavigation />}
 
       {/* Main Content Area - Edge to Edge Canvas */}
-      <div className="flex-1 relative overflow-hidden">
+      <div
+        className={`flex-1 relative overflow-hidden ${
+          !isUIToggled ? "pt-0" : ""
+        }`}
+      >
         {/* Canvas Area - Full Screen */}
         <CanvasArea />
 
         {/* Floating Panels */}
-        <PanelContainer
-          onOpenDesignSystem={() => setIsDesignSystemOpen(true)}
-        />
+        {isUIToggled && (
+          <PanelContainer
+            onOpenDesignSystem={() => setIsDesignSystemOpen(true)}
+          />
+        )}
 
         {/* Context Menu */}
         <ContextMenu />
@@ -161,11 +193,96 @@ function DesignEditorContent() {
           onClose={() => setIsDesignSystemOpen(false)}
           onInsert={handleInsertItem}
         />
+
+        {/* Global Search Modal */}
+        {isGlobalSearchOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start justify-center pt-20 z-50">
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+              <div className="p-4">
+                <input
+                  type="text"
+                  placeholder="Search components, actions, settings..."
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      handleGlobalSearchClose();
+                    }
+                  }}
+                />
+                <div className="mt-4 text-sm text-gray-500">
+                  Press ESC to close
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Color Picker */}
+        {/* <ColorPicker
+          color={currentColor}
+          onChange={handleColorChangeWithUpdate}
+          selectedObject={
+            selectedId
+              ? objects.find((obj) => obj.id === selectedId) || null
+              : null
+          }
+        /> */}
       </div>
 
       {/* Floating Action Bar - Outside main content */}
-      <ActionBar />
+      {isUIToggled && <ActionBar />}
     </div>
+  );
+}
+
+function DesignEditorWithShortcuts() {
+  const [isUIToggled, setIsUIToggled] = useState(true);
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+  const [currentColor, setCurrentColor] = useState("#000000");
+  const [isGlobalSearchOpen, setIsGlobalSearchOpen] = useState(false);
+
+  const handleUIToggle = useCallback(() => {
+    setIsUIToggled((prev) => !prev);
+  }, []);
+
+  const handleColorPickerOpen = useCallback(() => {
+    setIsColorPickerOpen(true);
+  }, []);
+
+  const handleColorChange = useCallback((color: string) => {
+    setCurrentColor(color);
+  }, []);
+
+  const handleColorPickerClose = useCallback(() => {
+    setIsColorPickerOpen(false);
+  }, []);
+
+  const handleGlobalSearchOpen = useCallback(() => {
+    setIsGlobalSearchOpen(true);
+  }, []);
+
+  const handleGlobalSearchClose = useCallback(() => {
+    setIsGlobalSearchOpen(false);
+  }, []);
+
+  return (
+    <GlobalShortcutsProvider
+      onUIToggle={handleUIToggle}
+      onColorPickerOpen={handleColorPickerOpen}
+      onGlobalSearchOpen={handleGlobalSearchOpen}
+    >
+      <DesignEditorContent
+        isUIToggled={isUIToggled}
+        onUIToggle={handleUIToggle}
+        isColorPickerOpen={isColorPickerOpen}
+        currentColor={currentColor}
+        onColorChange={handleColorChange}
+        onColorPickerClose={handleColorPickerClose}
+        isGlobalSearchOpen={isGlobalSearchOpen}
+        onGlobalSearchClose={handleGlobalSearchClose}
+      />
+    </GlobalShortcutsProvider>
   );
 }
 
@@ -173,9 +290,7 @@ export default function DesignEditor() {
   return (
     <CanvasProvider>
       <DevTools />
-      <GlobalShortcutsProvider>
-        <DesignEditorContent />
-      </GlobalShortcutsProvider>
+      <DesignEditorWithShortcuts />
     </CanvasProvider>
   );
 }

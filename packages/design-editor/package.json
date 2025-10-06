@@ -13,7 +13,12 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@paths-design/canvas-engine": "workspace:*",
+    "@paths-design/canvas-renderer-dom": "workspace:*",
+    "@paths-design/canvas-schema": "workspace:*",
     "@paths-design/design-system": "workspace:*",
+    "@paths-design/design-tokens": "workspace:*",
+    "@paths-design/properties-panel": "workspace:*",
     "@radix-ui/react-accordion": "1.2.2",
     "@radix-ui/react-alert-dialog": "1.1.4",
     "@radix-ui/react-aspect-ratio": "1.1.1",

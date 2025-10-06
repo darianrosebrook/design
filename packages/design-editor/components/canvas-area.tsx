@@ -1,7 +1,9 @@
 "use client";
 
+import { createCanvasRenderer } from "@paths-design/canvas-renderer-dom";
+import type { CanvasDocumentType } from "@paths-design/canvas-schema";
+import { loadIndex } from "@paths-design/component-indexer";
 import React, { useState, useRef, useEffect } from "react";
-import { ComponentRenderer } from "./component-renderer";
 import { ZoomControls } from "./zoom-controls";
 import { useCanvas } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
@@ -21,6 +23,9 @@ export function CanvasArea() {
     activeTool,
     canvasBackground,
     canvasBackgroundColor,
+    designTokens,
+    flattenedTokens,
+    getTokenValue,
     _duplicateObject,
     _deleteObject,
     _bringForward,
@@ -50,7 +55,117 @@ export function CanvasArea() {
   const [isSpacePressed, setIsSpacePressed] = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  const handleContextMenu = (e: React.MouseEvent, objectId?: string) => {
+  // Component index for component resolution
+  const [componentIndex, setComponentIndex] = useState<any>(null);
+
+  // Load component index on mount
+  useEffect(() => {
+    const loadComponentIndex = async () => {
+      try {
+        // Try to load from design system package first
+        const index = await loadIndex(
+          "../design-system/dist/component-index.json"
+        );
+        console.info(
+          "✅ Loaded component index:",
+          index.components.length,
+          "components"
+        );
+        setComponentIndex(index);
+      } catch (error) {
+        console.warn("Failed to load component index:", error);
+        // Fallback to empty index
+        setComponentIndex({ components: [] });
+      }
+    };
+
+    loadComponentIndex();
+  }, []);
+
+  // Canvas renderer
+  const rendererRef = useRef<any>(null);
+
+  // Create renderer when component index is loaded
+  useEffect(() => {
+    if (componentIndex && !rendererRef.current) {
+      console.info(
+        "🔧 Creating CanvasDOMRenderer with component index:",
+        componentIndex.components?.length || 0,
+        "components"
+      );
+      rendererRef.current = createCanvasRenderer({
+        interactive: true,
+        componentIndex,
+        onSelectionChange: (nodeIds: string[]) => {
+          console.info("🎯 Selection changed:", nodeIds);
+          setSelectedId(nodeIds[0] || null);
+        },
+        onNodeUpdate: (nodeId: string, updates: Partial<CanvasObject>) => {
+          console.info("📝 Node updated:", nodeId, updates);
+          updateObject(nodeId, updates);
+        },
+      });
+    }
+  }, [componentIndex]);
+
+  // Convert objects to document format for renderer
+  const convertObjectsToDocument = (
+    objs: CanvasObject[]
+  ): CanvasDocumentType => {
+    return {
+      schemaVersion: "0.1.0",
+      id: "webview-document",
+      name: "Webview Document",
+      artboards: [
+        {
+          id: "main-artboard",
+          name: "Main Artboard",
+          frame: { x: 0, y: 0, width: 1200, height: 800 },
+          children: objs.map((obj) => ({
+            id: obj.id,
+            type: obj.type as any,
+            name: obj.name,
+            frame: {
+              x: obj.x,
+              y: obj.y,
+              width: obj.width,
+              height: obj.height,
+            },
+            visible: obj.visible,
+            style: {
+              fills: obj.fill
+                ? [{ type: "solid", color: obj.fill }]
+                : undefined,
+              strokes: obj.stroke
+                ? [
+                    {
+                      type: "solid",
+                      color: obj.stroke,
+                      width: obj.strokeWidth,
+                    },
+                  ]
+                : undefined,
+              radius: obj.cornerRadius,
+              opacity: obj.opacity / 100,
+            },
+            text: obj.text,
+            textStyle: obj.fontSize
+              ? {
+                  size: obj.fontSize,
+                  family: obj.fontFamily,
+                  weight: obj.fontWeight,
+                  letterSpacing: obj.letterSpacing,
+                  lineHeight: obj.lineHeight,
+                }
+              : undefined,
+            src: obj.src,
+          })),
+        },
+      ],
+    };
+  };
+
+  const _handleContextMenu = (e: React.MouseEvent, objectId?: string) => {
     e.preventDefault();
     setContextMenu({
       type: "canvas",
@@ -154,7 +269,7 @@ export function CanvasArea() {
     }
   };
 
-  const handleObjectMouseDown = (e: React.MouseEvent, obj: CanvasObject) => {
+  const _handleObjectMouseDown = (e: React.MouseEvent, obj: CanvasObject) => {
     if (activeTool !== "select" || obj.locked || obj.name === "Background") {
       return;
     }
@@ -203,7 +318,7 @@ export function CanvasArea() {
     });
   };
 
-  const getResizeCursor = (handle: ResizeHandle): string => {
+  const _getResizeCursor = (handle: ResizeHandle): string => {
     switch (handle) {
       case "nw":
       case "se":
@@ -222,7 +337,7 @@ export function CanvasArea() {
     }
   };
 
-  const handleResizeMouseDown = (
+  const _handleResizeMouseDown = (
     e: React.MouseEvent,
     handle: ResizeHandle,
     obj: CanvasObject
@@ -364,316 +479,58 @@ export function CanvasArea() {
     }
   }, [selectedId, _deleteObject]);
 
-  const renderObject = (obj: CanvasObject) => {
-    // Don't render if object is not visible
-    if (!obj.visible) {
-      return null;
-    }
-
-    const commonStyles = {
-      position: "absolute" as const,
-      left: obj.x,
-      top: obj.y,
-      width: obj.width,
-      height: obj.height,
-      transform: `rotate(${obj.rotation}deg)`,
-      opacity: obj.opacity / 100,
-      cursor:
-        activeTool === "select" && !obj.locked && obj.name !== "Background"
-          ? "move"
-          : "default",
-      border: "none",
-      outline: "none",
-      pointerEvents: (obj.locked || obj.name === "Background"
-        ? "none"
-        : "auto") as React.CSSProperties["pointerEvents"],
-    };
-
-    const handleClick = (e: React.MouseEvent) => {
-      e.stopPropagation();
-      if (activeTool === "select") {
-        setSelectedId(obj.id);
+  // Render document when objects change and renderer is ready
+  useEffect(() => {
+    if (canvasRef.current && objects.length > 0 && rendererRef.current) {
+      try {
+        const document = convertObjectsToDocument(objects);
+        rendererRef.current.render(document, canvasRef.current);
+      } catch (error) {
+        console.error("Failed to render document:", error);
+        // TODO: Show error state to user
       }
-    };
-
-    switch (obj.type) {
-      case "rectangle":
-        return (
-          <div
-            key={obj.id}
-            style={{
-              ...commonStyles,
-              backgroundColor: obj.fill,
-              border: obj.stroke
-                ? `${obj.strokeWidth}px solid ${obj.stroke}`
-                : "none",
-              borderRadius: obj.cornerRadius,
-            }}
-            onClick={handleClick}
-            onMouseDown={(e) => handleObjectMouseDown(e, obj)}
-            onContextMenu={(e) =>
-              obj.name !== "Background"
-                ? handleContextMenu(e, obj.id)
-                : undefined
-            }
-          />
-        );
-
-      case "circle":
-        return (
-          <div
-            key={obj.id}
-            style={{
-              ...commonStyles,
-              backgroundColor: obj.fill,
-              border: obj.stroke
-                ? `${obj.strokeWidth}px solid ${obj.stroke}`
-                : "none",
-              borderRadius: "50%",
-            }}
-            onClick={handleClick}
-            onMouseDown={(e) => handleObjectMouseDown(e, obj)}
-            onContextMenu={(e) =>
-              obj.name !== "Background"
-                ? handleContextMenu(e, obj.id)
-                : undefined
-            }
-          />
-        );
-
-      case "text":
-        return (
-          <div
-            key={obj.id}
-            style={{
-              ...commonStyles,
-              color: obj.fill,
-              fontSize: obj.fontSize,
-              fontFamily: obj.fontFamily,
-              fontWeight: obj.fontWeight,
-              textAlign: obj.textAlign,
-              lineHeight: obj.lineHeight,
-              letterSpacing: `${obj.letterSpacing}em`,
-              display: "flex",
-              alignItems: "center",
-            }}
-            onClick={handleClick}
-            onMouseDown={(e) => handleObjectMouseDown(e, obj)}
-            onContextMenu={(e) =>
-              obj.name !== "Background"
-                ? handleContextMenu(e, obj.id)
-                : undefined
-            }
-          >
-            {obj.text}
-          </div>
-        );
-
-      case "image":
-        return (
-          <div
-            key={obj.id}
-            style={{
-              ...commonStyles,
-              borderRadius: obj.cornerRadius,
-              overflow: "hidden",
-            }}
-            onClick={handleClick}
-            onMouseDown={(e) => handleObjectMouseDown(e, obj)}
-            onContextMenu={(e) =>
-              obj.name !== "Background"
-                ? handleContextMenu(e, obj.id)
-                : undefined
-            }
-          >
-            <img
-              src={obj.src || "/placeholder.svg"}
-              alt={obj.name}
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                pointerEvents: "none" as React.CSSProperties["pointerEvents"],
-              }}
-            />
-          </div>
-        );
-
-      case "frame":
-        return (
-          <div
-            key={obj.id}
-            style={{
-              ...commonStyles,
-              backgroundColor: obj.fill,
-              borderRadius: obj.cornerRadius,
-              border: "1px solid rgba(255,255,255,0.1)",
-            }}
-            onClick={handleClick}
-            onMouseDown={(e) => handleObjectMouseDown(e, obj)}
-            onContextMenu={(e) =>
-              obj.name !== "Background"
-                ? handleContextMenu(e, obj.id)
-                : undefined
-            }
-          >
-            {obj.children?.map((child) => renderObject(child))}
-          </div>
-        );
-
-      case "component":
-        return <ComponentRenderer key={obj.id} object={obj} />;
-
-      default:
-        return null;
     }
-  };
+  }, [objects, componentIndex]);
+
+  // Functions removed as CanvasDOMRenderer now handles rendering
 
   const getBackgroundStyle = () => {
+    const baseGridSize = 20;
+    const scaledGridSize = baseGridSize * (zoom / 100);
+
+    // Use design tokens if available, otherwise fall back to canvasBackgroundColor
+    const backgroundColor =
+      designTokens && flattenedTokens
+        ? getTokenValue("semantic.color.background.primary") ||
+          canvasBackgroundColor
+        : canvasBackgroundColor;
+
     switch (canvasBackground) {
       case "dot-grid":
         return {
-          backgroundColor: canvasBackgroundColor,
+          backgroundColor,
           backgroundImage:
             "radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 1px, transparent 0)",
-          backgroundSize: "20px 20px",
+          backgroundSize: `${scaledGridSize}px ${scaledGridSize}px`,
         };
       case "square-grid":
         return {
-          backgroundColor: canvasBackgroundColor,
+          backgroundColor,
           backgroundImage: `
             linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px)
           `,
-          backgroundSize: "20px 20px",
+          backgroundSize: `${scaledGridSize}px ${scaledGridSize}px`,
         };
       case "solid":
         return {
-          backgroundColor: canvasBackgroundColor,
+          backgroundColor,
         };
       default:
         return {
-          backgroundColor: canvasBackgroundColor,
+          backgroundColor,
         };
     }
-  };
-
-  // Render bounding box overlay for selected elements
-  const renderBoundingBoxOverlay = () => {
-    if (selectedIds.size === 0 || activeTool !== "select") {
-      return null;
-    }
-
-    const handles: ResizeHandle[] = [
-      "nw",
-      "ne",
-      "sw",
-      "se",
-      "n",
-      "e",
-      "s",
-      "w",
-    ];
-
-    return (
-      <>
-        {Array.from(selectedIds).map((id) => {
-          const selectedObj = objects.find((obj) => obj.id === id);
-          if (!selectedObj) {
-            return null;
-          }
-
-          const isPrimary = id === selectedId;
-
-          return (
-            <div
-              key={id}
-              className="absolute pointer-events-none"
-              style={{
-                left: selectedObj.x - 2, // Account for border width
-                top: selectedObj.y - 2,
-                width: selectedObj.width + 4,
-                height: selectedObj.height + 4,
-                border: isPrimary ? "2px solid #4a9eff" : "2px solid #4a9eff",
-                borderRadius:
-                  selectedObj.type === "circle"
-                    ? "50%"
-                    : selectedObj.cornerRadius || 0,
-                transform: `rotate(${selectedObj.rotation}deg)`,
-                zIndex: 10, // Lower z-index to not interfere with panels
-                boxShadow: "0 0 0 1px rgba(255, 255, 255, 0.3)", // Subtle white outline for better visibility
-                opacity: isPrimary ? 1 : 0.7, // Dim non-primary selections
-              }}
-            >
-              {/* Render resize handles only for primary selection */}
-              {isPrimary &&
-                handles.map((handle) => {
-                  const handleStyle: React.CSSProperties = {
-                    position: "absolute",
-                    width: "8px",
-                    height: "8px",
-                    maxWidth: "8px",
-                    maxHeight: "8px",
-                    aspectRatio: "1/1",
-                    backgroundColor: "#4a9eff",
-                    border: "1px solid white",
-                    borderRadius: "1920px",
-                    cursor: getResizeCursor(handle),
-                    zIndex: 11, // Above the bounding box
-                  };
-
-                  // Position handles relative to the bounding box
-                  if (handle.includes("n")) {
-                    handleStyle.top = "-6px"; // -4px for handle center + -2px for border
-                  }
-                  if (handle.includes("s")) {
-                    handleStyle.bottom = "-6px";
-                  }
-                  if (handle.includes("w")) {
-                    handleStyle.left = "-6px";
-                  }
-                  if (handle.includes("e")) {
-                    handleStyle.right = "-6px";
-                  }
-                  if (handle === "n" || handle === "s") {
-                    handleStyle.left = "50%";
-                    handleStyle.transform = "translateX(-50%)";
-                    // Force square dimensions for edge handles
-                    handleStyle.width = "8px";
-                    handleStyle.height = "8px";
-                    handleStyle.minWidth = "8px";
-                    handleStyle.minHeight = "8px";
-                    handleStyle.maxWidth = "8px";
-                    handleStyle.maxHeight = "8px";
-                  }
-                  if (handle === "e" || handle === "w") {
-                    handleStyle.top = "50%";
-                    handleStyle.transform = "translateY(-50%)";
-                    // Force square dimensions for edge handles
-                    handleStyle.width = "8px";
-                    handleStyle.height = "8px";
-                    handleStyle.minWidth = "8px";
-                    handleStyle.minHeight = "8px";
-                    handleStyle.maxWidth = "8px";
-                    handleStyle.maxHeight = "8px";
-                  }
-
-                  return (
-                    <div
-                      key={handle}
-                      className="resize-handle pointer-events-auto"
-                      style={handleStyle}
-                      onMouseDown={(e) =>
-                        handleResizeMouseDown(e, handle, selectedObj)
-                      }
-                    />
-                  );
-                })}
-            </div>
-          );
-        })}
-      </>
-    );
   };
 
   return (
@@ -693,23 +550,17 @@ export function CanvasArea() {
       tabIndex={0}
       style={getBackgroundStyle()}
     >
-      {/* Canvas content */}
+      {/* CanvasDOMRenderer handles all object rendering with zoom and pan */}
       <div
-        className="relative w-full h-full p-8"
+        ref={canvasRef}
+        className="relative w-full h-full"
         style={{
           transform: `scale(${
             zoom / 100
           }) translate(${viewportX}px, ${viewportY}px)`,
-          transformOrigin: "top left",
+          transformOrigin: "0 0",
         }}
-      >
-        {objects.map((obj) => renderObject(obj))}
-
-        {/* Bounding box overlay - inside transformed container */}
-        <div className="absolute inset-0 pointer-events-none p-8">
-          {renderBoundingBoxOverlay()}
-        </div>
-      </div>
+      />
 
       {/* Map-like UI controls */}
       <div className="absolute bottom-4 left-4 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-medium z-[100]">

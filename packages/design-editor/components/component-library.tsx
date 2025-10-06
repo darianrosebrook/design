@@ -5,6 +5,7 @@ import {
   ComponentRenderer,
   getAvailableComponents,
   getComponentMetadata,
+  type COMPONENT_REGISTRY,
 } from "./component-renderer";
 import { useCanvas } from "@/lib/canvas-context";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
@@ -18,28 +19,28 @@ interface ComponentLibraryProps {
  * @author @darianrosebrook
  */
 export function ComponentLibrary({ className }: ComponentLibraryProps) {
-  const { objects, setObjects } = useCanvas();
+  const { document: _canvasDocument, createNode } = useCanvas();
   const availableComponents = getAvailableComponents();
 
-  const addComponentToCanvas = (componentType: string) => {
-    const metadata = getComponentMetadata(componentType as any);
-    const newComponent = {
-      id: `component-${Date.now()}`,
-      type: "component" as const,
+  const addComponentToCanvas = async (componentType: string) => {
+    const metadata = getComponentMetadata(componentType as keyof typeof COMPONENT_REGISTRY);
+    const nodeData = {
+      type: "component",
       name: `${componentType} Component`,
-      x: 100 + Math.random() * 200, // Random position for demo
-      y: 100 + Math.random() * 200,
-      width: componentType === "Button" ? 120 : 200,
-      height: componentType === "Button" ? 40 : 60,
-      rotation: 0,
+      frame: {
+        x: 100 + Math.random() * 200, // Random position for demo
+        y: 100 + Math.random() * 200,
+        width: componentType === "Button" ? 120 : 200,
+        height: componentType === "Button" ? 40 : 60,
+      },
       visible: true,
       locked: false,
-      opacity: 100,
+      opacity: 1.0,
       componentType,
       componentProps: metadata.defaultProps,
     };
 
-    setObjects([...objects, newComponent]);
+    await createNode([0, "children"], nodeData);
   };
 
   const groupedComponents = availableComponents.reduce((acc, componentType) => {
@@ -127,7 +128,7 @@ export function ComponentPreview({
     locked: false,
     opacity: 100,
     componentType,
-    componentProps: getComponentMetadata(componentType as any).defaultProps,
+    componentProps: getComponentMetadata(componentType as keyof typeof COMPONENT_REGISTRY).defaultProps,
   };
 
   return (

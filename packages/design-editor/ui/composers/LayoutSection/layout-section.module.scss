@@ -42,6 +42,36 @@
   gap: var(--layoutSection-spacing-controls);
 }
 
+.layoutModeControls {
+  // Layout mode controls container
+  display: flex;
+  flex-direction: column;
+  gap: var(--layoutSection-spacing-controls);
+}
+
+.layoutGapControl {
+  // Gap control container
+  display: flex;
+  align-items: center;
+  gap: var(--layoutSection-layout-toggle-gap);
+}
+
+.layoutGapLabel {
+  // Gap label styles
+  font-size: var(--layoutSection-typography-label-fontSize);
+  font-weight: var(--layoutSection-typography-label-fontWeight);
+  color: var(--layoutSection-typography-label-color);
+  min-width: 24px;
+}
+
+.layoutGapInput {
+  // Gap input styles
+  width: 60px;
+  height: 24px;
+  font-size: var(--layoutSection-typography-input-fontSize);
+  text-align: center;
+}
+
 // Dimensions Section
 .dimensionsSection {
   // Dimensions container styles

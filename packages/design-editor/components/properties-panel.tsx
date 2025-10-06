@@ -1,12 +1,14 @@
 "use client";
 
+import { Label } from "@paths-design/design-system";
+
 import React, { useState } from "react";
 import { useCanvas, findObject } from "@/lib/canvas-context";
 import { ChevronRight } from "@/lib/components/icons";
 import { CanvasBackgroundControls } from "@/ui/composers/CanvasBackgroundControls";
+import { AlignmentGrid } from "@/ui/composers/AlignmentGrid";
 import { Button } from "@/ui/primitives/Button";
 import { Input } from "@/ui/primitives/Input";
-import { Label } from "@paths-design/design-system";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
 import {
   Select,
@@ -25,9 +27,11 @@ interface PropertySection {
 }
 
 export function PropertiesPanel() {
-  const { objects, selectedId, updateObject } = useCanvas();
+  const { objects, selectedId, selectedIds, updateObject, alignObjects } =
+    useCanvas();
   const [sections, setSections] = useState<PropertySection[]>([
     { id: "layout", title: "Layout", expanded: true },
+    { id: "alignment", title: "Alignment", expanded: false },
     { id: "position", title: "Position", expanded: true },
     { id: "appearance", title: "Appearance", expanded: true },
     { id: "typography", title: "Typography", expanded: false },
@@ -214,14 +218,78 @@ export function PropertiesPanel() {
                   size="sm"
                   className="w-full h-8 text-xs"
                   onClick={() => {
-                    // TODO: Implement auto layout toggle
-                    console.info("Auto layout toggle not implemented");
+                    if (selectedObject) {
+                      const currentAutoLayout =
+                        selectedObject.autoLayout || false;
+                      updateObject(selectedObject.id, {
+                        autoLayout: !currentAutoLayout,
+                        // Set default layout direction if enabling auto layout
+                        ...(currentAutoLayout
+                          ? {}
+                          : { layoutDirection: "vertical" as const, gap: 8 }),
+                      });
+                    }
                   }}
                 >
-                  Enable Auto Layout
+                  {selectedObject?.autoLayout
+                    ? "Disable Auto Layout"
+                    : "Enable Auto Layout"}
                 </Button>
               </div>
+
+              {selectedObject?.autoLayout && (
+                <div className="space-y-2">
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">
+                      Direction
+                    </Label>
+                    <Select
+                      value={selectedObject.layoutDirection || "vertical"}
+                      onValueChange={(value) =>
+                        updateObject(selectedObject.id, {
+                          layoutDirection: value as "horizontal" | "vertical",
+                        })
+                      }
+                    >
+                      <SelectTrigger className="h-8 text-xs">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="vertical">Vertical</SelectItem>
+                        <SelectItem value="horizontal">Horizontal</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-1">
+                    <Label className="text-xs text-muted-foreground">Gap</Label>
+                    <Input
+                      type="number"
+                      value={selectedObject.gap || 8}
+                      onChange={(e) =>
+                        updateObject(selectedObject.id, {
+                          gap: Number(e.target.value),
+                        })
+                      }
+                      className="h-8 text-xs"
+                      min="0"
+                      max="100"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
+          )}
+
+          {/* Alignment Section */}
+          {renderSection(
+            sections.find((s) => s.id === "alignment") || sections[2],
+            2,
+            <AlignmentGrid
+              onAlign={(alignment) => {
+                alignObjects(alignment);
+              }}
+            />
           )}
 
           {/* Appearance Section */}

@@ -1,8 +1,27 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import type { CanvasDocumentType } from "@paths-design/canvas-schema";
+import type { NodePath } from "@paths-design/canvas-engine";
+import { DesignTokensSchema } from "@paths-design/design-tokens/dist/tokens.js";
+
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 import type React from "react";
+import {
+  createNode,
+  updateNode,
+  findNodeById,
+} from "@paths-design/canvas-engine";
+// Import specific functions to avoid bundling Node.js dependencies
+import { flattenTokens } from "@paths-design/design-tokens/dist/utils.js";
+import { resolveTokenReferences } from "@paths-design/design-tokens/dist/resolver.js";
 import type { CanvasObject } from "./types";
+import type { DesignTokens } from "@paths-design/design-tokens/dist/tokens.js";
 
 export type CanvasTool =
   | "select"
@@ -28,8 +47,17 @@ export type ContextMenuTarget = {
 };
 
 interface CanvasContextType {
+  // Legacy compatibility - still used by existing components
   objects: CanvasObject[];
   setObjects: (objects: CanvasObject[]) => void;
+  updateObject: (id: string, updates: Partial<CanvasObject>) => void;
+  addObject: (object: CanvasObject) => void;
+
+  // New document-based state
+  document: CanvasDocumentType;
+  setDocument: (document: CanvasDocumentType) => void;
+
+  // Selection state
   selectedId: string | null;
   selectedIds: Set<string>;
   setSelectedId: (id: string | null) => void;
@@ -37,7 +65,17 @@ interface CanvasContextType {
   addToSelection: (id: string) => void;
   removeFromSelection: (id: string) => void;
   clearSelection: () => void;
-  updateObject: (id: string, updates: Partial<CanvasObject>) => void;
+
+  // Engine-based operations
+  createNode: (parentPath: NodePath, nodeData: any) => Promise<void>;
+  updateNode: (nodeId: string, updates: any) => Promise<void>;
+  deleteNode: (nodeId: string) => Promise<void>;
+  findNodeById: (nodeId: string) => any;
+
+  // Design tokens
+  designTokens: DesignTokens | null;
+  flattenedTokens: Record<string, string | number>;
+  getTokenValue: (tokenPath: string) => string | number | undefined;
   contextMenu: ContextMenuTarget | null;
   setContextMenu: (menu: ContextMenuTarget | null) => void;
   activeTool: CanvasTool;
@@ -64,27 +102,6 @@ interface CanvasContextType {
   setCursorPosition: (x: number, y: number) => void;
   // Clipboard functions
   clipboard: CanvasObject[];
-  copyToClipboard: (objectIds: string[]) => void;
-  pasteFromClipboard: (offsetX?: number, offsetY?: number) => void;
-  cutToClipboard: (objectIds: string[]) => void;
-  reorderLayers: (fromIndex: number, toIndex: number) => void;
-  duplicateObject: (id: string) => void;
-  deleteObject: (id: string) => void;
-  bringForward: (id: string) => void;
-  sendBackward: (id: string) => void;
-  selectAll: () => void;
-  addObject: (object: CanvasObject) => void;
-  addObjectToParent: (
-    parentId: string,
-    object: CanvasObject,
-    slotIndex?: number
-  ) => void;
-  // Aliases for linting purposes
-  _duplicateObject: (id: string) => void;
-  _deleteObject: (id: string) => void;
-  _bringForward: (id: string) => void;
-  _sendBackward: (id: string) => void;
-  _selectAll: () => void;
 }
 
 const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
@@ -111,7 +128,51 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   const [cursorY, setCursorY] = useState<number>(0);
 
   // Clipboard state
-  const [clipboard, setClipboard] = useState<CanvasObject[]>([]);
+  const [clipboard, _setClipboard] = useState<CanvasObject[]>([]);
+
+  // Design tokens state
+  const [designTokens, setDesignTokens] = useState<DesignTokens | null>(null);
+  const [flattenedTokens, setFlattenedTokens] = useState<
+    Record<string, string | number>
+  >({});
+
+  // Load design tokens on mount
+  useEffect(() => {
+    const loadDesignTokens = async () => {
+      try {
+        // Load the design tokens from the JSON file (client-side fetch)
+        const response = await fetch("/designTokens.json");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch tokens: ${response.status}`);
+        }
+        const tokens = await response.json();
+
+        // Validate and set tokens
+        const validatedTokens = DesignTokensSchema.parse(tokens);
+        setDesignTokens(validatedTokens);
+
+        // Flatten tokens for easy access and resolve references
+        const resolvedTokens = resolveTokenReferences(validatedTokens, {
+          strict: false,
+        });
+        const flattened = flattenTokens(resolvedTokens, "core");
+        setFlattenedTokens(flattened);
+
+        console.info(
+          "✅ Loaded design tokens:",
+          Object.keys(flattened).length,
+          "flattened tokens"
+        );
+      } catch (error) {
+        console.warn("Failed to load design tokens:", error);
+        // Fallback to empty tokens
+        setDesignTokens(null);
+        setFlattenedTokens({});
+      }
+    };
+
+    loadDesignTokens();
+  }, []);
 
   // Multi-selection helpers
   const addToSelection = (id: string) => {
@@ -139,340 +200,142 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
     setSelectedId(null);
   };
 
-  const [objects, setObjects] = useState<CanvasObject[]>([
-    {
-      id: "frame-1",
-      type: "frame",
-      name: "Design Frame",
-      x: 100,
-      y: 100,
-      width: 800,
-      height: 600,
-      rotation: 0,
-      visible: true,
-      locked: false,
-      opacity: 100,
-      fill: "#1a1a1a",
-      cornerRadius: 16,
-      expanded: true,
-      children: [
-        {
-          id: "text-1",
-          type: "text",
-          name: "Heading Text",
-          x: 150,
-          y: 150,
-          width: 300,
-          height: 60,
-          rotation: 0,
-          visible: true,
-          locked: false,
-          opacity: 100,
-          text: "Design Editor",
-          fontSize: 48,
-          fontFamily: "Inter",
-          fontWeight: "700",
-          textAlign: "left",
-          lineHeight: 1.2,
-          letterSpacing: -0.02,
-          fill: "#ffffff",
-        },
-        {
-          id: "rect-1",
-          type: "rectangle",
-          name: "Card Background",
-          x: 150,
-          y: 240,
-          width: 400,
-          height: 200,
-          rotation: 0,
-          visible: true,
-          locked: false,
-          opacity: 100,
-          fill: "#2a2a2a",
-          stroke: "#3a3a3a",
-          strokeWidth: 2,
-          cornerRadius: 16,
-        },
-        {
-          id: "circle-1",
-          type: "circle",
-          name: "Avatar",
-          x: 600,
-          y: 150,
-          width: 80,
-          height: 80,
-          rotation: 0,
-          visible: true,
-          locked: false,
-          opacity: 100,
-          fill: "#4a9eff",
-          stroke: "#ffffff",
-          strokeWidth: 3,
-        },
-        {
-          id: "image-1",
-          type: "image",
-          name: "Product Image",
-          x: 180,
-          y: 270,
-          width: 120,
-          height: 120,
-          rotation: 0,
-          visible: true,
-          locked: false,
-          opacity: 100,
-          src: "/diverse-products-still-life.png",
-          cornerRadius: 8,
-        },
-      ],
-    },
-  ]);
-
-  const updateObject = (id: string, updates: Partial<CanvasObject>) => {
-    const updateRecursive = (objs: CanvasObject[]): CanvasObject[] => {
-      return objs.map((obj) => {
-        if (obj.id === id) {
-          return { ...obj, ...updates };
-        }
-        if (obj.children) {
-          return { ...obj, children: updateRecursive(obj.children) };
-        }
-        return obj;
-      });
-    };
-    setObjects(updateRecursive(objects));
+  const inverseSelection = () => {
+    const allObjectIds = objects.map((obj) => obj.id);
+    const unselectedIds = allObjectIds.filter((id) => !selectedIds.has(id));
+    setSelectedIds(new Set(unselectedIds));
+    setSelectedId(unselectedIds.length > 0 ? unselectedIds[0] : null);
   };
 
-  const reorderLayers = (fromIndex: number, toIndex: number) => {
-    const newObjects = [...objects];
-    const [removed] = newObjects.splice(fromIndex, 1);
-    newObjects.splice(toIndex, 0, removed);
-    setObjects(newObjects);
-  };
+  // Create default document with initial content
+  const createDefaultDocument = (): CanvasDocumentType => ({
+    schemaVersion: "0.1.0",
+    id: "default-document",
+    name: "New Document",
+    artboards: [
+      {
+        id: "main-artboard",
+        name: "Main Artboard",
+        frame: { x: 0, y: 0, width: 1200, height: 800 },
+        children: [
+          {
+            id: "frame-1",
+            type: "frame",
+            name: "Design Frame",
+            frame: { x: 100, y: 100, width: 800, height: 600 },
+            visible: true,
+            style: {
+              fills: [{ type: "solid", color: "#1a1a1a" }],
+              radius: 16,
+              opacity: 1,
+            },
+            children: [
+              {
+                id: "text-1",
+                type: "text",
+                name: "Heading Text",
+                frame: { x: 150, y: 150, width: 300, height: 60 },
+                visible: true,
+                text: "Design Editor",
+                textStyle: {
+                  size: 32,
+                  family: "Inter",
+                  weight: "600",
+                  color: "#ffffff",
+                },
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
 
-  const duplicateObject = (id: string) => {
-    const findObject = (
-      objs: CanvasObject[],
-      targetId: string
-    ): CanvasObject | null => {
-      for (const obj of objs) {
-        if (obj.id === targetId) {
-          return obj;
-        }
-        if (obj.children) {
-          const found = findObject(obj.children, targetId);
-          if (found) {
-            return found;
-          }
-        }
-      }
-      return null;
-    };
+  const [document, setDocument] = useState<CanvasDocumentType>(
+    createDefaultDocument()
+  );
 
-    const originalObject = findObject(objects, id);
-    if (!originalObject) {
-      return;
-    }
-
-    const duplicateObjectRecursive = (obj: CanvasObject): CanvasObject => ({
-      ...obj,
-      id: `${obj.type}-${Date.now()}`,
-      name: `${obj.name} Copy`,
-      x: obj.x + 20,
-      y: obj.y + 20,
-      children: obj.children?.map(duplicateObjectRecursive),
-    });
-
-    const duplicatedObject = duplicateObjectRecursive(originalObject);
-
-    // Check if the object is inside another object
-    const isInsideObject = (
-      objs: CanvasObject[],
-      targetId: string
-    ): boolean => {
-      for (const obj of objs) {
-        if (
-          obj.children?.some(
-            (child) =>
-              child.id === targetId || isInsideObject([child], targetId)
-          )
-        ) {
-          return true;
-        }
-      }
-      return false;
-    };
-
-    if (isInsideObject(objects, id)) {
-      // Find the parent and add to it
-      let parentId = null;
-      const findParent = (
-        objs: CanvasObject[],
-        targetId: string
-      ): string | null => {
-        for (const obj of objs) {
-          if (obj.children?.some((child) => child.id === targetId)) {
-            return obj.id;
-          }
-          if (obj.children) {
-            const found = findParent(obj.children, targetId);
-            if (found) {
-              return found;
-            }
-          }
-        }
-        return null;
-      };
-      parentId = findParent(objects, id);
-      if (parentId) {
-        addObjectToParent(parentId, duplicatedObject);
-      }
-    } else {
-      // Add to root level
-      setObjects([...objects, duplicatedObject]);
-    }
-
-    setSelectedId(duplicatedObject.id);
-  };
-
-  const deleteObject = (id: string) => {
-    const removeObjectRecursive = (objs: CanvasObject[]): CanvasObject[] => {
-      return objs
-        .filter((obj) => obj.id !== id)
-        .map((obj) => ({
-          ...obj,
-          children: obj.children
-            ? removeObjectRecursive(obj.children)
-            : undefined,
-        }));
-    };
-    setObjects(removeObjectRecursive(objects));
-    if (selectedId === id) {
-      setSelectedId(null);
+  // Engine-based operations
+  const createNodeOperation = async (parentPath: NodePath, nodeData: any) => {
+    const result = createNode(document, parentPath, nodeData);
+    if (result.success && result.data) {
+      setDocument(result.data.document);
+      // TODO: Apply patches for undo/redo
     }
   };
 
-  const bringForward = (id: string) => {
-    const findObjectIndex = (
-      objs: CanvasObject[],
-      targetId: string
-    ): number => {
-      for (let i = 0; i < objs.length; i++) {
-        if (objs[i].id === targetId) {
-          return i;
-        }
-      }
-      return -1;
-    };
-
-    const moveObjectForward = (objs: CanvasObject[]): CanvasObject[] => {
-      const index = findObjectIndex(objs, id);
-      if (index > -1 && index < objs.length - 1) {
-        const newObjects = [...objs];
-        const [removed] = newObjects.splice(index, 1);
-        newObjects.splice(index + 1, 0, removed);
-        return newObjects;
-      }
-      return objs.map((obj) => ({
-        ...obj,
-        children: obj.children ? moveObjectForward(obj.children) : undefined,
-      }));
-    };
-
-    setObjects(moveObjectForward(objects));
-  };
-
-  const sendBackward = (id: string) => {
-    const findObjectIndex = (
-      objs: CanvasObject[],
-      targetId: string
-    ): number => {
-      for (let i = 0; i < objs.length; i++) {
-        if (objs[i].id === targetId) {
-          return i;
-        }
-      }
-      return -1;
-    };
-
-    const moveObjectBackward = (objs: CanvasObject[]): CanvasObject[] => {
-      const index = findObjectIndex(objs, id);
-      if (index > 0) {
-        const newObjects = [...objs];
-        const [removed] = newObjects.splice(index, 1);
-        newObjects.splice(index - 1, 0, removed);
-        return newObjects;
-      }
-      return objs.map((obj) => ({
-        ...obj,
-        children: obj.children ? moveObjectBackward(obj.children) : undefined,
-      }));
-    };
-
-    setObjects(moveObjectBackward(objects));
-  };
-
-  const selectAll = () => {
-    // Find all visible objects recursively
-    const findAllVisibleObjects = (objs: CanvasObject[]): CanvasObject[] => {
-      const visibleObjects: CanvasObject[] = [];
-      for (const obj of objs) {
-        if (obj.visible) {
-          visibleObjects.push(obj);
-          if (obj.children) {
-            visibleObjects.push(...findAllVisibleObjects(obj.children));
-          }
-        }
-      }
-      return visibleObjects;
-    };
-
-    const visibleObjects = findAllVisibleObjects(objects);
-    // For now, select the first visible object (future: implement multi-selection)
-    if (visibleObjects.length > 0) {
-      setSelectedId(visibleObjects[0].id);
+  const updateNodeOperation = async (nodeId: string, updates: any) => {
+    const result = updateNode(document, nodeId, updates);
+    if (result.success && result.data) {
+      setDocument(result.data.document);
+      // TODO: Apply patches for undo/redo
     }
+  };
+
+  const deleteNodeOperation = async (nodeId: string) => {
+    // Find the node to determine its path for deletion
+    const findResult = findNodeById(document, nodeId);
+    if (findResult.success && findResult.data) {
+      // For deletion, we need to implement deleteNode in canvas-engine
+      // For now, we'll use updateNode to mark as invisible
+      await updateNodeOperation(nodeId, { visible: false });
+    }
+  };
+
+  // Legacy compatibility - convert document to objects array for existing components
+  const objects = document.artboards[0]?.children || [];
+
+  // Legacy compatibility - object operations that delegate to engine
+  const updateObject = async (id: string, updates: Partial<CanvasObject>) => {
+    await updateNodeOperation(id, updates);
   };
 
   const addObject = (object: CanvasObject) => {
-    setObjects((prev) => [...prev, object]);
-    // Select the newly added object
-    setSelectedId(object.id);
-    setSelectedIds(new Set([object.id]));
+    // Convert to document format and create node
+    createNodeOperation([0, "children"], {
+      type: object.type,
+      name: object.name,
+      frame: {
+        x: object.x,
+        y: object.y,
+        width: object.width,
+        height: object.height,
+      },
+      visible: object.visible,
+      style: {
+        fills: object.fill
+          ? [{ type: "solid", color: object.fill }]
+          : undefined,
+        strokes: object.stroke
+          ? [
+              {
+                type: "solid",
+                color: object.stroke,
+                width: object.strokeWidth,
+              },
+            ]
+          : undefined,
+        radius: object.cornerRadius,
+        opacity: object.opacity / 100,
+      },
+      text: object.text,
+      textStyle: object.fontSize
+        ? {
+            size: object.fontSize,
+            family: object.fontFamily,
+            weight: object.fontWeight,
+            letterSpacing: object.letterSpacing,
+            lineHeight: object.lineHeight,
+            color: object.fill,
+          }
+        : undefined,
+      src: object.src,
+    });
   };
 
-  const addObjectToParent = (
-    parentId: string,
-    object: CanvasObject,
-    slotIndex?: number
-  ) => {
-    setObjects((prev) => {
-      const addToParent = (objs: CanvasObject[]): CanvasObject[] => {
-        return objs.map((obj) => {
-          if (obj.id === parentId) {
-            const children = obj.children || [];
-            const newChildren =
-              slotIndex !== undefined
-                ? [
-                    ...children.slice(0, slotIndex),
-                    object,
-                    ...children.slice(slotIndex),
-                  ]
-                : [...children, object];
-            return { ...obj, children: newChildren };
-          }
-          if (obj.children) {
-            return { ...obj, children: addToParent(obj.children) };
-          }
-          return obj;
-        });
-      };
-      return addToParent(prev);
-    });
-    // Select the newly added object
-    setSelectedId(object.id);
-    setSelectedIds(new Set([object.id]));
+  // Design tokens utilities
+  const getTokenValue = (tokenPath: string): string | number | undefined => {
+    return flattenedTokens[tokenPath];
   };
 
   // Zoom controls
@@ -592,45 +455,21 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   };
 
   // Clipboard functions
-  const copyToClipboard = (objectIds: string[]) => {
-    const objectsToCopy = objectIds
-      .map((id) => objects.find((obj) => obj.id === id))
-      .filter(Boolean) as CanvasObject[];
-    setClipboard(objectsToCopy);
-  };
-
-  const pasteFromClipboard = (offsetX = 10, offsetY = 10) => {
-    if (clipboard.length === 0) return;
-
-    const newObjects = clipboard.map((obj) => ({
-      ...obj,
-      id: `${obj.type}-${Date.now()}-${Math.random()
-        .toString(36)
-        .substr(2, 9)}`,
-      x: obj.x + offsetX,
-      y: obj.y + offsetY,
-    }));
-
-    setObjects((prev) => [...prev, ...newObjects]);
-
-    // Select the pasted objects
-    if (newObjects.length > 0) {
-      setSelectedId(newObjects[0].id);
-      setSelectedIds(new Set(newObjects.map((obj) => obj.id)));
-    }
-  };
-
-  const cutToClipboard = (objectIds: string[]) => {
-    copyToClipboard(objectIds);
-    // Remove the objects after copying
-    objectIds.forEach((id) => deleteObject(id));
-  };
 
   return (
     <CanvasContext.Provider
       value={{
+        // Legacy compatibility
         objects,
-        setObjects,
+        setObjects: () => {}, // TODO: Implement legacy setObjects
+        updateObject,
+        addObject,
+
+        // New document-based state
+        document,
+        setDocument,
+
+        // Selection state
         selectedId,
         selectedIds,
         setSelectedId,
@@ -638,7 +477,18 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         addToSelection,
         removeFromSelection,
         clearSelection,
-        updateObject,
+        inverseSelection,
+
+        // Engine-based operations
+        createNode: createNodeOperation,
+        updateNode: updateNodeOperation,
+        deleteNode: deleteNodeOperation,
+        findNodeById: (nodeId: string) => findNodeById(document, nodeId),
+
+        // Design tokens
+        designTokens,
+        flattenedTokens,
+        getTokenValue,
         contextMenu,
         setContextMenu,
         activeTool,
@@ -665,23 +515,12 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         setCursorPosition,
         // Clipboard functions
         clipboard,
-        copyToClipboard,
-        pasteFromClipboard,
-        cutToClipboard,
-        reorderLayers,
-        duplicateObject,
-        deleteObject,
-        bringForward,
-        sendBackward,
-        selectAll,
-        addObject,
-        addObjectToParent,
-        // Aliases for linting purposes
-        _duplicateObject: duplicateObject,
-        _deleteObject: deleteObject,
-        _bringForward: bringForward,
-        _sendBackward: sendBackward,
-        _selectAll: selectAll,
+        // Alignment functions
+        alignObjects: (alignment: string) => {
+          setObjects((currentObjects) =>
+            alignObjects(currentObjects, selectedIds, alignment)
+          );
+        },
       }}
     >
       {children}
@@ -695,6 +534,93 @@ export function useCanvas() {
     throw new Error("useCanvas must be used within CanvasProvider");
   }
   return context;
+}
+
+// Alignment functions
+export function alignObjects(
+  objects: CanvasObject[],
+  selectedIds: Set<string>,
+  alignment: string
+): CanvasObject[] {
+  if (selectedIds.size < 2) {
+    return objects; // Need at least 2 objects to align
+  }
+
+  const selectedObjects = objects.filter((obj) => selectedIds.has(obj.id));
+  if (selectedObjects.length < 2) {
+    return objects;
+  }
+
+  // Calculate bounding box of all selected objects
+  let minX = Infinity,
+    minY = Infinity,
+    maxX = -Infinity,
+    maxY = -Infinity;
+  selectedObjects.forEach((obj) => {
+    minX = Math.min(minX, obj.x);
+    minY = Math.min(minY, obj.y);
+    maxX = Math.max(maxX, obj.x + obj.width);
+    maxY = Math.max(maxY, obj.y + obj.height);
+  });
+
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+
+  // Create updated objects
+  const updatedObjects = objects.map((obj) => {
+    if (!selectedIds.has(obj.id)) {
+      return obj;
+    }
+
+    const updatedObj = { ...obj };
+
+    switch (alignment) {
+      case "horizontal-left":
+        updatedObj.x = minX;
+        break;
+      case "horizontal-center":
+        updatedObj.x = centerX - obj.width / 2;
+        break;
+      case "horizontal-right":
+        updatedObj.x = maxX - obj.width;
+        break;
+      case "vertical-top":
+        updatedObj.y = minY;
+        break;
+      case "vertical-middle":
+        updatedObj.y = centerY - obj.height / 2;
+        break;
+      case "vertical-bottom":
+        updatedObj.y = maxY - obj.height;
+        break;
+      case "distribute-horizontal":
+        // Distribute objects evenly horizontally
+        const sortedByX = selectedObjects.sort((a, b) => a.x - b.x);
+        const totalWidth = maxX - minX;
+        const spacing = totalWidth / (selectedObjects.length - 1);
+        sortedByX.forEach((sortedObj, index) => {
+          if (obj.id === sortedObj.id) {
+            updatedObj.x = minX + spacing * index - obj.width / 2;
+          }
+        });
+        break;
+      case "distribute-vertical":
+        // Distribute objects evenly vertically
+        const sortedByY = selectedObjects.sort((a, b) => a.y - b.y);
+        const totalHeight = maxY - minY;
+        const verticalSpacing = totalHeight / (selectedObjects.length - 1);
+        sortedByY.forEach((sortedObj, index) => {
+          if (obj.id === sortedObj.id) {
+            updatedObj.y = minY + verticalSpacing * index - obj.height / 2;
+          }
+        });
+        break;
+    }
+
+    return updatedObj;
+  });
+
+  return updatedObjects;
 }
 
 // Utility function to find objects in the canvas hierarchy

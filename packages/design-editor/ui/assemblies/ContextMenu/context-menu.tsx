@@ -47,11 +47,14 @@ export function ContextMenu() {
     objects,
     setObjects,
     selectedId,
+    selectedIds,
     duplicateObject,
     deleteObject,
     bringForward,
     sendBackward,
     updateObject,
+    copyToClipboard,
+    pasteFromClipboard,
   } = useCanvas();
 
   // Close context menu on outside clicks and scroll
@@ -141,12 +144,21 @@ export function ContextMenu() {
         }
         break;
       case "group":
-        // TODO: Implement group functionality
-        console.log("Group Selection - not implemented yet");
+        if (selectedIds.size > 1) {
+          groupObjects(Array.from(selectedIds));
+        } else {
+          console.warn("Need at least 2 objects selected to group");
+        }
         break;
       case "ungroup":
-        // TODO: Implement ungroup functionality
-        console.log("Ungroup Selection - not implemented yet");
+        if (selectedId) {
+          const selectedObject = objects.find((obj) => obj.id === selectedId);
+          if (selectedObject?.type === "group") {
+            ungroupObjects(selectedId);
+          } else {
+            console.warn("Selected object is not a group");
+          }
+        }
         break;
       case "create-frame":
         // Create a new frame at the context menu position
@@ -261,21 +273,21 @@ export function ContextMenu() {
       label: "Group Selection",
       shortcut: "⌘G",
       action: "group",
-      disabled: true, // TODO: Implement group functionality
+      disabled: selectedIds.size < 2,
     },
     {
       icon: Ungroup,
       label: "Ungroup Selection",
       shortcut: "⌘⇧G",
       action: "ungroup",
-      disabled: true, // TODO: Implement ungroup functionality
+      disabled: !selectedObject || selectedObject.type !== "group",
     },
   ];
 
   // Determine which menu to show based on context type and selection
   const getMenuItems = () => {
-    // If we have a layerId or objectId, show object menu
-    if (contextMenu.layerId || contextMenu.objectId) {
+    // If we have an objectId, show object menu
+    if (contextMenu.objectId) {
       return objectMenuItems;
     }
 

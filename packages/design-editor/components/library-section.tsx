@@ -112,7 +112,7 @@ export function LibrarySection({
     // Call the onInsert callback if provided
     onInsert?.(item);
 
-    console.log(`Inserted ${item.name} into canvas`);
+    console.info(`Inserted ${item.name} into canvas`);
   };
 
   const filteredItems = useMemo(() => {

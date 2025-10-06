@@ -1,4 +1,9 @@
 import { Component, LayersIcon, Page, Square } from "@/lib/components/icons";
+import {
+  getAvailableComponents,
+  getComponentMetadata,
+  type IngestedComponent,
+} from "@/lib/utils/dynamic-component-registry";
 
 export interface DesignSystemItem {
   id: string;
@@ -18,6 +23,367 @@ export interface DesignSystemItem {
   accessibility: "basic" | "enhanced" | "full";
 }
 
+/**
+ * Convert an ingested component to a design system item
+ */
+function convertIngestedComponentToDesignSystemItem(
+  component: IngestedComponent
+): DesignSystemItem {
+  // Determine complexity based on props count
+  const propsCount = Object.keys(component.defaultProps || {}).length;
+  const complexity: "simple" | "medium" | "complex" =
+    propsCount <= 3 ? "simple" : propsCount <= 8 ? "medium" : "complex";
+
+  // Generate tags from category and name
+  const tags = [
+    component.category.toLowerCase(),
+    ...component.name.toLowerCase().split(/\s+/),
+  ].filter((tag, index, arr) => arr.indexOf(tag) === index); // Remove duplicates
+
+  return {
+    id: component.id,
+    name: component.name,
+    type: "component" as const,
+    category: component.category,
+    icon: Component, // Default icon, could be customized based on category
+    description: component.description || `${component.name} component`,
+    tags,
+    usage: 0, // Could be tracked separately
+    lastUsed: "Never", // Could be tracked separately
+    author: component.source || "Unknown",
+    version: component.version || "1.0.0",
+    isFavorite: false,
+    isBookmarked: false,
+    complexity,
+    accessibility: "basic" as const, // Default, could be enhanced based on component analysis
+  };
+}
+
+/**
+ * Generate design system items from available components
+ */
+/**
+ * Storage key for design system user preferences
+ */
+const DESIGN_SYSTEM_PREFERENCES_KEY = "design-editor-design-system-preferences";
+
+interface DesignSystemPreferences {
+  favorites: Set<string>;
+  bookmarks: Set<string>;
+  lastUsed: Record<string, string>;
+  usage: Record<string, number>;
+}
+
+/**
+ * Load user preferences from localStorage
+ */
+function loadUserPreferences(): DesignSystemPreferences {
+  // Check if we're on the client side before accessing localStorage
+  if (typeof window === "undefined") {
+    return {
+      favorites: new Set(),
+      bookmarks: new Set(),
+      lastUsed: {},
+      usage: {},
+    };
+  }
+
+  try {
+    const stored = localStorage.getItem(DESIGN_SYSTEM_PREFERENCES_KEY);
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      return {
+        favorites: new Set(parsed.favorites || []),
+        bookmarks: new Set(parsed.bookmarks || []),
+        lastUsed: parsed.lastUsed || {},
+        usage: parsed.usage || {},
+      };
+    }
+  } catch (error) {
+    console.warn("Failed to load design system preferences:", error);
+  }
+
+  return {
+    favorites: new Set(),
+    bookmarks: new Set(),
+    lastUsed: {},
+    usage: {},
+  };
+}
+
+/**
+ * Save user preferences to localStorage
+ */
+function saveUserPreferences(preferences: DesignSystemPreferences): void {
+  // Check if we're on the client side before accessing localStorage
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    const data = {
+      favorites: Array.from(preferences.favorites),
+      bookmarks: Array.from(preferences.bookmarks),
+      lastUsed: preferences.lastUsed,
+      usage: preferences.usage,
+    };
+    localStorage.setItem(DESIGN_SYSTEM_PREFERENCES_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.warn("Failed to save design system preferences:", error);
+  }
+}
+
+/**
+ * Update user preferences for a specific item
+ */
+export function updateDesignSystemItemPreferences(
+  itemId: string,
+  updates: {
+    isFavorite?: boolean;
+    isBookmarked?: boolean;
+    incrementUsage?: boolean;
+  }
+): void {
+  const preferences = loadUserPreferences();
+
+  if (updates.isFavorite !== undefined) {
+    if (updates.isFavorite) {
+      preferences.favorites.add(itemId);
+    } else {
+      preferences.favorites.delete(itemId);
+    }
+  }
+
+  if (updates.isBookmarked !== undefined) {
+    if (updates.isBookmarked) {
+      preferences.bookmarks.add(itemId);
+    } else {
+      preferences.bookmarks.delete(itemId);
+    }
+  }
+
+  if (updates.incrementUsage) {
+    preferences.usage[itemId] = (preferences.usage[itemId] || 0) + 1;
+    preferences.lastUsed[itemId] = new Date().toISOString();
+  }
+
+  saveUserPreferences(preferences);
+}
+
+/**
+ * Get design system usage statistics
+ */
+export function getDesignSystemStats(): {
+  totalItems: number;
+  favoriteCount: number;
+  bookmarkCount: number;
+  totalUsage: number;
+  recentlyUsed: DesignSystemItem[];
+  mostUsed: DesignSystemItem[];
+} {
+  const items = getDesignSystemItems();
+  const preferences = loadUserPreferences();
+
+  const favoriteCount = Array.from(preferences.favorites).length;
+  const bookmarkCount = Array.from(preferences.bookmarks).length;
+  const totalUsage = Object.values(preferences.usage).reduce(
+    (sum, count) => sum + count,
+    0
+  );
+
+  // Get recently used items (last 7 days)
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+  const recentlyUsed = items
+    .filter((item) => {
+      const lastUsed = preferences.lastUsed[item.id];
+      return lastUsed && new Date(lastUsed) > sevenDaysAgo;
+    })
+    .sort((a, b) => {
+      const aTime = new Date(preferences.lastUsed[a.id] || 0).getTime();
+      const bTime = new Date(preferences.lastUsed[b.id] || 0).getTime();
+      return bTime - aTime;
+    })
+    .slice(0, 10);
+
+  // Get most used items
+  const mostUsed = items
+    .filter((item) => (preferences.usage[item.id] || 0) > 0)
+    .sort(
+      (a, b) => (preferences.usage[b.id] || 0) - (preferences.usage[a.id] || 0)
+    )
+    .slice(0, 10);
+
+  return {
+    totalItems: items.length,
+    favoriteCount,
+    bookmarkCount,
+    totalUsage,
+    recentlyUsed,
+    mostUsed,
+  };
+}
+
+/**
+ * Clear all user preferences (for testing/reset)
+ */
+export function clearDesignSystemPreferences(): void {
+  // Check if we're on the client side before accessing localStorage
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  try {
+    localStorage.removeItem(DESIGN_SYSTEM_PREFERENCES_KEY);
+  } catch (error) {
+    console.warn("Failed to clear design system preferences:", error);
+  }
+}
+
+/**
+ * Export user preferences for backup
+ */
+export function exportDesignSystemPreferences(): string | null {
+  try {
+    const preferences = loadUserPreferences();
+    return JSON.stringify(
+      {
+        favorites: Array.from(preferences.favorites),
+        bookmarks: Array.from(preferences.bookmarks),
+        lastUsed: preferences.lastUsed,
+        usage: preferences.usage,
+        exportedAt: new Date().toISOString(),
+      },
+      null,
+      2
+    );
+  } catch (error) {
+    console.warn("Failed to export design system preferences:", error);
+    return null;
+  }
+}
+
+/**
+ * Import user preferences from backup
+ */
+export function importDesignSystemPreferences(jsonData: string): boolean {
+  try {
+    const data = JSON.parse(jsonData);
+
+    if (!data.favorites || !data.bookmarks || !data.lastUsed || !data.usage) {
+      throw new Error("Invalid preferences format");
+    }
+
+    const preferences: DesignSystemPreferences = {
+      favorites: new Set(data.favorites),
+      bookmarks: new Set(data.bookmarks),
+      lastUsed: data.lastUsed,
+      usage: data.usage,
+    };
+
+    saveUserPreferences(preferences);
+    return true;
+  } catch (error) {
+    console.warn("Failed to import design system preferences:", error);
+    return false;
+  }
+}
+
+export function getDesignSystemItems(): DesignSystemItem[] {
+  const componentNames = getAvailableComponents();
+  const designSystemItems: DesignSystemItem[] = [];
+  const preferences = loadUserPreferences();
+
+  for (const componentName of componentNames) {
+    const metadata = getComponentMetadata(componentName);
+    if (metadata) {
+      // Convert ComponentMetadata to IngestedComponent format for conversion
+      const ingestedComponent: IngestedComponent = {
+        id: componentName,
+        name: metadata.name,
+        description: metadata.description,
+        category: metadata.category,
+        icon: metadata.icon,
+        defaultProps: metadata.defaultProps,
+        component: metadata.component,
+        source: "component-registry",
+        lastUpdated: new Date().toISOString(),
+      };
+
+      const item =
+        convertIngestedComponentToDesignSystemItem(ingestedComponent);
+
+      // Apply user preferences
+      item.isFavorite = preferences.favorites.has(item.id);
+      item.isBookmarked = preferences.bookmarks.has(item.id);
+      item.usage = preferences.usage[item.id] || 0;
+      item.lastUsed = preferences.lastUsed[item.id] || item.lastUsed;
+
+      designSystemItems.push(item);
+    }
+  }
+
+  // Add some default items for pages, snippets, and icons if no components are available
+  if (designSystemItems.length === 0) {
+    const fallbackItems = getFallbackDesignSystemItems();
+    // Apply preferences to fallback items too
+    return fallbackItems.map((item) => ({
+      ...item,
+      isFavorite: preferences.favorites.has(item.id),
+      isBookmarked: preferences.bookmarks.has(item.id),
+      usage: preferences.usage[item.id] || item.usage,
+      lastUsed: preferences.lastUsed[item.id] || item.lastUsed,
+    }));
+  }
+
+  return designSystemItems;
+}
+
+/**
+ * Fallback design system items when no real components are available
+ */
+function getFallbackDesignSystemItems(): DesignSystemItem[] {
+  return [
+    {
+      id: "page-blank",
+      name: "Blank Page",
+      type: "page" as const,
+      category: "pages",
+      icon: Page,
+      description: "Empty page template",
+      tags: ["page", "blank", "template"],
+      usage: 10,
+      lastUsed: "1 hour ago",
+      author: "System",
+      version: "1.0.0",
+      isFavorite: false,
+      isBookmarked: false,
+      complexity: "simple",
+      accessibility: "basic",
+    },
+    {
+      id: "icon-placeholder",
+      name: "Placeholder Icon",
+      type: "icon" as const,
+      category: "icons",
+      icon: Square,
+      description: "Generic placeholder icon",
+      tags: ["icon", "placeholder", "generic"],
+      usage: 5,
+      lastUsed: "2 hours ago",
+      author: "System",
+      version: "1.0.0",
+      isFavorite: false,
+      isBookmarked: false,
+      complexity: "simple",
+      accessibility: "basic",
+    },
+  ];
+}
+
+// LEGACY: Keep mock data for backward compatibility during transition
+// TODO: Remove this once real implementation is fully working
 // MOCK DATA: Placeholder design system items for demonstration purposes
 export const mockDesignSystemItems: DesignSystemItem[] = [
   // MOCK DATA: Components showcase

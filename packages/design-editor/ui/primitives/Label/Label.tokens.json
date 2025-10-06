@@ -1,0 +1,17 @@
+{
+  "component": "Label",
+  "tokens": {
+    "fontSize": {
+      "value": "var(--font-size-sm)",
+      "description": "Label font size"
+    },
+    "fontWeight": {
+      "value": "var(--font-weight-medium)",
+      "description": "Label font weight"
+    },
+    "lineHeight": {
+      "value": "var(--line-height-none)",
+      "description": "Label line height"
+    }
+  }
+}

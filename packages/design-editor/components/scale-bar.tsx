@@ -1,7 +1,7 @@
 "use client";
 
-import { useCanvas } from "@/lib/canvas-context";
 import { useMemo } from "react";
+import { useCanvas } from "@/lib/canvas-context";
 
 /**
  * Scale bar component for showing pixel measurements

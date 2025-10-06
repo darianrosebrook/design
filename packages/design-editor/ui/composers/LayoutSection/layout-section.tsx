@@ -25,7 +25,7 @@ interface LayoutSectionProps {
 
 export function LayoutSection({ object, onUpdate }: LayoutSectionProps) {
   const [aspectLocked, setAspectLocked] = useState(true);
-  const [autoLayout, setAutoLayout] = useState(false);
+  const [autoLayout, setAutoLayout] = useState(object.autoLayout || false);
 
   const handleDimensionChange = (
     dimension: "width" | "height",
@@ -53,8 +53,20 @@ export function LayoutSection({ object, onUpdate }: LayoutSectionProps) {
   };
 
   const toggleAutoLayout = () => {
-    setAutoLayout(!autoLayout);
-    // TODO: Implement auto layout logic
+    const newAutoLayout = !autoLayout;
+    setAutoLayout(newAutoLayout);
+    onUpdate({
+      autoLayout: newAutoLayout,
+      // Set default values when enabling auto layout
+      ...(newAutoLayout && {
+        layoutDirection: "vertical" as const,
+        gap: 8,
+      }),
+    });
+  };
+
+  const setLayoutDirection = (direction: "horizontal" | "vertical") => {
+    onUpdate({ layoutDirection: direction });
   };
 
   return (
@@ -70,23 +82,46 @@ export function LayoutSection({ object, onUpdate }: LayoutSectionProps) {
           />
         </div>
         {autoLayout && (
-          <div className={styles.layoutModeButtons}>
-            <Button
-              variant="outline"
-              size="sm"
-              className={styles.resizeButton}
-              title="Horizontal"
-            >
-              <ArrowLeftRight className={styles.resizeButtonIcon} />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className={styles.resizeButton}
-              title="Vertical"
-            >
-              <ArrowUpDown className={styles.resizeButtonIcon} />
-            </Button>
+          <div className={styles.layoutModeControls}>
+            <div className={styles.layoutModeButtons}>
+              <Button
+                variant={
+                  object.layoutDirection === "horizontal"
+                    ? "default"
+                    : "outline"
+                }
+                size="sm"
+                className={styles.resizeButton}
+                title="Horizontal"
+                onClick={() => setLayoutDirection("horizontal")}
+              >
+                <ArrowLeftRight className={styles.resizeButtonIcon} />
+              </Button>
+              <Button
+                variant={
+                  object.layoutDirection === "vertical" ? "default" : "outline"
+                }
+                size="sm"
+                className={styles.resizeButton}
+                title="Vertical"
+                onClick={() => setLayoutDirection("vertical")}
+              >
+                <ArrowUpDown className={styles.resizeButtonIcon} />
+              </Button>
+            </div>
+
+            <div className={styles.layoutGapControl}>
+              <Label className={styles.layoutGapLabel}>Gap</Label>
+              <Input
+                type="number"
+                value={object.gap || 8}
+                onChange={(e) => onUpdate({ gap: Number(e.target.value) })}
+                className={styles.layoutGapInput}
+                min="0"
+                max="100"
+                step="1"
+              />
+            </div>
           </div>
         )}
       </div>

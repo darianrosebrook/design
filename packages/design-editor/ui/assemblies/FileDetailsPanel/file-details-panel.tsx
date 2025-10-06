@@ -18,14 +18,14 @@ export function FileDetailsPanel({
   onOpenDesignSystem,
   isCollapsed = false,
 }: FileDetailsPanelProps) {
-  const { objects } = useCanvas();
+  const { document } = useCanvas();
   const [activeTab, setActiveTab] = useState<"layers" | "library">("layers");
 
   // File metadata
   const fileMetadata = {
     name: "Design System",
     lastModified: "2 hours ago",
-    layers: objects.length,
+    layers: document.artboards[0]?.children?.length || 0,
     components: 4, // Mock data for now
   };
 
@@ -82,7 +82,7 @@ export function FileDetailsPanel({
 
           {/* Layers Tab */}
           <TabsContent value="layers" className="mt-4">
-            <LayersList objects={objects} />
+            <LayersList objects={document.artboards[0]?.children || []} />
           </TabsContent>
 
           {/* Library Tab */}

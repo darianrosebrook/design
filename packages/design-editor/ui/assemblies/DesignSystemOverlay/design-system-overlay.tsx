@@ -9,7 +9,7 @@ import { DesignSystemItem as DesignSystemItemComponent } from "@/lib/components/
 import { DesignSystemSearch } from "@/lib/components/design-system-search";
 import { Component, LayersIcon, Square } from "@/lib/components/icons";
 import type { DesignSystemItem } from "@/lib/data/design-system-items";
-import { mockDesignSystemItems } from "@/lib/data/design-system-items";
+import { getDesignSystemItems } from "@/lib/data/design-system-items";
 import { convertDesignSystemItemToCanvasObject } from "@/lib/utils/design-system-to-canvas";
 import { Button } from "@/ui/primitives/Button";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
@@ -40,10 +40,12 @@ export function DesignSystemOverlay({
     new Set()
   );
 
+  const designSystemItems = useMemo(() => getDesignSystemItems(), []);
+
   const categories = useMemo(() => {
-    const cats = new Set(mockDesignSystemItems.map((item) => item.category));
+    const cats = new Set(designSystemItems.map((item) => item.category));
     return Array.from(cats).sort();
-  }, []);
+  }, [designSystemItems]);
 
   const handleInsertItem = (item: DesignSystemItem) => {
     // Convert design system item to canvas object
@@ -59,7 +61,7 @@ export function DesignSystemOverlay({
   };
 
   const filteredItems = useMemo(() => {
-    const items = mockDesignSystemItems.filter((item) => {
+    const items = designSystemItems.filter((item) => {
       // Filter by tab
       if (activeTab === "components" && item.type !== "component") {
         return false;

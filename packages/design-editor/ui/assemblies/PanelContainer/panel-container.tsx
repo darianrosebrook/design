@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useCanvas, findObject } from "@/lib/canvas-context";
+import { useCanvas } from "@/lib/canvas-context";
 import { FileDetailsPanel } from "@/ui/assemblies/FileDetailsPanel";
 import { PropertiesPanel } from "@/ui/assemblies/PropertiesPanel";
 import { PropertiesPanelCollapsed } from "@/ui/assemblies/PropertiesPanelCollapsed";
@@ -13,20 +13,31 @@ interface PanelContainerProps {
 }
 
 export function PanelContainer({ onOpenDesignSystem }: PanelContainerProps) {
-  const { objects, selectedId } = useCanvas();
+  const { document, selectedId } = useCanvas();
   const [leftPanelCollapsed, setLeftPanelCollapsed] = useState(false);
   const [rightPanelCollapsed, setRightPanelCollapsed] = useState(false);
 
   // Safely find the selected object with error handling
   const selectedObject = React.useMemo(() => {
-    if (!selectedId || !objects) return null;
+    if (!selectedId || !document) return null;
     try {
-      return findObject(objects, selectedId);
+      // Find object in document structure
+      const findInChildren = (children: any[]): any => {
+        for (const child of children) {
+          if (child.id === selectedId) return child;
+          if (child.children) {
+            const found = findInChildren(child.children);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+      return findInChildren(document.artboards[0]?.children || []);
     } catch (error) {
       console.warn("Error finding selected object:", error);
       return null;
     }
-  }, [selectedId, objects]);
+  }, [selectedId, document]);
 
   // Keyboard shortcuts for panel toggling
   useEffect(() => {

@@ -19,28 +19,28 @@ interface ComponentLibraryProps {
  * @author @darianrosebrook
  */
 export function ComponentLibrary({ className }: ComponentLibraryProps) {
-  const { objects, setObjects } = useCanvas();
+  const { document, createNode } = useCanvas();
   const availableComponents = getAvailableComponents();
 
-  const addComponentToCanvas = (componentType: string) => {
+  const addComponentToCanvas = async (componentType: string) => {
     const metadata = getComponentMetadata(componentType as any);
-    const newComponent = {
-      id: `component-${Date.now()}`,
-      type: "component" as const,
+    const nodeData = {
+      type: "component",
       name: `${componentType} Component`,
-      x: 150, // Fixed position to prevent hydration mismatch
-      y: 150, // Fixed position to prevent hydration mismatch
-      width: componentType === "Button" ? 120 : 200,
-      height: componentType === "Button" ? 40 : 60,
-      rotation: 0,
+      frame: {
+        x: 150, // Fixed position to prevent hydration mismatch
+        y: 150, // Fixed position to prevent hydration mismatch
+        width: componentType === "Button" ? 120 : 200,
+        height: componentType === "Button" ? 40 : 60,
+      },
       visible: true,
       locked: false,
-      opacity: 100,
+      opacity: 1.0,
       componentType,
       componentProps: metadata.defaultProps,
     };
 
-    setObjects([...objects, newComponent]);
+    await createNode([0, "children"], nodeData);
   };
 
   const groupedComponents = availableComponents.reduce((acc, componentType) => {

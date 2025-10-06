@@ -12,11 +12,11 @@ type ResizeHandle = "nw" | "ne" | "sw" | "se" | "n" | "e" | "s" | "w";
 
 export function CanvasArea() {
   const {
-    objects,
+    document,
     selectedId,
     setSelectedId,
     setContextMenu,
-    updateObject,
+    updateNode,
     activeTool,
     canvasBackground,
     zoom,
@@ -113,9 +113,11 @@ export function CanvasArea() {
         // Convert screen delta to canvas coordinates accounting for zoom
         const dx = (e.clientX - dragStart.x) / (zoom / 100);
         const dy = (e.clientY - dragStart.y) / (zoom / 100);
-        updateObject(selectedId, {
-          x: objectStart.x + dx,
-          y: objectStart.y + dy,
+        updateNode(selectedId, {
+          frame: {
+            x: objectStart.x + dx,
+            y: objectStart.y + dy,
+          },
         });
       } else if (isResizing && resizeHandle) {
         // Convert screen delta to canvas coordinates accounting for zoom
@@ -170,7 +172,9 @@ export function CanvasArea() {
             break;
         }
 
-        updateObject(selectedId, updates);
+        updateNode(selectedId, {
+          frame: updates,
+        });
       }
     };
 
@@ -195,7 +199,7 @@ export function CanvasArea() {
     objectStart,
     selectedId,
     resizeHandle,
-    updateObject,
+    updateNode,
   ]);
 
   const renderResizeHandles = (obj: CanvasObject) => {
@@ -219,7 +223,7 @@ export function CanvasArea() {
         height: "8px",
         backgroundColor: "#4a9eff",
         border: "1px solid white",
-        borderRadius: "2px",
+        borderRadius: "1920px",
         cursor: `${handle}-resize`,
         zIndex: 10,
       };
@@ -263,7 +267,9 @@ export function CanvasArea() {
       cursor: activeTool === "select" && !obj.locked ? "move" : "default",
       border: isSelected ? "2px solid #4a9eff" : "none",
       outline: isSelected ? "none" : undefined,
-      pointerEvents: obj.locked ? "none" : ("auto" as const),
+      pointerEvents: (obj.locked
+        ? "none"
+        : "auto") as React.CSSProperties["pointerEvents"],
     };
 
     const handleClick = (e: React.MouseEvent) => {
@@ -363,7 +369,7 @@ export function CanvasArea() {
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                pointerEvents: "none",
+                pointerEvents: "none" as const,
               }}
             />
             {isSelected && renderResizeHandles(obj)}
@@ -445,7 +451,9 @@ export function CanvasArea() {
           transformOrigin: "0 0",
         }}
       >
-        {objects.filter((obj) => obj && obj.id).map((obj) => renderObject(obj))}
+        {document.artboards[0]?.children
+          ?.filter((obj) => obj && obj.id)
+          .map((obj) => renderObject(obj)) || []}
       </div>
 
       {/* Bottom left UI container */}
