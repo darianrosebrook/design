@@ -1,3 +1,147 @@
 {
-  "badge": {}
+  "prefix": "badge",
+  "tokens": {
+    "borderRadius": {
+      "value": "6px",
+      "description": "Border radius for badge corners"
+    },
+    "border": {
+      "width": {
+        "value": "1px",
+        "description": "Border width for badges"
+      },
+      "style": {
+        "value": "solid",
+        "description": "Border style for badges"
+      }
+    },
+    "padding": {
+      "horizontal": {
+        "value": "8px",
+        "description": "Horizontal padding for badges"
+      },
+      "vertical": {
+        "value": "2px",
+        "description": "Vertical padding for badges"
+      }
+    },
+    "fontSize": {
+      "value": "12px",
+      "description": "Font size for badge text"
+    },
+    "fontWeight": {
+      "value": "{typography.fontWeight.medium}",
+      "description": "Font weight for badge text"
+    },
+    "gap": {
+      "value": "4px",
+      "description": "Gap between badge content elements"
+    },
+    "icon": {
+      "size": {
+        "value": "12px",
+        "description": "Size for badge icons"
+      }
+    },
+    "transition": {
+      "duration": {
+        "value": "150ms",
+        "description": "Transition duration for badge interactions"
+      },
+      "easing": {
+        "value": "{motion.interaction.hover.easing}",
+        "description": "Transition easing for badge interactions"
+      }
+    },
+    "focus": {
+      "ring": {
+        "value": "0 0 0 3px rgba(var(--color-action-border-primary-focus), 0.5)",
+        "description": "Focus ring for badges"
+      }
+    },
+    "variants": {
+      "default": {
+        "borderColor": {
+          "value": "transparent",
+          "description": "Border color for default badge variant"
+        },
+        "backgroundColor": {
+          "value": "{color.action.background.primary.default}",
+          "description": "Background color for default badge variant"
+        },
+        "color": {
+          "value": "{color.action.foreground.primary.default}",
+          "description": "Text color for default badge variant"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.action.background.primary.default}",
+            "opacity": 0.9,
+            "description": "Hover background color for default badge variant"
+          }
+        }
+      },
+      "secondary": {
+        "borderColor": {
+          "value": "transparent",
+          "description": "Border color for secondary badge variant"
+        },
+        "backgroundColor": {
+          "value": "{color.action.background.secondary.default}",
+          "description": "Background color for secondary badge variant"
+        },
+        "color": {
+          "value": "{color.action.foreground.secondary.default}",
+          "description": "Text color for secondary badge variant"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.default}",
+            "opacity": 0.7,
+            "description": "Hover background color for secondary badge variant"
+          }
+        }
+      },
+      "destructive": {
+        "borderColor": {
+          "value": "transparent",
+          "description": "Border color for destructive badge variant"
+        },
+        "backgroundColor": {
+          "value": "{color.action.background.danger.default}",
+          "description": "Background color for destructive badge variant"
+        },
+        "color": {
+          "value": "{color.action.foreground.danger.default}",
+          "description": "Text color for destructive badge variant"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.action.background.danger.default}",
+            "opacity": 0.9,
+            "description": "Hover background color for destructive badge variant"
+          }
+        },
+        "dark": {
+          "backgroundColor": {
+            "value": "{color.action.background.danger.default}",
+            "opacity": 0.6,
+            "description": "Dark mode background color for destructive badge variant"
+          }
+        }
+      },
+      "outline": {
+        "color": {
+          "value": "{color.mode.dark}",
+          "description": "Text color for outline badge variant"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Hover background color for outline badge variant"
+          }
+        }
+      }
+    }
+  }
 }

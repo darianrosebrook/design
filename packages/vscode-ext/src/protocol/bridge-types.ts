@@ -6,8 +6,8 @@
  * in DESIGNER-022. All messages are validated with Zod schemas.
  */
 
-import { z } from "zod";
 import type { CanvasDocumentType } from "@paths-design/canvas-schema";
+import { z } from "zod";
 
 /**
  * Protocol version for bridge compatibility

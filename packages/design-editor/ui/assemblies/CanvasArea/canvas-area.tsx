@@ -4,8 +4,8 @@ import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
-import { ZoomControls } from "@/ui/composers/ZoomControls";
 import { ComponentRenderer } from "@/ui/composers/ComponentRenderer";
+import { ZoomControls } from "@/ui/composers/ZoomControls";
 
 type ResizeHandle = "nw" | "ne" | "sw" | "se" | "n" | "e" | "s" | "w";
 
@@ -662,7 +662,7 @@ export function CanvasArea() {
   return (
     <div
       ref={canvasRef}
-      className={`canvas-area relative w-full h-full overflow-hidden focus:outline-none ${
+      className={`// canvas-area relative w-full h-full overflow-hidden focus:outline-none ${
         isDragging || isResizing ? "no-select" : ""
       } ${isSpacePressed ? "cursor-grab" : ""} ${
         isPanning ? "cursor-grabbing" : ""
@@ -678,7 +678,7 @@ export function CanvasArea() {
     >
       {/* Canvas content */}
       <div
-        className="relative w-full h-full p-8"
+        className="// relative w-full h-full p-8"
         style={{
           transform: `scale(${
             zoom / 100
@@ -689,13 +689,13 @@ export function CanvasArea() {
         {objects.map((obj) => renderObject(obj))}
 
         {/* Bounding box overlay - inside transformed container */}
-        <div className="absolute inset-0 pointer-events-none p-8">
+        <div className="// absolute inset-0 pointer-events-none p-8">
           {renderBoundingBoxOverlay()}
         </div>
       </div>
 
       {/* Map-like UI controls */}
-      <div className="absolute bottom-4 left-4 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-medium z-[100]">
+      <div className="// absolute bottom-4 left-4 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-medium z-[100]">
         <div>
           Cursor: {Math.round(cursorX)}, {Math.round(cursorY)}
         </div>
@@ -705,7 +705,7 @@ export function CanvasArea() {
       </div>
 
       {/* Zoom controls */}
-      <div className="absolute bottom-4 right-4 z-[100]">
+      <div className="// absolute bottom-4 right-4 z-[100]">
         <ZoomControls />
       </div>
     </div>

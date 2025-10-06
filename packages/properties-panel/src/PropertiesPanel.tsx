@@ -3,9 +3,7 @@
  * @author @darianrosebrook
  */
 
-// Use global React object if available (for webview context)
-const React = (globalThis as any).React || require("react");
-const { useMemo } = React;
+import React, { useMemo } from "react";
 import { PropertiesService } from "./properties-service.js";
 import { PropertyRegistry } from "./property-registry.js";
 import { PropertySectionComponent } from "./PropertySection.js";

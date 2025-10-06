@@ -2,8 +2,8 @@
 
 import * as React from 'react'
 import { Drawer as DrawerPrimitive } from 'vaul'
-import { cn } from '@/lib/utils'
 import styles from './${componentName}.module.scss'
+import { cn } from '@/lib/utils'
 
 function Drawer({
   ...props

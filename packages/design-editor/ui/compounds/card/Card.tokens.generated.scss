@@ -1,0 +1,19 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/compounds/Card/card.tokens.json
+ */
+@mixin vars {
+  /* === Border Tokens === */
+  --card-border-width: var(--semantic-shape-control-border-default-width);
+  --card-border-style: var(--semantic-shape-control-border-default-style);
+  --card-border-color: var(--semantic-color-display-border-subtle);
+
+  /* === Header Tokens === */
+  --card-header-padding-horizontal: var(--semantic-spacing-padding-grid-large);
+  --card-header-gap: var(--semantic-spacing-gap-grid-small);
+
+  /* === Content Tokens === */
+  --card-content-padding-horizontal: var(--semantic-spacing-padding-grid-large);
+
+  /* === Footer Tokens === */
+  --card-footer-padding-horizontal: var(--semantic-spacing-padding-grid-large);
+}

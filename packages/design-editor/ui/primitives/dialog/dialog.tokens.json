@@ -1,3 +1,275 @@
 {
-  "dialog": {}
+  "prefix": "dialog",
+  "tokens": {
+    "overlay": {
+      "position": {
+        "value": "fixed",
+        "description": "Position for dialog overlay"
+      },
+      "inset": {
+        "value": "0",
+        "description": "Inset for dialog overlay (full screen)"
+      },
+      "zIndex": {
+        "value": "1040",
+        "description": "Z-index for dialog overlay"
+      },
+      "backgroundColor": {
+        "value": "rgba(0, 0, 0, 0.5)",
+        "description": "Background color for dialog overlay"
+      }
+    },
+    "content": {
+      "position": {
+        "value": "fixed",
+        "description": "Position for dialog content"
+      },
+      "top": {
+        "value": "50%",
+        "description": "Top position for dialog content"
+      },
+      "left": {
+        "value": "50%",
+        "description": "Left position for dialog content"
+      },
+      "zIndex": {
+        "value": "1040",
+        "description": "Z-index for dialog content"
+      },
+      "display": {
+        "value": "grid",
+        "description": "Display property for dialog content"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for dialog content"
+      },
+      "maxWidth": {
+        "default": {
+          "value": "calc(100% - 2rem)",
+          "description": "Maximum width for dialog content on small screens"
+        },
+        "large": {
+          "value": "32rem",
+          "description": "Maximum width for dialog content on large screens"
+        }
+      },
+      "translate": {
+        "x": {
+          "value": "-50%",
+          "description": "X translation for centering dialog content"
+        },
+        "y": {
+          "value": "-50%",
+          "description": "Y translation for centering dialog content"
+        }
+      },
+      "gap": {
+        "value": "16px",
+        "description": "Gap between dialog content elements"
+      },
+      "borderRadius": {
+        "value": "8px",
+        "description": "Border radius for dialog content"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for dialog content"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for dialog content"
+        },
+        "color": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Border color for dialog content"
+        }
+      },
+      "padding": {
+        "value": "24px",
+        "description": "Padding for dialog content"
+      },
+      "boxShadow": {
+        "value": "{elevation.level.4}",
+        "description": "Box shadow for dialog content"
+      },
+      "backgroundColor": {
+        "value": "{color.mode.white}",
+        "description": "Background color for dialog content"
+      },
+      "animation": {
+        "duration": {
+          "value": "200ms",
+          "description": "Animation duration for dialog content"
+        }
+      }
+    },
+    "close": {
+      "position": {
+        "value": "absolute",
+        "description": "Position for dialog close button"
+      },
+      "top": {
+        "value": "16px",
+        "description": "Top position for dialog close button"
+      },
+      "right": {
+        "value": "16px",
+        "description": "Right position for dialog close button"
+      },
+      "size": {
+        "value": "28px",
+        "description": "Size for dialog close button"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for dialog close button"
+      },
+      "opacity": {
+        "default": {
+          "value": "0.7",
+          "description": "Default opacity for dialog close button"
+        },
+        "hover": {
+          "value": "1",
+          "description": "Hover opacity for dialog close button"
+        }
+      },
+      "transition": {
+        "property": {
+          "value": "opacity",
+          "description": "Transition property for dialog close button"
+        },
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for dialog close button"
+        },
+        "easing": {
+          "value": "{motion.interaction.hover.easing}",
+          "description": "Transition easing for dialog close button"
+        }
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for dialog close button icon"
+        },
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for dialog close button icon"
+        },
+        "flexShrink": {
+          "value": "0",
+          "description": "Flex shrink for dialog close button icon"
+        }
+      },
+      "focus": {
+        "ring": {
+          "color": {
+            "value": "{color.action.border.primary.focus}",
+            "description": "Focus ring color for dialog close button"
+          },
+          "width": {
+            "value": "2px",
+            "description": "Focus ring width for dialog close button"
+          },
+          "offset": {
+            "value": "2px",
+            "description": "Focus ring offset for dialog close button"
+          }
+        }
+      },
+      "states": {
+        "open": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.hover}",
+            "description": "Background color when dialog is open"
+          },
+          "color": {
+            "value": "{color.palette.neutral.500}",
+            "description": "Color when dialog is open"
+          }
+        }
+      }
+    },
+    "header": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for dialog header"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for dialog header"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for dialog header"
+      },
+      "textAlign": {
+        "default": {
+          "value": "center",
+          "description": "Text align for dialog header on small screens"
+        },
+        "large": {
+          "value": "left",
+          "description": "Text align for dialog header on large screens"
+        }
+      }
+    },
+    "footer": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for dialog footer"
+      },
+      "flexDirection": {
+        "default": {
+          "value": "column-reverse",
+          "description": "Flex direction for dialog footer on small screens"
+        },
+        "large": {
+          "value": "row",
+          "description": "Flex direction for dialog footer on large screens"
+        }
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for dialog footer"
+      },
+      "justifyContent": {
+        "large": {
+          "value": "flex-end",
+          "description": "Justify content for dialog footer on large screens"
+        }
+      }
+    },
+    "title": {
+      "fontSize": {
+        "value": "18px",
+        "description": "Font size for dialog title"
+      },
+      "lineHeight": {
+        "value": "1",
+        "description": "Line height for dialog title"
+      },
+      "fontWeight": {
+        "value": "600",
+        "description": "Font weight for dialog title"
+      }
+    },
+    "description": {
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for dialog description"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for dialog description"
+      },
+      "lineHeight": {
+        "value": "1.4",
+        "description": "Line height for dialog description"
+      }
+    }
+  }
 }

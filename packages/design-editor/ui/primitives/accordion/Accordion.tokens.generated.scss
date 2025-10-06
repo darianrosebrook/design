@@ -1,0 +1,32 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Accordion/accordion.tokens.json
+ */
+@mixin vars {
+  /* === Item Tokens === */
+  --accordion-item-borderColor: var(--color-action-border-secondary-default);
+  --accordion-item-borderWidth: 1px;
+
+  /* === Trigger Tokens === */
+  --accordion-trigger-gap: var(--spacing-gap-grid-large);
+  --accordion-trigger-padding-vertical: var(--components-action-padding-vertical-default);
+  --accordion-trigger-padding-horizontal: var(--spacing-padding-card);
+  --accordion-trigger-borderRadius: var(--shape-control-radius-default);
+  --accordion-trigger-fontSize: var(--typography-body-02);
+  --accordion-trigger-fontWeight: var(--typography-font-weight-medium);
+  --accordion-trigger-lineHeight: var(--typography-line-height-tight);
+  --accordion-trigger-icon-color: var(--color-display-foreground-tertiary);
+  --accordion-trigger-icon-size: var(--components-action-gap-icon);
+  --accordion-trigger-icon-transform-translateY: 2px;
+  --accordion-trigger-focus-borderColor: var(--color-action-border-primary-focus);
+  --accordion-trigger-focus-ringColor: var(--color-action-border-primary-focus);
+  --accordion-trigger-focus-ringWidth: 3px;
+
+  /* === Content Tokens === */
+  --accordion-content-fontSize: var(--typography-body-02);
+  --accordion-content-padding-top: 0px;
+  --accordion-content-padding-bottom: var(--components-action-padding-vertical-default);
+  --accordion-content-animation-enter-duration: var(--motion-interaction-enter-duration);
+  --accordion-content-animation-enter-easing: var(--motion-interaction-enter-easing);
+  --accordion-content-animation-exit-duration: var(--motion-interaction-exit-duration);
+  --accordion-content-animation-exit-easing: var(--motion-interaction-exit-easing);
+}

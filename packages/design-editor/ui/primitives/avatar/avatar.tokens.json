@@ -1,3 +1,175 @@
 {
-  "avatar": {}
+  "prefix": "avatar",
+  "tokens": {
+    "avatar": {
+      "display": {
+        "value": "inline-flex",
+        "description": "Display type for avatar container"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for avatar container"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for avatar container"
+      },
+      "verticalAlign": {
+        "value": "middle",
+        "description": "Vertical alignment for avatar container"
+      },
+      "overflow": {
+        "value": "hidden",
+        "description": "Overflow behavior for avatar container"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for avatar container"
+      },
+      "borderRadius": {
+        "value": "100%",
+        "description": "Border radius for circular avatar"
+      },
+      "sizes": {
+        "xs": {
+          "size": {
+            "value": "24px",
+            "description": "Size for extra small avatar"
+          },
+          "fontSize": {
+            "value": "10px",
+            "description": "Font size for extra small avatar fallback"
+          }
+        },
+        "sm": {
+          "size": {
+            "value": "32px",
+            "description": "Size for small avatar"
+          },
+          "fontSize": {
+            "value": "12px",
+            "description": "Font size for small avatar fallback"
+          }
+        },
+        "default": {
+          "size": {
+            "value": "40px",
+            "description": "Size for default avatar"
+          },
+          "fontSize": {
+            "value": "14px",
+            "description": "Font size for default avatar fallback"
+          }
+        },
+        "lg": {
+          "size": {
+            "value": "56px",
+            "description": "Size for large avatar"
+          },
+          "fontSize": {
+            "value": "18px",
+            "description": "Font size for large avatar fallback"
+          }
+        },
+        "xl": {
+          "size": {
+            "value": "80px",
+            "description": "Size for extra large avatar"
+          },
+          "fontSize": {
+            "value": "24px",
+            "description": "Font size for extra large avatar fallback"
+          }
+        },
+        "2xl": {
+          "size": {
+            "value": "120px",
+            "description": "Size for 2x large avatar"
+          },
+          "fontSize": {
+            "value": "32px",
+            "description": "Font size for 2x large avatar fallback"
+          }
+        }
+      },
+      "colors": {
+        "background": {
+          "muted": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color for muted avatar"
+          }
+        },
+        "foreground": {
+          "muted": {
+            "value": "{color.palette.neutral.600}",
+            "description": "Foreground color for muted avatar"
+          }
+        }
+      }
+    },
+    "image": {
+      "aspectRatio": {
+        "value": "1",
+        "description": "Aspect ratio for avatar image (square)"
+      },
+      "size": {
+        "value": "100%",
+        "description": "Size for avatar image"
+      },
+      "objectFit": {
+        "value": "cover",
+        "description": "Object fit for avatar image"
+      },
+      "borderRadius": {
+        "value": "inherit",
+        "description": "Border radius for avatar image"
+      }
+    },
+    "fallback": {
+      "display": {
+        "value": "flex",
+        "description": "Display for avatar fallback"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for avatar fallback"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for avatar fallback"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for avatar fallback"
+      },
+      "height": {
+        "value": "100%",
+        "description": "Height for avatar fallback"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for avatar fallback"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for avatar fallback"
+      },
+      "lineHeight": {
+        "value": "1",
+        "description": "Line height for avatar fallback"
+      },
+      "color": {
+        "value": "{color.palette.neutral.600}",
+        "description": "Color for avatar fallback text"
+      },
+      "backgroundColor": {
+        "value": "{color.palette.neutral.100}",
+        "description": "Background color for avatar fallback"
+      },
+      "borderRadius": {
+        "value": "inherit",
+        "description": "Border radius for avatar fallback"
+      }
+    }
+  }
 }

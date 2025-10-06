@@ -1,0 +1,165 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Sidebar/sidebar.tokens.json
+ */
+@mixin vars {
+  /* === Width Tokens === */
+  --sidebar-width-default: 16rem;
+  --sidebar-width-mobile: 18rem;
+  --sidebar-width-icon: 3rem;
+
+  /* === Container Tokens === */
+  --sidebar-container-backgroundColor: var(--color-action-background-secondary-default);
+  --sidebar-container-color: var(--color-action-foreground-secondary-default);
+  --sidebar-container-width: var(--sidebar-width);
+  --sidebar-container-padding: 0px;
+
+  /* === Provider Tokens === */
+  --sidebar-provider-display: flex;
+  --sidebar-provider-flexDirection: column;
+  --sidebar-provider-minHeight: 100vh;
+  --sidebar-provider-width: 100vw;
+
+  /* === Insets Tokens === */
+  --sidebar-insets-display: flex;
+  --sidebar-insets-flexDirection: column;
+  --sidebar-insets-flex: 1;
+
+  /* === Input Tokens === */
+  --sidebar-input-backgroundColor: var(--color-mode-white);
+  --sidebar-input-height: 32px;
+  --sidebar-input-width: 100%;
+  --sidebar-input-boxShadow: none;
+
+  /* === Header Tokens === */
+  --sidebar-header-display: flex;
+  --sidebar-header-flexDirection: column;
+  --sidebar-header-gap: 8px;
+  --sidebar-header-padding: 8px;
+
+  /* === Footer Tokens === */
+  --sidebar-footer-display: flex;
+  --sidebar-footer-flexDirection: column;
+  --sidebar-footer-gap: 8px;
+  --sidebar-footer-padding: 8px;
+
+  /* === Separator Tokens === */
+  --sidebar-separator-backgroundColor: var(--color-palette-neutral-200);
+  --sidebar-separator-margin-horizontal: 8px;
+  --sidebar-separator-width: auto;
+
+  /* === Content Tokens === */
+  --sidebar-content-display: flex;
+  --sidebar-content-flexDirection: column;
+  --sidebar-content-gap: 8px;
+  --sidebar-content-padding: 8px;
+
+  /* === Group Tokens === */
+  --sidebar-group-display: flex;
+  --sidebar-group-flexDirection: column;
+  --sidebar-group-gap: 4px;
+  --sidebar-group-minWidth: 0px;
+  --sidebar-group-padding: 8px;
+
+  /* === GroupLabel Tokens === */
+  --sidebar-groupLabel-display: flex;
+  --sidebar-groupLabel-width: 100%;
+  --sidebar-groupLabel-minWidth: 0px;
+  --sidebar-groupLabel-flexDirection: column;
+  --sidebar-groupLabel-gap: 2px;
+
+  /* === GroupContent Tokens === */
+  --sidebar-groupContent-display: flex;
+  --sidebar-groupContent-width: 100%;
+  --sidebar-groupContent-minWidth: 0px;
+  --sidebar-groupContent-flexDirection: column;
+  --sidebar-groupContent-gap: 2px;
+
+  /* === Menu Tokens === */
+  --sidebar-menu-display: flex;
+  --sidebar-menu-width: 100%;
+  --sidebar-menu-minWidth: 0px;
+  --sidebar-menu-flexDirection: column;
+  --sidebar-menu-gap: 2px;
+
+  /* === MenuItem Tokens === */
+  --sidebar-menuItem-position: relative;
+
+  /* === MenuButton Tokens === */
+  --sidebar-menuButton-display: flex;
+  --sidebar-menuButton-width: 100%;
+  --sidebar-menuButton-alignItems: center;
+  --sidebar-menuButton-gap: 8px;
+  --sidebar-menuButton-overflow: hidden;
+  --sidebar-menuButton-borderRadius: 6px;
+  --sidebar-menuButton-padding: 8px;
+  --sidebar-menuButton-textAlign: left;
+  --sidebar-menuButton-fontSize: 14px;
+  --sidebar-menuButton-outline: none;
+  --sidebar-menuButton-ring: 2px solid {color.action.border.primary.focus};
+  --sidebar-menuButton-transition-properties: width, height, padding;
+  --sidebar-menuButton-transition-duration: 150ms;
+  --sidebar-menuButton-transition-easing: var(--motion-interaction-hover-easing);
+  --sidebar-menuButton-states-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --sidebar-menuButton-states-hover-color: var(--color-action-foreground-secondary-default);
+  --sidebar-menuButton-states-active-backgroundColor: var(--color-action-background-secondary-active);
+  --sidebar-menuButton-states-active-color: var(--color-action-foreground-secondary-default);
+  --sidebar-menuButton-states-active-fontWeight: 500;
+  --sidebar-menuButton-states-disabled-pointerEvents: none;
+  --sidebar-menuButton-states-disabled-opacity: 0.5;
+  --sidebar-menuButton-variants-outline-backgroundColor: var(--color-mode-white);
+  --sidebar-menuButton-variants-outline-boxShadow: 0 0 0 1px {color.palette.neutral.200};
+  --sidebar-menuButton-variants-outline-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --sidebar-menuButton-variants-outline-hover-color: var(--color-action-foreground-secondary-default);
+  --sidebar-menuButton-variants-outline-hover-boxShadow: 0 0 0 1px {color.action.background.secondary.hover};
+  --sidebar-menuButton-sizes-default-height: 32px;
+  --sidebar-menuButton-sizes-default-fontSize: 14px;
+  --sidebar-menuButton-sizes-sm-height: 28px;
+  --sidebar-menuButton-sizes-sm-fontSize: 12px;
+  --sidebar-menuButton-sizes-lg-height: 48px;
+  --sidebar-menuButton-sizes-lg-fontSize: 14px;
+  --sidebar-menuButton-icon-size: 16px;
+  --sidebar-menuButton-icon-flexShrink: 0;
+
+  /* === MenuSub Tokens === */
+  --sidebar-menuSub-display: flex;
+  --sidebar-menuSub-width: 100%;
+  --sidebar-menuSub-minWidth: 0px;
+  --sidebar-menuSub-flexDirection: column;
+  --sidebar-menuSub-gap: 2px;
+
+  /* === MenuSubItem Tokens === */
+  --sidebar-menuSubItem-position: relative;
+
+  /* === MenuSubButton Tokens === */
+  --sidebar-menuSubButton-display: flex;
+  --sidebar-menuSubButton-height: 32px;
+  --sidebar-menuSubButton-alignItems: center;
+  --sidebar-menuSubButton-gap: 8px;
+  --sidebar-menuSubButton-borderRadius: 6px;
+  --sidebar-menuSubButton-padding: 8px;
+  --sidebar-menuSubButton-fontSize: 14px;
+  --sidebar-menuSubButton-transition-duration: 150ms;
+  --sidebar-menuSubButton-transition-easing: var(--motion-interaction-hover-easing);
+  --sidebar-menuSubButton-states-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --sidebar-menuSubButton-states-hover-color: var(--color-action-foreground-secondary-default);
+  --sidebar-menuSubButton-states-active-backgroundColor: var(--color-action-background-secondary-active);
+  --sidebar-menuSubButton-states-active-color: var(--color-action-foreground-secondary-default);
+  --sidebar-menuSubButton-icon-size: 16px;
+  --sidebar-menuSubButton-icon-borderRadius: 4px;
+  --sidebar-menuSubButton-skeleton-height: 16px;
+  --sidebar-menuSubButton-skeleton-maxWidth: var(--skeleton-width);
+  --sidebar-menuSubButton-skeleton-flex: 1;
+
+  /* === Trigger Tokens === */
+  --sidebar-trigger-size: 28px;
+
+  /* === Rail Tokens === */
+  --sidebar-rail-display: flex;
+  --sidebar-rail-alignItems: center;
+  --sidebar-rail-gap: 4px;
+  --sidebar-rail-borderRadius: 6px;
+  --sidebar-rail-padding: 8px;
+  --sidebar-rail-transition-duration: 150ms;
+  --sidebar-rail-transition-easing: var(--motion-interaction-hover-easing);
+  --sidebar-rail-states-hover-backgroundColor: var(--color-action-background-secondary-hover);
+}

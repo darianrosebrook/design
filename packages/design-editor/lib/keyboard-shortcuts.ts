@@ -737,19 +737,19 @@ export function findShortcut(
 
   return KEYBOARD_SHORTCUTS.find((s) => {
     const skey = s.key.length === 1 ? s.key.toLowerCase() : s.key;
-    if (skey !== normalizedKey) return false;
+    if (skey !== normalizedKey) {return false;}
 
     // Primary modifier: "ctrl" in the table means Ctrl on Win/Linux, Command on macOS
     const requirePrimary = !!(s.modifiers?.ctrl || s.modifiers?.cmd);
     const eventPrimary = isMac ? !!mods.cmd : !!mods.ctrl;
-    if (requirePrimary && !eventPrimary) return false;
+    if (requirePrimary && !eventPrimary) {return false;}
 
     // If the shortcut explicitly asks for cmd (rare), enforce meta too
-    if (s.modifiers?.cmd && !mods.cmd) return false;
+    if (s.modifiers?.cmd && !mods.cmd) {return false;}
 
     // Only enforce shift/alt if explicitly required by the shortcut
-    if (s.modifiers?.shift && !mods.shift) return false;
-    if (s.modifiers?.alt && !mods.alt) return false;
+    if (s.modifiers?.shift && !mods.shift) {return false;}
+    if (s.modifiers?.alt && !mods.alt) {return false;}
 
     return true;
   });

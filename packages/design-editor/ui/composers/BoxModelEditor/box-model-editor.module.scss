@@ -1,7 +1,219 @@
-// box-model-editor composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// BoxModelEditor composer component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.box-model-editor {
-  // Placeholder for future SCSS implementation
-  // Will contain box-model-editor-specific styles when migrating from Tailwind
+.boxModelEditor {
+  // Main container styles
+  background-color: var(--boxModelEditor-backgroundColor);
+}
+
+// Visual Box Model Representation
+.visualContainer {
+  // Visual container styles
+  background-color: var(--boxModelEditor-visual-container-backgroundColor);
+  border-radius: var(--boxModelEditor-visual-container-borderRadius);
+  padding: var(--boxModelEditor-visual-container-padding);
+  position: relative;
+}
+
+.visualBoxModel {
+  // Box model visualization styles
+  width: var(--boxModelEditor-visual-container-size-width);
+  height: var(--boxModelEditor-visual-container-size-height);
+  margin: 0 auto;
+  position: relative;
+}
+
+.marginLayer {
+  // Margin visualization layer
+  position: absolute;
+  border: 2px dashed var(--boxModelEditor-visual-margin-borderColor);
+  background-color: var(--boxModelEditor-visual-margin-backgroundColor);
+  border-radius: 4px;
+}
+
+.borderLayer {
+  // Border visualization layer
+  position: absolute;
+  border: 2px solid var(--boxModelEditor-visual-border-borderColor);
+  background-color: var(--boxModelEditor-visual-border-backgroundColor);
+  border-radius: 2px;
+}
+
+.paddingLayer {
+  // Padding visualization layer
+  position: absolute;
+  border: 2px solid var(--boxModelEditor-visual-padding-borderColor);
+  background-color: var(--boxModelEditor-visual-padding-backgroundColor);
+  border-radius: 2px;
+}
+
+.contentLayer {
+  // Content visualization layer
+  position: absolute;
+  border: 2px solid var(--boxModelEditor-visual-content-borderColor);
+  background-color: var(--boxModelEditor-visual-content-backgroundColor);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--boxModelEditor-visual-label-fontSize);
+  font-weight: var(--boxModelEditor-visual-label-fontWeight);
+  color: var(--semantic-color-display-foreground-primary);
+}
+
+.visualLabel {
+  // Labels for visual elements
+  position: absolute;
+  font-size: var(--boxModelEditor-visual-label-fontSize);
+  font-weight: var(--boxModelEditor-visual-label-fontWeight);
+  pointer-events: none;
+}
+
+.marginLabel {
+  // Margin label positioning
+  top: 2px;
+  left: 2px;
+  color: #1e40af; // blue-600
+}
+
+.borderLabel {
+  // Border label positioning
+  top: 2px;
+  right: 2px;
+  color: #ea580c; // orange-600
+}
+
+.paddingLabel {
+  // Padding label positioning
+  bottom: 2px;
+  left: 2px;
+  color: #16a34a; // green-600
+}
+
+.contentLabel {
+  // Content label positioning
+  bottom: 2px;
+  right: 2px;
+  color: #9333ea; // purple-600
+}
+
+.linkIcon {
+  // Icon styles for link/unlink buttons
+  width: var(--boxModelEditor-linkButton-iconSize);
+  height: var(--boxModelEditor-linkButton-iconSize);
+}
+
+// Controls Section
+.controlsSection {
+  // Controls container styles
+  display: flex;
+  flex-direction: column;
+  gap: var(--boxModelEditor-controls-spacing-container);
+}
+
+.sectionContainer {
+  // Individual section containers
+  display: flex;
+  flex-direction: column;
+  gap: var(--boxModelEditor-controls-spacing-section);
+}
+
+.sectionHeader {
+  // Section header styles
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sectionLabel {
+  // Section labels
+  font-size: var(--boxModelEditor-controls-label-fontSize);
+  font-weight: var(--boxModelEditor-controls-label-fontWeight);
+  color: var(--boxModelEditor-controls-label-color);
+}
+
+.linkButton {
+  // Link/unlink toggle buttons
+  width: var(--boxModelEditor-linkButton-size);
+  height: var(--boxModelEditor-linkButton-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--semantic-shape-control-radius-default);
+  border: 1px solid var(--semantic-color-display-border-subtle);
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    background-color: var(--semantic-color-display-background-secondary);
+  }
+
+  svg {
+    width: var(--boxModelEditor-linkButton-iconSize);
+    height: var(--boxModelEditor-linkButton-iconSize);
+    color: var(--semantic-color-display-foreground-secondary);
+
+    &:hover {
+      color: var(--semantic-color-display-foreground-primary);
+    }
+  }
+}
+
+.controlInput {
+  // Control input styles
+  height: var(--boxModelEditor-controls-input-height);
+  font-size: var(--boxModelEditor-controls-input-fontSize);
+  border-radius: var(--semantic-shape-control-radius-default);
+  border: 1px solid var(--semantic-color-display-border-subtle);
+  background-color: var(--semantic-color-display-background-primary);
+  color: var(--semantic-color-display-foreground-primary);
+  padding: 0 var(--semantic-spacing-padding-grid-small);
+
+  &:focus {
+    outline: 2px solid var(--semantic-color-action-border-primary-focus);
+    outline-offset: 2px;
+    border-color: var(--semantic-color-action-border-primary-focus);
+  }
+}
+
+.inputLabel {
+  // Labels for inputs
+  font-size: var(--boxModelEditor-controls-label-fontSize);
+  color: var(--semantic-color-display-foreground-secondary);
+  margin-bottom: var(--semantic-spacing-margin-grid-xsmall);
+}
+
+.inputGroup {
+  // Input group container
+  display: flex;
+  align-items: center;
+  gap: var(--boxModelEditor-controls-spacing-input);
+}
+
+.linkedInput {
+  // Single input for linked values
+  flex: 1;
+}
+
+.unlinkedInputs {
+  // Grid for unlinked values
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--boxModelEditor-controls-spacing-section);
+}
+
+.unlinkedInputGroup {
+  // Individual input groups for unlinked values
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantic-spacing-gap-grid-xsmall);
+}
+
+.directionLabel {
+  // Direction labels (T, R, B, L)
+  font-size: var(--boxModelEditor-controls-label-fontSize);
+  color: var(--semantic-color-display-foreground-secondary);
+  text-align: center;
+  font-weight: var(--semantic-typography-font-weight-medium);
 }

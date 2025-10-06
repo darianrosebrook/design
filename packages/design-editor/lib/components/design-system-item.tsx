@@ -1,18 +1,9 @@
 "use client";
 
 import type React from "react";
+import { Star, Bookmark, Download, Eye, Clock, User } from "./icons";
 import { Badge } from "@/ui/primitives/Badge";
 import { Button } from "@/ui/primitives/Button";
-import {
-  Star,
-  Bookmark,
-  Download,
-  Eye,
-  Heart,
-  Clock,
-  User,
-  Tag,
-} from "./icons";
 
 export interface DesignSystemItem {
   id: string;
@@ -53,7 +44,7 @@ function getComplexityColor(complexity: string) {
   }
 }
 
-function getAccessibilityColor(accessibility: string) {
+function _getAccessibilityColor(accessibility: string) {
   switch (accessibility) {
     case "basic":
       return "bg-gray-100 text-gray-800";

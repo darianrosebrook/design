@@ -1,3 +1,346 @@
 {
-  "chart": {}
+  "prefix": "chart",
+  "tokens": {
+    "container": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for chart container"
+      },
+      "aspectRatio": {
+        "value": "16/9",
+        "description": "Aspect ratio for chart container"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for chart container"
+      },
+      "fontSize": {
+        "value": "12px",
+        "description": "Font size for chart container"
+      },
+      "padding": {
+        "value": "12px",
+        "description": "Padding for chart container"
+      }
+    },
+    "recharts": {
+      "axis": {
+        "tick": {
+          "text": {
+            "fill": {
+              "value": "{color.palette.neutral.500}",
+              "description": "Fill color for axis tick text"
+            }
+          }
+        }
+      },
+      "grid": {
+        "line": {
+          "stroke": {
+            "value": "{color.palette.neutral.200}",
+            "opacity": 0.5,
+            "description": "Stroke color for grid lines"
+          }
+        }
+      },
+      "tooltip": {
+        "cursor": {
+          "stroke": {
+            "value": "{color.palette.neutral.200}",
+            "description": "Stroke color for tooltip cursor"
+          }
+        }
+      },
+      "polarGrid": {
+        "stroke": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Stroke color for polar grid"
+        }
+      },
+      "radialBar": {
+        "backgroundSector": {
+          "fill": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Fill color for radial bar background sector"
+          }
+        }
+      },
+      "rectangle": {
+        "tooltipCursor": {
+          "fill": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Fill color for rectangle tooltip cursor"
+          }
+        }
+      },
+      "referenceLine": {
+        "stroke": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Stroke color for reference lines"
+        }
+      },
+      "dot": {
+        "stroke": {
+          "value": "transparent",
+          "description": "Stroke color for dots"
+        }
+      },
+      "sector": {
+        "outline": {
+          "value": "none",
+          "description": "Outline for sectors"
+        },
+        "stroke": {
+          "value": "transparent",
+          "description": "Stroke color for sectors"
+        }
+      },
+      "surface": {
+        "outline": {
+          "value": "none",
+          "description": "Outline for surfaces"
+        }
+      },
+      "layer": {
+        "outline": {
+          "value": "none",
+          "description": "Outline for layers"
+        }
+      },
+      "curve": {
+        "tooltipCursor": {
+          "stroke": {
+            "value": "{color.palette.neutral.200}",
+            "description": "Stroke color for curve tooltip cursor"
+          }
+        }
+      }
+    },
+    "tooltip": {
+      "content": {
+        "display": {
+          "value": "flex",
+          "description": "Display for tooltip content"
+        },
+        "flexDirection": {
+          "value": "column",
+          "description": "Flex direction for tooltip content"
+        },
+        "gap": {
+          "value": "6px",
+          "description": "Gap in tooltip content"
+        },
+        "wrap": {
+          "flexWrap": {
+            "value": "wrap",
+            "description": "Flex wrap for tooltip content"
+          }
+        },
+        "indicator": {
+          "size": {
+            "value": "10px",
+            "description": "Size for tooltip indicators"
+          },
+          "borderRadius": {
+            "value": "2px",
+            "description": "Border radius for tooltip indicators"
+          },
+          "color": {
+            "muted": {
+              "value": "{color.palette.neutral.500}",
+              "description": "Muted color for tooltip indicators"
+            }
+          },
+          "variants": {
+            "dot": {
+              "size": {
+                "value": "10px",
+                "description": "Size for dot indicators"
+              }
+            },
+            "line": {
+              "width": {
+                "value": "4px",
+                "description": "Width for line indicators"
+              }
+            },
+            "dashed": {
+              "width": {
+                "value": "0px",
+                "description": "Width for dashed indicators"
+              },
+              "borderWidth": {
+                "value": "1.5px",
+                "description": "Border width for dashed indicators"
+              },
+              "borderStyle": {
+                "value": "dashed",
+                "description": "Border style for dashed indicators"
+              },
+              "backgroundColor": {
+                "value": "transparent",
+                "description": "Background color for dashed indicators"
+              },
+              "margin": {
+                "vertical": {
+                  "value": "2px",
+                  "description": "Vertical margin for dashed indicators"
+                }
+              }
+            }
+          }
+        },
+        "label": {
+          "fontWeight": {
+            "value": "500",
+            "description": "Font weight for tooltip labels"
+          }
+        },
+        "value": {
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Color for tooltip values"
+          },
+          "fontFamily": {
+            "value": "monospace",
+            "description": "Font family for tooltip values"
+          },
+          "fontWeight": {
+            "value": "500",
+            "description": "Font weight for tooltip values"
+          },
+          "tabularNums": {
+            "value": "tabular-nums",
+            "description": "Tabular numbers for tooltip values"
+          }
+        },
+        "item": {
+          "display": {
+            "value": "flex",
+            "description": "Display for tooltip items"
+          },
+          "width": {
+            "value": "100%",
+            "description": "Width for tooltip items"
+          },
+          "flexWrap": {
+            "value": "wrap",
+            "description": "Flex wrap for tooltip items"
+          },
+          "gap": {
+            "value": "8px",
+            "description": "Gap for tooltip items"
+          },
+          "alignItems": {
+            "value": "stretch",
+            "description": "Align items for tooltip items"
+          },
+          "indicator": {
+            "color": {
+              "value": "{color.palette.neutral.500}",
+              "description": "Color for tooltip item indicators"
+            }
+          }
+        },
+        "text": {
+          "color": {
+            "value": "{color.palette.neutral.500}",
+            "description": "Color for tooltip item text"
+          }
+        },
+        "nestedLabel": {
+          "alignItems": {
+            "value": "flex-end",
+            "description": "Align items when label is nested"
+          }
+        },
+        "default": {
+          "alignItems": {
+            "value": "center",
+            "description": "Default align items for tooltip items"
+          }
+        }
+      }
+    },
+    "legend": {
+      "content": {
+        "display": {
+          "value": "flex",
+          "description": "Display for legend content"
+        },
+        "alignItems": {
+          "value": "center",
+          "description": "Align items for legend content"
+        },
+        "justifyContent": {
+          "value": "center",
+          "description": "Justify content for legend content"
+        },
+        "gap": {
+          "value": "16px",
+          "description": "Gap for legend content"
+        },
+        "padding": {
+          "vertical": {
+            "value": "12px",
+            "description": "Vertical padding for legend content"
+          }
+        },
+        "verticalAlign": {
+          "top": {
+            "paddingBottom": {
+              "value": "12px",
+              "description": "Padding bottom when vertically aligned to top"
+            }
+          },
+          "bottom": {
+            "paddingTop": {
+              "value": "12px",
+              "description": "Padding top when vertically aligned to bottom"
+            }
+          }
+        }
+      },
+      "item": {
+        "display": {
+          "value": "flex",
+          "description": "Display for legend items"
+        },
+        "alignItems": {
+          "value": "center",
+          "description": "Align items for legend items"
+        },
+        "gap": {
+          "value": "6px",
+          "description": "Gap for legend items"
+        },
+        "icon": {
+          "color": {
+            "value": "{color.palette.neutral.500}",
+            "description": "Color for legend item icons"
+          },
+          "size": {
+            "value": "12px",
+            "description": "Size for legend item icons"
+          },
+          "indicator": {
+            "size": {
+              "value": "8px",
+              "description": "Size for legend item indicators"
+            },
+            "borderRadius": {
+              "value": "2px",
+              "description": "Border radius for legend item indicators"
+            }
+          }
+        }
+      }
+    },
+    "grid": {
+      "gap": {
+        "value": "6px",
+        "description": "Gap for grid layouts in tooltips"
+      }
+    }
+  }
 }

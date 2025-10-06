@@ -1,3 +1,122 @@
 {
-  "radio-group": {}
+  "prefix": "radioGroup",
+  "tokens": {
+    "container": {
+      "display": {
+        "value": "grid",
+        "description": "Display property for radio group container"
+      },
+      "gap": {
+        "value": "12px",
+        "description": "Gap between radio group items"
+      }
+    },
+    "item": {
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for radio items"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for radio items"
+        },
+        "color": {
+          "default": {
+            "value": "{color.palette.neutral.200}",
+            "description": "Default border color for radio items"
+          }
+        }
+      },
+      "size": {
+        "value": "16px",
+        "description": "Size of radio items"
+      },
+      "borderRadius": {
+        "value": "9999px",
+        "description": "Border radius for radio items (fully rounded)"
+      },
+      "boxShadow": {
+        "value": "{elevation.level.1}",
+        "description": "Box shadow for radio items"
+      },
+      "transition": {
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for radio items"
+        },
+        "easing": {
+          "value": "ease-in-out",
+          "description": "Transition easing for radio items"
+        }
+      },
+      "backgroundColor": {
+        "default": {
+          "value": "transparent",
+          "description": "Default background color for radio items"
+        },
+        "dark": {
+          "value": "{color.palette.neutral.200}",
+          "opacity": 0.3,
+          "description": "Dark mode background color for radio items"
+        }
+      },
+      "color": {
+        "value": "{color.action.background.primary.default}",
+        "description": "Color for radio items"
+      },
+      "states": {
+        "disabled": {
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity for disabled radio items"
+          }
+        }
+      }
+    },
+    "indicator": {
+      "position": {
+        "value": "relative",
+        "description": "Position for radio indicators"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display property for radio indicators"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for radio indicators"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for radio indicators"
+      },
+      "icon": {
+        "fill": {
+          "value": "{color.action.background.primary.default}",
+          "description": "Fill color for radio indicator icons"
+        },
+        "position": {
+          "value": "absolute",
+          "description": "Position for radio indicator icons"
+        },
+        "top": {
+          "value": "50%",
+          "description": "Top position for radio indicator icons"
+        },
+        "left": {
+          "value": "50%",
+          "description": "Left position for radio indicator icons"
+        },
+        "size": {
+          "value": "8px",
+          "description": "Size for radio indicator icons"
+        },
+        "transform": {
+          "value": "translate(-50%, -50%)",
+          "description": "Transform for radio indicator icons"
+        }
+      }
+    }
+  }
 }

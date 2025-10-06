@@ -1,0 +1,31 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/ToggleGroup/toggle-group.tokens.json
+ */
+@mixin vars {
+  /* === Padding Tokens === */
+  --toggle-group-padding-horizontal-default: 12px;
+  --toggle-group-padding-horizontal-sm: 8px;
+  --toggle-group-padding-horizontal-lg: 16px;
+  --toggle-group-padding-vertical-default: 6px;
+  --toggle-group-padding-vertical-sm: 4px;
+  --toggle-group-padding-vertical-lg: 8px;
+
+  /* === Height Tokens === */
+  --toggle-group-height-default: 36px;
+  --toggle-group-height-sm: 32px;
+  --toggle-group-height-lg: 40px;
+
+  /* === Variants Tokens === */
+  --toggle-group-variants-default-backgroundColor: var(--color-action-background-secondary-default);
+  --toggle-group-variants-default-color: var(--color-action-foreground-secondary-default);
+  --toggle-group-variants-default-borderColor: var(--color-action-border-secondary-default);
+  --toggle-group-variants-default-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --toggle-group-variants-default-selected-backgroundColor: var(--color-action-background-primary-default);
+  --toggle-group-variants-default-selected-color: var(--color-action-foreground-primary-default);
+  --toggle-group-variants-outline-backgroundColor: var(--color-mode-light);
+  --toggle-group-variants-outline-borderColor: var(--color-action-border-secondary-default);
+  --toggle-group-variants-outline-color: var(--color-action-foreground-secondary-default);
+  --toggle-group-variants-outline-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --toggle-group-variants-outline-selected-backgroundColor: var(--color-action-background-primary-default);
+  --toggle-group-variants-outline-selected-color: var(--color-action-foreground-primary-default);
+}

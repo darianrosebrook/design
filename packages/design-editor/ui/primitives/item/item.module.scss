@@ -1,7 +1,198 @@
 // item primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Item.tokens.generated.scss' as itemTokens;
+
+// Include the generated variables mixin
+@include itemTokens.vars;
+
+// Item group container
+.item-group {
+  display: var(--item-group-display);
+  flex-direction: var(--item-group-flexDirection);
+}
+
+// Item separator
+.item-separator {
+  margin: var(--item-separator-margin-vertical) 0;
+}
+
+// Item main component
 .item {
-  // Placeholder for future SCSS implementation
-  // Will contain item-specific styles when migrating from Tailwind
+  display: var(--item-item-display);
+  align-items: var(--item-item-alignItems);
+  border: var(--item-item-border-width) var(--item-item-border-style) var(--item-item-border-color);
+  font-size: var(--item-item-fontSize);
+  border-radius: var(--item-item-borderRadius);
+  transition: var(--item-item-transition-property) var(--item-item-transition-duration);
+  flex-wrap: var(--item-item-flexWrap);
+  outline: var(--item-item-outline);
+
+  // Focus visible state
+  &:focus-visible {
+    border-color: var(--item-item-focusVisible-borderColor);
+    box-shadow: 0 0 0 var(--item-item-focusVisible-ringWidth) rgba(var(--item-item-focusVisible-ringColor), var(--item-item-focusVisible-ringColor-opacity));
+  }
+
+  // Link hover state (when item is an anchor tag)
+  &[data-slot="item"]:is(a):hover {
+    background-color: var(--item-item-link-hover-backgroundColor);
+    opacity: var(--item-item-link-hover-backgroundColor-opacity);
+  }
+
+  // Variant: default
+  &[data-variant="default"] {
+    background-color: var(--item-item-variants-default-backgroundColor);
+  }
+
+  // Variant: outline
+  &[data-variant="outline"] {
+    border-color: var(--item-item-variants-outline-borderColor);
+  }
+
+  // Variant: muted
+  &[data-variant="muted"] {
+    background-color: var(--item-item-variants-muted-backgroundColor);
+    opacity: var(--item-item-variants-muted-backgroundColor-opacity);
+  }
+
+  // Size: default
+  &[data-size="default"] {
+    padding: var(--item-item-sizes-default-padding-vertical) var(--item-item-sizes-default-padding-horizontal);
+    gap: var(--item-item-sizes-default-gap);
+  }
+
+  // Size: sm
+  &[data-size="sm"] {
+    padding: var(--item-item-sizes-sm-padding-vertical) var(--item-item-sizes-sm-padding-horizontal);
+    gap: var(--item-item-sizes-sm-gap);
+  }
+}
+
+// Item media area
+.item-media {
+  display: var(--item-media-display);
+  flex-shrink: var(--item-media-flexShrink);
+  align-items: var(--item-media-alignItems);
+  justify-content: var(--item-media-justifyContent);
+  gap: var(--item-media-gap);
+
+  // Icons in media
+  svg {
+    pointer-events: var(--item-media-icon-pointerEvents);
+  }
+
+  // When description is present
+  .item:has([data-slot="item-description"]) & {
+    align-self: var(--item-media-description-selfStart);
+    transform: translateY(var(--item-media-description-translateY));
+  }
+
+  // Variant: default
+  &[data-variant="default"] {
+    background-color: var(--item-media-variants-default-backgroundColor);
+  }
+
+  // Variant: icon
+  &[data-variant="icon"] {
+    width: var(--item-media-variants-icon-size);
+    height: var(--item-media-variants-icon-size);
+    border: var(--item-media-variants-icon-border-width) var(--item-media-variants-icon-border-style) var(--item-media-variants-icon-border-color);
+    border-radius: var(--item-media-variants-icon-borderRadius);
+    background-color: var(--item-media-variants-icon-backgroundColor);
+
+    // Icons within icon variant
+    svg:not([class*="size-"]) {
+      width: var(--item-media-variants-icon-icon-size);
+      height: var(--item-media-variants-icon-icon-size);
+    }
+  }
+
+  // Variant: image
+  &[data-variant="image"] {
+    width: var(--item-media-variants-image-size);
+    height: var(--item-media-variants-image-size);
+    border-radius: var(--item-media-variants-image-borderRadius);
+    overflow: var(--item-media-variants-image-overflow);
+
+    // Images within image variant
+    img {
+      width: var(--item-media-variants-image-image-size);
+      height: var(--item-media-variants-image-image-size);
+      object-fit: var(--item-media-variants-image-image-objectFit);
+    }
+  }
+}
+
+// Item content area
+.item-content {
+  display: var(--item-content-display);
+  flex: var(--item-content-flex);
+  flex-direction: var(--item-content-flexDirection);
+  gap: var(--item-content-gap);
+
+  // When adjacent to another content area
+  & + [data-slot="item-content"] {
+    flex: var(--item-content-adjacent-flex);
+  }
+}
+
+// Item title
+.item-title {
+  display: var(--item-title-display);
+  width: var(--item-title-width);
+  align-items: var(--item-title-alignItems);
+  gap: var(--item-title-gap);
+  font-size: var(--item-title-fontSize);
+  line-height: var(--item-title-lineHeight);
+  font-weight: var(--item-title-fontWeight);
+}
+
+// Item description
+.item-description {
+  color: var(--item-description-color);
+  display: -webkit-box;
+  -webkit-line-clamp: var(--item-description-lineClamp);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: var(--item-description-fontSize);
+  line-height: var(--item-description-lineHeight);
+  font-weight: var(--item-description-fontWeight);
+  text-wrap: var(--item-description-textBalance);
+
+  // Links within description
+  a {
+    text-decoration: var(--item-description-link-textDecoration);
+    text-underline-offset: var(--item-description-link-underlineOffset);
+
+    &:hover {
+      color: var(--item-description-link-hover-color);
+    }
+  }
+}
+
+// Item actions
+.item-actions {
+  display: var(--item-actions-display);
+  align-items: var(--item-actions-alignItems);
+  gap: var(--item-actions-gap);
+}
+
+// Item header
+.item-header {
+  display: var(--item-header-display);
+  flex-basis: var(--item-header-flexBasis);
+  align-items: var(--item-header-alignItems);
+  justify-content: var(--item-header-justifyContent);
+  gap: var(--item-header-gap);
+}
+
+// Item footer
+.item-footer {
+  display: var(--item-footer-display);
+  flex-basis: var(--item-footer-flexBasis);
+  align-items: var(--item-footer-alignItems);
+  justify-content: var(--item-footer-justifyContent);
+  gap: var(--item-footer-gap);
 }

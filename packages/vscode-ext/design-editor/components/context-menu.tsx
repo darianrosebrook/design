@@ -1,8 +1,8 @@
 "use client"
 
+import { Copy, Trash2, Lock, Eye, MoveUp, MoveDown, Group } from "lucide-react"
 import { useEffect } from "react"
 import { useCanvas } from "@/lib/canvas-context"
-import { Copy, Trash2, Lock, Eye, MoveUp, MoveDown, Group } from "lucide-react"
 
 export function ContextMenu() {
   const { contextMenu, setContextMenu, objects, selectedId } = useCanvas()
@@ -21,7 +21,7 @@ export function ContextMenu() {
     }
   }, [contextMenu, setContextMenu])
 
-  if (!contextMenu) return null
+  if (!contextMenu) {return null}
 
   const menuItems = [
     { icon: Copy, label: "Duplicate", shortcut: "⌘D" },

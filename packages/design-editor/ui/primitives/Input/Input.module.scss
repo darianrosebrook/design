@@ -1,78 +1,83 @@
 // Input component styles
-// Migrated from Tailwind to SCSS with design tokens
+// Migrated from Tailwind to SCSS with semantic design tokens
+
+// Import generated token variables
+@use './Input.tokens.generated.scss' as inputTokens;
 
 .input {
+  // Include the generated variables mixin within the component scope
+  @include inputTokens.vars;
   // File input text color (equivalent to file:text-foreground)
   &[type="file"] {
-    color: hsl(var(--foreground));
+    color: var(--semantic-color-display-foreground-primary);
   }
 
   // Placeholder text color (equivalent to placeholder:text-muted-foreground)
   &::placeholder {
-    color: hsl(var(--muted-foreground));
+    color: var(--input-placeholderColor);
   }
 
   // Selection colors (equivalent to selection:bg-primary selection:text-primary-foreground)
   &::selection {
-    background-color: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
+    background-color: var(--input-selection-backgroundColor);
+    color: var(--input-selection-color);
   }
 
   // Dark mode background (equivalent to dark:bg-input/30)
   .dark & {
-    background-color: hsl(var(--input) / 0.3);
+    background-color: rgba(var(--input-backgroundColor-dark), var(--input-backgroundColor-dark-opacity));
   }
 
   // Base input styles (equivalent to border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none)
   color: inherit;
-  border: 1px solid hsl(var(--input)); // equivalent to border-input
-  height: 36px; // equivalent to h-9
-  width: 100%; // equivalent to w-full
-  min-width: 0; // equivalent to min-w-0
-  border-radius: 6px; // equivalent to rounded-md
-  background-color: transparent; // equivalent to bg-transparent
-  padding: 4px 12px; // equivalent to py-1 px-3
-  font-size: 16px; // equivalent to text-base
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); // equivalent to shadow-xs
-  transition: color 150ms ease-in-out, box-shadow 150ms ease-in-out; // equivalent to transition-[color,box-shadow]
-  outline: none; // equivalent to outline-none
+  border: var(--input-border-width) solid var(--input-border-color-default);
+  height: var(--input-height);
+  width: 100%;
+  min-width: 0;
+  border-radius: var(--input-borderRadius);
+  background-color: var(--input-backgroundColor-default);
+  padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+  font-size: var(--input-fontSize-base);
+  box-shadow: var(--semantic-elevation-default);
+  transition: var(--semantic-motion-interaction-focus-duration) var(--semantic-motion-interaction-focus-easing);
+  outline: none;
 
   // File input specific styles (equivalent to file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium)
   &[type="file"] {
     display: inline-flex;
     align-items: center;
-    height: 28px; // equivalent to file:h-7
-    border: 0; // equivalent to file:border-0
-    background-color: transparent; // equivalent to file:bg-transparent
-    font-size: 14px; // equivalent to file:text-sm
-    font-weight: 500; // equivalent to file:font-medium
+    height: calc(var(--semantic-components-input-height-small) - var(--semantic-shape-border-width-hairline));
+    border: 0;
+    background-color: transparent;
+    font-size: var(--semantic-typography-input-02);
+    font-weight: var(--semantic-typography-font-weight-medium);
   }
 
   // Disabled state (equivalent to disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50)
   &:disabled {
     pointer-events: none;
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--semantic-opacity-disabled);
   }
 
   // Medium screen text size (equivalent to md:text-sm)
-  @media (min-width: 768px) {
-    font-size: 14px; // equivalent to md:text-sm
+  @media (min-width: var(--semantic-dimension-breakpoint-md)) {
+    font-size: var(--semantic-typography-input-02);
   }
 
   // Focus visible styles (equivalent to focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px])
   &:focus-visible {
-    border-color: hsl(var(--ring));
-    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5);
+    border-color: var(--input-border-color-focus);
+    box-shadow: 0 0 0 var(--input-focus-ring-width) rgba(var(--input-focus-ring-color), var(--input-focus-ring-color-opacity));
   }
 
   // Invalid state (equivalent to aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive)
   &[aria-invalid="true"] {
-    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2);
-    border-color: hsl(var(--destructive));
+    box-shadow: 0 0 0 var(--input-focus-ring-width) rgba(var(--input-border-color-invalid), 0.2);
+    border-color: var(--input-border-color-invalid);
 
     .dark & {
-      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4);
+      box-shadow: 0 0 0 var(--input-focus-ring-width) rgba(var(--input-border-color-invalid), 0.4);
     }
   }
 }

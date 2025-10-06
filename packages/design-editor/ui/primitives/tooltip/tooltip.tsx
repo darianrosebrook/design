@@ -1,63 +1,104 @@
-'use client'
+import * as TooltipPrimitive from "@radix-ui/react-tooltip";
+import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
+import styles from "./tooltip.module.scss";
+import { cn } from "@/lib/utils";
 
-import * as TooltipPrimitive from '@radix-ui/react-tooltip'
-import * as React from 'react'
-import { cn } from '@/lib/utils'
-import styles from './${componentName}.module.scss'
+/**
+ * Tooltip component variant styles using CVA
+ * @author @darianrosebrook
+ */
+const tooltipVariants = cva(
+  // Base styles now in SCSS - keeping Tailwind commented for reference
+  // "z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+  styles.tooltip,
+  {
+    variants: {
+      variant: {
+        // Tailwind versions commented for reference:
+        // default: "bg-popover text-popover-foreground border-border",
+        // light: "bg-background text-foreground border-border",
 
+        default: styles["tooltip--variant-default"],
+        light: styles["tooltip--variant-light"],
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
+
+/**
+ * Tooltip provider component
+ * @author @darianrosebrook
+ */
 function TooltipProvider({
-  delayDuration = 0,
+  children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
   return (
-    <TooltipPrimitive.Provider
-      data-slot="tooltip-provider"
-      delayDuration={delayDuration}
-      {...props}
-    />
-  )
+    <TooltipPrimitive.Provider {...props}>{children}</TooltipPrimitive.Provider>
+  );
 }
 
+/**
+ * Tooltip root component
+ * @author @darianrosebrook
+ */
 function Tooltip({
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Root>) {
-  return (
-    <TooltipProvider>
-      <TooltipPrimitive.Root data-slot="tooltip" {...props} />
-    </TooltipProvider>
-  )
+  return <TooltipPrimitive.Root {...props} />;
 }
 
+/**
+ * Tooltip trigger component
+ * @author @darianrosebrook
+ */
 function TooltipTrigger({
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {
-  return <TooltipPrimitive.Trigger data-slot="tooltip-trigger" {...props} />
+  return <TooltipPrimitive.Trigger asChild {...props} />;
 }
 
+export interface TooltipContentProps
+  extends React.ComponentProps<typeof TooltipPrimitive.Content>,
+    VariantProps<typeof tooltipVariants> {}
+
+/**
+ * Tooltip content component
+ *
+ * @param className - Additional CSS classes
+ * @param variant - Visual variant of the tooltip
+ * @param sideOffset - Offset from the trigger element
+ * @param ...props - Additional props passed to the underlying TooltipPrimitive.Content
+ * @author @darianrosebrook
+ */
 function TooltipContent({
   className,
-  sideOffset = 0,
-  children,
+  variant,
+  sideOffset = 4,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+}: TooltipContentProps) {
   return (
-    <TooltipPrimitive.Portal>
-      <TooltipPrimitive.Content
-        data-slot="tooltip-content"
-        sideOffset={sideOffset}
-        className={cn(
-          'bg-foreground text-background animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance',
-          className,
-        )}
-        {...props}
-      >
-        {children}
-        <TooltipPrimitive.Arrow className="bg-foreground fill-foreground z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
-      </TooltipPrimitive.Content>
-    </TooltipPrimitive.Portal>
-  )
+    <TooltipPrimitive.Content
+      data-slot="tooltip-content"
+      sideOffset={sideOffset}
+      className={cn(tooltipVariants({ variant, className }))}
+      {...props}
+    >
+      {props.children}
+      <TooltipPrimitive.Arrow className={styles["tooltip-arrow"]} />
+    </TooltipPrimitive.Content>
+  );
 }
 
-// Component implementation
-
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+  tooltipVariants,
+  type TooltipContentProps,
+};

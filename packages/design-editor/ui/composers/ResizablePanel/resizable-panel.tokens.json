@@ -1,3 +1,74 @@
 {
-  "resizable-panel": {}
+  "prefix": "resizablePanel",
+  "tokens": {
+    "backgroundColor": {
+      "value": "{semantic.color.display.background.primary}",
+      "description": "Background color for resizable panel"
+    },
+    "borderColor": {
+      "value": "{semantic.color.display.border.subtle}",
+      "description": "Border color for resizable panel"
+    },
+    "borderRadius": {
+      "value": "{semantic.shape.radius.extra.large}",
+      "description": "Border radius for resizable panel"
+    },
+    "layout": {
+      "handle": {
+        "width": {
+          "value": "4px",
+          "description": "Width for resize handle"
+        },
+        "height": {
+          "value": "100%",
+          "description": "Height for resize handle"
+        },
+        "interactionArea": {
+          "offset": {
+            "value": "4px",
+            "description": "Offset for handle interaction area"
+          }
+        }
+      }
+    },
+    "interactive": {
+      "handle": {
+        "cursor": {
+          "value": "col-resize",
+          "description": "Cursor for resize handle"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{semantic.color.action.background.primary.default}",
+            "opacity": 0.5,
+            "description": "Background color for handle on hover"
+          }
+        },
+        "transition": {
+          "duration": {
+            "value": "150ms",
+            "description": "Transition duration for handle hover"
+          },
+          "easing": {
+            "value": "ease-in-out",
+            "description": "Transition easing for handle hover"
+          }
+        }
+      }
+    },
+    "positioning": {
+      "left": {
+        "right": {
+          "value": "0",
+          "description": "Right position for left-side handle"
+        }
+      },
+      "right": {
+        "left": {
+          "value": "0",
+          "description": "Left position for right-side handle"
+        }
+      }
+    }
+  }
 }

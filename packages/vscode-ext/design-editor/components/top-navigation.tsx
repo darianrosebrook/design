@@ -1,6 +1,8 @@
 "use client"
 
+import { ChevronDown } from "lucide-react"
 import { useState } from "react"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,8 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { ChevronDown } from "lucide-react"
 
 export function TopNavigation() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null)

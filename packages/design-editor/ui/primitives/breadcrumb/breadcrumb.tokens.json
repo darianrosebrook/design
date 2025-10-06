@@ -1,3 +1,219 @@
 {
-  "breadcrumb": {}
+  "prefix": "breadcrumb",
+  "tokens": {
+    "breadcrumb": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for breadcrumb components"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for breadcrumb components"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap between breadcrumb elements"
+      }
+    },
+    "list": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for breadcrumb list"
+      },
+      "flexWrap": {
+        "value": "wrap",
+        "description": "Flex wrap for breadcrumb list"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for breadcrumb list"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap between breadcrumb list items"
+      }
+    },
+    "item": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for breadcrumb item"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for breadcrumb item"
+      }
+    },
+    "link": {
+      "display": {
+        "value": "inline-flex",
+        "description": "Display type for breadcrumb link"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for breadcrumb link"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap in breadcrumb link"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for breadcrumb link"
+      },
+      "padding": {
+        "horizontal": {
+          "value": "4px",
+          "description": "Horizontal padding for breadcrumb link"
+        },
+        "vertical": {
+          "value": "2px",
+          "description": "Vertical padding for breadcrumb link"
+        }
+      },
+      "color": {
+        "value": "{color.palette.neutral.600}",
+        "description": "Color for breadcrumb link"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for breadcrumb link"
+      },
+      "lineHeight": {
+        "value": "1.4",
+        "description": "Line height for breadcrumb link"
+      },
+      "transition": {
+        "property": {
+          "value": "color",
+          "description": "Transition property for breadcrumb link"
+        },
+        "duration": {
+          "value": "200ms",
+          "description": "Transition duration for breadcrumb link"
+        },
+        "easing": {
+          "value": "ease-in-out",
+          "description": "Transition easing for breadcrumb link"
+        }
+      },
+      "states": {
+        "hover": {
+          "color": {
+            "value": "{color.palette.neutral.900}",
+            "description": "Color on hover for breadcrumb link"
+          }
+        },
+        "focus": {
+          "outline": {
+            "value": "2px solid {color.palette.blue.500}",
+            "description": "Outline on focus for breadcrumb link"
+          },
+          "outlineOffset": {
+            "value": "2px",
+            "description": "Outline offset on focus for breadcrumb link"
+          }
+        }
+      }
+    },
+    "page": {
+      "color": {
+        "value": "{color.palette.neutral.900}",
+        "description": "Color for breadcrumb page"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for breadcrumb page"
+      },
+      "lineHeight": {
+        "value": "1.4",
+        "description": "Line height for breadcrumb page"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for breadcrumb page"
+      }
+    },
+    "separator": {
+      "color": {
+        "value": "{color.palette.neutral.400}",
+        "description": "Color for breadcrumb separator"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display type for breadcrumb separator"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for breadcrumb separator"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for breadcrumb separator"
+      },
+      "icon": {
+        "size": {
+          "value": "14px",
+          "description": "Size for separator icon"
+        }
+      }
+    },
+    "ellipsis": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for breadcrumb ellipsis"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for breadcrumb ellipsis"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for breadcrumb ellipsis"
+      },
+      "height": {
+        "value": "20px",
+        "description": "Height for breadcrumb ellipsis"
+      },
+      "width": {
+        "value": "20px",
+        "description": "Width for breadcrumb ellipsis"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for breadcrumb ellipsis"
+      },
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for breadcrumb ellipsis"
+      },
+      "icon": {
+        "size": {
+          "value": "14px",
+          "description": "Size for ellipsis icon"
+        }
+      },
+      "states": {
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color on hover for breadcrumb ellipsis"
+          }
+        },
+        "focus": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color on focus for breadcrumb ellipsis"
+          },
+          "outline": {
+            "value": "2px solid {color.palette.blue.500}",
+            "description": "Outline on focus for breadcrumb ellipsis"
+          },
+          "outlineOffset": {
+            "value": "2px",
+            "description": "Outline offset on focus for breadcrumb ellipsis"
+          }
+        }
+      }
+    }
+  }
 }

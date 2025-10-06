@@ -1,0 +1,30 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Resizable/resizable.tokens.json
+ */
+@mixin vars {
+  /* === PanelGroup Tokens === */
+  --resizable-panelGroup-layout-direction-horizontal-flexDirection: row;
+  --resizable-panelGroup-layout-direction-vertical-flexDirection: column;
+
+  /* === Handle Tokens === */
+  --resizable-handle-backgroundColor: var(--semantic-color-display-border-subtle);
+  --resizable-handle-focus-ring-color: var(--semantic-color-action-border-primary-focus);
+  --resizable-handle-focus-ring-width: 1px;
+  --resizable-handle-focus-ring-offset: 1px;
+  --resizable-handle-layout-width: 1px;
+  --resizable-handle-layout-height: 1px;
+  --resizable-handle-layout-indicator-width: 4px;
+  --resizable-handle-layout-indicator-height: 4px;
+  --resizable-handle-layout-indicator-position-horizontal-left: 50%;
+  --resizable-handle-layout-indicator-position-horizontal-translateX: -50%;
+  --resizable-handle-layout-indicator-position-vertical-top: 50%;
+  --resizable-handle-layout-indicator-position-vertical-translateY: -50%;
+
+  /* === HandleGrip Tokens === */
+  --resizable-handleGrip-backgroundColor: var(--semantic-color-display-border-subtle);
+  --resizable-handleGrip-borderRadius: var(--semantic-shape-control-radius-xsmall);
+  --resizable-handleGrip-layout-width: 12px;
+  --resizable-handleGrip-layout-height: 16px;
+  --resizable-handleGrip-layout-zIndex: var(--semantic-z-index-overlay);
+  --resizable-handleGrip-icon-size: 10px;
+}

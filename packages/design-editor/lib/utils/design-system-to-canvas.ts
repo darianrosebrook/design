@@ -1,5 +1,5 @@
-import { CanvasObject } from "@/lib/types";
 import type { DesignSystemItem } from "@/lib/data/design-system-items";
+import type { CanvasObject } from "@/lib/types";
 
 /**
  * Converts a design system item to a canvas object

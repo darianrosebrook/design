@@ -1,5 +1,6 @@
 "use client";
 
+import { Label } from "@paths-design/design-system";
 import {
   Link2,
   Unlink,
@@ -11,11 +12,11 @@ import {
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import { Button } from '@/ui/primitives/Button';
-import { Input } from '@/ui/primitives/Input';
-import { Label } from '@/ui/primitives/label';
-import { Switch } from '@/ui/primitives/switch';
+import styles from "./layout-section.module.scss";
 import type { CanvasObject } from "@/lib/types";
+import { Button } from "@/ui/primitives/Button";
+import { Input } from "@/ui/primitives/Input";
+import { Switch } from "@/ui/primitives/Switch";
 
 interface LayoutSectionProps {
   object: CanvasObject;
@@ -57,97 +58,97 @@ export function LayoutSection({ object, onUpdate }: LayoutSectionProps) {
   };
 
   return (
-    <div className="space-y-3">
+    <div className={styles.layoutSection}>
       {/* Layout Mode Toggle */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Label className="text-xs font-medium">Auto Layout</Label>
+      <div className={styles.layoutModeToggle}>
+        <div className={styles.layoutModeToggleContent}>
+          <Label className={styles.layoutModeToggleLabel}>Auto Layout</Label>
           <Switch
             checked={autoLayout}
             onCheckedChange={toggleAutoLayout}
-            className="scale-75"
+            className={styles.layoutModeToggleSwitch}
           />
         </div>
         {autoLayout && (
-          <div className="flex gap-1">
+          <div className={styles.layoutModeButtons}>
             <Button
               variant="outline"
               size="sm"
-              className="h-6 w-6 p-0"
+              className={styles.resizeButton}
               title="Horizontal"
             >
-              <ArrowLeftRight className="h-3 w-3" />
+              <ArrowLeftRight className={styles.resizeButtonIcon} />
             </Button>
             <Button
               variant="outline"
               size="sm"
-              className="h-6 w-6 p-0"
+              className={styles.resizeButton}
               title="Vertical"
             >
-              <ArrowUpDown className="h-3 w-3" />
+              <ArrowUpDown className={styles.resizeButtonIcon} />
             </Button>
           </div>
         )}
       </div>
 
       {/* Dimensions */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label className="text-xs font-medium">Size</Label>
+      <div className={styles.dimensionsSection}>
+        <div className={styles.dimensionsHeader}>
+          <Label className={styles.dimensionsLabel}>Size</Label>
           <Button
             variant="ghost"
             size="icon"
-            className="h-5 w-5"
+            className={styles.aspectLockButton}
             onClick={() => setAspectLocked(!aspectLocked)}
             title={aspectLocked ? "Unlock aspect ratio" : "Lock aspect ratio"}
           >
             {aspectLocked ? (
-              <Link2 className="h-3 w-3" />
+              <Link2 className={styles.aspectLockIcon} />
             ) : (
-              <Unlink className="h-3 w-3" />
+              <Unlink className={styles.aspectLockIcon} />
             )}
           </Button>
         </div>
 
-        <div className="grid grid-cols-[1fr_auto_1fr] gap-2 items-end">
-          <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">W</Label>
+        <div className={styles.dimensionsGrid}>
+          <div className={styles.dimensionInputGroup}>
+            <Label className={styles.dimensionLabel}>W</Label>
             <Input
               type="number"
               value={object.width}
               onChange={(e) =>
                 handleDimensionChange("width", Number(e.target.value))
               }
-              className="h-8 text-sm"
+              className={styles.dimensionInput}
               step="0.1"
             />
           </div>
 
-          <div className="flex flex-col items-center gap-1 mb-1">
+          <div className={styles.aspectLockCenter}>
             <Button
               variant="ghost"
               size="icon"
-              className="h-6 w-6"
+              className={styles.aspectLockButton}
               onClick={() => setAspectLocked(!aspectLocked)}
               title={aspectLocked ? "Unlock aspect ratio" : "Lock aspect ratio"}
             >
               {aspectLocked ? (
-                <Link2 className="h-3 w-3" />
+                <Link2 className={styles.aspectLockIcon} />
               ) : (
-                <Unlink className="h-3 w-3" />
+                <Unlink className={styles.aspectLockIcon} />
               )}
             </Button>
           </div>
 
-          <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">H</Label>
+          <div className={styles.dimensionInputGroup}>
+            <Label className={styles.dimensionLabel}>H</Label>
             <Input
               type="number"
               value={object.height}
               onChange={(e) =>
                 handleDimensionChange("height", Number(e.target.value))
               }
-              className="h-8 text-sm"
+              className={styles.dimensionInput}
               step="0.1"
             />
           </div>
@@ -155,69 +156,69 @@ export function LayoutSection({ object, onUpdate }: LayoutSectionProps) {
       </div>
 
       {/* Resize Mode */}
-      <div className="space-y-2">
-        <Label className="text-xs font-medium">Resize</Label>
-        <div className="grid grid-cols-2 gap-1">
+      <div className={styles.resizeSection}>
+        <Label className={styles.resizeLabel}>Resize</Label>
+        <div className={styles.resizeGrid}>
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs"
+            className={styles.resizeButton}
             title="Fill container"
           >
-            <Maximize2 className="h-3 w-3 mr-1" />
+            <Maximize2 className={styles.resizeButtonIcon} />
             Fill
           </Button>
           <Button
             variant="outline"
             size="sm"
-            className="h-8 text-xs"
+            className={styles.resizeButton}
             title="Hug contents"
           >
-            <Minimize2 className="h-3 w-3 mr-1" />
+            <Minimize2 className={styles.resizeButtonIcon} />
             Hug
           </Button>
         </div>
       </div>
 
       {/* Rotation */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label className="text-xs font-medium">Rotation</Label>
+      <div className={styles.rotationSection}>
+        <div className={styles.rotationHeader}>
+          <Label className={styles.rotationLabel}>Rotation</Label>
           <Button
             variant="ghost"
             size="icon"
-            className="h-5 w-5"
+            className={styles.rotationResetButton}
             onClick={resetRotation}
             title="Reset rotation"
           >
-            <RotateCcw className="h-3 w-3" />
+            <RotateCcw className={styles.rotationResetIcon} />
           </Button>
         </div>
-        <div className="flex items-center gap-2">
+        <div className={styles.rotationControls}>
           <Input
             type="number"
             value={object.rotation}
             onChange={(e) => handleRotationChange(Number(e.target.value))}
-            className="h-8 text-sm flex-1"
+            className={styles.rotationInput}
             step="0.1"
             min="-360"
             max="360"
           />
-          <span className="text-xs text-muted-foreground">°</span>
+          <span className={styles.rotationUnit}>°</span>
         </div>
       </div>
 
       {/* Constraints */}
-      <div className="space-y-2">
-        <Label className="text-xs font-medium">Constraints</Label>
-        <div className="grid grid-cols-2 gap-2">
-          <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">Horizontal</Label>
-            <div className="flex gap-1">
+      <div className={styles.constraintsSection}>
+        <Label className={styles.constraintsLabel}>Constraints</Label>
+        <div className={styles.constraintsGrid}>
+          <div className={styles.constraintGroup}>
+            <Label className={styles.constraintLabel}>Horizontal</Label>
+            <div className={styles.constraintButtons}>
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 h-7 text-xs"
+                className={styles.constraintButton}
                 title="Left"
               >
                 L
@@ -225,7 +226,7 @@ export function LayoutSection({ object, onUpdate }: LayoutSectionProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 h-7 text-xs"
+                className={styles.constraintButton}
                 title="Center"
               >
                 C
@@ -233,20 +234,20 @@ export function LayoutSection({ object, onUpdate }: LayoutSectionProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 h-7 text-xs"
+                className={styles.constraintButton}
                 title="Right"
               >
                 R
               </Button>
             </div>
           </div>
-          <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">Vertical</Label>
-            <div className="flex gap-1">
+          <div className={styles.constraintGroup}>
+            <Label className={styles.constraintLabel}>Vertical</Label>
+            <div className={styles.constraintButtons}>
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 h-7 text-xs"
+                className={styles.constraintButton}
                 title="Top"
               >
                 T
@@ -254,7 +255,7 @@ export function LayoutSection({ object, onUpdate }: LayoutSectionProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 h-7 text-xs"
+                className={styles.constraintButton}
                 title="Center"
               >
                 C
@@ -262,7 +263,7 @@ export function LayoutSection({ object, onUpdate }: LayoutSectionProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="flex-1 h-7 text-xs"
+                className={styles.constraintButton}
                 title="Bottom"
               >
                 B
@@ -273,12 +274,12 @@ export function LayoutSection({ object, onUpdate }: LayoutSectionProps) {
       </div>
 
       {/* Clip Content */}
-      <div className="flex items-center justify-between">
-        <Label className="text-xs font-medium">Clip content</Label>
+      <div className={styles.clipContentSection}>
+        <Label className={styles.clipContentLabel}>Clip content</Label>
         <Switch
           checked={object.clipContent || false}
           onCheckedChange={(checked) => onUpdate({ clipContent: checked })}
-          className="scale-75"
+          className={styles.clipContentSwitch}
         />
       </div>
     </div>

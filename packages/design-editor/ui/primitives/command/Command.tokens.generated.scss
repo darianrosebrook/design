@@ -1,0 +1,96 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Command/command.tokens.json
+ */
+@mixin vars {
+  /* === Command Tokens === */
+  --command-command-backgroundColor: var(--color-palette-neutral-0);
+  --command-command-color: var(--color-mode-dark);
+  --command-command-display: flex;
+  --command-command-height: 100%;
+  --command-command-width: 100%;
+  --command-command-flexDirection: column;
+  --command-command-overflow: hidden;
+  --command-command-borderRadius: 8px;
+
+  /* === Dialog Tokens === */
+  --command-dialog-content-overflow: hidden;
+  --command-dialog-content-padding: 0px;
+
+  /* === Input Tokens === */
+  --command-input-wrapper-display: flex;
+  --command-input-wrapper-height: 36px;
+  --command-input-wrapper-alignItems: center;
+  --command-input-wrapper-gap: 8px;
+  --command-input-wrapper-borderBottom-width: 1px;
+  --command-input-wrapper-borderBottom-style: solid;
+  --command-input-wrapper-borderBottom-color: var(--color-palette-neutral-200);
+  --command-input-wrapper-padding-horizontal: 12px;
+  --command-input-icon-size: 16px;
+  --command-input-icon-opacity: 0.5;
+  --command-input-icon-flexShrink: 0;
+  --command-input-element-display: flex;
+  --command-input-element-height: 40px;
+  --command-input-element-width: 100%;
+  --command-input-element-borderRadius: 8px;
+  --command-input-element-backgroundColor: transparent;
+  --command-input-element-padding-vertical: 12px;
+  --command-input-element-fontSize: 14px;
+  --command-input-element-outline: none;
+  --command-input-element-placeholder-color: var(--color-palette-neutral-500);
+  --command-input-element-disabled-cursor: not-allowed;
+  --command-input-element-disabled-opacity: 0.5;
+
+  /* === List Tokens === */
+  --command-list-maxHeight: 300px;
+  --command-list-scrollPadding-vertical: 4px;
+  --command-list-overflowX: hidden;
+  --command-list-overflowY: auto;
+
+  /* === Empty Tokens === */
+  --command-empty-padding-vertical: 24px;
+  --command-empty-textAlign: center;
+  --command-empty-fontSize: 14px;
+
+  /* === Group Tokens === */
+  --command-group-color: var(--color-mode-dark);
+  --command-group-overflow: hidden;
+  --command-group-padding: 4px;
+  --command-group-heading-color: var(--color-palette-neutral-500);
+  --command-group-heading-padding-horizontal: 8px;
+  --command-group-heading-padding-vertical: 6px;
+  --command-group-heading-fontSize: 12px;
+  --command-group-heading-fontWeight: 500;
+  --command-group-spacing-top: 0px;
+
+  /* === Separator Tokens === */
+  --command-separator-backgroundColor: var(--color-palette-neutral-200);
+  --command-separator-margin-horizontal: -4px;
+  --command-separator-height: 1px;
+
+  /* === Item Tokens === */
+  --command-item-position: relative;
+  --command-item-display: flex;
+  --command-item-cursor: default;
+  --command-item-alignItems: center;
+  --command-item-gap: 8px;
+  --command-item-borderRadius: 4px;
+  --command-item-padding-horizontal: 8px;
+  --command-item-padding-vertical: 6px;
+  --command-item-fontSize: 14px;
+  --command-item-outline: none;
+  --command-item-userSelect: none;
+  --command-item-icon-pointerEvents: none;
+  --command-item-icon-flexShrink: 0;
+  --command-item-icon-size: 16px;
+  --command-item-icon-color: var(--color-palette-neutral-500);
+  --command-item-states-selected-backgroundColor: var(--color-palette-neutral-100);
+  --command-item-states-selected-color: var(--color-mode-dark);
+  --command-item-states-disabled-pointerEvents: none;
+  --command-item-states-disabled-opacity: 0.5;
+
+  /* === Shortcut Tokens === */
+  --command-shortcut-color: var(--color-palette-neutral-500);
+  --command-shortcut-marginLeft: auto;
+  --command-shortcut-fontSize: 12px;
+  --command-shortcut-letterSpacing: 0.05em;
+}

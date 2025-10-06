@@ -1,0 +1,106 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Item/item.tokens.json
+ */
+@mixin vars {
+  /* === Group Tokens === */
+  --item-group-display: flex;
+  --item-group-flexDirection: column;
+
+  /* === Separator Tokens === */
+  --item-separator-margin-vertical: 0px;
+
+  /* === Item Tokens === */
+  --item-item-display: flex;
+  --item-item-alignItems: center;
+  --item-item-border-width: 1px;
+  --item-item-border-style: solid;
+  --item-item-border-color: transparent;
+  --item-item-fontSize: 14px;
+  --item-item-borderRadius: 8px;
+  --item-item-transition-property: background-color, border-color;
+  --item-item-transition-duration: 100ms;
+  --item-item-flexWrap: wrap;
+  --item-item-outline: none;
+  --item-item-focusVisible-borderColor: var(--color-palette-blue-500);
+  --item-item-focusVisible-ringColor: var(--color-palette-blue-500);
+  --item-item-focusVisible-ringWidth: 3px;
+  --item-item-variants-default-backgroundColor: transparent;
+  --item-item-variants-outline-borderColor: var(--color-palette-neutral-200);
+  --item-item-variants-muted-backgroundColor: var(--color-palette-neutral-100);
+  --item-item-sizes-default-padding-vertical: 16px;
+  --item-item-sizes-default-padding-horizontal: 16px;
+  --item-item-sizes-default-gap: 16px;
+  --item-item-sizes-sm-padding-vertical: 12px;
+  --item-item-sizes-sm-padding-horizontal: 16px;
+  --item-item-sizes-sm-gap: 10px;
+  --item-item-link-hover-backgroundColor: var(--color-palette-neutral-100);
+
+  /* === Media Tokens === */
+  --item-media-display: flex;
+  --item-media-flexShrink: 0;
+  --item-media-alignItems: center;
+  --item-media-justifyContent: center;
+  --item-media-gap: 8px;
+  --item-media-description-selfStart: flex-start;
+  --item-media-description-translateY: 2px;
+  --item-media-variants-default-backgroundColor: transparent;
+  --item-media-variants-icon-size: 32px;
+  --item-media-variants-icon-border-width: 1px;
+  --item-media-variants-icon-border-style: solid;
+  --item-media-variants-icon-border-color: var(--color-palette-neutral-200);
+  --item-media-variants-icon-borderRadius: 4px;
+  --item-media-variants-icon-backgroundColor: var(--color-palette-neutral-100);
+  --item-media-variants-icon-icon-size: 16px;
+  --item-media-variants-image-size: 40px;
+  --item-media-variants-image-borderRadius: 4px;
+  --item-media-variants-image-overflow: hidden;
+  --item-media-variants-image-image-size: 100%;
+  --item-media-variants-image-image-objectFit: cover;
+  --item-media-icon-pointerEvents: none;
+
+  /* === Content Tokens === */
+  --item-content-display: flex;
+  --item-content-flex: 1;
+  --item-content-flexDirection: column;
+  --item-content-gap: 4px;
+  --item-content-adjacent-flex: none;
+
+  /* === Title Tokens === */
+  --item-title-display: flex;
+  --item-title-width: fit-content;
+  --item-title-alignItems: center;
+  --item-title-gap: 8px;
+  --item-title-fontSize: 14px;
+  --item-title-lineHeight: 1.375;
+  --item-title-fontWeight: 500;
+
+  /* === Description Tokens === */
+  --item-description-color: var(--color-palette-neutral-500);
+  --item-description-lineClamp: 2;
+  --item-description-fontSize: 14px;
+  --item-description-lineHeight: 1.428;
+  --item-description-fontWeight: 400;
+  --item-description-textBalance: balance;
+  --item-description-link-hover-color: var(--color-palette-blue-600);
+  --item-description-link-textDecoration: underline;
+  --item-description-link-underlineOffset: 4px;
+
+  /* === Actions Tokens === */
+  --item-actions-display: flex;
+  --item-actions-alignItems: center;
+  --item-actions-gap: 8px;
+
+  /* === Header Tokens === */
+  --item-header-display: flex;
+  --item-header-flexBasis: 100%;
+  --item-header-alignItems: center;
+  --item-header-justifyContent: space-between;
+  --item-header-gap: 8px;
+
+  /* === Footer Tokens === */
+  --item-footer-display: flex;
+  --item-footer-flexBasis: 100%;
+  --item-footer-alignItems: center;
+  --item-footer-justifyContent: space-between;
+  --item-footer-gap: 8px;
+}

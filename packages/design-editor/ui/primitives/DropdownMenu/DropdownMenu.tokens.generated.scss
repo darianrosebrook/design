@@ -1,0 +1,96 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/DropdownMenu/dropdown-menu.tokens.json
+ */
+@mixin vars {
+  /* === Content Tokens === */
+  --dropdownMenu-content-backgroundColor: var(--color-mode-white);
+  --dropdownMenu-content-color: var(--color-mode-dark);
+  --dropdownMenu-content-zIndex: 50;
+  --dropdownMenu-content-maxHeight: var(--radix-dropdown-menu-content-available-height);
+  --dropdownMenu-content-minWidth: 128px;
+  --dropdownMenu-content-borderRadius: 6px;
+  --dropdownMenu-content-border-width: 1px;
+  --dropdownMenu-content-border-style: solid;
+  --dropdownMenu-content-border-color: var(--color-palette-neutral-200);
+  --dropdownMenu-content-padding: 4px;
+  --dropdownMenu-content-boxShadow: var(--elevation-level-3);
+  --dropdownMenu-content-overflow-x: hidden;
+  --dropdownMenu-content-overflow-y: auto;
+
+  /* === Item Tokens === */
+  --dropdownMenu-item-display: flex;
+  --dropdownMenu-item-position: relative;
+  --dropdownMenu-item-cursor: default;
+  --dropdownMenu-item-alignItems: center;
+  --dropdownMenu-item-gap: 8px;
+  --dropdownMenu-item-borderRadius: 4px;
+  --dropdownMenu-item-padding-horizontal: 8px;
+  --dropdownMenu-item-padding-vertical: 6px;
+  --dropdownMenu-item-fontSize: 14px;
+  --dropdownMenu-item-outline: none;
+  --dropdownMenu-item-userSelect: none;
+  --dropdownMenu-item-states-focus-backgroundColor: var(--color-action-background-secondary-hover);
+  --dropdownMenu-item-states-focus-color: var(--color-action-foreground-secondary-default);
+  --dropdownMenu-item-states-disabled-pointerEvents: none;
+  --dropdownMenu-item-states-disabled-opacity: 0.5;
+  --dropdownMenu-item-variants-destructive-color: var(--color-action-foreground-danger-default);
+  --dropdownMenu-item-variants-destructive-focus-backgroundColor: var(--color-action-background-danger-hover);
+  --dropdownMenu-item-variants-destructive-focus-color: var(--color-action-foreground-danger-default);
+  --dropdownMenu-item-variants-destructive-iconColor: var(--color-action-foreground-danger-default);
+  --dropdownMenu-item-variants-inset-paddingLeft: 32px;
+  --dropdownMenu-item-icon-pointerEvents: none;
+  --dropdownMenu-item-icon-flexShrink: 0;
+  --dropdownMenu-item-icon-size: 16px;
+  --dropdownMenu-item-icon-color-default: var(--color-palette-neutral-500);
+
+  /* === CheckboxItem Tokens === */
+  --dropdownMenu-checkboxItem-paddingLeft: 32px;
+  --dropdownMenu-checkboxItem-paddingRight: 8px;
+  --dropdownMenu-checkboxItem-indicator-position: absolute;
+  --dropdownMenu-checkboxItem-indicator-pointerEvents: none;
+  --dropdownMenu-checkboxItem-indicator-left: 8px;
+  --dropdownMenu-checkboxItem-indicator-display: flex;
+  --dropdownMenu-checkboxItem-indicator-alignItems: center;
+  --dropdownMenu-checkboxItem-indicator-justifyContent: center;
+  --dropdownMenu-checkboxItem-indicator-size: 14px;
+
+  /* === RadioItem Tokens === */
+  --dropdownMenu-radioItem-paddingLeft: 32px;
+  --dropdownMenu-radioItem-paddingRight: 8px;
+  --dropdownMenu-radioItem-indicator-position: absolute;
+  --dropdownMenu-radioItem-indicator-pointerEvents: none;
+  --dropdownMenu-radioItem-indicator-left: 8px;
+  --dropdownMenu-radioItem-indicator-display: flex;
+  --dropdownMenu-radioItem-indicator-alignItems: center;
+  --dropdownMenu-radioItem-indicator-justifyContent: center;
+  --dropdownMenu-radioItem-indicator-size: 8px;
+  --dropdownMenu-radioItem-indicator-borderRadius: 9999px;
+
+  /* === Label Tokens === */
+  --dropdownMenu-label-padding-horizontal: 8px;
+  --dropdownMenu-label-padding-vertical: 6px;
+  --dropdownMenu-label-fontSize: 12px;
+  --dropdownMenu-label-fontWeight: 600;
+  --dropdownMenu-label-color: var(--color-palette-neutral-500);
+
+  /* === Separator Tokens === */
+  --dropdownMenu-separator-backgroundColor: var(--color-palette-neutral-200);
+  --dropdownMenu-separator-margin-horizontal: -4px;
+  --dropdownMenu-separator-margin-vertical: 4px;
+  --dropdownMenu-separator-height: 1px;
+
+  /* === Shortcut Tokens === */
+  --dropdownMenu-shortcut-marginLeft: auto;
+  --dropdownMenu-shortcut-fontSize: 12px;
+  --dropdownMenu-shortcut-fontWeight: 500;
+  --dropdownMenu-shortcut-color: var(--color-palette-neutral-500);
+  --dropdownMenu-shortcut-opacity: 0.6;
+
+  /* === SubTrigger Tokens === */
+  --dropdownMenu-subTrigger-paddingRight: 8px;
+  --dropdownMenu-subTrigger-chevron-marginLeft: auto;
+  --dropdownMenu-subTrigger-chevron-size: 16px;
+
+  /* === SubContent Tokens === */
+  --dropdownMenu-subContent-extends: content;
+}

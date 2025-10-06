@@ -1,0 +1,23 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/AlignmentGrid/alignment-grid.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --alignmentGrid-spacing-container: var(--semantic-spacing-gap-grid-small);
+  --alignmentGrid-spacing-row: var(--semantic-spacing-gap-grid-xsmall);
+  --alignmentGrid-spacing-header: var(--semantic-spacing-margin-grid-small);
+
+  /* === Typography Tokens === */
+  --alignmentGrid-typography-title-fontSize: var(--semantic-typography-body-01);
+  --alignmentGrid-typography-title-fontWeight: var(--semantic-typography-font-weight-medium);
+  --alignmentGrid-typography-title-color: var(--semantic-color-display-foreground-secondary);
+  --alignmentGrid-typography-button-fontSize: var(--semantic-typography-body-01);
+
+  /* === Layout Tokens === */
+  --alignmentGrid-layout-button-height: var(--semantic-components-button-height-sm);
+  --alignmentGrid-layout-button-minWidth: 32px;
+  --alignmentGrid-layout-icon-size: 12px;
+
+  /* === Distribution Tokens === */
+  --alignmentGrid-distribution-padding-top: var(--semantic-spacing-padding-grid-small);
+}

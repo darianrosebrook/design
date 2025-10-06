@@ -1,5 +1,6 @@
 {
-  "Button": {
+  "prefix": "button",
+  "tokens": {
     "borderRadius": {
       "value": "6px",
       "description": "Border radius for button corners"
@@ -77,65 +78,66 @@
     "variants": {
       "default": {
         "backgroundColor": {
-          "value": "hsl(var(--primary))",
+          "value": "{color.action.background.primary.default}",
           "description": "Background color for default variant"
         },
         "color": {
-          "value": "hsl(var(--primary-foreground))",
+          "value": "{color.action.foreground.primary.default}",
           "description": "Text color for default variant"
         },
         "hover": {
           "backgroundColor": {
-            "value": "hsl(var(--primary) / 0.9)",
+            "value": "{color.action.background.primary.default}",
+            "opacity": 0.9,
             "description": "Background color on hover for default variant"
           }
         }
       },
       "destructive": {
         "backgroundColor": {
-          "value": "hsl(var(--destructive))",
+          "value": "{color.action.background.danger.default}",
           "description": "Background color for destructive variant"
         },
         "color": {
-          "value": "#ffffff",
+          "value": "{color.action.foreground.danger.default}",
           "description": "Text color for destructive variant"
         }
       },
       "outline": {
         "backgroundColor": {
-          "value": "hsl(var(--background))",
+          "value": "{color.mode.light}",
           "description": "Background color for outline variant"
         },
         "borderColor": {
-          "value": "hsl(var(--border))",
+          "value": "{color.action.border.secondary.default}",
           "description": "Border color for outline variant"
         }
       },
       "secondary": {
         "backgroundColor": {
-          "value": "hsl(var(--secondary))",
+          "value": "{color.action.background.secondary.default}",
           "description": "Background color for secondary variant"
         },
         "color": {
-          "value": "hsl(var(--secondary-foreground))",
+          "value": "{color.action.foreground.secondary.default}",
           "description": "Text color for secondary variant"
         }
       },
       "ghost": {
         "hover": {
           "backgroundColor": {
-            "value": "hsl(var(--accent))",
+            "value": "{color.palette.neutral.100}",
             "description": "Background color on hover for ghost variant"
           },
           "color": {
-            "value": "hsl(var(--accent-foreground))",
+            "value": "{color.mode.dark}",
             "description": "Text color on hover for ghost variant"
           }
         }
       },
       "link": {
         "color": {
-          "value": "hsl(var(--primary))",
+          "value": "{color.action.background.primary.default}",
           "description": "Text color for link variant"
         }
       }

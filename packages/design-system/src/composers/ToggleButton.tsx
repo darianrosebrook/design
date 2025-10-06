@@ -6,11 +6,11 @@
  * Combines Button, Tooltip, and Popover for a split-button effect.
  */
 
-import { defaultTokens as tokens } from "../tokens.js";
 import React, { useState, useCallback } from "react";
 import { Button } from "../primitives/Button";
-import { Tooltip } from "./Tooltip";
+import { defaultTokens as tokens } from "../tokens.js";
 import { Popover } from "./Popover";
+import { Tooltip } from "./Tooltip";
 
 /**
  * ToggleButton props

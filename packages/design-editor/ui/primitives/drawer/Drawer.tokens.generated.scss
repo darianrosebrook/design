@@ -1,0 +1,100 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Drawer/drawer.tokens.json
+ */
+@mixin vars {
+  /* === Overlay Tokens === */
+  --drawer-overlay-position: fixed;
+  --drawer-overlay-inset: 0;
+  --drawer-overlay-zIndex: 1050;
+  --drawer-overlay-backgroundColor: rgba(0, 0, 0, 0.5);
+  --drawer-overlay-animation-duration: 200ms;
+  --drawer-overlay-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* === Content Tokens === */
+  --drawer-content-position: fixed;
+  --drawer-content-zIndex: 1050;
+  --drawer-content-display: flex;
+  --drawer-content-flexDirection: column;
+  --drawer-content-backgroundColor: var(--color-mode-light);
+  --drawer-content-borderRadius: 8px;
+  --drawer-content-animation-duration: 400ms;
+  --drawer-content-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --drawer-content-directions-top-inset: 0;
+  --drawer-content-directions-top-top: 0;
+  --drawer-content-directions-top-bottom: auto;
+  --drawer-content-directions-top-left: 0;
+  --drawer-content-directions-top-right: 0;
+  --drawer-content-directions-top-marginBottom: 96px;
+  --drawer-content-directions-top-maxHeight: 80vh;
+  --drawer-content-directions-top-borderBottom-width: 1px;
+  --drawer-content-directions-top-borderBottom-style: solid;
+  --drawer-content-directions-top-borderBottom-color: var(--color-palette-neutral-200);
+  --drawer-content-directions-top-borderRadiusBottom: 8px;
+  --drawer-content-directions-bottom-inset: 0;
+  --drawer-content-directions-bottom-top: auto;
+  --drawer-content-directions-bottom-bottom: 0;
+  --drawer-content-directions-bottom-left: 0;
+  --drawer-content-directions-bottom-right: 0;
+  --drawer-content-directions-bottom-marginTop: 96px;
+  --drawer-content-directions-bottom-maxHeight: 80vh;
+  --drawer-content-directions-bottom-borderTop-width: 1px;
+  --drawer-content-directions-bottom-borderTop-style: solid;
+  --drawer-content-directions-bottom-borderTop-color: var(--color-palette-neutral-200);
+  --drawer-content-directions-bottom-borderRadiusTop: 8px;
+  --drawer-content-directions-left-inset: 0;
+  --drawer-content-directions-left-top: 0;
+  --drawer-content-directions-left-bottom: 0;
+  --drawer-content-directions-left-left: 0;
+  --drawer-content-directions-left-right: auto;
+  --drawer-content-directions-left-width: 75%;
+  --drawer-content-directions-left-maxWidth: 384px;
+  --drawer-content-directions-left-borderRight-width: 1px;
+  --drawer-content-directions-left-borderRight-style: solid;
+  --drawer-content-directions-left-borderRight-color: var(--color-palette-neutral-200);
+  --drawer-content-directions-right-inset: 0;
+  --drawer-content-directions-right-top: 0;
+  --drawer-content-directions-right-bottom: 0;
+  --drawer-content-directions-right-left: auto;
+  --drawer-content-directions-right-right: 0;
+  --drawer-content-directions-right-width: 75%;
+  --drawer-content-directions-right-maxWidth: 384px;
+  --drawer-content-directions-right-borderLeft-width: 1px;
+  --drawer-content-directions-right-borderLeft-style: solid;
+  --drawer-content-directions-right-borderLeft-color: var(--color-palette-neutral-200);
+
+  /* === Handle Tokens === */
+  --drawer-handle-display: none;
+  --drawer-handle-backgroundColor: var(--color-palette-neutral-100);
+  --drawer-handle-margin-horizontal: auto;
+  --drawer-handle-marginTop: 16px;
+  --drawer-handle-height: 8px;
+  --drawer-handle-width: 100px;
+  --drawer-handle-borderRadius: 9999px;
+  --drawer-handle-flexShrink: 0;
+  --drawer-handle-bottomDirection-display: block;
+
+  /* === Header Tokens === */
+  --drawer-header-display: flex;
+  --drawer-header-flexDirection: column;
+  --drawer-header-gap: 4px;
+  --drawer-header-padding: 16px;
+  --drawer-header-bottomDirection-textAlign: center;
+  --drawer-header-topDirection-textAlign: center;
+  --drawer-header-responsive-gap: 6px;
+  --drawer-header-responsive-textAlign: left;
+
+  /* === Footer Tokens === */
+  --drawer-footer-marginTop: auto;
+  --drawer-footer-display: flex;
+  --drawer-footer-flexDirection: column;
+  --drawer-footer-gap: 8px;
+  --drawer-footer-padding: 16px;
+
+  /* === Title Tokens === */
+  --drawer-title-color: var(--color-mode-dark);
+  --drawer-title-fontWeight: 600;
+
+  /* === Description Tokens === */
+  --drawer-description-color: var(--color-palette-neutral-500);
+  --drawer-description-fontSize: 14px;
+}

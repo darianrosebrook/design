@@ -1,7 +1,156 @@
-// tooltip primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Tooltip component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
+// Import generated token variables
+@use './Tooltip.tokens.generated.scss' as tooltipTokens;
+
+// Base tooltip styles (equivalent to Tailwind base classes)
 .tooltip {
-  // Placeholder for future SCSS implementation
-  // Will contain tooltip-specific styles when migrating from Tailwind
+  // Include the generated variables mixin within the component scope
+  @include tooltipTokens.vars;
+  z-index: var(--tooltip-zIndex);
+  overflow: hidden;
+  border-radius: var(--tooltip-borderRadius);
+  border: 1px solid var(--tooltip-variants-default-borderColor);
+  background-color: var(--tooltip-variants-default-backgroundColor);
+  color: var(--tooltip-variants-default-color);
+  font-size: var(--tooltip-fontSize);
+  font-weight: var(--tooltip-fontWeight);
+  line-height: var(--tooltip-lineHeight);
+  padding: var(--tooltip-padding-vertical) var(--tooltip-padding-horizontal);
+  max-width: var(--tooltip-maxWidth);
+  word-wrap: break-word;
+  box-shadow: var(--semantic-elevation-medium);
+
+  // Animation styles
+  animation-duration: var(--tooltip-animation-duration);
+  animation-timing-function: var(--tooltip-animation-easing);
+  animation-fill-mode: both;
+
+  // Animation keyframes
+  &[data-state="delayed-open"] {
+    animation-name: tooltip-show;
+  }
+
+  &[data-state="closed"] {
+    animation-name: tooltip-hide;
+  }
+
+  // Arrow styles
+  &[data-side="top"] {
+    animation-name: tooltip-slide-down-and-fade;
+  }
+
+  &[data-side="right"] {
+    animation-name: tooltip-slide-left-and-fade;
+  }
+
+  &[data-side="bottom"] {
+    animation-name: tooltip-slide-up-and-fade;
+  }
+
+  &[data-side="left"] {
+    animation-name: tooltip-slide-right-and-fade;
+  }
+}
+
+// Tooltip arrow
+.tooltip-arrow {
+  fill: var(--tooltip-variants-default-backgroundColor);
+  width: var(--tooltip-arrow-size);
+  height: var(--tooltip-arrow-size);
+}
+
+// Tooltip content wrapper
+.tooltip-content {
+  position: relative;
+  z-index: var(--tooltip-zIndex);
+}
+
+// Variant styles
+.tooltip--variant-default {
+  background-color: var(--tooltip-variants-default-backgroundColor);
+  color: var(--tooltip-variants-default-color);
+  border-color: var(--tooltip-variants-default-borderColor);
+
+  .tooltip-arrow {
+    fill: var(--tooltip-variants-default-backgroundColor);
+  }
+}
+
+.tooltip--variant-light {
+  background-color: var(--tooltip-variants-light-backgroundColor);
+  color: var(--tooltip-variants-light-color);
+  border-color: var(--tooltip-variants-light-borderColor);
+
+  .tooltip-arrow {
+    fill: var(--tooltip-variants-light-backgroundColor);
+  }
+}
+
+// Animation keyframes
+@keyframes tooltip-show {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes tooltip-hide {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes tooltip-slide-down-and-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tooltip-slide-left-and-fade {
+  from {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes tooltip-slide-up-and-fade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tooltip-slide-right-and-fade {
+  from {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

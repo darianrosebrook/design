@@ -3,9 +3,9 @@
  * @author @darianrosebrook
  */
 
-import { defaultTokens as tokens } from "../tokens.js";
 import React, { useMemo } from "react";
 import { Button } from "../primitives/Button";
+import { defaultTokens as tokens } from "../tokens.js";
 
 // Local types to avoid circular dependencies
 export interface SelectionState {

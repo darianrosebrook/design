@@ -1,0 +1,39 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Alert/alert.tokens.json
+ */
+@mixin vars {
+  /* === Border Tokens === */
+  --alert-border-width: 1px;
+  --alert-border-style: solid;
+  --alert-border-color-default: var(--color-palette-neutral-200);
+
+  /* === Padding Tokens === */
+  --alert-padding-horizontal: 16px;
+  --alert-padding-vertical: 12px;
+
+  /* === Gap Tokens === */
+  --alert-gap-row: 2px;
+  --alert-gap-column: 12px;
+
+  /* === Icon Tokens === */
+  --alert-icon-size: 16px;
+  --alert-icon-translateY: 2px;
+
+  /* === Title Tokens === */
+  --alert-title-fontSize: 14px;
+  --alert-title-fontWeight: var(--typography-font-weight-medium);
+  --alert-title-letterSpacing: -0.025em;
+  --alert-title-lineHeight: 1.25;
+  --alert-title-minHeight: 20px;
+
+  /* === Description Tokens === */
+  --alert-description-fontSize: 14px;
+  --alert-description-lineHeight: 1.625;
+
+  /* === Variants Tokens === */
+  --alert-variants-default-backgroundColor: var(--color-mode-light);
+  --alert-variants-default-color: var(--color-mode-dark);
+  --alert-variants-destructive-backgroundColor: var(--color-mode-light);
+  --alert-variants-destructive-color: var(--color-action-background-danger-default);
+  --alert-variants-destructive-descriptionColor: var(--color-action-background-danger-default);
+}

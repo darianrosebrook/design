@@ -1,7 +1,44 @@
 // form primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
-.form {
-  // Placeholder for future SCSS implementation
-  // Will contain form-specific styles when migrating from Tailwind
+// Import generated token variables
+@use './Form.tokens.generated.scss' as formTokens;
+
+// Include the generated variables mixin
+@include formTokens.vars;
+
+// Form item container
+.form-item {
+  display: var(--form-item-display);
+  gap: var(--form-item-gap);
+}
+
+// Form label
+.form-label {
+  color: var(--form-label-color-default);
+
+  // Error state
+  &[data-error="true"] {
+    color: var(--form-label-color-error);
+  }
+}
+
+// Form control (handled by React Hook Form - mostly accessibility attributes)
+// The actual styling is handled by the input components themselves
+
+// Form description
+.form-description {
+  color: var(--form-description-color);
+  font-size: var(--form-description-fontSize);
+}
+
+// Form message (error message)
+.form-message {
+  color: var(--form-message-color);
+  font-size: var(--form-message-fontSize);
+
+  // Only show when there's content
+  &:empty {
+    display: var(--form-message-hidden);
+  }
 }

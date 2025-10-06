@@ -1,0 +1,75 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Dialog/dialog.tokens.json
+ */
+@mixin vars {
+  /* === Overlay Tokens === */
+  --dialog-overlay-position: fixed;
+  --dialog-overlay-inset: 0;
+  --dialog-overlay-zIndex: 1040;
+  --dialog-overlay-backgroundColor: rgba(0, 0, 0, 0.5);
+
+  /* === Content Tokens === */
+  --dialog-content-position: fixed;
+  --dialog-content-top: 50%;
+  --dialog-content-left: 50%;
+  --dialog-content-zIndex: 1040;
+  --dialog-content-display: grid;
+  --dialog-content-width: 100%;
+  --dialog-content-maxWidth-default: calc(100% - 2rem);
+  --dialog-content-maxWidth-large: 32rem;
+  --dialog-content-translate-x: -50%;
+  --dialog-content-translate-y: -50%;
+  --dialog-content-gap: 16px;
+  --dialog-content-borderRadius: 8px;
+  --dialog-content-border-width: 1px;
+  --dialog-content-border-style: solid;
+  --dialog-content-border-color: var(--color-palette-neutral-200);
+  --dialog-content-padding: 24px;
+  --dialog-content-boxShadow: var(--elevation-level-4);
+  --dialog-content-backgroundColor: var(--color-mode-white);
+  --dialog-content-animation-duration: 200ms;
+
+  /* === Close Tokens === */
+  --dialog-close-position: absolute;
+  --dialog-close-top: 16px;
+  --dialog-close-right: 16px;
+  --dialog-close-size: 28px;
+  --dialog-close-borderRadius: 4px;
+  --dialog-close-opacity-default: 0.7;
+  --dialog-close-opacity-hover: 1;
+  --dialog-close-transition-property: opacity;
+  --dialog-close-transition-duration: 150ms;
+  --dialog-close-transition-easing: var(--motion-interaction-hover-easing);
+  --dialog-close-icon-size: 16px;
+  --dialog-close-icon-pointerEvents: none;
+  --dialog-close-icon-flexShrink: 0;
+  --dialog-close-focus-ring-color: var(--color-action-border-primary-focus);
+  --dialog-close-focus-ring-width: 2px;
+  --dialog-close-focus-ring-offset: 2px;
+  --dialog-close-states-open-backgroundColor: var(--color-action-background-secondary-hover);
+  --dialog-close-states-open-color: var(--color-palette-neutral-500);
+
+  /* === Header Tokens === */
+  --dialog-header-display: flex;
+  --dialog-header-flexDirection: column;
+  --dialog-header-gap: 8px;
+  --dialog-header-textAlign-default: center;
+  --dialog-header-textAlign-large: left;
+
+  /* === Footer Tokens === */
+  --dialog-footer-display: flex;
+  --dialog-footer-flexDirection-default: column-reverse;
+  --dialog-footer-flexDirection-large: row;
+  --dialog-footer-gap: 8px;
+  --dialog-footer-justifyContent-large: flex-end;
+
+  /* === Title Tokens === */
+  --dialog-title-fontSize: 18px;
+  --dialog-title-lineHeight: 1;
+  --dialog-title-fontWeight: 600;
+
+  /* === Description Tokens === */
+  --dialog-description-color: var(--color-palette-neutral-500);
+  --dialog-description-fontSize: 14px;
+  --dialog-description-lineHeight: 1.4;
+}

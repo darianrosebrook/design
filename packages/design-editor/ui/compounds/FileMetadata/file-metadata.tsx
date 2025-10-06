@@ -1,8 +1,8 @@
 "use client";
 
 import { Info } from "lucide-react";
-import { cn } from "@/lib/utils";
 import styles from "./file-metadata.module.scss";
+import { cn } from "@/lib/utils";
 
 interface FileMetadataProps {
   name: string;
@@ -24,7 +24,7 @@ export function FileMetadata({
       </div>
       <div className={styles.fileMetadataContent}>
         <div className={styles.fileMetadataRow}>
-          <Info className="h-3 w-3" />
+          <Info className={styles.icon} />
           <span>{name}</span>
         </div>
         <div className={styles.fileMetadataStats}>

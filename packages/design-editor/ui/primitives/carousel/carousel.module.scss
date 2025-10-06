@@ -9,69 +9,69 @@
 
 // Main carousel container
 .carousel {
-  position: var(--carousel-container-position-value);
+  position: var(--carousel-container-position);
 }
 
 // Carousel content wrapper (overflow hidden container)
 .carousel-content {
-  overflow: var(--carousel-content-overflow-value);
+  overflow: var(--carousel-content-overflow);
 }
 
 // Carousel items container (flex container for slides)
 .carousel-items {
-  display: var(--carousel-content-display-value);
+  display: var(--carousel-content-display);
 
   // Horizontal orientation (default)
   &:not(.carousel-items--vertical) {
-    margin-left: var(--carousel-content-gap-horizontal-value);
+    margin-left: var(--carousel-content-gap-horizontal);
   }
 
   // Vertical orientation
   &.carousel-items--vertical {
-    flex-direction: var(--carousel-content-flexDirection-vertical-value);
-    margin-top: var(--carousel-content-gap-vertical-value);
+    flex-direction: var(--carousel-content-flexDirection-vertical);
+    margin-top: var(--carousel-content-gap-vertical);
   }
 }
 
 // Individual carousel item
 .carousel-item {
-  flex: var(--carousel-item-flex-value);
-  min-width: var(--carousel-item-minWidth-value);
+  flex: var(--carousel-item-flex);
+  min-width: var(--carousel-item-minWidth);
 
   // Horizontal orientation (default)
   &:not(.carousel-item--vertical) {
-    padding-left: var(--carousel-item-padding-horizontal-value);
+    padding-left: var(--carousel-item-padding-horizontal);
   }
 
   // Vertical orientation
   &.carousel-item--vertical {
-    padding-top: var(--carousel-item-padding-vertical-value);
+    padding-top: var(--carousel-item-padding-vertical);
   }
 }
 
 // Navigation buttons base styles
 .carousel-button {
-  position: var(--carousel-navigation-button-position-value);
-  z-index: var(--carousel-navigation-button-zIndex-value);
-  width: var(--carousel-navigation-button-size-value);
-  height: var(--carousel-navigation-button-size-value);
-  border-radius: var(--carousel-navigation-button-borderRadius-value);
+  position: var(--carousel-navigation-button-position);
+  z-index: var(--carousel-navigation-button-zIndex);
+  width: var(--carousel-navigation-button-size);
+  height: var(--carousel-navigation-button-size);
+  border-radius: var(--carousel-navigation-button-borderRadius);
 }
 
 // Previous button
 .carousel-previous {
   // Horizontal orientation (default)
   &:not(.carousel-previous--vertical) {
-    top: var(--carousel-navigation-previous-position-horizontal-top-value);
-    left: var(--carousel-navigation-previous-position-horizontal-left-value);
-    transform: var(--carousel-navigation-previous-position-horizontal-transform-value);
+    top: var(--carousel-navigation-previous-position-horizontal-top);
+    left: var(--carousel-navigation-previous-position-horizontal-left);
+    transform: var(--carousel-navigation-previous-position-horizontal-transform);
   }
 
   // Vertical orientation
   &.carousel-previous--vertical {
-    top: var(--carousel-navigation-previous-position-vertical-top-value);
-    left: var(--carousel-navigation-previous-position-vertical-left-value);
-    transform: var(--carousel-navigation-previous-position-vertical-transform-value);
+    top: var(--carousel-navigation-previous-position-vertical-top);
+    left: var(--carousel-navigation-previous-position-vertical-left);
+    transform: var(--carousel-navigation-previous-position-vertical-transform);
   }
 }
 
@@ -79,15 +79,15 @@
 .carousel-next {
   // Horizontal orientation (default)
   &:not(.carousel-next--vertical) {
-    top: var(--carousel-navigation-next-position-horizontal-top-value);
-    right: var(--carousel-navigation-next-position-horizontal-right-value);
-    transform: var(--carousel-navigation-next-position-horizontal-transform-value);
+    top: var(--carousel-navigation-next-position-horizontal-top);
+    right: var(--carousel-navigation-next-position-horizontal-right);
+    transform: var(--carousel-navigation-next-position-horizontal-transform);
   }
 
   // Vertical orientation
   &.carousel-next--vertical {
-    bottom: var(--carousel-navigation-next-position-vertical-bottom-value);
-    left: var(--carousel-navigation-next-position-vertical-left-value);
-    transform: var(--carousel-navigation-next-position-vertical-transform-value);
+    bottom: var(--carousel-navigation-next-position-vertical-bottom);
+    left: var(--carousel-navigation-next-position-vertical-left);
+    transform: var(--carousel-navigation-next-position-vertical-transform);
   }
 }

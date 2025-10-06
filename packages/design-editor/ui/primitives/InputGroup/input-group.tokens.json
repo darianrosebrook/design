@@ -1,3 +1,607 @@
 {
-  "input-group": {}
+  "prefix": "inputGroup",
+  "tokens": {
+    "container": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for input group container"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for input group container"
+      },
+      "position": {
+        "value": "relative",
+        "description": "Position for input group container"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for input group container"
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for input group container"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for input group container"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for input group container"
+        },
+        "color": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Border color for input group container"
+        }
+      },
+      "backgroundColor": {
+        "value": "{color.palette.neutral.0}",
+        "description": "Background color for input group container"
+      },
+      "dark": {
+        "backgroundColor": {
+          "value": "{color.palette.neutral.0}",
+          "opacity": 0.3,
+          "description": "Background color for input group container in dark mode"
+        }
+      },
+      "boxShadow": {
+        "value": "{elevation.small}",
+        "description": "Box shadow for input group container"
+      },
+      "transition": {
+        "property": {
+          "value": "color, box-shadow",
+          "description": "Transition properties for input group container"
+        },
+        "duration": {
+          "value": "200ms",
+          "description": "Transition duration for input group container"
+        },
+        "easing": {
+          "value": "ease-in-out",
+          "description": "Transition easing for input group container"
+        }
+      },
+      "height": {
+        "default": {
+          "value": "36px",
+          "description": "Default height for input group container"
+        },
+        "textarea": {
+          "value": "auto",
+          "description": "Height for input group container when containing textarea"
+        }
+      },
+      "outline": {
+        "value": "none",
+        "description": "Outline for input group container"
+      },
+      "states": {
+        "focus": {
+          "borderColor": {
+            "value": "{color.palette.blue.500}",
+            "description": "Border color when focused"
+          },
+          "ring": {
+            "color": {
+              "value": "{color.palette.blue.500}",
+              "opacity": 0.5,
+              "description": "Ring color when focused"
+            },
+            "width": {
+              "value": "3px",
+              "description": "Ring width when focused"
+            }
+          }
+        },
+        "error": {
+          "ring": {
+            "color": {
+              "value": "{color.palette.red.600}",
+              "opacity": 0.2,
+              "description": "Ring color when in error state"
+            },
+            "dark": {
+              "color": {
+                "value": "{color.palette.red.600}",
+                "opacity": 0.4,
+                "description": "Ring color when in error state in dark mode"
+              }
+            }
+          },
+          "borderColor": {
+            "value": "{color.palette.red.600}",
+            "description": "Border color when in error state"
+          }
+        }
+      },
+      "alignment": {
+        "inlineStart": {
+          "padding": {
+            "left": {
+              "value": "8px",
+              "description": "Left padding when has inline-start aligned elements"
+            }
+          }
+        },
+        "inlineEnd": {
+          "padding": {
+            "right": {
+              "value": "8px",
+              "description": "Right padding when has inline-end aligned elements"
+            }
+          }
+        },
+        "blockStart": {
+          "flexDirection": {
+            "value": "column",
+            "description": "Flex direction for block-start alignment"
+          },
+          "height": {
+            "value": "auto",
+            "description": "Height for block-start alignment"
+          },
+          "padding": {
+            "bottom": {
+              "value": "12px",
+              "description": "Bottom padding for block-start alignment"
+            }
+          }
+        },
+        "blockEnd": {
+          "flexDirection": {
+            "value": "column",
+            "description": "Flex direction for block-end alignment"
+          },
+          "height": {
+            "value": "auto",
+            "description": "Height for block-end alignment"
+          },
+          "padding": {
+            "top": {
+              "value": "12px",
+              "description": "Top padding for block-end alignment"
+            }
+          }
+        }
+      }
+    },
+    "addon": {
+      "display": {
+        "value": "flex",
+        "description": "Display for addon elements"
+      },
+      "height": {
+        "value": "auto",
+        "description": "Height for addon elements"
+      },
+      "cursor": {
+        "value": "text",
+        "description": "Cursor for addon elements"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for addon elements"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for addon elements"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap between addon elements"
+      },
+      "padding": {
+        "vertical": {
+          "value": "6px",
+          "description": "Vertical padding for addon elements"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for addon elements"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for addon elements"
+      },
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for addon elements"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for addon elements"
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for icons in addon elements"
+        },
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for icons in addon elements"
+        }
+      },
+      "kbd": {
+        "borderRadius": {
+          "value": "calc(6px - 5px)",
+          "description": "Border radius for keyboard shortcuts in addon"
+        }
+      },
+      "alignments": {
+        "inlineStart": {
+          "order": {
+            "value": "-1",
+            "description": "Order for inline-start alignment"
+          },
+          "padding": {
+            "left": {
+              "value": "12px",
+              "description": "Left padding for inline-start alignment"
+            }
+          },
+          "button": {
+            "margin": {
+              "left": {
+                "value": "-7px",
+                "description": "Left margin for buttons in inline-start alignment"
+              }
+            }
+          },
+          "kbd": {
+            "margin": {
+              "left": {
+                "value": "-5.6px",
+                "description": "Left margin for keyboard shortcuts in inline-start alignment"
+              }
+            }
+          }
+        },
+        "inlineEnd": {
+          "order": {
+            "value": "1",
+            "description": "Order for inline-end alignment"
+          },
+          "padding": {
+            "right": {
+              "value": "12px",
+              "description": "Right padding for inline-end alignment"
+            }
+          },
+          "button": {
+            "margin": {
+              "right": {
+                "value": "-6.4px",
+                "description": "Right margin for buttons in inline-end alignment"
+              }
+            }
+          },
+          "kbd": {
+            "margin": {
+              "right": {
+                "value": "-5.6px",
+                "description": "Right margin for keyboard shortcuts in inline-end alignment"
+              }
+            }
+          }
+        },
+        "blockStart": {
+          "order": {
+            "value": "-1",
+            "description": "Order for block-start alignment"
+          },
+          "width": {
+            "value": "100%",
+            "description": "Width for block-start alignment"
+          },
+          "justifyContent": {
+            "value": "flex-start",
+            "description": "Justify content for block-start alignment"
+          },
+          "padding": {
+            "horizontal": {
+              "value": "12px",
+              "description": "Horizontal padding for block-start alignment"
+            },
+            "top": {
+              "value": "12px",
+              "description": "Top padding for block-start alignment"
+            }
+          },
+          "borderBottom": {
+            "padding": {
+              "bottom": {
+                "value": "12px",
+                "description": "Bottom padding when has border bottom"
+              }
+            }
+          },
+          "input": {
+            "padding": {
+              "top": {
+                "value": "10px",
+                "description": "Top padding adjustment for input in block-start alignment"
+              }
+            }
+          }
+        },
+        "blockEnd": {
+          "order": {
+            "value": "1",
+            "description": "Order for block-end alignment"
+          },
+          "width": {
+            "value": "100%",
+            "description": "Width for block-end alignment"
+          },
+          "justifyContent": {
+            "value": "flex-start",
+            "description": "Justify content for block-end alignment"
+          },
+          "padding": {
+            "horizontal": {
+              "value": "12px",
+              "description": "Horizontal padding for block-end alignment"
+            },
+            "bottom": {
+              "value": "12px",
+              "description": "Bottom padding for block-end alignment"
+            }
+          },
+          "borderTop": {
+            "padding": {
+              "top": {
+                "value": "12px",
+                "description": "Top padding when has border top"
+              }
+            }
+          },
+          "input": {
+            "padding": {
+              "bottom": {
+                "value": "10px",
+                "description": "Bottom padding adjustment for input in block-end alignment"
+              }
+            }
+          }
+        }
+      },
+      "disabled": {
+        "opacity": {
+          "value": 0.5,
+          "description": "Opacity when disabled"
+        }
+      }
+    },
+    "button": {
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for buttons"
+      },
+      "boxShadow": {
+        "value": "none",
+        "description": "Box shadow for buttons"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display for buttons"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for buttons"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for buttons"
+      },
+      "sizes": {
+        "xs": {
+          "height": {
+            "value": "24px",
+            "description": "Height for extra small buttons"
+          },
+          "gap": {
+            "value": "4px",
+            "description": "Gap for extra small buttons"
+          },
+          "padding": {
+            "horizontal": {
+              "value": "8px",
+              "description": "Horizontal padding for extra small buttons"
+            }
+          },
+          "borderRadius": {
+            "value": "calc(6px - 5px)",
+            "description": "Border radius for extra small buttons"
+          },
+          "icon": {
+            "size": {
+              "value": "14px",
+              "description": "Icon size for extra small buttons"
+            },
+            "padding": {
+              "horizontal": {
+                "value": "8px",
+                "description": "Horizontal padding when has icon for extra small buttons"
+              }
+            }
+          }
+        },
+        "sm": {
+          "height": {
+            "value": "32px",
+            "description": "Height for small buttons"
+          },
+          "padding": {
+            "horizontal": {
+              "value": "10px",
+              "description": "Horizontal padding for small buttons"
+            }
+          },
+          "gap": {
+            "value": "6px",
+            "description": "Gap for small buttons"
+          },
+          "borderRadius": {
+            "value": "6px",
+            "description": "Border radius for small buttons"
+          },
+          "icon": {
+            "padding": {
+              "horizontal": {
+                "value": "10px",
+                "description": "Horizontal padding when has icon for small buttons"
+              }
+            }
+          }
+        },
+        "iconXs": {
+          "size": {
+            "value": "24px",
+            "description": "Size for extra small icon buttons"
+          },
+          "borderRadius": {
+            "value": "calc(6px - 5px)",
+            "description": "Border radius for extra small icon buttons"
+          },
+          "padding": {
+            "value": "0px",
+            "description": "Padding for extra small icon buttons"
+          },
+          "icon": {
+            "padding": {
+              "value": "0px",
+              "description": "Padding when has icon for extra small icon buttons"
+            }
+          }
+        },
+        "iconSm": {
+          "size": {
+            "value": "32px",
+            "description": "Size for small icon buttons"
+          },
+          "padding": {
+            "value": "0px",
+            "description": "Padding for small icon buttons"
+          },
+          "icon": {
+            "padding": {
+              "value": "0px",
+              "description": "Padding when has icon for small icon buttons"
+            }
+          }
+        }
+      }
+    },
+    "text": {
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for text elements"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display for text elements"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for text elements"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for text elements"
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for icons in text elements"
+        },
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for icons in text elements"
+        }
+      }
+    },
+    "input": {
+      "flex": {
+        "value": "1",
+        "description": "Flex grow for input elements"
+      },
+      "borderRadius": {
+        "value": "0px",
+        "description": "Border radius for input elements"
+      },
+      "border": {
+        "value": "none",
+        "description": "Border for input elements"
+      },
+      "backgroundColor": {
+        "value": "transparent",
+        "description": "Background color for input elements"
+      },
+      "dark": {
+        "backgroundColor": {
+          "value": "transparent",
+          "description": "Background color for input elements in dark mode"
+        }
+      },
+      "boxShadow": {
+        "value": "none",
+        "description": "Box shadow for input elements"
+      },
+      "focus": {
+        "ring": {
+          "value": "none",
+          "description": "Ring for input elements when focused"
+        }
+      }
+    },
+    "textarea": {
+      "flex": {
+        "value": "1",
+        "description": "Flex grow for textarea elements"
+      },
+      "resize": {
+        "value": "none",
+        "description": "Resize behavior for textarea elements"
+      },
+      "borderRadius": {
+        "value": "0px",
+        "description": "Border radius for textarea elements"
+      },
+      "border": {
+        "value": "none",
+        "description": "Border for textarea elements"
+      },
+      "backgroundColor": {
+        "value": "transparent",
+        "description": "Background color for textarea elements"
+      },
+      "dark": {
+        "backgroundColor": {
+          "value": "transparent",
+          "description": "Background color for textarea elements in dark mode"
+        }
+      },
+      "padding": {
+        "vertical": {
+          "value": "12px",
+          "description": "Vertical padding for textarea elements"
+        }
+      },
+      "boxShadow": {
+        "value": "none",
+        "description": "Box shadow for textarea elements"
+      },
+      "focus": {
+        "ring": {
+          "value": "none",
+          "description": "Ring for textarea elements when focused"
+        }
+      }
+    }
+  }
 }

@@ -1,0 +1,10 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Skeleton/skeleton.tokens.json
+ */
+@mixin vars {
+  /* === Animation Tokens === */
+  --skeleton-animation-duration: 2s;
+  --skeleton-animation-easing: cubic-bezier(0.4, 0, 0.6, 1);
+  --skeleton-animation-opacity-min: var(--semantic-opacity-disabled);
+  --skeleton-animation-opacity-max: 1;
+}

@@ -3,10 +3,11 @@
 import { Link2, Unlink } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import { Button } from '@/ui/primitives/Button';
-import { Input } from '@/ui/primitives/Input';
-import { Label } from '@/ui/primitives/label';
+import styles from "./box-model-editor.module.scss";
 import type { CanvasObject } from "@/lib/types";
+import { Button } from "@/ui/primitives/Button";
+import { Input } from "@/ui/primitives/Input";
+import { Label } from "@/ui/primitives/Label";
 
 interface BoxModelEditorProps {
   object: CanvasObject;
@@ -96,36 +97,36 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
     const isLinked = linked[section as keyof typeof linked];
 
     return (
-      <div className="space-y-1">
-        <Label className="text-xs text-muted-foreground">{label}</Label>
-        <div className="flex items-center gap-1">
+      <div className={styles.inputGroup}>
+        <Label className={styles.inputLabel}>{label}</Label>
+        <div className={styles.inputGroup}>
           <Input
             type="number"
             value={value}
             onChange={(e) =>
               updateValue(section, property, Number(e.target.value))
             }
-            className="h-7 text-xs"
+            className={styles.controlInput}
             step="0.1"
           />
           {isLinked && (
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              className={styles.linkButton}
               onClick={() => setLinked({ ...linked, [section]: false })}
             >
-              <Link2 className="h-3 w-3" />
+              <Link2 className={styles.linkIcon} />
             </Button>
           )}
           {!isLinked && (
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              className={styles.linkButton}
               onClick={() => setLinked({ ...linked, [section]: true })}
             >
-              <Unlink className="h-3 w-3" />
+              <Unlink className={styles.linkIcon} />
             </Button>
           )}
         </div>
@@ -134,13 +135,13 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
   };
 
   return (
-    <div className="space-y-3">
+    <div className={styles.boxModelEditor}>
       {/* Visual Box Model Representation */}
-      <div className="relative p-4 bg-muted/20 rounded-lg">
-        <div className="relative mx-auto" style={{ width: 120, height: 80 }}>
+      <div className={styles.visualContainer}>
+        <div className={styles.visualBoxModel}>
           {/* Margin */}
           <div
-            className="absolute border-2 border-dashed border-blue-300 bg-blue-50/20"
+            className={styles.marginLayer}
             style={{
               top: -values.margin.top,
               right: -values.margin.right,
@@ -151,7 +152,7 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
 
           {/* Border */}
           <div
-            className="absolute border-2 border-orange-300 bg-orange-50/20"
+            className={styles.borderLayer}
             style={{
               top: -values.margin.top - values.border.top,
               right: -values.margin.right - values.border.right,
@@ -162,7 +163,7 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
 
           {/* Padding */}
           <div
-            className="absolute border-2 border-green-300 bg-green-50/20"
+            className={styles.paddingLayer}
             style={{
               top: -values.margin.top - values.border.top - values.padding.top,
               right:
@@ -180,7 +181,7 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
 
           {/* Content */}
           <div
-            className="absolute border-2 border-purple-300 bg-purple-50/20 flex items-center justify-center text-xs font-medium"
+            className={styles.contentLayer}
             style={{
               width: values.content.width,
               height: values.content.height,
@@ -191,45 +192,45 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
         </div>
 
         {/* Labels */}
-        <div className="absolute top-2 left-2 text-xs text-blue-600 font-medium">
+        <div className={`${styles.visualLabel} ${styles.marginLabel}`}>
           Margin
         </div>
-        <div className="absolute top-2 right-2 text-xs text-orange-600 font-medium">
+        <div className={`${styles.visualLabel} ${styles.borderLabel}`}>
           Border
         </div>
-        <div className="absolute bottom-2 left-2 text-xs text-green-600 font-medium">
+        <div className={`${styles.visualLabel} ${styles.paddingLabel}`}>
           Padding
         </div>
-        <div className="absolute bottom-2 right-2 text-xs text-purple-600 font-medium">
+        <div className={`${styles.visualLabel} ${styles.contentLabel}`}>
           Content
         </div>
       </div>
 
       {/* Controls */}
-      <div className="space-y-3">
+      <div className={styles.controlsSection}>
         {/* Content */}
-        <div className="space-y-2">
-          <Label className="text-xs font-medium">Content</Label>
-          <div className="grid grid-cols-2 gap-2">
+        <div className={styles.sectionContainer}>
+          <Label className={styles.sectionLabel}>Content</Label>
+          <div className={`${styles.unlinkedInputs}`}>
             {renderInput("content", "width", "W")}
             {renderInput("content", "height", "H")}
           </div>
         </div>
 
         {/* Padding */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-xs font-medium">Padding</Label>
+        <div className={styles.sectionContainer}>
+          <div className={styles.sectionHeader}>
+            <Label className={styles.sectionLabel}>Padding</Label>
             <Button
               variant="ghost"
               size="icon"
-              className="h-5 w-5"
+              className={styles.linkButton}
               onClick={() => setLinked({ ...linked, padding: !linked.padding })}
             >
               {linked.padding ? (
-                <Link2 className="h-3 w-3" />
+                <Link2 className={styles.linkIcon} />
               ) : (
-                <Unlink className="h-3 w-3" />
+                <Unlink className={styles.linkIcon} />
               )}
             </Button>
           </div>
@@ -240,56 +241,56 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
               onChange={(e) =>
                 updateValue("padding", "top", Number(e.target.value))
               }
-              className="h-7 text-xs"
+              className={styles.controlInput}
               step="0.1"
             />
           ) : (
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">T</Label>
+            <div className={styles.unlinkedInputs}>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>T</Label>
                 <Input
                   type="number"
                   value={values.padding.top}
                   onChange={(e) =>
                     updateValue("padding", "top", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">R</Label>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>R</Label>
                 <Input
                   type="number"
                   value={values.padding.right}
                   onChange={(e) =>
                     updateValue("padding", "right", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">B</Label>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>B</Label>
                 <Input
                   type="number"
                   value={values.padding.bottom}
                   onChange={(e) =>
                     updateValue("padding", "bottom", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">L</Label>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>L</Label>
                 <Input
                   type="number"
                   value={values.padding.left}
                   onChange={(e) =>
                     updateValue("padding", "left", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
@@ -298,19 +299,19 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
         </div>
 
         {/* Border */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-xs font-medium">Border</Label>
+        <div className={styles.sectionContainer}>
+          <div className={styles.sectionHeader}>
+            <Label className={styles.sectionLabel}>Border</Label>
             <Button
               variant="ghost"
               size="icon"
-              className="h-5 w-5"
+              className={styles.linkButton}
               onClick={() => setLinked({ ...linked, border: !linked.border })}
             >
               {linked.border ? (
-                <Link2 className="h-3 w-3" />
+                <Link2 className={styles.linkIcon} />
               ) : (
-                <Unlink className="h-3 w-3" />
+                <Unlink className={styles.linkIcon} />
               )}
             </Button>
           </div>
@@ -321,56 +322,56 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
               onChange={(e) =>
                 updateValue("border", "top", Number(e.target.value))
               }
-              className="h-7 text-xs"
+              className={styles.controlInput}
               step="0.1"
             />
           ) : (
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">T</Label>
+            <div className={styles.unlinkedInputs}>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>T</Label>
                 <Input
                   type="number"
                   value={values.border.top}
                   onChange={(e) =>
                     updateValue("border", "top", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">R</Label>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>R</Label>
                 <Input
                   type="number"
                   value={values.border.right}
                   onChange={(e) =>
                     updateValue("border", "right", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">B</Label>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>B</Label>
                 <Input
                   type="number"
                   value={values.border.bottom}
                   onChange={(e) =>
                     updateValue("border", "bottom", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">L</Label>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>L</Label>
                 <Input
                   type="number"
                   value={values.border.left}
                   onChange={(e) =>
                     updateValue("border", "left", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
@@ -379,19 +380,19 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
         </div>
 
         {/* Margin */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label className="text-xs font-medium">Margin</Label>
+        <div className={styles.sectionContainer}>
+          <div className={styles.sectionHeader}>
+            <Label className={styles.sectionLabel}>Margin</Label>
             <Button
               variant="ghost"
               size="icon"
-              className="h-5 w-5"
+              className={styles.linkButton}
               onClick={() => setLinked({ ...linked, margin: !linked.margin })}
             >
               {linked.margin ? (
-                <Link2 className="h-3 w-3" />
+                <Link2 className={styles.linkIcon} />
               ) : (
-                <Unlink className="h-3 w-3" />
+                <Unlink className={styles.linkIcon} />
               )}
             </Button>
           </div>
@@ -402,56 +403,56 @@ export function BoxModelEditor({ object, onUpdate }: BoxModelEditorProps) {
               onChange={(e) =>
                 updateValue("margin", "top", Number(e.target.value))
               }
-              className="h-7 text-xs"
+              className={styles.controlInput}
               step="0.1"
             />
           ) : (
-            <div className="grid grid-cols-2 gap-2">
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">T</Label>
+            <div className={styles.unlinkedInputs}>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>T</Label>
                 <Input
                   type="number"
                   value={values.margin.top}
                   onChange={(e) =>
                     updateValue("margin", "top", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">R</Label>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>R</Label>
                 <Input
                   type="number"
                   value={values.margin.right}
                   onChange={(e) =>
                     updateValue("margin", "right", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">B</Label>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>B</Label>
                 <Input
                   type="number"
                   value={values.margin.bottom}
                   onChange={(e) =>
                     updateValue("margin", "bottom", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>
-              <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">L</Label>
+              <div className={styles.unlinkedInputGroup}>
+                <Label className={styles.directionLabel}>L</Label>
                 <Input
                   type="number"
                   value={values.margin.left}
                   onChange={(e) =>
                     updateValue("margin", "left", Number(e.target.value))
                   }
-                  className="h-7 text-xs"
+                  className={styles.controlInput}
                   step="0.1"
                 />
               </div>

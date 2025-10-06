@@ -1,7 +1,102 @@
-// top-navigation composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// top-navigation assemblie component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.top-navigation {
-  // Placeholder for future SCSS implementation
-  // Will contain top-navigation-specific styles when migrating from Tailwind
+.topnavigation {
+  // Base navigation styles (equivalent to flex h-12 items-center gap-1 border-b border-border bg-card px-3)
+  display: flex;
+  height: var(--semantic-components-navigation-height-bar);
+  align-items: center;
+  gap: var(--semantic-spacing-gap-grid-small);
+  border-bottom: var(--semantic-shape-control-border-default-width) var(--semantic-shape-control-border-default-style) var(--semantic-color-navigation-border-primary);
+  background-color: var(--semantic-color-navigation-background-primary);
+  padding: 0 var(--semantic-components-navigation-padding-item-horizontal);
+
+  // Logo and title container (equivalent to flex items-center gap-2 mr-4)
+  .topnavigationLogoContainer {
+    display: flex;
+    align-items: center;
+    gap: var(--semantic-components-navigation-gap-icon);
+    margin-right: var(--semantic-spacing-gap-grid-medium);
+
+    // Logo styles (equivalent to w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm)
+    .topnavigationLogo {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--semantic-shape-control-radius-default);
+      background-color: var(--semantic-color-navigation-foreground-active);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--semantic-color-navigation-foreground-active);
+      font-weight: var(--semantic-typography-font-weight-bold);
+      font-size: var(--semantic-typography-body-03);
+    }
+
+    // Title styles (equivalent to text-sm font-medium)
+    .topnavigationTitle {
+      font-size: var(--semantic-typography-body-03);
+      font-weight: var(--semantic-typography-font-weight-medium);
+      color: var(--semantic-color-navigation-foreground-primary);
+    }
+  }
+
+  // Menu container (equivalent to flex items-center gap-0.5)
+  .topnavigationMenuContainer {
+    display: flex;
+    align-items: center;
+    gap: var(--semantic-spacing-gap-grid-small);
+
+    // Menu button styles (equivalent to h-8 px-3 text-sm font-normal hover:bg-accent)
+    .topnavigationMenuButton {
+      height: var(--semantic-components-action-height-small);
+      padding: 0 var(--semantic-components-action-padding-horizontal-small);
+      font-size: var(--semantic-typography-body-03);
+      font-weight: var(--semantic-typography-font-weight-regular);
+
+      &:hover {
+        background-color: var(--semantic-color-navigation-background-secondary);
+      }
+
+      // Chevron icon styles (equivalent to ml-1 h-3 w-3 opacity-50)
+      .topnavigationChevron {
+        margin-left: var(--semantic-spacing-gap-grid-small);
+        width: var(--semantic-components-action-gap-icon);
+        height: var(--semantic-components-action-gap-icon);
+        opacity: var(--semantic-opacity-disabled);
+      }
+    }
+
+    // Menu item styles (equivalent to flex items-center justify-between cursor-pointer)
+    .topnavigationMenuItem {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--semantic-color-navigation-background-secondary);
+      }
+
+      // Shortcut styles (equivalent to text-xs text-muted-foreground)
+      .topnavigationShortcut {
+        font-size: var(--semantic-typography-caption-02);
+        color: var(--semantic-color-navigation-foreground-secondary);
+      }
+    }
+  }
+
+  // Right side controls (equivalent to ml-auto flex items-center gap-2)
+  .topnavigationControls {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--semantic-components-action-gap-icon);
+
+    // Share button styles (equivalent to h-8 px-3 text-sm)
+    .topnavigationShareButton {
+      height: var(--semantic-components-action-height-small);
+      padding: 0 var(--semantic-components-action-padding-horizontal-small);
+      font-size: var(--semantic-typography-body-03);
+    }
+  }
 }

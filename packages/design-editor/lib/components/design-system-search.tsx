@@ -1,16 +1,16 @@
 "use client";
 
 import { Search } from "lucide-react";
-import { Input } from '@/ui/primitives/Input';
+import { Grid, List, Star } from "./icons";
+import { Button } from "@/ui/primitives/Button";
+import { Input } from "@/ui/primitives/Input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/ui/primitives/select';
-import { Button } from '@/ui/primitives/Button';
-import { Grid, List, Star } from "./icons";
+} from "@/ui/primitives/Select";
 
 interface DesignSystemSearchProps {
   searchQuery: string;

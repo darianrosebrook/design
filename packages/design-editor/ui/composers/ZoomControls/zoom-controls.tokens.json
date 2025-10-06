@@ -1,3 +1,109 @@
 {
-  "zoom-controls": {}
+  "prefix": "zoomControls",
+  "tokens": {
+    "backgroundColor": {
+      "value": "{semantic.color.display.background.primary}",
+      "description": "Background color for zoom controls"
+    },
+    "borderColor": {
+      "value": "{semantic.color.display.border.subtle}",
+      "description": "Border color for zoom controls"
+    },
+    "borderRadius": {
+      "value": "{semantic.shape.control.radius.default}",
+      "description": "Border radius for zoom controls"
+    },
+    "spacing": {
+      "container": {
+        "value": "{semantic.spacing.padding.grid.xsmall}",
+        "description": "Padding for controls container"
+      },
+      "gap": {
+        "value": "{semantic.spacing.gap.grid.xsmall}",
+        "description": "Gap between control elements"
+      },
+      "separator": {
+        "margin": {
+          "value": "{semantic.spacing.margin.grid.xsmall}",
+          "description": "Margin for separator element"
+        }
+      }
+    },
+    "layout": {
+      "button": {
+        "size": {
+          "value": "32px",
+          "description": "Size for zoom control buttons"
+        }
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for zoom control icons"
+        }
+      },
+      "display": {
+        "minWidth": {
+          "value": "3rem",
+          "description": "Minimum width for zoom display"
+        },
+        "padding": {
+          "horizontal": {
+            "value": "{semantic.spacing.padding.grid.small}",
+            "description": "Horizontal padding for zoom display"
+          }
+        }
+      },
+      "separator": {
+        "width": {
+          "value": "1px",
+          "description": "Width for separator line"
+        },
+        "height": {
+          "value": "24px",
+          "description": "Height for separator line"
+        }
+      },
+      "selectionIcon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for selection icon"
+        }
+      }
+    },
+    "typography": {
+      "display": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for zoom display"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.medium}",
+          "description": "Font weight for zoom display"
+        },
+        "textAlign": {
+          "value": "center",
+          "description": "Text alignment for zoom display"
+        }
+      },
+      "selectionIcon": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for selection icon"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.semibold}",
+          "description": "Font weight for selection icon"
+        }
+      }
+    },
+    "interactive": {
+      "hover": {
+        "backgroundColor": {
+          "value": "{semantic.color.action.background.secondary.hover}",
+          "description": "Background color on hover"
+        }
+      }
+    }
+  }
 }

@@ -1,15 +1,20 @@
 // Checkbox component styles
 // Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Checkbox.tokens.generated.scss' as checkboxTokens;
+
 .checkbox {
+  // Include the generated variables mixin within the component scope
+  @include checkboxTokens.vars;
   // Base checkbox styles (equivalent to border-input dark:bg-input/30 size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none)
-  border: 1px solid hsl(var(--input)); // equivalent to border-input
-  width: 16px; // equivalent to size-4
-  height: 16px; // equivalent to size-4
+  border: var(--checkbox-border-width) var(--checkbox-border-style) var(--checkbox-border-color-default); // equivalent to border-input
+  width: var(--checkbox-size); // equivalent to size-4
+  height: var(--checkbox-size); // equivalent to size-4
   flex-shrink: 0; // equivalent to shrink-0
-  border-radius: 4px; // equivalent to rounded-[4px]
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); // equivalent to shadow-xs
-  transition: box-shadow 150ms ease-in-out; // equivalent to transition-shadow
+  border-radius: var(--checkbox-borderRadius); // equivalent to rounded-[4px]
+  box-shadow: var(--checkbox-boxShadow); // equivalent to shadow-xs
+  transition: box-shadow var(--checkbox-transition-duration) var(--checkbox-transition-easing); // equivalent to transition-shadow
   outline: none; // equivalent to outline-none
 
   // Peer styles (equivalent to peer)
@@ -17,40 +22,41 @@
 
   // Dark mode background (equivalent to dark:bg-input/30)
   .dark & {
-    background-color: hsl(var(--input) / 0.3);
+    background-color: var(--checkbox-backgroundColor-dark);
+    opacity: var(--checkbox-backgroundColor-dark-opacity);
   }
 
   // Checked state (equivalent to data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary)
   &[data-state="checked"] {
-    background-color: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
-    border-color: hsl(var(--primary));
+    background-color: var(--checkbox-states-checked-backgroundColor);
+    color: var(--checkbox-states-checked-color);
+    border-color: var(--checkbox-states-checked-borderColor);
 
     .dark & {
-      background-color: hsl(var(--primary));
+      background-color: var(--checkbox-states-checked-dark-backgroundColor);
     }
   }
 
   // Focus visible styles (equivalent to focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px])
   &:focus-visible {
-    border-color: hsl(var(--ring));
-    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5);
+    border-color: var(--semantic-color-action-border-primary-focus);
+    box-shadow: var(--semantic-focus-ring);
   }
 
   // Invalid state (equivalent to aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive)
   &[aria-invalid="true"] {
-    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2);
-    border-color: hsl(var(--destructive));
+    box-shadow: var(--semantic-focus-ring);
+    border-color: var(--semantic-color-action-background-danger-default);
 
     .dark & {
-      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4);
+      box-shadow: var(--semantic-focus-ring);
     }
   }
 
   // Disabled state (equivalent to disabled:cursor-not-allowed disabled:opacity-50)
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--checkbox-states-disabled-opacity);
   }
 }
 
@@ -64,7 +70,7 @@
 
   // Icon size (equivalent to size-3.5 on the CheckIcon)
   svg {
-    width: 14px; // equivalent to size-3.5
-    height: 14px;
+    width: var(--checkbox-indicator-icon-size); // equivalent to size-3.5
+    height: var(--checkbox-indicator-icon-size);
   }
 }

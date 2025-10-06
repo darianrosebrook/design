@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { ComponentRenderer } from "./component-renderer";
+import { ZoomControls } from "./zoom-controls";
 import { useCanvas } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
-import { ZoomControls } from "./zoom-controls";
-import { ComponentRenderer } from "./component-renderer";
 
 type ResizeHandle = "nw" | "ne" | "sw" | "se" | "n" | "e" | "s" | "w";
 

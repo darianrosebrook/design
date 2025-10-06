@@ -5,8 +5,8 @@
   // Base avatar styles (equivalent to relative flex size-8 shrink-0 overflow-hidden rounded-full)
   position: relative;
   display: flex;
-  width: 32px; // equivalent to size-8
-  height: 32px; // equivalent to size-8
+  width: var(--semantic-components-action-height-small); // equivalent to size-8
+  height: var(--semantic-components-action-height-small); // equivalent to size-8
   flex-shrink: 0; // equivalent to shrink-0
   overflow: hidden; // equivalent to overflow-hidden
   border-radius: 9999px; // equivalent to rounded-full
@@ -21,7 +21,7 @@
 
 .avatarFallback {
   // Fallback styles (equivalent to bg-muted flex size-full items-center justify-center rounded-full)
-  background-color: hsl(var(--muted));
+  background-color: var(--core-color-display-background-secondary);
   display: flex;
   width: 100%; // equivalent to size-full
   height: 100%; // equivalent to size-full

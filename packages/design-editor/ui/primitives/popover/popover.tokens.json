@@ -1,3 +1,85 @@
 {
-  "popover": {}
+  "prefix": "popover",
+  "tokens": {
+    "borderRadius": {
+      "value": "8px",
+      "description": "Border radius for popover corners"
+    },
+    "fontSize": {
+      "value": "14px",
+      "description": "Base font size for popover text"
+    },
+    "fontWeight": {
+      "value": "400",
+      "description": "Font weight for popover text"
+    },
+    "lineHeight": {
+      "value": "1.4",
+      "description": "Line height for popover text"
+    },
+    "padding": {
+      "horizontal": {
+        "value": "16px",
+        "description": "Horizontal padding for popover content"
+      },
+      "vertical": {
+        "value": "12px",
+        "description": "Vertical padding for popover content"
+      }
+    },
+    "maxWidth": {
+      "value": "320px",
+      "description": "Maximum width for popover content"
+    },
+    "zIndex": {
+      "value": "1050",
+      "description": "Z-index for popover overlay"
+    },
+    "animation": {
+      "duration": {
+        "value": "200ms",
+        "description": "Animation duration for popover transitions"
+      },
+      "easing": {
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "description": "Animation easing for popover transitions"
+      }
+    },
+    "variants": {
+      "default": {
+        "backgroundColor": {
+          "value": "{color.mode.light}",
+          "description": "Background color for default variant"
+        },
+        "color": {
+          "value": "{color.action.foreground.secondary.default}",
+          "description": "Text color for default variant"
+        },
+        "borderColor": {
+          "value": "{color.action.border.secondary.default}",
+          "description": "Border color for default variant"
+        }
+      },
+      "dark": {
+        "backgroundColor": {
+          "value": "{color.mode.dark}",
+          "description": "Background color for dark variant"
+        },
+        "color": {
+          "value": "{color.action.foreground.secondary.default}",
+          "description": "Text color for dark variant"
+        },
+        "borderColor": {
+          "value": "{color.action.border.secondary.default}",
+          "description": "Border color for dark variant"
+        }
+      }
+    },
+    "arrow": {
+      "size": {
+        "value": "6px",
+        "description": "Size of the popover arrow"
+      }
+    }
+  }
 }

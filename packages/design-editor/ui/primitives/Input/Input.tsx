@@ -1,6 +1,6 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
 import styles from "./Input.module.scss";
+import { cn } from "@/lib/utils";
 
 export interface InputProps extends React.ComponentProps<"input"> {}
 

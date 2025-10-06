@@ -31,7 +31,7 @@ export function CanvasArea() {
   }
 
   const handleObjectMouseDown = (e: React.MouseEvent, obj: CanvasObject) => {
-    if (activeTool !== "select" || obj.locked) return
+    if (activeTool !== "select" || obj.locked) {return}
 
     e.stopPropagation()
     setSelectedId(obj.id)
@@ -50,7 +50,7 @@ export function CanvasArea() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!selectedId) return
+      if (!selectedId) {return}
 
       if (isDragging) {
         const dx = e.clientX - dragStart.x
@@ -118,7 +118,7 @@ export function CanvasArea() {
   }, [isDragging, isResizing, dragStart, objectStart, selectedId, resizeHandle, updateObject])
 
   const renderResizeHandles = (obj: CanvasObject) => {
-    if (!obj || obj.id !== selectedId || activeTool !== "select") return null
+    if (!obj || obj.id !== selectedId || activeTool !== "select") {return null}
 
     const handles: ResizeHandle[] = ["nw", "ne", "sw", "se", "n", "e", "s", "w"]
 
@@ -135,10 +135,10 @@ export function CanvasArea() {
       }
 
       // Position handles
-      if (handle.includes("n")) style.top = "-4px"
-      if (handle.includes("s")) style.bottom = "-4px"
-      if (handle.includes("w")) style.left = "-4px"
-      if (handle.includes("e")) style.right = "-4px"
+      if (handle.includes("n")) {style.top = "-4px"}
+      if (handle.includes("s")) {style.bottom = "-4px"}
+      if (handle.includes("w")) {style.left = "-4px"}
+      if (handle.includes("e")) {style.right = "-4px"}
       if (handle === "n" || handle === "s") {
         style.left = "50%"
         style.transform = "translateX(-50%)"

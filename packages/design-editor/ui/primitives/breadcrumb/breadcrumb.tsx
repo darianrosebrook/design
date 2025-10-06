@@ -1,8 +1,8 @@
 import { Slot } from "@radix-ui/react-slot";
 import { ChevronRight, MoreHorizontal } from "lucide-react";
 import * as React from "react";
-import { cn } from "@/lib/utils";
 import styles from "./breadcrumb.module.scss";
+import { cn } from "@/lib/utils";
 
 function Breadcrumb({ ...props }: React.ComponentProps<"nav">) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />;
@@ -12,9 +12,7 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<"ol">) {
   return (
     <ol
       data-slot="breadcrumb-list"
-      // Original Tailwind classes (commented for reference):
-      // "text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5"
-      className={cn(styles.breadcrumbList, className)}
+      className={cn(styles.breadcrumb, styles.breadcrumbList, className)}
       {...props}
     />
   );
@@ -24,9 +22,7 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<"li">) {
   return (
     <li
       data-slot="breadcrumb-item"
-      // Original Tailwind classes (commented for reference):
-      // "inline-flex items-center gap-1.5"
-      className={cn(styles.breadcrumbItem, className)}
+      className={cn(styles.breadcrumb, styles.breadcrumbItem, className)}
       {...props}
     />
   );
@@ -44,9 +40,7 @@ function BreadcrumbLink({
   return (
     <Comp
       data-slot="breadcrumb-link"
-      // Original Tailwind classes (commented for reference):
-      // "hover:text-foreground transition-colors"
-      className={cn(styles.breadcrumbLink, className)}
+      className={cn(styles.breadcrumb, styles.breadcrumbLink, className)}
       {...props}
     />
   );
@@ -59,9 +53,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
       role="link"
       aria-disabled="true"
       aria-current="page"
-      // Original Tailwind classes (commented for reference):
-      // "text-foreground font-normal"
-      className={cn(styles.breadcrumbPage, className)}
+      className={cn(styles.breadcrumb, styles.breadcrumbPage, className)}
       {...props}
     />
   );
@@ -77,9 +69,8 @@ function BreadcrumbSeparator({
       data-slot="breadcrumb-separator"
       role="presentation"
       aria-hidden="true"
-      // Original Tailwind classes (commented for reference):
       // "[&>svg]:size-3.5"
-      className={cn(styles.breadcrumbSeparator, className)}
+      className={cn(styles.breadcrumb, styles.breadcrumbSeparator, className)}
       {...props}
     >
       {children ?? <ChevronRight />}
@@ -96,9 +87,7 @@ function BreadcrumbEllipsis({
       data-slot="breadcrumb-ellipsis"
       role="presentation"
       aria-hidden="true"
-      // Original Tailwind classes (commented for reference):
-      // "flex size-9 items-center justify-center"
-      className={cn(styles.breadcrumbEllipsis, className)}
+      className={cn(styles.breadcrumb, styles.breadcrumbEllipsis, className)}
       {...props}
     >
       <MoreHorizontal className={styles.breadcrumbEllipsisIcon} />

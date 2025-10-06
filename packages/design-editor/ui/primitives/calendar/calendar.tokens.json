@@ -1,3 +1,637 @@
 {
-  "calendar": {}
+  "prefix": "calendar",
+  "tokens": {
+    "calendar": {
+      "backgroundColor": {
+        "value": "{color.mode.light}",
+        "description": "Background color for calendar container"
+      },
+      "padding": {
+        "value": "12px",
+        "description": "Padding for calendar container"
+      },
+      "width": {
+        "value": "fit-content",
+        "description": "Width for calendar container"
+      },
+      "cellSize": {
+        "value": "32px",
+        "description": "Size for calendar cells"
+      }
+    },
+    "months": {
+      "display": {
+        "value": "flex",
+        "description": "Display for months container"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for months"
+      },
+      "gap": {
+        "value": "16px",
+        "description": "Gap between months"
+      },
+      "responsive": {
+        "flexDirection": {
+          "value": "row",
+          "description": "Responsive flex direction for months"
+        }
+      }
+    },
+    "month": {
+      "display": {
+        "value": "flex",
+        "description": "Display for month container"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for month"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for month"
+      },
+      "gap": {
+        "value": "16px",
+        "description": "Gap within month"
+      }
+    },
+    "nav": {
+      "display": {
+        "value": "flex",
+        "description": "Display for navigation"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for navigation"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap in navigation"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for navigation"
+      },
+      "position": {
+        "value": "absolute",
+        "description": "Position for navigation"
+      },
+      "top": {
+        "value": "0",
+        "description": "Top position for navigation"
+      },
+      "insetX": {
+        "value": "0",
+        "description": "Inset X for navigation"
+      },
+      "justifyContent": {
+        "value": "space-between",
+        "description": "Justify content for navigation"
+      }
+    },
+    "navButton": {
+      "size": {
+        "value": "32px",
+        "description": "Size for navigation buttons"
+      },
+      "padding": {
+        "value": "0",
+        "description": "Padding for navigation buttons"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for navigation buttons"
+      },
+      "disabled": {
+        "opacity": {
+          "value": "0.5",
+          "description": "Opacity when navigation button is disabled"
+        }
+      }
+    },
+    "monthCaption": {
+      "display": {
+        "value": "flex",
+        "description": "Display for month caption"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for month caption"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for month caption"
+      },
+      "height": {
+        "value": "32px",
+        "description": "Height for month caption"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for month caption"
+      },
+      "padding": {
+        "horizontal": {
+          "value": "32px",
+          "description": "Horizontal padding for month caption"
+        }
+      }
+    },
+    "dropdowns": {
+      "display": {
+        "value": "flex",
+        "description": "Display for dropdowns"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for dropdowns"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for dropdowns"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for dropdowns"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for dropdowns"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for dropdowns"
+      },
+      "height": {
+        "value": "32px",
+        "description": "Height for dropdowns"
+      },
+      "gap": {
+        "value": "6px",
+        "description": "Gap in dropdowns"
+      }
+    },
+    "dropdownRoot": {
+      "position": {
+        "value": "relative",
+        "description": "Position for dropdown root"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for dropdown root"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for dropdown root"
+        },
+        "color": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Border color for dropdown root"
+        }
+      },
+      "boxShadow": {
+        "value": "{elevation.small}",
+        "description": "Box shadow for dropdown root"
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for dropdown root"
+      },
+      "focus": {
+        "borderColor": {
+          "value": "{color.palette.blue.500}",
+          "description": "Border color on focus"
+        },
+        "ringColor": {
+          "value": "{color.palette.blue.500}",
+          "opacity": 0.5,
+          "description": "Ring color on focus"
+        },
+        "ringWidth": {
+          "value": "3px",
+          "description": "Ring width on focus"
+        }
+      }
+    },
+    "dropdown": {
+      "position": {
+        "value": "absolute",
+        "description": "Position for dropdown"
+      },
+      "inset": {
+        "value": "0",
+        "description": "Inset for dropdown"
+      },
+      "backgroundColor": {
+        "value": "{color.palette.neutral.0}",
+        "description": "Background color for dropdown"
+      },
+      "opacity": {
+        "value": "0",
+        "description": "Opacity for dropdown"
+      }
+    },
+    "captionLabel": {
+      "userSelect": {
+        "value": "none",
+        "description": "User select for caption label"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for caption label"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for caption label"
+      },
+      "button": {
+        "display": {
+          "value": "flex",
+          "description": "Display for button-style caption label"
+        },
+        "alignItems": {
+          "value": "center",
+          "description": "Align items for button-style caption label"
+        },
+        "gap": {
+          "value": "4px",
+          "description": "Gap for button-style caption label"
+        },
+        "borderRadius": {
+          "value": "6px",
+          "description": "Border radius for button-style caption label"
+        },
+        "padding": {
+          "horizontal": {
+            "value": "8px",
+            "description": "Horizontal padding for button-style caption label"
+          },
+          "vertical": {
+            "value": "2px",
+            "description": "Vertical padding for button-style caption label"
+          }
+        },
+        "height": {
+          "value": "32px",
+          "description": "Height for button-style caption label"
+        },
+        "icon": {
+          "color": {
+            "value": "{color.palette.neutral.500}",
+            "description": "Icon color for button-style caption label"
+          },
+          "size": {
+            "value": "14px",
+            "description": "Icon size for button-style caption label"
+          }
+        }
+      }
+    },
+    "table": {
+      "width": {
+        "value": "100%",
+        "description": "Width for table"
+      },
+      "borderCollapse": {
+        "value": "collapse",
+        "description": "Border collapse for table"
+      }
+    },
+    "weekdays": {
+      "display": {
+        "value": "flex",
+        "description": "Display for weekdays"
+      }
+    },
+    "weekday": {
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for weekday"
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for weekday"
+      },
+      "flex": {
+        "value": "1",
+        "description": "Flex for weekday"
+      },
+      "fontWeight": {
+        "value": "400",
+        "description": "Font weight for weekday"
+      },
+      "fontSize": {
+        "value": "0.8rem",
+        "description": "Font size for weekday"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for weekday"
+      }
+    },
+    "week": {
+      "display": {
+        "value": "flex",
+        "description": "Display for week"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for week"
+      },
+      "marginTop": {
+        "value": "8px",
+        "description": "Top margin for week"
+      }
+    },
+    "weekNumberHeader": {
+      "userSelect": {
+        "value": "none",
+        "description": "User select for week number header"
+      },
+      "width": {
+        "value": "32px",
+        "description": "Width for week number header"
+      }
+    },
+    "weekNumber": {
+      "display": {
+        "value": "flex",
+        "description": "Display for week number"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for week number"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for week number"
+      },
+      "size": {
+        "value": "32px",
+        "description": "Size for week number"
+      },
+      "textAlign": {
+        "value": "center",
+        "description": "Text align for week number"
+      },
+      "fontSize": {
+        "value": "0.8rem",
+        "description": "Font size for week number"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for week number"
+      },
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for week number"
+      }
+    },
+    "day": {
+      "position": {
+        "value": "relative",
+        "description": "Position for day"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for day"
+      },
+      "height": {
+        "value": "100%",
+        "description": "Height for day"
+      },
+      "padding": {
+        "value": "0",
+        "description": "Padding for day"
+      },
+      "textAlign": {
+        "value": "center",
+        "description": "Text align for day"
+      },
+      "aspectRatio": {
+        "value": "1",
+        "description": "Aspect ratio for day"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for day"
+      },
+      "focused": {
+        "borderColor": {
+          "value": "{color.palette.blue.500}",
+          "description": "Border color when focused"
+        },
+        "ringColor": {
+          "value": "{color.palette.blue.500}",
+          "opacity": 0.5,
+          "description": "Ring color when focused"
+        },
+        "ringWidth": {
+          "value": "3px",
+          "description": "Ring width when focused"
+        },
+        "position": {
+          "value": "relative",
+          "description": "Position when focused"
+        },
+        "zIndex": {
+          "value": "10",
+          "description": "Z-index when focused"
+        }
+      },
+      "rangeStart": {
+        "borderRadius": {
+          "value": "6px 0 0 6px",
+          "description": "Border radius for range start"
+        },
+        "backgroundColor": {
+          "value": "{color.palette.neutral.100}",
+          "description": "Background color for range start"
+        }
+      },
+      "rangeMiddle": {
+        "borderRadius": {
+          "value": "0",
+          "description": "Border radius for range middle"
+        }
+      },
+      "rangeEnd": {
+        "borderRadius": {
+          "value": "0 6px 6px 0",
+          "description": "Border radius for range end"
+        },
+        "backgroundColor": {
+          "value": "{color.palette.neutral.100}",
+          "description": "Background color for range end"
+        }
+      },
+      "today": {
+        "backgroundColor": {
+          "value": "{color.palette.neutral.100}",
+          "description": "Background color for today"
+        },
+        "color": {
+          "value": "{color.palette.neutral.900}",
+          "description": "Color for today"
+        },
+        "borderRadius": {
+          "value": "6px",
+          "description": "Border radius for today"
+        },
+        "selected": {
+          "borderRadius": {
+            "value": "0",
+            "description": "Border radius when today is selected"
+          }
+        }
+      },
+      "outside": {
+        "color": {
+          "value": "{color.palette.neutral.500}",
+          "description": "Color for outside days"
+        },
+        "selected": {
+          "color": {
+            "value": "{color.palette.neutral.500}",
+            "description": "Color for selected outside days"
+          }
+        }
+      },
+      "disabled": {
+        "color": {
+          "value": "{color.palette.neutral.500}",
+          "description": "Color for disabled days"
+        },
+        "opacity": {
+          "value": "0.5",
+          "description": "Opacity for disabled days"
+        }
+      },
+      "hidden": {
+        "visibility": {
+          "value": "hidden",
+          "description": "Visibility for hidden days"
+        }
+      }
+    },
+    "dayButton": {
+      "display": {
+        "value": "flex",
+        "description": "Display for day button"
+      },
+      "aspectRatio": {
+        "value": "1",
+        "description": "Aspect ratio for day button"
+      },
+      "size": {
+        "value": "auto",
+        "description": "Size for day button"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for day button"
+      },
+      "minWidth": {
+        "value": "32px",
+        "description": "Min width for day button"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for day button"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap for day button"
+      },
+      "lineHeight": {
+        "value": "1",
+        "description": "Line height for day button"
+      },
+      "fontWeight": {
+        "value": "400",
+        "description": "Font weight for day button"
+      },
+      "focusRing": {
+        "width": {
+          "value": "3px",
+          "description": "Focus ring width for day button"
+        }
+      },
+      "selected": {
+        "single": {
+          "backgroundColor": {
+            "value": "{color.palette.blue.600}",
+            "description": "Background color for single selected day"
+          },
+          "color": {
+            "value": "{color.palette.white}",
+            "description": "Color for single selected day"
+          }
+        },
+        "range": {
+          "start": {
+            "backgroundColor": {
+              "value": "{color.palette.blue.600}",
+              "description": "Background color for range start"
+            },
+            "color": {
+              "value": "{color.palette.white}",
+              "description": "Color for range start"
+            },
+            "borderRadius": {
+              "value": "6px 0 0 6px",
+              "description": "Border radius for range start"
+            }
+          },
+          "end": {
+            "backgroundColor": {
+              "value": "{color.palette.blue.600}",
+              "description": "Background color for range end"
+            },
+            "color": {
+              "value": "{color.palette.white}",
+              "description": "Color for range end"
+            },
+            "borderRadius": {
+              "value": "0 6px 6px 0",
+              "description": "Border radius for range end"
+            }
+          },
+          "middle": {
+            "backgroundColor": {
+              "value": "{color.palette.neutral.100}",
+              "description": "Background color for range middle"
+            },
+            "color": {
+              "value": "{color.palette.neutral.900}",
+              "description": "Color for range middle"
+            },
+            "borderRadius": {
+              "value": "0",
+              "description": "Border radius for range middle"
+            }
+          }
+        }
+      },
+      "span": {
+        "fontSize": {
+          "value": "12px",
+          "description": "Font size for spans within day button"
+        },
+        "opacity": {
+          "value": "0.7",
+          "description": "Opacity for spans within day button"
+        }
+      }
+    },
+    "chevron": {
+      "size": {
+        "value": "16px",
+        "description": "Size for chevron icons"
+      }
+    }
+  }
 }

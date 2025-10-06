@@ -1,3 +1,92 @@
 {
-  "checkbox": {}
+  "prefix": "checkbox",
+  "tokens": {
+    "Checkbox": {
+      "size": {
+        "value": "16px",
+        "description": "Size of the checkbox"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for checkbox corners"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for checkbox"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for checkbox"
+        },
+        "color": {
+          "default": {
+            "value": "{color.palette.neutral.200}",
+            "description": "Default border color for checkbox"
+          }
+        }
+      },
+      "boxShadow": {
+        "value": "{elevation.level.1}",
+        "description": "Box shadow for checkbox"
+      },
+      "transition": {
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for checkbox interactions"
+        },
+        "easing": {
+          "value": "{motion.interaction.hover.easing}",
+          "description": "Transition easing for checkbox interactions"
+        }
+      },
+      "backgroundColor": {
+        "default": {
+          "value": "transparent",
+          "description": "Default background color for checkbox"
+        },
+        "dark": {
+          "value": "{color.palette.neutral.200}",
+          "opacity": 0.3,
+          "description": "Dark mode background color for checkbox"
+        }
+      },
+      "states": {
+        "checked": {
+          "backgroundColor": {
+            "value": "{color.action.background.primary.default}",
+            "description": "Background color for checked state"
+          },
+          "color": {
+            "value": "{color.action.foreground.primary.default}",
+            "description": "Text color for checked state"
+          },
+          "borderColor": {
+            "value": "{color.action.background.primary.default}",
+            "description": "Border color for checked state"
+          },
+          "dark": {
+            "backgroundColor": {
+              "value": "{color.action.background.primary.default}",
+              "description": "Dark mode background color for checked state"
+            }
+          }
+        },
+        "disabled": {
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity for disabled state"
+          }
+        }
+      },
+      "indicator": {
+        "icon": {
+          "size": {
+            "value": "14px",
+            "description": "Size for checkbox check icon"
+          }
+        }
+      }
+    }
+  }
 }

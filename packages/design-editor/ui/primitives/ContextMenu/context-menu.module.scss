@@ -1,7 +1,410 @@
 // context-menu primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
-.context-menu {
-  // Placeholder for future SCSS implementation
-  // Will contain context-menu-specific styles when migrating from Tailwind
+// Import generated token variables
+@use './ContextMenu.tokens.generated.scss' as contextMenuTokens;
+
+// Include the generated variables mixin
+@include contextMenuTokens.vars;
+
+// Animation keyframes for context menu
+@keyframes context-menu-show {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes context-menu-hide {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes context-menu-slide-down-and-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes context-menu-slide-left-and-fade {
+  from {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes context-menu-slide-up-and-fade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes context-menu-slide-right-and-fade {
+  from {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Context menu content
+.context-menu-content {
+  background-color: var(--contextMenu-content-backgroundColor);
+  color: var(--contextMenu-content-color);
+  z-index: var(--contextMenu-content-zIndex);
+  max-height: var(--contextMenu-content-maxHeight);
+  min-width: var(--contextMenu-content-minWidth);
+  overflow-x: var(--contextMenu-content-overflow-x);
+  overflow-y: var(--contextMenu-content-overflow-y);
+  border-radius: var(--contextMenu-content-borderRadius);
+  border: var(--contextMenu-content-border-width) var(--contextMenu-content-border-style) var(--contextMenu-content-border-color);
+  padding: var(--contextMenu-content-padding);
+  box-shadow: var(--contextMenu-content-boxShadow);
+  animation-duration: var(--contextMenu-content-animation-duration);
+  animation-timing-function: var(--contextMenu-content-animation-easing);
+  animation-fill-mode: both;
+
+  // Animation states
+  &[data-state="open"] {
+    animation-name: context-menu-show;
+  }
+
+  &[data-state="closed"] {
+    animation-name: context-menu-hide;
+  }
+
+  // Position variants
+  &[data-side="top"] {
+    animation-name: context-menu-slide-down-and-fade;
+  }
+
+  &[data-side="right"] {
+    animation-name: context-menu-slide-left-and-fade;
+  }
+
+  &[data-side="bottom"] {
+    animation-name: context-menu-slide-up-and-fade;
+  }
+
+  &[data-side="left"] {
+    animation-name: context-menu-slide-right-and-fade;
+  }
+}
+
+// Context menu sub-content
+.context-menu-sub-content {
+  background-color: var(--contextMenu-subContent-backgroundColor);
+  color: var(--contextMenu-subContent-color);
+  z-index: var(--contextMenu-subContent-zIndex);
+  min-width: var(--contextMenu-subContent-minWidth);
+  overflow: var(--contextMenu-subContent-overflow);
+  border-radius: var(--contextMenu-subContent-borderRadius);
+  border: var(--contextMenu-subContent-border-width) var(--contextMenu-subContent-border-style) var(--contextMenu-subContent-border-color);
+  padding: var(--contextMenu-subContent-padding);
+  box-shadow: var(--contextMenu-subContent-boxShadow);
+  animation-duration: var(--contextMenu-content-animation-duration);
+  animation-timing-function: var(--contextMenu-content-animation-easing);
+  animation-fill-mode: both;
+
+  // Animation states
+  &[data-state="open"] {
+    animation-name: context-menu-show;
+  }
+
+  &[data-state="closed"] {
+    animation-name: context-menu-hide;
+  }
+
+  // Position variants
+  &[data-side="top"] {
+    animation-name: context-menu-slide-down-and-fade;
+  }
+
+  &[data-side="right"] {
+    animation-name: context-menu-slide-left-and-fade;
+  }
+
+  &[data-side="bottom"] {
+    animation-name: context-menu-slide-up-and-fade;
+  }
+
+  &[data-side="left"] {
+    animation-name: context-menu-slide-right-and-fade;
+  }
+}
+
+// Context menu item
+.context-menu-item {
+  position: var(--contextMenu-item-position);
+  display: var(--contextMenu-item-display);
+  cursor: var(--contextMenu-item-cursor);
+  align-items: var(--contextMenu-item-alignItems);
+  gap: var(--contextMenu-item-gap);
+  border-radius: var(--contextMenu-item-borderRadius);
+  padding: var(--contextMenu-item-padding-vertical) var(--contextMenu-item-padding-horizontal);
+  font-size: var(--contextMenu-item-fontSize);
+  outline: var(--contextMenu-item-outline);
+  user-select: var(--contextMenu-item-userSelect);
+
+  // Inset variant
+  &[data-inset="true"] {
+    padding-left: var(--contextMenu-item-inset-paddingLeft);
+  }
+
+  // Focus state
+  &:focus {
+    background-color: var(--contextMenu-item-states-focus-backgroundColor);
+    color: var(--contextMenu-item-states-focus-color);
+  }
+
+  // Disabled state
+  &[data-disabled="true"] {
+    pointer-events: var(--contextMenu-item-states-disabled-pointerEvents);
+    opacity: var(--contextMenu-item-states-disabled-opacity);
+  }
+
+  // Destructive variant
+  &[data-variant="destructive"] {
+    color: var(--contextMenu-item-variants-destructive-color);
+
+    &:focus {
+      background-color: var(--contextMenu-item-variants-destructive-focus-backgroundColor);
+      color: var(--contextMenu-item-variants-destructive-focus-color);
+    }
+
+    // Icons in destructive items
+    svg:not([class*="text-"]) {
+      color: var(--contextMenu-item-variants-destructive-icon-color);
+    }
+  }
+
+  // Icons within items
+  svg:not([class*="text-"]) {
+    width: var(--contextMenu-item-icon-size);
+    height: var(--contextMenu-item-icon-size);
+    color: var(--contextMenu-item-icon-color);
+    pointer-events: var(--contextMenu-item-icon-pointerEvents);
+    flex-shrink: var(--contextMenu-item-icon-flexShrink);
+  }
+
+  // Icons with explicit text color classes should keep their color
+  svg[class*="text-"] {
+    pointer-events: var(--contextMenu-item-icon-pointerEvents);
+    flex-shrink: var(--contextMenu-item-icon-flexShrink);
+  }
+
+  // All SVGs within items
+  svg {
+    pointer-events: var(--contextMenu-item-icon-pointerEvents);
+    flex-shrink: var(--contextMenu-item-icon-flexShrink);
+
+    &:not([class*="size-"]) {
+      width: var(--contextMenu-item-icon-size);
+      height: var(--contextMenu-item-icon-size);
+    }
+  }
+}
+
+// Context menu sub-trigger
+.context-menu-sub-trigger {
+  display: var(--contextMenu-subTrigger-display);
+  cursor: var(--contextMenu-subTrigger-cursor);
+  align-items: var(--contextMenu-subTrigger-alignItems);
+  border-radius: var(--contextMenu-subTrigger-borderRadius);
+  padding: var(--contextMenu-subTrigger-padding-vertical) var(--contextMenu-subTrigger-padding-horizontal);
+  font-size: var(--contextMenu-subTrigger-fontSize);
+  outline: var(--contextMenu-subTrigger-outline);
+  user-select: var(--contextMenu-subTrigger-userSelect);
+
+  // Inset variant
+  &[data-inset="true"] {
+    padding-left: var(--contextMenu-subTrigger-inset-paddingLeft);
+  }
+
+  // Focus state
+  &:focus {
+    background-color: var(--contextMenu-subTrigger-states-focus-backgroundColor);
+    color: var(--contextMenu-subTrigger-states-focus-color);
+  }
+
+  // Open state
+  &[data-state="open"] {
+    background-color: var(--contextMenu-subTrigger-states-open-backgroundColor);
+    color: var(--contextMenu-subTrigger-states-open-color);
+  }
+
+  // Chevron icon
+  svg {
+    margin-left: var(--contextMenu-subTrigger-icon-marginLeft);
+    width: var(--contextMenu-subTrigger-icon-size);
+    height: var(--contextMenu-subTrigger-icon-size);
+    pointer-events: var(--contextMenu-subTrigger-icon-pointerEvents);
+    flex-shrink: var(--contextMenu-subTrigger-icon-flexShrink);
+  }
+}
+
+// Context menu checkbox item
+.context-menu-checkbox-item {
+  position: var(--contextMenu-checkboxItem-position);
+  display: var(--contextMenu-checkboxItem-display);
+  cursor: var(--contextMenu-checkboxItem-cursor);
+  align-items: var(--contextMenu-checkboxItem-alignItems);
+  gap: var(--contextMenu-checkboxItem-gap);
+  border-radius: var(--contextMenu-checkboxItem-borderRadius);
+  padding: var(--contextMenu-checkboxItem-padding-top) var(--contextMenu-checkboxItem-padding-right) var(--contextMenu-checkboxItem-padding-bottom) var(--contextMenu-checkboxItem-padding-left);
+  font-size: var(--contextMenu-checkboxItem-fontSize);
+  outline: var(--contextMenu-checkboxItem-outline);
+  user-select: var(--contextMenu-checkboxItem-userSelect);
+
+  // Focus state
+  &:focus {
+    background-color: var(--contextMenu-checkboxItem-states-focus-backgroundColor);
+    color: var(--contextMenu-checkboxItem-states-focus-color);
+  }
+
+  // Disabled state
+  &[data-disabled="true"] {
+    pointer-events: var(--contextMenu-checkboxItem-states-disabled-pointerEvents);
+    opacity: var(--contextMenu-checkboxItem-states-disabled-opacity);
+  }
+
+  // Indicator
+  span {
+    position: var(--contextMenu-checkboxItem-indicator-position);
+    left: var(--contextMenu-checkboxItem-indicator-left);
+    display: var(--contextMenu-checkboxItem-indicator-display);
+    align-items: var(--contextMenu-checkboxItem-indicator-alignItems);
+    justify-content: var(--contextMenu-checkboxItem-indicator-justifyContent);
+    width: var(--contextMenu-checkboxItem-indicator-size);
+    height: var(--contextMenu-checkboxItem-indicator-size);
+    pointer-events: var(--contextMenu-checkboxItem-indicator-pointerEvents);
+
+    // Check icon
+    svg {
+      width: var(--contextMenu-checkboxItem-indicator-icon-size);
+      height: var(--contextMenu-checkboxItem-indicator-icon-size);
+    }
+  }
+
+  // Icons within checkbox items
+  svg {
+    pointer-events: var(--contextMenu-checkboxItem-icon-pointerEvents);
+    flex-shrink: var(--contextMenu-checkboxItem-icon-flexShrink);
+
+    &:not([class*="size-"]) {
+      width: var(--contextMenu-checkboxItem-icon-size);
+      height: var(--contextMenu-checkboxItem-icon-size);
+    }
+  }
+}
+
+// Context menu radio item
+.context-menu-radio-item {
+  position: var(--contextMenu-radioItem-position);
+  display: var(--contextMenu-radioItem-display);
+  cursor: var(--contextMenu-radioItem-cursor);
+  align-items: var(--contextMenu-radioItem-alignItems);
+  gap: var(--contextMenu-radioItem-gap);
+  border-radius: var(--contextMenu-radioItem-borderRadius);
+  padding: var(--contextMenu-radioItem-padding-top) var(--contextMenu-radioItem-padding-right) var(--contextMenu-radioItem-padding-bottom) var(--contextMenu-radioItem-padding-left);
+  font-size: var(--contextMenu-radioItem-fontSize);
+  outline: var(--contextMenu-radioItem-outline);
+  user-select: var(--contextMenu-radioItem-userSelect);
+
+  // Focus state
+  &:focus {
+    background-color: var(--contextMenu-radioItem-states-focus-backgroundColor);
+    color: var(--contextMenu-radioItem-states-focus-color);
+  }
+
+  // Disabled state
+  &[data-disabled="true"] {
+    pointer-events: var(--contextMenu-radioItem-states-disabled-pointerEvents);
+    opacity: var(--contextMenu-radioItem-states-disabled-opacity);
+  }
+
+  // Indicator
+  span {
+    position: var(--contextMenu-radioItem-indicator-position);
+    left: var(--contextMenu-radioItem-indicator-left);
+    display: var(--contextMenu-radioItem-indicator-display);
+    align-items: var(--contextMenu-radioItem-indicator-alignItems);
+    justify-content: var(--contextMenu-radioItem-indicator-justifyContent);
+    width: var(--contextMenu-radioItem-indicator-size);
+    height: var(--contextMenu-radioItem-indicator-size);
+    pointer-events: var(--contextMenu-radioItem-indicator-pointerEvents);
+
+    // Radio icon
+    svg {
+      width: var(--contextMenu-radioItem-indicator-icon-size);
+      height: var(--contextMenu-radioItem-indicator-icon-size);
+      fill: var(--contextMenu-radioItem-indicator-icon-fill);
+    }
+  }
+
+  // Icons within radio items
+  svg {
+    pointer-events: var(--contextMenu-radioItem-icon-pointerEvents);
+    flex-shrink: var(--contextMenu-radioItem-icon-flexShrink);
+
+    &:not([class*="size-"]) {
+      width: var(--contextMenu-radioItem-icon-size);
+      height: var(--contextMenu-radioItem-icon-size);
+    }
+  }
+}
+
+// Context menu label
+.context-menu-label {
+  color: var(--contextMenu-label-color);
+  padding: var(--contextMenu-label-padding-vertical) var(--contextMenu-label-padding-horizontal);
+  font-size: var(--contextMenu-label-fontSize);
+  font-weight: var(--contextMenu-label-fontWeight);
+
+  // Inset variant
+  &[data-inset="true"] {
+    padding-left: var(--contextMenu-label-inset-paddingLeft);
+  }
+}
+
+// Context menu separator
+.context-menu-separator {
+  background-color: var(--contextMenu-separator-backgroundColor);
+  margin: var(--contextMenu-separator-margin-vertical) var(--contextMenu-separator-margin-horizontal);
+  height: var(--contextMenu-separator-height);
+}
+
+// Context menu shortcut
+.context-menu-shortcut {
+  color: var(--contextMenu-shortcut-color);
+  margin-left: var(--contextMenu-shortcut-marginLeft);
+  font-size: var(--contextMenu-shortcut-fontSize);
+  letter-spacing: var(--contextMenu-shortcut-letterSpacing);
 }

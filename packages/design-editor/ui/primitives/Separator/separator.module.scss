@@ -1,20 +1,25 @@
 // Separator component styles
 // Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Separator.tokens.generated.scss' as separatorTokens;
+
 .separator {
+  // Include the generated variables mixin within the component scope
+  @include separatorTokens.vars;
   // Base separator styles (equivalent to bg-border shrink-0)
-  background-color: hsl(var(--border)); // equivalent to bg-border
+  background-color: var(--separator-backgroundColor); // equivalent to bg-border
   flex-shrink: 0; // equivalent to shrink-0
 
   // Horizontal orientation (equivalent to data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full)
   &[data-orientation="horizontal"] {
-    height: 1px; // equivalent to h-px
-    width: 100%; // equivalent to w-full
+    height: var(--separator-height-horizontal); // equivalent to h-px
+    width: var(--separator-width-horizontal); // equivalent to w-full
   }
 
   // Vertical orientation (equivalent to data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px)
   &[data-orientation="vertical"] {
-    height: 100%; // equivalent to h-full
-    width: 1px; // equivalent to w-px
+    height: var(--separator-height-vertical); // equivalent to h-full
+    width: var(--separator-width-vertical); // equivalent to w-px
   }
 }

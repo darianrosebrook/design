@@ -1,0 +1,52 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Pagination/pagination.tokens.json
+ */
+@mixin vars {
+  /* === Nav Tokens === */
+  --pagination-nav-display: flex;
+  --pagination-nav-width: 100%;
+  --pagination-nav-margin-horizontal: auto;
+  --pagination-nav-justifyContent: center;
+
+  /* === Content Tokens === */
+  --pagination-content-display: flex;
+  --pagination-content-flexDirection: row;
+  --pagination-content-alignItems: center;
+  --pagination-content-gap: 4px;
+
+  /* === Item Tokens === */
+  --pagination-item-position: relative;
+
+  /* === Link Tokens === */
+  --pagination-link-states-active-variant: outline;
+  --pagination-link-states-inactive-variant: ghost;
+  --pagination-link-size-default: icon;
+
+  /* === Previous Tokens === */
+  --pagination-previous-size: default;
+  --pagination-previous-gap: 4px;
+  --pagination-previous-padding-left-default: 10px;
+  --pagination-previous-padding-left-large: 8px;
+  --pagination-previous-padding-right: 10px;
+  --pagination-previous-icon-size: 16px;
+  --pagination-previous-text-display: none;
+  --pagination-previous-text-large-display: block;
+
+  /* === Next Tokens === */
+  --pagination-next-size: default;
+  --pagination-next-gap: 4px;
+  --pagination-next-padding-left: 10px;
+  --pagination-next-padding-right-default: 10px;
+  --pagination-next-padding-right-large: 8px;
+  --pagination-next-icon-size: 16px;
+  --pagination-next-text-display: none;
+  --pagination-next-text-large-display: block;
+
+  /* === Ellipsis Tokens === */
+  --pagination-ellipsis-display: flex;
+  --pagination-ellipsis-alignItems: center;
+  --pagination-ellipsis-justifyContent: center;
+  --pagination-ellipsis-size: 36px;
+  --pagination-ellipsis-icon-size: 16px;
+  --pagination-ellipsis-text-screenReaderOnly: screen reader only;
+}

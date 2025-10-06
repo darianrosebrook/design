@@ -1,9 +1,5 @@
 "use client";
 
-import React from "react";
-import type { CanvasObject } from "@/lib/types";
-
-// Import all design system components
 import {
   Button,
   Box,
@@ -19,6 +15,11 @@ import {
   NumberField,
   ColorField,
 } from "@paths-design/design-system";
+import React from "react";
+import styles from "./component-renderer.module.scss";
+import type { CanvasObject } from "@/lib/types";
+
+// Import all design system components
 
 /**
  * Component registry mapping component names to actual components
@@ -62,23 +63,12 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
     console.warn(`Component "${ComponentName}" not found in registry`);
     return (
       <div
+        className={styles.componentRendererError}
         style={{
-          position: "absolute",
           left: object.x,
           top: object.y,
           width: object.width,
           height: object.height,
-          backgroundColor: "#ff6b6b",
-          border: "2px dashed #ff4757",
-          borderRadius: 4,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "white",
-          fontSize: 12,
-          fontWeight: "bold",
-          textAlign: "center",
-          padding: 8,
         }}
       >
         Component "{ComponentName}" not found
@@ -101,56 +91,60 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
     case "Button":
       return (
         <div
+          className={styles.componentRendererPositioned}
           style={{
-            position: "absolute",
             left: object.x,
             top: object.y,
             width: object.width,
             height: object.height,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
           }}
         >
-          <Component {...componentProps}>
-            {componentProps.children || "Button"}
-          </Component>
+          <div className={styles.componentRendererButton}>
+            <Component {...componentProps}>
+              {componentProps.children || "Button"}
+            </Component>
+          </div>
         </div>
       );
 
     case "Box":
       return (
         <div
+          className={styles.componentRendererPositioned}
           style={{
-            position: "absolute",
             left: object.x,
             top: object.y,
             width: object.width,
             height: object.height,
           }}
         >
-          <Component {...componentProps}>
-            {object.children && object.children.length > 0 ? (
-              object.children.map((child) => {
-                // Simple child rendering without recursion to avoid circular dependencies
-                return (
-                  <div key={child.id} style={{ position: "relative" }}>
-                    {child.type === "component" ? (
-                      <ComponentRenderer object={child} />
-                    ) : (
-                      <div>Child: {child.name}</div>
-                    )}
+          <div className={styles.componentRendererStack}>
+            <Component {...componentProps}>
+              {object.children && object.children.length > 0 ? (
+                object.children.map((child) => {
+                  // Simple child rendering without recursion to avoid circular dependencies
+                  return (
+                    <div
+                      key={child.id}
+                      className={styles.componentRendererChild}
+                    >
+                      {child.type === "component" ? (
+                        <ComponentRenderer object={child} />
+                      ) : (
+                        <div>Child: {child.name}</div>
+                      )}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className={styles.componentRendererSlot}>
+                  <div className={styles.componentRendererSlotLabel}>
+                    ◇ Slot
                   </div>
-                );
-              })
-            ) : (
-              <div className="border-2 border-dashed border-orange-300 bg-orange-50 bg-opacity-50 rounded-md flex items-center justify-center cursor-pointer hover:bg-orange-100 hover:border-orange-400 transition-colors min-h-[40px]">
-                <div className="text-orange-600 text-sm font-medium opacity-70">
-                  ◇ Slot
                 </div>
-              </div>
-            )}
-          </Component>
+              )}
+            </Component>
+          </div>
         </div>
       );
 
@@ -158,34 +152,34 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
     case "TextField":
       return (
         <div
+          className={styles.componentRendererPositioned}
           style={{
-            position: "absolute",
             left: object.x,
             top: object.y,
             width: object.width,
             height: object.height,
-            display: "flex",
-            alignItems: "center",
           }}
         >
-          <Component {...componentProps} />
+          <div className={styles.componentRendererInput}>
+            <Component {...componentProps} />
+          </div>
         </div>
       );
 
     case "Select":
       return (
         <div
+          className={styles.componentRendererPositioned}
           style={{
-            position: "absolute",
             left: object.x,
             top: object.y,
             width: object.width,
             height: object.height,
-            display: "flex",
-            alignItems: "center",
           }}
         >
-          <Component {...componentProps} options={[]} />
+          <div className={styles.componentRendererSelect}>
+            <Component {...componentProps} options={[]} />
+          </div>
         </div>
       );
 
@@ -193,51 +187,64 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
     case "Flex":
       return (
         <div
+          className={styles.componentRendererPositioned}
           style={{
-            position: "absolute",
             left: object.x,
             top: object.y,
             width: object.width,
             height: object.height,
           }}
         >
-          <Component {...componentProps}>
-            {object.children && object.children.length > 0 ? (
-              object.children.map((child) => {
-                // Simple child rendering without recursion to avoid circular dependencies
-                return (
-                  <div key={child.id} style={{ position: "relative" }}>
-                    {child.type === "component" ? (
-                      <ComponentRenderer object={child} />
-                    ) : (
-                      <div>Child: {child.name}</div>
-                    )}
+          <div
+            className={`${
+              ComponentName === "Stack"
+                ? styles.componentRendererStack
+                : styles.componentRendererFlex
+            }`}
+          >
+            <Component {...componentProps}>
+              {object.children && object.children.length > 0 ? (
+                object.children.map((child) => {
+                  // Simple child rendering without recursion to avoid circular dependencies
+                  return (
+                    <div
+                      key={child.id}
+                      className={styles.componentRendererChild}
+                    >
+                      {child.type === "component" ? (
+                        <ComponentRenderer object={child} />
+                      ) : (
+                        <div>Child: {child.name}</div>
+                      )}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className={styles.componentRendererSlot}>
+                  <div className={styles.componentRendererSlotLabel}>
+                    ◇ Slot
                   </div>
-                );
-              })
-            ) : (
-              <div className="border-2 border-dashed border-orange-300 bg-orange-50 bg-opacity-50 rounded-md flex items-center justify-center cursor-pointer hover:bg-orange-100 hover:border-orange-400 transition-colors min-h-[40px]">
-                <div className="text-orange-600 text-sm font-medium opacity-70">
-                  ◇ Slot
                 </div>
-              </div>
-            )}
-          </Component>
+              )}
+            </Component>
+          </div>
         </div>
       );
 
     default:
       return (
         <div
+          className={styles.componentRendererPositioned}
           style={{
-            position: "absolute",
             left: object.x,
             top: object.y,
             width: object.width,
             height: object.height,
           }}
         >
-          <Component {...componentProps} />
+          <div className={styles.componentRendererContent}>
+            <Component {...componentProps} />
+          </div>
         </div>
       );
   }

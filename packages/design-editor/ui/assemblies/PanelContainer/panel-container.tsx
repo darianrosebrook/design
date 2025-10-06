@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CollapsiblePanel } from "@/ui/composers/CollapsiblePanel";
+import { useCanvas , findObject } from "@/lib/canvas-context";
 import { FileDetailsPanel } from "@/ui/assemblies/FileDetailsPanel";
 import { PropertiesPanel } from "@/ui/assemblies/PropertiesPanel";
 import { PropertiesPanelCollapsed } from "@/ui/assemblies/PropertiesPanelCollapsed";
+import { CollapsiblePanel } from "@/ui/composers/CollapsiblePanel";
 import { ResizablePanel } from "@/ui/composers/ResizablePanel";
-import { useCanvas } from "@/lib/canvas-context";
-import { findObject } from "@/lib/canvas-context";
 
 interface PanelContainerProps {
   onOpenDesignSystem?: () => void;

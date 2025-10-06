@@ -1,7 +1,284 @@
 // input-group primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './InputGroup.tokens.generated.scss' as inputGroupTokens;
+
+// Include the generated variables mixin
+@include inputGroupTokens.vars;
+
+// Input group container
 .input-group {
-  // Placeholder for future SCSS implementation
-  // Will contain input-group-specific styles when migrating from Tailwind
+  display: var(--inputGroup-container-display);
+  width: var(--inputGroup-container-width);
+  position: var(--inputGroup-container-position);
+  align-items: var(--inputGroup-container-alignItems);
+  border-radius: var(--inputGroup-container-borderRadius);
+  border: var(--inputGroup-container-border-width) var(--inputGroup-container-border-style) var(--inputGroup-container-border-color);
+  background-color: var(--inputGroup-container-backgroundColor);
+  box-shadow: var(--inputGroup-container-boxShadow);
+  transition: var(--inputGroup-container-transition-property) var(--inputGroup-container-transition-duration) var(--inputGroup-container-transition-easing);
+  height: var(--inputGroup-container-height-default);
+  outline: var(--inputGroup-container-outline);
+
+  // Dark mode
+  .dark & {
+    background-color: var(--inputGroup-container-dark-backgroundColor);
+  }
+
+  // When containing textarea
+  &:has(> textarea) {
+    height: var(--inputGroup-container-height-textarea);
+  }
+
+  // Alignment adjustments
+  &:has(>[data-align="inline-start"]) {
+    padding-left: var(--inputGroup-container-alignment-inlineStart-padding-left);
+  }
+
+  &:has(>[data-align="inline-end"]) {
+    padding-right: var(--inputGroup-container-alignment-inlineEnd-padding-right);
+  }
+
+  &:has(>[data-align="block-start"]) {
+    flex-direction: var(--inputGroup-container-alignment-blockStart-flexDirection);
+    height: var(--inputGroup-container-alignment-blockStart-height);
+    padding-bottom: var(--inputGroup-container-alignment-blockStart-padding-bottom);
+  }
+
+  &:has(>[data-align="block-end"]) {
+    flex-direction: var(--inputGroup-container-alignment-blockEnd-flexDirection);
+    height: var(--inputGroup-container-alignment-blockEnd-height);
+    padding-top: var(--inputGroup-container-alignment-blockEnd-padding-top);
+  }
+
+  // Focus state (when input is focused)
+  &:has([data-slot="input-group-control"]:focus-visible) {
+    border-color: var(--inputGroup-container-states-focus-borderColor);
+    box-shadow: 0 0 0 var(--inputGroup-container-states-focus-ring-width) rgba(var(--inputGroup-container-states-focus-ring-color), var(--inputGroup-container-states-focus-ring-opacity));
+  }
+
+  // Error state
+  &:has([aria-invalid="true"]) {
+    box-shadow: 0 0 0 var(--inputGroup-container-states-error-ring-width) rgba(var(--inputGroup-container-states-error-ring-color), var(--inputGroup-container-states-error-ring-opacity));
+    border-color: var(--inputGroup-container-states-error-borderColor);
+
+    .dark & {
+      box-shadow: 0 0 0 var(--inputGroup-container-states-error-ring-width) rgba(var(--inputGroup-container-states-error-ring-dark-color), var(--inputGroup-container-states-error-ring-dark-opacity));
+    }
+  }
+
+  // Disabled state
+  &[data-disabled="true"] {
+    opacity: var(--inputGroup-addon-disabled-opacity);
+  }
+}
+
+// Input group addon
+.input-group-addon {
+  display: var(--inputGroup-addon-display);
+  height: var(--inputGroup-addon-height);
+  cursor: var(--inputGroup-addon-cursor);
+  align-items: var(--inputGroup-addon-alignItems);
+  justify-content: var(--inputGroup-addon-justifyContent);
+  gap: var(--inputGroup-addon-gap);
+  padding: var(--inputGroup-addon-padding-vertical) 0;
+  font-size: var(--inputGroup-addon-fontSize);
+  font-weight: var(--inputGroup-addon-fontWeight);
+  color: var(--inputGroup-addon-color);
+  user-select: var(--inputGroup-addon-userSelect);
+
+  // Icon styles
+  svg:not([class*='size-']) {
+    width: var(--inputGroup-addon-icon-size);
+    height: var(--inputGroup-addon-icon-size);
+    pointer-events: var(--inputGroup-addon-icon-pointerEvents);
+  }
+
+  // Keyboard shortcut styles
+  kbd {
+    border-radius: var(--inputGroup-addon-kbd-borderRadius);
+  }
+
+  // Alignment variants
+  &[data-align="inline-start"] {
+    order: var(--inputGroup-addon-alignments-inlineStart-order);
+    padding-left: var(--inputGroup-addon-alignments-inlineStart-padding-left);
+
+    // Button adjustments
+    > button {
+      margin-left: var(--inputGroup-addon-alignments-inlineStart-button-margin-left);
+    }
+
+    // Keyboard shortcut adjustments
+    > kbd {
+      margin-left: var(--inputGroup-addon-alignments-inlineStart-kbd-margin-left);
+    }
+  }
+
+  &[data-align="inline-end"] {
+    order: var(--inputGroup-addon-alignments-inlineEnd-order);
+    padding-right: var(--inputGroup-addon-alignments-inlineEnd-padding-right);
+
+    // Button adjustments
+    > button {
+      margin-right: var(--inputGroup-addon-alignments-inlineEnd-button-margin-right);
+    }
+
+    // Keyboard shortcut adjustments
+    > kbd {
+      margin-right: var(--inputGroup-addon-alignments-inlineEnd-kbd-margin-right);
+    }
+  }
+
+  &[data-align="block-start"] {
+    order: var(--inputGroup-addon-alignments-blockStart-order);
+    width: var(--inputGroup-addon-alignments-blockStart-width);
+    justify-content: var(--inputGroup-addon-alignments-blockStart-justifyContent);
+    padding: var(--inputGroup-addon-alignments-blockStart-padding-top) var(--inputGroup-addon-alignments-blockStart-padding-horizontal);
+
+    // Border bottom adjustments
+    .border-b & {
+      padding-bottom: var(--inputGroup-addon-alignments-blockStart-borderBottom-padding-bottom);
+    }
+
+    // Input adjustments in block-start alignment
+    & + [data-slot="input-group-control"] {
+      padding-top: var(--inputGroup-addon-alignments-blockStart-input-padding-top);
+    }
+  }
+
+  &[data-align="block-end"] {
+    order: var(--inputGroup-addon-alignments-blockEnd-order);
+    width: var(--inputGroup-addon-alignments-blockEnd-width);
+    justify-content: var(--inputGroup-addon-alignments-blockEnd-justifyContent);
+    padding: var(--inputGroup-addon-alignments-blockEnd-padding-bottom) var(--inputGroup-addon-alignments-blockEnd-padding-horizontal);
+
+    // Border top adjustments
+    .border-t & {
+      padding-top: var(--inputGroup-addon-alignments-blockEnd-borderTop-padding-top);
+    }
+
+    // Input adjustments in block-end alignment
+    & + [data-slot="input-group-control"] {
+      padding-bottom: var(--inputGroup-addon-alignments-blockEnd-input-padding-bottom);
+    }
+  }
+
+  // Disabled state
+  .input-group[data-disabled="true"] & {
+    opacity: var(--inputGroup-addon-disabled-opacity);
+  }
+}
+
+// Input group button
+.input-group-button {
+  font-size: var(--inputGroup-button-fontSize);
+  box-shadow: var(--inputGroup-button-boxShadow);
+  display: var(--inputGroup-button-display);
+  gap: var(--inputGroup-button-gap);
+  align-items: var(--inputGroup-button-alignItems);
+
+  // Size variants
+  &--size-xs {
+    height: var(--inputGroup-button-sizes-xs-height);
+    gap: var(--inputGroup-button-sizes-xs-gap);
+    padding: 0 var(--inputGroup-button-sizes-xs-padding-horizontal);
+    border-radius: var(--inputGroup-button-sizes-xs-borderRadius);
+
+    // Icon adjustments
+    &:has(> svg) {
+      padding: 0 var(--inputGroup-button-sizes-xs-icon-padding-horizontal);
+    }
+  }
+
+  &--size-sm {
+    height: var(--inputGroup-button-sizes-sm-height);
+    padding: 0 var(--inputGroup-button-sizes-sm-padding-horizontal);
+    gap: var(--inputGroup-button-sizes-sm-gap);
+    border-radius: var(--inputGroup-button-sizes-sm-borderRadius);
+
+    // Icon adjustments
+    &:has(> svg) {
+      padding: 0 var(--inputGroup-button-sizes-sm-icon-padding-horizontal);
+    }
+  }
+
+  &--size-icon-xs {
+    width: var(--inputGroup-button-sizes-iconXs-size);
+    height: var(--inputGroup-button-sizes-iconXs-size);
+    border-radius: var(--inputGroup-button-sizes-iconXs-borderRadius);
+    padding: var(--inputGroup-button-sizes-iconXs-padding);
+
+    // Icon adjustments
+    &:has(> svg) {
+      padding: var(--inputGroup-button-sizes-iconXs-icon-padding);
+    }
+  }
+
+  &--size-icon-sm {
+    width: var(--inputGroup-button-sizes-iconSm-size);
+    height: var(--inputGroup-button-sizes-iconSm-size);
+    padding: var(--inputGroup-button-sizes-iconSm-padding);
+
+    // Icon adjustments
+    &:has(> svg) {
+      padding: var(--inputGroup-button-sizes-iconSm-icon-padding);
+    }
+  }
+}
+
+// Input group text
+.input-group-text {
+  color: var(--inputGroup-text-color);
+  display: var(--inputGroup-text-display);
+  align-items: var(--inputGroup-text-alignItems);
+  gap: var(--inputGroup-text-gap);
+
+  // Icon styles
+  svg:not([class*='size-']) {
+    width: var(--inputGroup-text-icon-size);
+    height: var(--inputGroup-text-icon-size);
+    pointer-events: var(--inputGroup-text-icon-pointerEvents);
+  }
+}
+
+// Input group input
+.input-group-input {
+  flex: var(--inputGroup-input-flex);
+  border-radius: var(--inputGroup-input-borderRadius);
+  border: var(--inputGroup-input-border);
+  background-color: var(--inputGroup-input-backgroundColor);
+  box-shadow: var(--inputGroup-input-boxShadow);
+
+  // Dark mode
+  .dark & {
+    background-color: var(--inputGroup-input-dark-backgroundColor);
+  }
+
+  // Focus state
+  &:focus-visible {
+    box-shadow: var(--inputGroup-input-focus-ring);
+  }
+}
+
+// Input group textarea
+.input-group-textarea {
+  flex: var(--inputGroup-input-flex);
+  resize: var(--inputGroup-textarea-resize);
+  border-radius: var(--inputGroup-textarea-borderRadius);
+  border: var(--inputGroup-textarea-border);
+  background-color: var(--inputGroup-textarea-backgroundColor);
+  padding: var(--inputGroup-textarea-padding-vertical) 0;
+  box-shadow: var(--inputGroup-textarea-boxShadow);
+
+  // Dark mode
+  .dark & {
+    background-color: var(--inputGroup-textarea-dark-backgroundColor);
+  }
+
+  // Focus state
+  &:focus-visible {
+    box-shadow: var(--inputGroup-textarea-focus-ring);
+  }
 }

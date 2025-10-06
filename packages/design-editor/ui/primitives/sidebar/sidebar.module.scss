@@ -1,7 +1,253 @@
 // sidebar primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Sidebar.tokens.generated.scss' as sidebarTokens;
+
+// Include the generated variables mixin
+@include sidebarTokens.vars;
+
+// Provider styles
+.sidebarProvider {
+  display: var(--sidebar-provider-display);
+  flex-direction: var(--sidebar-provider-flexDirection);
+  min-height: var(--sidebar-provider-minHeight);
+  width: var(--sidebar-provider-width);
+}
+
+// Sidebar container styles
 .sidebar {
-  // Placeholder for future SCSS implementation
-  // Will contain sidebar-specific styles when migrating from Tailwind
+  background-color: var(--sidebar-container-backgroundColor);
+  color: var(--sidebar-container-color);
+  width: var(--sidebar-container-width);
+  padding: var(--sidebar-container-padding);
+}
+
+// Sidebar insets styles
+.sidebarInset {
+  display: var(--sidebar-insets-display);
+  flex-direction: var(--sidebar-insets-flexDirection);
+  flex: var(--sidebar-insets-flex);
+}
+
+// Input styles
+.sidebarInput {
+  background-color: var(--sidebar-input-backgroundColor);
+  height: var(--sidebar-input-height);
+  width: var(--sidebar-input-width);
+  box-shadow: var(--sidebar-input-boxShadow);
+}
+
+// Header styles
+.sidebarHeader {
+  display: var(--sidebar-header-display);
+  flex-direction: var(--sidebar-header-flexDirection);
+  gap: var(--sidebar-header-gap);
+  padding: var(--sidebar-header-padding);
+}
+
+// Footer styles
+.sidebarFooter {
+  display: var(--sidebar-footer-display);
+  flex-direction: var(--sidebar-footer-flexDirection);
+  gap: var(--sidebar-footer-gap);
+  padding: var(--sidebar-footer-padding);
+}
+
+// Separator styles
+.sidebarSeparator {
+  background-color: var(--sidebar-separator-backgroundColor);
+  margin: 0 var(--sidebar-separator-margin-horizontal);
+  width: var(--sidebar-separator-width);
+}
+
+// Content styles
+.sidebarContent {
+  display: var(--sidebar-content-display);
+  flex-direction: var(--sidebar-content-flexDirection);
+  gap: var(--sidebar-content-gap);
+  padding: var(--sidebar-content-padding);
+}
+
+// Group styles
+.sidebarGroup {
+  display: var(--sidebar-group-display);
+  flex-direction: var(--sidebar-group-flexDirection);
+  gap: var(--sidebar-group-gap);
+  min-width: var(--sidebar-group-minWidth);
+  padding: var(--sidebar-group-padding);
+}
+
+// Group label styles
+.sidebarGroupLabel {
+  display: var(--sidebar-groupLabel-display);
+  width: var(--sidebar-groupLabel-width);
+  min-width: var(--sidebar-groupLabel-minWidth);
+  flex-direction: var(--sidebar-groupLabel-flexDirection);
+  gap: var(--sidebar-groupLabel-gap);
+}
+
+// Group content styles
+.sidebarGroupContent {
+  display: var(--sidebar-groupContent-display);
+  width: var(--sidebar-groupContent-width);
+  min-width: var(--sidebar-groupContent-minWidth);
+  flex-direction: var(--sidebar-groupContent-flexDirection);
+  gap: var(--sidebar-groupContent-gap);
+}
+
+// Menu styles
+.sidebarMenu {
+  display: var(--sidebar-menu-display);
+  width: var(--sidebar-menu-width);
+  min-width: var(--sidebar-menu-minWidth);
+  flex-direction: var(--sidebar-menu-flexDirection);
+  gap: var(--sidebar-menu-gap);
+}
+
+// Menu item styles
+.sidebarMenuItem {
+  position: var(--sidebar-menuItem-position);
+}
+
+// Menu button styles
+.sidebarMenuButton {
+  display: var(--sidebar-menuButton-display);
+  width: var(--sidebar-menuButton-width);
+  align-items: var(--sidebar-menuButton-alignItems);
+  gap: var(--sidebar-menuButton-gap);
+  overflow: var(--sidebar-menuButton-overflow);
+  border-radius: var(--sidebar-menuButton-borderRadius);
+  padding: var(--sidebar-menuButton-padding);
+  text-align: var(--sidebar-menuButton-textAlign);
+  font-size: var(--sidebar-menuButton-fontSize);
+  outline: var(--sidebar-menuButton-outline);
+  transition: var(--sidebar-menuButton-transition-properties) var(--sidebar-menuButton-transition-duration) var(--sidebar-menuButton-transition-easing);
+
+  // Icon styles
+  svg {
+    width: var(--sidebar-menuButton-icon-size);
+    height: var(--sidebar-menuButton-icon-size);
+    flex-shrink: var(--sidebar-menuButton-icon-flexShrink);
+  }
+
+  // Hover state
+  &:hover {
+    background-color: var(--sidebar-menuButton-states-hover-backgroundColor);
+    color: var(--sidebar-menuButton-states-hover-color);
+  }
+
+  // Active state
+  &[data-active="true"] {
+    background-color: var(--sidebar-menuButton-states-active-backgroundColor);
+    color: var(--sidebar-menuButton-states-active-color);
+    font-weight: var(--sidebar-menuButton-states-active-fontWeight);
+  }
+
+  // Disabled state
+  &:disabled {
+    pointer-events: var(--sidebar-menuButton-states-disabled-pointerEvents);
+    opacity: var(--sidebar-menuButton-states-disabled-opacity);
+  }
+
+  // Focus visible state
+  &:focus-visible {
+    box-shadow: var(--sidebar-menuButton-ring);
+  }
+
+  // Size variants
+  &--size-sm {
+    height: var(--sidebar-menuButton-sizes-sm-height);
+    font-size: var(--sidebar-menuButton-sizes-sm-fontSize);
+  }
+
+  &--size-lg {
+    height: var(--sidebar-menuButton-sizes-lg-height);
+    font-size: var(--sidebar-menuButton-sizes-lg-fontSize);
+  }
+
+  // Variant: outline
+  &--variant-outline {
+    background-color: var(--sidebar-menuButton-variants-outline-backgroundColor);
+    box-shadow: var(--sidebar-menuButton-variants-outline-boxShadow);
+
+    &:hover {
+      background-color: var(--sidebar-menuButton-variants-outline-hover-backgroundColor);
+      color: var(--sidebar-menuButton-variants-outline-hover-color);
+      box-shadow: var(--sidebar-menuButton-variants-outline-hover-boxShadow);
+    }
+  }
+}
+
+// Menu sub styles
+.sidebarMenuSub {
+  display: var(--sidebar-menuSub-display);
+  width: var(--sidebar-menuSub-width);
+  min-width: var(--sidebar-menuSub-minWidth);
+  flex-direction: var(--sidebar-menuSub-flexDirection);
+  gap: var(--sidebar-menuSub-gap);
+}
+
+// Menu sub item styles
+.sidebarMenuSubItem {
+  position: var(--sidebar-menuSubItem-position);
+}
+
+// Menu sub button styles
+.sidebarMenuSubButton {
+  display: var(--sidebar-menuSubButton-display);
+  height: var(--sidebar-menuSubButton-height);
+  align-items: var(--sidebar-menuSubButton-alignItems);
+  gap: var(--sidebar-menuSubButton-gap);
+  border-radius: var(--sidebar-menuSubButton-borderRadius);
+  padding: var(--sidebar-menuSubButton-padding);
+  font-size: var(--sidebar-menuSubButton-fontSize);
+  transition: var(--sidebar-menuSubButton-transition-duration) var(--sidebar-menuSubButton-transition-easing);
+
+  // Icon styles
+  svg {
+    width: var(--sidebar-menuSubButton-icon-size);
+    height: var(--sidebar-menuSubButton-icon-size);
+    border-radius: var(--sidebar-menuSubButton-icon-borderRadius);
+  }
+
+  // Skeleton styles
+  .sidebarMenuSubButtonSkeleton {
+    height: var(--sidebar-menuSubButton-skeleton-height);
+    max-width: var(--sidebar-menuSubButton-skeleton-maxWidth);
+    flex: var(--sidebar-menuSubButton-skeleton-flex);
+  }
+
+  // Hover state
+  &:hover {
+    background-color: var(--sidebar-menuSubButton-states-hover-backgroundColor);
+    color: var(--sidebar-menuSubButton-states-hover-color);
+  }
+
+  // Active state
+  &[data-active="true"] {
+    background-color: var(--sidebar-menuSubButton-states-active-backgroundColor);
+    color: var(--sidebar-menuSubButton-states-active-color);
+  }
+}
+
+// Trigger styles
+.sidebarTrigger {
+  width: var(--sidebar-trigger-size);
+  height: var(--sidebar-trigger-size);
+}
+
+// Rail styles
+.sidebarRail {
+  display: var(--sidebar-rail-display);
+  align-items: var(--sidebar-rail-alignItems);
+  gap: var(--sidebar-rail-gap);
+  border-radius: var(--sidebar-rail-borderRadius);
+  padding: var(--sidebar-rail-padding);
+  transition: var(--sidebar-rail-transition-duration) var(--sidebar-rail-transition-easing);
+
+  // Hover state
+  &:hover {
+    background-color: var(--sidebar-rail-states-hover-backgroundColor);
+  }
 }

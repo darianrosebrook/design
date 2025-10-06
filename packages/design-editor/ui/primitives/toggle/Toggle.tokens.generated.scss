@@ -1,0 +1,34 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Toggle/toggle.tokens.json
+ */
+@mixin vars {
+  /* === Padding Tokens === */
+  --toggle-padding-horizontal-default: 12px;
+  --toggle-padding-horizontal-sm: 8px;
+  --toggle-padding-horizontal-lg: 16px;
+  --toggle-padding-vertical-default: 6px;
+  --toggle-padding-vertical-sm: 4px;
+  --toggle-padding-vertical-lg: 8px;
+
+  /* === Height Tokens === */
+  --toggle-height-default: 36px;
+  --toggle-height-sm: 32px;
+  --toggle-height-lg: 40px;
+
+  /* === Variants Tokens === */
+  --toggle-variants-default-backgroundColor: var(--color-action-background-secondary-default);
+  --toggle-variants-default-color: var(--color-action-foreground-secondary-default);
+  --toggle-variants-default-borderColor: var(--color-action-border-secondary-default);
+  --toggle-variants-default-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --toggle-variants-default-pressed-backgroundColor: var(--color-action-background-secondary-active);
+  --toggle-variants-outline-backgroundColor: var(--color-mode-light);
+  --toggle-variants-outline-borderColor: var(--color-action-border-secondary-default);
+  --toggle-variants-outline-color: var(--color-action-foreground-secondary-default);
+  --toggle-variants-outline-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --toggle-variants-secondary-backgroundColor: var(--color-action-background-secondary-default);
+  --toggle-variants-secondary-color: var(--color-action-foreground-secondary-default);
+  --toggle-variants-secondary-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --toggle-variants-ghost-backgroundColor: transparent;
+  --toggle-variants-ghost-color: var(--color-action-foreground-secondary-default);
+  --toggle-variants-ghost-hover-backgroundColor: var(--color-action-background-secondary-hover);
+}

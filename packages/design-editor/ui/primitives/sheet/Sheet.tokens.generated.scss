@@ -1,0 +1,60 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Sheet/sheet.tokens.json
+ */
+@mixin vars {
+  /* === Overlay Tokens === */
+  --sheet-overlay-backgroundColor: rgba(0, 0, 0, 0.5);
+  --sheet-overlay-zIndex: var(--semantic-z-index-modal);
+  --sheet-overlay-animation-duration-in: var(--semantic-animation-duration-fast);
+  --sheet-overlay-animation-duration-out: var(--semantic-animation-duration-fast);
+  --sheet-overlay-animation-easing: var(--semantic-animation-easing-default);
+
+  /* === Content Tokens === */
+  --sheet-content-backgroundColor: var(--semantic-color-display-background-primary);
+  --sheet-content-borderColor: var(--semantic-color-display-border-subtle);
+  --sheet-content-borderWidth: var(--semantic-shape-border-width-default);
+  --sheet-content-shadow: var(--semantic-effect-shadow-large);
+  --sheet-content-zIndex: var(--semantic-z-index-modal);
+  --sheet-content-layout-gap: var(--semantic-spacing-gap-grid-medium);
+  --sheet-content-layout-maxWidth-mobile: 75%;
+  --sheet-content-layout-maxWidth-desktop: 24rem;
+  --sheet-content-layout-height-full: 100%;
+  --sheet-content-layout-height-auto: auto;
+  --sheet-content-animation-duration-in: var(--semantic-animation-duration-normal);
+  --sheet-content-animation-duration-out: var(--semantic-animation-duration-fast);
+  --sheet-content-animation-easing: var(--semantic-animation-easing-default);
+  --sheet-content-animation-slide-distance: 100%;
+
+  /* === Close Tokens === */
+  --sheet-close-backgroundColor: transparent;
+  --sheet-close-backgroundColorHover: var(--semantic-color-action-background-secondary-hover);
+  --sheet-close-borderRadius: var(--semantic-shape-control-radius-xsmall);
+  --sheet-close-size: 24px;
+  --sheet-close-iconSize: 16px;
+  --sheet-close-position-top: var(--semantic-spacing-margin-grid-medium);
+  --sheet-close-position-right: var(--semantic-spacing-margin-grid-medium);
+  --sheet-close-opacity-default: 0.7;
+  --sheet-close-opacity-hover: 1;
+  --sheet-close-focus-ring-color: var(--semantic-color-action-border-primary-focus);
+  --sheet-close-focus-ring-width: 2px;
+  --sheet-close-focus-ring-offset: 2px;
+  --sheet-close-transition-duration: var(--semantic-animation-duration-fast);
+  --sheet-close-transition-property: opacity;
+
+  /* === Header Tokens === */
+  --sheet-header-padding: var(--semantic-spacing-padding-grid-medium);
+  --sheet-header-gap: var(--semantic-spacing-gap-grid-xsmall);
+
+  /* === Footer Tokens === */
+  --sheet-footer-padding: var(--semantic-spacing-padding-grid-medium);
+  --sheet-footer-gap: var(--semantic-spacing-gap-grid-small);
+  --sheet-footer-marginTop: auto;
+
+  /* === Title Tokens === */
+  --sheet-title-color: var(--semantic-color-display-foreground-primary);
+  --sheet-title-fontWeight: var(--semantic-typography-font-weight-semibold);
+
+  /* === Description Tokens === */
+  --sheet-description-color: var(--semantic-color-display-foreground-secondary);
+  --sheet-description-fontSize: var(--semantic-typography-body-03);
+}

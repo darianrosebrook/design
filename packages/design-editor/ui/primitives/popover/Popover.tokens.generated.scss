@@ -1,0 +1,23 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Popover/popover.tokens.json
+ */
+@mixin vars {
+  /* === Padding Tokens === */
+  --popover-padding-horizontal: 16px;
+  --popover-padding-vertical: 12px;
+
+  /* === Animation Tokens === */
+  --popover-animation-duration: 200ms;
+  --popover-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* === Variants Tokens === */
+  --popover-variants-default-backgroundColor: var(--color-mode-light);
+  --popover-variants-default-color: var(--color-action-foreground-secondary-default);
+  --popover-variants-default-borderColor: var(--color-action-border-secondary-default);
+  --popover-variants-dark-backgroundColor: var(--color-mode-dark);
+  --popover-variants-dark-color: var(--color-action-foreground-secondary-default);
+  --popover-variants-dark-borderColor: var(--color-action-border-secondary-default);
+
+  /* === Arrow Tokens === */
+  --popover-arrow-size: 6px;
+}

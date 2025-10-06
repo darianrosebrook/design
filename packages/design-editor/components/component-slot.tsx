@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { useCanvas } from "@/lib/canvas-context";
 import { getComponentMetadata } from "./component-renderer";
+import type { COMPONENT_REGISTRY } from "./component-renderer";
+import { useCanvas } from "@/lib/canvas-context";
 
 interface ComponentSlotProps {
   parentId: string;
@@ -21,13 +22,13 @@ export function ComponentSlot({
   slotIndex = 0,
   className = "",
   style = {},
-  onDrop,
+  onDrop: _onDrop,
 }: ComponentSlotProps) {
   const { addObjectToParent } = useCanvas();
 
   const handleClick = () => {
     // TODO: Open component picker or insert default component
-    console.log("Slot clicked, parent:", parentId, "slot:", slotIndex);
+    console.info("Slot clicked, parent:", parentId, "slot:", slotIndex);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -45,7 +46,9 @@ export function ComponentSlot({
 
     const componentType = e.dataTransfer.getData("component-type");
     if (componentType) {
-      const metadata = getComponentMetadata(componentType as any);
+      const metadata = getComponentMetadata(
+        componentType as keyof typeof COMPONENT_REGISTRY
+      );
       const newComponent = {
         id: `component-${Date.now()}`,
         type: "component" as const,

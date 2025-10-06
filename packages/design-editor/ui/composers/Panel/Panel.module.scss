@@ -1,0 +1,179 @@
+// Panel composer component styles
+// Shared components for all panels in the application
+
+.panel {
+  // Main panel container styles
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+// Panel Header
+.panelHeader {
+  // Base header styles
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--panel-spacing-header-vertical) var(--panel-spacing-header-horizontal);
+  border-bottom: 1px solid var(--panel-borderColor);
+}
+
+.panelHeader_compact {
+  // Compact variant
+  padding: calc(var(--panel-spacing-header-vertical) * 0.75) calc(var(--panel-spacing-header-horizontal) * 0.67);
+}
+
+.panelHeaderContent {
+  // Header content container
+  display: flex;
+  flex-direction: column;
+  gap: var(--panel-spacing-gap-xs);
+}
+
+.panelHeaderTitle {
+  // Title styles
+  font-size: var(--panel-typography-title-fontSize);
+  font-weight: var(--panel-typography-title-fontWeight);
+  color: var(--panel-typography-title-color);
+}
+
+.panelHeaderSubtitle {
+  // Subtitle styles
+  font-size: var(--panel-typography-subtitle-fontSize);
+  color: var(--panel-typography-subtitle-color);
+}
+
+.panelHeaderActions {
+  // Actions container
+  display: flex;
+  align-items: center;
+  gap: var(--panel-spacing-gap-xs);
+}
+
+// Panel Section
+.panelSection {
+  // Section container styles
+  display: flex;
+  flex-direction: column;
+  gap: var(--panel-spacing-gap-sm);
+}
+
+.panelSectionHeader {
+  // Section header button styles
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: var(--panel-typography-section-fontSize);
+  font-weight: var(--panel-typography-section-fontWeight);
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  color: inherit;
+
+  &:hover {
+    color: hsl(var(--panel-typography-title-color) / var(--panel-interactive-hover-opacity));
+  }
+
+  &:focus-visible {
+    outline: var(--panel-interactive-focus-ring-width) solid var(--panel-interactive-focus-ring-color);
+    outline-offset: var(--panel-interactive-focus-ring-offset);
+  }
+}
+
+.panelSectionHeaderContent {
+  // Header content styles
+  display: flex;
+  align-items: center;
+  gap: var(--panel-spacing-gap-sm);
+}
+
+.panelSectionIcon {
+  // Icon container styles
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--panel-layout-icon-size);
+  height: var(--panel-layout-icon-size);
+  color: var(--panel-typography-subtitle-color);
+
+  &:hover {
+    color: var(--panel-typography-title-color);
+  }
+}
+
+.panelSectionTitle {
+  // Title text styles
+  color: inherit;
+}
+
+.panelSectionHeaderEnd {
+  // Header end container (chevron and actions)
+  display: flex;
+  align-items: center;
+  gap: var(--panel-spacing-gap-xs);
+}
+
+.panelSectionChevron {
+  // Chevron icon styles
+  width: var(--panel-layout-chevron-size);
+  height: var(--panel-layout-chevron-size);
+  transition: transform 150ms ease-in-out;
+  color: var(--panel-typography-subtitle-color);
+}
+
+.panelSectionChevron--expanded {
+  // Expanded chevron rotation
+  transform: rotate(90deg);
+  color: var(--panel-typography-title-color);
+}
+
+.panelSectionContent {
+  // Content container styles
+  padding-left: var(--panel-layout-section-padding-left);
+}
+
+// Panel Content
+.panelContent {
+  // Base content styles
+  flex: 1;
+}
+
+.panelContent--padding-none {
+  // No padding
+  padding: 0;
+}
+
+.panelContent--padding-sm {
+  // Small padding
+  padding: var(--panel-spacing-padding-sm);
+}
+
+.panelContent--padding-md {
+  // Medium padding
+  padding: var(--panel-spacing-padding-md);
+}
+
+.panelContent--padding-lg {
+  // Large padding
+  padding: var(--panel-spacing-padding-lg);
+}
+
+.panelContent--scrollable {
+  // Scrollable content styles
+  overflow: hidden;
+}
+
+.panelContentScrollArea {
+  // Scroll area styles
+  height: 100%;
+  overflow-y: auto;
+}
+
+// Panel Footer
+.panelFooter {
+  // Footer styles
+  border-top: 1px solid var(--panel-borderColor);
+  padding: var(--panel-spacing-padding-md);
+}

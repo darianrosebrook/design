@@ -1,9 +1,5 @@
 "use client";
 
-import React from "react";
-import type { CanvasObject } from "@/lib/types";
-
-// Import all design system components
 import {
   Button,
   Box,
@@ -19,6 +15,10 @@ import {
   NumberField,
   ColorField,
 } from "@paths-design/design-system";
+import React from "react";
+import type { CanvasObject } from "@/lib/types";
+
+// Import all design system components
 
 /**
  * Component registry mapping component names to actual components

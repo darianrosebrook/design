@@ -1,0 +1,111 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/NavigationMenu/navigation-menu.tokens.json
+ */
+@mixin vars {
+  /* === Container Tokens === */
+  --navigationMenu-container-position: relative;
+  --navigationMenu-container-display: flex;
+  --navigationMenu-container-maxWidth: max-content;
+  --navigationMenu-container-flex: 1;
+  --navigationMenu-container-alignItems: center;
+  --navigationMenu-container-justifyContent: center;
+
+  /* === List Tokens === */
+  --navigationMenu-list-display: flex;
+  --navigationMenu-list-flex: 1;
+  --navigationMenu-list-listStyle: none;
+  --navigationMenu-list-alignItems: center;
+  --navigationMenu-list-justifyContent: center;
+  --navigationMenu-list-gap: 4px;
+
+  /* === Item Tokens === */
+  --navigationMenu-item-position: relative;
+
+  /* === Trigger Tokens === */
+  --navigationMenu-trigger-display: inline-flex;
+  --navigationMenu-trigger-height: 36px;
+  --navigationMenu-trigger-width: max-content;
+  --navigationMenu-trigger-alignItems: center;
+  --navigationMenu-trigger-justifyContent: center;
+  --navigationMenu-trigger-borderRadius: 6px;
+  --navigationMenu-trigger-backgroundColor-default: var(--color-mode-white);
+  --navigationMenu-trigger-padding-horizontal: 16px;
+  --navigationMenu-trigger-padding-vertical: 8px;
+  --navigationMenu-trigger-fontSize: 14px;
+  --navigationMenu-trigger-fontWeight: 500;
+  --navigationMenu-trigger-transition-duration: 150ms;
+  --navigationMenu-trigger-transition-easing: ease-in-out;
+  --navigationMenu-trigger-states-hover-backgroundColor: var(--color-palette-neutral-100);
+  --navigationMenu-trigger-states-hover-color: var(--color-mode-dark);
+  --navigationMenu-trigger-states-focus-backgroundColor: var(--color-palette-neutral-100);
+  --navigationMenu-trigger-states-focus-color: var(--color-mode-dark);
+  --navigationMenu-trigger-states-open-backgroundColor: var(--color-palette-neutral-100);
+  --navigationMenu-trigger-states-disabled-opacity: 0.5;
+  --navigationMenu-trigger-chevron-marginLeft: 4px;
+  --navigationMenu-trigger-chevron-size: 12px;
+  --navigationMenu-trigger-chevron-transition-duration: 300ms;
+  --navigationMenu-trigger-chevron-transition-easing: ease-in-out;
+  --navigationMenu-trigger-chevron-transform-open: rotate(180deg);
+
+  /* === Content Tokens === */
+  --navigationMenu-content-position: absolute;
+  --navigationMenu-content-top: 0;
+  --navigationMenu-content-left: 0;
+  --navigationMenu-content-width: 100%;
+  --navigationMenu-content-padding: 8px;
+  --navigationMenu-content-paddingRight: 10px;
+
+  /* === Viewport Tokens === */
+  --navigationMenu-viewport-position: absolute;
+  --navigationMenu-viewport-top: 100%;
+  --navigationMenu-viewport-left: 0;
+  --navigationMenu-viewport-display: flex;
+  --navigationMenu-viewport-justifyContent: center;
+  --navigationMenu-viewport-zIndex: 50;
+  --navigationMenu-viewport-inner-transformOrigin: top center;
+  --navigationMenu-viewport-inner-backgroundColor: var(--color-mode-white);
+  --navigationMenu-viewport-inner-color: var(--color-mode-dark);
+  --navigationMenu-viewport-inner-position: relative;
+  --navigationMenu-viewport-inner-marginTop: 6px;
+  --navigationMenu-viewport-inner-height: var(--radix-navigation-menu-viewport-height);
+  --navigationMenu-viewport-inner-width: 100%;
+  --navigationMenu-viewport-inner-overflow: hidden;
+  --navigationMenu-viewport-inner-borderRadius: 6px;
+  --navigationMenu-viewport-inner-border: 1px solid {color.palette.neutral.200};
+  --navigationMenu-viewport-inner-boxShadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* === Link Tokens === */
+  --navigationMenu-link-display: flex;
+  --navigationMenu-link-flexDirection: column;
+  --navigationMenu-link-gap: 4px;
+  --navigationMenu-link-borderRadius: 4px;
+  --navigationMenu-link-padding: 8px;
+  --navigationMenu-link-fontSize: 14px;
+  --navigationMenu-link-transition-duration: 150ms;
+  --navigationMenu-link-transition-easing: ease-in-out;
+  --navigationMenu-link-icon-color-default: var(--color-palette-neutral-500);
+  --navigationMenu-link-icon-size: 16px;
+  --navigationMenu-link-states-hover-backgroundColor: var(--color-palette-neutral-100);
+  --navigationMenu-link-states-hover-color: var(--color-mode-dark);
+  --navigationMenu-link-states-focus-backgroundColor: var(--color-palette-neutral-100);
+  --navigationMenu-link-states-focus-color: var(--color-mode-dark);
+  --navigationMenu-link-states-active-backgroundColor: var(--color-palette-neutral-100);
+  --navigationMenu-link-states-active-color: var(--color-mode-dark);
+
+  /* === Indicator Tokens === */
+  --navigationMenu-indicator-position: absolute;
+  --navigationMenu-indicator-top: 100%;
+  --navigationMenu-indicator-zIndex: 1;
+  --navigationMenu-indicator-display: flex;
+  --navigationMenu-indicator-height: 6px;
+  --navigationMenu-indicator-alignItems: flex-end;
+  --navigationMenu-indicator-justifyContent: center;
+  --navigationMenu-indicator-overflow: hidden;
+  --navigationMenu-indicator-arrow-backgroundColor: var(--color-palette-neutral-200);
+  --navigationMenu-indicator-arrow-position: relative;
+  --navigationMenu-indicator-arrow-top: 60%;
+  --navigationMenu-indicator-arrow-size: 8px;
+  --navigationMenu-indicator-arrow-transform: rotate(45deg);
+  --navigationMenu-indicator-arrow-borderTopLeftRadius: 2px;
+  --navigationMenu-indicator-arrow-boxShadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}

@@ -10,17 +10,17 @@ import {
   Plus,
 } from "lucide-react";
 import { useState, useMemo } from "react";
-import { Badge } from "@/ui/primitives/Badge";
-import { Button } from "@/ui/primitives/Button";
-import { Input } from "@/ui/primitives/Input";
-import { ScrollArea } from "@/ui/primitives/ScrollArea";
-import { useCanvas } from "@/lib/canvas-context";
-import { convertLibraryItemToCanvasObject } from "@/lib/utils/library-to-canvas";
+import type React from "react";
 import {
   getAvailableComponents,
   getComponentMetadata,
 } from "./component-renderer";
-import type React from "react";
+import { useCanvas } from "@/lib/canvas-context";
+import { convertLibraryItemToCanvasObject } from "@/lib/utils/library-to-canvas";
+import { Badge } from "@/ui/primitives/Badge";
+import { Button } from "@/ui/primitives/Button";
+import { Input } from "@/ui/primitives/Input";
+import { ScrollArea } from "@/ui/primitives/ScrollArea";
 
 interface LibraryItem {
   id: string;

@@ -1,7 +1,186 @@
 // dialog primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
-.dialog {
-  // Placeholder for future SCSS implementation
-  // Will contain dialog-specific styles when migrating from Tailwind
+// Import generated token variables
+@use './Dialog.tokens.generated.scss' as dialogTokens;
+
+// Include the generated variables mixin
+@include dialogTokens.vars;
+
+// Animation keyframes for dialog transitions
+@keyframes dialog-overlay-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialog-overlay-hide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dialog-content-show {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes dialog-content-hide {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+// Dialog overlay styles
+.dialog-overlay {
+  position: var(--dialog-overlay-position);
+  inset: var(--dialog-overlay-inset);
+  z-index: var(--dialog-overlay-zIndex);
+  background-color: var(--dialog-overlay-backgroundColor);
+
+  // Animation states
+  &[data-state="open"] {
+    animation: dialog-overlay-show var(--dialog-content-animation-duration) var(--motion-interaction-hover-easing);
+  }
+
+  &[data-state="closed"] {
+    animation: dialog-overlay-hide var(--dialog-content-animation-duration) var(--motion-interaction-hover-easing);
+  }
+}
+
+// Dialog content styles
+.dialog-content {
+  position: var(--dialog-content-position);
+  top: var(--dialog-content-top);
+  left: var(--dialog-content-left);
+  z-index: var(--dialog-content-zIndex);
+  display: var(--dialog-content-display);
+  width: var(--dialog-content-width);
+  max-width: var(--dialog-content-maxWidth-default);
+  transform: translate(var(--dialog-content-translate-x), var(--dialog-content-translate-y));
+  gap: var(--dialog-content-gap);
+  border-radius: var(--dialog-content-borderRadius);
+  border: var(--dialog-content-border-width) var(--dialog-content-border-style) var(--dialog-content-border-color);
+  padding: var(--dialog-content-padding);
+  box-shadow: var(--dialog-content-boxShadow);
+  background-color: var(--dialog-content-backgroundColor);
+
+  // Responsive max-width
+  @media (min-width: 640px) {
+    max-width: var(--dialog-content-maxWidth-large);
+  }
+
+  // Animation states
+  &[data-state="open"] {
+    animation: dialog-content-show var(--dialog-content-animation-duration) var(--motion-interaction-hover-easing);
+  }
+
+  &[data-state="closed"] {
+    animation: dialog-content-hide var(--dialog-content-animation-duration) var(--motion-interaction-hover-easing);
+  }
+}
+
+// Dialog close button styles
+.dialog-close {
+  position: var(--dialog-close-position);
+  top: var(--dialog-close-top);
+  right: var(--dialog-close-right);
+  width: var(--dialog-close-size);
+  height: var(--dialog-close-size);
+  border-radius: var(--dialog-close-borderRadius);
+  opacity: var(--dialog-close-opacity-default);
+  transition: var(--dialog-close-transition-property) var(--dialog-close-transition-duration) var(--dialog-close-transition-easing);
+  outline: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  // Icon styles
+  svg {
+    width: var(--dialog-close-icon-size);
+    height: var(--dialog-close-icon-size);
+    pointer-events: var(--dialog-close-icon-pointerEvents);
+    flex-shrink: var(--dialog-close-icon-flexShrink);
+  }
+
+  // Hover state
+  &:hover {
+    opacity: var(--dialog-close-opacity-hover);
+  }
+
+  // Focus state
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 var(--dialog-close-focus-ring-width) var(--dialog-close-focus-ring-color);
+    outline-offset: var(--dialog-close-focus-ring-offset);
+  }
+
+  // Disabled state
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  // Open state (when dialog is open)
+  &[data-state="open"] {
+    background-color: var(--dialog-close-states-open-backgroundColor);
+    color: var(--dialog-close-states-open-color);
+  }
+}
+
+// Dialog header styles
+.dialog-header {
+  display: var(--dialog-header-display);
+  flex-direction: var(--dialog-header-flexDirection);
+  gap: var(--dialog-header-gap);
+  text-align: var(--dialog-header-textAlign-default);
+
+  @media (min-width: 640px) {
+    text-align: var(--dialog-header-textAlign-large);
+  }
+}
+
+// Dialog footer styles
+.dialog-footer {
+  display: var(--dialog-footer-display);
+  gap: var(--dialog-footer-gap);
+  flex-direction: var(--dialog-footer-flexDirection-default);
+
+  @media (min-width: 640px) {
+    flex-direction: var(--dialog-footer-flexDirection-large);
+    justify-content: var(--dialog-footer-justifyContent-large);
+  }
+}
+
+// Dialog title styles
+.dialog-title {
+  font-size: var(--dialog-title-fontSize);
+  line-height: var(--dialog-title-lineHeight);
+  font-weight: var(--dialog-title-fontWeight);
+  margin: 0;
+}
+
+// Dialog description styles
+.dialog-description {
+  color: var(--dialog-description-color);
+  font-size: var(--dialog-description-fontSize);
+  line-height: var(--dialog-description-lineHeight);
+  margin: 0;
 }

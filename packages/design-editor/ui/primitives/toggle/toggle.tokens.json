@@ -1,3 +1,145 @@
 {
-  "toggle": {}
+  "prefix": "toggle",
+  "tokens": {
+    "borderRadius": {
+      "value": "6px",
+      "description": "Border radius for toggle corners"
+    },
+    "fontSize": {
+      "value": "14px",
+      "description": "Base font size for toggle text"
+    },
+    "fontWeight": {
+      "value": "500",
+      "description": "Font weight for toggle text"
+    },
+    "lineHeight": {
+      "value": "1.2",
+      "description": "Line height for toggle text"
+    },
+    "padding": {
+      "horizontal": {
+        "default": {
+          "value": "12px",
+          "description": "Horizontal padding for default size"
+        },
+        "sm": {
+          "value": "8px",
+          "description": "Horizontal padding for small size"
+        },
+        "lg": {
+          "value": "16px",
+          "description": "Horizontal padding for large size"
+        }
+      },
+      "vertical": {
+        "default": {
+          "value": "6px",
+          "description": "Vertical padding for default size"
+        },
+        "sm": {
+          "value": "4px",
+          "description": "Vertical padding for small size"
+        },
+        "lg": {
+          "value": "8px",
+          "description": "Vertical padding for large size"
+        }
+      }
+    },
+    "height": {
+      "default": {
+        "value": "36px",
+        "description": "Height for default size"
+      },
+      "sm": {
+        "value": "32px",
+        "description": "Height for small size"
+      },
+      "lg": {
+        "value": "40px",
+        "description": "Height for large size"
+      }
+    },
+    "variants": {
+      "default": {
+        "backgroundColor": {
+          "value": "{color.action.background.secondary.default}",
+          "description": "Background color for default variant"
+        },
+        "color": {
+          "value": "{color.action.foreground.secondary.default}",
+          "description": "Text color for default variant"
+        },
+        "borderColor": {
+          "value": "{color.action.border.secondary.default}",
+          "description": "Border color for default variant"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.hover}",
+            "description": "Background color on hover for default variant"
+          }
+        },
+        "pressed": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.active}",
+            "description": "Background color when pressed for default variant"
+          }
+        }
+      },
+      "outline": {
+        "backgroundColor": {
+          "value": "{color.mode.light}",
+          "description": "Background color for outline variant"
+        },
+        "borderColor": {
+          "value": "{color.action.border.secondary.default}",
+          "description": "Border color for outline variant"
+        },
+        "color": {
+          "value": "{color.action.foreground.secondary.default}",
+          "description": "Text color for outline variant"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.hover}",
+            "description": "Background color on hover for outline variant"
+          }
+        }
+      },
+      "secondary": {
+        "backgroundColor": {
+          "value": "{color.action.background.secondary.default}",
+          "description": "Background color for secondary variant"
+        },
+        "color": {
+          "value": "{color.action.foreground.secondary.default}",
+          "description": "Text color for secondary variant"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.hover}",
+            "description": "Background color on hover for secondary variant"
+          }
+        }
+      },
+      "ghost": {
+        "backgroundColor": {
+          "value": "transparent",
+          "description": "Background color for ghost variant"
+        },
+        "color": {
+          "value": "{color.action.foreground.secondary.default}",
+          "description": "Text color for ghost variant"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.hover}",
+            "description": "Background color on hover for ghost variant"
+          }
+        }
+      }
+    }
+  }
 }

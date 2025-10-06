@@ -1,3 +1,427 @@
 {
-  "navigation-menu": {}
+  "prefix": "navigationMenu",
+  "tokens": {
+    "container": {
+      "position": {
+        "value": "relative",
+        "description": "Position for navigation menu container"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display property for navigation menu container"
+      },
+      "maxWidth": {
+        "value": "max-content",
+        "description": "Maximum width for navigation menu container"
+      },
+      "flex": {
+        "value": "1",
+        "description": "Flex property for navigation menu container"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for navigation menu container"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for navigation menu container"
+      }
+    },
+    "list": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for navigation menu list"
+      },
+      "flex": {
+        "value": "1",
+        "description": "Flex property for navigation menu list"
+      },
+      "listStyle": {
+        "value": "none",
+        "description": "List style for navigation menu list"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for navigation menu list"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for navigation menu list"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap between navigation menu list items"
+      }
+    },
+    "item": {
+      "position": {
+        "value": "relative",
+        "description": "Position for navigation menu items"
+      }
+    },
+    "trigger": {
+      "display": {
+        "value": "inline-flex",
+        "description": "Display property for navigation menu triggers"
+      },
+      "height": {
+        "value": "36px",
+        "description": "Height for navigation menu triggers"
+      },
+      "width": {
+        "value": "max-content",
+        "description": "Width for navigation menu triggers"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for navigation menu triggers"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for navigation menu triggers"
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for navigation menu triggers"
+      },
+      "backgroundColor": {
+        "default": {
+          "value": "{color.mode.white}",
+          "description": "Default background color for navigation menu triggers"
+        }
+      },
+      "padding": {
+        "horizontal": {
+          "value": "16px",
+          "description": "Horizontal padding for navigation menu triggers"
+        },
+        "vertical": {
+          "value": "8px",
+          "description": "Vertical padding for navigation menu triggers"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for navigation menu triggers"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for navigation menu triggers"
+      },
+      "transition": {
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for navigation menu triggers"
+        },
+        "easing": {
+          "value": "ease-in-out",
+          "description": "Transition easing for navigation menu triggers"
+        }
+      },
+      "states": {
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Hover background color for navigation menu triggers"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Hover text color for navigation menu triggers"
+          }
+        },
+        "focus": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Focus background color for navigation menu triggers"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Focus text color for navigation menu triggers"
+          }
+        },
+        "open": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "opacity": 0.5,
+            "description": "Open state background color for navigation menu triggers"
+          }
+        },
+        "disabled": {
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity for disabled navigation menu triggers"
+          }
+        }
+      },
+      "chevron": {
+        "marginLeft": {
+          "value": "4px",
+          "description": "Left margin for navigation menu trigger chevrons"
+        },
+        "size": {
+          "value": "12px",
+          "description": "Size for navigation menu trigger chevrons"
+        },
+        "transition": {
+          "duration": {
+            "value": "300ms",
+            "description": "Transition duration for navigation menu trigger chevrons"
+          },
+          "easing": {
+            "value": "ease-in-out",
+            "description": "Transition easing for navigation menu trigger chevrons"
+          }
+        },
+        "transform": {
+          "open": {
+            "value": "rotate(180deg)",
+            "description": "Transform for open state navigation menu trigger chevrons"
+          }
+        }
+      }
+    },
+    "content": {
+      "position": {
+        "value": "absolute",
+        "description": "Position for navigation menu content"
+      },
+      "top": {
+        "value": "0",
+        "description": "Top position for navigation menu content"
+      },
+      "left": {
+        "value": "0",
+        "description": "Left position for navigation menu content"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for navigation menu content"
+      },
+      "padding": {
+        "value": "8px",
+        "description": "Padding for navigation menu content"
+      },
+      "paddingRight": {
+        "value": "10px",
+        "description": "Right padding for navigation menu content"
+      }
+    },
+    "viewport": {
+      "position": {
+        "value": "absolute",
+        "description": "Position for navigation menu viewport"
+      },
+      "top": {
+        "value": "100%",
+        "description": "Top position for navigation menu viewport"
+      },
+      "left": {
+        "value": "0",
+        "description": "Left position for navigation menu viewport"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display property for navigation menu viewport"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for navigation menu viewport"
+      },
+      "zIndex": {
+        "value": "50",
+        "description": "Z-index for navigation menu viewport"
+      },
+      "inner": {
+        "transformOrigin": {
+          "value": "top center",
+          "description": "Transform origin for navigation menu viewport inner"
+        },
+        "backgroundColor": {
+          "value": "{color.mode.white}",
+          "description": "Background color for navigation menu viewport inner"
+        },
+        "color": {
+          "value": "{color.mode.dark}",
+          "description": "Text color for navigation menu viewport inner"
+        },
+        "position": {
+          "value": "relative",
+          "description": "Position for navigation menu viewport inner"
+        },
+        "marginTop": {
+          "value": "6px",
+          "description": "Top margin for navigation menu viewport inner"
+        },
+        "height": {
+          "value": "var(--radix-navigation-menu-viewport-height)",
+          "description": "Height for navigation menu viewport inner"
+        },
+        "width": {
+          "value": "100%",
+          "description": "Width for navigation menu viewport inner"
+        },
+        "overflow": {
+          "value": "hidden",
+          "description": "Overflow for navigation menu viewport inner"
+        },
+        "borderRadius": {
+          "value": "6px",
+          "description": "Border radius for navigation menu viewport inner"
+        },
+        "border": {
+          "value": "1px solid {color.palette.neutral.200}",
+          "description": "Border for navigation menu viewport inner"
+        },
+        "boxShadow": {
+          "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+          "description": "Box shadow for navigation menu viewport inner"
+        }
+      }
+    },
+    "link": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for navigation menu links"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for navigation menu links"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap for navigation menu links"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for navigation menu links"
+      },
+      "padding": {
+        "value": "8px",
+        "description": "Padding for navigation menu links"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for navigation menu links"
+      },
+      "transition": {
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for navigation menu links"
+        },
+        "easing": {
+          "value": "ease-in-out",
+          "description": "Transition easing for navigation menu links"
+        }
+      },
+      "icon": {
+        "color": {
+          "default": {
+            "value": "{color.palette.neutral.500}",
+            "description": "Default color for navigation menu link icons"
+          }
+        },
+        "size": {
+          "value": "16px",
+          "description": "Size for navigation menu link icons"
+        }
+      },
+      "states": {
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Hover background color for navigation menu links"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Hover text color for navigation menu links"
+          }
+        },
+        "focus": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Focus background color for navigation menu links"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Focus text color for navigation menu links"
+          }
+        },
+        "active": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "opacity": 0.5,
+            "description": "Active background color for navigation menu links"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Active text color for navigation menu links"
+          }
+        }
+      }
+    },
+    "indicator": {
+      "position": {
+        "value": "absolute",
+        "description": "Position for navigation menu indicator"
+      },
+      "top": {
+        "value": "100%",
+        "description": "Top position for navigation menu indicator"
+      },
+      "zIndex": {
+        "value": "1",
+        "description": "Z-index for navigation menu indicator"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display property for navigation menu indicator"
+      },
+      "height": {
+        "value": "6px",
+        "description": "Height for navigation menu indicator"
+      },
+      "alignItems": {
+        "value": "flex-end",
+        "description": "Align items for navigation menu indicator"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for navigation menu indicator"
+      },
+      "overflow": {
+        "value": "hidden",
+        "description": "Overflow for navigation menu indicator"
+      },
+      "arrow": {
+        "backgroundColor": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Background color for navigation menu indicator arrow"
+        },
+        "position": {
+          "value": "relative",
+          "description": "Position for navigation menu indicator arrow"
+        },
+        "top": {
+          "value": "60%",
+          "description": "Top position for navigation menu indicator arrow"
+        },
+        "size": {
+          "value": "8px",
+          "description": "Size for navigation menu indicator arrow"
+        },
+        "transform": {
+          "value": "rotate(45deg)",
+          "description": "Transform for navigation menu indicator arrow"
+        },
+        "borderTopLeftRadius": {
+          "value": "2px",
+          "description": "Border top left radius for navigation menu indicator arrow"
+        },
+        "boxShadow": {
+          "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+          "description": "Box shadow for navigation menu indicator arrow"
+        }
+      }
+    }
+  }
 }

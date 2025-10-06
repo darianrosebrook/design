@@ -1,37 +1,9 @@
 "use client";
 
-import {
-  ChevronRight,
-  Link2,
-  Unlink,
-  Plus,
-  GripVertical,
-  Square,
-  Type,
-  Circle,
-  ImageIcon,
-  LayersIcon,
-  Frame,
-  Eye,
-  EyeOff,
-  Lock,
-  Unlock,
-  Move,
-  RotateCw,
-  FlipHorizontal,
-  FlipVertical,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignTop,
-  AlignMiddle,
-  AlignBottom,
-  MoreHorizontal,
-  Settings,
-  Info,
-} from "@/lib/components/icons";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useCanvas, findObject } from "@/lib/canvas-context";
+import { ChevronRight } from "@/lib/components/icons";
+import { CanvasBackgroundControls } from "@/ui/composers/CanvasBackgroundControls";
 import { Button } from "@/ui/primitives/Button";
 import { Input } from "@/ui/primitives/Input";
 import { Label } from "@/ui/primitives/Label";
@@ -44,9 +16,6 @@ import {
   SelectValue,
 } from "@/ui/primitives/Select";
 import { Slider } from "@/ui/primitives/Slider";
-import { useCanvas, findObject } from "@/lib/canvas-context";
-import type { CanvasObject } from "@/lib/types";
-import { CanvasBackgroundControls } from "@/ui/composers/CanvasBackgroundControls";
 // Component props panel temporarily removed
 
 interface PropertySection {
@@ -142,7 +111,7 @@ export function PropertiesPanel() {
 
           {/* Position Section */}
           {renderSection(
-            sections.find((s) => s.id === "position")!,
+            sections.find((s) => s.id === "position") || sections[0],
             0,
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-2">
@@ -233,7 +202,7 @@ export function PropertiesPanel() {
 
           {/* Layout Section */}
           {renderSection(
-            sections.find((s) => s.id === "layout")!,
+            sections.find((s) => s.id === "layout") || sections[1],
             1,
             <div className="space-y-2">
               <div className="space-y-1">
@@ -246,7 +215,7 @@ export function PropertiesPanel() {
                   className="w-full h-8 text-xs"
                   onClick={() => {
                     // TODO: Implement auto layout toggle
-                    console.log("Auto layout toggle not implemented");
+                    console.info("Auto layout toggle not implemented");
                   }}
                 >
                   Enable Auto Layout
@@ -257,7 +226,7 @@ export function PropertiesPanel() {
 
           {/* Appearance Section */}
           {renderSection(
-            sections.find((s) => s.id === "appearance")!,
+            sections.find((s) => s.id === "appearance") || sections[2],
             2,
             <div className="space-y-3">
               <div className="space-y-2">
@@ -331,7 +300,7 @@ export function PropertiesPanel() {
           {/* Typography Section */}
           {selectedObject.type === "text" &&
             renderSection(
-              sections.find((s) => s.id === "typography")!,
+              sections.find((s) => s.id === "typography") || sections[3],
               3,
               <div className="space-y-3">
                 <div className="space-y-1">
@@ -439,7 +408,7 @@ export function PropertiesPanel() {
                       className="flex-1 h-8 text-xs capitalize"
                       onClick={() =>
                         updateObject(selectedObject.id, {
-                          textAlign: align as any,
+                          textAlign: align as "left" | "center" | "right",
                         })
                       }
                     >
@@ -452,7 +421,7 @@ export function PropertiesPanel() {
 
           {/* Effects Section */}
           {renderSection(
-            sections.find((s) => s.id === "effects")!,
+            sections.find((s) => s.id === "effects") || sections[4],
             4,
             <div className="space-y-2">
               <Button

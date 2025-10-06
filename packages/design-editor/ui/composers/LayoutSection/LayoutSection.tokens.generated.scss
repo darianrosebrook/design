@@ -1,0 +1,44 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/LayoutSection/layout-section.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --layoutSection-spacing-container: var(--semantic-spacing-gap-grid-medium);
+  --layoutSection-spacing-section: var(--semantic-spacing-gap-grid-small);
+  --layoutSection-spacing-controls: var(--semantic-spacing-gap-grid-xsmall);
+
+  /* === Typography Tokens === */
+  --layoutSection-typography-label-fontSize: var(--semantic-typography-body-01);
+  --layoutSection-typography-label-fontWeight: var(--semantic-typography-font-weight-medium);
+  --layoutSection-typography-label-color: var(--semantic-color-display-foreground-primary);
+  --layoutSection-typography-sublabel-fontSize: var(--semantic-typography-body-01);
+  --layoutSection-typography-sublabel-color: var(--semantic-color-display-foreground-secondary);
+  --layoutSection-typography-unit-fontSize: var(--semantic-typography-body-01);
+  --layoutSection-typography-unit-color: var(--semantic-color-display-foreground-secondary);
+
+  /* === Layout Tokens === */
+  --layoutSection-layout-dimensions-grid-columns: 1fr auto 1fr;
+  --layoutSection-layout-dimensions-grid-gap: var(--semantic-spacing-gap-grid-small);
+  --layoutSection-layout-constraints-grid-columns: 2;
+  --layoutSection-layout-constraints-grid-gap: var(--semantic-spacing-gap-grid-small);
+  --layoutSection-layout-constraints-button-gap: var(--semantic-spacing-gap-grid-xsmall);
+  --layoutSection-layout-resize-grid-columns: 2;
+  --layoutSection-layout-resize-grid-gap: var(--semantic-spacing-gap-grid-xsmall);
+  --layoutSection-layout-toggle-gap: var(--semantic-spacing-gap-grid-small);
+
+  /* === Input Tokens === */
+  --layoutSection-input-height: var(--semantic-components-input-height-sm);
+  --layoutSection-input-fontSize: var(--semantic-typography-body-03);
+
+  /* === Button Tokens === */
+  --layoutSection-button-size: 20px;
+  --layoutSection-button-iconSize: 12px;
+  --layoutSection-button-padding: 0;
+
+  /* === Switch Tokens === */
+  --layoutSection-switch-scale: 0.75;
+
+  /* === Interactive Tokens === */
+  --layoutSection-interactive-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --layoutSection-interactive-borderRadius: var(--semantic-shape-control-radius-default);
+}

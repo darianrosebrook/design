@@ -1,95 +1,95 @@
 // CollapsiblePanel composer component styles
-// Migrated from Tailwind to SCSS with design tokens
+// Migrated from Tailwind to SCSS with semantic design tokens
 
 .collapsiblePanel {
-  // Base container styles (equivalent to relative transition-all duration-300 ease-in-out)
-  position: relative; // equivalent to relative
-  transition: all 300ms ease-in-out; // equivalent to transition-all duration-300 ease-in-out
+  // Base container styles
+  position: relative;
+  transition: var(--collapsiblePanel-animation-duration) var(--collapsiblePanel-animation-easing);
 }
 
 .collapsiblePanelContainer {
-  // Panel container styles (equivalent to bg-card border border-border rounded-2xl overflow-hidden transition-all duration-300 ease-in-out)
-  background-color: hsl(var(--card)); // equivalent to bg-card
-  border: 1px solid hsl(var(--border)); // equivalent to border border-border
-  border-radius: 16px; // equivalent to rounded-2xl
-  overflow: hidden; // equivalent to overflow-hidden
-  transition: all 300ms ease-in-out; // equivalent to transition-all duration-300 ease-in-out
+  // Panel container styles
+  background-color: var(--collapsiblePanel-backgroundColor);
+  border: 1px solid var(--collapsiblePanel-borderColor);
+  border-radius: var(--collapsiblePanel-borderRadius);
+  overflow: hidden;
+  transition: var(--collapsiblePanel-animation-duration) var(--collapsiblePanel-animation-easing);
 
-  // Collapsed state height (equivalent to h-12 when collapsed, h-full when expanded)
+  // Collapsed state height
   &.collapsiblePanelContainer--collapsed {
-    height: 48px; // equivalent to h-12
+    height: var(--collapsiblePanel-layout-collapsed-height);
   }
 
   &.collapsiblePanelContainer--expanded {
-    height: 100%; // equivalent to h-full
+    height: 100%;
   }
 }
 
 .collapsiblePanelContent {
-  // Main content styles (equivalent to transition-all duration-300)
-  transition: all 300ms ease-in-out; // equivalent to transition-all duration-300
+  // Main content styles
+  transition: var(--collapsiblePanel-animation-duration) var(--collapsiblePanel-animation-easing);
 
-  // Collapsed state (equivalent to opacity-0 scale-95 pointer-events-none when collapsed)
+  // Collapsed state
   &.collapsiblePanelContent--collapsed {
-    opacity: 0; // equivalent to opacity-0
-    transform: scale(0.95); // equivalent to scale-95
-    pointer-events: none; // equivalent to pointer-events-none
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
   }
 
-  // Expanded state (equivalent to opacity-100 scale-100 when expanded)
+  // Expanded state
   &.collapsiblePanelContent--expanded {
-    opacity: 1; // equivalent to opacity-100
-    transform: scale(1); // equivalent to scale-100
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
 .collapsiblePanelCollapsedContent {
-  // Collapsed content styles (equivalent to absolute inset-0 flex items-center justify-center transition-all duration-300)
-  position: absolute; // equivalent to absolute
-  top: 0; // equivalent to inset-0
-  right: 0; // equivalent to inset-0
-  bottom: 0; // equivalent to inset-0
-  left: 0; // equivalent to inset-0
-  display: flex; // equivalent to flex
-  align-items: center; // equivalent to items-center
-  justify-content: center; // equivalent to justify-center
-  transition: all 300ms ease-in-out; // equivalent to transition-all duration-300
+  // Collapsed content styles
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--collapsiblePanel-animation-duration) var(--collapsiblePanel-animation-easing);
 
-  // Collapsed state (equivalent to opacity-100 scale-100 when collapsed)
+  // Collapsed state
   &.collapsiblePanelCollapsedContent--visible {
-    opacity: 1; // equivalent to opacity-100
-    transform: scale(1); // equivalent to scale-100
+    opacity: 1;
+    transform: scale(1);
   }
 
-  // Expanded state (equivalent to opacity-0 scale-95 pointer-events-none when expanded)
+  // Expanded state
   &.collapsiblePanelCollapsedContent--hidden {
-    opacity: 0; // equivalent to opacity-0
-    transform: scale(0.95); // equivalent to scale-95
-    pointer-events: none; // equivalent to pointer-events-none
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
   }
 }
 
 .collapsiblePanelToggle {
-  // Toggle button styles (equivalent to absolute top-2 right-2 h-6 w-6 hover:bg-accent transition-all duration-300 z-20 bg-card/80 border border-border shadow-sm rounded-full)
-  position: absolute; // equivalent to absolute
-  top: 8px; // equivalent to top-2
-  right: 8px; // equivalent to right-2
-  height: 24px; // equivalent to h-6
-  width: 24px; // equivalent to w-6
-  z-index: 20; // equivalent to z-20
-  background-color: hsl(var(--card) / 0.8); // equivalent to bg-card/80
-  border: 1px solid hsl(var(--border)); // equivalent to border border-border
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); // equivalent to shadow-sm
-  border-radius: 9999px; // equivalent to rounded-full
-  transition: all 300ms ease-in-out; // equivalent to transition-all duration-300
+  // Toggle button styles
+  position: absolute;
+  top: var(--collapsiblePanel-spacing-toggle-offset);
+  right: var(--collapsiblePanel-spacing-toggle-offset);
+  height: var(--collapsiblePanel-layout-toggle-size);
+  width: var(--collapsiblePanel-layout-toggle-size);
+  z-index: 20;
+  background-color: var(--collapsiblePanel-interactive-toggle-backgroundColor);
+  border: 1px solid var(--collapsiblePanel-borderColor);
+  box-shadow: var(--collapsiblePanel-interactive-shadow);
+  border-radius: var(--semantic-shape-radius-full);
+  transition: var(--collapsiblePanel-animation-hover-duration) var(--collapsiblePanel-animation-hover-easing);
 
   &:hover {
-    background-color: hsl(var(--accent)); // equivalent to hover:bg-accent
+    background-color: var(--collapsiblePanel-interactive-toggle-hover-backgroundColor);
   }
 }
 
 .collapsiblePanelToggleIcon {
-  // Toggle icon styles (equivalent to h-3 w-3)
-  width: 12px; // equivalent to w-3
-  height: 12px; // equivalent to h-3
+  // Toggle icon styles
+  width: var(--collapsiblePanel-layout-toggleIcon-size);
+  height: var(--collapsiblePanel-layout-toggleIcon-size);
 }

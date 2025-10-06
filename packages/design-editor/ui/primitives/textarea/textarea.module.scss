@@ -1,58 +1,6 @@
-// Textarea component styles
+// textarea primitive component styles
 // Migrated from Tailwind to SCSS with design tokens
 
 .textarea {
-  // Placeholder text color (equivalent to placeholder:text-muted-foreground)
-  &::placeholder {
-    color: hsl(var(--muted-foreground));
-  }
-
-  // Dark mode background (equivalent to dark:bg-input/30)
-  .dark & {
-    background-color: hsl(var(--input) / 0.3);
-  }
-
-  // Base textarea styles (equivalent to border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex field-sizing-content min-h-16 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm)
-  border: 1px solid hsl(var(--input)); // equivalent to border-input
-  display: flex; // equivalent to flex
-  field-sizing: content; // equivalent to field-sizing-content
-  min-height: 64px; // equivalent to min-h-16
-  width: 100%; // equivalent to w-full
-  border-radius: 6px; // equivalent to rounded-md
-  background-color: transparent; // equivalent to bg-transparent
-  padding: 8px 12px; // equivalent to px-3 py-2
-  font-size: 16px; // equivalent to text-base
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); // equivalent to shadow-xs
-  transition: color 150ms ease-in-out, box-shadow 150ms ease-in-out; // equivalent to transition-[color,box-shadow]
-  outline: none; // equivalent to outline-none
-
-  // Resize behavior (equivalent to resize-none would be needed if we want to prevent resizing)
-  resize: vertical; // Allow vertical resizing by default
-
-  // Disabled state (equivalent to disabled:cursor-not-allowed disabled:opacity-50)
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-
-  // Medium screen text size (equivalent to md:text-sm)
-  @media (min-width: 768px) {
-    font-size: 14px; // equivalent to md:text-sm
-  }
-
-  // Focus visible styles (equivalent to focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px])
-  &:focus-visible {
-    border-color: hsl(var(--ring));
-    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5);
-  }
-
-  // Invalid state (equivalent to aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive)
-  &[aria-invalid="true"] {
-    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2);
-    border-color: hsl(var(--destructive));
-
-    .dark & {
-      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4);
-    }
-  }
+  // Base component styles
 }

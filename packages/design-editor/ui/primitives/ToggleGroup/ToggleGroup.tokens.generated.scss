@@ -1,0 +1,68 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/ToggleGroup/toggle-group.tokens.json
+ */
+@mixin vars {
+  /* === BorderRadius Tokens === */
+  --toggle-group-borderRadius-value: 6px;
+  --toggle-group-borderRadius-description: Border radius for toggle group corners;
+
+  /* === FontSize Tokens === */
+  --toggle-group-fontSize-value: 14px;
+  --toggle-group-fontSize-description: Base font size for toggle group text;
+
+  /* === FontWeight Tokens === */
+  --toggle-group-fontWeight-value: 500;
+  --toggle-group-fontWeight-description: Font weight for toggle group text;
+
+  /* === LineHeight Tokens === */
+  --toggle-group-lineHeight-value: 1.2;
+  --toggle-group-lineHeight-description: Line height for toggle group text;
+
+  /* === Padding Tokens === */
+  --toggle-group-padding-horizontal-default-value: 12px;
+  --toggle-group-padding-horizontal-default-description: Horizontal padding for default size;
+  --toggle-group-padding-horizontal-sm-value: 8px;
+  --toggle-group-padding-horizontal-sm-description: Horizontal padding for small size;
+  --toggle-group-padding-horizontal-lg-value: 16px;
+  --toggle-group-padding-horizontal-lg-description: Horizontal padding for large size;
+  --toggle-group-padding-vertical-default-value: 6px;
+  --toggle-group-padding-vertical-default-description: Vertical padding for default size;
+  --toggle-group-padding-vertical-sm-value: 4px;
+  --toggle-group-padding-vertical-sm-description: Vertical padding for small size;
+  --toggle-group-padding-vertical-lg-value: 8px;
+  --toggle-group-padding-vertical-lg-description: Vertical padding for large size;
+
+  /* === Height Tokens === */
+  --toggle-group-height-default-value: 36px;
+  --toggle-group-height-default-description: Height for default size;
+  --toggle-group-height-sm-value: 32px;
+  --toggle-group-height-sm-description: Height for small size;
+  --toggle-group-height-lg-value: 40px;
+  --toggle-group-height-lg-description: Height for large size;
+
+  /* === Variants Tokens === */
+  --toggle-group-variants-default-backgroundColor-value: var(--color-action-background-secondary-default);
+  --toggle-group-variants-default-backgroundColor-description: Background color for default variant;
+  --toggle-group-variants-default-color-value: var(--color-action-foreground-secondary-default);
+  --toggle-group-variants-default-color-description: Text color for default variant;
+  --toggle-group-variants-default-borderColor-value: var(--color-action-border-secondary-default);
+  --toggle-group-variants-default-borderColor-description: Border color for default variant;
+  --toggle-group-variants-default-hover-backgroundColor-value: var(--color-action-background-secondary-hover);
+  --toggle-group-variants-default-hover-backgroundColor-description: Background color on hover for default variant;
+  --toggle-group-variants-default-selected-backgroundColor-value: var(--color-action-background-primary-default);
+  --toggle-group-variants-default-selected-backgroundColor-description: Background color when selected for default variant;
+  --toggle-group-variants-default-selected-color-value: var(--color-action-foreground-primary-default);
+  --toggle-group-variants-default-selected-color-description: Text color when selected for default variant;
+  --toggle-group-variants-outline-backgroundColor-value: var(--color-mode-light);
+  --toggle-group-variants-outline-backgroundColor-description: Background color for outline variant;
+  --toggle-group-variants-outline-borderColor-value: var(--color-action-border-secondary-default);
+  --toggle-group-variants-outline-borderColor-description: Border color for outline variant;
+  --toggle-group-variants-outline-color-value: var(--color-action-foreground-secondary-default);
+  --toggle-group-variants-outline-color-description: Text color for outline variant;
+  --toggle-group-variants-outline-hover-backgroundColor-value: var(--color-action-background-secondary-hover);
+  --toggle-group-variants-outline-hover-backgroundColor-description: Background color on hover for outline variant;
+  --toggle-group-variants-outline-selected-backgroundColor-value: var(--color-action-background-primary-default);
+  --toggle-group-variants-outline-selected-backgroundColor-description: Background color when selected for outline variant;
+  --toggle-group-variants-outline-selected-color-value: var(--color-action-foreground-primary-default);
+  --toggle-group-variants-outline-selected-color-description: Text color when selected for outline variant;
+}

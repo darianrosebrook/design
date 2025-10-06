@@ -14,8 +14,8 @@ import {
   Frame,
   Component,
 } from "lucide-react";
-import { Button } from "@/ui/primitives/Button";
 import type { CanvasObject, ObjectType } from "@/lib/types";
+import { Button } from "@/ui/primitives/Button";
 
 const typeIcons: Record<ObjectType, any> = {
   rectangle: Square,

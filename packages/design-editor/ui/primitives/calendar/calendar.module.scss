@@ -1,7 +1,312 @@
 // calendar primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Calendar.tokens.generated.scss' as calendarTokens;
+
+// Include the generated variables mixin
+@include calendarTokens.vars;
+
+// Calendar root container
 .calendar {
-  // Placeholder for future SCSS implementation
-  // Will contain calendar-specific styles when migrating from Tailwind
+  background-color: var(--calendar-calendar-backgroundColor);
+  padding: var(--calendar-calendar-padding);
+  width: var(--calendar-calendar-width);
+}
+
+// Calendar months container
+.calendar-months {
+  display: var(--calendar-months-display);
+  flex-direction: var(--calendar-months-flexDirection);
+  gap: var(--calendar-months-gap);
+
+  // Responsive layout
+  @media (min-width: 768px) {
+    flex-direction: var(--calendar-months-responsive-flexDirection);
+  }
+}
+
+// Calendar month container
+.calendar-month {
+  display: var(--calendar-month-display);
+  flex-direction: var(--calendar-month-flexDirection);
+  width: var(--calendar-month-width);
+  gap: var(--calendar-month-gap);
+}
+
+// Calendar navigation
+.calendar-nav {
+  display: var(--calendar-nav-display);
+  align-items: var(--calendar-nav-alignItems);
+  gap: var(--calendar-nav-gap);
+  width: var(--calendar-nav-width);
+  position: var(--calendar-nav-position);
+  top: var(--calendar-nav-top);
+  inset-inline-start: var(--calendar-nav-insetX);
+  inset-inline-end: var(--calendar-nav-insetX);
+  justify-content: var(--calendar-nav-justifyContent);
+}
+
+// Calendar navigation buttons
+.calendar-button_previous,
+.calendar-button_next {
+  size: var(--calendar-navButton-size);
+  padding: var(--calendar-navButton-padding);
+  user-select: var(--calendar-navButton-userSelect);
+
+  // Chevron icons
+  svg {
+    width: var(--calendar-chevron-size);
+    height: var(--calendar-chevron-size);
+  }
+
+  // Disabled state
+  &[aria-disabled="true"] {
+    opacity: var(--calendar-navButton-disabled-opacity);
+  }
+}
+
+// Calendar month caption
+.calendar-month_caption {
+  display: var(--calendar-monthCaption-display);
+  align-items: var(--calendar-monthCaption-alignItems);
+  justify-content: var(--calendar-monthCaption-justifyContent);
+  height: var(--calendar-monthCaption-height);
+  width: var(--calendar-monthCaption-width);
+  padding-inline: var(--calendar-monthCaption-padding-horizontal);
+}
+
+// Calendar dropdowns
+.calendar-dropdowns {
+  display: var(--calendar-dropdowns-display);
+  align-items: var(--calendar-dropdowns-alignItems);
+  justify-content: var(--calendar-dropdowns-justifyContent);
+  width: var(--calendar-dropdowns-width);
+  font-size: var(--calendar-dropdowns-fontSize);
+  font-weight: var(--calendar-dropdowns-fontWeight);
+  height: var(--calendar-dropdowns-height);
+  gap: var(--calendar-dropdowns-gap);
+}
+
+// Calendar dropdown root
+.calendar-dropdown_root {
+  position: var(--calendar-dropdownRoot-position);
+  border: var(--calendar-dropdownRoot-border-width) var(--calendar-dropdownRoot-border-style) var(--calendar-dropdownRoot-border-color);
+  box-shadow: var(--calendar-dropdownRoot-boxShadow);
+  border-radius: var(--calendar-dropdownRoot-borderRadius);
+
+  // Focus state
+  &:has-focus {
+    border-color: var(--calendar-dropdownRoot-focus-borderColor);
+    box-shadow: 0 0 0 var(--calendar-dropdownRoot-focus-ringWidth) rgba(var(--calendar-dropdownRoot-focus-ringColor), var(--calendar-dropdownRoot-focus-ringColor-opacity));
+  }
+}
+
+// Calendar dropdown
+.calendar-dropdown {
+  position: var(--calendar-dropdown-position);
+  inset: var(--calendar-dropdown-inset);
+  background-color: var(--calendar-dropdown-backgroundColor);
+  opacity: var(--calendar-dropdown-opacity);
+}
+
+// Calendar caption label
+.calendar-caption_label {
+  user-select: var(--calendar-captionLabel-userSelect);
+  font-weight: var(--calendar-captionLabel-fontWeight);
+  font-size: var(--calendar-captionLabel-fontSize);
+
+  // Button variant (when layout is "dropdown")
+  &[data-layout="dropdown"] {
+    display: var(--calendar-captionLabel-button-display);
+    align-items: var(--calendar-captionLabel-button-alignItems);
+    gap: var(--calendar-captionLabel-button-gap);
+    border-radius: var(--calendar-captionLabel-button-borderRadius);
+    padding: var(--calendar-captionLabel-button-padding-vertical) var(--calendar-captionLabel-button-padding-horizontal);
+    height: var(--calendar-captionLabel-button-height);
+
+    // Icons in button variant
+    svg {
+      color: var(--calendar-captionLabel-button-icon-color);
+      width: var(--calendar-captionLabel-button-icon-size);
+      height: var(--calendar-captionLabel-button-icon-size);
+    }
+  }
+}
+
+// Calendar table
+.calendar-table {
+  width: var(--calendar-table-width);
+  border-collapse: var(--calendar-table-borderCollapse);
+}
+
+// Calendar weekdays
+.calendar-weekdays {
+  display: var(--calendar-weekdays-display);
+}
+
+// Calendar weekday
+.calendar-weekday {
+  color: var(--calendar-weekday-color);
+  border-radius: var(--calendar-weekday-borderRadius);
+  flex: var(--calendar-weekday-flex);
+  font-weight: var(--calendar-weekday-fontWeight);
+  font-size: var(--calendar-weekday-fontSize);
+  user-select: var(--calendar-weekday-userSelect);
+}
+
+// Calendar week
+.calendar-week {
+  display: var(--calendar-week-display);
+  width: var(--calendar-week-width);
+  margin-top: var(--calendar-week-marginTop);
+}
+
+// Calendar week number header
+.calendar-week_number_header {
+  user-select: var(--calendar-weekNumberHeader-userSelect);
+  width: var(--calendar-weekNumberHeader-width);
+}
+
+// Calendar week number
+.calendar-week_number {
+  display: var(--calendar-weekNumber-display);
+  align-items: var(--calendar-weekNumber-alignItems);
+  justify-content: var(--calendar-weekNumber-justifyContent);
+  size: var(--calendar-weekNumber-size);
+  text-align: var(--calendar-weekNumber-textAlign);
+  font-size: var(--calendar-weekNumber-fontSize);
+  user-select: var(--calendar-weekNumber-userSelect);
+  color: var(--calendar-weekNumber-color);
+}
+
+// Calendar day
+.calendar-day {
+  position: var(--calendar-day-position);
+  width: var(--calendar-day-width);
+  height: var(--calendar-day-height);
+  padding: var(--calendar-day-padding);
+  text-align: var(--calendar-day-textAlign);
+  aspect-ratio: var(--calendar-day-aspectRatio);
+  user-select: var(--calendar-day-userSelect);
+
+  // Range start
+  &[data-range-start="true"] {
+    border-radius: var(--calendar-day-rangeStart-borderRadius);
+    background-color: var(--calendar-day-rangeStart-backgroundColor);
+  }
+
+  // Range middle
+  &[data-range-middle="true"] {
+    border-radius: var(--calendar-day-rangeMiddle-borderRadius);
+  }
+
+  // Range end
+  &[data-range-end="true"] {
+    border-radius: var(--calendar-day-rangeEnd-borderRadius);
+    background-color: var(--calendar-day-rangeEnd-backgroundColor);
+  }
+
+  // Today
+  &[data-today="true"] {
+    background-color: var(--calendar-day-today-backgroundColor);
+    color: var(--calendar-day-today-color);
+    border-radius: var(--calendar-day-today-borderRadius);
+
+    // Today when selected
+    &[data-selected="true"] {
+      border-radius: var(--calendar-day-today-selected-borderRadius);
+    }
+  }
+
+  // Outside days
+  &[data-outside="true"] {
+    color: var(--calendar-day-outside-color);
+
+    // Selected outside days
+    &[data-selected="true"] {
+      color: var(--calendar-day-outside-selected-color);
+    }
+  }
+
+  // Disabled days
+  &[data-disabled="true"] {
+    color: var(--calendar-day-disabled-color);
+    opacity: var(--calendar-day-disabled-opacity);
+  }
+
+  // Hidden days
+  &[data-hidden="true"] {
+    visibility: var(--calendar-day-hidden-visibility);
+  }
+
+  // Focused day
+  &[data-focused="true"] {
+    border-color: var(--calendar-day-focused-borderColor);
+    box-shadow: 0 0 0 var(--calendar-day-focused-ringWidth) rgba(var(--calendar-day-focused-ringColor), var(--calendar-day-focused-ringColor-opacity));
+    position: var(--calendar-day-focused-position);
+    z-index: var(--calendar-day-focused-zIndex);
+  }
+}
+
+// Calendar day button
+.calendar-day-button {
+  display: var(--calendar-dayButton-display);
+  aspect-ratio: var(--calendar-dayButton-aspectRatio);
+  size: var(--calendar-dayButton-size);
+  width: var(--calendar-dayButton-width);
+  min-width: var(--calendar-dayButton-minWidth);
+  flex-direction: var(--calendar-dayButton-flexDirection);
+  gap: var(--calendar-dayButton-gap);
+  line-height: var(--calendar-dayButton-lineHeight);
+  font-weight: var(--calendar-dayButton-fontWeight);
+
+  // Single selected day
+  &[data-selected-single="true"] {
+    background-color: var(--calendar-dayButton-selected-single-backgroundColor);
+    color: var(--calendar-dayButton-selected-single-color);
+  }
+
+  // Range start
+  &[data-range-start="true"] {
+    background-color: var(--calendar-dayButton-selected-range-start-backgroundColor);
+    color: var(--calendar-dayButton-selected-range-start-color);
+    border-radius: var(--calendar-dayButton-selected-range-start-borderRadius);
+  }
+
+  // Range end
+  &[data-range-end="true"] {
+    background-color: var(--calendar-dayButton-selected-range-end-backgroundColor);
+    color: var(--calendar-dayButton-selected-range-end-color);
+    border-radius: var(--calendar-dayButton-selected-range-end-borderRadius);
+  }
+
+  // Range middle
+  &[data-range-middle="true"] {
+    background-color: var(--calendar-dayButton-selected-range-middle-backgroundColor);
+    color: var(--calendar-dayButton-selected-range-middle-color);
+    border-radius: var(--calendar-dayButton-selected-range-middle-borderRadius);
+  }
+
+  // Focused state
+  &:focus-visible {
+    box-shadow: 0 0 0 var(--calendar-dayButton-focusRing-width) rgba(var(--calendar-day-focused-ringColor), var(--calendar-day-focused-ringColor-opacity));
+  }
+
+  // Spans within day button (for additional content)
+  span {
+    font-size: var(--calendar-dayButton-span-fontSize);
+    opacity: var(--calendar-dayButton-span-opacity);
+  }
+}
+
+// RTL support for chevrons
+.calendar:has([dir="rtl"]) {
+  .rdp-button_next svg {
+    transform: rotate(180deg);
+  }
+
+  .rdp-button_previous svg {
+    transform: rotate(180deg);
+  }
 }

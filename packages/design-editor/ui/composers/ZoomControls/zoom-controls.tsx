@@ -1,10 +1,9 @@
 "use client";
 
+import { ZoomIn, ZoomOut, Maximize } from "lucide-react";
+import styles from "./zoom-controls.module.scss";
 import { useCanvas } from "@/lib/canvas-context";
 import { Button } from "@/ui/primitives/Button";
-import { ZoomIn, ZoomOut, Maximize } from "lucide-react";
-import { cn } from "@/lib/utils";
-import styles from "./zoom-controls.module.scss";
 
 /**
  * Zoom controls component with plus/minus buttons and zoom to fit functionality

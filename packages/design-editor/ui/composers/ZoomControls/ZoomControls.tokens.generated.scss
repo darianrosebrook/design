@@ -1,0 +1,28 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/ZoomControls/zoom-controls.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --zoomControls-spacing-container: var(--semantic-spacing-padding-grid-xsmall);
+  --zoomControls-spacing-gap: var(--semantic-spacing-gap-grid-xsmall);
+  --zoomControls-spacing-separator-margin: var(--semantic-spacing-margin-grid-xsmall);
+
+  /* === Layout Tokens === */
+  --zoomControls-layout-button-size: 32px;
+  --zoomControls-layout-icon-size: 16px;
+  --zoomControls-layout-display-minWidth: 3rem;
+  --zoomControls-layout-display-padding-horizontal: var(--semantic-spacing-padding-grid-small);
+  --zoomControls-layout-separator-width: 1px;
+  --zoomControls-layout-separator-height: 24px;
+  --zoomControls-layout-selectionIcon-size: 16px;
+
+  /* === Typography Tokens === */
+  --zoomControls-typography-display-fontSize: var(--semantic-typography-body-01);
+  --zoomControls-typography-display-fontWeight: var(--semantic-typography-font-weight-medium);
+  --zoomControls-typography-display-textAlign: center;
+  --zoomControls-typography-selectionIcon-fontSize: var(--semantic-typography-body-01);
+  --zoomControls-typography-selectionIcon-fontWeight: var(--semantic-typography-font-weight-semibold);
+
+  /* === Interactive Tokens === */
+  --zoomControls-interactive-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+}

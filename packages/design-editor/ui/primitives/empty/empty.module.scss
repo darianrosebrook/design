@@ -1,46 +1,52 @@
 // Empty component styles
 // Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Empty.tokens.generated.scss' as emptyTokens;
+
 .empty {
+  // Include the generated variables mixin within the component scope
+  @include emptyTokens.vars;
+
   // Base empty styles (equivalent to flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12)
-  display: flex; // equivalent to flex
-  min-width: 0; // equivalent to min-w-0
-  flex: 1; // equivalent to flex-1
-  flex-direction: column; // equivalent to flex-col
-  align-items: center; // equivalent to items-center
-  justify-content: center; // equivalent to justify-center
-  gap: 24px; // equivalent to gap-6
-  border-radius: 8px; // equivalent to rounded-lg
-  border: 1px dashed hsl(var(--border)); // equivalent to border-dashed
-  padding: 24px; // equivalent to p-6
-  text-align: center; // equivalent to text-center
-  text-wrap: balance; // equivalent to text-balance
+  display: var(--empty-container-display); // equivalent to flex
+  min-width: var(--empty-container-minWidth); // equivalent to min-w-0
+  flex: var(--empty-container-flex); // equivalent to flex-1
+  flex-direction: var(--empty-container-flexDirection); // equivalent to flex-col
+  align-items: var(--empty-container-alignItems); // equivalent to items-center
+  justify-content: var(--empty-container-justifyContent); // equivalent to justify-center
+  gap: var(--empty-container-gap); // equivalent to gap-6
+  border-radius: var(--empty-container-borderRadius); // equivalent to rounded-lg
+  border: var(--empty-container-border-width) var(--empty-container-border-style) var(--empty-container-border-color); // equivalent to border-dashed
+  padding: var(--empty-container-padding-default); // equivalent to p-6
+  text-align: var(--empty-container-textAlign); // equivalent to text-center
+  text-wrap: var(--empty-container-textWrap); // equivalent to text-balance
 
   @media (min-width: 768px) {
-    padding: 48px; // equivalent to md:p-12
+    padding: var(--empty-container-padding-medium); // equivalent to md:p-12
   }
 }
 
 .emptyHeader {
   // Header styles (equivalent to flex max-w-sm flex-col items-center gap-2 text-center)
-  display: flex; // equivalent to flex
-  max-width: 24rem; // equivalent to max-w-sm
-  flex-direction: column; // equivalent to flex-col
-  align-items: center; // equivalent to items-center
-  gap: 8px; // equivalent to gap-2
-  text-align: center; // equivalent to text-center
+  display: var(--empty-header-display); // equivalent to flex
+  max-width: var(--empty-header-maxWidth); // equivalent to max-w-sm
+  flex-direction: var(--empty-header-flexDirection); // equivalent to flex-col
+  align-items: var(--empty-header-alignItems); // equivalent to items-center
+  gap: var(--empty-header-gap); // equivalent to gap-2
+  text-align: var(--empty-header-textAlign); // equivalent to text-center
 }
 
 .emptyMedia {
   // Base media styles (equivalent to flex shrink-0 items-center justify-center mb-2 [&_svg]:pointer-events-none [&_svg]:shrink-0)
-  display: flex; // equivalent to flex
-  flex-shrink: 0; // equivalent to shrink-0
-  align-items: center; // equivalent to items-center
-  justify-content: center; // equivalent to justify-center
-  margin-bottom: 8px; // equivalent to mb-2
+  display: var(--empty-media-display); // equivalent to flex
+  flex-shrink: var(--empty-media-flexShrink); // equivalent to shrink-0
+  align-items: var(--empty-media-alignItems); // equivalent to items-center
+  justify-content: var(--empty-media-justifyContent); // equivalent to justify-center
+  margin-bottom: var(--empty-media-marginBottom); // equivalent to mb-2
 
   & svg {
-    pointer-events: none; // equivalent to [&_svg]:pointer-events-none
+    pointer-events: var(--empty-media-icon-pointerEvents); // equivalent to [&_svg]:pointer-events-none
     flex-shrink: 0; // equivalent to [&_svg]:shrink-0
   }
 }
@@ -53,54 +59,54 @@
 
 .emptyMedia--variant-icon {
   // Icon variant (equivalent to bg-muted text-foreground flex size-10 shrink-0 items-center justify-center rounded-lg [&_svg:not([class*='size-'])]:size-6)
-  background-color: hsl(var(--muted)); // equivalent to bg-muted
-  color: hsl(var(--foreground)); // equivalent to text-foreground
+  background-color: var(--empty-media-variants-icon-backgroundColor); // equivalent to bg-muted
+  color: var(--empty-media-variants-icon-color); // equivalent to text-foreground
   display: flex; // equivalent to flex
-  width: 40px; // equivalent to size-10
-  height: 40px; // equivalent to size-10
+  width: var(--empty-media-variants-icon-size); // equivalent to size-10
+  height: var(--empty-media-variants-icon-size); // equivalent to size-10
   flex-shrink: 0; // equivalent to shrink-0
   align-items: center; // equivalent to items-center
   justify-content: center; // equivalent to justify-center
-  border-radius: 8px; // equivalent to rounded-lg
+  border-radius: var(--empty-media-variants-icon-borderRadius); // equivalent to rounded-lg
 
   & svg:not([class*="size-"]) {
-    width: 24px; // equivalent to size-6
-    height: 24px;
+    width: var(--empty-media-variants-icon-iconSize); // equivalent to size-6
+    height: var(--empty-media-variants-icon-iconSize);
   }
 }
 
 .emptyTitle {
   // Title styles (equivalent to text-lg font-medium tracking-tight)
-  font-size: 18px; // equivalent to text-lg
-  font-weight: 500; // equivalent to font-medium
-  letter-spacing: -0.025em; // equivalent to tracking-tight
+  font-size: var(--empty-title-fontSize); // equivalent to text-lg
+  font-weight: var(--empty-title-fontWeight); // equivalent to font-medium
+  letter-spacing: var(--empty-title-letterSpacing); // equivalent to tracking-tight
 }
 
 .emptyDescription {
   // Description styles (equivalent to text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4)
-  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
-  font-size: 14px; // equivalent to text-sm
-  line-height: 1.625; // equivalent to relaxed
+  color: var(--empty-description-color); // equivalent to text-muted-foreground
+  font-size: var(--empty-description-fontSize); // equivalent to text-sm
+  line-height: var(--empty-description-lineHeight); // equivalent to relaxed
 
   & > a {
-    text-decoration: underline; // equivalent to [&>a]:underline
-    text-underline-offset: 4px; // equivalent to [&>a]:underline-offset-4
+    text-decoration: var(--empty-description-link-textDecoration); // equivalent to [&>a]:underline
+    text-underline-offset: var(--empty-description-link-textUnderlineOffset); // equivalent to [&>a]:underline-offset-4
 
     &:hover {
-      color: hsl(var(--primary)); // equivalent to [&>a:hover]:text-primary
+      color: var(--empty-description-link-hover-color); // equivalent to [&>a:hover]:text-primary
     }
   }
 }
 
 .emptyContent {
   // Content styles (equivalent to flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance)
-  display: flex; // equivalent to flex
-  width: 100%; // equivalent to w-full
-  max-width: 24rem; // equivalent to max-w-sm
-  min-width: 0; // equivalent to min-w-0
-  flex-direction: column; // equivalent to flex-col
-  align-items: center; // equivalent to items-center
-  gap: 16px; // equivalent to gap-4
-  font-size: 14px; // equivalent to text-sm
-  text-wrap: balance; // equivalent to text-balance
+  display: var(--empty-content-display); // equivalent to flex
+  width: var(--empty-content-width); // equivalent to w-full
+  max-width: var(--empty-content-maxWidth); // equivalent to max-w-sm
+  min-width: var(--empty-content-minWidth); // equivalent to min-w-0
+  flex-direction: var(--empty-content-flexDirection); // equivalent to flex-col
+  align-items: var(--empty-content-alignItems); // equivalent to items-center
+  gap: var(--empty-content-gap); // equivalent to gap-4
+  font-size: var(--empty-content-fontSize); // equivalent to text-sm
+  text-wrap: var(--empty-content-textWrap); // equivalent to text-balance
 }

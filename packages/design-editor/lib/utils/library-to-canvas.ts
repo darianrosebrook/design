@@ -1,5 +1,5 @@
-import { CanvasObject } from "@/lib/types";
 import type { LibraryItem } from "./library-types";
+import type { CanvasObject } from "@/lib/types";
 
 /**
  * Converts a library item to a canvas object

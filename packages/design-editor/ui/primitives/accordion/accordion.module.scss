@@ -1,7 +1,110 @@
-// accordion primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Accordion primitive component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.accordion {
-  // Placeholder for future SCSS implementation
-  // Will contain accordion-specific styles when migrating from Tailwind
+// Import generated token variables
+@import './Accordion.tokens.generated.scss';
+
+// Include the generated variables mixin at the top level
+@include vars;
+
+// Keyframe animations for accordion content
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+// Accordion Item styles (equivalent to border-b last:border-b-0)
+.accordion-item {
+  border-bottom: 1px solid var(--accordion-accordion-item-borderColor);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+// Accordion Trigger styles
+.accordion-trigger {
+  // Base layout (equivalent to flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium)
+  display: flex;
+  flex: 1;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--accordion-accordion-trigger-gap); // 16px equivalent to gap-4
+  border-radius: var(--accordion-accordion-trigger-borderRadius);
+  padding: var(--accordion-accordion-trigger-padding-vertical) var(--accordion-accordion-trigger-padding-horizontal); // py-4, px-4
+  text-align: left;
+  font-size: var(--accordion-accordion-trigger-fontSize); // text-sm
+  font-weight: var(--accordion-accordion-trigger-fontWeight); // font-medium
+  line-height: var(--accordion-accordion-trigger-lineHeight);
+  transition: var(--semantic-motion-interaction-hover-duration) var(--semantic-motion-interaction-hover-easing);
+  outline: none;
+  cursor: pointer;
+
+  // Hover state (equivalent to hover:underline)
+  &:hover {
+    text-decoration: underline;
+  }
+
+  // Focus visible styles (equivalent to focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px])
+  &:focus-visible {
+    border-color: var(--accordion-accordion-trigger-focus-borderColor);
+    box-shadow: 0 0 0 var(--accordion-accordion-trigger-focus-ringWidth) rgba(var(--accordion-accordion-trigger-focus-ringColor), var(--accordion-accordion-trigger-focus-ringColor-opacity));
+  }
+
+  // Disabled state (equivalent to disabled:pointer-events-none disabled:opacity-50)
+  &:disabled {
+    pointer-events: none;
+    opacity: var(--semantic-opacity-disabled);
+  }
+
+  // Icon rotation when open (equivalent to [&[data-state=open]>svg]:rotate-180)
+  &[data-state="open"] > svg {
+    transform: rotate(180deg);
+  }
+}
+
+// ChevronDown icon styles (equivalent to text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200)
+.accordion-trigger-icon {
+  color: var(--accordion-accordion-trigger-icon-color); // text-muted-foreground equivalent
+  pointer-events: none;
+  width: var(--accordion-accordion-trigger-icon-size); // size-4 equivalent (16px)
+  height: var(--accordion-accordion-trigger-icon-size);
+  flex-shrink: 0;
+  transform: translateY(var(--accordion-accordion-trigger-icon-transform-translateY)); // translate-y-0.5 equivalent
+  transition: transform var(--semantic-motion-interaction-hover-duration) var(--semantic-motion-interaction-hover-easing); // duration-200 equivalent
+}
+
+// Accordion Content styles
+.accordion-content {
+  // Base content styles (equivalent to overflow-hidden text-sm)
+  overflow: hidden;
+  font-size: var(--accordion-accordion-content-fontSize); // text-sm
+
+  // Animation states (equivalent to data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down)
+  &[data-state="closed"] {
+    animation: accordion-up var(--accordion-accordion-content-animation-exit-duration) var(--accordion-accordion-content-animation-exit-easing);
+  }
+
+  &[data-state="open"] {
+    animation: accordion-down var(--accordion-accordion-content-animation-enter-duration) var(--accordion-accordion-content-animation-enter-easing);
+  }
+}
+
+// Content wrapper div (equivalent to pt-0 pb-4)
+.accordion-content-wrapper {
+  padding-top: var(--accordion-accordion-content-padding-top); // pt-0
+  padding-bottom: var(--accordion-accordion-content-padding-bottom); // pb-4
 }

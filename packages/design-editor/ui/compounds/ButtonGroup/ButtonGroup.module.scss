@@ -1,5 +1,5 @@
 // ButtonGroup compound component styles
-// Migrated from Tailwind to SCSS with design tokens
+// Migrated from Tailwind to SCSS with semantic design tokens
 
 .buttonGroup {
   // Base styles (equivalent to flex w-fit items-stretch)
@@ -27,13 +27,13 @@
 
   // Complex selector for select trigger rounding (equivalent to has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-md)
   &:has(select[aria-hidden="true"]:last-child) > [data-slot="select-trigger"]:last-of-type {
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
+    border-top-right-radius: var(--buttonGroup-border-radius-horizontal-first);
+    border-bottom-right-radius: var(--buttonGroup-border-radius-horizontal-first);
   }
 
   // Nested button group gap (equivalent to has-[>[data-slot=button-group]]:gap-2)
   &:has(> [data-slot="button-group"]) {
-    gap: 8px; // equivalent to gap-2
+    gap: var(--buttonGroup-spacing-gap);
   }
 }
 
@@ -70,33 +70,33 @@
 
 .buttonGroupText {
   // Text component styles (equivalent to bg-muted flex items-center gap-2 rounded-md border px-4 text-sm font-medium shadow-xs)
-  background-color: hsl(var(--muted));
+  background-color: var(--buttonGroup-text-backgroundColor);
   display: flex;
   align-items: center;
-  gap: 8px; // equivalent to gap-2
-  border-radius: 6px; // equivalent to rounded-md
-  border: 1px solid hsl(var(--border)); // equivalent to border
-  padding: 0 16px; // equivalent to px-4
-  font-size: 14px; // equivalent to text-sm
-  font-weight: 500; // equivalent to font-medium
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); // equivalent to shadow-xs
+  gap: var(--buttonGroup-spacing-gap);
+  border-radius: var(--buttonGroup-text-borderRadius);
+  border: 1px solid var(--buttonGroup-separator-backgroundColor);
+  padding: 0 var(--buttonGroup-text-padding-horizontal);
+  font-size: var(--buttonGroup-text-fontSize);
+  font-weight: var(--buttonGroup-text-fontWeight);
+  box-shadow: var(--semantic-elevation-default);
 
   // SVG icon styles (equivalent to [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4)
   svg {
     pointer-events: none;
 
     &:not([class*="size-"]) {
-      width: 16px;
-      height: 16px;
+      width: var(--semantic-components-action-gap-icon);
+      height: var(--semantic-components-action-gap-icon);
     }
   }
 }
 
 .buttonGroupSeparator {
   // Separator component styles (equivalent to bg-input relative !m-0 self-stretch data-[orientation=vertical]:h-auto)
-  background-color: hsl(var(--input));
+  background-color: var(--buttonGroup-separator-backgroundColor);
   position: relative;
-  margin: 0; // equivalent to !m-0
+  margin: var(--buttonGroup-separator-margin);
   align-self: stretch;
 
   // Vertical orientation adjustment (equivalent to data-[orientation=vertical]:h-auto)

@@ -1,10 +1,11 @@
 "use client";
 
+import { Label } from "@paths-design/design-system";
 import { Palette, Grid3X3, Square, Circle } from "lucide-react";
 import type React from "react";
-import { Input } from '@/ui/primitives/Input';
-import { Label } from '@/ui/primitives/label';
+import styles from "./canvas-background-controls.module.scss";
 import { useCanvas } from "@/lib/canvas-context";
+import { Input } from "@/ui/primitives/Input";
 
 export function CanvasBackgroundControls() {
   const {
@@ -36,13 +37,15 @@ export function CanvasBackgroundControls() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className={styles.canvasBackgroundControls}>
       {/* Background Color */}
-      <div className="space-y-2">
-        <Label className="text-xs font-medium">Background Color</Label>
-        <div className="flex items-center gap-2">
+      <div className={styles.colorPickerSection}>
+        <Label className={styles.colorPickerSectionLabel}>
+          Background Color
+        </Label>
+        <div className={styles.colorPickerContainer}>
           <div
-            className="w-8 h-8 rounded-lg border border-border cursor-pointer flex items-center justify-center"
+            className={styles.colorPickerSwatch}
             style={{ backgroundColor: canvasBackgroundColor }}
             onClick={() => {
               // Create a color input and trigger it
@@ -56,25 +59,27 @@ export function CanvasBackgroundControls() {
               input.click();
             }}
           >
-            <Palette className="h-4 w-4 text-white" />
+            <Palette className={styles.colorPickerIcon} />
           </div>
           <Input
             type="text"
             value={canvasBackgroundColor}
             onChange={(e) => setCanvasBackgroundColor(e.target.value)}
-            className="h-8 text-sm flex-1"
+            className={styles.colorInput}
             placeholder="#18181b"
           />
         </div>
       </div>
 
       {/* Background Type */}
-      <div className="space-y-2">
-        <Label className="text-xs font-medium">Background Type</Label>
-        <div className="relative bg-muted/20 rounded-lg p-1">
+      <div className={styles.backgroundTypeSection}>
+        <Label className={styles.backgroundTypeSectionLabel}>
+          Background Type
+        </Label>
+        <div className={styles.backgroundTypeSelector}>
           {/* Sliding background indicator */}
           <div
-            className="absolute top-1 bottom-1 bg-card border border-border rounded-md transition-all duration-200 ease-out"
+            className={styles.backgroundTypeIndicator}
             style={{
               left: `${
                 (backgroundOptions.findIndex(
@@ -88,7 +93,7 @@ export function CanvasBackgroundControls() {
             }}
           />
 
-          <div className="relative flex">
+          <div className={styles.backgroundTypeButtons}>
             {backgroundOptions.map((option) => {
               const Icon = option.icon;
               const isSelected = canvasBackground === option.value;
@@ -97,15 +102,15 @@ export function CanvasBackgroundControls() {
                 <button
                   key={option.value}
                   onClick={() => setCanvasBackground(option.value)}
-                  className={`flex-1 flex flex-col items-center gap-1 p-2 rounded-md transition-colors ${
-                    isSelected
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
+                  className={`${styles.backgroundTypeButton} ${
+                    isSelected ? styles.selected : ""
                   }`}
                 >
-                  <Icon className="h-4 w-4" />
-                  <span className="text-xs font-medium">{option.label}</span>
-                  <span className="text-xs opacity-60">
+                  <Icon className={styles.backgroundTypeButtonIcon} />
+                  <span className={styles.backgroundTypeButtonLabel}>
+                    {option.label}
+                  </span>
+                  <span className={styles.backgroundTypeButtonDescription}>
                     {option.description}
                   </span>
                 </button>
@@ -116,10 +121,10 @@ export function CanvasBackgroundControls() {
       </div>
 
       {/* Preview */}
-      <div className="space-y-2">
-        <Label className="text-xs font-medium">Preview</Label>
+      <div className={styles.previewSection}>
+        <Label className={styles.previewSectionLabel}>Preview</Label>
         <div
-          className="w-full h-16 rounded-lg border border-border overflow-hidden"
+          className={styles.previewContainer}
           style={{
             backgroundColor: canvasBackgroundColor,
             backgroundImage: getBackgroundStyle(canvasBackground),

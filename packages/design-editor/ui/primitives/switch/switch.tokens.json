@@ -1,3 +1,104 @@
 {
-  "switch": {}
+  "prefix": "switch",
+  "tokens": {
+    "Switch": {
+      "height": {
+        "value": "1.15rem",
+        "description": "Height of the switch component"
+      },
+      "width": {
+        "value": "{components.action.height.small}",
+        "description": "Width of the switch component"
+      },
+      "borderRadius": {
+        "value": "9999px",
+        "description": "Border radius for switch (fully rounded)"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for switch"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for switch"
+        }
+      },
+      "boxShadow": {
+        "value": "{elevation.level.1}",
+        "description": "Box shadow for switch"
+      },
+      "transition": {
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for switch interactions"
+        },
+        "easing": {
+          "value": "{motion.interaction.hover.easing}",
+          "description": "Transition easing for switch interactions"
+        }
+      },
+      "thumb": {
+        "size": {
+          "value": "16px",
+          "description": "Size of the switch thumb"
+        },
+        "borderRadius": {
+          "value": "9999px",
+          "description": "Border radius for switch thumb"
+        },
+        "backgroundColor": {
+          "default": {
+            "value": "{color.mode.white}",
+            "description": "Default background color for switch thumb"
+          },
+          "uncheckedDark": {
+            "value": "{color.mode.dark}",
+            "description": "Background color for unchecked thumb in dark mode"
+          },
+          "checkedDark": {
+            "value": "{color.action.foreground.primary.default}",
+            "description": "Background color for checked thumb in dark mode"
+          }
+        },
+        "transform": {
+          "checked": {
+            "value": "translateX(calc(100% - 2px))",
+            "description": "Transform for checked state"
+          },
+          "unchecked": {
+            "value": "translateX(0)",
+            "description": "Transform for unchecked state"
+          }
+        }
+      },
+      "states": {
+        "checked": {
+          "backgroundColor": {
+            "value": "{color.action.background.primary.default}",
+            "description": "Background color for checked state"
+          }
+        },
+        "unchecked": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.200}",
+            "description": "Background color for unchecked state"
+          },
+          "dark": {
+            "backgroundColor": {
+              "value": "{color.palette.neutral.200}",
+              "opacity": 0.7,
+              "description": "Dark mode background color for unchecked state"
+            }
+          }
+        },
+        "disabled": {
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity for disabled state"
+          }
+        }
+      }
+    }
+  }
 }

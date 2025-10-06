@@ -3,15 +3,15 @@
 
 .card {
   // Base card styles (equivalent to bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm)
-  background-color: hsl(var(--card));
-  color: hsl(var(--card-foreground));
+  background-color: var(--card-backgroundColor);
+  color: var(--semantic-color-display-foreground-primary);
   display: flex;
   flex-direction: column;
-  gap: 24px; // equivalent to gap-6
-  border-radius: 12px; // equivalent to rounded-xl
-  border: 1px solid hsl(var(--border));
-  padding: 24px 0; // equivalent to py-6, horizontal padding handled by sub-components
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); // equivalent to shadow-sm
+  gap: var(--card-gap);
+  border-radius: var(--card-borderRadius);
+  border: var(--card-border-width) var(--card-border-style) var(--card-border-color);
+  padding: var(--card-padding) 0; // equivalent to py-6, horizontal padding handled by sub-components
+  box-shadow: var(--card-shadow);
 }
 
 .cardHeader {
@@ -22,8 +22,8 @@
   grid-auto-rows: min-content;
   grid-template-rows: auto auto;
   align-items: start;
-  gap: 8px; // equivalent to gap-2
-  padding: 0 24px; // equivalent to px-6
+  gap: var(--card-header-gap);
+  padding: 0 var(--card-header-padding-horizontal);
 
   // Grid columns when card action is present (equivalent to has-data-[slot=card-action]:grid-cols-[1fr_auto])
   &:has([data-slot="card-action"]) {
@@ -32,20 +32,20 @@
 
   // Bottom border spacing (equivalent to [.border-b]:pb-6)
   .border-b & {
-    padding-bottom: 24px; // equivalent to pb-6
+    padding-bottom: var(--card-padding);
   }
 }
 
 .cardTitle {
   // Title styles (equivalent to leading-none font-semibold)
   line-height: 1; // equivalent to leading-none
-  font-weight: 600; // equivalent to font-semibold
+  font-weight: var(--semantic-typography-font-weight-semibold);
 }
 
 .cardDescription {
   // Description styles (equivalent to text-muted-foreground text-sm)
-  color: hsl(var(--muted-foreground));
-  font-size: 14px; // equivalent to text-sm
+  color: var(--semantic-color-display-foreground-secondary);
+  font-size: var(--semantic-typography-body-03);
 }
 
 .cardAction {
@@ -59,17 +59,17 @@
 
 .cardContent {
   // Content styles (equivalent to px-6)
-  padding: 0 24px; // equivalent to px-6
+  padding: 0 var(--card-content-padding-horizontal);
 }
 
 .cardFooter {
   // Footer styles (equivalent to flex items-center px-6 [.border-t]:pt-6)
   display: flex;
   align-items: center;
-  padding: 0 24px; // equivalent to px-6
+  padding: 0 var(--card-footer-padding-horizontal);
 
   // Top border spacing (equivalent to [.border-t]:pt-6)
   .border-t & {
-    padding-top: 24px; // equivalent to pt-6
+    padding-top: var(--card-padding);
   }
 }

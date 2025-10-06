@@ -35,24 +35,24 @@ export function PropertiesPanelCollapsed({
   hasSelection = false,
 }: PropertiesPanelCollapsedProps) {
   return (
-    <div className="flex items-center gap-3 px-3 py-2">
+    <div className="// flex items-center gap-3 px-3 py-2">
       {/* Properties Icon */}
-      <Settings className="h-4 w-4 text-muted-foreground shrink-0" />
+      <Settings className="// h-4 w-4 text-muted-foreground shrink-0" />
 
       {/* Selection Info */}
-      <div className="flex items-center gap-3 min-w-0 flex-1">
+      <div className="// flex items-center gap-3 min-w-0 flex-1">
         {hasSelection && selectedObjectType ? (
           <>
             {/* Object Type Icon */}
             {(() => {
               const Icon = typeIcons[selectedObjectType];
               return (
-                <Icon className="h-4 w-4 text-muted-foreground shrink-0" />
+                <Icon className="// h-4 w-4 text-muted-foreground shrink-0" />
               );
             })()}
 
             {/* Object Name */}
-            <span className="text-xs font-medium text-foreground truncate">
+            <span className="// text-xs font-medium text-foreground truncate">
               {selectedObjectName || selectedObjectType}
             </span>
 

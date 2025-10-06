@@ -1,7 +1,169 @@
 // command primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Command.tokens.generated.scss' as commandTokens;
+
+// Include the generated variables mixin
+@include commandTokens.vars;
+
+// Command main container
 .command {
-  // Placeholder for future SCSS implementation
-  // Will contain command-specific styles when migrating from Tailwind
+  background-color: var(--command-command-backgroundColor);
+  color: var(--command-command-color);
+  display: var(--command-command-display);
+  height: var(--command-command-height);
+  width: var(--command-command-width);
+  flex-direction: var(--command-command-flexDirection);
+  overflow: var(--command-command-overflow);
+  border-radius: var(--command-command-borderRadius);
+}
+
+// Command dialog content wrapper
+.command-dialog-content {
+  overflow: var(--command-dialog-content-overflow);
+  padding: var(--command-dialog-content-padding);
+}
+
+// Command input wrapper
+.command-input-wrapper {
+  display: var(--command-input-wrapper-display);
+  height: var(--command-input-wrapper-height);
+  align-items: var(--command-input-wrapper-alignItems);
+  gap: var(--command-input-wrapper-gap);
+  border-bottom: var(--command-input-wrapper-borderBottom-width) var(--command-input-wrapper-borderBottom-style) var(--command-input-wrapper-borderBottom-color);
+  padding: 0 var(--command-input-wrapper-padding-horizontal);
+
+  // Icon within input wrapper
+  svg {
+    width: var(--command-input-icon-size);
+    height: var(--command-input-icon-size);
+    opacity: var(--command-input-icon-opacity);
+    flex-shrink: var(--command-input-icon-flexShrink);
+  }
+}
+
+// Command input element
+.command-input {
+  display: var(--command-input-element-display);
+  height: var(--command-input-element-height);
+  width: var(--command-input-element-width);
+  border-radius: var(--command-input-element-borderRadius);
+  background-color: var(--command-input-element-backgroundColor);
+  padding: var(--command-input-element-padding-vertical) 0;
+  font-size: var(--command-input-element-fontSize);
+  outline: var(--command-input-element-outline);
+
+  // Placeholder styling
+  &::placeholder {
+    color: var(--command-input-element-placeholder-color);
+  }
+
+  // Disabled state
+  &:disabled {
+    cursor: var(--command-input-element-disabled-cursor);
+    opacity: var(--command-input-element-disabled-opacity);
+  }
+}
+
+// Command list container
+.command-list {
+  max-height: var(--command-list-maxHeight);
+  scroll-padding: var(--command-list-scrollPadding-vertical) 0;
+  overflow-x: var(--command-list-overflowX);
+  overflow-y: var(--command-list-overflowY);
+}
+
+// Command empty state
+.command-empty {
+  padding: var(--command-empty-padding-vertical) 0;
+  text-align: var(--command-empty-textAlign);
+  font-size: var(--command-empty-fontSize);
+}
+
+// Command group container
+.command-group {
+  color: var(--command-group-color);
+  overflow: var(--command-group-overflow);
+  padding: var(--command-group-padding);
+
+  // Group heading
+  [cmdk-group-heading] {
+    color: var(--command-group-heading-color);
+    padding: var(--command-group-heading-padding-vertical) var(--command-group-heading-padding-horizontal);
+    font-size: var(--command-group-heading-fontSize);
+    font-weight: var(--command-group-heading-fontWeight);
+  }
+
+  // Spacing between groups
+  &:not([hidden]) ~ [cmdk-group] {
+    padding-top: var(--command-group-spacing-top);
+  }
+}
+
+// Command separator
+.command-separator {
+  background-color: var(--command-separator-backgroundColor);
+  margin: 0 var(--command-separator-margin-horizontal);
+  height: var(--command-separator-height);
+}
+
+// Command item
+.command-item {
+  position: var(--command-item-position);
+  display: var(--command-item-display);
+  cursor: var(--command-item-cursor);
+  align-items: var(--command-item-alignItems);
+  gap: var(--command-item-gap);
+  border-radius: var(--command-item-borderRadius);
+  padding: var(--command-item-padding-vertical) var(--command-item-padding-horizontal);
+  font-size: var(--command-item-fontSize);
+  outline: var(--command-item-outline);
+  user-select: var(--command-item-userSelect);
+
+  // Selected state
+  &[data-selected="true"] {
+    background-color: var(--command-item-states-selected-backgroundColor);
+    color: var(--command-item-states-selected-color);
+  }
+
+  // Disabled state
+  &[data-disabled="true"] {
+    pointer-events: var(--command-item-states-disabled-pointerEvents);
+    opacity: var(--command-item-states-disabled-opacity);
+  }
+
+  // Icons within items
+  svg:not([class*="text-"]) {
+    width: var(--command-item-icon-size);
+    height: var(--command-item-icon-size);
+    color: var(--command-item-icon-color);
+    pointer-events: var(--command-item-icon-pointerEvents);
+    flex-shrink: var(--command-item-icon-flexShrink);
+  }
+
+  // Icons with explicit text color classes should keep their color
+  svg[class*="text-"] {
+    pointer-events: var(--command-item-icon-pointerEvents);
+    flex-shrink: var(--command-item-icon-flexShrink);
+  }
+
+  // All SVGs within items
+  svg {
+    pointer-events: var(--command-item-icon-pointerEvents);
+    flex-shrink: var(--command-item-icon-flexShrink);
+
+    &:not([class*="size-"]) {
+      width: var(--command-item-icon-size);
+      height: var(--command-item-icon-size);
+    }
+  }
+}
+
+// Command shortcut
+.command-shortcut {
+  color: var(--command-shortcut-color);
+  margin-left: var(--command-shortcut-marginLeft);
+  font-size: var(--command-shortcut-fontSize);
+  letter-spacing: var(--command-shortcut-letterSpacing);
 }

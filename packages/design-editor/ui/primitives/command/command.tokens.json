@@ -1,3 +1,359 @@
 {
-  "command": {}
+  "prefix": "command",
+  "tokens": {
+    "command": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.0}",
+        "description": "Background color for command container"
+      },
+      "color": {
+        "value": "{color.mode.dark}",
+        "description": "Text color for command container"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display type for command container"
+      },
+      "height": {
+        "value": "100%",
+        "description": "Height for command container"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for command container"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for command container"
+      },
+      "overflow": {
+        "value": "hidden",
+        "description": "Overflow behavior for command container"
+      },
+      "borderRadius": {
+        "value": "8px",
+        "description": "Border radius for command container"
+      }
+    },
+    "dialog": {
+      "content": {
+        "overflow": {
+          "value": "hidden",
+          "description": "Overflow for dialog content"
+        },
+        "padding": {
+          "value": "0px",
+          "description": "Padding for dialog content"
+        }
+      }
+    },
+    "input": {
+      "wrapper": {
+        "display": {
+          "value": "flex",
+          "description": "Display for input wrapper"
+        },
+        "height": {
+          "value": "36px",
+          "description": "Height for input wrapper"
+        },
+        "alignItems": {
+          "value": "center",
+          "description": "Align items for input wrapper"
+        },
+        "gap": {
+          "value": "8px",
+          "description": "Gap between input wrapper elements"
+        },
+        "borderBottom": {
+          "width": {
+            "value": "1px",
+            "description": "Border bottom width for input wrapper"
+          },
+          "style": {
+            "value": "solid",
+            "description": "Border bottom style for input wrapper"
+          },
+          "color": {
+            "value": "{color.palette.neutral.200}",
+            "description": "Border bottom color for input wrapper"
+          }
+        },
+        "padding": {
+          "horizontal": {
+            "value": "12px",
+            "description": "Horizontal padding for input wrapper"
+          }
+        }
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for search icon"
+        },
+        "opacity": {
+          "value": "0.5",
+          "description": "Opacity for search icon"
+        },
+        "flexShrink": {
+          "value": "0",
+          "description": "Flex shrink for search icon"
+        }
+      },
+      "element": {
+        "display": {
+          "value": "flex",
+          "description": "Display for input element"
+        },
+        "height": {
+          "value": "40px",
+          "description": "Height for input element"
+        },
+        "width": {
+          "value": "100%",
+          "description": "Width for input element"
+        },
+        "borderRadius": {
+          "value": "8px",
+          "description": "Border radius for input element"
+        },
+        "backgroundColor": {
+          "value": "transparent",
+          "description": "Background color for input element"
+        },
+        "padding": {
+          "vertical": {
+            "value": "12px",
+            "description": "Vertical padding for input element"
+          }
+        },
+        "fontSize": {
+          "value": "14px",
+          "description": "Font size for input element"
+        },
+        "outline": {
+          "value": "none",
+          "description": "Outline for input element"
+        },
+        "placeholder": {
+          "color": {
+            "value": "{color.palette.neutral.500}",
+            "description": "Placeholder color for input element"
+          }
+        },
+        "disabled": {
+          "cursor": {
+            "value": "not-allowed",
+            "description": "Cursor when input is disabled"
+          },
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity when input is disabled"
+          }
+        }
+      }
+    },
+    "list": {
+      "maxHeight": {
+        "value": "300px",
+        "description": "Maximum height for command list"
+      },
+      "scrollPadding": {
+        "vertical": {
+          "value": "4px",
+          "description": "Vertical scroll padding for command list"
+        }
+      },
+      "overflowX": {
+        "value": "hidden",
+        "description": "Horizontal overflow for command list"
+      },
+      "overflowY": {
+        "value": "auto",
+        "description": "Vertical overflow for command list"
+      }
+    },
+    "empty": {
+      "padding": {
+        "vertical": {
+          "value": "24px",
+          "description": "Vertical padding for empty state"
+        }
+      },
+      "textAlign": {
+        "value": "center",
+        "description": "Text alignment for empty state"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for empty state"
+      }
+    },
+    "group": {
+      "color": {
+        "value": "{color.mode.dark}",
+        "description": "Text color for command group"
+      },
+      "overflow": {
+        "value": "hidden",
+        "description": "Overflow for command group"
+      },
+      "padding": {
+        "value": "4px",
+        "description": "Padding for command group"
+      },
+      "heading": {
+        "color": {
+          "value": "{color.palette.neutral.500}",
+          "description": "Color for group heading"
+        },
+        "padding": {
+          "horizontal": {
+            "value": "8px",
+            "description": "Horizontal padding for group heading"
+          },
+          "vertical": {
+            "value": "6px",
+            "description": "Vertical padding for group heading"
+          }
+        },
+        "fontSize": {
+          "value": "12px",
+          "description": "Font size for group heading"
+        },
+        "fontWeight": {
+          "value": "500",
+          "description": "Font weight for group heading"
+        }
+      },
+      "spacing": {
+        "top": {
+          "value": "0px",
+          "description": "Top spacing between groups"
+        }
+      }
+    },
+    "separator": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.200}",
+        "description": "Background color for separator"
+      },
+      "margin": {
+        "horizontal": {
+          "value": "-4px",
+          "description": "Horizontal margin for separator"
+        }
+      },
+      "height": {
+        "value": "1px",
+        "description": "Height for separator"
+      }
+    },
+    "item": {
+      "position": {
+        "value": "relative",
+        "description": "Position for command item"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display for command item"
+      },
+      "cursor": {
+        "value": "default",
+        "description": "Cursor for command item"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for command item"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap between item elements"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for command item"
+      },
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for command item"
+        },
+        "vertical": {
+          "value": "6px",
+          "description": "Vertical padding for command item"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for command item"
+      },
+      "outline": {
+        "value": "none",
+        "description": "Outline for command item"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for command item"
+      },
+      "icon": {
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for item icons"
+        },
+        "flexShrink": {
+          "value": "0",
+          "description": "Flex shrink for item icons"
+        },
+        "size": {
+          "value": "16px",
+          "description": "Size for item icons"
+        },
+        "color": {
+          "value": "{color.palette.neutral.500}",
+          "description": "Color for item icons"
+        }
+      },
+      "states": {
+        "selected": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color when item is selected"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Text color when item is selected"
+          }
+        },
+        "disabled": {
+          "pointerEvents": {
+            "value": "none",
+            "description": "Pointer events when item is disabled"
+          },
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity when item is disabled"
+          }
+        }
+      }
+    },
+    "shortcut": {
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for command shortcut"
+      },
+      "marginLeft": {
+        "value": "auto",
+        "description": "Left margin for shortcut (auto pushes to right)"
+      },
+      "fontSize": {
+        "value": "12px",
+        "description": "Font size for shortcut"
+      },
+      "letterSpacing": {
+        "value": "0.05em",
+        "description": "Letter spacing for shortcut"
+      }
+    }
+  }
 }

@@ -1,3 +1,81 @@
 {
-  "form": {}
+  "prefix": "form",
+  "tokens": {
+    "item": {
+      "display": {
+        "value": "grid",
+        "description": "Display type for form item"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap between form item elements"
+      }
+    },
+    "label": {
+      "color": {
+        "default": {
+          "value": "{color.mode.dark}",
+          "description": "Default color for form labels"
+        },
+        "error": {
+          "value": "{color.palette.red.600}",
+          "description": "Color for labels when there's an error"
+        }
+      }
+    },
+    "control": {
+      "id": {
+        "value": "auto",
+        "description": "ID generation for form controls"
+      },
+      "ariaDescribedBy": {
+        "default": {
+          "value": "description-only",
+          "description": "ARIA described by when no error"
+        },
+        "error": {
+          "value": "description-and-message",
+          "description": "ARIA described by when there's an error"
+        }
+      },
+      "ariaInvalid": {
+        "error": {
+          "value": "true",
+          "description": "ARIA invalid when there's an error"
+        },
+        "valid": {
+          "value": "false",
+          "description": "ARIA invalid when valid"
+        }
+      }
+    },
+    "description": {
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for form descriptions"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for form descriptions"
+      }
+    },
+    "message": {
+      "color": {
+        "value": "{color.palette.red.600}",
+        "description": "Color for form error messages"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for form error messages"
+      },
+      "display": {
+        "value": "block",
+        "description": "Display when message exists"
+      },
+      "hidden": {
+        "value": "none",
+        "description": "Display when no message"
+      }
+    }
+  }
 }

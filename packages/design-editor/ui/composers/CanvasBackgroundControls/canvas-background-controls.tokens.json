@@ -1,3 +1,168 @@
 {
-  "canvas-background-controls": {}
+  "prefix": "canvasBackgroundControls",
+  "tokens": {
+    "backgroundColor": {
+      "value": "{semantic.color.display.background.primary}",
+      "description": "Background color for controls container"
+    },
+    "borderColor": {
+      "value": "{semantic.color.display.border.subtle}",
+      "description": "Border color for controls sections"
+    },
+    "spacing": {
+      "container": {
+        "value": "{semantic.spacing.gap.grid.medium}",
+        "description": "Gap between control sections"
+      },
+      "section": {
+        "value": "{semantic.spacing.gap.grid.small}",
+        "description": "Gap within control sections"
+      },
+      "input": {
+        "value": "{semantic.spacing.gap.grid.small}",
+        "description": "Gap between inputs and elements"
+      }
+    },
+    "typography": {
+      "label": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for section labels"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.medium}",
+          "description": "Font weight for section labels"
+        },
+        "color": {
+          "value": "{semantic.color.display.foreground.primary}",
+          "description": "Text color for section labels"
+        }
+      }
+    },
+    "colorPicker": {
+      "size": {
+        "value": "32px",
+        "description": "Size for color picker swatch"
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.default}",
+        "description": "Border radius for color picker"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for color picker"
+        },
+        "color": {
+          "value": "{semantic.color.display.border.subtle}",
+          "description": "Border color for color picker"
+        }
+      }
+    },
+    "colorInput": {
+      "height": {
+        "value": "{semantic.components.input.height.sm}",
+        "description": "Height for color input field"
+      },
+      "fontSize": {
+        "value": "{semantic.typography.body.03}",
+        "description": "Font size for color input"
+      }
+    },
+    "backgroundTypeSelector": {
+      "backgroundColor": {
+        "value": "{semantic.color.display.background.secondary}",
+        "opacity": 0.2,
+        "description": "Background color for type selector container"
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.default}",
+        "description": "Border radius for type selector"
+      },
+      "padding": {
+        "value": "{semantic.spacing.padding.grid.xsmall}",
+        "description": "Padding for type selector container"
+      }
+    },
+    "backgroundTypeButton": {
+      "padding": {
+        "value": "{semantic.spacing.padding.grid.small}",
+        "description": "Padding for background type buttons"
+      },
+      "gap": {
+        "value": "{semantic.spacing.gap.grid.xsmall}",
+        "description": "Gap between icon and text in buttons"
+      }
+    },
+    "backgroundTypeIndicator": {
+      "backgroundColor": {
+        "value": "{semantic.color.display.background.primary}",
+        "description": "Background color for selected type indicator"
+      },
+      "borderColor": {
+        "value": "{semantic.color.display.border.subtle}",
+        "description": "Border color for selected type indicator"
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.small}",
+        "description": "Border radius for selected type indicator"
+      },
+      "transition": {
+        "duration": {
+          "value": "200ms",
+          "description": "Transition duration for indicator"
+        },
+        "easing": {
+          "value": "ease-out",
+          "description": "Transition easing for indicator"
+        }
+      }
+    },
+    "preview": {
+      "height": {
+        "value": "64px",
+        "description": "Height for background preview"
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.default}",
+        "description": "Border radius for preview"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for preview"
+        },
+        "color": {
+          "value": "{semantic.color.display.border.subtle}",
+          "description": "Border color for preview"
+        }
+      }
+    },
+    "icon": {
+      "size": {
+        "button": {
+          "value": "16px",
+          "description": "Icon size in type selector buttons"
+        },
+        "picker": {
+          "value": "16px",
+          "description": "Icon size in color picker"
+        }
+      },
+      "color": {
+        "selected": {
+          "value": "{semantic.color.display.foreground.primary}",
+          "description": "Icon color for selected state"
+        },
+        "unselected": {
+          "value": "{semantic.color.display.foreground.secondary}",
+          "description": "Icon color for unselected state"
+        },
+        "hover": {
+          "value": "{semantic.color.display.foreground.primary}",
+          "description": "Icon color on hover"
+        }
+      }
+    }
+  }
 }

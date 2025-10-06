@@ -1,3 +1,116 @@
 {
-  "accordion": {}
+  "prefix": "accordion",
+  "tokens": {
+    "item": {
+      "borderColor": {
+        "value": "{color.action.border.secondary.default}",
+        "description": "Border color for accordion item separators"
+      },
+      "borderWidth": {
+        "value": "1px",
+        "description": "Border width for accordion item separators"
+      }
+    },
+    "trigger": {
+      "gap": {
+        "value": "{spacing.gap.gridLarge}",
+        "description": "Gap between trigger content and chevron icon"
+      },
+      "padding": {
+        "vertical": {
+          "value": "{components.action.padding.vertical.default}",
+          "description": "Vertical padding for accordion trigger"
+        },
+        "horizontal": {
+          "value": "{spacing.padding.card}",
+          "description": "Horizontal padding for accordion trigger"
+        }
+      },
+      "borderRadius": {
+        "value": "{shape.control.radius.default}",
+        "description": "Border radius for accordion trigger"
+      },
+      "fontSize": {
+        "value": "{typography.body.02}",
+        "description": "Font size for accordion trigger text"
+      },
+      "fontWeight": {
+        "value": "{typography.fontWeight.medium}",
+        "description": "Font weight for accordion trigger text"
+      },
+      "lineHeight": {
+        "value": "{typography.lineHeight.tight}",
+        "description": "Line height for accordion trigger text"
+      },
+      "icon": {
+        "color": {
+          "value": "{color.display.foreground.tertiary}",
+          "description": "Color for the accordion chevron icon"
+        },
+        "size": {
+          "value": "{components.action.gap.icon}",
+          "description": "Size of the accordion chevron icon"
+        },
+        "transform": {
+          "translateY": {
+            "value": "2px",
+            "description": "Vertical translation for chevron icon alignment"
+          }
+        }
+      },
+      "focus": {
+        "borderColor": {
+          "value": "{color.action.border.primary.focus}",
+          "description": "Border color on focus for accordion trigger"
+        },
+        "ringColor": {
+          "value": "{color.action.border.primary.focus}",
+          "opacity": 0.5,
+          "description": "Ring color on focus for accordion trigger"
+        },
+        "ringWidth": {
+          "value": "3px",
+          "description": "Ring width on focus for accordion trigger"
+        }
+      }
+    },
+    "content": {
+      "fontSize": {
+        "value": "{typography.body.02}",
+        "description": "Font size for accordion content text"
+      },
+      "padding": {
+        "top": {
+          "value": "0px",
+          "description": "Top padding for accordion content wrapper"
+        },
+        "bottom": {
+          "value": "{components.action.padding.vertical.default}",
+          "description": "Bottom padding for accordion content wrapper"
+        }
+      },
+      "animation": {
+        "enter": {
+          "duration": {
+            "value": "{motion.interaction.enter.duration}",
+            "description": "Duration for accordion content expand animation"
+          },
+          "easing": {
+            "value": "{motion.interaction.enter.easing}",
+            "description": "Easing for accordion content expand animation"
+          }
+        },
+        "exit": {
+          "duration": {
+            "value": "{motion.interaction.exit.duration}",
+            "description": "Duration for accordion content collapse animation"
+          },
+          "easing": {
+            "value": "{motion.interaction.exit.easing}",
+            "description": "Easing for accordion content collapse animation"
+          }
+        }
+      }
+    }
+  }
 }

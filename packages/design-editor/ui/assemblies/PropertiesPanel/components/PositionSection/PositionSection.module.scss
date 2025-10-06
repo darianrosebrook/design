@@ -1,0 +1,30 @@
+// PositionSection component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.positionSection {
+  // Section container styles (equivalent to space-y-2)
+  display: flex;
+  flex-direction: column;
+  gap: 8px; // equivalent to space-y-2
+}
+
+.positionSectionGrid {
+  // Grid layout styles (equivalent to grid grid-cols-2 gap-2)
+  display: grid;
+  grid-template-columns: 1fr 1fr; // equivalent to grid-cols-2
+  gap: 8px; // equivalent to gap-2
+}
+
+.positionSectionField {
+  // Field container (no specific styles needed)
+}
+
+.positionSectionLabel {
+  // Label styles (equivalent to text-xs text-muted-foreground)
+  font-size: 12px; // equivalent to text-xs
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+}
+
+.positionSectionInput {
+  // Input styles (no additional styles needed beyond base Input component)
+}

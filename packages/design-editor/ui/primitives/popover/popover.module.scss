@@ -1,7 +1,117 @@
 // popover primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
-.popover {
-  // Placeholder for future SCSS implementation
-  // Will contain popover-specific styles when migrating from Tailwind
+// Import generated token variables
+@use './Popover.tokens.generated.scss' as popoverTokens;
+
+// Include the generated variables mixin
+@include popoverTokens.vars;
+
+// Animation keyframes for popover transitions
+@keyframes popover-show {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes popover-hide {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes popover-slide-down-and-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popover-slide-left-and-fade {
+  from {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes popover-slide-up-and-fade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popover-slide-right-and-fade {
+  from {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Popover content styles
+.popover-content {
+  background-color: var(--popover-backgroundColor);
+  color: var(--popover-color);
+  z-index: var(--popover-zIndex);
+  width: var(--popover-maxWidth);
+  border-radius: var(--popover-borderRadius);
+  border: 1px solid var(--popover-borderColor);
+  padding: var(--popover-padding-vertical) var(--popover-padding-horizontal);
+  box-shadow: var(--popover-boxShadow);
+  outline: none;
+  animation-duration: var(--popover-animation-duration);
+  animation-timing-function: var(--popover-animation-easing);
+  animation-fill-mode: both;
+
+  // Animation states
+  &[data-state="open"] {
+    animation-name: popover-show;
+  }
+
+  &[data-state="closed"] {
+    animation-name: popover-hide;
+  }
+
+  // Position variants
+  &[data-side="top"] {
+    animation-name: popover-slide-down-and-fade;
+  }
+
+  &[data-side="right"] {
+    animation-name: popover-slide-left-and-fade;
+  }
+
+  &[data-side="bottom"] {
+    animation-name: popover-slide-up-and-fade;
+  }
+
+  &[data-side="left"] {
+    animation-name: popover-slide-right-and-fade;
+  }
 }

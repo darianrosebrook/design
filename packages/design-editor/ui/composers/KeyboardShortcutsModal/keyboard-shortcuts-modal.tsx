@@ -2,6 +2,13 @@
 
 import type React from "react";
 import { useState, useEffect } from "react";
+import styles from "./keyboard-shortcuts-modal.module.scss";
+import {
+  getShortcutsByCategory,
+  formatShortcut,
+  type KeyboardShortcut,
+  type ShortcutCategory,
+} from "@/lib/keyboard-shortcuts";
 import { Badge } from "@/ui/primitives/Badge";
 import {
   Dialog,
@@ -13,12 +20,6 @@ import {
 import { Input } from "@/ui/primitives/Input";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
 import { Separator } from "@/ui/primitives/Separator";
-import {
-  getShortcutsByCategory,
-  formatShortcut,
-  type KeyboardShortcut,
-  type ShortcutCategory,
-} from "@/lib/keyboard-shortcuts";
 
 interface KeyboardShortcutsModalProps {
   open: boolean;
@@ -138,11 +139,11 @@ export function KeyboardShortcutsModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-hidden">
+      <DialogContent className={styles.shortcutsModal}>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+          <DialogTitle className={styles.shortcutsTitle}>
             Keyboard Shortcuts
-            <Badge variant="secondary" className="ml-2">
+            <Badge variant="secondary" className={styles.badge}>
               {filteredShortcuts.filter((s) => s.implemented !== false).length}/
               {filteredShortcuts.length} implemented
             </Badge>
@@ -153,18 +154,18 @@ export function KeyboardShortcutsModal({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="flex flex-col gap-4">
+        <div className={styles.shortcutsContent}>
           {/* Search */}
-          <div className="relative">
+          <div className={styles.searchContainer}>
             <Input
               placeholder="Search shortcuts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className={styles.searchInput}
             />
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <div className={styles.searchIconContainer}>
               <svg
-                className="h-4 w-4 text-muted-foreground"
+                className={styles.searchIcon}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -180,57 +181,59 @@ export function KeyboardShortcutsModal({
           </div>
 
           {/* Shortcuts List */}
-          <ScrollArea className="flex-1 max-h-[60vh]">
-            <div className="space-y-6">
+          <ScrollArea className={styles.shortcutsScrollArea}>
+            <div className={styles.shortcutsGrid}>
               {Object.entries(groupedShortcuts).map(([category, shortcuts]) => (
                 <div key={category}>
-                  <div className="flex items-center gap-2 mb-3">
+                  <div className={styles.categoryHeader}>
                     <Badge
                       className={categoryColors[category as ShortcutCategory]}
                     >
                       {categoryLabels[category as ShortcutCategory]}
                     </Badge>
-                    <span className="text-sm text-muted-foreground">
+                    <span className={styles.categoryCount}>
                       {shortcuts.filter((s) => s.implemented !== false).length}/
                       {shortcuts.length} implemented
                     </span>
                   </div>
 
-                  <div className="grid gap-2">
+                  <div className={styles.shortcutsList}>
                     {shortcuts.map((shortcut, index) => {
                       const isImplemented = shortcut.implemented !== false; // Default to true if not specified
                       return (
                         <div
                           key={`${shortcut.action}-${index}`}
-                          className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
+                          className={`${styles.shortcutItem} ${
                             isImplemented
-                              ? "bg-card hover:bg-accent/50"
-                              : "bg-muted/30 opacity-60 cursor-not-allowed"
+                              ? styles["shortcutItem--implemented"]
+                              : styles["shortcutItem--notImplemented"]
                           }`}
                         >
-                          <div className="flex-1">
+                          <div className={styles.shortcutContent}>
                             <div
-                              className={`font-medium text-sm ${
-                                !isImplemented ? "text-muted-foreground" : ""
+                              className={`${styles.shortcutName} ${
+                                !isImplemented
+                                  ? styles["shortcutName--notImplemented"]
+                                  : ""
                               }`}
                             >
                               {shortcut.description}
                               {!isImplemented && (
-                                <span className="ml-2 text-xs bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 px-1.5 py-0.5 rounded">
+                                <span className={styles.comingSoonBadge}>
                                   Coming Soon
                                 </span>
                               )}
                             </div>
-                            <div className="text-xs text-muted-foreground">
+                            <div className={styles.shortcutDescription}>
                               {shortcut.action}
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className={styles.shortcutKeys}>
                             <kbd
-                              className={`px-2 py-1 text-xs font-mono rounded border ${
+                              className={`${styles.shortcutKey} ${
                                 isImplemented
-                                  ? "bg-muted"
-                                  : "bg-muted/50 text-muted-foreground"
+                                  ? styles["shortcutKey--implemented"]
+                                  : styles["shortcutKey--notImplemented"]
                               }`}
                             >
                               {formatShortcut(shortcut)}
@@ -241,7 +244,7 @@ export function KeyboardShortcutsModal({
                     })}
                   </div>
 
-                  <Separator className="mt-4" />
+                  <Separator className={styles.categorySeparator} />
                 </div>
               ))}
             </div>

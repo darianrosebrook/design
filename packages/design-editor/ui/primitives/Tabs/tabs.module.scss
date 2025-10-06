@@ -1,47 +1,53 @@
 // Tabs component styles
 // Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Tabs.tokens.generated.scss' as tabsTokens;
+
 .tabs {
+  // Include the generated variables mixin within the component scope
+  @include tabsTokens.vars;
+
   // Base tabs container styles (equivalent to flex flex-col gap-2)
   display: flex; // equivalent to flex
   flex-direction: column; // equivalent to flex-col
-  gap: 8px; // equivalent to gap-2
+  gap: var(--tabs-container-gap); // equivalent to gap-2
 }
 
 .tabsList {
   // Tab list container styles (equivalent to bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px])
-  background-color: hsl(var(--muted)); // equivalent to bg-muted
-  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  background-color: var(--tabs-list-backgroundColor); // equivalent to bg-muted
+  color: var(--tabs-list-color); // equivalent to text-muted-foreground
   display: inline-flex; // equivalent to inline-flex
-  height: 36px; // equivalent to h-9
+  height: var(--tabs-list-height); // equivalent to h-9
   width: fit-content; // equivalent to w-fit
   align-items: center; // equivalent to items-center
   justify-content: center; // equivalent to justify-center
-  border-radius: 8px; // equivalent to rounded-lg
-  padding: 3px; // equivalent to p-[3px]
+  border-radius: var(--tabs-list-borderRadius); // equivalent to rounded-lg
+  padding: var(--tabs-list-padding); // equivalent to p-[3px]
 }
 
 .tabsTrigger {
   // Tab trigger styles (equivalent to data-[state=active]:bg-background dark:data-[state=active]:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 text-foreground dark:text-muted-foreground inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm)
-  color: hsl(var(--foreground)); // equivalent to text-foreground
+  color: var(--tabs-trigger-color-default); // equivalent to text-foreground
   display: inline-flex; // equivalent to inline-flex
-  height: calc(100% - 1px); // equivalent to h-[calc(100%-1px)]
+  height: var(--tabs-trigger-height); // equivalent to h-[calc(100%-1px)]
   flex: 1; // equivalent to flex-1
   align-items: center; // equivalent to items-center
   justify-content: center; // equivalent to justify-center
-  gap: 6px; // equivalent to gap-1.5
-  border-radius: 6px; // equivalent to rounded-md
-  border: 1px solid transparent; // equivalent to border border-transparent
-  padding: 4px 8px; // equivalent to px-2 py-1
-  font-size: 14px; // equivalent to text-sm
-  font-weight: 500; // equivalent to font-medium
+  gap: var(--tabs-trigger-gap); // equivalent to gap-1.5
+  border-radius: var(--tabs-trigger-borderRadius); // equivalent to rounded-md
+  border: var(--tabs-trigger-border-width) var(--tabs-trigger-border-style) transparent; // equivalent to border border-transparent
+  padding: var(--tabs-trigger-padding-vertical) var(--tabs-trigger-padding-horizontal); // equivalent to px-2 py-1
+  font-size: var(--tabs-trigger-fontSize); // equivalent to text-sm
+  font-weight: var(--tabs-trigger-fontWeight); // equivalent to font-medium
   white-space: nowrap; // equivalent to whitespace-nowrap
-  transition: color 150ms ease-in-out, box-shadow 150ms ease-in-out; // equivalent to transition-[color,box-shadow]
+  transition: color var(--tabs-trigger-transition-duration) var(--tabs-trigger-transition-easing), box-shadow var(--tabs-trigger-transition-duration) var(--tabs-trigger-transition-easing); // equivalent to transition-[color,box-shadow]
   outline: none; // equivalent to focus-visible:outline-1
 
   // Dark mode colors
   .dark & {
-    color: hsl(var(--muted-foreground)); // equivalent to dark:text-muted-foreground
+    color: var(--tabs-trigger-color-dark); // equivalent to dark:text-muted-foreground
   }
 
   // SVG icon styles (equivalent to [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4)
@@ -57,13 +63,14 @@
 
   // Active state (equivalent to data-[state=active]:bg-background dark:data-[state=active]:text-foreground dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 data-[state=active]:shadow-sm)
   &[data-state="active"] {
-    background-color: hsl(var(--background)); // equivalent to data-[state=active]:bg-background
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); // equivalent to data-[state=active]:shadow-sm
+    background-color: var(--tabs-trigger-states-active-backgroundColor); // equivalent to data-[state=active]:bg-background
+    box-shadow: var(--tabs-trigger-states-active-boxShadow); // equivalent to data-[state=active]:shadow-sm
 
     .dark & {
-      color: hsl(var(--foreground)); // equivalent to dark:data-[state=active]:text-foreground
-      border-color: hsl(var(--input)); // equivalent to dark:data-[state=active]:border-input
-      background-color: hsl(var(--input) / 0.3); // equivalent to dark:data-[state=active]:bg-input/30
+      color: var(--tabs-trigger-states-active-dark-color); // equivalent to dark:data-[state=active]:text-foreground
+      border-color: var(--tabs-trigger-states-active-dark-borderColor); // equivalent to dark:data-[state=active]:border-input
+      background-color: var(--tabs-trigger-states-active-dark-backgroundColor); // equivalent to dark:data-[state=active]:bg-input/30
+      opacity: var(--tabs-trigger-states-active-dark-backgroundColor-opacity);
     }
   }
 
@@ -77,12 +84,12 @@
   // Disabled state (equivalent to disabled:pointer-events-none disabled:opacity-50)
   &:disabled {
     pointer-events: none;
-    opacity: 0.5;
+    opacity: var(--tabs-trigger-states-disabled-opacity);
   }
 }
 
 .tabsContent {
   // Tab content styles (equivalent to flex-1 outline-none)
-  flex: 1; // equivalent to flex-1
+  flex: var(--tabs-content-flex); // equivalent to flex-1
   outline: none; // equivalent to outline-none
 }

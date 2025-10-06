@@ -1,0 +1,113 @@
+/**
+ * 404 Not Found page styles
+ * Uses design tokens instead of Tailwind classes
+ */
+
+.page {
+  /* Full screen centering */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+
+  /* Background and text colors */
+  background-color: var(--core-color-display-background-primary);
+  color: var(--core-color-display-foreground-primary);
+
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--core-color-mode-dark);
+  }
+}
+
+.content {
+  /* Center alignment */
+  text-align: center;
+
+  /* Spacing between elements */
+  & > * + * {
+    margin-top: var(--core-spacing-size-04); /* 1rem = 16px */
+  }
+}
+
+.errorCode {
+  /* Large error number */
+  font-size: var(--core-typography-ramp-16); /* 4rem = 64px */
+  font-weight: var(--core-typography-weight-bold);
+  color: var(--core-color-display-foreground-secondary);
+
+  /* Reset margins */
+  margin: 0;
+}
+
+.errorTitle {
+  /* Error title */
+  font-size: var(--core-typography-ramp-07); /* 1.5rem = 24px */
+  font-weight: var(--core-typography-weight-semibold);
+
+  /* Reset margins */
+  margin: 0;
+}
+
+.errorDescription {
+  /* Error description */
+  color: var(--core-color-display-foreground-secondary);
+  max-width: 28rem; /* 448px */
+
+  /* Reset margins */
+  margin: 0;
+}
+
+.homeButton {
+  /* Button styling matching shadcn/ui design */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Rounded corners */
+  border-radius: var(--core-radius-size-02); /* 4px */
+
+  /* Font */
+  font-size: var(--core-typography-ramp-03); /* 0.875rem = 14px */
+  font-weight: var(--core-typography-weight-medium);
+
+  /* Ring styles for focus */
+  --ring-offset-color: var(--core-color-display-background-primary);
+  --ring-color: var(--core-color-focus-ring);
+
+  /* Transition */
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Focus styles */
+  &:focus-visible {
+    outline: 2px solid var(--ring-color);
+    outline-offset: 2px;
+  }
+
+  /* Disabled state */
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* Button dimensions */
+  height: 2.5rem; /* 40px */
+  padding: 0 var(--core-spacing-size-04); /* 16px */
+
+  /* Primary button colors */
+  background-color: var(--semantic-color-action-background-primary-default);
+  color: var(--semantic-color-action-foreground-primary-default);
+
+  /* Hover state */
+  &:hover {
+    background-color: var(--semantic-color-action-background-primary-hover);
+  }
+
+  /* Active state */
+  &:active {
+    background-color: var(--semantic-color-action-background-primary-active);
+  }
+
+  /* Text decoration for links */
+  text-decoration: none;
+}

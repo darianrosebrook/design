@@ -10,9 +10,9 @@ import {
   AlignHorizontalJustifyCenter,
 } from "lucide-react";
 import type React from "react";
-import { Button } from "@/ui/primitives/Button";
-import { cn } from "@/lib/utils";
 import styles from "./alignment-grid.module.scss";
+import { cn } from "@/lib/utils";
+import { Button } from "@/ui/primitives/Button";
 
 interface AlignmentGridProps {
   onAlign: (alignment: string) => void;

@@ -1,3 +1,146 @@
 {
-  "box-model-editor": {}
+  "prefix": "boxModelEditor",
+  "tokens": {
+    "backgroundColor": {
+      "value": "{semantic.color.display.background.primary}",
+      "description": "Background color for box model editor"
+    },
+    "visual": {
+      "container": {
+        "backgroundColor": {
+          "value": "{semantic.color.display.background.secondary}",
+          "opacity": 0.2,
+          "description": "Background color for visual container"
+        },
+        "borderRadius": {
+          "value": "{semantic.shape.control.radius.default}",
+          "description": "Border radius for visual container"
+        },
+        "padding": {
+          "value": "{semantic.spacing.padding.grid.medium}",
+          "description": "Padding for visual container"
+        },
+        "size": {
+          "width": {
+            "value": "120px",
+            "description": "Width for visual box model"
+          },
+          "height": {
+            "value": "80px",
+            "description": "Height for visual box model"
+          }
+        }
+      },
+      "margin": {
+        "borderColor": {
+          "value": "{semantic.color.palette.blue.300}",
+          "description": "Border color for margin visualization"
+        },
+        "backgroundColor": {
+          "value": "{semantic.color.palette.blue.50}",
+          "opacity": 0.2,
+          "description": "Background color for margin visualization"
+        }
+      },
+      "border": {
+        "borderColor": {
+          "value": "{semantic.color.palette.orange.300}",
+          "description": "Border color for border visualization"
+        },
+        "backgroundColor": {
+          "value": "{semantic.color.palette.orange.50}",
+          "opacity": 0.2,
+          "description": "Background color for border visualization"
+        }
+      },
+      "padding": {
+        "borderColor": {
+          "value": "{semantic.color.palette.green.300}",
+          "description": "Border color for padding visualization"
+        },
+        "backgroundColor": {
+          "value": "{semantic.color.palette.green.50}",
+          "opacity": 0.2,
+          "description": "Background color for padding visualization"
+        }
+      },
+      "content": {
+        "borderColor": {
+          "value": "{semantic.color.palette.purple.300}",
+          "description": "Border color for content visualization"
+        },
+        "backgroundColor": {
+          "value": "{semantic.color.palette.purple.50}",
+          "opacity": 0.2,
+          "description": "Background color for content visualization"
+        }
+      },
+      "label": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for visual labels"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.medium}",
+          "description": "Font weight for visual labels"
+        }
+      }
+    },
+    "controls": {
+      "spacing": {
+        "container": {
+          "value": "{semantic.spacing.gap.grid.medium}",
+          "description": "Gap between control sections"
+        },
+        "section": {
+          "value": "{semantic.spacing.gap.grid.small}",
+          "description": "Gap within control sections"
+        },
+        "input": {
+          "value": "{semantic.spacing.gap.grid.xsmall}",
+          "description": "Gap between inputs and buttons"
+        }
+      },
+      "input": {
+        "height": {
+          "value": "{semantic.components.input.height.default}",
+          "description": "Height for control inputs"
+        },
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for control inputs"
+        }
+      },
+      "button": {
+        "size": {
+          "value": "20px",
+          "description": "Size for control buttons"
+        }
+      },
+      "label": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for control labels"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.medium}",
+          "description": "Font weight for control labels"
+        },
+        "color": {
+          "value": "{semantic.color.display.foreground.primary}",
+          "description": "Text color for control labels"
+        }
+      }
+    },
+    "linkButton": {
+      "size": {
+        "value": "{semantic.components.button.height.sm}",
+        "description": "Size for link/unlink buttons"
+      },
+      "iconSize": {
+        "value": "12px",
+        "description": "Icon size for link/unlink buttons"
+      }
+    }
+  }
 }

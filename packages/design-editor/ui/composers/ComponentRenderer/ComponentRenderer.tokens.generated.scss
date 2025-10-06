@@ -1,0 +1,33 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/ComponentRenderer/component-renderer.tokens.json
+ */
+@mixin vars {
+  /* === Error Tokens === */
+  --componentRenderer-error-backgroundColor: var(--semantic-color-palette-red-50);
+  --componentRenderer-error-borderColor: var(--semantic-color-palette-red-400);
+  --componentRenderer-error-textColor: var(--semantic-color-palette-red-600);
+  --componentRenderer-error-borderRadius: var(--semantic-shape-control-radius-small);
+
+  /* === Slot Tokens === */
+  --componentRenderer-slot-backgroundColor: var(--semantic-color-palette-orange-50);
+  --componentRenderer-slot-borderColor: var(--semantic-color-palette-orange-300);
+  --componentRenderer-slot-textColor: var(--semantic-color-palette-orange-600);
+  --componentRenderer-slot-hover-backgroundColor: var(--semantic-color-palette-orange-100);
+  --componentRenderer-slot-hover-borderColor: var(--semantic-color-palette-orange-400);
+  --componentRenderer-slot-minHeight: 40px;
+  --componentRenderer-slot-borderRadius: var(--semantic-shape-control-radius-default);
+
+  /* === Typography Tokens === */
+  --componentRenderer-typography-error-fontSize: var(--semantic-typography-body-01);
+  --componentRenderer-typography-error-fontWeight: var(--semantic-typography-font-weight-semibold);
+  --componentRenderer-typography-slot-fontSize: var(--semantic-typography-body-03);
+  --componentRenderer-typography-slot-fontWeight: var(--semantic-typography-font-weight-medium);
+
+  /* === Layout Tokens === */
+  --componentRenderer-layout-positioning-type: absolute;
+  --componentRenderer-layout-positioning-description: Positioning type for rendered components;
+
+  /* === Animation Tokens === */
+  --componentRenderer-animation-transition-duration: 150ms;
+  --componentRenderer-animation-transition-easing: ease-in-out;
+}

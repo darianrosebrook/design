@@ -1,8 +1,9 @@
 {
-  "ButtonGroup": {
+  "prefix": "buttonGroup",
+  "tokens": {
     "spacing": {
       "gap": {
-        "value": "0px",
+        "value": "{semantic.spacing.gap.grid.small}",
         "description": "Gap between button group items"
       }
     },
@@ -10,7 +11,7 @@
       "radius": {
         "horizontal": {
           "first": {
-            "value": "6px 0 0 6px",
+            "value": "{semantic.shape.control.radius.default} 0 0 {semantic.shape.control.radius.default}",
             "description": "Border radius for first item in horizontal group"
           },
           "middle": {
@@ -18,13 +19,13 @@
             "description": "Border radius for middle items in horizontal group"
           },
           "last": {
-            "value": "0 6px 6px 0",
+            "value": "0 {semantic.shape.control.radius.default} {semantic.shape.control.radius.default} 0",
             "description": "Border radius for last item in horizontal group"
           }
         },
         "vertical": {
           "first": {
-            "value": "6px 6px 0 0",
+            "value": "{semantic.shape.control.radius.default} {semantic.shape.control.radius.default} 0 0",
             "description": "Border radius for first item in vertical group"
           },
           "middle": {
@@ -32,7 +33,7 @@
             "description": "Border radius for middle items in vertical group"
           },
           "last": {
-            "value": "0 0 6px 6px",
+            "value": "0 0 {semantic.shape.control.radius.default} {semantic.shape.control.radius.default}",
             "description": "Border radius for last item in vertical group"
           }
         }
@@ -46,31 +47,31 @@
     },
     "text": {
       "backgroundColor": {
-        "value": "hsl(var(--muted))",
+        "value": "{semantic.color.display.background.secondary}",
         "description": "Background color for ButtonGroupText"
       },
       "fontSize": {
-        "value": "14px",
+        "value": "{semantic.typography.body.03}",
         "description": "Font size for ButtonGroupText"
       },
       "fontWeight": {
-        "value": "500",
+        "value": "{semantic.typography.font.weight.medium}",
         "description": "Font weight for ButtonGroupText"
       },
       "padding": {
         "horizontal": {
-          "value": "16px",
+          "value": "{semantic.components.input.padding.horizontal.default}",
           "description": "Horizontal padding for ButtonGroupText"
         }
       },
       "borderRadius": {
-        "value": "6px",
+        "value": "{semantic.shape.control.radius.default}",
         "description": "Border radius for ButtonGroupText"
       }
     },
     "separator": {
       "backgroundColor": {
-        "value": "hsl(var(--input))",
+        "value": "{semantic.color.display.border.subtle}",
         "description": "Background color for separator"
       },
       "margin": {

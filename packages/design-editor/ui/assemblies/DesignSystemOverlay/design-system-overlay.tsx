@@ -1,18 +1,18 @@
 "use client";
 
+import { FileText, X, Library } from "lucide-react";
 import { useState, useMemo } from "react";
 import type React from "react";
-import { FileText, X, Library } from "lucide-react";
+import { useCanvas } from "@/lib/canvas-context";
+import { DesignSystemItem as DesignSystemItemComponent } from "@/lib/components/design-system-item";
+import { DesignSystemSearch } from "@/lib/components/design-system-search";
+import { Component, LayersIcon, Square } from "@/lib/components/icons";
+import type { DesignSystemItem } from "@/lib/data/design-system-items";
+import { mockDesignSystemItems } from "@/lib/data/design-system-items";
+import { convertDesignSystemItemToCanvasObject } from "@/lib/utils/design-system-to-canvas";
 import { Button } from "@/ui/primitives/Button";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
 import { Tabs, TabsList, TabsTrigger } from "@/ui/primitives/Tabs";
-import { Component, LayersIcon, Square } from "@/lib/components/icons";
-import { DesignSystemSearch } from "@/lib/components/design-system-search";
-import { DesignSystemItem as DesignSystemItemComponent } from "@/lib/components/design-system-item";
-import type { DesignSystemItem } from "@/lib/data/design-system-items";
-import { mockDesignSystemItems } from "@/lib/data/design-system-items";
-import { useCanvas } from "@/lib/canvas-context";
-import { convertDesignSystemItemToCanvasObject } from "@/lib/utils/design-system-to-canvas";
 
 interface DesignSystemOverlayProps {
   isOpen: boolean;
@@ -121,22 +121,22 @@ export function DesignSystemOverlay({
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-6xl h-[80vh] flex flex-col">
+    <div className="// fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+      <div className="// bg-card border border-border rounded-xl shadow-2xl w-full max-w-6xl h-[80vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-border">
+        <div className="// flex items-center justify-between p-6 border-b border-border">
           <div>
-            <h2 className="text-xl font-semibold">Design System Library</h2>
-            <p className="text-sm text-muted-foreground">
+            <h2 className="// text-xl font-semibold">Design System Library</h2>
+            <p className="// text-sm text-muted-foreground">
               Browse and insert components, snippets, and templates
             </p>
             {/* MOCK DATA: This modal showcases placeholder design system content */}
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="// text-xs text-muted-foreground mt-1">
               Demo content - showing mock design system items
             </p>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-5 w-5" />
+            <X className="// h-5 w-5" />
           </Button>
         </div>
 
@@ -145,29 +145,29 @@ export function DesignSystemOverlay({
           value={activeTab}
           onValueChange={(value) => setActiveTab(value as any)}
         >
-          <div className="px-6 py-4 border-b border-border">
-            <TabsList className="grid w-full grid-cols-4">
+          <div className="// px-6 py-4 border-b border-border">
+            <TabsList className="// grid w-full grid-cols-4">
               <TabsTrigger value="components">
-                <Component className="h-4 w-4 mr-2" />
+                <Component className="// h-4 w-4 mr-2" />
                 Components
               </TabsTrigger>
               <TabsTrigger value="snippets">
-                <LayersIcon className="h-4 w-4 mr-2" />
+                <LayersIcon className="// h-4 w-4 mr-2" />
                 Snippets
               </TabsTrigger>
               <TabsTrigger value="pages">
-                <FileText className="h-4 w-4 mr-2" />
+                <FileText className="// h-4 w-4 mr-2" />
                 Pages
               </TabsTrigger>
               <TabsTrigger value="icons">
-                <Square className="h-4 w-4 mr-2" />
+                <Square className="// h-4 w-4 mr-2" />
                 Icons
               </TabsTrigger>
             </TabsList>
           </div>
 
           {/* Content */}
-          <div className="flex-1 flex flex-col">
+          <div className="// flex-1 flex flex-col">
             <DesignSystemSearch
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
@@ -183,12 +183,12 @@ export function DesignSystemOverlay({
             />
 
             {/* Items grid/list */}
-            <ScrollArea className="flex-1">
+            <ScrollArea className="// flex-1">
               <div
-                className={`p-6 ${
+                className={`// p-6 ${
                   viewMode === "grid"
-                    ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-                    : "space-y-4"
+                    ? "// grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+                    : "// space-y-4"
                 }`}
               >
                 {filteredItems.map((item) => (
@@ -209,10 +209,12 @@ export function DesignSystemOverlay({
                 ))}
               </div>
               {filteredItems.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <Library className="h-12 w-12 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium mb-2">No items found</h3>
-                  <p className="text-sm text-muted-foreground">
+                <div className="// flex flex-col items-center justify-center py-12 text-center">
+                  <Library className="// h-12 w-12 text-muted-foreground mb-4" />
+                  <h3 className="// text-lg font-medium mb-2">
+                    No items found
+                  </h3>
+                  <p className="// text-sm text-muted-foreground">
                     Try adjusting your search or filter criteria
                   </p>
                 </div>

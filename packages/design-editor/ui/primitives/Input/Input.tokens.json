@@ -1,5 +1,6 @@
 {
-  "Input": {
+  "prefix": "input",
+  "tokens": {
     "borderRadius": {
       "value": "6px",
       "description": "Border radius for input corners"
@@ -35,15 +36,15 @@
       },
       "color": {
         "default": {
-          "value": "hsl(var(--input))",
+          "value": "{color.action.border.secondary.default}",
           "description": "Default border color"
         },
         "focus": {
-          "value": "hsl(var(--ring))",
+          "value": "{color.action.border.primary.focus}",
           "description": "Border color on focus"
         },
         "invalid": {
-          "value": "hsl(var(--destructive))",
+          "value": "{color.action.background.danger.default}",
           "description": "Border color when invalid"
         }
       }
@@ -54,7 +55,8 @@
         "description": "Default background color"
       },
       "dark": {
-        "value": "hsl(var(--input) / 0.3)",
+        "value": "{color.action.border.secondary.default}",
+        "opacity": 0.3,
         "description": "Background color in dark mode"
       }
     },
@@ -63,16 +65,16 @@
       "description": "Text color"
     },
     "placeholderColor": {
-      "value": "hsl(var(--muted-foreground))",
+      "value": "{color.palette.neutral.500}",
       "description": "Placeholder text color"
     },
     "selection": {
       "backgroundColor": {
-        "value": "hsl(var(--primary))",
+        "value": "{color.action.background.primary.default}",
         "description": "Background color for selected text"
       },
       "color": {
-        "value": "hsl(var(--primary-foreground))",
+        "value": "{color.action.foreground.primary.default}",
         "description": "Text color for selected text"
       }
     },
@@ -93,7 +95,8 @@
     "focus": {
       "ring": {
         "color": {
-          "value": "hsl(var(--ring) / 0.5)",
+          "value": "{color.action.border.primary.focus}",
+          "opacity": 0.5,
           "description": "Focus ring color"
         },
         "width": {

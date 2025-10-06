@@ -1,14 +1,12 @@
 "use client";
 
-import type React from "react";
-
-import { useState } from "react";
 import { ChevronRight, Link2, Unlink, Plus, GripVertical } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Slider } from "@/components/ui/slider";
 import {
   Select,
   SelectContent,
@@ -16,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
 import { useCanvas } from "@/lib/canvas-context";
 import type { CanvasObject } from "@/lib/types";
 
@@ -51,10 +50,10 @@ export function PropertiesPanel() {
     id: string
   ): CanvasObject | null => {
     for (const obj of objs) {
-      if (obj.id === id) return obj;
+      if (obj.id === id) {return obj;}
       if (obj.children) {
         const found = findObject(obj.children, id);
-        if (found) return found;
+        if (found) {return found;}
       }
     }
     return null;
@@ -100,7 +99,7 @@ export function PropertiesPanel() {
   };
 
   const shouldShowSection = (sectionId: string): boolean => {
-    if (!selectedObject) return false;
+    if (!selectedObject) {return false;}
 
     switch (sectionId) {
       case "typography":
@@ -136,7 +135,7 @@ export function PropertiesPanel() {
     index: number,
     content: React.ReactNode
   ) => {
-    if (!shouldShowSection(section.id)) return null;
+    if (!shouldShowSection(section.id)) {return null;}
 
     const isDragging = draggedSectionIndex === index;
     const showDropIndicator = dropSectionIndex === index;

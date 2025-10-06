@@ -1,19 +1,19 @@
 // Skeleton component styles
-// Migrated from Tailwind to SCSS with design tokens
+// Migrated from Tailwind to SCSS with semantic design tokens
 
 .skeleton {
-  // Base skeleton styles (equivalent to bg-accent animate-pulse rounded-md)
-  background-color: hsl(var(--accent)); // equivalent to bg-accent
-  border-radius: 6px; // equivalent to rounded-md
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; // equivalent to animate-pulse
+  // Base skeleton styles
+  background-color: var(--skeleton-backgroundColor);
+  border-radius: var(--skeleton-borderRadius);
+  animation: skeletonPulse var(--skeleton-animation-duration) var(--skeleton-animation-easing) infinite;
 }
 
 // Pulse animation keyframes
-@keyframes pulse {
+@keyframes skeletonPulse {
   0%, 100% {
-    opacity: 1;
+    opacity: var(--skeleton-animation-opacity-max);
   }
   50% {
-    opacity: 0.5;
+    opacity: var(--skeleton-animation-opacity-min);
   }
 }

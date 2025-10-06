@@ -1,0 +1,51 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/AlertDialog/alert-dialog.tokens.json
+ */
+@mixin vars {
+  /* === Overlay Tokens === */
+  --alertDialog-overlay-backgroundColor: rgba(0, 0, 0, 0.5);
+  --alertDialog-overlay-zIndex: var(--semantic-z-index-modal);
+  --alertDialog-overlay-animation-duration-in: var(--semantic-animation-duration-fast);
+  --alertDialog-overlay-animation-duration-out: var(--semantic-animation-duration-fast);
+  --alertDialog-overlay-animation-easing: var(--semantic-animation-easing-default);
+
+  /* === Content Tokens === */
+  --alertDialog-content-backgroundColor: var(--semantic-color-display-background-primary);
+  --alertDialog-content-borderColor: var(--semantic-color-display-border-subtle);
+  --alertDialog-content-borderWidth: var(--semantic-shape-border-width-default);
+  --alertDialog-content-borderRadius: var(--semantic-shape-control-radius-default);
+  --alertDialog-content-shadow: var(--semantic-effect-shadow-large);
+  --alertDialog-content-zIndex: var(--semantic-z-index-modal);
+  --alertDialog-content-layout-maxWidth-mobile: calc(100% - 2rem);
+  --alertDialog-content-layout-maxWidth-desktop: 32rem;
+  --alertDialog-content-layout-padding: var(--semantic-spacing-padding-grid-large);
+  --alertDialog-content-layout-gap: var(--semantic-spacing-gap-grid-medium);
+  --alertDialog-content-layout-position-top: 50%;
+  --alertDialog-content-layout-position-left: 50%;
+  --alertDialog-content-layout-position-translateX: -50%;
+  --alertDialog-content-layout-position-translateY: -50%;
+  --alertDialog-content-animation-duration-in: var(--semantic-animation-duration-normal);
+  --alertDialog-content-animation-duration-out: var(--semantic-animation-duration-fast);
+  --alertDialog-content-animation-easing: var(--semantic-animation-easing-default);
+  --alertDialog-content-animation-zoom-scale: 0.95;
+
+  /* === Header Tokens === */
+  --alertDialog-header-gap: var(--semantic-spacing-gap-grid-small);
+  --alertDialog-header-textAlign-mobile: center;
+  --alertDialog-header-textAlign-desktop: left;
+
+  /* === Footer Tokens === */
+  --alertDialog-footer-gap: var(--semantic-spacing-gap-grid-small);
+  --alertDialog-footer-layout-mobile-flexDirection: column-reverse;
+  --alertDialog-footer-layout-desktop-flexDirection: row;
+  --alertDialog-footer-layout-desktop-justifyContent: flex-end;
+
+  /* === Title Tokens === */
+  --alertDialog-title-color: var(--semantic-color-display-foreground-primary);
+  --alertDialog-title-fontSize: var(--semantic-typography-heading-04);
+  --alertDialog-title-fontWeight: var(--semantic-typography-font-weight-semibold);
+
+  /* === Description Tokens === */
+  --alertDialog-description-color: var(--semantic-color-display-foreground-secondary);
+  --alertDialog-description-fontSize: var(--semantic-typography-body-03);
+}

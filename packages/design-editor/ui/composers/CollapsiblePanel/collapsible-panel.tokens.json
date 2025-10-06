@@ -1,3 +1,84 @@
 {
-  "collapsible-panel": {}
+  "prefix": "collapsiblePanel",
+  "tokens": {
+    "backgroundColor": {
+      "value": "{semantic.color.display.background.primary}",
+      "description": "Background color for collapsible panel container"
+    },
+    "borderColor": {
+      "value": "{semantic.color.display.border.subtle}",
+      "description": "Border color for collapsible panel"
+    },
+    "borderRadius": {
+      "value": "{semantic.shape.radius.extra.large}",
+      "description": "Border radius for collapsible panel"
+    },
+    "spacing": {
+      "toggle": {
+        "offset": {
+          "value": "{semantic.spacing.gap.grid.small}",
+          "description": "Offset for toggle button from edges"
+        }
+      }
+    },
+    "layout": {
+      "collapsed": {
+        "height": {
+          "value": "{semantic.components.input.height.default}",
+          "description": "Height when panel is collapsed"
+        }
+      },
+      "toggle": {
+        "size": {
+          "value": "24px",
+          "description": "Size for toggle button"
+        }
+      },
+      "toggleIcon": {
+        "size": {
+          "value": "{semantic.components.action.gap.icon}",
+          "description": "Size for toggle button icon"
+        }
+      }
+    },
+    "animation": {
+      "duration": {
+        "value": "{semantic.motion.interaction.modal.enter.duration}",
+        "description": "Animation duration for panel transitions"
+      },
+      "easing": {
+        "value": "{semantic.motion.interaction.modal.enter.easing}",
+        "description": "Animation easing for panel transitions"
+      },
+      "hover": {
+        "duration": {
+          "value": "{semantic.motion.interaction.hover.duration}",
+          "description": "Animation duration for hover states"
+        },
+        "easing": {
+          "value": "{semantic.motion.interaction.hover.easing}",
+          "description": "Animation easing for hover states"
+        }
+      }
+    },
+    "interactive": {
+      "toggle": {
+        "backgroundColor": {
+          "value": "{semantic.color.display.background.primary}",
+          "opacity": 0.8,
+          "description": "Background color for toggle button"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{semantic.color.action.background.secondary.hover}",
+            "description": "Background color for toggle button on hover"
+          }
+        }
+      },
+      "shadow": {
+        "value": "{semantic.elevation.surface.raised}",
+        "description": "Shadow for toggle button"
+      }
+    }
+  }
 }

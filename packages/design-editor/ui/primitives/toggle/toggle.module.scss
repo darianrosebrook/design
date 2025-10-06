@@ -1,108 +1,175 @@
 // Toggle component styles
-// Migrated from Tailwind to SCSS with design tokens
+// Migrated from Tailwind to SCSS with semantic design tokens
 
+// Import generated token variables
+@use './Toggle.tokens.generated.scss' as toggleTokens;
+
+// Base toggle styles (equivalent to Tailwind base classes)
 .toggle {
-  // Base toggle styles (equivalent to inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium hover:bg-muted hover:text-muted-foreground disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none transition-[color,box-shadow] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive whitespace-nowrap)
-  display: inline-flex; // equivalent to inline-flex
-  align-items: center; // equivalent to items-center
-  justify-content: center; // equivalent to justify-center
-  gap: 8px; // equivalent to gap-2
-  border-radius: 6px; // equivalent to rounded-md
-  font-size: 14px; // equivalent to text-sm
-  font-weight: 500; // equivalent to font-medium
-  white-space: nowrap; // equivalent to whitespace-nowrap
-  outline: none; // equivalent to outline-none
-  transition: color 150ms ease-in-out, box-shadow 150ms ease-in-out; // equivalent to transition-[color,box-shadow]
+  // Include the generated variables mixin within the component scope
+  @include toggleTokens.vars;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--semantic-spacing-gap-grid-small); // 8px
+  white-space: nowrap;
+  border-radius: var(--toggle-borderRadius);
+  font-size: var(--toggle-fontSize);
+  font-weight: var(--toggle-fontWeight);
+  line-height: var(--toggle-lineHeight);
+  transition: var(--semantic-motion-interaction-hover-duration) var(--semantic-motion-interaction-hover-easing);
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
 
-  // SVG icon styles (equivalent to [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0)
+  // SVG icon styles
   svg {
-    pointer-events: none; // equivalent to [&_svg]:pointer-events-none
-    flex-shrink: 0; // equivalent to [&_svg]:shrink-0
+    pointer-events: none;
+    width: var(--semantic-components-action-gap-icon); // 8px * 2
+    height: var(--semantic-components-action-gap-icon); // 8px * 2
+    flex-shrink: 0;
 
     &:not([class*="size-"]) {
-      width: 16px; // equivalent to size-4
-      height: 16px;
+      width: var(--semantic-components-action-gap-icon); // 8px * 2
+      height: var(--semantic-components-action-gap-icon); // 8px * 2
     }
   }
 
-  // Hover styles (equivalent to hover:bg-muted hover:text-muted-foreground)
-  &:hover {
-    background-color: hsl(var(--muted)); // equivalent to hover:bg-muted
-    color: hsl(var(--muted-foreground)); // equivalent to hover:text-muted-foreground
-  }
-
-  // Active/on state (equivalent to data-[state=on]:bg-accent data-[state=on]:text-accent-foreground)
-  &[data-state="on"] {
-    background-color: hsl(var(--accent)); // equivalent to data-[state=on]:bg-accent
-    color: hsl(var(--accent-foreground)); // equivalent to data-[state=on]:text-accent-foreground
-  }
-
-  // Focus visible styles (equivalent to focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px])
-  &:focus-visible {
-    border-color: hsl(var(--ring));
-    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5);
-  }
-
-  // Invalid state (equivalent to aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive)
-  &[aria-invalid="true"] {
-    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2);
-    border-color: hsl(var(--destructive));
-
-    .dark & {
-      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4);
-    }
-  }
-
-  // Disabled state (equivalent to disabled:pointer-events-none disabled:opacity-50)
+  // Disabled state
   &:disabled {
     pointer-events: none;
-    opacity: 0.5;
-  }
-}
-
-// Variant styles
-.toggle--variant-default {
-  // Default variant (equivalent to bg-transparent)
-  background-color: transparent; // equivalent to bg-transparent
-}
-
-.toggle--variant-outline {
-  // Outline variant (equivalent to border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground)
-  border: 1px solid hsl(var(--input)); // equivalent to border border-input
-  background-color: transparent; // equivalent to bg-transparent
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); // equivalent to shadow-xs
-
-  // Override hover styles for outline variant
-  &:hover {
-    background-color: hsl(var(--accent)); // equivalent to hover:bg-accent
-    color: hsl(var(--accent-foreground)); // equivalent to hover:text-accent-foreground
+    opacity: var(--semantic-opacity-disabled);
   }
 
-  // Active/on state override for outline variant
+  // Focus visible styles
+  &:focus-visible {
+    outline: none;
+    border-color: var(--semantic-color-action-border-primary-focus);
+    box-shadow: 0 0 0 3px rgba(var(--semantic-color-action-border-primary-focus), 0.5);
+  }
+
+  // Data attributes for state management
   &[data-state="on"] {
-    background-color: hsl(var(--accent));
-    color: hsl(var(--accent-foreground));
+    background-color: var(--semantic-color-action-background-primary-default);
+    color: var(--semantic-color-action-foreground-primary-default);
+
+    &:hover {
+      background-color: var(--semantic-color-action-background-primary-hover);
+    }
+  }
+
+  &[data-state="off"] {
+    background-color: transparent;
+    color: var(--semantic-color-action-foreground-secondary-default);
+
+    &:hover {
+      background-color: var(--semantic-color-action-background-secondary-hover);
+    }
   }
 }
 
 // Size variants
 .toggle--size-default {
-  // Default size (equivalent to h-9 px-2 min-w-9)
-  height: 36px; // equivalent to h-9
-  padding: 0 8px; // equivalent to px-2
-  min-width: 36px; // equivalent to min-w-9
+  height: var(--toggle-height-default);
+  padding: var(--toggle-padding-vertical-default) var(--toggle-padding-horizontal-default);
+
+  // Adjust padding when there's an SVG
+  &:has(> svg) {
+    padding-left: var(--semantic-components-action-padding-horizontal-small);
+    padding-right: var(--semantic-components-action-padding-horizontal-small);
+  }
 }
 
 .toggle--size-sm {
-  // Small size (equivalent to h-8 px-1.5 min-w-8)
-  height: 32px; // equivalent to h-8
-  padding: 0 6px; // equivalent to px-1.5
-  min-width: 32px; // equivalent to min-w-8
+  height: var(--toggle-height-sm);
+  border-radius: var(--toggle-borderRadius);
+  gap: var(--semantic-components-action-gap-composite);
+  padding: var(--toggle-padding-vertical-sm) var(--toggle-padding-horizontal-sm);
+
+  // Adjust padding when there's an SVG
+  &:has(> svg) {
+    padding-left: calc(var(--semantic-components-action-padding-horizontal-small) - var(--semantic-spacing-gap-grid-small));
+    padding-right: calc(var(--semantic-components-action-padding-horizontal-small) - var(--semantic-spacing-gap-grid-small));
+  }
 }
 
 .toggle--size-lg {
-  // Large size (equivalent to h-10 px-2.5 min-w-10)
-  height: 40px; // equivalent to h-10
-  padding: 0 10px; // equivalent to px-2.5
-  min-width: 40px; // equivalent to min-w-10
+  height: var(--toggle-height-lg);
+  border-radius: var(--toggle-borderRadius);
+  padding: var(--toggle-padding-vertical-lg) var(--toggle-padding-horizontal-lg);
+
+  // Adjust padding when there's an SVG
+  &:has(> svg) {
+    padding-left: var(--semantic-components-action-padding-horizontal-default);
+    padding-right: var(--semantic-components-action-padding-horizontal-default);
+  }
+}
+
+// Variant styles
+.toggle--variant-default {
+  background-color: var(--toggle-variants-default-backgroundColor);
+  color: var(--toggle-variants-default-color);
+  border-color: var(--toggle-variants-default-borderColor);
+
+  &:hover {
+    background-color: var(--toggle-variants-default-hover-backgroundColor);
+  }
+
+  &:active,
+  &[data-state="on"] {
+    background-color: var(--toggle-variants-default-pressed-backgroundColor);
+  }
+}
+
+.toggle--variant-outline {
+  background-color: var(--toggle-variants-outline-backgroundColor);
+  border-color: var(--toggle-variants-outline-borderColor);
+  color: var(--toggle-variants-outline-color);
+
+  &:hover {
+    background-color: var(--toggle-variants-outline-hover-backgroundColor);
+  }
+
+  &[data-state="on"] {
+    background-color: var(--semantic-color-action-background-primary-default);
+    color: var(--semantic-color-action-foreground-primary-default);
+    border-color: var(--semantic-color-action-border-primary-default);
+  }
+
+  .dark & {
+    background-color: var(--semantic-color-action-background-secondary-default);
+    border-color: var(--semantic-color-action-border-secondary-default);
+
+    &:hover {
+      background-color: var(--semantic-color-action-background-secondary-hover);
+    }
+  }
+}
+
+.toggle--variant-secondary {
+  background-color: var(--toggle-variants-secondary-backgroundColor);
+  color: var(--toggle-variants-secondary-color);
+
+  &:hover {
+    background-color: var(--toggle-variants-secondary-hover-backgroundColor);
+  }
+
+  &[data-state="on"] {
+    background-color: var(--semantic-color-action-background-primary-default);
+    color: var(--semantic-color-action-foreground-primary-default);
+  }
+}
+
+.toggle--variant-ghost {
+  background-color: var(--toggle-variants-ghost-backgroundColor);
+  color: var(--toggle-variants-ghost-color);
+
+  &:hover {
+    background-color: var(--toggle-variants-ghost-hover-backgroundColor);
+  }
+
+  &[data-state="on"] {
+    background-color: var(--semantic-color-action-background-primary-default);
+    color: var(--semantic-color-action-foreground-primary-default);
+  }
 }

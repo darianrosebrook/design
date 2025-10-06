@@ -1,3 +1,179 @@
 {
-  "select": {}
+  "prefix": "select",
+  "tokens": {
+    "borderRadius": {
+      "value": "6px",
+      "description": "Border radius for select corners"
+    },
+    "fontSize": {
+      "value": "14px",
+      "description": "Base font size for select text"
+    },
+    "fontWeight": {
+      "value": "400",
+      "description": "Font weight for select text"
+    },
+    "lineHeight": {
+      "value": "1.2",
+      "description": "Line height for select text"
+    },
+    "padding": {
+      "horizontal": {
+        "default": {
+          "value": "12px",
+          "description": "Horizontal padding for default size"
+        },
+        "sm": {
+          "value": "8px",
+          "description": "Horizontal padding for small size"
+        }
+      },
+      "vertical": {
+        "default": {
+          "value": "8px",
+          "description": "Vertical padding for default size"
+        },
+        "sm": {
+          "value": "6px",
+          "description": "Vertical padding for small size"
+        }
+      }
+    },
+    "height": {
+      "default": {
+        "value": "36px",
+        "description": "Height for default size"
+      },
+      "sm": {
+        "value": "32px",
+        "description": "Height for small size"
+      }
+    },
+    "trigger": {
+      "backgroundColor": {
+        "value": "transparent",
+        "description": "Background color for select trigger"
+      },
+      "borderColor": {
+        "value": "{color.action.border.secondary.default}",
+        "description": "Border color for select trigger"
+      },
+      "color": {
+        "value": "{color.action.foreground.secondary.default}",
+        "description": "Text color for select trigger"
+      },
+      "hover": {
+        "borderColor": {
+          "value": "{color.action.border.secondary.hover}",
+          "description": "Border color on hover for select trigger"
+        }
+      },
+      "focus": {
+        "borderColor": {
+          "value": "{color.action.border.primary.focus}",
+          "description": "Border color when focused for select trigger"
+        },
+        "ringColor": {
+          "value": "{color.action.border.primary.focus}",
+          "description": "Ring color when focused for select trigger"
+        }
+      },
+      "disabled": {
+        "opacity": {
+          "value": "0.5",
+          "description": "Opacity when disabled for select trigger"
+        },
+        "cursor": {
+          "value": "not-allowed",
+          "description": "Cursor style when disabled for select trigger"
+        }
+      }
+    },
+    "content": {
+      "backgroundColor": {
+        "value": "{color.mode.light}",
+        "description": "Background color for select content"
+      },
+      "borderColor": {
+        "value": "{color.action.border.secondary.default}",
+        "description": "Border color for select content"
+      },
+      "color": {
+        "value": "{color.action.foreground.secondary.default}",
+        "description": "Text color for select content"
+      },
+      "maxHeight": {
+        "value": "240px",
+        "description": "Maximum height for select content"
+      },
+      "minWidth": {
+        "value": "128px",
+        "description": "Minimum width for select content"
+      },
+      "zIndex": {
+        "value": "1050",
+        "description": "Z-index for select content"
+      }
+    },
+    "item": {
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for select item"
+        },
+        "vertical": {
+          "value": "6px",
+          "description": "Vertical padding for select item"
+        }
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for select item"
+      },
+      "hover": {
+        "backgroundColor": {
+          "value": "{color.action.background.secondary.hover}",
+          "description": "Background color on hover for select item"
+        },
+        "color": {
+          "value": "{color.action.foreground.secondary.default}",
+          "description": "Text color on hover for select item"
+        }
+      },
+      "selected": {
+        "backgroundColor": {
+          "value": "{color.action.background.primary.default}",
+          "description": "Background color when selected for select item"
+        },
+        "color": {
+          "value": "{color.action.foreground.primary.default}",
+          "description": "Text color when selected for select item"
+        }
+      },
+      "disabled": {
+        "opacity": {
+          "value": "0.5",
+          "description": "Opacity when disabled for select item"
+        },
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events when disabled for select item"
+        }
+      }
+    },
+    "icon": {
+      "size": {
+        "value": "16px",
+        "description": "Size of the select icon"
+      },
+      "color": {
+        "value": "{color.action.foreground.tertiary.default}",
+        "description": "Color of the select icon"
+      },
+      "opacity": {
+        "value": "0.5",
+        "description": "Opacity of the select icon"
+      }
+    }
+  }
 }

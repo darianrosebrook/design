@@ -1,3 +1,31 @@
 {
-  "separator": {}
+  "prefix": "separator",
+  "tokens": {
+    "Separator": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.200}",
+        "description": "Background color for separator lines"
+      },
+      "width": {
+        "horizontal": {
+          "value": "100%",
+          "description": "Width for horizontal separators"
+        },
+        "vertical": {
+          "value": "1px",
+          "description": "Width for vertical separators"
+        }
+      },
+      "height": {
+        "horizontal": {
+          "value": "1px",
+          "description": "Height for horizontal separators"
+        },
+        "vertical": {
+          "value": "100%",
+          "description": "Height for vertical separators"
+        }
+      }
+    }
+  }
 }

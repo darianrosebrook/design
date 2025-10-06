@@ -1,0 +1,37 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Input/Input.tokens.json
+ */
+@mixin vars {
+  /* === FontSize Tokens === */
+  --input-fontSize-base: 16px;
+  --input-fontSize-md: 14px;
+
+  /* === Padding Tokens === */
+  --input-padding-horizontal: 12px;
+  --input-padding-vertical: 4px;
+
+  /* === Border Tokens === */
+  --input-border-width: 1px;
+  --input-border-color-default: var(--color-action-border-secondary-default);
+  --input-border-color-focus: var(--color-action-border-primary-focus);
+  --input-border-color-invalid: var(--color-action-background-danger-default);
+
+  /* === BackgroundColor Tokens === */
+  --input-backgroundColor-default: transparent;
+  --input-backgroundColor-dark: var(--color-action-border-secondary-default);
+
+  /* === Selection Tokens === */
+  --input-selection-backgroundColor: var(--color-action-background-primary-default);
+  --input-selection-color: var(--color-action-foreground-primary-default);
+
+  /* === Transition Tokens === */
+  --input-transition-properties: color, box-shadow;
+  --input-transition-duration: 150ms;
+
+  /* === Focus Tokens === */
+  --input-focus-ring-color: var(--color-action-border-primary-focus);
+  --input-focus-ring-width: 3px;
+
+  /* === Disabled Tokens === */
+  --input-disabled-opacity: 0.5;
+}

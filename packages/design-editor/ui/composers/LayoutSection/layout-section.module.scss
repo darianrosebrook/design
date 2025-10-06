@@ -1,7 +1,358 @@
-// layout-section composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// LayoutSection composer component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.layout-section {
-  // Placeholder for future SCSS implementation
-  // Will contain layout-section-specific styles when migrating from Tailwind
+.layoutSection {
+  // Main container styles
+  background-color: var(--layoutSection-backgroundColor);
+  display: flex;
+  flex-direction: column;
+  gap: var(--layoutSection-spacing-container);
+}
+
+// Layout Mode Toggle Section
+.layoutModeToggle {
+  // Toggle container styles
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.layoutModeToggleContent {
+  // Toggle content container
+  display: flex;
+  align-items: center;
+  gap: var(--layoutSection-layout-toggle-gap);
+}
+
+.layoutModeToggleLabel {
+  // Toggle label styles
+  font-size: var(--layoutSection-typography-label-fontSize);
+  font-weight: var(--layoutSection-typography-label-fontWeight);
+  color: var(--layoutSection-typography-label-color);
+}
+
+.layoutModeToggleSwitch {
+  // Switch scale override
+  transform: scale(var(--layoutSection-switch-scale));
+}
+
+.layoutModeButtons {
+  // Layout mode buttons container
+  display: flex;
+  gap: var(--layoutSection-spacing-controls);
+}
+
+// Dimensions Section
+.dimensionsSection {
+  // Dimensions container styles
+  display: flex;
+  flex-direction: column;
+  gap: var(--layoutSection-spacing-section);
+}
+
+.dimensionsHeader {
+  // Dimensions header styles
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dimensionsLabel {
+  // Dimensions label styles
+  font-size: var(--layoutSection-typography-label-fontSize);
+  font-weight: var(--layoutSection-typography-label-fontWeight);
+  color: var(--layoutSection-typography-label-color);
+}
+
+.aspectLockButton {
+  // Aspect lock toggle button
+  width: var(--layoutSection-button-size);
+  height: var(--layoutSection-button-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--layoutSection-interactive-borderRadius);
+  border: 1px solid var(--layoutSection-borderColor);
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    background-color: var(--layoutSection-interactive-hover-backgroundColor);
+  }
+
+  svg {
+    width: var(--layoutSection-button-iconSize);
+    height: var(--layoutSection-button-iconSize);
+    color: var(--semantic-color-display-foreground-secondary);
+
+    &:hover {
+      color: var(--semantic-color-display-foreground-primary);
+    }
+  }
+}
+
+.dimensionsGrid {
+  // Dimensions grid container
+  display: grid;
+  grid-template-columns: var(--layoutSection-layout-dimensions-grid-columns);
+  gap: var(--layoutSection-layout-dimensions-grid-gap);
+  align-items: end;
+}
+
+.dimensionInputGroup {
+  // Individual dimension input groups
+  display: flex;
+  flex-direction: column;
+  gap: var(--layoutSection-spacing-controls);
+}
+
+.dimensionLabel {
+  // Dimension labels (W, H)
+  font-size: var(--layoutSection-typography-sublabel-fontSize);
+  color: var(--layoutSection-typography-sublabel-color);
+  text-align: center;
+  font-weight: var(--semantic-typography-font-weight-medium);
+}
+
+.dimensionInput {
+  // Dimension input fields
+  height: var(--layoutSection-input-height);
+  font-size: var(--layoutSection-input-fontSize);
+  border-radius: var(--layoutSection-interactive-borderRadius);
+  border: 1px solid var(--layoutSection-borderColor);
+  background-color: var(--semantic-color-display-background-primary);
+  color: var(--semantic-color-display-foreground-primary);
+  padding: 0 var(--semantic-spacing-padding-grid-small);
+
+  &:focus {
+    outline: 2px solid var(--semantic-color-action-border-primary-focus);
+    outline-offset: 2px;
+    border-color: var(--semantic-color-action-border-primary-focus);
+  }
+}
+
+.aspectLockCenter {
+  // Center aspect lock button
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--layoutSection-spacing-controls);
+  margin-bottom: var(--semantic-spacing-margin-grid-xsmall);
+}
+
+// Resize Mode Section
+.resizeSection {
+  // Resize section container
+  display: flex;
+  flex-direction: column;
+  gap: var(--layoutSection-spacing-section);
+}
+
+.resizeLabel {
+  // Resize label styles
+  font-size: var(--layoutSection-typography-label-fontSize);
+  font-weight: var(--layoutSection-typography-label-fontWeight);
+  color: var(--layoutSection-typography-label-color);
+}
+
+.resizeGrid {
+  // Resize buttons grid
+  display: grid;
+  grid-template-columns: var(--layoutSection-layout-resize-grid-columns);
+  gap: var(--layoutSection-layout-resize-grid-gap);
+}
+
+.resizeButton {
+  // Resize mode buttons
+  height: var(--layoutSection-input-height);
+  font-size: var(--layoutSection-input-fontSize);
+  border-radius: var(--layoutSection-interactive-borderRadius);
+  border: 1px solid var(--layoutSection-borderColor);
+  background-color: var(--semantic-color-display-background-primary);
+  color: var(--semantic-color-display-foreground-primary);
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--semantic-spacing-gap-grid-xsmall);
+
+  &:hover {
+    background-color: var(--layoutSection-interactive-hover-backgroundColor);
+    border-color: var(--semantic-color-action-border-primary-focus);
+  }
+
+  svg {
+    width: var(--layoutSection-button-iconSize);
+    height: var(--layoutSection-button-iconSize);
+  }
+}
+
+// Rotation Section
+.rotationSection {
+  // Rotation section container
+  display: flex;
+  flex-direction: column;
+  gap: var(--layoutSection-spacing-section);
+}
+
+.rotationHeader {
+  // Rotation header styles
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rotationLabel {
+  // Rotation label styles
+  font-size: var(--layoutSection-typography-label-fontSize);
+  font-weight: var(--layoutSection-typography-label-fontWeight);
+  color: var(--layoutSection-typography-label-color);
+}
+
+.rotationResetButton {
+  // Rotation reset button
+  width: var(--layoutSection-button-size);
+  height: var(--layoutSection-button-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--layoutSection-interactive-borderRadius);
+  border: 1px solid var(--layoutSection-borderColor);
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    background-color: var(--layoutSection-interactive-hover-backgroundColor);
+  }
+
+  svg {
+    width: var(--layoutSection-button-iconSize);
+    height: var(--layoutSection-button-iconSize);
+    color: var(--semantic-color-display-foreground-secondary);
+
+    &:hover {
+      color: var(--semantic-color-display-foreground-primary);
+    }
+  }
+}
+
+.rotationControls {
+  // Rotation controls container
+  display: flex;
+  align-items: center;
+  gap: var(--layoutSection-spacing-controls);
+}
+
+.rotationInput {
+  // Rotation input field
+  height: var(--layoutSection-input-height);
+  font-size: var(--layoutSection-input-fontSize);
+  border-radius: var(--layoutSection-interactive-borderRadius);
+  border: 1px solid var(--layoutSection-borderColor);
+  background-color: var(--semantic-color-display-background-primary);
+  color: var(--semantic-color-display-foreground-primary);
+  padding: 0 var(--semantic-spacing-padding-grid-small);
+  flex: 1;
+
+  &:focus {
+    outline: 2px solid var(--semantic-color-action-border-primary-focus);
+    outline-offset: 2px;
+    border-color: var(--semantic-color-action-border-primary-focus);
+  }
+}
+
+.rotationUnit {
+  // Rotation unit indicator
+  font-size: var(--layoutSection-typography-unit-fontSize);
+  color: var(--layoutSection-typography-unit-color);
+}
+
+// Constraints Section
+.constraintsSection {
+  // Constraints section container
+  display: flex;
+  flex-direction: column;
+  gap: var(--layoutSection-spacing-section);
+}
+
+.constraintsLabel {
+  // Constraints label styles
+  font-size: var(--layoutSection-typography-label-fontSize);
+  font-weight: var(--layoutSection-typography-label-fontWeight);
+  color: var(--layoutSection-typography-label-color);
+}
+
+.constraintsGrid {
+  // Constraints grid container
+  display: grid;
+  grid-template-columns: var(--layoutSection-layout-constraints-grid-columns);
+  gap: var(--layoutSection-layout-constraints-grid-gap);
+}
+
+.constraintGroup {
+  // Individual constraint groups
+  display: flex;
+  flex-direction: column;
+  gap: var(--layoutSection-spacing-controls);
+}
+
+.constraintLabel {
+  // Constraint labels
+  font-size: var(--layoutSection-typography-sublabel-fontSize);
+  color: var(--layoutSection-typography-sublabel-color);
+}
+
+.constraintButtons {
+  // Constraint buttons container
+  display: flex;
+  gap: var(--layoutSection-layout-constraints-button-gap);
+}
+
+.constraintButton {
+  // Individual constraint buttons
+  flex: 1;
+  height: calc(var(--layoutSection-input-height) * 0.875);
+  font-size: var(--layoutSection-input-fontSize);
+  border-radius: var(--layoutSection-interactive-borderRadius);
+  border: 1px solid var(--layoutSection-borderColor);
+  background-color: var(--semantic-color-display-background-primary);
+  color: var(--semantic-color-display-foreground-primary);
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+
+  &:hover {
+    background-color: var(--layoutSection-interactive-hover-backgroundColor);
+    border-color: var(--semantic-color-action-border-primary-focus);
+  }
+}
+
+// Clip Content Section
+.clipContentSection {
+  // Clip content toggle section
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.clipContentLabel {
+  // Clip content label styles
+  font-size: var(--layoutSection-typography-label-fontSize);
+  font-weight: var(--layoutSection-typography-label-fontWeight);
+  color: var(--layoutSection-typography-label-color);
+}
+
+.clipContentSwitch {
+  // Clip content switch scale
+  transform: scale(var(--layoutSection-switch-scale));
+}
+
+// Icon styles for buttons
+.aspectLockIcon,
+.resizeButtonIcon,
+.rotationResetIcon {
+  width: var(--layoutSection-button-iconSize);
+  height: var(--layoutSection-button-iconSize);
 }

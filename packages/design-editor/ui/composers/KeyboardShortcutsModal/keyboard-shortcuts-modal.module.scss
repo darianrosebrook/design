@@ -1,7 +1,182 @@
-// keyboard-shortcuts-modal composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// KeyboardShortcutsModal composer component styles
+// Migrated from Tailwind to SCSS with design tokens
 
-.keyboard-shortcuts-modal {
-  // Placeholder for future SCSS implementation
-  // Will contain keyboard-shortcuts-modal-specific styles when migrating from Tailwind
+.shortcutsModal {
+  // Modal container styles
+  max-width: var(--keyboardShortcutsModal-layout-modal-maxWidth);
+  max-height: var(--keyboardShortcutsModal-layout-modal-maxHeight);
+  overflow: hidden;
+}
+
+.shortcutsTitle {
+  // Title styles
+  display: flex;
+  align-items: center;
+  gap: var(--keyboardShortcutsModal-layout-badge-gap);
+  font-size: var(--keyboardShortcutsModal-typography-title-fontSize);
+  font-weight: var(--keyboardShortcutsModal-typography-title-fontWeight);
+  color: var(--keyboardShortcutsModal-typography-title-color);
+}
+
+.shortcutsContent {
+  // Content container styles
+  display: flex;
+  flex-direction: column;
+  gap: var(--keyboardShortcutsModal-spacing-container);
+}
+
+.searchContainer {
+  position: relative;
+}
+
+.searchInput {
+  padding-left: calc(var(--keyboardShortcutsModal-layout-search-icon-size) + var(--keyboardShortcutsModal-spacing-search-icon) * 2);
+}
+
+.searchIconContainer {
+  // Search icon container
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  padding-left: var(--keyboardShortcutsModal-spacing-search-icon);
+  pointer-events: none;
+}
+
+.searchIcon {
+  // Search icon styles
+  width: var(--keyboardShortcutsModal-layout-search-icon-size);
+  height: var(--keyboardShortcutsModal-layout-search-icon-size);
+  color: var(--keyboardShortcutsModal-typography-count-color);
+}
+
+.shortcutsScrollArea {
+  // Scroll area styles
+  flex: 1;
+  max-height: var(--keyboardShortcutsModal-layout-scrollArea-maxHeight);
+}
+
+.shortcutsGrid {
+  // Grid container styles
+  display: flex;
+  flex-direction: column;
+  gap: var(--keyboardShortcutsModal-spacing-category);
+}
+
+.categoryHeader {
+  // Category header styles
+  display: flex;
+  align-items: center;
+  gap: var(--keyboardShortcutsModal-layout-badge-gap);
+  margin-bottom: var(--semantic-spacing-margin-grid-small);
+}
+
+.categoryCount {
+  // Category count styles
+  font-size: var(--keyboardShortcutsModal-typography-count-fontSize);
+  color: var(--keyboardShortcutsModal-typography-count-color);
+}
+
+.shortcutsList {
+  // Shortcuts list styles
+  display: grid;
+  gap: var(--keyboardShortcutsModal-spacing-item);
+}
+
+.shortcutItem {
+  // Shortcut item styles
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--semantic-spacing-padding-grid-small);
+  border-radius: var(--semantic-shape-control-radius-default);
+  border: 1px solid var(--keyboardShortcutsModal-borderColor);
+  transition: color 150ms ease-in-out, background-color 150ms ease-in-out;
+
+  // Implemented state
+  &.shortcutItem--implemented {
+    background-color: var(--keyboardShortcutsModal-interactive-shortcut-backgroundColor);
+
+    &:hover {
+      background-color: var(--keyboardShortcutsModal-interactive-shortcut-hover-backgroundColor);
+    }
+  }
+
+  // Not implemented state
+  &.shortcutItem--notImplemented {
+    background-color: var(--keyboardShortcutsModal-interactive-shortcut-backgroundColor);
+    opacity: var(--keyboardShortcutsModal-interactive-shortcut-notImplemented-opacity);
+    cursor: var(--keyboardShortcutsModal-interactive-shortcut-notImplemented-cursor);
+  }
+}
+
+.shortcutContent {
+  flex: 1;
+}
+
+.shortcutName {
+  // Shortcut name styles
+  font-weight: var(--keyboardShortcutsModal-typography-shortcut-name-fontWeight);
+  font-size: var(--keyboardShortcutsModal-typography-shortcut-name-fontSize);
+  color: var(--keyboardShortcutsModal-typography-shortcut-name-color);
+
+  // Not implemented state
+  &.shortcutName--notImplemented {
+    color: var(--keyboardShortcutsModal-typography-count-color);
+  }
+}
+
+.comingSoonBadge {
+  // Coming soon badge styles
+  margin-left: var(--semantic-spacing-margin-grid-small);
+  font-size: var(--semantic-typography-body-01);
+  background-color: var(--keyboardShortcutsModal-badge-comingSoon-backgroundColor);
+  color: var(--keyboardShortcutsModal-badge-comingSoon-color);
+  padding: var(--semantic-spacing-padding-grid-xsmall) var(--semantic-spacing-padding-grid-small);
+  border-radius: var(--semantic-shape-control-radius-small);
+
+  // Dark mode styles
+  .dark & {
+    background-color: var(--keyboardShortcutsModal-badge-comingSoon-dark-backgroundColor);
+    color: var(--keyboardShortcutsModal-badge-comingSoon-dark-color);
+  }
+}
+
+.shortcutDescription {
+  // Shortcut description styles
+  font-size: var(--keyboardShortcutsModal-typography-shortcut-description-fontSize);
+  color: var(--keyboardShortcutsModal-typography-shortcut-description-color);
+}
+
+.shortcutKeys {
+  // Keys container styles
+  display: flex;
+  align-items: center;
+  gap: var(--semantic-spacing-gap-grid-small);
+}
+
+.shortcutKey {
+  // Key styles
+  padding: var(--keyboardShortcutsModal-layout-shortcut-key-padding-vertical) var(--keyboardShortcutsModal-layout-shortcut-key-padding-horizontal);
+  font-size: var(--keyboardShortcutsModal-typography-shortcut-key-fontSize);
+  font-family: var(--keyboardShortcutsModal-typography-shortcut-key-fontFamily);
+  border-radius: var(--keyboardShortcutsModal-layout-shortcut-key-borderRadius);
+  border: 1px solid var(--keyboardShortcutsModal-borderColor);
+
+  // Implemented state
+  &.shortcutKey--implemented {
+    background-color: var(--keyboardShortcutsModal-interactive-key-implemented-backgroundColor);
+  }
+
+  // Not implemented state
+  &.shortcutKey--notImplemented {
+    background-color: var(--keyboardShortcutsModal-interactive-key-notImplemented-backgroundColor);
+    color: var(--keyboardShortcutsModal-interactive-key-notImplemented-color);
+  }
+}
+
+.categorySeparator {
+  margin-top: var(--semantic-spacing-margin-grid-medium);
 }

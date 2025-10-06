@@ -1,0 +1,23 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Tooltip/tooltip.tokens.json
+ */
+@mixin vars {
+  /* === Padding Tokens === */
+  --tooltip-padding-horizontal: 8px;
+  --tooltip-padding-vertical: 6px;
+
+  /* === Animation Tokens === */
+  --tooltip-animation-duration: 200ms;
+  --tooltip-animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* === Variants Tokens === */
+  --tooltip-variants-default-backgroundColor: var(--color-palette-neutral-900);
+  --tooltip-variants-default-color: var(--color-palette-neutral-50);
+  --tooltip-variants-default-borderColor: var(--color-palette-neutral-800);
+  --tooltip-variants-light-backgroundColor: var(--color-palette-neutral-50);
+  --tooltip-variants-light-color: var(--color-palette-neutral-900);
+  --tooltip-variants-light-borderColor: var(--color-palette-neutral-200);
+
+  /* === Arrow Tokens === */
+  --tooltip-arrow-size: 4px;
+}

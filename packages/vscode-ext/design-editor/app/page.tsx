@@ -1,11 +1,11 @@
 "use client"
 
-import { TopNavigation } from "@/components/top-navigation"
+import { ActionBar } from "@/components/action-bar"
+import { CanvasArea } from "@/components/canvas-area"
 import { LayersPanel } from "@/components/layers-panel"
 import { PropertiesPanel } from "@/components/properties-panel"
-import { CanvasArea } from "@/components/canvas-area"
 import { ResizablePanel } from "@/components/resizable-panel"
-import { ActionBar } from "@/components/action-bar"
+import { TopNavigation } from "@/components/top-navigation"
 import { CanvasProvider } from "@/lib/canvas-context"
 
 export default function DesignEditor() {

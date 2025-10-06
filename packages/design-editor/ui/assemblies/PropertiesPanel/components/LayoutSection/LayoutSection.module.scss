@@ -1,0 +1,62 @@
+// LayoutSection component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.layoutSection {
+  // Section container styles (equivalent to space-y-2)
+  display: flex;
+  flex-direction: column;
+  gap: 8px; // equivalent to space-y-2
+}
+
+.layoutSectionGrid {
+  // Grid layout styles (equivalent to grid grid-cols-2 gap-2)
+  display: grid;
+  grid-template-columns: 1fr 1fr; // equivalent to grid-cols-2
+  gap: 8px; // equivalent to gap-2
+}
+
+.layoutSectionField {
+  // Field container (no specific styles needed)
+}
+
+.layoutSectionLabel {
+  // Label styles (equivalent to text-xs text-muted-foreground)
+  font-size: 12px; // equivalent to text-xs
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+}
+
+.layoutSectionInput {
+  // Input styles (no additional styles needed beyond base Input component)
+}
+
+.layoutSectionAspectRatio {
+  // Aspect ratio container (equivalent to flex items-center justify-between)
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.layoutSectionAspectRatioControls {
+  // Aspect ratio controls container (equivalent to flex items-center gap-2)
+  display: flex;
+  align-items: center;
+  gap: 8px; // equivalent to gap-2
+}
+
+.layoutSectionAspectRatioValue {
+  // Aspect ratio value display (equivalent to text-sm)
+  font-size: 14px; // equivalent to text-sm
+}
+
+.layoutSectionAspectRatioButton {
+  // Aspect ratio lock button (equivalent to h-8 w-8 p-0)
+  height: 32px; // equivalent to h-8
+  width: 32px; // equivalent to w-8
+  padding: 0; // equivalent to p-0
+}
+
+.layoutSectionAspectRatioIcon {
+  // Aspect ratio icon styles (equivalent to h-4 w-4)
+  width: 16px; // equivalent to w-4
+  height: 16px; // equivalent to h-4
+}

@@ -1,0 +1,19 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/ResizablePanel/resizable-panel.tokens.json
+ */
+@mixin vars {
+  /* === Layout Tokens === */
+  --resizablePanel-layout-handle-width: 4px;
+  --resizablePanel-layout-handle-height: 100%;
+  --resizablePanel-layout-handle-interactionArea-offset: 4px;
+
+  /* === Interactive Tokens === */
+  --resizablePanel-interactive-handle-cursor: col-resize;
+  --resizablePanel-interactive-handle-hover-backgroundColor: var(--semantic-color-action-background-primary-default);
+  --resizablePanel-interactive-handle-transition-duration: 150ms;
+  --resizablePanel-interactive-handle-transition-easing: ease-in-out;
+
+  /* === Positioning Tokens === */
+  --resizablePanel-positioning-left-right: 0;
+  --resizablePanel-positioning-right-left: 0;
+}

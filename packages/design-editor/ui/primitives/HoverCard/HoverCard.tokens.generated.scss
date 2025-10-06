@@ -1,0 +1,23 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/HoverCard/hover-card.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --hoverCard-spacing-padding: var(--semantic-spacing-padding-grid-medium);
+  --hoverCard-spacing-sideOffset: var(--semantic-spacing-gap-grid-xsmall);
+
+  /* === Typography Tokens === */
+  --hoverCard-typography-fontSize: var(--semantic-typography-body-02);
+  --hoverCard-typography-lineHeight: var(--semantic-typography-body-line-height-02);
+
+  /* === Layout Tokens === */
+  --hoverCard-layout-maxWidth: 16rem;
+  --hoverCard-layout-zIndex: var(--semantic-z-index-dropdown);
+
+  /* === Animation Tokens === */
+  --hoverCard-animation-duration-in: var(--semantic-animation-duration-fast);
+  --hoverCard-animation-duration-out: var(--semantic-animation-duration-fast);
+  --hoverCard-animation-easing: var(--semantic-animation-easing-default);
+  --hoverCard-animation-zoom-scale: 0.95;
+  --hoverCard-animation-slide-distance: var(--semantic-spacing-gap-grid-xsmall);
+}

@@ -9,36 +9,36 @@
 
 // Base spinner styles
 .spinner {
-  color: var(--spinner-color-value);
-  animation: var(--spinner-animation-iterationCount-value) var(--spinner-animation-timingFunction-value) var(--spinner-animation-duration-value) spin;
+  color: var(--spinner-color);
+  animation: var(--spinner-animation-iterationCount) var(--spinner-animation-timingFunction) var(--spinner-animation-duration) spin;
   flex-shrink: 0;
 
   // Size variants
   &--size-sm {
-    width: var(--spinner-size-sm-value);
-    height: var(--spinner-size-sm-value);
+    width: var(--spinner-size-sm);
+    height: var(--spinner-size-sm);
   }
 
   &--size-md {
-    width: var(--spinner-size-md-value);
-    height: var(--spinner-size-md-value);
+    width: var(--spinner-size-md);
+    height: var(--spinner-size-md);
   }
 
   &--size-lg {
-    width: var(--spinner-size-lg-value);
-    height: var(--spinner-size-lg-value);
+    width: var(--spinner-size-lg);
+    height: var(--spinner-size-lg);
   }
 
   &--size-xl {
-    width: var(--spinner-size-xl-value);
-    height: var(--spinner-size-xl-value);
+    width: var(--spinner-size-xl);
+    height: var(--spinner-size-xl);
   }
 }
 
 // Default size (md)
 .spinner:not(&--size-sm):not(&--size-lg):not(&--size-xl) {
-  width: var(--spinner-size-default-value);
-  height: var(--spinner-size-default-value);
+  width: var(--spinner-size-default);
+  height: var(--spinner-size-default);
 }
 
 // Spin animation keyframes

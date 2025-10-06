@@ -1,0 +1,46 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Avatar/avatar.tokens.json
+ */
+@mixin vars {
+  /* === Avatar Tokens === */
+  --avatar-avatar-display: inline-flex;
+  --avatar-avatar-alignItems: center;
+  --avatar-avatar-justifyContent: center;
+  --avatar-avatar-verticalAlign: middle;
+  --avatar-avatar-overflow: hidden;
+  --avatar-avatar-userSelect: none;
+  --avatar-avatar-borderRadius: 100%;
+  --avatar-avatar-sizes-xs-size: 24px;
+  --avatar-avatar-sizes-xs-fontSize: 10px;
+  --avatar-avatar-sizes-sm-size: 32px;
+  --avatar-avatar-sizes-sm-fontSize: 12px;
+  --avatar-avatar-sizes-default-size: 40px;
+  --avatar-avatar-sizes-default-fontSize: 14px;
+  --avatar-avatar-sizes-lg-size: 56px;
+  --avatar-avatar-sizes-lg-fontSize: 18px;
+  --avatar-avatar-sizes-xl-size: 80px;
+  --avatar-avatar-sizes-xl-fontSize: 24px;
+  --avatar-avatar-sizes-2xl-size: 120px;
+  --avatar-avatar-sizes-2xl-fontSize: 32px;
+  --avatar-avatar-colors-background-muted: var(--color-palette-neutral-100);
+  --avatar-avatar-colors-foreground-muted: var(--color-palette-neutral-600);
+
+  /* === Image Tokens === */
+  --avatar-image-aspectRatio: 1;
+  --avatar-image-size: 100%;
+  --avatar-image-objectFit: cover;
+  --avatar-image-borderRadius: inherit;
+
+  /* === Fallback Tokens === */
+  --avatar-fallback-display: flex;
+  --avatar-fallback-alignItems: center;
+  --avatar-fallback-justifyContent: center;
+  --avatar-fallback-width: 100%;
+  --avatar-fallback-height: 100%;
+  --avatar-fallback-fontSize: 14px;
+  --avatar-fallback-fontWeight: 500;
+  --avatar-fallback-lineHeight: 1;
+  --avatar-fallback-color: var(--color-palette-neutral-600);
+  --avatar-fallback-backgroundColor: var(--color-palette-neutral-100);
+  --avatar-fallback-borderRadius: inherit;
+}

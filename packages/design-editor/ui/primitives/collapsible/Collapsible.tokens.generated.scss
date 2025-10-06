@@ -3,16 +3,11 @@
  */
 @mixin vars {
   /* === Content Tokens === */
-  --collapsible-content-overflow-value: hidden;
-  --collapsible-content-overflow-description: Overflow for collapsible content;
-  --collapsible-content-animation-name-value: collapsible-slide-down;
-  --collapsible-content-animation-name-description: Animation name for slide down;
-  --collapsible-content-animation-fillMode-value: forwards;
-  --collapsible-content-animation-fillMode-description: Animation fill mode;
+  --collapsible-content-overflow: hidden;
+  --collapsible-content-animation-name: collapsible-slide-down;
+  --collapsible-content-animation-fillMode: forwards;
 
   /* === Animation Tokens === */
-  --collapsible-animation-duration-value: 150ms;
-  --collapsible-animation-duration-description: Animation duration for collapsible transitions;
-  --collapsible-animation-easing-value: ease-out;
-  --collapsible-animation-easing-description: Animation easing for collapsible transitions;
+  --collapsible-animation-duration: 150ms;
+  --collapsible-animation-easing: ease-out;
 }

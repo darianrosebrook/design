@@ -1,0 +1,36 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/BoxModelEditor/box-model-editor.tokens.json
+ */
+@mixin vars {
+  /* === Visual Tokens === */
+  --boxModelEditor-visual-container-backgroundColor: var(--semantic-color-display-background-secondary);
+  --boxModelEditor-visual-container-borderRadius: var(--semantic-shape-control-radius-default);
+  --boxModelEditor-visual-container-padding: var(--semantic-spacing-padding-grid-medium);
+  --boxModelEditor-visual-container-size-width: 120px;
+  --boxModelEditor-visual-container-size-height: 80px;
+  --boxModelEditor-visual-margin-borderColor: var(--semantic-color-palette-blue-300);
+  --boxModelEditor-visual-margin-backgroundColor: var(--semantic-color-palette-blue-50);
+  --boxModelEditor-visual-border-borderColor: var(--semantic-color-palette-orange-300);
+  --boxModelEditor-visual-border-backgroundColor: var(--semantic-color-palette-orange-50);
+  --boxModelEditor-visual-padding-borderColor: var(--semantic-color-palette-green-300);
+  --boxModelEditor-visual-padding-backgroundColor: var(--semantic-color-palette-green-50);
+  --boxModelEditor-visual-content-borderColor: var(--semantic-color-palette-purple-300);
+  --boxModelEditor-visual-content-backgroundColor: var(--semantic-color-palette-purple-50);
+  --boxModelEditor-visual-label-fontSize: var(--semantic-typography-body-01);
+  --boxModelEditor-visual-label-fontWeight: var(--semantic-typography-font-weight-medium);
+
+  /* === Controls Tokens === */
+  --boxModelEditor-controls-spacing-container: var(--semantic-spacing-gap-grid-medium);
+  --boxModelEditor-controls-spacing-section: var(--semantic-spacing-gap-grid-small);
+  --boxModelEditor-controls-spacing-input: var(--semantic-spacing-gap-grid-xsmall);
+  --boxModelEditor-controls-input-height: var(--semantic-components-input-height-default);
+  --boxModelEditor-controls-input-fontSize: var(--semantic-typography-body-01);
+  --boxModelEditor-controls-button-size: 20px;
+  --boxModelEditor-controls-label-fontSize: var(--semantic-typography-body-01);
+  --boxModelEditor-controls-label-fontWeight: var(--semantic-typography-font-weight-medium);
+  --boxModelEditor-controls-label-color: var(--semantic-color-display-foreground-primary);
+
+  /* === LinkButton Tokens === */
+  --boxModelEditor-linkButton-size: var(--semantic-components-button-height-sm);
+  --boxModelEditor-linkButton-iconSize: 12px;
+}

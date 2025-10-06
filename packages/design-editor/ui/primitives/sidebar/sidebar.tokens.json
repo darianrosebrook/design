@@ -1,3 +1,575 @@
 {
-  "sidebar": {}
+  "prefix": "sidebar",
+  "tokens": {
+    "width": {
+      "default": {
+        "value": "16rem",
+        "description": "Default width of the sidebar"
+      },
+      "mobile": {
+        "value": "18rem",
+        "description": "Width of the sidebar on mobile"
+      },
+      "icon": {
+        "value": "3rem",
+        "description": "Width of the sidebar in icon-only mode"
+      }
+    },
+    "container": {
+      "backgroundColor": {
+        "value": "{color.action.background.secondary.default}",
+        "description": "Background color for sidebar container"
+      },
+      "color": {
+        "value": "{color.action.foreground.secondary.default}",
+        "description": "Text color for sidebar container"
+      },
+      "width": {
+        "value": "var(--sidebar-width)",
+        "description": "Width of sidebar container"
+      },
+      "padding": {
+        "value": "0px",
+        "description": "Padding for sidebar container"
+      }
+    },
+    "provider": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar provider"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for sidebar provider"
+      },
+      "minHeight": {
+        "value": "100vh",
+        "description": "Minimum height for sidebar provider"
+      },
+      "width": {
+        "value": "100vw",
+        "description": "Width for sidebar provider"
+      }
+    },
+    "insets": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar insets"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for sidebar insets"
+      },
+      "flex": {
+        "value": "1",
+        "description": "Flex property for sidebar insets"
+      }
+    },
+    "input": {
+      "backgroundColor": {
+        "value": "{color.mode.white}",
+        "description": "Background color for sidebar input"
+      },
+      "height": {
+        "value": "32px",
+        "description": "Height for sidebar input"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for sidebar input"
+      },
+      "boxShadow": {
+        "value": "none",
+        "description": "Box shadow for sidebar input"
+      }
+    },
+    "header": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar header"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for sidebar header"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for sidebar header"
+      },
+      "padding": {
+        "value": "8px",
+        "description": "Padding for sidebar header"
+      }
+    },
+    "footer": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar footer"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for sidebar footer"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for sidebar footer"
+      },
+      "padding": {
+        "value": "8px",
+        "description": "Padding for sidebar footer"
+      }
+    },
+    "separator": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.200}",
+        "description": "Background color for sidebar separator"
+      },
+      "margin": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal margin for sidebar separator"
+        }
+      },
+      "width": {
+        "value": "auto",
+        "description": "Width for sidebar separator"
+      }
+    },
+    "content": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar content"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for sidebar content"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for sidebar content"
+      },
+      "padding": {
+        "value": "8px",
+        "description": "Padding for sidebar content"
+      }
+    },
+    "group": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar group"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for sidebar group"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap for sidebar group"
+      },
+      "minWidth": {
+        "value": "0px",
+        "description": "Minimum width for sidebar group"
+      },
+      "padding": {
+        "value": "8px",
+        "description": "Padding for sidebar group"
+      }
+    },
+    "groupLabel": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar group label"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for sidebar group label"
+      },
+      "minWidth": {
+        "value": "0px",
+        "description": "Minimum width for sidebar group label"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for sidebar group label"
+      },
+      "gap": {
+        "value": "2px",
+        "description": "Gap for sidebar group label"
+      }
+    },
+    "groupContent": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar group content"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for sidebar group content"
+      },
+      "minWidth": {
+        "value": "0px",
+        "description": "Minimum width for sidebar group content"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for sidebar group content"
+      },
+      "gap": {
+        "value": "2px",
+        "description": "Gap for sidebar group content"
+      }
+    },
+    "menu": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar menu"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for sidebar menu"
+      },
+      "minWidth": {
+        "value": "0px",
+        "description": "Minimum width for sidebar menu"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for sidebar menu"
+      },
+      "gap": {
+        "value": "2px",
+        "description": "Gap for sidebar menu"
+      }
+    },
+    "menuItem": {
+      "position": {
+        "value": "relative",
+        "description": "Position for sidebar menu item"
+      }
+    },
+    "menuButton": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar menu button"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for sidebar menu button"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for sidebar menu button"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for sidebar menu button"
+      },
+      "overflow": {
+        "value": "hidden",
+        "description": "Overflow for sidebar menu button"
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for sidebar menu button"
+      },
+      "padding": {
+        "value": "8px",
+        "description": "Padding for sidebar menu button"
+      },
+      "textAlign": {
+        "value": "left",
+        "description": "Text align for sidebar menu button"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for sidebar menu button"
+      },
+      "outline": {
+        "value": "none",
+        "description": "Outline for sidebar menu button"
+      },
+      "ring": {
+        "value": "2px solid {color.action.border.primary.focus}",
+        "description": "Ring for sidebar menu button"
+      },
+      "transition": {
+        "properties": {
+          "value": "width, height, padding",
+          "description": "Transition properties for sidebar menu button"
+        },
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for sidebar menu button"
+        },
+        "easing": {
+          "value": "{motion.interaction.hover.easing}",
+          "description": "Transition easing for sidebar menu button"
+        }
+      },
+      "states": {
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.hover}",
+            "description": "Background color on hover for sidebar menu button"
+          },
+          "color": {
+            "value": "{color.action.foreground.secondary.default}",
+            "description": "Color on hover for sidebar menu button"
+          }
+        },
+        "active": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.active}",
+            "description": "Background color when active for sidebar menu button"
+          },
+          "color": {
+            "value": "{color.action.foreground.secondary.default}",
+            "description": "Color when active for sidebar menu button"
+          },
+          "fontWeight": {
+            "value": "500",
+            "description": "Font weight when active for sidebar menu button"
+          }
+        },
+        "disabled": {
+          "pointerEvents": {
+            "value": "none",
+            "description": "Pointer events when disabled for sidebar menu button"
+          },
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity when disabled for sidebar menu button"
+          }
+        }
+      },
+      "variants": {
+        "outline": {
+          "backgroundColor": {
+            "value": "{color.mode.white}",
+            "description": "Background color for outline variant"
+          },
+          "boxShadow": {
+            "value": "0 0 0 1px {color.palette.neutral.200}",
+            "description": "Box shadow for outline variant"
+          },
+          "hover": {
+            "backgroundColor": {
+              "value": "{color.action.background.secondary.hover}",
+              "description": "Hover background color for outline variant"
+            },
+            "color": {
+              "value": "{color.action.foreground.secondary.default}",
+              "description": "Hover color for outline variant"
+            },
+            "boxShadow": {
+              "value": "0 0 0 1px {color.action.background.secondary.hover}",
+              "description": "Hover box shadow for outline variant"
+            }
+          }
+        }
+      },
+      "sizes": {
+        "default": {
+          "height": {
+            "value": "32px",
+            "description": "Height for default size"
+          },
+          "fontSize": {
+            "value": "14px",
+            "description": "Font size for default size"
+          }
+        },
+        "sm": {
+          "height": {
+            "value": "28px",
+            "description": "Height for small size"
+          },
+          "fontSize": {
+            "value": "12px",
+            "description": "Font size for small size"
+          }
+        },
+        "lg": {
+          "height": {
+            "value": "48px",
+            "description": "Height for large size"
+          },
+          "fontSize": {
+            "value": "14px",
+            "description": "Font size for large size"
+          }
+        }
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for sidebar menu button icons"
+        },
+        "flexShrink": {
+          "value": "0",
+          "description": "Flex shrink for sidebar menu button icons"
+        }
+      }
+    },
+    "menuSub": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar menu sub"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for sidebar menu sub"
+      },
+      "minWidth": {
+        "value": "0px",
+        "description": "Minimum width for sidebar menu sub"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for sidebar menu sub"
+      },
+      "gap": {
+        "value": "2px",
+        "description": "Gap for sidebar menu sub"
+      }
+    },
+    "menuSubItem": {
+      "position": {
+        "value": "relative",
+        "description": "Position for sidebar menu sub item"
+      }
+    },
+    "menuSubButton": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar menu sub button"
+      },
+      "height": {
+        "value": "32px",
+        "description": "Height for sidebar menu sub button"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for sidebar menu sub button"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for sidebar menu sub button"
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for sidebar menu sub button"
+      },
+      "padding": {
+        "value": "8px",
+        "description": "Padding for sidebar menu sub button"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for sidebar menu sub button"
+      },
+      "transition": {
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for sidebar menu sub button"
+        },
+        "easing": {
+          "value": "{motion.interaction.hover.easing}",
+          "description": "Transition easing for sidebar menu sub button"
+        }
+      },
+      "states": {
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.hover}",
+            "description": "Background color on hover for sidebar menu sub button"
+          },
+          "color": {
+            "value": "{color.action.foreground.secondary.default}",
+            "description": "Color on hover for sidebar menu sub button"
+          }
+        },
+        "active": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.active}",
+            "description": "Background color when active for sidebar menu sub button"
+          },
+          "color": {
+            "value": "{color.action.foreground.secondary.default}",
+            "description": "Color when active for sidebar menu sub button"
+          }
+        }
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for sidebar menu sub button icons"
+        },
+        "borderRadius": {
+          "value": "4px",
+          "description": "Border radius for sidebar menu sub button icons"
+        }
+      },
+      "skeleton": {
+        "height": {
+          "value": "16px",
+          "description": "Height for skeleton in sidebar menu sub button"
+        },
+        "maxWidth": {
+          "value": "var(--skeleton-width)",
+          "description": "Max width for skeleton in sidebar menu sub button"
+        },
+        "flex": {
+          "value": "1",
+          "description": "Flex for skeleton in sidebar menu sub button"
+        }
+      }
+    },
+    "trigger": {
+      "size": {
+        "value": "28px",
+        "description": "Size for sidebar trigger"
+      }
+    },
+    "rail": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for sidebar rail"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for sidebar rail"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap for sidebar rail"
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for sidebar rail"
+      },
+      "padding": {
+        "value": "8px",
+        "description": "Padding for sidebar rail"
+      },
+      "transition": {
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for sidebar rail"
+        },
+        "easing": {
+          "value": "{motion.interaction.hover.easing}",
+          "description": "Transition easing for sidebar rail"
+        }
+      },
+      "states": {
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.hover}",
+            "description": "Background color on hover for sidebar rail"
+          }
+        }
+      }
+    }
+  }
 }

@@ -3,9 +3,9 @@
  * @author @darianrosebrook
  */
 
-import { defaultTokens as tokens } from "../tokens.js";
 import React from "react";
 import { Input } from "../primitives/Input";
+import { defaultTokens as tokens } from "../tokens.js";
 
 export interface TextFieldProps {
   label?: string;

@@ -1,3 +1,133 @@
 {
-  "component-library": {}
+  "prefix": "componentLibrary",
+  "tokens": {
+    "backgroundColor": {
+      "value": "{semantic.color.display.background.primary}",
+      "description": "Background color for component library container"
+    },
+    "borderColor": {
+      "value": "{semantic.color.display.border.subtle}",
+      "description": "Border color for component library sections"
+    },
+    "spacing": {
+      "container": {
+        "value": "{semantic.spacing.padding.grid.small}",
+        "description": "Padding for main container"
+      },
+      "section": {
+        "value": "{semantic.spacing.gap.grid.medium}",
+        "description": "Gap between sections"
+      },
+      "item": {
+        "value": "{semantic.spacing.gap.grid.xsmall}",
+        "description": "Gap between component items"
+      }
+    },
+    "typography": {
+      "header": {
+        "fontSize": {
+          "value": "{semantic.typography.body.03}",
+          "description": "Font size for section headers"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.semibold}",
+          "description": "Font weight for section headers"
+        },
+        "color": {
+          "value": "{semantic.color.display.foreground.primary}",
+          "description": "Text color for section headers"
+        }
+      },
+      "subheader": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for subheaders"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.medium}",
+          "description": "Font weight for subheaders"
+        },
+        "color": {
+          "value": "{semantic.color.display.foreground.secondary}",
+          "description": "Text color for subheaders"
+        }
+      },
+      "item": {
+        "name": {
+          "fontSize": {
+            "value": "{semantic.typography.body.03}",
+            "description": "Font size for component names"
+          },
+          "fontWeight": {
+            "value": "{semantic.typography.font.weight.medium}",
+            "description": "Font weight for component names"
+          },
+          "color": {
+            "value": "{semantic.color.display.foreground.primary}",
+            "description": "Text color for component names"
+          }
+        },
+        "description": {
+          "fontSize": {
+            "value": "{semantic.typography.body.01}",
+            "description": "Font size for component descriptions"
+          },
+          "color": {
+            "value": "{semantic.color.display.foreground.secondary}",
+            "description": "Text color for component descriptions"
+          }
+        }
+      }
+    },
+    "layout": {
+      "header": {
+        "height": {
+          "value": "{semantic.components.panel.header.height}",
+          "description": "Height for component library header"
+        },
+        "padding": {
+          "horizontal": {
+            "value": "{semantic.spacing.padding.grid.small}",
+            "description": "Horizontal padding for header"
+          },
+          "vertical": {
+            "value": "{semantic.spacing.padding.grid.small}",
+            "description": "Vertical padding for header"
+          }
+        }
+      },
+      "component": {
+        "padding": {
+          "value": "{semantic.spacing.padding.grid.small}",
+          "description": "Padding for component items"
+        },
+        "gap": {
+          "value": "{semantic.spacing.gap.grid.small}",
+          "description": "Gap between icon and text in components"
+        },
+        "minHeight": {
+          "value": "48px",
+          "description": "Minimum height for component items"
+        }
+      },
+      "icon": {
+        "size": {
+          "value": "20px",
+          "description": "Size for component icons"
+        }
+      }
+    },
+    "interactive": {
+      "hover": {
+        "backgroundColor": {
+          "value": "{semantic.color.action.background.secondary.hover}",
+          "description": "Background color on hover"
+        }
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.default}",
+        "description": "Border radius for interactive elements"
+      }
+    }
+  }
 }

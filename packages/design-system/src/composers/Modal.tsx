@@ -3,8 +3,8 @@
  * @author @darianrosebrook
  */
 
-import { defaultTokens as tokens } from "../tokens.js";
 import React, { useEffect, useRef } from "react";
+import { defaultTokens as tokens } from "../tokens.js";
 
 export interface ModalProps {
   isOpen: boolean;

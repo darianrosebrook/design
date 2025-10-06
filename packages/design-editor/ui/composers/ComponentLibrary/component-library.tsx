@@ -1,13 +1,14 @@
 "use client";
 
 import React from "react";
-import { ScrollArea } from "@/ui/primitives/ScrollArea";
+import styles from "./component-library.module.scss";
+import { useCanvas } from "@/lib/canvas-context";
 import {
   ComponentRenderer,
   getAvailableComponents,
   getComponentMetadata,
 } from "@/ui/composers/ComponentRenderer";
-import { useCanvas } from "@/lib/canvas-context";
+import { ScrollArea } from "@/ui/primitives/ScrollArea";
 
 interface ComponentLibraryProps {
   className?: string;
@@ -55,23 +56,23 @@ export function ComponentLibrary({ className }: ComponentLibraryProps) {
   }, {} as Record<string, Array<{ type: string; name: string; description: string; icon: string }>>);
 
   return (
-    <div className={`h-full flex flex-col ${className}`}>
-      <div className="flex items-center justify-between px-3 py-2 border-b border-border">
-        <h2 className="text-sm font-semibold">Components</h2>
-        <span className="text-xs text-muted-foreground">
+    <div className={`${styles.componentLibrary} ${className || ""}`}>
+      <div className={styles.componentLibraryHeader}>
+        <h2 className={styles.componentLibraryHeaderTitle}>Components</h2>
+        <span className={styles.componentLibraryHeaderCount}>
           {availableComponents.length} components
         </span>
       </div>
 
-      <ScrollArea className="flex-1">
-        <div className="p-3 space-y-4">
+      <ScrollArea className={styles.componentLibraryContent}>
+        <div className={styles.componentLibraryContent}>
           {Object.entries(groupedComponents).map(([category, components]) => (
-            <div key={category} className="space-y-2">
-              <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            <div key={category} className={styles.componentLibraryCategory}>
+              <h3 className={styles.componentLibraryCategoryHeader}>
                 {category}
               </h3>
 
-              <div className="grid grid-cols-1 gap-1">
+              <div className={styles.componentLibraryGrid}>
                 {components.map(({ type, name, description, icon }) => (
                   <button
                     key={type}
@@ -81,13 +82,17 @@ export function ComponentLibrary({ className }: ComponentLibraryProps) {
                       e.dataTransfer.setData("component-type", type);
                       e.dataTransfer.effectAllowed = "copy";
                     }}
-                    className="flex items-center gap-3 p-2 rounded-md hover:bg-accent transition-colors text-left"
+                    className={styles.componentLibraryItem}
                     title={`${description} - Click to insert or drag to canvas`}
                   >
-                    <div className="text-lg">{icon}</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium">{name}</div>
-                      <div className="text-xs text-muted-foreground truncate">
+                    <div className={styles.componentLibraryItemIcon}>
+                      {icon}
+                    </div>
+                    <div className={styles.componentLibraryItemContent}>
+                      <div className={styles.componentLibraryItemName}>
+                        {name}
+                      </div>
+                      <div className={styles.componentLibraryItemDescription}>
                         {description}
                       </div>
                     </div>
@@ -131,10 +136,7 @@ export function ComponentPreview({
   };
 
   return (
-    <div
-      className="border rounded-md p-4 bg-background"
-      style={{ width, height }}
-    >
+    <div className={styles.componentLibraryPreview} style={{ width, height }}>
       <ComponentRenderer object={mockObject} />
     </div>
   );

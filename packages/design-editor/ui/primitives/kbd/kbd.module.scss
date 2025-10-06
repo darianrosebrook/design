@@ -1,45 +1,53 @@
 // Kbd component styles
 // Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Kbd.tokens.generated.scss' as kbdTokens;
+
 .kbd {
+  // Include the generated variables mixin within the component scope
+  @include kbdTokens.vars;
+
   // Base kbd styles (equivalent to bg-muted w-fit text-muted-foreground pointer-events-none inline-flex h-5 min-w-5 items-center justify-center gap-1 rounded-sm px-1 font-sans text-xs font-medium select-none)
-  background-color: hsl(var(--muted)); // equivalent to bg-muted
-  width: fit-content; // equivalent to w-fit
-  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
-  pointer-events: none; // equivalent to pointer-events-none
-  display: inline-flex; // equivalent to inline-flex
-  height: 20px; // equivalent to h-5
-  min-width: 20px; // equivalent to min-w-5
-  align-items: center; // equivalent to items-center
-  justify-content: center; // equivalent to justify-center
-  gap: 4px; // equivalent to gap-1
-  border-radius: 4px; // equivalent to rounded-sm
-  padding: 0 4px; // equivalent to px-1
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; // equivalent to font-sans
-  font-size: 12px; // equivalent to text-xs
-  font-weight: 500; // equivalent to font-medium
-  user-select: none; // equivalent to select-none
+  background-color: var(--kbd-container-backgroundColor); // equivalent to bg-muted
+  width: var(--kbd-container-width); // equivalent to w-fit
+  color: var(--kbd-container-color); // equivalent to text-muted-foreground
+  pointer-events: var(--kbd-container-pointerEvents); // equivalent to pointer-events-none
+  display: var(--kbd-container-display); // equivalent to inline-flex
+  height: var(--kbd-container-height); // equivalent to h-5
+  min-width: var(--kbd-container-minWidth); // equivalent to min-w-5
+  align-items: var(--kbd-container-alignItems); // equivalent to items-center
+  justify-content: var(--kbd-container-justifyContent); // equivalent to justify-center
+  gap: var(--kbd-container-gap); // equivalent to gap-1
+  border-radius: var(--kbd-container-borderRadius); // equivalent to rounded-sm
+  padding: 0 var(--kbd-container-padding-horizontal); // equivalent to px-1
+  font-family: var(--kbd-container-fontFamily); // equivalent to font-sans
+  font-size: var(--kbd-container-fontSize); // equivalent to text-xs
+  font-weight: var(--kbd-container-fontWeight); // equivalent to font-medium
+  user-select: var(--kbd-container-userSelect); // equivalent to select-none
 
   // SVG icon styles (equivalent to [&_svg:not([class*='size-'])]:size-3)
   & svg:not([class*="size-"]) {
-    width: 12px; // equivalent to size-3
-    height: 12px;
+    width: var(--kbd-icon-size); // equivalent to size-3
+    height: var(--kbd-icon-size);
   }
 
   // Tooltip-specific styles (equivalent to [[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background dark:[[data-slot=tooltip-content]_&]:bg-background/10)
   [data-slot="tooltip-content"] & {
-    background-color: hsl(var(--background) / 0.2); // equivalent to bg-background/20
-    color: hsl(var(--background)); // equivalent to text-background
+    background-color: var(--kbd-tooltip-backgroundColor); // equivalent to bg-background/20
+    color: var(--kbd-tooltip-color); // equivalent to text-background
+    opacity: var(--kbd-tooltip-backgroundColor-opacity);
 
     .dark & {
-      background-color: hsl(var(--background) / 0.1); // equivalent to dark:bg-background/10
+      background-color: var(--kbd-tooltip-dark-backgroundColor); // equivalent to dark:bg-background/10
+      opacity: var(--kbd-tooltip-dark-backgroundColor-opacity);
     }
   }
 }
 
 .kbdGroup {
   // Group styles (equivalent to inline-flex items-center gap-1)
-  display: inline-flex; // equivalent to inline-flex
-  align-items: center; // equivalent to items-center
-  gap: 4px; // equivalent to gap-1
+  display: var(--kbd-group-display); // equivalent to inline-flex
+  align-items: var(--kbd-group-alignItems); // equivalent to items-center
+  gap: var(--kbd-group-gap); // equivalent to gap-1
 }

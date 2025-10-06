@@ -7,13 +7,13 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import type { CanvasObject } from "./types";
 import { useCanvasBridge } from "./bridge-context";
 import type {
   IncomingMessageType,
   DocumentArtboard,
   DocumentNode,
 } from "./bridge-types";
+import type { CanvasObject } from "./types";
 
 export type CanvasTool =
   | "select"
@@ -166,7 +166,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
   // Listen for document and state updates from extension
   useEffect(() => {
-    if (!isReady) return;
+    if (!isReady) {return;}
 
     const unsubscribers = [
       // Document updates

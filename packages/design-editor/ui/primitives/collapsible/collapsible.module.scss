@@ -9,14 +9,14 @@
 // Collapsible content with slide animation
 .collapsible-content {
   @include collapsibleTokens.vars;
-  overflow: var(--collapsible-content-overflow-value);
+  overflow: var(--collapsible-content-overflow);
 
   &[data-state="open"] {
-    animation: var(--collapsible-content-animation-name-value) var(--collapsible-animation-duration-value) var(--collapsible-animation-easing-value) var(--collapsible-content-animation-fillMode-value);
+    animation: var(--collapsible-content-animation-name) var(--collapsible-animation-duration) var(--collapsible-animation-easing) var(--collapsible-content-animation-fillMode);
   }
 
   &[data-state="closed"] {
-    animation: var(--collapsible-content-animation-name-value) var(--collapsible-animation-duration-value) var(--collapsible-animation-easing-value) var(--collapsible-content-animation-fillMode-value) reverse;
+    animation: var(--collapsible-content-animation-name) var(--collapsible-animation-duration) var(--collapsible-animation-easing) var(--collapsible-content-animation-fillMode) reverse;
   }
 }
 

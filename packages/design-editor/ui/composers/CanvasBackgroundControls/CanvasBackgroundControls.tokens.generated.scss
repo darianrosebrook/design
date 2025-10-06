@@ -1,0 +1,53 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/CanvasBackgroundControls/canvas-background-controls.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --canvasBackgroundControls-spacing-container: var(--semantic-spacing-gap-grid-medium);
+  --canvasBackgroundControls-spacing-section: var(--semantic-spacing-gap-grid-small);
+  --canvasBackgroundControls-spacing-input: var(--semantic-spacing-gap-grid-small);
+
+  /* === Typography Tokens === */
+  --canvasBackgroundControls-typography-label-fontSize: var(--semantic-typography-body-01);
+  --canvasBackgroundControls-typography-label-fontWeight: var(--semantic-typography-font-weight-medium);
+  --canvasBackgroundControls-typography-label-color: var(--semantic-color-display-foreground-primary);
+
+  /* === ColorPicker Tokens === */
+  --canvasBackgroundControls-colorPicker-size: 32px;
+  --canvasBackgroundControls-colorPicker-borderRadius: var(--semantic-shape-control-radius-default);
+  --canvasBackgroundControls-colorPicker-border-width: 1px;
+  --canvasBackgroundControls-colorPicker-border-color: var(--semantic-color-display-border-subtle);
+
+  /* === ColorInput Tokens === */
+  --canvasBackgroundControls-colorInput-height: var(--semantic-components-input-height-sm);
+  --canvasBackgroundControls-colorInput-fontSize: var(--semantic-typography-body-03);
+
+  /* === BackgroundTypeSelector Tokens === */
+  --canvasBackgroundControls-backgroundTypeSelector-backgroundColor: var(--semantic-color-display-background-secondary);
+  --canvasBackgroundControls-backgroundTypeSelector-borderRadius: var(--semantic-shape-control-radius-default);
+  --canvasBackgroundControls-backgroundTypeSelector-padding: var(--semantic-spacing-padding-grid-xsmall);
+
+  /* === BackgroundTypeButton Tokens === */
+  --canvasBackgroundControls-backgroundTypeButton-padding: var(--semantic-spacing-padding-grid-small);
+  --canvasBackgroundControls-backgroundTypeButton-gap: var(--semantic-spacing-gap-grid-xsmall);
+
+  /* === BackgroundTypeIndicator Tokens === */
+  --canvasBackgroundControls-backgroundTypeIndicator-backgroundColor: var(--semantic-color-display-background-primary);
+  --canvasBackgroundControls-backgroundTypeIndicator-borderColor: var(--semantic-color-display-border-subtle);
+  --canvasBackgroundControls-backgroundTypeIndicator-borderRadius: var(--semantic-shape-control-radius-small);
+  --canvasBackgroundControls-backgroundTypeIndicator-transition-duration: 200ms;
+  --canvasBackgroundControls-backgroundTypeIndicator-transition-easing: ease-out;
+
+  /* === Preview Tokens === */
+  --canvasBackgroundControls-preview-height: 64px;
+  --canvasBackgroundControls-preview-borderRadius: var(--semantic-shape-control-radius-default);
+  --canvasBackgroundControls-preview-border-width: 1px;
+  --canvasBackgroundControls-preview-border-color: var(--semantic-color-display-border-subtle);
+
+  /* === Icon Tokens === */
+  --canvasBackgroundControls-icon-size-button: 16px;
+  --canvasBackgroundControls-icon-size-picker: 16px;
+  --canvasBackgroundControls-icon-color-selected: var(--semantic-color-display-foreground-primary);
+  --canvasBackgroundControls-icon-color-unselected: var(--semantic-color-display-foreground-secondary);
+  --canvasBackgroundControls-icon-color-hover: var(--semantic-color-display-foreground-primary);
+}

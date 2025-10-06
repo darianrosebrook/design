@@ -1,7 +1,104 @@
 // pagination primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Pagination.tokens.generated.scss' as paginationTokens;
+
+// Include the generated variables mixin
+@include paginationTokens.vars;
+
+// Navigation container styles
 .pagination {
-  // Placeholder for future SCSS implementation
-  // Will contain pagination-specific styles when migrating from Tailwind
+  display: var(--pagination-nav-display);
+  width: var(--pagination-nav-width);
+  margin: 0 var(--pagination-nav-margin-horizontal);
+  justify-content: var(--pagination-nav-justifyContent);
+}
+
+// Content list styles
+.pagination-content {
+  display: var(--pagination-content-display);
+  flex-direction: var(--pagination-content-flexDirection);
+  align-items: var(--pagination-content-alignItems);
+  gap: var(--pagination-content-gap);
+}
+
+// Item wrapper styles
+.pagination-item {
+  position: var(--pagination-item-position);
+}
+
+// Previous button styles
+.pagination-previous {
+  gap: var(--pagination-previous-gap);
+  padding: 0 var(--pagination-previous-padding-right);
+  padding-left: var(--pagination-previous-padding-left-default);
+
+  @media (min-width: 640px) {
+    padding-left: var(--pagination-previous-padding-left-large);
+  }
+
+  .pagination-previous-icon {
+    width: var(--pagination-previous-icon-size);
+    height: var(--pagination-previous-icon-size);
+  }
+
+  .pagination-previous-text {
+    display: var(--pagination-previous-text-display);
+
+    @media (min-width: 640px) {
+      display: var(--pagination-previous-text-large-display);
+    }
+  }
+}
+
+// Next button styles
+.pagination-next {
+  gap: var(--pagination-next-gap);
+  padding: 0 var(--pagination-next-padding-left);
+  padding-right: var(--pagination-next-padding-right-default);
+
+  @media (min-width: 640px) {
+    padding-right: var(--pagination-next-padding-right-large);
+  }
+
+  .pagination-next-icon {
+    width: var(--pagination-next-icon-size);
+    height: var(--pagination-next-icon-size);
+  }
+
+  .pagination-next-text {
+    display: var(--pagination-next-text-display);
+
+    @media (min-width: 640px) {
+      display: var(--pagination-next-text-large-display);
+    }
+  }
+}
+
+// Ellipsis styles
+.pagination-ellipsis {
+  display: var(--pagination-ellipsis-display);
+  align-items: var(--pagination-ellipsis-alignItems);
+  justify-content: var(--pagination-ellipsis-justifyContent);
+  width: var(--pagination-ellipsis-size);
+  height: var(--pagination-ellipsis-size);
+
+  .pagination-ellipsis-icon {
+    width: var(--pagination-ellipsis-icon-size);
+    height: var(--pagination-ellipsis-icon-size);
+  }
+
+  .pagination-ellipsis-text {
+    // Screen reader only text for accessibility
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 }

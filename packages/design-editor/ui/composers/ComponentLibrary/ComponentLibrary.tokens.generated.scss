@@ -1,0 +1,35 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/ComponentLibrary/component-library.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --componentLibrary-spacing-container: var(--semantic-spacing-padding-grid-small);
+  --componentLibrary-spacing-section: var(--semantic-spacing-gap-grid-medium);
+  --componentLibrary-spacing-item: var(--semantic-spacing-gap-grid-xsmall);
+
+  /* === Typography Tokens === */
+  --componentLibrary-typography-header-fontSize: var(--semantic-typography-body-03);
+  --componentLibrary-typography-header-fontWeight: var(--semantic-typography-font-weight-semibold);
+  --componentLibrary-typography-header-color: var(--semantic-color-display-foreground-primary);
+  --componentLibrary-typography-subheader-fontSize: var(--semantic-typography-body-01);
+  --componentLibrary-typography-subheader-fontWeight: var(--semantic-typography-font-weight-medium);
+  --componentLibrary-typography-subheader-color: var(--semantic-color-display-foreground-secondary);
+  --componentLibrary-typography-item-name-fontSize: var(--semantic-typography-body-03);
+  --componentLibrary-typography-item-name-fontWeight: var(--semantic-typography-font-weight-medium);
+  --componentLibrary-typography-item-name-color: var(--semantic-color-display-foreground-primary);
+  --componentLibrary-typography-item-description-fontSize: var(--semantic-typography-body-01);
+  --componentLibrary-typography-item-description-color: var(--semantic-color-display-foreground-secondary);
+
+  /* === Layout Tokens === */
+  --componentLibrary-layout-header-height: var(--semantic-components-panel-header-height);
+  --componentLibrary-layout-header-padding-horizontal: var(--semantic-spacing-padding-grid-small);
+  --componentLibrary-layout-header-padding-vertical: var(--semantic-spacing-padding-grid-small);
+  --componentLibrary-layout-component-padding: var(--semantic-spacing-padding-grid-small);
+  --componentLibrary-layout-component-gap: var(--semantic-spacing-gap-grid-small);
+  --componentLibrary-layout-component-minHeight: 48px;
+  --componentLibrary-layout-icon-size: 20px;
+
+  /* === Interactive Tokens === */
+  --componentLibrary-interactive-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --componentLibrary-interactive-borderRadius: var(--semantic-shape-control-radius-default);
+}

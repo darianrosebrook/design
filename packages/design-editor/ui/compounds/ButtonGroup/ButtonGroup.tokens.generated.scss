@@ -1,0 +1,29 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/compounds/ButtonGroup/ButtonGroup.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --buttonGroup-spacing-gap: var(--semantic-spacing-gap-grid-small);
+
+  /* === Border Tokens === */
+  --buttonGroup-border-radius-horizontal-first: {semantic.shape.control.radius.default} 0 0 {semantic.shape.control.radius.default};
+  --buttonGroup-border-radius-horizontal-middle: 0;
+  --buttonGroup-border-radius-horizontal-last: 0 {semantic.shape.control.radius.default} {semantic.shape.control.radius.default} 0;
+  --buttonGroup-border-radius-vertical-first: {semantic.shape.control.radius.default} {semantic.shape.control.radius.default} 0 0;
+  --buttonGroup-border-radius-vertical-middle: 0;
+  --buttonGroup-border-radius-vertical-last: 0 0 {semantic.shape.control.radius.default} {semantic.shape.control.radius.default};
+
+  /* === Focus Tokens === */
+  --buttonGroup-focus-zIndex: 10;
+
+  /* === Text Tokens === */
+  --buttonGroup-text-backgroundColor: var(--semantic-color-display-background-secondary);
+  --buttonGroup-text-fontSize: var(--semantic-typography-body-03);
+  --buttonGroup-text-fontWeight: var(--semantic-typography-font-weight-medium);
+  --buttonGroup-text-padding-horizontal: var(--semantic-components-input-padding-horizontal-default);
+  --buttonGroup-text-borderRadius: var(--semantic-shape-control-radius-default);
+
+  /* === Separator Tokens === */
+  --buttonGroup-separator-backgroundColor: var(--semantic-color-display-border-subtle);
+  --buttonGroup-separator-margin: 0;
+}

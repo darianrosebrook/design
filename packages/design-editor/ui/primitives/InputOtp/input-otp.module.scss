@@ -9,51 +9,51 @@
 // OTP input container
 .input-otp-container {
   @include inputOtpTokens.vars;
-  display: var(--input-otp-input-otp-container-display-value);
-  align-items: var(--input-otp-input-otp-container-alignItems-value);
-  gap: var(--input-otp-input-otp-container-gap-value);
+  display: var(--input-otp-container-display);
+  align-items: var(--input-otp-container-alignItems);
+  gap: var(--input-otp-container-gap);
 
   &.input-otp-container--disabled {
-    opacity: var(--input-otp-input-otp-container-disabled-opacity-value);
+    opacity: var(--input-otp-container-disabled-opacity);
   }
 }
 
 // OTP input element
 .input-otp {
   &.input-otp--disabled {
-    cursor: var(--input-otp-input-otp-input-cursor-disabled-value);
+    cursor: var(--input-otp-input-cursor-disabled);
   }
 }
 
 // OTP input group
 .input-otp-group {
-  display: var(--input-otp-input-otp-group-display-value);
-  align-items: var(--input-otp-input-otp-group-alignItems-value);
+  display: var(--input-otp-group-display);
+  align-items: var(--input-otp-group-alignItems);
 }
 
 // OTP input slot
 .input-otp-slot {
-  display: var(--input-otp-input-otp-slot-display-value);
-  align-items: var(--input-otp-input-otp-slot-alignItems-value);
-  justify-content: var(--input-otp-input-otp-slot-justifyContent-value);
-  position: var(--input-otp-input-otp-slot-position-value);
-  width: var(--input-otp-input-otp-slot-width-value);
-  height: var(--input-otp-input-otp-slot-height-value);
-  font-size: var(--input-otp-input-otp-slot-fontSize-value);
-  border: var(--input-otp-input-otp-slot-border-width-value) var(--input-otp-input-otp-slot-border-style-value) var(--input-otp-input-otp-slot-border-color-value);
-  box-shadow: var(--input-otp-input-otp-slot-boxShadow-value);
-  transition: var(--input-otp-input-otp-slot-transition-value) var(--input-otp-input-otp-slot-transitionDuration-value) var(--input-otp-input-otp-slot-transitionEasing-value);
-  outline: var(--input-otp-input-otp-slot-outline-value);
+  display: var(--input-otp-slot-display);
+  align-items: var(--input-otp-slot-alignItems);
+  justify-content: var(--input-otp-slot-justifyContent);
+  position: var(--input-otp-slot-position);
+  width: var(--input-otp-slot-width);
+  height: var(--input-otp-slot-height);
+  font-size: var(--input-otp-slot-fontSize);
+  border: var(--input-otp-slot-border-width) var(--input-otp-slot-border-style) var(--input-otp-slot-border-color);
+  box-shadow: var(--input-otp-slot-boxShadow);
+  transition: var(--input-otp-slot-transition) var(--input-otp-slot-transitionDuration) var(--input-otp-slot-transitionEasing);
+  outline: var(--input-otp-slot-outline);
 
   // First slot
   &:first-child {
-    border-radius: var(--input-otp-input-otp-slot-border-radius-first-value);
-    border-left-width: var(--input-otp-input-otp-slot-border-width-value);
+    border-radius: var(--input-otp-slot-border-radius-first);
+    border-left-width: var(--input-otp-slot-border-width);
   }
 
   // Last slot
   &:last-child {
-    border-radius: var(--input-otp-input-otp-slot-border-radius-last-value);
+    border-radius: var(--input-otp-slot-border-radius-last);
   }
 
   // Middle slots
@@ -64,42 +64,42 @@
 
   // Active state
   &[data-active="true"] {
-    border-color: var(--input-otp-input-otp-slot-states-active-borderColor-value);
-    box-shadow: var(--input-otp-input-otp-slot-states-active-boxShadow-value);
-    z-index: var(--input-otp-input-otp-slot-zIndex-active-value);
+    border-color: var(--input-otp-slot-states-active-borderColor);
+    box-shadow: var(--input-otp-slot-states-active-boxShadow);
+    z-index: var(--input-otp-slot-zIndex-active);
 
     // Invalid active state
     &[aria-invalid="true"] {
-      box-shadow: var(--input-otp-input-otp-slot-states-active-invalid-boxShadow-value);
-      border-color: var(--input-otp-input-otp-slot-states-active-invalid-borderColor-value);
+      box-shadow: var(--input-otp-slot-states-active-invalid-boxShadow);
+      border-color: var(--input-otp-slot-states-active-invalid-borderColor);
 
       // Dark mode
       .dark & {
-        box-shadow: var(--input-otp-input-otp-slot-states-active-invalid-dark-boxShadow-value);
+        box-shadow: var(--input-otp-slot-states-active-invalid-dark-boxShadow);
       }
     }
   }
 
   // Invalid state (not active)
   &[aria-invalid="true"] {
-    border-color: var(--input-otp-input-otp-slot-states-invalid-borderColor-value);
+    border-color: var(--input-otp-slot-states-invalid-borderColor);
   }
 }
 
 // OTP caret (blinking cursor)
 .input-otp-caret {
-  position: var(--input-otp-input-otp-caret-position-value);
-  inset: var(--input-otp-input-otp-caret-inset-value);
-  display: var(--input-otp-input-otp-caret-display-value);
-  align-items: var(--input-otp-input-otp-caret-alignItems-value);
-  justify-content: var(--input-otp-input-otp-caret-justifyContent-value);
-  pointer-events: var(--input-otp-input-otp-caret-pointerEvents-value);
+  position: var(--input-otp-caret-position);
+  inset: var(--input-otp-caret-inset);
+  display: var(--input-otp-caret-display);
+  align-items: var(--input-otp-caret-alignItems);
+  justify-content: var(--input-otp-caret-justifyContent);
+  pointer-events: var(--input-otp-caret-pointerEvents);
 
   .input-otp-caret-line {
-    background-color: var(--input-otp-input-otp-caret-backgroundColor-value);
-    width: var(--input-otp-input-otp-caret-width-value);
-    height: var(--input-otp-input-otp-caret-height-value);
-    animation: var(--input-otp-input-otp-caret-animation-name-value) var(--input-otp-input-otp-caret-animation-duration-value) infinite;
+    background-color: var(--input-otp-caret-backgroundColor);
+    width: var(--input-otp-caret-width);
+    height: var(--input-otp-caret-height);
+    animation: var(--input-otp-caret-animation-name) var(--input-otp-caret-animation-duration) infinite;
   }
 }
 

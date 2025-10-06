@@ -1,0 +1,35 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Kbd/kbd.tokens.json
+ */
+@mixin vars {
+  /* === Container Tokens === */
+  --kbd-container-backgroundColor: var(--color-palette-neutral-100);
+  --kbd-container-color: var(--color-palette-neutral-500);
+  --kbd-container-width: fit-content;
+  --kbd-container-pointerEvents: none;
+  --kbd-container-display: inline-flex;
+  --kbd-container-height: 20px;
+  --kbd-container-minWidth: 20px;
+  --kbd-container-alignItems: center;
+  --kbd-container-justifyContent: center;
+  --kbd-container-gap: 4px;
+  --kbd-container-borderRadius: 4px;
+  --kbd-container-padding-horizontal: 4px;
+  --kbd-container-fontFamily: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --kbd-container-fontSize: 12px;
+  --kbd-container-fontWeight: 500;
+  --kbd-container-userSelect: none;
+
+  /* === Icon Tokens === */
+  --kbd-icon-size: 12px;
+
+  /* === Tooltip Tokens === */
+  --kbd-tooltip-backgroundColor: var(--color-mode-white);
+  --kbd-tooltip-color: var(--color-mode-white);
+  --kbd-tooltip-dark-backgroundColor: var(--color-mode-white);
+
+  /* === Group Tokens === */
+  --kbd-group-display: inline-flex;
+  --kbd-group-alignItems: center;
+  --kbd-group-gap: 4px;
+}

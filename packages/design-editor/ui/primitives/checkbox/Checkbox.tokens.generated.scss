@@ -1,0 +1,22 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Checkbox/checkbox.tokens.json
+ */
+@mixin vars {
+  /* === Checkbox Tokens === */
+  --checkbox-Checkbox-size: 16px;
+  --checkbox-Checkbox-borderRadius: 4px;
+  --checkbox-Checkbox-border-width: 1px;
+  --checkbox-Checkbox-border-style: solid;
+  --checkbox-Checkbox-border-color-default: var(--color-palette-neutral-200);
+  --checkbox-Checkbox-boxShadow: var(--elevation-level-1);
+  --checkbox-Checkbox-transition-duration: 150ms;
+  --checkbox-Checkbox-transition-easing: var(--motion-interaction-hover-easing);
+  --checkbox-Checkbox-backgroundColor-default: transparent;
+  --checkbox-Checkbox-backgroundColor-dark: var(--color-palette-neutral-200);
+  --checkbox-Checkbox-states-checked-backgroundColor: var(--color-action-background-primary-default);
+  --checkbox-Checkbox-states-checked-color: var(--color-action-foreground-primary-default);
+  --checkbox-Checkbox-states-checked-borderColor: var(--color-action-background-primary-default);
+  --checkbox-Checkbox-states-checked-dark-backgroundColor: var(--color-action-background-primary-default);
+  --checkbox-Checkbox-states-disabled-opacity: 0.5;
+  --checkbox-Checkbox-indicator-icon-size: 14px;
+}

@@ -1,3 +1,19 @@
 {
-  "sonner": {}
+  "prefix": "sonner",
+  "tokens": {
+    "toast": {
+      "backgroundColor": {
+        "value": "{semantic.color.display.background.popover}",
+        "description": "Background color for toast notifications"
+      },
+      "foregroundColor": {
+        "value": "{semantic.color.display.foreground.popover}",
+        "description": "Text color for toast notifications"
+      },
+      "borderColor": {
+        "value": "{semantic.color.display.border.subtle}",
+        "description": "Border color for toast notifications"
+      }
+    }
+  }
 }

@@ -1,7 +1,278 @@
-// select primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Select component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
+// Import generated token variables
+@use './Select.tokens.generated.scss' as selectTokens;
+
+// Base select styles (equivalent to Tailwind base classes)
 .select {
-  // Placeholder for future SCSS implementation
-  // Will contain select-specific styles when migrating from Tailwind
+  // Include the generated variables mixin within the component scope
+  @include selectTokens.vars;
+  position: relative;
+}
+
+// Select trigger styles
+.select-trigger {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--semantic-spacing-gap-grid-small); // 8px
+  white-space: nowrap;
+  border-radius: var(--select-borderRadius);
+  border: 1px solid var(--select-trigger-borderColor);
+  background-color: var(--select-trigger-backgroundColor);
+  font-size: var(--select-fontSize);
+  font-weight: var(--select-fontWeight);
+  line-height: var(--select-lineHeight);
+  transition: var(--semantic-motion-interaction-hover-duration) var(--semantic-motion-interaction-hover-easing);
+  box-shadow: var(--semantic-elevation-small);
+  outline: none;
+  cursor: pointer;
+
+  // Placeholder text
+  &[data-placeholder] {
+    color: var(--semantic-color-action-foreground-tertiary-default);
+  }
+
+  // Hover state
+  &:hover {
+    border-color: var(--select-trigger-hover-borderColor);
+  }
+
+  // Focus state
+  &:focus {
+    border-color: var(--select-trigger-focus-borderColor);
+    box-shadow: 0 0 0 3px rgba(var(--select-trigger-focus-ringColor), 0.5);
+  }
+
+  // Disabled state
+  &:disabled {
+    opacity: var(--select-trigger-disabled-opacity);
+    cursor: var(--select-trigger-disabled-cursor);
+    pointer-events: none;
+  }
+
+  // Invalid state
+  &[aria-invalid="true"] {
+    box-shadow: 0 0 0 3px rgba(var(--semantic-color-feedback-foreground-danger-default), 0.2);
+    border-color: var(--semantic-color-feedback-foreground-danger-default);
+
+    .dark & {
+      box-shadow: 0 0 0 3px rgba(var(--semantic-color-feedback-foreground-danger-default), 0.4);
+    }
+  }
+}
+
+// Select trigger size variants
+.select-trigger--size-default {
+  height: var(--select-height-default);
+  padding: var(--select-padding-vertical-default) var(--select-padding-horizontal-default);
+}
+
+.select-trigger--size-sm {
+  height: var(--select-height-sm);
+  padding: var(--select-padding-vertical-sm) var(--select-padding-horizontal-sm);
+  font-size: var(--semantic-typography-body-small-fontSize);
+}
+
+// Select icon
+.select-icon {
+  width: var(--select-icon-size);
+  height: var(--select-icon-size);
+  opacity: var(--select-icon-opacity);
+  color: var(--select-icon-color);
+  flex-shrink: 0;
+}
+
+// Select content
+.select-content {
+  position: relative;
+  z-index: var(--select-content-zIndex);
+  max-height: var(--select-content-maxHeight);
+  min-width: var(--select-content-minWidth);
+  overflow: hidden;
+  border-radius: var(--select-borderRadius);
+  border: 1px solid var(--select-content-borderColor);
+  background-color: var(--select-content-backgroundColor);
+  color: var(--select-content-color);
+  box-shadow: var(--semantic-elevation-medium);
+  animation-duration: var(--semantic-motion-interaction-hover-duration);
+  animation-timing-function: var(--semantic-motion-interaction-hover-easing);
+  animation-fill-mode: both;
+
+  // Animation states
+  &[data-state="open"] {
+    animation-name: select-content-show;
+  }
+
+  &[data-state="closed"] {
+    animation-name: select-content-hide;
+  }
+
+  // Position variants
+  &[data-side="top"] {
+    animation-name: select-content-slide-down-and-fade;
+  }
+
+  &[data-side="right"] {
+    animation-name: select-content-slide-left-and-fade;
+  }
+
+  &[data-side="bottom"] {
+    animation-name: select-content-slide-up-and-fade;
+  }
+
+  &[data-side="left"] {
+    animation-name: select-content-slide-right-and-fade;
+  }
+
+  // Dark mode
+  .dark & {
+    background-color: var(--semantic-color-action-background-secondary-default);
+    border-color: var(--semantic-color-action-border-secondary-default);
+  }
+}
+
+// Select viewport
+.select-viewport {
+  padding: var(--semantic-spacing-gap-grid-small);
+}
+
+// Select item
+.select-item {
+  position: relative;
+  display: flex;
+  width: 100%;
+  cursor: default;
+  user-select: none;
+  align-items: center;
+  border-radius: var(--select-item-borderRadius);
+  padding: var(--select-item-padding-vertical) var(--select-item-padding-horizontal);
+  font-size: var(--select-fontSize);
+  line-height: var(--select-lineHeight);
+  outline: none;
+  transition: var(--semantic-motion-interaction-hover-duration) var(--semantic-motion-interaction-hover-easing);
+
+  // Hover state
+  &:hover,
+  &:focus {
+    background-color: var(--select-item-hover-backgroundColor);
+    color: var(--select-item-hover-color);
+  }
+
+  // Selected state
+  &[data-state="checked"] {
+    background-color: var(--select-item-selected-backgroundColor);
+    color: var(--select-item-selected-color);
+  }
+
+  // Disabled state
+  &:disabled,
+  &[data-disabled] {
+    opacity: var(--select-item-disabled-opacity);
+    pointer-events: var(--select-item-disabled-pointerEvents);
+  }
+}
+
+// Select item indicator
+.select-item-indicator {
+  position: absolute;
+  right: var(--semantic-spacing-gap-grid-small);
+  display: flex;
+  height: var(--semantic-spacing-gap-grid-medium); // 12px
+  width: var(--semantic-spacing-gap-grid-medium); // 12px
+  align-items: center;
+  justify-content: center;
+}
+
+// Select label
+.select-label {
+  padding: var(--select-item-padding-vertical) var(--select-item-padding-horizontal);
+  font-size: var(--semantic-typography-body-small-fontSize);
+  font-weight: var(--semantic-typography-body-small-fontWeight);
+  color: var(--semantic-color-action-foreground-tertiary-default);
+}
+
+// Select separator
+.select-separator {
+  margin: calc(var(--semantic-spacing-gap-grid-small) * -1) 0;
+  height: 1px;
+  background-color: var(--semantic-color-action-border-secondary-default);
+}
+
+// Select scroll buttons
+.select-scroll-button {
+  display: flex;
+  cursor: default;
+  align-items: center;
+  justify-content: center;
+  padding: var(--semantic-spacing-gap-grid-small) 0;
+}
+
+// Animation keyframes
+@keyframes select-content-show {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes select-content-hide {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes select-content-slide-down-and-fade {
+  from {
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes select-content-slide-left-and-fade {
+  from {
+    opacity: 0;
+    transform: translateX(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes select-content-slide-up-and-fade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes select-content-slide-right-and-fade {
+  from {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

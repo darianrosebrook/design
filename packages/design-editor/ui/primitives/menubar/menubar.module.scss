@@ -1,7 +1,159 @@
 // menubar primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Menubar.tokens.generated.scss' as menubarTokens;
+
+// Include the generated variables mixin
+@include menubarTokens.vars;
+
+// Root menubar styles
 .menubar {
-  // Placeholder for future SCSS implementation
-  // Will contain menubar-specific styles when migrating from Tailwind
+  background-color: var(--menubar-root-backgroundColor);
+  display: var(--menubar-root-display);
+  height: var(--menubar-root-height);
+  align-items: var(--menubar-root-alignItems);
+  gap: var(--menubar-root-gap);
+  border-radius: var(--menubar-root-borderRadius);
+  border: var(--menubar-root-border-width) var(--menubar-root-border-style) var(--menubar-root-border-color);
+  padding: var(--menubar-root-padding);
+  box-shadow: var(--menubar-root-boxShadow);
+}
+
+// Trigger styles
+.menubarTrigger {
+  display: var(--menubar-trigger-display);
+  align-items: var(--menubar-trigger-alignItems);
+  border-radius: var(--menubar-trigger-borderRadius);
+  padding: var(--menubar-trigger-padding-vertical) var(--menubar-trigger-padding-horizontal);
+  font-size: var(--menubar-trigger-fontSize);
+  font-weight: var(--menubar-trigger-fontWeight);
+  outline: var(--menubar-trigger-outline);
+  user-select: var(--menubar-trigger-userSelect);
+
+  // Focus state
+  &:focus {
+    background-color: var(--menubar-trigger-states-focus-backgroundColor);
+    color: var(--menubar-trigger-states-focus-color);
+  }
+
+  // Open state
+  &[data-state="open"] {
+    background-color: var(--menubar-trigger-states-open-backgroundColor);
+    color: var(--menubar-trigger-states-open-color);
+  }
+}
+
+// Content styles
+.menubarContent {
+  background-color: var(--menubar-content-backgroundColor);
+  color: var(--menubar-content-color);
+  z-index: var(--menubar-content-zIndex);
+  min-width: var(--menubar-content-minWidth);
+  border-radius: var(--menubar-content-borderRadius);
+  border: var(--menubar-content-border-width) var(--menubar-content-border-style) var(--menubar-content-border-color);
+  padding: var(--menubar-content-padding);
+  box-shadow: var(--menubar-content-boxShadow);
+  overflow: var(--menubar-content-overflow);
+}
+
+// Item styles
+.menubarItem {
+  display: var(--menubar-item-display);
+  align-items: var(--menubar-item-alignItems);
+  border-radius: var(--menubar-item-borderRadius);
+  padding: var(--menubar-item-padding-vertical) var(--menubar-item-padding-horizontal);
+  font-size: var(--menubar-item-fontSize);
+  outline: var(--menubar-item-outline);
+
+  // Focus state
+  &:focus {
+    background-color: var(--menubar-item-states-focus-backgroundColor);
+    color: var(--menubar-item-states-focus-color);
+  }
+
+  // Disabled state
+  &:disabled {
+    pointer-events: var(--menubar-item-states-disabled-pointerEvents);
+    opacity: var(--menubar-item-states-disabled-opacity);
+  }
+
+  // Destructive variant
+  &--variant-destructive {
+    color: var(--menubar-item-variants-destructive-color);
+
+    &:focus {
+      background-color: var(--menubar-item-variants-destructive-focus-backgroundColor);
+      color: var(--menubar-item-variants-destructive-focus-color);
+    }
+  }
+}
+
+// Separator styles
+.menubarSeparator {
+  background-color: var(--menubar-separator-backgroundColor);
+  margin: var(--menubar-separator-margin-vertical) var(--menubar-separator-margin-horizontal);
+  height: var(--menubar-separator-height);
+}
+
+// Label styles
+.menubarLabel {
+  padding: var(--menubar-label-padding-vertical) var(--menubar-label-padding-horizontal);
+  font-size: var(--menubar-label-fontSize);
+  font-weight: var(--menubar-label-fontWeight);
+  color: var(--menubar-label-color);
+}
+
+// Checkbox item styles
+.menubarCheckboxItem {
+  // Inherits from menubarItem, adds indicator positioning
+  .menubarCheckboxItemIndicator {
+    position: var(--menubar-checkboxItem-indicator-position);
+    left: var(--menubar-checkboxItem-indicator-left);
+    display: var(--menubar-checkboxItem-indicator-display);
+    align-items: var(--menubar-checkboxItem-indicator-alignItems);
+    justify-content: var(--menubar-checkboxItem-indicator-justifyContent);
+    width: var(--menubar-checkboxItem-indicator-size);
+    height: var(--menubar-checkboxItem-indicator-size);
+  }
+}
+
+// Radio item styles
+.menubarRadioItem {
+  // Inherits from menubarItem, adds indicator positioning
+  .menubarRadioItemIndicator {
+    position: var(--menubar-radioItem-indicator-position);
+    left: var(--menubar-radioItem-indicator-left);
+    display: var(--menubar-radioItem-indicator-display);
+    align-items: var(--menubar-radioItem-indicator-alignItems);
+    justify-content: var(--menubar-radioItem-indicator-justifyContent);
+    width: var(--menubar-radioItem-indicator-size);
+    height: var(--menubar-radioItem-indicator-size);
+    border-radius: var(--menubar-radioItem-indicator-borderRadius);
+  }
+}
+
+// Sub trigger styles
+.menubarSubTrigger {
+  // Inherits from menubarItem, adds right padding and chevron
+  padding-right: var(--menubar-subTrigger-paddingRight);
+
+  .menubarSubTriggerChevron {
+    margin-left: var(--menubar-subTrigger-chevron-marginLeft);
+    width: var(--menubar-subTrigger-chevron-size);
+    height: var(--menubar-subTrigger-chevron-size);
+  }
+}
+
+// Sub content styles (extends content)
+.menubarSubContent {
+  background-color: var(--menubar-content-backgroundColor);
+  color: var(--menubar-content-color);
+  z-index: var(--menubar-content-zIndex);
+  min-width: var(--menubar-content-minWidth);
+  border-radius: var(--menubar-content-borderRadius);
+  border: var(--menubar-content-border-width) var(--menubar-content-border-style) var(--menubar-content-border-color);
+  padding: var(--menubar-content-padding);
+  box-shadow: var(--menubar-content-boxShadow);
+  overflow: var(--menubar-content-overflow);
 }

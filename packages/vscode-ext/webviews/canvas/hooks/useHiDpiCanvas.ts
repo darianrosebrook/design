@@ -13,7 +13,7 @@ export function useHiDpiCanvas(
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el) {return;}
     const ro = new ResizeObserver(() => {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
       const rect = el.getBoundingClientRect();
@@ -21,7 +21,7 @@ export function useHiDpiCanvas(
       el.height = Math.max(1, Math.floor(rect.height * dpr));
       setSize({ width: el.width, height: el.height });
       const c = el.getContext("2d");
-      if (c) setCtx(c);
+      if (c) {setCtx(c);}
     });
     ro.observe(el);
     return () => ro.disconnect();

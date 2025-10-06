@@ -1,7 +1,68 @@
-// file-details-panel composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// FileDetailsPanel assembly component styles
+// Migrated from Tailwind to SCSS with design tokens
 
-.file-details-panel {
-  // Placeholder for future SCSS implementation
-  // Will contain file-details-panel-specific styles when migrating from Tailwind
+.fileDetailsPanel {
+  // Main panel container styles (equivalent to flex flex-col h-full)
+  display: flex;
+  flex-direction: column;
+  height: 100%; // equivalent to h-full
+}
+
+.fileDetailsPanelContent {
+  // Content area styles (equivalent to flex-1 px-3 pb-3)
+  flex: 1; // equivalent to flex-1
+  padding: 0 12px 12px 12px; // equivalent to px-3 pb-3
+}
+
+.fileDetailsPanelTabs {
+  // Tabs container styles (equivalent to flex flex-col h-full)
+  display: flex;
+  flex-direction: column;
+  height: 100%; // equivalent to h-full
+}
+
+.fileDetailsPanelCollapsed {
+  // Collapsed view styles (equivalent to flex flex-col items-center gap-3 py-4 text-center)
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px; // equivalent to gap-3
+  padding: 16px 0; // equivalent to py-4
+  text-align: center; // equivalent to text-center
+}
+
+.fileDetailsPanelCollapsedName {
+  // Collapsed name styles (equivalent to text-xs font-medium text-foreground truncate max-w-[80px])
+  font-size: 12px; // equivalent to text-xs
+  font-weight: 500; // equivalent to font-medium
+  color: hsl(var(--foreground)); // equivalent to text-foreground
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 80px; // equivalent to max-w-[80px]
+}
+
+.fileDetailsPanelCollapsedStats {
+  // Collapsed stats styles (equivalent to flex items-center gap-1 text-xs text-muted-foreground)
+  display: flex;
+  align-items: center;
+  gap: 4px; // equivalent to gap-1
+  font-size: 12px; // equivalent to text-xs
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+}
+
+.fileDetailsPanelCollapsedTime {
+  // Collapsed time styles (equivalent to text-xs text-muted-foreground truncate max-w-[70px])
+  font-size: 12px; // equivalent to text-xs
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 70px; // equivalent to max-w-[70px]
+}
+
+.fileDetailsPanelCollapsedIcon {
+  // Collapsed icon styles (equivalent to h-3 w-3)
+  width: 12px; // equivalent to w-3
+  height: 12px; // equivalent to h-3
 }

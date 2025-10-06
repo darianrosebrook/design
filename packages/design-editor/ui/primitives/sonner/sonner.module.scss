@@ -1,7 +1,18 @@
-// sonner primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Sonner primitive component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.sonner {
-  // Placeholder for future SCSS implementation
-  // Will contain sonner-specific styles when migrating from Tailwind
+.sonnerToaster {
+  // Sonner toaster wrapper styles
+  // Uses CSS custom properties that map to our design tokens
+
+  // Set CSS custom properties for Sonner
+  --normal-bg: var(--sonner-toast-backgroundColor);
+  --normal-text: var(--sonner-toast-foregroundColor);
+  --normal-border: var(--sonner-toast-borderColor);
+}
+
+// Additional toast customization classes can be added here if needed
+.sonnerToast {
+  // Custom toast styles if needed
+  // Most styling is handled by Sonner library using CSS custom properties
 }

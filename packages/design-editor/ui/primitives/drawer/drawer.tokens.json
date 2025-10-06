@@ -1,3 +1,379 @@
 {
-  "drawer": {}
+  "prefix": "drawer",
+  "tokens": {
+    "overlay": {
+      "position": {
+        "value": "fixed",
+        "description": "Position for overlay"
+      },
+      "inset": {
+        "value": "0",
+        "description": "Inset for overlay"
+      },
+      "zIndex": {
+        "value": "1050",
+        "description": "Z-index for overlay"
+      },
+      "backgroundColor": {
+        "value": "rgba(0, 0, 0, 0.5)",
+        "description": "Background color for overlay"
+      },
+      "animation": {
+        "duration": {
+          "value": "200ms",
+          "description": "Animation duration for overlay"
+        },
+        "easing": {
+          "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "description": "Animation easing for overlay"
+        }
+      }
+    },
+    "content": {
+      "position": {
+        "value": "fixed",
+        "description": "Position for drawer content"
+      },
+      "zIndex": {
+        "value": "1050",
+        "description": "Z-index for drawer content"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display for drawer content"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for drawer content"
+      },
+      "backgroundColor": {
+        "value": "{color.mode.light}",
+        "description": "Background color for drawer content"
+      },
+      "borderRadius": {
+        "value": "8px",
+        "description": "Border radius for drawer content"
+      },
+      "animation": {
+        "duration": {
+          "value": "400ms",
+          "description": "Animation duration for drawer content"
+        },
+        "easing": {
+          "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "description": "Animation easing for drawer content"
+        }
+      },
+      "directions": {
+        "top": {
+          "inset": {
+            "value": "0",
+            "description": "Inset for top direction"
+          },
+          "top": {
+            "value": "0",
+            "description": "Top position for top direction"
+          },
+          "bottom": {
+            "value": "auto",
+            "description": "Bottom position for top direction"
+          },
+          "left": {
+            "value": "0",
+            "description": "Left position for top direction"
+          },
+          "right": {
+            "value": "0",
+            "description": "Right position for top direction"
+          },
+          "marginBottom": {
+            "value": "96px",
+            "description": "Margin bottom for top direction"
+          },
+          "maxHeight": {
+            "value": "80vh",
+            "description": "Max height for top direction"
+          },
+          "borderBottom": {
+            "width": {
+              "value": "1px",
+              "description": "Border bottom width for top direction"
+            },
+            "style": {
+              "value": "solid",
+              "description": "Border bottom style for top direction"
+            },
+            "color": {
+              "value": "{color.palette.neutral.200}",
+              "description": "Border bottom color for top direction"
+            }
+          },
+          "borderRadiusBottom": {
+            "value": "8px",
+            "description": "Border radius bottom for top direction"
+          }
+        },
+        "bottom": {
+          "inset": {
+            "value": "0",
+            "description": "Inset for bottom direction"
+          },
+          "top": {
+            "value": "auto",
+            "description": "Top position for bottom direction"
+          },
+          "bottom": {
+            "value": "0",
+            "description": "Bottom position for bottom direction"
+          },
+          "left": {
+            "value": "0",
+            "description": "Left position for bottom direction"
+          },
+          "right": {
+            "value": "0",
+            "description": "Right position for bottom direction"
+          },
+          "marginTop": {
+            "value": "96px",
+            "description": "Margin top for bottom direction"
+          },
+          "maxHeight": {
+            "value": "80vh",
+            "description": "Max height for bottom direction"
+          },
+          "borderTop": {
+            "width": {
+              "value": "1px",
+              "description": "Border top width for bottom direction"
+            },
+            "style": {
+              "value": "solid",
+              "description": "Border top style for bottom direction"
+            },
+            "color": {
+              "value": "{color.palette.neutral.200}",
+              "description": "Border top color for bottom direction"
+            }
+          },
+          "borderRadiusTop": {
+            "value": "8px",
+            "description": "Border radius top for bottom direction"
+          }
+        },
+        "left": {
+          "inset": {
+            "value": "0",
+            "description": "Inset for left direction"
+          },
+          "top": {
+            "value": "0",
+            "description": "Top position for left direction"
+          },
+          "bottom": {
+            "value": "0",
+            "description": "Bottom position for left direction"
+          },
+          "left": {
+            "value": "0",
+            "description": "Left position for left direction"
+          },
+          "right": {
+            "value": "auto",
+            "description": "Right position for left direction"
+          },
+          "width": {
+            "value": "75%",
+            "description": "Width for left direction"
+          },
+          "maxWidth": {
+            "value": "384px",
+            "description": "Max width for left direction"
+          },
+          "borderRight": {
+            "width": {
+              "value": "1px",
+              "description": "Border right width for left direction"
+            },
+            "style": {
+              "value": "solid",
+              "description": "Border right style for left direction"
+            },
+            "color": {
+              "value": "{color.palette.neutral.200}",
+              "description": "Border right color for left direction"
+            }
+          }
+        },
+        "right": {
+          "inset": {
+            "value": "0",
+            "description": "Inset for right direction"
+          },
+          "top": {
+            "value": "0",
+            "description": "Top position for right direction"
+          },
+          "bottom": {
+            "value": "0",
+            "description": "Bottom position for right direction"
+          },
+          "left": {
+            "value": "auto",
+            "description": "Left position for right direction"
+          },
+          "right": {
+            "value": "0",
+            "description": "Right position for right direction"
+          },
+          "width": {
+            "value": "75%",
+            "description": "Width for right direction"
+          },
+          "maxWidth": {
+            "value": "384px",
+            "description": "Max width for right direction"
+          },
+          "borderLeft": {
+            "width": {
+              "value": "1px",
+              "description": "Border left width for right direction"
+            },
+            "style": {
+              "value": "solid",
+              "description": "Border left style for right direction"
+            },
+            "color": {
+              "value": "{color.palette.neutral.200}",
+              "description": "Border left color for right direction"
+            }
+          }
+        }
+      }
+    },
+    "handle": {
+      "display": {
+        "value": "none",
+        "description": "Default display for handle"
+      },
+      "backgroundColor": {
+        "value": "{color.palette.neutral.100}",
+        "description": "Background color for handle"
+      },
+      "margin": {
+        "horizontal": {
+          "value": "auto",
+          "description": "Horizontal margin for handle"
+        }
+      },
+      "marginTop": {
+        "value": "16px",
+        "description": "Top margin for handle"
+      },
+      "height": {
+        "value": "8px",
+        "description": "Height for handle"
+      },
+      "width": {
+        "value": "100px",
+        "description": "Width for handle"
+      },
+      "borderRadius": {
+        "value": "9999px",
+        "description": "Border radius for handle"
+      },
+      "flexShrink": {
+        "value": "0",
+        "description": "Flex shrink for handle"
+      },
+      "bottomDirection": {
+        "display": {
+          "value": "block",
+          "description": "Display when direction is bottom"
+        }
+      }
+    },
+    "header": {
+      "display": {
+        "value": "flex",
+        "description": "Display for header"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for header"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap for header"
+      },
+      "padding": {
+        "value": "16px",
+        "description": "Padding for header"
+      },
+      "bottomDirection": {
+        "textAlign": {
+          "value": "center",
+          "description": "Text align when direction is bottom"
+        }
+      },
+      "topDirection": {
+        "textAlign": {
+          "value": "center",
+          "description": "Text align when direction is top"
+        }
+      },
+      "responsive": {
+        "gap": {
+          "value": "6px",
+          "description": "Responsive gap for header"
+        },
+        "textAlign": {
+          "value": "left",
+          "description": "Responsive text align for header"
+        }
+      }
+    },
+    "footer": {
+      "marginTop": {
+        "value": "auto",
+        "description": "Top margin for footer"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display for footer"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for footer"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for footer"
+      },
+      "padding": {
+        "value": "16px",
+        "description": "Padding for footer"
+      }
+    },
+    "title": {
+      "color": {
+        "value": "{color.mode.dark}",
+        "description": "Color for title"
+      },
+      "fontWeight": {
+        "value": "600",
+        "description": "Font weight for title"
+      }
+    },
+    "description": {
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for description"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for description"
+      }
+    }
+  }
 }

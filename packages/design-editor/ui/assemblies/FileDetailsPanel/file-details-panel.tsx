@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { LayersIcon, Library } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/primitives/Tabs";
-import { FileMetadata } from "@/ui/compounds/FileMetadata";
+import { useState } from "react";
+import styles from "./file-details-panel.module.scss";
+import { useCanvas } from "@/lib/canvas-context";
+import { cn } from "@/lib/utils";
 import { LayersList } from "@/ui/assemblies/LayersList";
 import { LibrarySection } from "@/ui/assemblies/LibrarySection";
-import { useCanvas } from "@/lib/canvas-context";
+import { Panel, PanelContent } from "@/ui/composers/Panel";
+import { FileMetadata } from "@/ui/compounds/FileMetadata";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/primitives/Tabs";
 
 interface FileDetailsPanelProps {
   onOpenDesignSystem?: () => void;
@@ -31,15 +34,15 @@ export function FileDetailsPanel({
   // If collapsed, show compact view
   if (isCollapsed) {
     return (
-      <div className="flex flex-col items-center gap-3 py-4 text-center">
-        <div className="text-xs font-medium text-foreground truncate max-w-[80px]">
+      <div className={styles.fileDetailsPanelCollapsed}>
+        <div className={styles.fileDetailsPanelCollapsedName}>
           {fileMetadata.name}
         </div>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <LayersIcon className="h-3 w-3" />
+        <div className={styles.fileDetailsPanelCollapsedStats}>
+          <LayersIcon className={styles.fileDetailsPanelCollapsedIcon} />
           <span>{fileMetadata.layers}</span>
         </div>
-        <div className="text-xs text-muted-foreground truncate max-w-[70px]">
+        <div className={styles.fileDetailsPanelCollapsedTime}>
           {fileMetadata.lastModified}
         </div>
       </div>
@@ -47,40 +50,43 @@ export function FileDetailsPanel({
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <Panel>
       {/* Header with file metadata */}
       <FileMetadata {...fileMetadata} />
 
-      {/* Tabs */}
-      <Tabs
-        value={activeTab}
-        onValueChange={(value) => setActiveTab(value as "layers" | "library")}
-      >
-        <TabsList className="grid w-full grid-cols-2 mx-3 mt-2 h-9">
-          <TabsTrigger value="layers" className="text-xs">
-            <LayersIcon className="h-3 w-3 mr-1" />
-            Layers
-          </TabsTrigger>
-          <TabsTrigger value="library" className="text-xs">
-            <Library className="h-3 w-3 mr-1" />
-            Library
-          </TabsTrigger>
-        </TabsList>
+      {/* Content with tabs */}
+      <PanelContent>
+        <Tabs
+          value={activeTab}
+          onValueChange={(value) => setActiveTab(value as "layers" | "library")}
+          className={styles.fileDetailsPanelTabs}
+        >
+          <TabsList className="// grid w-full grid-cols-2 mx-3 mt-2 h-9">
+            <TabsTrigger value="layers" className="// text-xs">
+              <LayersIcon className="// h-3 w-3 mr-1" />
+              Layers
+            </TabsTrigger>
+            <TabsTrigger value="library" className="// text-xs">
+              <Library className="// h-3 w-3 mr-1" />
+              Library
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Layers Tab */}
-        <TabsContent value="layers" className="flex-1 m-0">
-          <LayersList objects={objects} />
-        </TabsContent>
+          {/* Layers Tab */}
+          <TabsContent value="layers" className="// flex-1 m-0">
+            <LayersList objects={objects} />
+          </TabsContent>
 
-        {/* Library Tab */}
-        <TabsContent value="library" className="flex-1 m-0">
-          <LibrarySection
-            title="Design System"
-            items={[]} // MOCK DATA: Library section will use internal mock data for demonstration
-            onOpenDesignSystem={onOpenDesignSystem}
-          />
-        </TabsContent>
-      </Tabs>
-    </div>
+          {/* Library Tab */}
+          <TabsContent value="library" className="// flex-1 m-0">
+            <LibrarySection
+              title="Design System"
+              items={[]} // MOCK DATA: Library section will use internal mock data for demonstration
+              onOpenDesignSystem={onOpenDesignSystem}
+            />
+          </TabsContent>
+        </Tabs>
+      </PanelContent>
+    </Panel>
   );
 }

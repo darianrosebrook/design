@@ -1,7 +1,117 @@
 // table primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Table.tokens.generated.scss' as tableTokens;
+
+// Include the generated variables mixin
+@include tableTokens.vars;
+
+// Table container styles
+.table-container {
+  position: var(--table-container-position);
+  width: var(--table-container-width);
+  overflow-x: var(--table-container-overflowX);
+}
+
+// Table element styles
 .table {
-  // Placeholder for future SCSS implementation
-  // Will contain table-specific styles when migrating from Tailwind
+  width: var(--table-table-width);
+  caption-side: var(--table-table-captionSide);
+  font-size: var(--table-table-fontSize);
+}
+
+// Table header styles
+.table-header {
+  tr {
+    border-bottom: var(--table-header-row-borderBottom-width) var(--table-header-row-borderBottom-style) var(--table-header-row-borderBottom-color);
+  }
+}
+
+// Table body styles
+.table-body {
+  tr:last-child {
+    border-bottom: var(--table-body-row-last-borderBottom);
+  }
+}
+
+// Table footer styles
+.table-footer {
+  background-color: var(--table-footer-backgroundColor);
+  opacity: var(--table-footer-backgroundColor-opacity);
+  border-top: var(--table-footer-borderTop-width) var(--table-footer-borderTop-style) var(--table-footer-borderTop-color);
+  font-weight: var(--table-footer-fontWeight);
+
+  tr:last-child {
+    border-bottom: var(--table-footer-row-last-borderBottom);
+  }
+}
+
+// Table row styles
+.table-row {
+  border-bottom: var(--table-row-borderBottom-width) var(--table-row-borderBottom-style) var(--table-row-borderBottom-color);
+  transition: var(--table-row-transition-property) var(--table-row-transition-duration) var(--table-row-transition-easing);
+
+  // Hover state
+  &:hover {
+    background-color: var(--table-row-states-hover-backgroundColor);
+    opacity: var(--table-row-states-hover-backgroundColor-opacity);
+  }
+
+  // Selected state
+  &[data-state="selected"] {
+    background-color: var(--table-row-states-selected-backgroundColor);
+  }
+}
+
+// Table head styles
+.table-head {
+  color: var(--table-head-color);
+  height: var(--table-head-height);
+  padding: 0 var(--table-head-padding-horizontal);
+  text-align: var(--table-head-textAlign);
+  vertical-align: var(--table-head-verticalAlign);
+  font-weight: var(--table-head-fontWeight);
+  white-space: var(--table-head-whiteSpace);
+
+  // Checkbox adjustments
+  &:has([role="checkbox"]) {
+    padding-right: var(--table-head-checkbox-paddingRight);
+
+    [role="checkbox"] {
+      transform: translateY(var(--table-head-checkbox-translateY));
+    }
+  }
+
+  // Text line clamping
+  span {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// Table cell styles
+.table-cell {
+  padding: 0 var(--table-cell-padding-horizontal);
+  vertical-align: var(--table-cell-verticalAlign);
+  white-space: var(--table-cell-whiteSpace);
+
+  // Checkbox adjustments
+  &:has([role="checkbox"]) {
+    padding-right: var(--table-cell-checkbox-paddingRight);
+
+    [role="checkbox"] {
+      transform: translateY(var(--table-cell-checkbox-translateY));
+    }
+  }
+}
+
+// Table caption styles
+.table-caption {
+  color: var(--table-caption-color);
+  margin-top: var(--table-caption-marginTop);
+  font-size: var(--table-caption-fontSize);
+  text-align: var(--table-caption-textAlign);
 }

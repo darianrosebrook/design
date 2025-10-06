@@ -1,8 +1,8 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { Separator } from '@/ui/primitives/separator';
 import { cn } from "@/lib/utils";
+import { Separator } from "@/ui/primitives/Separator";
 
 function ItemGroup({ className, ...props }: React.ComponentProps<"div">) {
   return (
@@ -107,7 +107,7 @@ function ItemContent({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="item-content"
       className={cn(
-        "flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none",
+        // "flex flex-1 flex-col gap-1 [&+[data-slot=item-content]]:flex-none",
         className
       )}
       {...props}
@@ -120,7 +120,7 @@ function ItemTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="item-title"
       className={cn(
-        "flex w-fit items-center gap-2 text-sm leading-snug font-medium",
+        // "flex w-fit items-center gap-2 text-sm leading-snug font-medium",
         className
       )}
       {...props}
@@ -133,8 +133,8 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
     <p
       data-slot="item-description"
       className={cn(
-        "text-muted-foreground line-clamp-2 text-sm leading-normal font-normal text-balance",
-        "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
+        // "text-muted-foreground line-clamp-2 text-sm leading-normal font-normal text-balance",
+        // "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
         className
       )}
       {...props}
@@ -146,7 +146,7 @@ function ItemActions({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="item-actions"
-      className={cn("flex items-center gap-2", className)}
+      className={cn("flex items-center gap-2", className)} // "flex items-center gap-2",
       {...props}
     />
   );

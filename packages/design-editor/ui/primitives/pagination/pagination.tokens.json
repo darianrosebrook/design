@@ -1,3 +1,189 @@
 {
-  "pagination": {}
+  "prefix": "pagination",
+  "tokens": {
+    "nav": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for pagination navigation"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for pagination navigation"
+      },
+      "margin": {
+        "horizontal": {
+          "value": "auto",
+          "description": "Horizontal margin for pagination navigation"
+        }
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for pagination navigation"
+      }
+    },
+    "content": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for pagination content"
+      },
+      "flexDirection": {
+        "value": "row",
+        "description": "Flex direction for pagination content"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for pagination content"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap between pagination content items"
+      }
+    },
+    "item": {
+      "position": {
+        "value": "relative",
+        "description": "Position for pagination items"
+      }
+    },
+    "link": {
+      "states": {
+        "active": {
+          "variant": {
+            "value": "outline",
+            "description": "Button variant for active pagination links"
+          }
+        },
+        "inactive": {
+          "variant": {
+            "value": "ghost",
+            "description": "Button variant for inactive pagination links"
+          }
+        }
+      },
+      "size": {
+        "default": {
+          "value": "icon",
+          "description": "Default size for pagination links"
+        }
+      }
+    },
+    "previous": {
+      "size": {
+        "value": "default",
+        "description": "Size for previous button"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap between icon and text in previous button"
+      },
+      "padding": {
+        "left": {
+          "default": {
+            "value": "10px",
+            "description": "Left padding for previous button on small screens"
+          },
+          "large": {
+            "value": "8px",
+            "description": "Left padding for previous button on large screens"
+          }
+        },
+        "right": {
+          "value": "10px",
+          "description": "Right padding for previous button"
+        }
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for previous button icon"
+        }
+      },
+      "text": {
+        "display": {
+          "value": "none",
+          "description": "Display for previous button text on small screens"
+        },
+        "large": {
+          "display": {
+            "value": "block",
+            "description": "Display for previous button text on large screens"
+          }
+        }
+      }
+    },
+    "next": {
+      "size": {
+        "value": "default",
+        "description": "Size for next button"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap between icon and text in next button"
+      },
+      "padding": {
+        "left": {
+          "value": "10px",
+          "description": "Left padding for next button"
+        },
+        "right": {
+          "default": {
+            "value": "10px",
+            "description": "Right padding for next button on small screens"
+          },
+          "large": {
+            "value": "8px",
+            "description": "Right padding for next button on large screens"
+          }
+        }
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for next button icon"
+        }
+      },
+      "text": {
+        "display": {
+          "value": "none",
+          "description": "Display for next button text on small screens"
+        },
+        "large": {
+          "display": {
+            "value": "block",
+            "description": "Display for next button text on large screens"
+          }
+        }
+      }
+    },
+    "ellipsis": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for pagination ellipsis"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for pagination ellipsis"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for pagination ellipsis"
+      },
+      "size": {
+        "value": "36px",
+        "description": "Size for pagination ellipsis"
+      },
+      "icon": {
+        "size": {
+          "value": "16px",
+          "description": "Size for ellipsis icon"
+        }
+      },
+      "text": {
+        "screenReaderOnly": {
+          "value": "screen reader only",
+          "description": "Accessibility text for ellipsis"
+        }
+      }
+    }
+  }
 }

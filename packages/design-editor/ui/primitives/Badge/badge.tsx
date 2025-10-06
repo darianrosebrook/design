@@ -1,8 +1,8 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { cn } from "@/lib/utils";
 import styles from "./badge.module.scss";
+import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
   // Base styles now in SCSS - keeping Tailwind commented for reference

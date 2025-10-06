@@ -1,7 +1,92 @@
-// component-renderer composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// ComponentRenderer composer component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.component-renderer {
-  // Placeholder for future SCSS implementation
-  // Will contain component-renderer-specific styles when migrating from Tailwind
+.componentRenderer {
+  // Base component styles
+  position: absolute;
+}
+
+// Error State
+.componentRendererError {
+  // Error container styles
+  background-color: var(--componentRenderer-error-backgroundColor);
+  border: 2px dashed var(--componentRenderer-error-borderColor);
+  border-radius: var(--componentRenderer-error-borderRadius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--componentRenderer-error-textColor);
+  font-size: var(--componentRenderer-typography-error-fontSize);
+  font-weight: var(--componentRenderer-typography-error-fontWeight);
+  text-align: center;
+  padding: var(--semantic-spacing-padding-grid-small);
+  cursor: default;
+  user-select: none;
+}
+
+// Slot State
+.componentRendererSlot {
+  // Slot container styles
+  background-color: var(--componentRenderer-slot-backgroundColor);
+  border: 2px dashed var(--componentRenderer-slot-borderColor);
+  border-radius: var(--componentRenderer-slot-borderRadius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-height: var(--componentRenderer-slot-minHeight);
+  transition: all var(--componentRenderer-animation-transition-duration) var(--componentRenderer-animation-transition-easing);
+
+  &:hover {
+    background-color: var(--componentRenderer-slot-hover-backgroundColor);
+    border-color: var(--componentRenderer-slot-hover-borderColor);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.componentRendererSlotLabel {
+  // Slot label styles
+  font-size: var(--componentRenderer-typography-slot-fontSize);
+  font-weight: var(--componentRenderer-typography-slot-fontWeight);
+  color: var(--componentRenderer-slot-textColor);
+  opacity: 0.7;
+  user-select: none;
+}
+
+// Component Positioning
+.componentRendererPositioned {
+  // Positioned component container
+  position: var(--componentRenderer-layout-positioning-type);
+}
+
+// Component Content
+.componentRendererContent {
+  // Component content wrapper
+  width: 100%;
+  height: 100%;
+}
+
+// Special Layout Components
+.componentRendererButton,
+.componentRendererInput,
+.componentRendererSelect {
+  // Special layout for form components
+  display: flex;
+  align-items: center;
+}
+
+.componentRendererStack,
+.componentRendererFlex {
+  // Layout containers
+  width: 100%;
+  height: 100%;
+}
+
+// Child Components
+.componentRendererChild {
+  // Child component container
+  position: relative;
 }

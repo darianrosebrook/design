@@ -1,0 +1,29 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Form/form.tokens.json
+ */
+@mixin vars {
+  /* === Item Tokens === */
+  --form-item-display: grid;
+  --form-item-gap: 8px;
+
+  /* === Label Tokens === */
+  --form-label-color-default: var(--color-mode-dark);
+  --form-label-color-error: var(--color-palette-red-600);
+
+  /* === Control Tokens === */
+  --form-control-id: auto;
+  --form-control-ariaDescribedBy-default: description-only;
+  --form-control-ariaDescribedBy-error: description-and-message;
+  --form-control-ariaInvalid-error: true;
+  --form-control-ariaInvalid-valid: false;
+
+  /* === Description Tokens === */
+  --form-description-color: var(--color-palette-neutral-500);
+  --form-description-fontSize: 14px;
+
+  /* === Message Tokens === */
+  --form-message-color: var(--color-palette-red-600);
+  --form-message-fontSize: 14px;
+  --form-message-display: block;
+  --form-message-hidden: none;
+}

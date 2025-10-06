@@ -3,9 +3,9 @@
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { toggleVariants } from '@/ui/primitives/toggle';
-import { cn } from "@/lib/utils";
 import styles from "./toggle-group.module.scss";
+import { cn } from "@/lib/utils";
+import { toggleVariants } from "@/ui/primitives/Toggle";
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants>
@@ -27,9 +27,7 @@ function ToggleGroup({
       data-slot="toggle-group"
       data-variant={variant}
       data-size={size}
-      // Original Tailwind classes (commented for reference):
-      // "group/toggle-group flex w-fit items-center rounded-md data-[variant=outline]:shadow-xs"
-      className={cn(styles.toggleGroup, className)}
+      className={cn(styles.togglegroup, className)}
       {...props}
     >
       <ToggleGroupContext.Provider value={{ variant, size }}>
@@ -59,8 +57,6 @@ function ToggleGroupItem({
           variant: context.variant || variant,
           size: context.size || size,
         }),
-        // Original Tailwind classes (commented for reference):
-        // "min-w-0 flex-1 shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l"
         styles.toggleGroupItem,
         className
       )}

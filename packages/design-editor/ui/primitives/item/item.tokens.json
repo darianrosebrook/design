@@ -1,3 +1,410 @@
 {
-  "item": {}
+  "prefix": "item",
+  "tokens": {
+    "group": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for item group"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for item group"
+      }
+    },
+    "separator": {
+      "margin": {
+        "vertical": {
+          "value": "0px",
+          "description": "Vertical margin for item separator"
+        }
+      }
+    },
+    "item": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for item"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for item"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for item"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for item"
+        },
+        "color": {
+          "value": "transparent",
+          "description": "Border color for item"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for item"
+      },
+      "borderRadius": {
+        "value": "8px",
+        "description": "Border radius for item"
+      },
+      "transition": {
+        "property": {
+          "value": "background-color, border-color",
+          "description": "Transition properties for item"
+        },
+        "duration": {
+          "value": "100ms",
+          "description": "Transition duration for item"
+        }
+      },
+      "flexWrap": {
+        "value": "wrap",
+        "description": "Flex wrap for item"
+      },
+      "outline": {
+        "value": "none",
+        "description": "Outline for item"
+      },
+      "focusVisible": {
+        "borderColor": {
+          "value": "{color.palette.blue.500}",
+          "description": "Border color on focus for item"
+        },
+        "ringColor": {
+          "value": "{color.palette.blue.500}",
+          "opacity": 0.5,
+          "description": "Ring color on focus for item"
+        },
+        "ringWidth": {
+          "value": "3px",
+          "description": "Ring width on focus for item"
+        }
+      },
+      "variants": {
+        "default": {
+          "backgroundColor": {
+            "value": "transparent",
+            "description": "Background color for default variant"
+          }
+        },
+        "outline": {
+          "borderColor": {
+            "value": "{color.palette.neutral.200}",
+            "description": "Border color for outline variant"
+          }
+        },
+        "muted": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "opacity": 0.5,
+            "description": "Background color for muted variant"
+          }
+        }
+      },
+      "sizes": {
+        "default": {
+          "padding": {
+            "vertical": {
+              "value": "16px",
+              "description": "Vertical padding for default size"
+            },
+            "horizontal": {
+              "value": "16px",
+              "description": "Horizontal padding for default size"
+            }
+          },
+          "gap": {
+            "value": "16px",
+            "description": "Gap for default size"
+          }
+        },
+        "sm": {
+          "padding": {
+            "vertical": {
+              "value": "12px",
+              "description": "Vertical padding for small size"
+            },
+            "horizontal": {
+              "value": "16px",
+              "description": "Horizontal padding for small size"
+            }
+          },
+          "gap": {
+            "value": "10px",
+            "description": "Gap for small size"
+          }
+        }
+      },
+      "link": {
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "opacity": 0.5,
+            "description": "Background color on hover for links"
+          }
+        }
+      }
+    },
+    "media": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for media"
+      },
+      "flexShrink": {
+        "value": "0",
+        "description": "Flex shrink for media"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for media"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for media"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for media"
+      },
+      "description": {
+        "selfStart": {
+          "value": "flex-start",
+          "description": "Align self when description is present"
+        },
+        "translateY": {
+          "value": "2px",
+          "description": "Vertical translation when description is present"
+        }
+      },
+      "variants": {
+        "default": {
+          "backgroundColor": {
+            "value": "transparent",
+            "description": "Background color for default media variant"
+          }
+        },
+        "icon": {
+          "size": {
+            "value": "32px",
+            "description": "Size for icon media variant"
+          },
+          "border": {
+            "width": {
+              "value": "1px",
+              "description": "Border width for icon media variant"
+            },
+            "style": {
+              "value": "solid",
+              "description": "Border style for icon media variant"
+            },
+            "color": {
+              "value": "{color.palette.neutral.200}",
+              "description": "Border color for icon media variant"
+            }
+          },
+          "borderRadius": {
+            "value": "4px",
+            "description": "Border radius for icon media variant"
+          },
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color for icon media variant"
+          },
+          "icon": {
+            "size": {
+              "value": "16px",
+              "description": "Icon size within icon media variant"
+            }
+          }
+        },
+        "image": {
+          "size": {
+            "value": "40px",
+            "description": "Size for image media variant"
+          },
+          "borderRadius": {
+            "value": "4px",
+            "description": "Border radius for image media variant"
+          },
+          "overflow": {
+            "value": "hidden",
+            "description": "Overflow for image media variant"
+          },
+          "image": {
+            "size": {
+              "value": "100%",
+              "description": "Image size within image media variant"
+            },
+            "objectFit": {
+              "value": "cover",
+              "description": "Object fit for images"
+            }
+          }
+        }
+      },
+      "icon": {
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for icons"
+        }
+      }
+    },
+    "content": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for content"
+      },
+      "flex": {
+        "value": "1",
+        "description": "Flex value for content"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for content"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap for content"
+      },
+      "adjacent": {
+        "flex": {
+          "value": "none",
+          "description": "Flex value when content is adjacent to other content"
+        }
+      }
+    },
+    "title": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for title"
+      },
+      "width": {
+        "value": "fit-content",
+        "description": "Width for title"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for title"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for title"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for title"
+      },
+      "lineHeight": {
+        "value": "1.375",
+        "description": "Line height for title"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for title"
+      }
+    },
+    "description": {
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for description"
+      },
+      "lineClamp": {
+        "value": "2",
+        "description": "Line clamp for description"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for description"
+      },
+      "lineHeight": {
+        "value": "1.428",
+        "description": "Line height for description"
+      },
+      "fontWeight": {
+        "value": "400",
+        "description": "Font weight for description"
+      },
+      "textBalance": {
+        "value": "balance",
+        "description": "Text balance for description"
+      },
+      "link": {
+        "hover": {
+          "color": {
+            "value": "{color.palette.blue.600}",
+            "description": "Color for links on hover"
+          }
+        },
+        "textDecoration": {
+          "value": "underline",
+          "description": "Text decoration for links"
+        },
+        "underlineOffset": {
+          "value": "4px",
+          "description": "Underline offset for links"
+        }
+      }
+    },
+    "actions": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for actions"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for actions"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for actions"
+      }
+    },
+    "header": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for header"
+      },
+      "flexBasis": {
+        "value": "100%",
+        "description": "Flex basis for header"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for header"
+      },
+      "justifyContent": {
+        "value": "space-between",
+        "description": "Justify content for header"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for header"
+      }
+    },
+    "footer": {
+      "display": {
+        "value": "flex",
+        "description": "Display type for footer"
+      },
+      "flexBasis": {
+        "value": "100%",
+        "description": "Flex basis for footer"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for footer"
+      },
+      "justifyContent": {
+        "value": "space-between",
+        "description": "Justify content for footer"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for footer"
+      }
+    }
+  }
 }

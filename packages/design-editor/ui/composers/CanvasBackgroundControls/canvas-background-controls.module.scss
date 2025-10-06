@@ -1,7 +1,202 @@
-// canvas-background-controls composer component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// CanvasBackgroundControls composer component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.canvas-background-controls {
-  // Placeholder for future SCSS implementation
-  // Will contain canvas-background-controls-specific styles when migrating from Tailwind
+.canvasBackgroundControls {
+  // Main container styles
+  background-color: var(--canvasBackgroundControls-backgroundColor);
+  display: flex;
+  flex-direction: column;
+  gap: var(--canvasBackgroundControls-spacing-container);
+}
+
+// Color Picker Section
+.colorPickerSection {
+  // Section container styles
+  display: flex;
+  flex-direction: column;
+  gap: var(--canvasBackgroundControls-spacing-section);
+}
+
+.colorPickerSectionLabel {
+  // Label styles
+  font-size: var(--canvasBackgroundControls-typography-label-fontSize);
+  font-weight: var(--canvasBackgroundControls-typography-label-fontWeight);
+  color: var(--canvasBackgroundControls-typography-label-color);
+}
+
+.colorPickerContainer {
+  // Color picker container styles
+  display: flex;
+  align-items: center;
+  gap: var(--canvasBackgroundControls-spacing-input);
+}
+
+.colorPickerSwatch {
+  // Color swatch styles
+  width: var(--canvasBackgroundControls-colorPicker-size);
+  height: var(--canvasBackgroundControls-colorPicker-size);
+  border-radius: var(--canvasBackgroundControls-colorPicker-borderRadius);
+  border: var(--canvasBackgroundControls-colorPicker-border-width) solid var(--canvasBackgroundControls-colorPicker-border-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+
+  svg {
+    width: var(--canvasBackgroundControls-icon-size-picker);
+    height: var(--canvasBackgroundControls-icon-size-picker);
+    color: white;
+    z-index: 1;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  }
+}
+
+.colorInput {
+  // Color input field styles
+  height: var(--canvasBackgroundControls-colorInput-height);
+  font-size: var(--canvasBackgroundControls-colorInput-fontSize);
+  border-radius: var(--semantic-shape-control-radius-default);
+  border: 1px solid var(--semantic-color-display-border-subtle);
+  background-color: var(--semantic-color-display-background-primary);
+  color: var(--semantic-color-display-foreground-primary);
+  padding: 0 var(--semantic-spacing-padding-grid-small);
+  flex: 1;
+
+  &:focus {
+    outline: 2px solid var(--semantic-color-action-border-primary-focus);
+    outline-offset: 2px;
+    border-color: var(--semantic-color-action-border-primary-focus);
+  }
+
+  &::placeholder {
+    color: var(--semantic-color-display-foreground-tertiary);
+  }
+}
+
+// Background Type Selector Section
+.backgroundTypeSection {
+  // Section container styles
+  display: flex;
+  flex-direction: column;
+  gap: var(--canvasBackgroundControls-spacing-section);
+}
+
+.backgroundTypeSectionLabel {
+  // Label styles
+  font-size: var(--canvasBackgroundControls-typography-label-fontSize);
+  font-weight: var(--canvasBackgroundControls-typography-label-fontWeight);
+  color: var(--canvasBackgroundControls-typography-label-color);
+}
+
+.backgroundTypeSelector {
+  // Type selector container styles
+  background-color: var(--canvasBackgroundControls-backgroundTypeSelector-backgroundColor);
+  border-radius: var(--canvasBackgroundControls-backgroundTypeSelector-borderRadius);
+  padding: var(--canvasBackgroundControls-backgroundTypeSelector-padding);
+  position: relative;
+}
+
+.backgroundTypeIndicator {
+  // Sliding indicator for selected type
+  position: absolute;
+  top: var(--semantic-spacing-padding-grid-xsmall);
+  bottom: var(--semantic-spacing-padding-grid-xsmall);
+  background-color: var(--canvasBackgroundControls-backgroundTypeIndicator-backgroundColor);
+  border: 1px solid var(--canvasBackgroundControls-backgroundTypeIndicator-borderColor);
+  border-radius: var(--canvasBackgroundControls-backgroundTypeIndicator-borderRadius);
+  transition: all var(--canvasBackgroundControls-backgroundTypeIndicator-transition-duration) var(--canvasBackgroundControls-backgroundTypeIndicator-transition-easing);
+}
+
+.backgroundTypeButtons {
+  // Buttons container styles
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.backgroundTypeButton {
+  // Individual type button styles
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--canvasBackgroundControls-backgroundTypeButton-gap);
+  padding: var(--canvasBackgroundControls-backgroundTypeButton-padding);
+  border-radius: var(--semantic-shape-control-radius-small);
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color 150ms ease-in-out;
+
+  &:hover {
+    .backgroundTypeButtonIcon,
+    .backgroundTypeButtonLabel {
+      color: var(--canvasBackgroundControls-icon-color-hover);
+    }
+  }
+
+  &.selected {
+    .backgroundTypeButtonIcon,
+    .backgroundTypeButtonLabel {
+      color: var(--canvasBackgroundControls-icon-color-selected);
+    }
+  }
+}
+
+.backgroundTypeButtonIcon {
+  // Icon in type buttons
+  width: var(--canvasBackgroundControls-icon-size-button);
+  height: var(--canvasBackgroundControls-icon-size-button);
+  color: var(--canvasBackgroundControls-icon-color-unselected);
+  transition: color 150ms ease-in-out;
+}
+
+.backgroundTypeButtonLabel {
+  // Label in type buttons
+  font-size: var(--semantic-typography-body-01);
+  font-weight: var(--semantic-typography-font-weight-medium);
+  color: var(--canvasBackgroundControls-icon-color-unselected);
+  transition: color 150ms ease-in-out;
+}
+
+.backgroundTypeButtonDescription {
+  // Description in type buttons
+  font-size: var(--semantic-typography-body-01);
+  opacity: 0.6;
+  color: var(--canvasBackgroundControls-icon-color-unselected);
+}
+
+// Preview Section
+.previewSection {
+  // Preview container styles
+  display: flex;
+  flex-direction: column;
+  gap: var(--canvasBackgroundControls-spacing-section);
+}
+
+.previewSectionLabel {
+  // Preview label styles
+  font-size: var(--canvasBackgroundControls-typography-label-fontSize);
+  font-weight: var(--canvasBackgroundControls-typography-label-fontWeight);
+  color: var(--canvasBackgroundControls-typography-label-color);
+}
+
+.previewContainer {
+  // Preview container styles
+  width: 100%;
+  height: var(--canvasBackgroundControls-preview-height);
+  border-radius: var(--canvasBackgroundControls-preview-borderRadius);
+  border: var(--canvasBackgroundControls-preview-border-width) solid var(--canvasBackgroundControls-preview-border-color);
+  overflow: hidden;
+  position: relative;
+}
+
+// Color Picker Icon
+.colorPickerIcon {
+  width: var(--canvasBackgroundControls-icon-size-picker);
+  height: var(--canvasBackgroundControls-icon-size-picker);
+  color: white;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 }

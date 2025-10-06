@@ -1,7 +1,89 @@
-// resizable primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Resizable primitive component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.resizable {
-  // Placeholder for future SCSS implementation
-  // Will contain resizable-specific styles when migrating from Tailwind
+.resizablePanelGroup {
+  // Panel group container styles
+  display: flex;
+  height: 100%;
+  width: 100%;
+
+  // Directional layout
+  &[data-panel-group-direction="vertical"] {
+    flex-direction: var(--resizable-panelGroup-layout-direction-vertical-flexDirection);
+  }
+
+  &:not([data-panel-group-direction="vertical"]) {
+    flex-direction: var(--resizable-panelGroup-layout-direction-horizontal-flexDirection);
+  }
+}
+
+.resizableHandle {
+  // Resize handle base styles
+  background-color: var(--resizable-handle-backgroundColor);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+
+  // Focus styles
+  &:focus-visible {
+    outline: var(--resizable-handle-focus-ring-width) solid var(--resizable-handle-focus-ring-color);
+    outline-offset: var(--resizable-handle-focus-ring-offset);
+  }
+
+  // Visual indicator line (pseudo-element)
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: var(--resizable-handle-backgroundColor);
+    width: var(--resizable-handle-layout-indicator-width);
+    height: var(--resizable-handle-layout-indicator-height);
+  }
+
+  // Default horizontal layout
+  width: var(--resizable-handle-layout-width);
+
+  &::after {
+    left: var(--resizable-handle-layout-indicator-position-horizontal-left);
+    transform: translateX(var(--resizable-handle-layout-indicator-position-horizontal-translateX));
+    inset-block: 0; // Full height
+  }
+
+  // Vertical layout adjustments
+  &[data-panel-group-direction="vertical"] {
+    height: var(--resizable-handle-layout-height);
+    width: 100%;
+
+    &::after {
+      top: var(--resizable-handle-layout-indicator-position-vertical-top);
+      transform: translateY(var(--resizable-handle-layout-indicator-position-vertical-translateY));
+      inset-inline: 0; // Full width
+      height: var(--resizable-handle-layout-indicator-width);
+      width: var(--resizable-handle-layout-indicator-height);
+    }
+
+    // Rotate grip icon for vertical handles
+    .resizableHandleGrip {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.resizableHandleGrip {
+  // Handle grip visual element
+  background-color: var(--resizable-handleGrip-backgroundColor);
+  z-index: var(--resizable-handleGrip-layout-zIndex);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--resizable-handleGrip-layout-width);
+  height: var(--resizable-handleGrip-layout-height);
+  border-radius: var(--resizable-handleGrip-borderRadius);
+
+  // Grip icon styles
+  svg {
+    width: var(--resizable-handleGrip-icon-size);
+    height: var(--resizable-handleGrip-icon-size);
+  }
 }

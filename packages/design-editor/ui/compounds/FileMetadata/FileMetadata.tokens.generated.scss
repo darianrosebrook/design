@@ -1,0 +1,25 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/compounds/FileMetadata/file-metadata.tokens.json
+ */
+@mixin vars {
+  /* === Padding Tokens === */
+  --fileMetadata-padding-horizontal: var(--semantic-spacing-padding-grid-small);
+  --fileMetadata-padding-vertical: var(--semantic-spacing-padding-grid-small);
+
+  /* === Header Tokens === */
+  --fileMetadata-header-marginBottom: var(--semantic-spacing-margin-grid-small);
+
+  /* === Title Tokens === */
+  --fileMetadata-title-fontSize: var(--semantic-typography-body-03);
+  --fileMetadata-title-fontWeight: var(--semantic-typography-font-weight-semibold);
+
+  /* === Content Tokens === */
+  --fileMetadata-content-fontSize: var(--semantic-typography-body-01);
+  --fileMetadata-content-color: var(--semantic-color-display-foreground-secondary);
+
+  /* === Row Tokens === */
+  --fileMetadata-row-gap: var(--semantic-spacing-gap-grid-small);
+
+  /* === Stats Tokens === */
+  --fileMetadata-stats-gap: var(--semantic-spacing-gap-grid-medium);
+}

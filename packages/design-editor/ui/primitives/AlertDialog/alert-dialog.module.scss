@@ -1,7 +1,162 @@
-// alert-dialog primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// AlertDialog primitive component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.alert-dialog {
-  // Placeholder for future SCSS implementation
-  // Will contain alert-dialog-specific styles when migrating from Tailwind
+.alertDialogOverlay {
+  // Alert dialog overlay backdrop
+  position: fixed;
+  inset: 0;
+  z-index: var(--alertDialog-overlay-zIndex);
+  background-color: var(--alertDialog-overlay-backgroundColor);
+
+  // Animation states
+  &[data-state="open"] {
+    animation: alertDialogOverlayFadeIn var(--alertDialog-overlay-animation-duration-in) var(--alertDialog-overlay-animation-easing);
+  }
+
+  &[data-state="closed"] {
+    animation: alertDialogOverlayFadeOut var(--alertDialog-overlay-animation-duration-out) var(--alertDialog-overlay-animation-easing);
+  }
+}
+
+.alertDialogContent {
+  // Alert dialog content container
+  background-color: var(--alertDialog-content-backgroundColor);
+  border: var(--alertDialog-content-borderWidth) solid var(--alertDialog-content-borderColor);
+  border-radius: var(--alertDialog-content-borderRadius);
+  box-shadow: var(--alertDialog-content-shadow);
+  z-index: var(--alertDialog-content-zIndex);
+  position: fixed;
+  top: var(--alertDialog-content-layout-position-top);
+  left: var(--alertDialog-content-layout-position-left);
+  transform: translate(
+    var(--alertDialog-content-layout-position-translateX),
+    var(--alertDialog-content-layout-position-translateY)
+  );
+  width: 100%;
+  max-width: var(--alertDialog-content-layout-maxWidth-mobile);
+  display: grid;
+  gap: var(--alertDialog-content-layout-gap);
+  padding: var(--alertDialog-content-layout-padding);
+  transition: var(--alertDialog-content-animation-duration-out) var(--alertDialog-content-animation-easing);
+
+  @media (min-width: 640px) {
+    max-width: var(--alertDialog-content-layout-maxWidth-desktop);
+  }
+
+  // Animation states
+  &[data-state="open"] {
+    animation:
+      alertDialogContentFadeIn var(--alertDialog-content-animation-duration-in) var(--alertDialog-content-animation-easing),
+      alertDialogContentZoomIn var(--alertDialog-content-animation-duration-in) var(--alertDialog-content-animation-easing);
+  }
+
+  &[data-state="closed"] {
+    animation:
+      alertDialogContentFadeOut var(--alertDialog-content-animation-duration-out) var(--alertDialog-content-animation-easing),
+      alertDialogContentZoomOut var(--alertDialog-content-animation-duration-out) var(--alertDialog-content-animation-easing);
+  }
+}
+
+.alertDialogHeader {
+  // Header container
+  display: flex;
+  flex-direction: column;
+  gap: var(--alertDialog-header-gap);
+  text-align: var(--alertDialog-header-textAlign-mobile);
+
+  @media (min-width: 640px) {
+    text-align: var(--alertDialog-header-textAlign-desktop);
+  }
+}
+
+.alertDialogFooter {
+  // Footer container
+  display: flex;
+  gap: var(--alertDialog-footer-gap);
+  flex-direction: var(--alertDialog-footer-layout-mobile-flexDirection);
+
+  @media (min-width: 640px) {
+    flex-direction: var(--alertDialog-footer-layout-desktop-flexDirection);
+    justify-content: var(--alertDialog-footer-layout-desktop-justifyContent);
+  }
+}
+
+.alertDialogTitle {
+  // Title styles
+  color: var(--alertDialog-title-color);
+  font-size: var(--alertDialog-title-fontSize);
+  font-weight: var(--alertDialog-title-fontWeight);
+}
+
+.alertDialogDescription {
+  // Description styles
+  color: var(--alertDialog-description-color);
+  font-size: var(--alertDialog-description-fontSize);
+}
+
+// Animation keyframes
+@keyframes alertDialogOverlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes alertDialogOverlayFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes alertDialogContentFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes alertDialogContentFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes alertDialogContentZoomIn {
+  from {
+    transform: translate(
+      var(--alertDialog-content-layout-position-translateX),
+      var(--alertDialog-content-layout-position-translateY)
+    ) scale(var(--alertDialog-content-animation-zoom-scale));
+  }
+  to {
+    transform: translate(
+      var(--alertDialog-content-layout-position-translateX),
+      var(--alertDialog-content-layout-position-translateY)
+    ) scale(1);
+  }
+}
+
+@keyframes alertDialogContentZoomOut {
+  from {
+    transform: translate(
+      var(--alertDialog-content-layout-position-translateX),
+      var(--alertDialog-content-layout-position-translateY)
+    ) scale(1);
+  }
+  to {
+    transform: translate(
+      var(--alertDialog-content-layout-position-translateX),
+      var(--alertDialog-content-layout-position-translateY)
+    ) scale(var(--alertDialog-content-animation-zoom-scale));
+  }
 }

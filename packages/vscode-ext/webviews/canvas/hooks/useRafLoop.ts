@@ -10,7 +10,7 @@ export function useRafLoop(cb: () => void, deps: any[]) {
     };
     raf.current = requestAnimationFrame(tick);
     return () => {
-      if (raf.current) cancelAnimationFrame(raf.current);
+      if (raf.current) {cancelAnimationFrame(raf.current);}
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);

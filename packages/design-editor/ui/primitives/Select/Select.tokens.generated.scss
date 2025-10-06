@@ -1,0 +1,48 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Select/select.tokens.json
+ */
+@mixin vars {
+  /* === Padding Tokens === */
+  --select-padding-horizontal-default: 12px;
+  --select-padding-horizontal-sm: 8px;
+  --select-padding-vertical-default: 8px;
+  --select-padding-vertical-sm: 6px;
+
+  /* === Height Tokens === */
+  --select-height-default: 36px;
+  --select-height-sm: 32px;
+
+  /* === Trigger Tokens === */
+  --select-trigger-backgroundColor: transparent;
+  --select-trigger-borderColor: var(--color-action-border-secondary-default);
+  --select-trigger-color: var(--color-action-foreground-secondary-default);
+  --select-trigger-hover-borderColor: var(--color-action-border-secondary-hover);
+  --select-trigger-focus-borderColor: var(--color-action-border-primary-focus);
+  --select-trigger-focus-ringColor: var(--color-action-border-primary-focus);
+  --select-trigger-disabled-opacity: 0.5;
+  --select-trigger-disabled-cursor: not-allowed;
+
+  /* === Content Tokens === */
+  --select-content-backgroundColor: var(--color-mode-light);
+  --select-content-borderColor: var(--color-action-border-secondary-default);
+  --select-content-color: var(--color-action-foreground-secondary-default);
+  --select-content-maxHeight: 240px;
+  --select-content-minWidth: 128px;
+  --select-content-zIndex: 1050;
+
+  /* === Item Tokens === */
+  --select-item-padding-horizontal: 8px;
+  --select-item-padding-vertical: 6px;
+  --select-item-borderRadius: 4px;
+  --select-item-hover-backgroundColor: var(--color-action-background-secondary-hover);
+  --select-item-hover-color: var(--color-action-foreground-secondary-default);
+  --select-item-selected-backgroundColor: var(--color-action-background-primary-default);
+  --select-item-selected-color: var(--color-action-foreground-primary-default);
+  --select-item-disabled-opacity: 0.5;
+  --select-item-disabled-pointerEvents: none;
+
+  /* === Icon Tokens === */
+  --select-icon-size: 16px;
+  --select-icon-color: var(--color-action-foreground-tertiary-default);
+  --select-icon-opacity: 0.5;
+}

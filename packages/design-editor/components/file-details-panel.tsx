@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { LayersIcon, Library } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/primitives/Tabs";
-import { FileMetadata } from "@/ui/compounds/FileMetadata";
+import { useState } from "react";
+import { useCanvas } from "@/lib/canvas-context";
 import { LayersList } from "@/ui/assemblies/LayersList";
 import { LibrarySection } from "@/ui/assemblies/LibrarySection";
-import { useCanvas } from "@/lib/canvas-context";
+import { FileMetadata } from "@/ui/compounds/FileMetadata";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/ui/primitives/Tabs";
 
 interface FileDetailsPanelProps {
   onOpenDesignSystem?: () => void;

@@ -1,3 +1,87 @@
 {
-  "hover-card": {}
+  "prefix": "hoverCard",
+  "tokens": {
+    "backgroundColor": {
+      "value": "{semantic.color.display.background.popover}",
+      "description": "Background color for hover card content"
+    },
+    "foregroundColor": {
+      "value": "{semantic.color.display.foreground.popover}",
+      "description": "Text color for hover card content"
+    },
+    "borderColor": {
+      "value": "{semantic.color.display.border.subtle}",
+      "description": "Border color for hover card"
+    },
+    "borderWidth": {
+      "value": "{semantic.shape.border.width.default}",
+      "description": "Border width for hover card"
+    },
+    "borderRadius": {
+      "value": "{semantic.shape.control.radius.default}",
+      "description": "Border radius for hover card content"
+    },
+    "spacing": {
+      "padding": {
+        "value": "{semantic.spacing.padding.grid.medium}",
+        "description": "Padding inside hover card content"
+      },
+      "sideOffset": {
+        "value": "{semantic.spacing.gap.grid.xsmall}",
+        "description": "Distance from trigger element"
+      }
+    },
+    "typography": {
+      "fontSize": {
+        "value": "{semantic.typography.body.02}",
+        "description": "Font size for hover card content"
+      },
+      "lineHeight": {
+        "value": "{semantic.typography.body.lineHeight.02}",
+        "description": "Line height for hover card content"
+      }
+    },
+    "layout": {
+      "maxWidth": {
+        "value": "16rem",
+        "description": "Maximum width for hover card content"
+      },
+      "zIndex": {
+        "value": "{semantic.zIndex.dropdown}",
+        "description": "Z-index for hover card"
+      }
+    },
+    "shadow": {
+      "value": "{semantic.effect.shadow.medium}",
+      "description": "Shadow effect for hover card"
+    },
+    "animation": {
+      "duration": {
+        "in": {
+          "value": "{semantic.animation.duration.fast}",
+          "description": "Animation duration for fade in"
+        },
+        "out": {
+          "value": "{semantic.animation.duration.fast}",
+          "description": "Animation duration for fade out"
+        }
+      },
+      "easing": {
+        "value": "{semantic.animation.easing.default}",
+        "description": "Animation easing for hover card"
+      },
+      "zoom": {
+        "scale": {
+          "value": "0.95",
+          "description": "Zoom scale for open/close animation"
+        }
+      },
+      "slide": {
+        "distance": {
+          "value": "{semantic.spacing.gap.grid.xsmall}",
+          "description": "Slide distance for directional animations"
+        }
+      }
+    }
+  }
 }

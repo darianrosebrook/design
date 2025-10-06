@@ -3,62 +3,36 @@
  */
 @mixin vars {
   /* === Container Tokens === */
-  --carousel-container-position-value: relative;
-  --carousel-container-position-description: Position for carousel container;
+  --carousel-container-position: relative;
 
   /* === Content Tokens === */
-  --carousel-content-overflow-value: hidden;
-  --carousel-content-overflow-description: Overflow for carousel content wrapper;
-  --carousel-content-display-value: flex;
-  --carousel-content-display-description: Display for carousel items container;
-  --carousel-content-gap-horizontal-value: -16px;
-  --carousel-content-gap-horizontal-description: Negative margin for horizontal carousel to create gap illusion;
-  --carousel-content-gap-vertical-value: -16px;
-  --carousel-content-gap-vertical-description: Negative margin for vertical carousel to create gap illusion;
-  --carousel-content-flexDirection-vertical-value: column;
-  --carousel-content-flexDirection-vertical-description: Flex direction for vertical carousel;
+  --carousel-content-overflow: hidden;
+  --carousel-content-display: flex;
+  --carousel-content-gap-horizontal: -16px;
+  --carousel-content-gap-vertical: -16px;
+  --carousel-content-flexDirection-vertical: column;
 
   /* === Item Tokens === */
-  --carousel-item-flex-value: 0 0 100%;
-  --carousel-item-flex-description: Flex properties for carousel item (no grow, no shrink, full width);
-  --carousel-item-minWidth-value: 0;
-  --carousel-item-minWidth-description: Minimum width for carousel item;
-  --carousel-item-padding-horizontal-value: 16px;
-  --carousel-item-padding-horizontal-description: Padding for horizontal carousel items;
-  --carousel-item-padding-vertical-value: 16px;
-  --carousel-item-padding-vertical-description: Padding for vertical carousel items;
+  --carousel-item-flex: 0 0 100%;
+  --carousel-item-minWidth: 0;
+  --carousel-item-padding-horizontal: 16px;
+  --carousel-item-padding-vertical: 16px;
 
   /* === Navigation Tokens === */
-  --carousel-navigation-button-size-value: 32px;
-  --carousel-navigation-button-size-description: Size for navigation buttons;
-  --carousel-navigation-button-borderRadius-value: var(--semantic-border-radius-full);
-  --carousel-navigation-button-borderRadius-description: Border radius for navigation buttons;
-  --carousel-navigation-button-position-value: absolute;
-  --carousel-navigation-button-position-description: Position for navigation buttons;
-  --carousel-navigation-button-zIndex-value: 10;
-  --carousel-navigation-button-zIndex-description: Z-index for navigation buttons;
-  --carousel-navigation-previous-position-horizontal-top-value: 50%;
-  --carousel-navigation-previous-position-horizontal-top-description: Top position for horizontal previous button;
-  --carousel-navigation-previous-position-horizontal-left-value: -48px;
-  --carousel-navigation-previous-position-horizontal-left-description: Left position for horizontal previous button;
-  --carousel-navigation-previous-position-horizontal-transform-value: translateY(-50%);
-  --carousel-navigation-previous-position-horizontal-transform-description: Transform for horizontal previous button;
-  --carousel-navigation-previous-position-vertical-top-value: -48px;
-  --carousel-navigation-previous-position-vertical-top-description: Top position for vertical previous button;
-  --carousel-navigation-previous-position-vertical-left-value: 50%;
-  --carousel-navigation-previous-position-vertical-left-description: Left position for vertical previous button;
-  --carousel-navigation-previous-position-vertical-transform-value: translateX(-50%) rotate(90deg);
-  --carousel-navigation-previous-position-vertical-transform-description: Transform for vertical previous button;
-  --carousel-navigation-next-position-horizontal-top-value: 50%;
-  --carousel-navigation-next-position-horizontal-top-description: Top position for horizontal next button;
-  --carousel-navigation-next-position-horizontal-right-value: -48px;
-  --carousel-navigation-next-position-horizontal-right-description: Right position for horizontal next button;
-  --carousel-navigation-next-position-horizontal-transform-value: translateY(-50%);
-  --carousel-navigation-next-position-horizontal-transform-description: Transform for horizontal next button;
-  --carousel-navigation-next-position-vertical-bottom-value: -48px;
-  --carousel-navigation-next-position-vertical-bottom-description: Bottom position for vertical next button;
-  --carousel-navigation-next-position-vertical-left-value: 50%;
-  --carousel-navigation-next-position-vertical-left-description: Left position for vertical next button;
-  --carousel-navigation-next-position-vertical-transform-value: translateX(-50%) rotate(90deg);
-  --carousel-navigation-next-position-vertical-transform-description: Transform for vertical next button;
+  --carousel-navigation-button-size: 32px;
+  --carousel-navigation-button-borderRadius: var(--semantic-border-radius-full);
+  --carousel-navigation-button-position: absolute;
+  --carousel-navigation-button-zIndex: 10;
+  --carousel-navigation-previous-position-horizontal-top: 50%;
+  --carousel-navigation-previous-position-horizontal-left: -48px;
+  --carousel-navigation-previous-position-horizontal-transform: translateY(-50%);
+  --carousel-navigation-previous-position-vertical-top: -48px;
+  --carousel-navigation-previous-position-vertical-left: 50%;
+  --carousel-navigation-previous-position-vertical-transform: translateX(-50%) rotate(90deg);
+  --carousel-navigation-next-position-horizontal-top: 50%;
+  --carousel-navigation-next-position-horizontal-right: -48px;
+  --carousel-navigation-next-position-horizontal-transform: translateY(-50%);
+  --carousel-navigation-next-position-vertical-bottom: -48px;
+  --carousel-navigation-next-position-vertical-left: 50%;
+  --carousel-navigation-next-position-vertical-transform: translateX(-50%) rotate(90deg);
 }

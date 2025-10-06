@@ -1,3 +1,111 @@
 {
-  "kbd": {}
+  "prefix": "kbd",
+  "tokens": {
+    "container": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.100}",
+        "description": "Background color for keyboard shortcut display"
+      },
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Text color for keyboard shortcut display"
+      },
+      "width": {
+        "value": "fit-content",
+        "description": "Width for keyboard shortcut display"
+      },
+      "pointerEvents": {
+        "value": "none",
+        "description": "Pointer events for keyboard shortcut display"
+      },
+      "display": {
+        "value": "inline-flex",
+        "description": "Display property for keyboard shortcut display"
+      },
+      "height": {
+        "value": "20px",
+        "description": "Height for keyboard shortcut display"
+      },
+      "minWidth": {
+        "value": "20px",
+        "description": "Minimum width for keyboard shortcut display"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for keyboard shortcut display"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for keyboard shortcut display"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap between elements in keyboard shortcut display"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for keyboard shortcut display"
+      },
+      "padding": {
+        "horizontal": {
+          "value": "4px",
+          "description": "Horizontal padding for keyboard shortcut display"
+        }
+      },
+      "fontFamily": {
+        "value": "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+        "description": "Font family for keyboard shortcut display"
+      },
+      "fontSize": {
+        "value": "12px",
+        "description": "Font size for keyboard shortcut display"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for keyboard shortcut display"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for keyboard shortcut display"
+      }
+    },
+    "icon": {
+      "size": {
+        "value": "12px",
+        "description": "Size for icons in keyboard shortcut display"
+      }
+    },
+    "tooltip": {
+      "backgroundColor": {
+        "value": "{color.mode.white}",
+        "opacity": 0.2,
+        "description": "Background color for keyboard shortcut in tooltip"
+      },
+      "color": {
+        "value": "{color.mode.white}",
+        "description": "Text color for keyboard shortcut in tooltip"
+      },
+      "dark": {
+        "backgroundColor": {
+          "value": "{color.mode.white}",
+          "opacity": 0.1,
+          "description": "Dark mode background color for keyboard shortcut in tooltip"
+        }
+      }
+    },
+    "group": {
+      "display": {
+        "value": "inline-flex",
+        "description": "Display property for keyboard shortcut group"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for keyboard shortcut group"
+      },
+      "gap": {
+        "value": "4px",
+        "description": "Gap between keyboard shortcuts in group"
+      }
+    }
+  }
 }

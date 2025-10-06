@@ -1,8 +1,8 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Separator } from "@/ui/primitives/Separator";
-import { cn } from "@/lib/utils";
 import styles from "./ButtonGroup.module.scss";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/ui/primitives/Separator";
 
 const buttonGroupVariants = cva(
   // Base styles now in SCSS - keeping Tailwind commented for reference

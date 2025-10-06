@@ -2,6 +2,8 @@
 
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import styles from "./top-navigation.module.scss";
+import { cn } from "@/lib/utils";
 import { KeyboardShortcutsModal } from "@/ui/composers/KeyboardShortcutsModal";
 import { Button } from "@/ui/primitives/Button";
 import {
@@ -96,35 +98,33 @@ export function TopNavigation() {
   ];
 
   return (
-    <div className="flex h-12 items-center gap-1 border-b border-border bg-card px-3">
-      <div className="flex items-center gap-2 mr-4">
-        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
-          DS
-        </div>
-        <span className="text-sm font-medium">Design System</span>
+    <div className={styles.topnavigation}>
+      <div className={styles.topnavigationLogoContainer}>
+        <div className={styles.topnavigationLogo}>DS</div>
+        <span className={styles.topnavigationTitle}>Design System</span>
       </div>
 
-      <div className="flex items-center gap-0.5">
+      <div className={styles.topnavigationMenuContainer}>
         {menuItems.map((menu) => (
           <DropdownMenu key={menu.label}>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 px-3 text-sm font-normal hover:bg-accent"
+                className={styles.topnavigationMenuButton}
               >
                 {menu.label}
-                <ChevronDown className="ml-1 h-3 w-3 opacity-50" />
+                <ChevronDown className={styles.topnavigationChevron} />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-56">
+            <DropdownMenuContent align="start" className="// w-56">
               {menu.items.map((item, index) =>
                 item.separator ? (
                   <DropdownMenuSeparator key={`separator-${index}`} />
                 ) : (
                   <DropdownMenuItem
                     key={item.label}
-                    className="flex items-center justify-between cursor-pointer"
+                    className={styles.topnavigationMenuItem}
                     onClick={() => {
                       if (item.action === "show-shortcuts") {
                         setShowKeyboardShortcuts(true);
@@ -133,7 +133,7 @@ export function TopNavigation() {
                   >
                     <span>{item.label}</span>
                     {item.shortcut && (
-                      <span className="text-xs text-muted-foreground">
+                      <span className={styles.topnavigationShortcut}>
                         {item.shortcut}
                       </span>
                     )}
@@ -145,8 +145,12 @@ export function TopNavigation() {
         ))}
       </div>
 
-      <div className="ml-auto flex items-center gap-2">
-        <Button variant="ghost" size="sm" className="h-8 px-3 text-sm">
+      <div className={styles.topnavigationControls}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={styles.topnavigationShareButton}
+        >
           Share
         </Button>
       </div>

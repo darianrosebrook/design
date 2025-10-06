@@ -1,3 +1,350 @@
 {
-  "dropdown-menu": {}
+  "prefix": "dropdownMenu",
+  "tokens": {
+    "content": {
+      "backgroundColor": {
+        "value": "{color.mode.white}",
+        "description": "Background color for dropdown menu content"
+      },
+      "color": {
+        "value": "{color.mode.dark}",
+        "description": "Text color for dropdown menu content"
+      },
+      "zIndex": {
+        "value": "50",
+        "description": "Z-index for dropdown menu content"
+      },
+      "maxHeight": {
+        "value": "var(--radix-dropdown-menu-content-available-height)",
+        "description": "Maximum height for dropdown menu content"
+      },
+      "minWidth": {
+        "value": "128px",
+        "description": "Minimum width for dropdown menu content"
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for dropdown menu content"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for dropdown menu content"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for dropdown menu content"
+        },
+        "color": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Border color for dropdown menu content"
+        }
+      },
+      "padding": {
+        "value": "4px",
+        "description": "Padding for dropdown menu content"
+      },
+      "boxShadow": {
+        "value": "{elevation.level.3}",
+        "description": "Box shadow for dropdown menu content"
+      },
+      "overflow": {
+        "x": {
+          "value": "hidden",
+          "description": "Horizontal overflow for dropdown menu content"
+        },
+        "y": {
+          "value": "auto",
+          "description": "Vertical overflow for dropdown menu content"
+        }
+      }
+    },
+    "item": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for dropdown menu items"
+      },
+      "position": {
+        "value": "relative",
+        "description": "Position for dropdown menu items"
+      },
+      "cursor": {
+        "value": "default",
+        "description": "Cursor for dropdown menu items"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for dropdown menu items"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap between elements in dropdown menu items"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for dropdown menu items"
+      },
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for dropdown menu items"
+        },
+        "vertical": {
+          "value": "6px",
+          "description": "Vertical padding for dropdown menu items"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for dropdown menu items"
+      },
+      "outline": {
+        "value": "none",
+        "description": "Outline for dropdown menu items"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for dropdown menu items"
+      },
+      "states": {
+        "focus": {
+          "backgroundColor": {
+            "value": "{color.action.background.secondary.hover}",
+            "description": "Background color on focus for dropdown menu items"
+          },
+          "color": {
+            "value": "{color.action.foreground.secondary.default}",
+            "description": "Color on focus for dropdown menu items"
+          }
+        },
+        "disabled": {
+          "pointerEvents": {
+            "value": "none",
+            "description": "Pointer events when disabled for dropdown menu items"
+          },
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity when disabled for dropdown menu items"
+          }
+        }
+      },
+      "variants": {
+        "destructive": {
+          "color": {
+            "value": "{color.action.foreground.danger.default}",
+            "description": "Color for destructive variant items"
+          },
+          "focus": {
+            "backgroundColor": {
+              "value": "{color.action.background.danger.hover}",
+              "description": "Background color on focus for destructive variant"
+            },
+            "color": {
+              "value": "{color.action.foreground.danger.default}",
+              "description": "Color on focus for destructive variant"
+            }
+          },
+          "iconColor": {
+            "value": "{color.action.foreground.danger.default}",
+            "description": "Icon color for destructive variant"
+          }
+        },
+        "inset": {
+          "paddingLeft": {
+            "value": "32px",
+            "description": "Left padding for inset items"
+          }
+        }
+      },
+      "icon": {
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for item icons"
+        },
+        "flexShrink": {
+          "value": "0",
+          "description": "Flex shrink for item icons"
+        },
+        "size": {
+          "value": "16px",
+          "description": "Size for item icons"
+        },
+        "color": {
+          "default": {
+            "value": "{color.palette.neutral.500}",
+            "description": "Default color for item icons"
+          }
+        }
+      }
+    },
+    "checkboxItem": {
+      "paddingLeft": {
+        "value": "32px",
+        "description": "Left padding for checkbox items"
+      },
+      "paddingRight": {
+        "value": "8px",
+        "description": "Right padding for checkbox items"
+      },
+      "indicator": {
+        "position": {
+          "value": "absolute",
+          "description": "Position for checkbox item indicator"
+        },
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for checkbox item indicator"
+        },
+        "left": {
+          "value": "8px",
+          "description": "Left position for checkbox item indicator"
+        },
+        "display": {
+          "value": "flex",
+          "description": "Display property for checkbox item indicator"
+        },
+        "alignItems": {
+          "value": "center",
+          "description": "Align items for checkbox item indicator"
+        },
+        "justifyContent": {
+          "value": "center",
+          "description": "Justify content for checkbox item indicator"
+        },
+        "size": {
+          "value": "14px",
+          "description": "Size for checkbox item indicator"
+        }
+      }
+    },
+    "radioItem": {
+      "paddingLeft": {
+        "value": "32px",
+        "description": "Left padding for radio items"
+      },
+      "paddingRight": {
+        "value": "8px",
+        "description": "Right padding for radio items"
+      },
+      "indicator": {
+        "position": {
+          "value": "absolute",
+          "description": "Position for radio item indicator"
+        },
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for radio item indicator"
+        },
+        "left": {
+          "value": "8px",
+          "description": "Left position for radio item indicator"
+        },
+        "display": {
+          "value": "flex",
+          "description": "Display property for radio item indicator"
+        },
+        "alignItems": {
+          "value": "center",
+          "description": "Align items for radio item indicator"
+        },
+        "justifyContent": {
+          "value": "center",
+          "description": "Justify content for radio item indicator"
+        },
+        "size": {
+          "value": "8px",
+          "description": "Size for radio item indicator"
+        },
+        "borderRadius": {
+          "value": "9999px",
+          "description": "Border radius for radio item indicator"
+        }
+      }
+    },
+    "label": {
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for dropdown menu labels"
+        },
+        "vertical": {
+          "value": "6px",
+          "description": "Vertical padding for dropdown menu labels"
+        }
+      },
+      "fontSize": {
+        "value": "12px",
+        "description": "Font size for dropdown menu labels"
+      },
+      "fontWeight": {
+        "value": "600",
+        "description": "Font weight for dropdown menu labels"
+      },
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for dropdown menu labels"
+      }
+    },
+    "separator": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.200}",
+        "description": "Background color for dropdown menu separators"
+      },
+      "margin": {
+        "horizontal": {
+          "value": "-4px",
+          "description": "Horizontal margin for dropdown menu separators"
+        },
+        "vertical": {
+          "value": "4px",
+          "description": "Vertical margin for dropdown menu separators"
+        }
+      },
+      "height": {
+        "value": "1px",
+        "description": "Height for dropdown menu separators"
+      }
+    },
+    "shortcut": {
+      "marginLeft": {
+        "value": "auto",
+        "description": "Left margin for dropdown menu shortcuts"
+      },
+      "fontSize": {
+        "value": "12px",
+        "description": "Font size for dropdown menu shortcuts"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for dropdown menu shortcuts"
+      },
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for dropdown menu shortcuts"
+      },
+      "opacity": {
+        "value": "0.6",
+        "description": "Opacity for dropdown menu shortcuts"
+      }
+    },
+    "subTrigger": {
+      "paddingRight": {
+        "value": "8px",
+        "description": "Right padding for dropdown menu sub triggers"
+      },
+      "chevron": {
+        "marginLeft": {
+          "value": "auto",
+          "description": "Left margin for chevron icon in sub triggers"
+        },
+        "size": {
+          "value": "16px",
+          "description": "Size for chevron icon in sub triggers"
+        }
+      }
+    },
+    "subContent": {
+      "extends": "content"
+    }
+  }
 }

@@ -1,3 +1,85 @@
 {
-  "tooltip": {}
+  "prefix": "tooltip",
+  "tokens": {
+    "borderRadius": {
+      "value": "6px",
+      "description": "Border radius for tooltip corners"
+    },
+    "fontSize": {
+      "value": "12px",
+      "description": "Base font size for tooltip text"
+    },
+    "fontWeight": {
+      "value": "400",
+      "description": "Font weight for tooltip text"
+    },
+    "lineHeight": {
+      "value": "1.4",
+      "description": "Line height for tooltip text"
+    },
+    "padding": {
+      "horizontal": {
+        "value": "8px",
+        "description": "Horizontal padding for tooltip content"
+      },
+      "vertical": {
+        "value": "6px",
+        "description": "Vertical padding for tooltip content"
+      }
+    },
+    "maxWidth": {
+      "value": "200px",
+      "description": "Maximum width for tooltip content"
+    },
+    "zIndex": {
+      "value": "1060",
+      "description": "Z-index for tooltip overlay"
+    },
+    "animation": {
+      "duration": {
+        "value": "200ms",
+        "description": "Animation duration for tooltip transitions"
+      },
+      "easing": {
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "description": "Animation easing for tooltip transitions"
+      }
+    },
+    "variants": {
+      "default": {
+        "backgroundColor": {
+          "value": "{color.palette.neutral.900}",
+          "description": "Background color for default variant"
+        },
+        "color": {
+          "value": "{color.palette.neutral.50}",
+          "description": "Text color for default variant"
+        },
+        "borderColor": {
+          "value": "{color.palette.neutral.800}",
+          "description": "Border color for default variant"
+        }
+      },
+      "light": {
+        "backgroundColor": {
+          "value": "{color.palette.neutral.50}",
+          "description": "Background color for light variant"
+        },
+        "color": {
+          "value": "{color.palette.neutral.900}",
+          "description": "Text color for light variant"
+        },
+        "borderColor": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Border color for light variant"
+        }
+      }
+    },
+    "arrow": {
+      "size": {
+        "value": "4px",
+        "description": "Size of the tooltip arrow"
+      }
+    }
+  }
 }

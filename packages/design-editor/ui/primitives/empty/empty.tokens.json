@@ -1,3 +1,231 @@
 {
-  "empty": {}
+  "prefix": "empty",
+  "tokens": {
+    "container": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for empty container"
+      },
+      "minWidth": {
+        "value": "0px",
+        "description": "Minimum width for empty container"
+      },
+      "flex": {
+        "value": "1",
+        "description": "Flex property for empty container"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for empty container"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for empty container"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for empty container"
+      },
+      "gap": {
+        "value": "24px",
+        "description": "Gap between empty container elements"
+      },
+      "borderRadius": {
+        "value": "8px",
+        "description": "Border radius for empty container"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for empty container"
+        },
+        "style": {
+          "value": "dashed",
+          "description": "Border style for empty container"
+        },
+        "color": {
+          "value": "{core.color.palette.neutral.200}",
+          "description": "Border color for empty container"
+        }
+      },
+      "padding": {
+        "default": {
+          "value": "24px",
+          "description": "Default padding for empty container"
+        },
+        "medium": {
+          "value": "48px",
+          "description": "Medium screen padding for empty container"
+        }
+      },
+      "textAlign": {
+        "value": "center",
+        "description": "Text align for empty container"
+      },
+      "textWrap": {
+        "value": "balance",
+        "description": "Text wrap for empty container"
+      }
+    },
+    "header": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for empty header"
+      },
+      "maxWidth": {
+        "value": "24rem",
+        "description": "Maximum width for empty header"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for empty header"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for empty header"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for empty header"
+      },
+      "textAlign": {
+        "value": "center",
+        "description": "Text align for empty header"
+      }
+    },
+    "media": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for empty media"
+      },
+      "flexShrink": {
+        "value": "0",
+        "description": "Flex shrink for empty media"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for empty media"
+      },
+      "justifyContent": {
+        "value": "center",
+        "description": "Justify content for empty media"
+      },
+      "marginBottom": {
+        "value": "8px",
+        "description": "Margin bottom for empty media"
+      },
+      "variants": {
+        "icon": {
+          "backgroundColor": {
+          "value": "{core.color.palette.neutral.100}",
+            "description": "Background color for icon variant"
+          },
+          "color": {
+          "value": "{core.color.mode.dark}",
+            "description": "Color for icon variant"
+          },
+          "size": {
+            "value": "40px",
+            "description": "Size for icon variant"
+          },
+          "borderRadius": {
+            "value": "8px",
+            "description": "Border radius for icon variant"
+          },
+          "iconSize": {
+            "value": "24px",
+            "description": "Icon size for icon variant"
+          }
+        }
+      },
+      "icon": {
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for media icons"
+        }
+      }
+    },
+    "title": {
+      "fontSize": {
+        "value": "18px",
+        "description": "Font size for empty title"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for empty title"
+      },
+      "letterSpacing": {
+        "value": "-0.025em",
+        "description": "Letter spacing for empty title"
+      }
+    },
+    "description": {
+      "color": {
+        "value": "{core.color.palette.neutral.500}",
+        "description": "Color for empty description"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for empty description"
+      },
+      "lineHeight": {
+        "value": "1.625",
+        "description": "Line height for empty description"
+      },
+      "link": {
+        "textDecoration": {
+          "value": "underline",
+          "description": "Text decoration for links in description"
+        },
+        "textUnderlineOffset": {
+          "value": "4px",
+          "description": "Text underline offset for links in description"
+        },
+        "hover": {
+          "color": {
+            "value": "{semantic.color.action.background.primary.default}",
+            "description": "Hover color for links in description"
+          }
+        }
+      }
+    },
+    "content": {
+      "display": {
+        "value": "flex",
+        "description": "Display property for empty content"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for empty content"
+      },
+      "maxWidth": {
+        "value": "24rem",
+        "description": "Maximum width for empty content"
+      },
+      "minWidth": {
+        "value": "0px",
+        "description": "Minimum width for empty content"
+      },
+      "flexDirection": {
+        "value": "column",
+        "description": "Flex direction for empty content"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for empty content"
+      },
+      "gap": {
+        "value": "16px",
+        "description": "Gap for empty content"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for empty content"
+      },
+      "textWrap": {
+        "value": "balance",
+        "description": "Text wrap for empty content"
+      }
+    }
+  }
 }

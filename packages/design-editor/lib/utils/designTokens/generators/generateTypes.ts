@@ -1,0 +1,204 @@
+#!/usr/bin/env node
+
+/**
+ * TypeScript Type Generator for Design Tokens
+ *
+ * Generates TypeScript types for token paths to enable IntelliSense
+ * in code that imports and uses design tokens.
+ *
+ * @author @darianrosebrook
+ */
+
+import * as fs from "fs";
+import * as path from "path";
+import { fileURLToPath } from "url";
+
+// @ts-ignore - CommonJS compatibility
+const __filename = require.main?.filename || __filename;
+const __dirname = path.dirname(__filename);
+const PROJECT_ROOT = path.resolve(__dirname, "..", "..");
+const TYPES_OUTPUT_PATH = path.join(PROJECT_ROOT, "types", "designTokens.ts");
+
+/**
+ * Token value structure
+ */
+interface TokenValue {
+  $value?: unknown;
+  $type?: string;
+  $description?: string;
+}
+
+/**
+ * Token group structure
+ */
+interface TokenGroup {
+  [key: string]: TokenValue | TokenGroup;
+}
+
+/**
+ * Extract token paths from a token object
+ *
+ * @param obj - Token object to traverse
+ * @param prefix - Current path prefix
+ * @returns Array of token paths
+ */
+function extractTokenPaths(obj: TokenGroup, prefix = ""): string[] {
+  const paths = [];
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (key.startsWith("$")) {continue;} // Skip metadata keys
+
+    const currentPath = prefix ? `${prefix}.${key}` : key;
+
+    if (value && typeof value === "object" && "$value" in value) {
+      // This is a token
+      paths.push(currentPath);
+    } else if (value && typeof value === "object" && !("$value" in value)) {
+      // This is a group, recurse
+      paths.push(...extractTokenPaths(value as TokenGroup, currentPath));
+    }
+  }
+
+  return paths;
+}
+
+/**
+ * Generate TypeScript types for token paths
+ *
+ * @returns Generated TypeScript type definitions as a string
+ */
+function generateTokenTypes(): string {
+  const coreTokensPath = path.join(
+    PROJECT_ROOT,
+    "ui",
+    "designTokens",
+    "core.tokens.json"
+  );
+  const semanticTokensPath = path.join(
+    PROJECT_ROOT,
+    "ui",
+    "designTokens",
+    "semantic.tokens.json"
+  );
+
+  const allPaths = [];
+
+  // Extract paths from core tokens
+  if (fs.existsSync(coreTokensPath)) {
+    const coreTokens = JSON.parse(fs.readFileSync(coreTokensPath, "utf8"));
+    const corePaths = extractTokenPaths(coreTokens).map((p) => `core.${p}`);
+    allPaths.push(...corePaths);
+  }
+
+  // Extract paths from semantic tokens
+  if (fs.existsSync(semanticTokensPath)) {
+    const semanticTokens = JSON.parse(
+      fs.readFileSync(semanticTokensPath, "utf8")
+    );
+    const semanticPaths = extractTokenPaths(semanticTokens).map(
+      (p) => `semantic.${p}`
+    );
+    allPaths.push(...semanticPaths);
+  }
+
+  // Sort paths for better organization
+  allPaths.sort();
+
+  // Generate TypeScript types
+  const typeContent = `/**
+ * Design Token Paths
+ * 
+ * Auto-generated TypeScript types for design token paths.
+ * Use these for type-safe token access in your code.
+ * 
+ * @example
+ * \`\`\`typescript
+ * import { TokenPath } from '@/types/designTokens';
+ * 
+ * const tokenPath: TokenPath = 'semantic.color.foreground.primary';
+ * const cssVar = \`var(--\${tokenPath.replace(/\\./g, '-')})\`;
+ * \`\`\`
+ */
+
+export type TokenPath = 
+${allPaths.map((path) => `  | '${path}'`).join("\n")};
+
+/**
+ * CSS Custom Property Name
+ * 
+ * Converts a token path to a CSS custom property name.
+ * 
+ * @example
+ * \`\`\`typescript
+ * const cssVar = toCSSVar('semantic.color.foreground.primary');
+ * // Result: '--semantic-color-foreground-primary'
+ * \`\`\`
+ */
+export type CSSVarName = \`--\${string}\`;
+
+/**
+ * Convert a token path to a CSS custom property name
+ */
+export function toCSSVar(tokenPath: TokenPath): CSSVarName {
+  return \`--\${tokenPath.replace(/\\./g, '-')}\` as CSSVarName;
+}
+
+/**
+ * Token namespace prefixes
+ */
+export type CoreTokenPath = Extract<TokenPath, \`core.\${string}\`>;
+export type SemanticTokenPath = Extract<TokenPath, \`semantic.\${string}\`>;
+
+/**
+ * Token type categories
+ */
+export type ColorTokenPath = Extract<TokenPath, \`\${string}.color.\${string}\`>;
+export type SpacingTokenPath = Extract<TokenPath, \`\${string}.spacing.\${string}\`>;
+export type TypographyTokenPath = Extract<TokenPath, \`\${string}.typography.\${string}\`>;
+export type MotionTokenPath = Extract<TokenPath, \`\${string}.motion.\${string}\`>;
+export type ElevationTokenPath = Extract<TokenPath, \`\${string}.elevation.\${string}\`>;
+export type ShapeTokenPath = Extract<TokenPath, \`\${string}.shape.\${string}\`>;
+export type DimensionTokenPath = Extract<TokenPath, \`\${string}.dimension.\${string}\`>;
+`;
+
+  return typeContent;
+}
+
+/**
+ * Main function to generate and write types
+ *
+ * @returns Generated type definitions string
+ */
+function generateTypes(): string {
+  console.log("[types] Generating TypeScript types for design tokens...");
+
+  const typeContent = generateTokenTypes();
+
+  // Ensure output directory exists
+  const outputDir = path.dirname(TYPES_OUTPUT_PATH);
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
+  // Write types file
+  fs.writeFileSync(TYPES_OUTPUT_PATH, typeContent);
+
+  console.log(
+    `[types] Generated types at ${path.relative(
+      PROJECT_ROOT,
+      TYPES_OUTPUT_PATH
+    )}`
+  );
+  console.log(
+    `[types] Generated ${typeContent.split("|").length - 1} token paths`
+  );
+
+  return typeContent;
+}
+
+// Run if called directly
+if (require.main === module) {
+  generateTypes();
+}
+
+export { generateTypes };

@@ -3,10 +3,10 @@
  * @author @darianrosebrook
  */
 
-import { defaultTokens as tokens } from "../tokens.js";
 import React from "react";
 import { Input } from "../primitives/Input";
 import { Label } from "../primitives/Label";
+import { defaultTokens as tokens } from "../tokens.js";
 
 export interface NumberFieldProps {
   label?: string;

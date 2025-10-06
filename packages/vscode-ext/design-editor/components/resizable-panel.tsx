@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useRef, useEffect } from "react"
 
 interface ResizablePanelProps {
@@ -19,7 +18,7 @@ export function ResizablePanel({ children, defaultWidth, minWidth, maxWidth, sid
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!isResizing || !panelRef.current) return
+      if (!isResizing || !panelRef.current) {return}
 
       const panelRect = panelRef.current.getBoundingClientRect()
       let newWidth: number

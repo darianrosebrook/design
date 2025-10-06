@@ -3,8 +3,8 @@
 
 .fileMetadata {
   // Base container styles (equivalent to px-3 py-2 border-b border-border)
-  padding: 8px 12px; // equivalent to px-3 py-2
-  border-bottom: 1px solid hsl(var(--border)); // equivalent to border-b border-border
+  padding: var(--fileMetadata-padding-vertical) var(--fileMetadata-padding-horizontal);
+  border-bottom: 1px solid var(--fileMetadata-borderColor);
 }
 
 .fileMetadataHeader {
@@ -12,19 +12,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px; // equivalent to mb-2
+  margin-bottom: var(--fileMetadata-header-marginBottom);
 }
 
 .fileMetadataTitle {
   // Title styles (equivalent to text-sm font-semibold)
-  font-size: 14px; // equivalent to text-sm
-  font-weight: 600; // equivalent to font-semibold
+  font-size: var(--fileMetadata-title-fontSize);
+  font-weight: var(--fileMetadata-title-fontWeight);
 }
 
 .fileMetadataContent {
   // Content styles (equivalent to text-xs text-muted-foreground space-y-1)
-  font-size: 12px; // equivalent to text-xs
-  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  font-size: var(--fileMetadata-content-fontSize);
+  color: var(--fileMetadata-content-color);
 }
 
 .fileMetadataContent > * + * {
@@ -35,12 +35,19 @@
   // Row styles (equivalent to flex items-center gap-2)
   display: flex;
   align-items: center;
-  gap: 8px; // equivalent to gap-2
+  gap: var(--fileMetadata-row-gap);
 }
 
 .fileMetadataStats {
   // Stats row styles (equivalent to flex items-center gap-4)
   display: flex;
   align-items: center;
-  gap: 16px; // equivalent to gap-4
+  gap: var(--fileMetadata-stats-gap);
+}
+
+.icon {
+  // Icon styles (equivalent to h-3 w-3)
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
 }

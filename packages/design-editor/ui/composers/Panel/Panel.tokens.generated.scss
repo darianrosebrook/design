@@ -1,0 +1,33 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/Panel/Panel.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --panel-spacing-padding-sm: var(--semantic-spacing-padding-grid-small);
+  --panel-spacing-padding-md: var(--semantic-spacing-padding-grid-medium);
+  --panel-spacing-padding-lg: var(--semantic-spacing-padding-grid-large);
+  --panel-spacing-gap-xs: var(--semantic-spacing-gap-grid-xsmall);
+  --panel-spacing-gap-sm: var(--semantic-spacing-gap-grid-small);
+  --panel-spacing-header-padding-horizontal: var(--semantic-spacing-padding-grid-small);
+  --panel-spacing-header-padding-vertical: var(--semantic-spacing-padding-grid-small);
+
+  /* === Typography Tokens === */
+  --panel-typography-title-fontSize: var(--semantic-typography-body-03);
+  --panel-typography-title-fontWeight: var(--semantic-typography-font-weight-semibold);
+  --panel-typography-title-color: var(--semantic-color-display-foreground-primary);
+  --panel-typography-subtitle-fontSize: var(--semantic-typography-body-01);
+  --panel-typography-subtitle-color: var(--semantic-color-display-foreground-secondary);
+  --panel-typography-section-fontSize: var(--semantic-typography-body-03);
+  --panel-typography-section-fontWeight: var(--semantic-typography-font-weight-medium);
+
+  /* === Layout Tokens === */
+  --panel-layout-icon-size: 16px;
+  --panel-layout-chevron-size: 16px;
+  --panel-layout-section-padding-left: var(--semantic-spacing-padding-grid-medium);
+
+  /* === Interactive Tokens === */
+  --panel-interactive-hover-opacity: 0.8;
+  --panel-interactive-focus-ring-color: var(--semantic-color-action-border-primary-focus);
+  --panel-interactive-focus-ring-width: 2px;
+  --panel-interactive-focus-ring-offset: 2px;
+}

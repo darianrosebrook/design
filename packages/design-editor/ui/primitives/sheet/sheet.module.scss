@@ -1,7 +1,220 @@
-// sheet primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Sheet primitive component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.sheet {
-  // Placeholder for future SCSS implementation
-  // Will contain sheet-specific styles when migrating from Tailwind
+.sheetOverlay {
+  // Sheet overlay backdrop
+  position: fixed;
+  inset: 0;
+  z-index: var(--sheet-overlay-zIndex);
+  background-color: var(--sheet-overlay-backgroundColor);
+
+  // Animation states
+  &[data-state="open"] {
+    animation: sheetOverlayFadeIn var(--sheet-overlay-animation-duration-in) var(--sheet-overlay-animation-easing);
+  }
+
+  &[data-state="closed"] {
+    animation: sheetOverlayFadeOut var(--sheet-overlay-animation-duration-out) var(--sheet-overlay-animation-easing);
+  }
+}
+
+.sheetContent {
+  // Sheet content container
+  background-color: var(--sheet-content-backgroundColor);
+  border: var(--sheet-content-borderWidth) solid var(--sheet-content-borderColor);
+  box-shadow: var(--sheet-content-shadow);
+  z-index: var(--sheet-content-zIndex);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sheet-content-layout-gap);
+  transition: var(--sheet-content-animation-duration-out) var(--sheet-content-animation-easing);
+
+  // Animation states
+  &[data-state="open"] {
+    animation: sheetContentSlideIn var(--sheet-content-animation-duration-in) var(--sheet-content-animation-easing);
+  }
+
+  &[data-state="closed"] {
+    animation: sheetContentSlideOut var(--sheet-content-animation-duration-out) var(--sheet-content-animation-easing);
+  }
+
+  // Side-specific positioning and sizing
+  &[data-side="right"] {
+    inset-block: 0; // Full height
+    right: 0;
+    height: var(--sheet-content-layout-height-full);
+    width: var(--sheet-content-layout-maxWidth-mobile);
+    border-left: var(--sheet-content-borderWidth) solid var(--sheet-content-borderColor);
+
+    @media (min-width: 640px) {
+      width: var(--sheet-content-layout-maxWidth-desktop);
+    }
+  }
+
+  &[data-side="left"] {
+    inset-block: 0; // Full height
+    left: 0;
+    height: var(--sheet-content-layout-height-full);
+    width: var(--sheet-content-layout-maxWidth-mobile);
+    border-right: var(--sheet-content-borderWidth) solid var(--sheet-content-borderColor);
+
+    @media (min-width: 640px) {
+      width: var(--sheet-content-layout-maxWidth-desktop);
+    }
+  }
+
+  &[data-side="top"] {
+    inset-inline: 0; // Full width
+    top: 0;
+    height: var(--sheet-content-layout-height-auto);
+    border-bottom: var(--sheet-content-borderWidth) solid var(--sheet-content-borderColor);
+  }
+
+  &[data-side="bottom"] {
+    inset-inline: 0; // Full width
+    bottom: 0;
+    height: var(--sheet-content-layout-height-auto);
+    border-top: var(--sheet-content-borderWidth) solid var(--sheet-content-borderColor);
+  }
+}
+
+.sheetClose {
+  // Close button styles
+  position: absolute;
+  top: var(--sheet-close-position-top);
+  right: var(--sheet-close-position-right);
+  width: var(--sheet-close-size);
+  height: var(--sheet-close-size);
+  background-color: var(--sheet-close-backgroundColor);
+  border-radius: var(--sheet-close-borderRadius);
+  opacity: var(--sheet-close-opacity-default);
+  transition: var(--sheet-close-transition-property) var(--sheet-close-transition-duration);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: var(--sheet-close-opacity-hover);
+    background-color: var(--sheet-close-backgroundColorHover);
+  }
+
+  &:focus-visible {
+    outline: var(--sheet-close-focus-ring-width) solid var(--sheet-close-focus-ring-color);
+    outline-offset: var(--sheet-close-focus-ring-offset);
+  }
+
+  &:disabled {
+    pointer-events: none;
+  }
+
+  svg {
+    width: var(--sheet-close-iconSize);
+    height: var(--sheet-close-iconSize);
+  }
+}
+
+.sheetHeader {
+  // Header container
+  display: flex;
+  flex-direction: column;
+  gap: var(--sheet-header-gap);
+  padding: var(--sheet-header-padding);
+}
+
+.sheetFooter {
+  // Footer container
+  margin-top: var(--sheet-footer-marginTop);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sheet-footer-gap);
+  padding: var(--sheet-footer-padding);
+}
+
+.sheetTitle {
+  // Title styles
+  color: var(--sheet-title-color);
+  font-weight: var(--sheet-title-fontWeight);
+}
+
+.sheetDescription {
+  // Description styles
+  color: var(--sheet-description-color);
+  font-size: var(--sheet-description-fontSize);
+}
+
+// Animation keyframes
+@keyframes sheetOverlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheetOverlayFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes sheetContentSlideIn {
+  from {
+    transform: translateX(var(--sheet-content-animation-slide-distance));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes sheetContentSlideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--sheet-content-animation-slide-distance));
+  }
+}
+
+// Directional slide animations
+@keyframes sheetContentSlideInFromRight {
+  from {
+    transform: translateX(var(--sheet-content-animation-slide-distance));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes sheetContentSlideInFromLeft {
+  from {
+    transform: translateX(calc(-1 * var(--sheet-content-animation-slide-distance)));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes sheetContentSlideInFromTop {
+  from {
+    transform: translateY(calc(-1 * var(--sheet-content-animation-slide-distance)));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes sheetContentSlideInFromBottom {
+  from {
+    transform: translateY(var(--sheet-content-animation-slide-distance));
+  }
+  to {
+    transform: translateY(0);
+  }
 }

@@ -9,91 +9,91 @@
 
 // Slider root container
 .slider {
-  position: var(--slider-slider-root-position-value);
-  display: var(--slider-slider-root-display-value);
-  width: var(--slider-slider-root-width-value);
-  touch-action: var(--slider-slider-root-touchAction-value);
-  align-items: var(--slider-slider-root-alignItems-value);
-  user-select: var(--slider-slider-root-userSelect-value);
+  position: var(--slider-slider-root-position);
+  display: var(--slider-slider-root-display);
+  width: var(--slider-slider-root-width);
+  touch-action: var(--slider-slider-root-touchAction);
+  align-items: var(--slider-slider-root-alignItems);
+  user-select: var(--slider-slider-root-userSelect);
 
   // Disabled state
   &[data-disabled="true"] {
-    opacity: var(--slider-slider-root-disabled-opacity-value);
+    opacity: var(--slider-slider-root-disabled-opacity);
   }
 
   // Vertical orientation
   &[data-orientation="vertical"] {
-    height: var(--slider-slider-root-orientation-vertical-height-value);
-    min-height: var(--slider-slider-root-orientation-vertical-minHeight-value);
-    width: var(--slider-slider-root-orientation-vertical-width-value);
-    flex-direction: var(--slider-slider-root-orientation-vertical-flexDirection-value);
+    height: var(--slider-slider-root-orientation-vertical-height);
+    min-height: var(--slider-slider-root-orientation-vertical-minHeight);
+    width: var(--slider-slider-root-orientation-vertical-width);
+    flex-direction: var(--slider-slider-root-orientation-vertical-flexDirection);
   }
 }
 
 // Slider track container
 .slider-track {
-  background-color: var(--slider-slider-track-backgroundColor-value);
-  position: var(--slider-slider-track-position-value);
-  flex-grow: var(--slider-slider-track-flexGrow-value);
-  overflow: var(--slider-slider-track-overflow-value);
-  border-radius: var(--slider-slider-track-borderRadius-value);
+  background-color: var(--slider-slider-track-backgroundColor);
+  position: var(--slider-slider-track-position);
+  flex-grow: var(--slider-slider-track-flexGrow);
+  overflow: var(--slider-slider-track-overflow);
+  border-radius: var(--slider-slider-track-borderRadius);
 
   // Horizontal orientation (default)
   &[data-orientation="horizontal"] {
-    height: var(--slider-slider-track-orientation-horizontal-height-value);
-    width: var(--slider-slider-track-orientation-horizontal-width-value);
+    height: var(--slider-slider-track-orientation-horizontal-height);
+    width: var(--slider-slider-track-orientation-horizontal-width);
   }
 
   // Vertical orientation
   &[data-orientation="vertical"] {
-    height: var(--slider-slider-track-orientation-vertical-height-value);
-    width: var(--slider-slider-track-orientation-vertical-width-value);
+    height: var(--slider-slider-track-orientation-vertical-height);
+    width: var(--slider-slider-track-orientation-vertical-width);
   }
 }
 
 // Slider range (filled portion)
 .slider-range {
-  background-color: var(--slider-slider-range-backgroundColor-value);
-  position: var(--slider-slider-range-position-value);
+  background-color: var(--slider-slider-range-backgroundColor);
+  position: var(--slider-slider-range-position);
 
   // Horizontal orientation (default)
   &[data-orientation="horizontal"] {
-    height: var(--slider-slider-range-orientation-horizontal-height-value);
+    height: var(--slider-slider-range-orientation-horizontal-height);
   }
 
   // Vertical orientation
   &[data-orientation="vertical"] {
-    width: var(--slider-slider-range-orientation-vertical-width-value);
+    width: var(--slider-slider-range-orientation-vertical-width);
   }
 }
 
 // Slider thumb (draggable handle)
 .slider-thumb {
-  display: var(--slider-slider-thumb-display-value);
-  width: var(--slider-slider-thumb-width-value);
-  height: var(--slider-slider-thumb-height-value);
-  flex-shrink: var(--slider-slider-thumb-flexShrink-value);
-  border-radius: var(--slider-slider-thumb-borderRadius-value);
-  border: var(--slider-slider-thumb-border-width-value) var(--slider-slider-thumb-border-style-value) var(--slider-slider-thumb-border-color-value);
-  background-color: var(--slider-slider-thumb-backgroundColor-value);
-  box-shadow: var(--slider-slider-thumb-boxShadow-value);
-  transition: var(--slider-slider-thumb-transitionProperties-value) var(--slider-slider-thumb-transition-value);
-  outline: var(--slider-slider-thumb-outline-value);
+  display: var(--slider-slider-thumb-display);
+  width: var(--slider-slider-thumb-width);
+  height: var(--slider-slider-thumb-height);
+  flex-shrink: var(--slider-slider-thumb-flexShrink);
+  border-radius: var(--slider-slider-thumb-borderRadius);
+  border: var(--slider-slider-thumb-border-width) var(--slider-slider-thumb-border-style) var(--slider-slider-thumb-border-color);
+  background-color: var(--slider-slider-thumb-backgroundColor);
+  box-shadow: var(--slider-slider-thumb-boxShadow);
+  transition: var(--slider-slider-thumb-transitionProperties) var(--slider-slider-thumb-transition);
+  outline: var(--slider-slider-thumb-outline);
 
   // Disabled state
   &[data-disabled="true"] {
-    pointer-events: var(--slider-slider-thumb-disabled-pointerEvents-value);
-    opacity: var(--slider-slider-thumb-disabled-opacity-value);
+    pointer-events: var(--slider-slider-thumb-disabled-pointerEvents);
+    opacity: var(--slider-slider-thumb-disabled-opacity);
   }
 
   // Hover state
   &:hover {
-    box-shadow: var(--slider-slider-thumb-states-hover-boxShadow-value);
+    box-shadow: var(--slider-slider-thumb-states-hover-boxShadow);
   }
 
   // Focus visible state
   &:focus-visible {
-    box-shadow: var(--slider-slider-thumb-states-focusVisible-boxShadow-value);
-    outline: var(--slider-slider-thumb-states-focusVisible-outline-value);
+    box-shadow: var(--slider-slider-thumb-states-focusVisible-boxShadow);
+    outline: var(--slider-slider-thumb-states-focusVisible-outline);
   }
 }

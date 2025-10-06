@@ -1,7 +1,76 @@
-// radio-group primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// RadioGroup component styles
+// Migrated from Tailwind to SCSS with design tokens
 
-.radio-group {
-  // Placeholder for future SCSS implementation
-  // Will contain radio-group-specific styles when migrating from Tailwind
+// Import generated token variables
+@use './RadioGroup.tokens.generated.scss' as radioGroupTokens;
+
+.radiogroup {
+  // Include the generated variables mixin within the component scope
+  @include radioGroupTokens.vars;
+  // Base radio group styles (equivalent to grid gap-3)
+  display: var(--radioGroup-container-display);
+  gap: var(--radioGroup-container-gap); // equivalent to gap-3
+}
+
+.radiogroupitem {
+  // Base radio item styles
+  border: var(--radioGroup-item-border-width) var(--radioGroup-item-border-style) var(--radioGroup-item-border-color-default); // equivalent to border-input
+  color: var(--radioGroup-item-color); // equivalent to text-primary
+  width: var(--radioGroup-item-size); // equivalent to size-4
+  height: var(--radioGroup-item-size); // equivalent to size-4
+  flex-shrink: 0; // equivalent to shrink-0
+  border-radius: var(--radioGroup-item-borderRadius); // equivalent to rounded-full
+  box-shadow: var(--radioGroup-item-boxShadow); // equivalent to shadow-xs
+  transition: color var(--radioGroup-item-transition-duration) var(--radioGroup-item-transition-easing), box-shadow var(--radioGroup-item-transition-duration) var(--radioGroup-item-transition-easing); // equivalent to transition-[color,box-shadow]
+  outline: none; // equivalent to outline-none
+
+  // Aspect ratio (square)
+  aspect-ratio: 1; // equivalent to aspect-square
+
+  // Dark mode background
+  .dark & {
+    background-color: var(--radioGroup-item-backgroundColor-dark); // equivalent to dark:bg-input/30
+    opacity: var(--radioGroup-item-backgroundColor-dark-opacity);
+  }
+
+  // Focus visible styles
+  &:focus-visible {
+    border-color: var(--semantic-color-action-border-primary-focus); // equivalent to focus-visible:border-ring
+    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5); // equivalent to focus-visible:ring-ring/50 focus-visible:ring-[3px]
+  }
+
+  // Invalid state
+  &[aria-invalid="true"] {
+    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2); // equivalent to aria-invalid:ring-destructive/20
+    border-color: var(--destructive); // equivalent to aria-invalid:border-destructive
+
+    .dark & {
+      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4); // equivalent to dark:aria-invalid:ring-destructive/40
+    }
+  }
+
+  // Disabled state
+  &:disabled {
+    cursor: not-allowed; // equivalent to disabled:cursor-not-allowed
+    opacity: var(--radioGroup-item-states-disabled-opacity); // equivalent to disabled:opacity-50
+  }
+}
+
+.radiogroupindicator {
+  // Indicator styles
+  position: var(--radioGroup-indicator-position); // equivalent to relative
+  display: var(--radioGroup-indicator-display); // equivalent to flex
+  align-items: var(--radioGroup-indicator-alignItems); // equivalent to items-center
+  justify-content: var(--radioGroup-indicator-justifyContent); // equivalent to justify-center
+
+  // Icon styles
+  svg {
+    fill: var(--radioGroup-indicator-icon-fill); // equivalent to fill-primary
+    position: var(--radioGroup-indicator-icon-position); // equivalent to absolute
+    top: var(--radioGroup-indicator-icon-top); // equivalent to top-1/2
+    left: var(--radioGroup-indicator-icon-left); // equivalent to left-1/2
+    width: var(--radioGroup-indicator-icon-size); // equivalent to size-2
+    height: var(--radioGroup-indicator-icon-size); // equivalent to size-2
+    transform: var(--radioGroup-indicator-icon-transform); // equivalent to -translate-x-1/2 -translate-y-1/2
+  }
 }

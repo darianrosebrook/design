@@ -1,3 +1,230 @@
 {
-  "keyboard-shortcuts-modal": {}
+  "prefix": "keyboardShortcutsModal",
+  "tokens": {
+    "backgroundColor": {
+      "value": "{semantic.color.display.background.primary}",
+      "description": "Background color for shortcuts modal"
+    },
+    "borderColor": {
+      "value": "{semantic.color.display.border.subtle}",
+      "description": "Border color for shortcuts modal"
+    },
+    "spacing": {
+      "container": {
+        "value": "{semantic.spacing.gap.grid.medium}",
+        "description": "Gap between main sections"
+      },
+      "category": {
+        "value": "{semantic.spacing.gap.grid.large}",
+        "description": "Gap between categories"
+      },
+      "item": {
+        "value": "{semantic.spacing.gap.grid.small}",
+        "description": "Gap between shortcut items"
+      },
+      "search": {
+        "icon": {
+          "value": "{semantic.spacing.padding.grid.small}",
+          "description": "Left padding for search input"
+        }
+      }
+    },
+    "typography": {
+      "title": {
+        "fontSize": {
+          "value": "{semantic.typography.heading.04}",
+          "description": "Font size for modal title"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.semibold}",
+          "description": "Font weight for modal title"
+        },
+        "color": {
+          "value": "{semantic.color.display.foreground.primary}",
+          "description": "Text color for modal title"
+        }
+      },
+      "category": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for category headers"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.medium}",
+          "description": "Font weight for category headers"
+        },
+        "color": {
+          "value": "{semantic.color.display.foreground.primary}",
+          "description": "Text color for category headers"
+        }
+      },
+      "shortcut": {
+        "name": {
+          "fontSize": {
+            "value": "{semantic.typography.body.03}",
+            "description": "Font size for shortcut names"
+          },
+          "fontWeight": {
+            "value": "{semantic.typography.font.weight.medium}",
+            "description": "Font weight for shortcut names"
+          },
+          "color": {
+            "value": "{semantic.color.display.foreground.primary}",
+            "description": "Text color for shortcut names"
+          }
+        },
+        "description": {
+          "fontSize": {
+            "value": "{semantic.typography.body.01}",
+            "description": "Font size for shortcut descriptions"
+          },
+          "color": {
+            "value": "{semantic.color.display.foreground.secondary}",
+            "description": "Text color for shortcut descriptions"
+          }
+        },
+        "key": {
+          "fontSize": {
+            "value": "{semantic.typography.body.01}",
+            "description": "Font size for shortcut keys"
+          },
+          "fontFamily": {
+            "value": "monospace",
+            "description": "Font family for shortcut keys"
+          }
+        }
+      },
+      "count": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for count badges"
+        },
+        "color": {
+          "value": "{semantic.color.display.foreground.secondary}",
+          "description": "Text color for count badges"
+        }
+      }
+    },
+    "layout": {
+      "modal": {
+        "maxWidth": {
+          "value": "56rem",
+          "description": "Maximum width for modal"
+        },
+        "maxHeight": {
+          "value": "80vh",
+          "description": "Maximum height for modal"
+        }
+      },
+      "scrollArea": {
+        "maxHeight": {
+          "value": "60vh",
+          "description": "Maximum height for scroll area"
+        }
+      },
+      "search": {
+        "icon": {
+          "size": {
+            "value": "16px",
+            "description": "Size for search icon"
+          }
+        }
+      },
+      "shortcut": {
+        "key": {
+          "padding": {
+            "horizontal": {
+              "value": "{semantic.spacing.padding.grid.small}",
+              "description": "Horizontal padding for shortcut keys"
+            },
+            "vertical": {
+              "value": "{semantic.spacing.padding.grid.xsmall}",
+              "description": "Vertical padding for shortcut keys"
+            }
+          },
+          "borderRadius": {
+            "value": "{semantic.shape.control.radius.small}",
+            "description": "Border radius for shortcut keys"
+          }
+        }
+      },
+      "badge": {
+        "gap": {
+          "value": "{semantic.spacing.gap.grid.small}",
+          "description": "Gap between badge elements"
+        }
+      }
+    },
+    "interactive": {
+      "shortcut": {
+        "backgroundColor": {
+          "value": "{semantic.color.display.background.primary}",
+          "description": "Background color for shortcut items"
+        },
+        "hover": {
+          "backgroundColor": {
+            "value": "{semantic.color.action.background.secondary.hover}",
+            "description": "Background color for shortcut items on hover"
+          }
+        },
+        "implemented": {
+          "opacity": {
+            "value": "1",
+            "description": "Opacity for implemented shortcuts"
+          }
+        },
+        "notImplemented": {
+          "opacity": {
+            "value": "0.6",
+            "description": "Opacity for not implemented shortcuts"
+          },
+          "cursor": {
+            "value": "not-allowed",
+            "description": "Cursor for not implemented shortcuts"
+          }
+        }
+      },
+      "key": {
+        "implemented": {
+          "backgroundColor": {
+            "value": "{semantic.color.display.background.secondary}",
+            "description": "Background color for implemented shortcut keys"
+          }
+        },
+        "notImplemented": {
+          "backgroundColor": {
+            "value": "{semantic.color.display.background.secondary}",
+            "opacity": 0.5,
+            "description": "Background color for not implemented shortcut keys"
+          },
+          "color": {
+            "value": "{semantic.color.display.foreground.secondary}",
+            "description": "Text color for not implemented shortcut keys"
+          }
+        }
+      }
+    },
+    "badge": {
+      "comingSoon": {
+        "backgroundColor": {
+          "value": "{semantic.color.palette.orange.100}",
+          "description": "Background color for coming soon badges"
+        },
+        "color": {
+          "value": "{semantic.color.palette.orange.800}",
+          "description": "Text color for coming soon badges"
+        },
+        "dark": {
+          "backgroundColor": {
+            "value": "{semantic.color.palette.orange.900}",
+            "description": "Background color for coming soon badges in dark mode"
+          },
+          "color": {
+            "value": "{semantic.color.palette.orange.200}",
+            "description": "Text color for coming soon badges in dark mode"
+          }
+        }
+      }
+    }
+  }
 }

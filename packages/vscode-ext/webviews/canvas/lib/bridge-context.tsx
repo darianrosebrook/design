@@ -55,7 +55,7 @@ export function CanvasBridgeProvider({
 
   // Set up message listener
   useEffect(() => {
-    if (!vscode) return;
+    if (!vscode) {return;}
 
     const handleMessage = (event: MessageEvent) => {
       const message = event.data as IncomingMessageType;
@@ -106,7 +106,7 @@ export function CanvasBridgeProvider({
 
   // Listen for ready confirmation and handle errors
   useEffect(() => {
-    if (!vscode) return;
+    if (!vscode) {return;}
 
     const unsubscribers = [
       onMessage("ready", () => {

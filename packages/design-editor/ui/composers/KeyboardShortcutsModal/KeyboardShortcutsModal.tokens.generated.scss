@@ -1,0 +1,53 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/KeyboardShortcutsModal/keyboard-shortcuts-modal.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --keyboardShortcutsModal-spacing-container: var(--semantic-spacing-gap-grid-medium);
+  --keyboardShortcutsModal-spacing-category: var(--semantic-spacing-gap-grid-large);
+  --keyboardShortcutsModal-spacing-item: var(--semantic-spacing-gap-grid-small);
+  --keyboardShortcutsModal-spacing-search-icon: var(--semantic-spacing-padding-grid-small);
+
+  /* === Typography Tokens === */
+  --keyboardShortcutsModal-typography-title-fontSize: var(--semantic-typography-heading-04);
+  --keyboardShortcutsModal-typography-title-fontWeight: var(--semantic-typography-font-weight-semibold);
+  --keyboardShortcutsModal-typography-title-color: var(--semantic-color-display-foreground-primary);
+  --keyboardShortcutsModal-typography-category-fontSize: var(--semantic-typography-body-01);
+  --keyboardShortcutsModal-typography-category-fontWeight: var(--semantic-typography-font-weight-medium);
+  --keyboardShortcutsModal-typography-category-color: var(--semantic-color-display-foreground-primary);
+  --keyboardShortcutsModal-typography-shortcut-name-fontSize: var(--semantic-typography-body-03);
+  --keyboardShortcutsModal-typography-shortcut-name-fontWeight: var(--semantic-typography-font-weight-medium);
+  --keyboardShortcutsModal-typography-shortcut-name-color: var(--semantic-color-display-foreground-primary);
+  --keyboardShortcutsModal-typography-shortcut-description-fontSize: var(--semantic-typography-body-01);
+  --keyboardShortcutsModal-typography-shortcut-description-color: var(--semantic-color-display-foreground-secondary);
+  --keyboardShortcutsModal-typography-shortcut-key-fontSize: var(--semantic-typography-body-01);
+  --keyboardShortcutsModal-typography-shortcut-key-fontFamily: monospace;
+  --keyboardShortcutsModal-typography-count-fontSize: var(--semantic-typography-body-01);
+  --keyboardShortcutsModal-typography-count-color: var(--semantic-color-display-foreground-secondary);
+
+  /* === Layout Tokens === */
+  --keyboardShortcutsModal-layout-modal-maxWidth: 56rem;
+  --keyboardShortcutsModal-layout-modal-maxHeight: 80vh;
+  --keyboardShortcutsModal-layout-scrollArea-maxHeight: 60vh;
+  --keyboardShortcutsModal-layout-search-icon-size: 16px;
+  --keyboardShortcutsModal-layout-shortcut-key-padding-horizontal: var(--semantic-spacing-padding-grid-small);
+  --keyboardShortcutsModal-layout-shortcut-key-padding-vertical: var(--semantic-spacing-padding-grid-xsmall);
+  --keyboardShortcutsModal-layout-shortcut-key-borderRadius: var(--semantic-shape-control-radius-small);
+  --keyboardShortcutsModal-layout-badge-gap: var(--semantic-spacing-gap-grid-small);
+
+  /* === Interactive Tokens === */
+  --keyboardShortcutsModal-interactive-shortcut-backgroundColor: var(--semantic-color-display-background-primary);
+  --keyboardShortcutsModal-interactive-shortcut-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --keyboardShortcutsModal-interactive-shortcut-implemented-opacity: 1;
+  --keyboardShortcutsModal-interactive-shortcut-notImplemented-opacity: 0.6;
+  --keyboardShortcutsModal-interactive-shortcut-notImplemented-cursor: not-allowed;
+  --keyboardShortcutsModal-interactive-key-implemented-backgroundColor: var(--semantic-color-display-background-secondary);
+  --keyboardShortcutsModal-interactive-key-notImplemented-backgroundColor: var(--semantic-color-display-background-secondary);
+  --keyboardShortcutsModal-interactive-key-notImplemented-color: var(--semantic-color-display-foreground-secondary);
+
+  /* === Badge Tokens === */
+  --keyboardShortcutsModal-badge-comingSoon-backgroundColor: var(--semantic-color-palette-orange-100);
+  --keyboardShortcutsModal-badge-comingSoon-color: var(--semantic-color-palette-orange-800);
+  --keyboardShortcutsModal-badge-comingSoon-dark-backgroundColor: var(--semantic-color-palette-orange-900);
+  --keyboardShortcutsModal-badge-comingSoon-dark-color: var(--semantic-color-palette-orange-200);
+}

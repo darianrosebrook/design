@@ -1,188 +1,209 @@
 // Button component styles
-// Migrated from Tailwind to SCSS with design tokens
+// Migrated from Tailwind to SCSS with semantic design tokens
+
+// Import generated token variables
+@use './Button.tokens.generated.scss' as buttonTokens;
 
 // Base button styles (equivalent to Tailwind base classes)
 .button {
+  // Include the generated variables mixin within the component scope
+  @include buttonTokens.vars;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px; // equivalent to gap-2
+  gap: var(--semantic-spacing-gap-grid-small); // 8px
   white-space: nowrap;
-  border-radius: 6px; // equivalent to rounded-md
-  font-size: 14px; // equivalent to text-sm
-  font-weight: 500; // equivalent to font-medium
-  line-height: 1.2;
-  transition: all 150ms ease-in-out; // equivalent to transition-all
+  border-radius: var(--button-borderRadius);
+  font-size: var(--button-fontSize);
+  font-weight: var(--button-fontWeight);
+  line-height: var(--button-lineHeight);
+  transition: var(--semantic-motion-interaction-hover-duration) var(--semantic-motion-interaction-hover-easing);
 
   // SVG icon styles
   svg {
     pointer-events: none;
-    width: 16px; // equivalent to size-4
-    height: 16px;
+    width: var(--semantic-components-action-gap-icon); // 8px * 2
+    height: var(--semantic-components-action-gap-icon); // 8px * 2
     flex-shrink: 0;
 
     &:not([class*="size-"]) {
-      width: 16px;
-      height: 16px;
+      width: var(--semantic-components-action-gap-icon); // 8px * 2
+      height: var(--semantic-components-action-gap-icon); // 8px * 2
     }
   }
 
   // Disabled state
   &:disabled {
     pointer-events: none;
-    opacity: 0.5; // equivalent to disabled:opacity-50
+    opacity: var(--semantic-opacity-disabled);
   }
 
   // Focus visible styles
   &:focus-visible {
     outline: none;
-    border-color: hsl(var(--ring));
-    box-shadow: 0 0 0 3px hsl(var(--ring) / 0.5); // equivalent to focus-visible:ring-[3px]
+    border-color: var(--semantic-color-action-border-primary-focus);
+    box-shadow: 0 0 0 3px rgba(var(--semantic-color-action-border-primary-focus), 0.5);
   }
 
   // Invalid state
   &[aria-invalid="true"] {
-    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2); // equivalent to aria-invalid:ring-destructive/20
-    border-color: hsl(var(--destructive));
+    box-shadow: 0 0 0 3px rgba(var(--semantic-color-feedback-foreground-danger-default), 0.2);
+    border-color: var(--semantic-color-feedback-foreground-danger-default);
 
     .dark & {
-      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4); // equivalent to dark:aria-invalid:ring-destructive/40
+      box-shadow: 0 0 0 3px rgba(var(--semantic-color-feedback-foreground-danger-default), 0.4);
     }
   }
 }
 
 // Size variants
 .button--size-default {
-  height: 36px; // equivalent to h-9
-  padding: 8px 16px; // equivalent to py-2 px-4
+  height: var(--button-height-default);
+  padding: var(--button-padding-vertical-default) var(--button-padding-horizontal-default);
 
   // Adjust padding when there's an SVG
   &:has(> svg) {
-    padding-left: 12px; // equivalent to px-3
-    padding-right: 12px;
+    padding-left: var(--semantic-components-action-padding-horizontal-small);
+    padding-right: var(--semantic-components-action-padding-horizontal-small);
   }
 }
 
 .button--size-sm {
-  height: 32px; // equivalent to h-8
-  border-radius: 6px; // rounded-md
-  gap: 6px; // gap-1.5
-  padding: 6px 12px; // equivalent to py-1.5 px-3
+  height: var(--button-height-sm);
+  border-radius: var(--button-borderRadius);
+  gap: var(--semantic-components-action-gap-composite);
+  padding: var(--button-padding-vertical-sm) var(--button-padding-horizontal-sm);
 
   // Adjust padding when there's an SVG
   &:has(> svg) {
-    padding-left: 10px; // equivalent to px-2.5
-    padding-right: 10px;
+    padding-left: calc(var(--semantic-components-action-padding-horizontal-small) - var(--semantic-spacing-gap-grid-small));
+    padding-right: calc(var(--semantic-components-action-padding-horizontal-small) - var(--semantic-spacing-gap-grid-small));
   }
 }
 
 .button--size-lg {
-  height: 40px; // equivalent to h-10
-  border-radius: 6px; // rounded-md
-  padding: 10px 24px; // equivalent to py-2.5 px-6
+  height: var(--button-height-lg);
+  border-radius: var(--button-borderRadius);
+  padding: var(--button-padding-vertical-lg) var(--button-padding-horizontal-lg);
 
   // Adjust padding when there's an SVG
   &:has(> svg) {
-    padding-left: 16px; // equivalent to px-4
-    padding-right: 16px;
+    padding-left: var(--semantic-components-action-padding-horizontal-default);
+    padding-right: var(--semantic-components-action-padding-horizontal-default);
   }
 }
 
 .button--size-icon {
-  width: 36px; // equivalent to size-9
-  height: 36px;
+  width: var(--button-height-icon-default);
+  height: var(--button-height-icon-default);
   padding: 0;
 }
 
 .button--size-icon-sm {
-  width: 32px; // equivalent to size-8
-  height: 32px;
+  width: var(--button-height-icon-sm);
+  height: var(--button-height-icon-sm);
   padding: 0;
 }
 
 .button--size-icon-lg {
-  width: 40px; // equivalent to size-10
-  height: 40px;
+  width: var(--button-height-icon-lg);
+  height: var(--button-height-icon-lg);
   padding: 0;
 }
 
 // Variant styles
 .button--variant-default {
-  background-color: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
+  background-color: var(--button-variants-default-backgroundColor);
+  color: var(--button-variants-default-color);
 
   &:hover {
-    background-color: hsl(var(--primary) / 0.9);
+    background-color: var(--button-variants-default-hover-backgroundColor);
+    opacity: var(--button-variants-default-hover-backgroundColor-opacity);
+  }
+
+  &:active {
+    background-color: var(--semantic-color-action-background-primary-active);
   }
 }
 
 .button--variant-destructive {
-  background-color: hsl(var(--destructive));
-  color: #ffffff;
+  background-color: var(--button-variants-destructive-backgroundColor);
+  color: var(--button-variants-destructive-color);
 
   &:hover {
-    background-color: hsl(var(--destructive) / 0.9);
+    background-color: var(--semantic-color-action-background-danger-hover);
+  }
+
+  &:active {
+    background-color: var(--semantic-color-action-background-danger-active);
   }
 
   &:focus-visible {
-    box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.2);
+    box-shadow: 0 0 0 3px rgba(var(--semantic-color-feedback-foreground-danger-default), 0.2);
 
     .dark & {
-      box-shadow: 0 0 0 3px hsl(var(--destructive) / 0.4);
+      box-shadow: 0 0 0 3px rgba(var(--semantic-color-feedback-foreground-danger-default), 0.4);
     }
-  }
-
-  .dark & {
-    background-color: hsl(var(--destructive) / 0.6);
   }
 }
 
 .button--variant-outline {
-  background-color: hsl(var(--background));
-  border: 1px solid hsl(var(--border)); // equivalent to border
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); // equivalent to shadow-xs
+  background-color: var(--button-variants-outline-backgroundColor);
+  border: 1px solid var(--button-variants-outline-borderColor);
+  box-shadow: var(--semantic-elevation-default);
 
   &:hover {
-    background-color: hsl(var(--accent));
-    color: hsl(var(--accent-foreground));
+    background-color: var(--semantic-color-action-background-secondary-hover);
+    color: var(--semantic-color-action-foreground-secondary-default);
+    border-color: var(--semantic-color-action-border-secondary-hover);
+  }
+
+  &:active {
+    background-color: var(--semantic-color-action-background-secondary-active);
   }
 
   .dark & {
-    background-color: hsl(var(--input) / 0.3);
-    border-color: hsl(var(--input));
+    background-color: var(--semantic-color-action-background-secondary-default);
+    border-color: var(--semantic-color-action-border-secondary-default);
 
     &:hover {
-      background-color: hsl(var(--input) / 0.5);
+      background-color: var(--semantic-color-action-background-secondary-hover);
     }
   }
 }
 
 .button--variant-secondary {
-  background-color: hsl(var(--secondary));
-  color: hsl(var(--secondary-foreground));
+  background-color: var(--button-variants-secondary-backgroundColor);
+  color: var(--button-variants-secondary-color);
 
   &:hover {
-    background-color: hsl(var(--secondary) / 0.8);
+    background-color: var(--semantic-color-action-background-secondary-hover);
+  }
+
+  &:active {
+    background-color: var(--semantic-color-action-background-secondary-active);
   }
 }
 
 .button--variant-ghost {
   &:hover {
-    background-color: hsl(var(--accent));
-    color: hsl(var(--accent-foreground));
+    background-color: var(--semantic-color-action-background-secondary-hover);
+    color: var(--semantic-color-action-foreground-secondary-default);
 
     .dark & {
-      background-color: hsl(var(--accent) / 0.5);
+      background-color: var(--semantic-color-action-background-secondary-hover);
     }
   }
 }
 
 .button--variant-link {
-  color: hsl(var(--primary));
+  color: var(--semantic-color-action-background-primary-default);
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--semantic-link-decoration-color);
 
   &:hover {
-    text-decoration: underline;
+    text-decoration-color: var(--semantic-link-hover-text);
   }
 }

@@ -1,7 +1,5 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import type React from "react"
 import {
   MousePointer2,
   Frame,
@@ -17,6 +15,8 @@ import {
   Code,
   ChevronDown,
 } from "lucide-react"
+import { useState, useEffect } from "react"
+import type React from "react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useCanvas, type CanvasTool } from "@/lib/canvas-context"
@@ -55,7 +55,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({ onViewModeChange }) => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {return}
 
       switch (e.key.toLowerCase()) {
         case "v":
@@ -104,17 +104,17 @@ export const ActionBar: React.FC<ActionBarProps> = ({ onViewModeChange }) => {
 
   const getActiveIcon = (button: ActionBarButton) => {
     if (button.name === "Selection") {
-      if (activeTool === "select") return MousePointer2
-      if (activeTool === "hand") return Hand
-      if (activeTool === "scale") return Scaling
+      if (activeTool === "select") {return MousePointer2}
+      if (activeTool === "hand") {return Hand}
+      if (activeTool === "scale") {return Scaling}
     }
     if (button.name === "Wrap") {
       return activeTool === "frame" ? Frame : button.defaultIcon
     }
     if (button.name === "Shape") {
-      if (activeTool === "rectangle") return Square
-      if (activeTool === "ellipse") return Circle
-      if (activeTool === "line") return Spline
+      if (activeTool === "rectangle") {return Square}
+      if (activeTool === "ellipse") {return Circle}
+      if (activeTool === "line") {return Spline}
     }
     if (button.name === "Image") {
       return activeTool === "image" ? ImageIcon : button.defaultIcon

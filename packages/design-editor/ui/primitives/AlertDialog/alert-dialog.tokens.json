@@ -1,3 +1,181 @@
 {
-  "alert-dialog": {}
+  "prefix": "alertDialog",
+  "tokens": {
+    "overlay": {
+      "backgroundColor": {
+        "value": "rgba(0, 0, 0, 0.5)",
+        "description": "Background color for alert dialog overlay"
+      },
+      "zIndex": {
+        "value": "{semantic.zIndex.modal}",
+        "description": "Z-index for alert dialog overlay"
+      },
+      "animation": {
+        "duration": {
+          "in": {
+            "value": "{semantic.animation.duration.fast}",
+            "description": "Animation duration for overlay fade in"
+          },
+          "out": {
+            "value": "{semantic.animation.duration.fast}",
+            "description": "Animation duration for overlay fade out"
+          }
+        },
+        "easing": {
+          "value": "{semantic.animation.easing.default}",
+          "description": "Animation easing for overlay"
+        }
+      }
+    },
+    "content": {
+      "backgroundColor": {
+        "value": "{semantic.color.display.background.primary}",
+        "description": "Background color for alert dialog content"
+      },
+      "borderColor": {
+        "value": "{semantic.color.display.border.subtle}",
+        "description": "Border color for alert dialog content"
+      },
+      "borderWidth": {
+        "value": "{semantic.shape.border.width.default}",
+        "description": "Border width for alert dialog content"
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.default}",
+        "description": "Border radius for alert dialog content"
+      },
+      "shadow": {
+        "value": "{semantic.effect.shadow.large}",
+        "description": "Shadow effect for alert dialog content"
+      },
+      "zIndex": {
+        "value": "{semantic.zIndex.modal}",
+        "description": "Z-index for alert dialog content"
+      },
+      "layout": {
+        "maxWidth": {
+          "mobile": {
+            "value": "calc(100% - 2rem)",
+            "description": "Maximum width on mobile"
+          },
+          "desktop": {
+            "value": "32rem",
+            "description": "Maximum width on desktop"
+          }
+        },
+        "padding": {
+          "value": "{semantic.spacing.padding.grid.large}",
+          "description": "Padding inside alert dialog content"
+        },
+        "gap": {
+          "value": "{semantic.spacing.gap.grid.medium}",
+          "description": "Gap between elements in content"
+        },
+        "position": {
+          "top": {
+            "value": "50%",
+            "description": "Top position for centering"
+          },
+          "left": {
+            "value": "50%",
+            "description": "Left position for centering"
+          },
+          "translateX": {
+            "value": "-50%",
+            "description": "X translation for centering"
+          },
+          "translateY": {
+            "value": "-50%",
+            "description": "Y translation for centering"
+          }
+        }
+      },
+      "animation": {
+        "duration": {
+          "in": {
+            "value": "{semantic.animation.duration.normal}",
+            "description": "Animation duration for content slide in"
+          },
+          "out": {
+            "value": "{semantic.animation.duration.fast}",
+            "description": "Animation duration for content slide out"
+          }
+        },
+        "easing": {
+          "value": "{semantic.animation.easing.default}",
+          "description": "Animation easing for content"
+        },
+        "zoom": {
+          "scale": {
+            "value": "0.95",
+            "description": "Zoom scale for open/close animation"
+          }
+        }
+      }
+    },
+    "header": {
+      "gap": {
+        "value": "{semantic.spacing.gap.grid.small}",
+        "description": "Gap between header elements"
+      },
+      "textAlign": {
+        "mobile": {
+          "value": "center",
+          "description": "Text alignment on mobile"
+        },
+        "desktop": {
+          "value": "left",
+          "description": "Text alignment on desktop"
+        }
+      }
+    },
+    "footer": {
+      "gap": {
+        "value": "{semantic.spacing.gap.grid.small}",
+        "description": "Gap between footer elements"
+      },
+      "layout": {
+        "mobile": {
+          "flexDirection": {
+            "value": "column-reverse",
+            "description": "Flex direction on mobile"
+          }
+        },
+        "desktop": {
+          "flexDirection": {
+            "value": "row",
+            "description": "Flex direction on desktop"
+          },
+          "justifyContent": {
+            "value": "flex-end",
+            "description": "Justification on desktop"
+          }
+        }
+      }
+    },
+    "title": {
+      "color": {
+        "value": "{semantic.color.display.foreground.primary}",
+        "description": "Text color for alert dialog title"
+      },
+      "fontSize": {
+        "value": "{semantic.typography.heading.04}",
+        "description": "Font size for alert dialog title"
+      },
+      "fontWeight": {
+        "value": "{semantic.typography.font.weight.semibold}",
+        "description": "Font weight for alert dialog title"
+      }
+    },
+    "description": {
+      "color": {
+        "value": "{semantic.color.display.foreground.secondary}",
+        "description": "Text color for alert dialog description"
+      },
+      "fontSize": {
+        "value": "{semantic.typography.body.03}",
+        "description": "Font size for alert dialog description"
+      }
+    }
+  }
 }

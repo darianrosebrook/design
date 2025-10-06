@@ -1,0 +1,48 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Chart/chart.tokens.json
+ */
+@mixin vars {
+  /* === Container Tokens === */
+  --chart-container-display: flex;
+  --chart-container-aspectRatio: 16/9;
+  --chart-container-justifyContent: center;
+  --chart-container-fontSize: 12px;
+  --chart-container-padding: 12px;
+
+  /* === Recharts Tokens === */
+  --chart-recharts-axis-tick-text-fill: var(--color-palette-neutral-500);
+  --chart-recharts-grid-line-stroke: var(--color-palette-neutral-200);
+  --chart-recharts-tooltip-cursor-stroke: var(--color-palette-neutral-200);
+  --chart-recharts-polarGrid-stroke: var(--color-palette-neutral-200);
+  --chart-recharts-radialBar-backgroundSector-fill: var(--color-palette-neutral-100);
+  --chart-recharts-rectangle-tooltipCursor-fill: var(--color-palette-neutral-100);
+  --chart-recharts-referenceLine-stroke: var(--color-palette-neutral-200);
+  --chart-recharts-dot-stroke: transparent;
+  --chart-recharts-sector-outline: none;
+  --chart-recharts-sector-stroke: transparent;
+  --chart-recharts-surface-outline: none;
+  --chart-recharts-layer-outline: none;
+  --chart-recharts-curve-tooltipCursor-stroke: var(--color-palette-neutral-200);
+
+  /* === Tooltip Tokens === */
+  --chart-tooltip-content: [object Object];
+
+  /* === Legend Tokens === */
+  --chart-legend-content-display: flex;
+  --chart-legend-content-alignItems: center;
+  --chart-legend-content-justifyContent: center;
+  --chart-legend-content-gap: 16px;
+  --chart-legend-content-padding-vertical: 12px;
+  --chart-legend-content-verticalAlign-top-paddingBottom: 12px;
+  --chart-legend-content-verticalAlign-bottom-paddingTop: 12px;
+  --chart-legend-item-display: flex;
+  --chart-legend-item-alignItems: center;
+  --chart-legend-item-gap: 6px;
+  --chart-legend-item-icon-color: var(--color-palette-neutral-500);
+  --chart-legend-item-icon-size: 12px;
+  --chart-legend-item-icon-indicator-size: 8px;
+  --chart-legend-item-icon-indicator-borderRadius: 2px;
+
+  /* === Grid Tokens === */
+  --chart-grid-gap: 6px;
+}

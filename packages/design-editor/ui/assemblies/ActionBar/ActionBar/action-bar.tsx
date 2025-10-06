@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import type React from "react";
+import { useCanvas, type CanvasTool } from "@/lib/canvas-context";
 import { Button } from "@/ui/primitives/Button";
 import {
   DropdownMenu,
@@ -26,7 +27,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/ui/primitives/DropdownMenu";
-import { useCanvas, type CanvasTool } from "@/lib/canvas-context";
 
 interface ActionBarOverflowOption {
   name: string;
@@ -235,28 +235,28 @@ export const ActionBar = ({ onViewModeChange }: ActionBarProps) => {
     <>
       {/* Toggle Button - appears when action bar is hidden */}
       {!isVisible && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+        <div className="// fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
           <Button
             variant="ghost"
             size="sm"
             onClick={toggleActionBar}
-            className="h-8 px-2 bg-zinc-800 border border-zinc-700 rounded-2xl shadow-2xl hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100"
+            className="// h-8 px-2 bg-zinc-800 border border-zinc-700 rounded-2xl shadow-2xl hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100"
             title="Show Action Bar (`)"
           >
-            <Eye className="h-4 w-4" />
+            <Eye className="// h-4 w-4" />
           </Button>
         </div>
       )}
 
       {/* Main Action Bar */}
       <div
-        className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ease-in-out ${
+        className={`// fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ease-in-out ${
           isVisible
             ? "opacity-100 transform translate-y-0"
             : "opacity-0 transform translate-y-4 pointer-events-none"
         }`}
       >
-        <div className="flex items-center gap-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-2 py-2 shadow-2xl">
+        <div className="// flex items-center gap-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-2 py-2 shadow-2xl">
           {actionBarLayout.map((button) => {
             const ActiveIcon = getActiveIcon(button);
             const isActive = button.isActive;
@@ -268,20 +268,20 @@ export const ActionBar = ({ onViewModeChange }: ActionBarProps) => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className={`h-8 px-2 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100 gap-1 ${
+                      className={`// h-8 px-2 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100 gap-1 ${
                         button.overflowOptions.some((opt) => opt.isActive)
                           ? "bg-zinc-700 text-zinc-100"
                           : ""
                       }`}
                     >
-                      <ActiveIcon className="h-4 w-4" />
-                      <ChevronDown className="h-3 w-3" />
+                      <ActiveIcon className="// h-4 w-4" />
+                      <ChevronDown className="// h-3 w-3" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="center"
                     side="top"
-                    className="bg-zinc-800 border-zinc-700 text-zinc-100"
+                    className="// bg-zinc-800 border-zinc-700 text-zinc-100"
                   >
                     {button.overflowOptions.map((option) => {
                       const OptionIcon = option.icon;
@@ -289,14 +289,14 @@ export const ActionBar = ({ onViewModeChange }: ActionBarProps) => {
                         <DropdownMenuItem
                           key={option.name}
                           onClick={option.onClick}
-                          className={`gap-2 hover:bg-zinc-700 cursor-pointer ${
+                          className={`// gap-2 hover:bg-zinc-700 cursor-pointer ${
                             option.isActive ? "bg-zinc-700" : ""
                           }`}
                         >
-                          <OptionIcon className="h-4 w-4" />
+                          <OptionIcon className="// h-4 w-4" />
                           <span>{option.name}</span>
                           {option.shortcut && (
-                            <span className="ml-auto text-xs text-zinc-500">
+                            <span className="// ml-auto text-xs text-zinc-500">
                               {option.shortcut.join("+")}
                             </span>
                           )}
@@ -314,25 +314,25 @@ export const ActionBar = ({ onViewModeChange }: ActionBarProps) => {
                 variant="ghost"
                 size="sm"
                 onClick={button.onClick}
-                className={`h-8 px-2 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100 ${
+                className={`// h-8 px-2 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100 ${
                   isActive ? "bg-zinc-700 text-zinc-100" : ""
                 }`}
               >
-                <ActiveIcon className="h-4 w-4" />
+                <ActiveIcon className="// h-4 w-4" />
               </Button>
             );
           })}
 
           {/* Hide Action Bar Button */}
-          <div className="w-px h-6 bg-zinc-600 mx-1" />
+          <div className="// w-px h-6 bg-zinc-600 mx-1" />
           <Button
             variant="ghost"
             size="sm"
             onClick={toggleActionBar}
-            className="h-8 px-2 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100"
+            className="// h-8 px-2 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100"
             title="Hide Action Bar (`)"
           >
-            <EyeOff className="h-4 w-4" />
+            <EyeOff className="// h-4 w-4" />
           </Button>
         </div>
       </div>

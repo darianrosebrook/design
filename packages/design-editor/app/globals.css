@@ -1,17 +1,56 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "../ui/css-variables.css";
+@import "./designTokens.scss";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  /* Additional shadcn/ui variables not covered by design tokens */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 14.5%;
+  --card: var(--color-background-surface);
+  --card-foreground: var(--color-text-primary);
+  --popover: var(--color-background-surface);
+  --popover-foreground: var(--color-text-primary);
+  --primary: 0 0% 20.5%;
+  --primary-foreground: 0 0% 98.5%;
+  --secondary: 0 0% 97%;
+  --secondary-foreground: 0 0% 20.5%;
+  --muted: 0 0% 97%;
+  --muted-foreground: 0 0% 55.6%;
+  --accent: 0 0% 97%;
+  --accent-foreground: 0 0% 20.5%;
+  --destructive: 27 100% 57.7%;
+  --destructive-foreground: 27 100% 57.7%;
+  --border: 0 0% 92.2%;
+  --input: 0 0% 92.2%;
+  --ring: 0 0% 70.8%;
+  --chart-1: 41 100% 64.6%;
+  --chart-2: 185 100% 60%;
+  --chart-3: 227 100% 39.8%;
+  --chart-4: 84 100% 82.8%;
+  --chart-5: 70 100% 76.9%;
+  --radius: 1rem;
+  --sidebar: var(--color-background-secondary);
+  --sidebar-foreground: var(--color-text-primary);
+  --sidebar-primary: var(--color-interactive-primary);
+  --sidebar-primary-foreground: var(--color-text-inverse);
+  --sidebar-accent: var(--color-interactive-secondary);
+  --sidebar-accent-foreground: var(--color-text-primary);
+  --sidebar-border: var(--color-border-default);
+  --sidebar-ring: var(--color-interactive-primary);
+}
+
+.dark {
   --background: 0 0% 14.5%;
   --foreground: 0 0% 98.5%;
-  --card: 0 0% 18%;
+  --card: 0 0% 14.5%;
   --card-foreground: 0 0% 98.5%;
-  --popover: 0 0% 18%;
+  --popover: 0 0% 14.5%;
   --popover-foreground: 0 0% 98.5%;
-  --primary: 264 100% 48.8%;
-  --primary-foreground: 0 0% 98.5%;
+  --primary: 0 0% 98.5%;
+  --primary-foreground: 0 0% 20.5%;
   --secondary: 0 0% 26.9%;
   --secondary-foreground: 0 0% 98.5%;
   --muted: 0 0% 26.9%;
@@ -28,15 +67,6 @@
   --chart-3: 70 100% 76.9%;
   --chart-4: 304 100% 62.7%;
   --chart-5: 16 100% 64.5%;
-  --radius: 1rem;
-  --sidebar: 0 0% 20.5%;
-  --sidebar-foreground: 0 0% 98.5%;
-  --sidebar-primary: 264 100% 48.8%;
-  --sidebar-primary-foreground: 0 0% 98.5%;
-  --sidebar-accent: 0 0% 26.9%;
-  --sidebar-accent-foreground: 0 0% 98.5%;
-  --sidebar-border: 0 0% 26.9%;
-  --sidebar-ring: 0 0% 43.9%;
 }
 
 @theme inline {

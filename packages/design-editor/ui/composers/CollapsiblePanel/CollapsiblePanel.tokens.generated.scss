@@ -1,0 +1,23 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/composers/CollapsiblePanel/collapsible-panel.tokens.json
+ */
+@mixin vars {
+  /* === Spacing Tokens === */
+  --collapsiblePanel-spacing-toggle-offset: var(--semantic-spacing-gap-grid-small);
+
+  /* === Layout Tokens === */
+  --collapsiblePanel-layout-collapsed-height: var(--semantic-components-input-height-default);
+  --collapsiblePanel-layout-toggle-size: 24px;
+  --collapsiblePanel-layout-toggleIcon-size: var(--semantic-components-action-gap-icon);
+
+  /* === Animation Tokens === */
+  --collapsiblePanel-animation-duration: var(--semantic-motion-interaction-modal-enter-duration);
+  --collapsiblePanel-animation-easing: var(--semantic-motion-interaction-modal-enter-easing);
+  --collapsiblePanel-animation-hover-duration: var(--semantic-motion-interaction-hover-duration);
+  --collapsiblePanel-animation-hover-easing: var(--semantic-motion-interaction-hover-easing);
+
+  /* === Interactive Tokens === */
+  --collapsiblePanel-interactive-toggle-backgroundColor: var(--semantic-color-display-background-primary);
+  --collapsiblePanel-interactive-toggle-hover-backgroundColor: var(--semantic-color-action-background-secondary-hover);
+  --collapsiblePanel-interactive-shadow: var(--semantic-elevation-surface-raised);
+}

@@ -1,15 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import styles from "./page.module.scss";
+import { CanvasProvider } from "@/lib/canvas-context";
+import { DevTools } from "@/lib/dev-tools";
+import { GlobalShortcutsProvider } from "@/lib/global-shortcuts-provider";
 import { ActionBar } from "@/ui/assemblies/ActionBar";
 import { CanvasArea } from "@/ui/assemblies/CanvasArea";
-import { ContextMenu } from "@/ui/primitives/ContextMenu";
 import { DesignSystemOverlay } from "@/ui/assemblies/DesignSystemOverlay";
 import { PanelContainer } from "@/ui/assemblies/PanelContainer";
 import { TopNavigation } from "@/ui/assemblies/TopNavigation";
-import { CanvasProvider } from "@/lib/canvas-context";
-import { GlobalShortcutsProvider } from "@/lib/global-shortcuts-provider";
-import { DevTools } from "@/lib/dev-tools";
+import { ContextMenu } from "@/ui/primitives/ContextMenu";
 
 export default function DesignEditor() {
   const [isDesignSystemOpen, setIsDesignSystemOpen] = useState(false);
@@ -24,12 +25,12 @@ export default function DesignEditor() {
     <CanvasProvider>
       <DevTools />
       <GlobalShortcutsProvider>
-        <div className="h-screen flex flex-col bg-background dark relative">
+        <div className={styles.page}>
           {/* Top Navigation */}
           <TopNavigation />
 
           {/* Full-screen Canvas Background */}
-          <div className="absolute inset-0 top-12">
+          <div className={styles.canvasBackground}>
             <CanvasArea />
           </div>
 

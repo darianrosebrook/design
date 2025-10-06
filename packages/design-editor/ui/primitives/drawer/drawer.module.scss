@@ -1,7 +1,181 @@
 // drawer primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
-.drawer {
-  // Placeholder for future SCSS implementation
-  // Will contain drawer-specific styles when migrating from Tailwind
+// Import generated token variables
+@use './Drawer.tokens.generated.scss' as drawerTokens;
+
+// Include the generated variables mixin
+@include drawerTokens.vars;
+
+// Drawer overlay
+.drawer-overlay {
+  position: var(--drawer-overlay-position);
+  inset: var(--drawer-overlay-inset);
+  z-index: var(--drawer-overlay-zIndex);
+  background-color: var(--drawer-overlay-backgroundColor);
+  animation-duration: var(--drawer-overlay-animation-duration);
+  animation-timing-function: var(--drawer-overlay-animation-easing);
+  animation-fill-mode: both;
+
+  // Animation states
+  &[data-state="open"] {
+    animation-name: drawer-overlay-show;
+  }
+
+  &[data-state="closed"] {
+    animation-name: drawer-overlay-hide;
+  }
+}
+
+// Drawer content
+.drawer-content {
+  position: var(--drawer-content-position);
+  z-index: var(--drawer-content-zIndex);
+  display: var(--drawer-content-display);
+  flex-direction: var(--drawer-content-flexDirection);
+  background-color: var(--drawer-content-backgroundColor);
+  border-radius: var(--drawer-content-borderRadius);
+  animation-duration: var(--drawer-content-animation-duration);
+  animation-timing-function: var(--drawer-content-animation-easing);
+  animation-fill-mode: both;
+
+  // Direction variants
+  &[data-vaul-drawer-direction="top"] {
+    inset: var(--drawer-content-directions-top-inset);
+    top: var(--drawer-content-directions-top-top);
+    bottom: var(--drawer-content-directions-top-bottom);
+    left: var(--drawer-content-directions-top-left);
+    right: var(--drawer-content-directions-top-right);
+    margin-bottom: var(--drawer-content-directions-top-marginBottom);
+    max-height: var(--drawer-content-directions-top-maxHeight);
+    border-bottom: var(--drawer-content-directions-top-borderBottom-width) var(--drawer-content-directions-top-borderBottom-style) var(--drawer-content-directions-top-borderBottom-color);
+    border-radius: 0 0 var(--drawer-content-directions-top-borderRadiusBottom) var(--drawer-content-directions-top-borderRadiusBottom);
+  }
+
+  &[data-vaul-drawer-direction="bottom"] {
+    inset: var(--drawer-content-directions-bottom-inset);
+    top: var(--drawer-content-directions-bottom-top);
+    bottom: var(--drawer-content-directions-bottom-bottom);
+    left: var(--drawer-content-directions-bottom-left);
+    right: var(--drawer-content-directions-bottom-right);
+    margin-top: var(--drawer-content-directions-bottom-marginTop);
+    max-height: var(--drawer-content-directions-bottom-maxHeight);
+    border-top: var(--drawer-content-directions-bottom-borderTop-width) var(--drawer-content-directions-bottom-borderTop-style) var(--drawer-content-directions-bottom-borderTop-color);
+    border-radius: var(--drawer-content-directions-bottom-borderRadiusTop) var(--drawer-content-directions-bottom-borderRadiusTop) 0 0;
+  }
+
+  &[data-vaul-drawer-direction="left"] {
+    inset: var(--drawer-content-directions-left-inset);
+    top: var(--drawer-content-directions-left-top);
+    bottom: var(--drawer-content-directions-left-bottom);
+    left: var(--drawer-content-directions-left-left);
+    right: var(--drawer-content-directions-left-right);
+    width: var(--drawer-content-directions-left-width);
+    max-width: var(--drawer-content-directions-left-maxWidth);
+    border-right: var(--drawer-content-directions-left-borderRight-width) var(--drawer-content-directions-left-borderRight-style) var(--drawer-content-directions-left-borderRight-color);
+  }
+
+  &[data-vaul-drawer-direction="right"] {
+    inset: var(--drawer-content-directions-right-inset);
+    top: var(--drawer-content-directions-right-top);
+    bottom: var(--drawer-content-directions-right-bottom);
+    left: var(--drawer-content-directions-right-left);
+    right: var(--drawer-content-directions-right-right);
+    width: var(--drawer-content-directions-right-width);
+    max-width: var(--drawer-content-directions-right-maxWidth);
+    border-left: var(--drawer-content-directions-right-borderLeft-width) var(--drawer-content-directions-right-borderLeft-style) var(--drawer-content-directions-right-borderLeft-color);
+  }
+
+  // Responsive max-width for left/right directions
+  @media (min-width: 640px) {
+    &[data-vaul-drawer-direction="left"],
+    &[data-vaul-drawer-direction="right"] {
+      max-width: var(--drawer-content-directions-left-maxWidth);
+    }
+  }
+
+  // Handle bar (only shown for bottom direction)
+  > div:first-child {
+    background-color: var(--drawer-handle-backgroundColor);
+    margin: var(--drawer-handle-marginTop) var(--drawer-handle-margin-horizontal) 0;
+    height: var(--drawer-handle-height);
+    width: var(--drawer-handle-width);
+    border-radius: var(--drawer-handle-borderRadius);
+    flex-shrink: var(--drawer-handle-flexShrink);
+    display: var(--drawer-handle-display);
+
+    // Only show for bottom direction
+    .drawer-content[data-vaul-drawer-direction="bottom"] & {
+      display: var(--drawer-handle-bottomDirection-display);
+    }
+  }
+}
+
+// Drawer header
+.drawer-header {
+  display: var(--drawer-header-display);
+  flex-direction: var(--drawer-header-flexDirection);
+  gap: var(--drawer-header-gap);
+  padding: var(--drawer-header-padding);
+
+  // Center text for bottom direction
+  .drawer-content[data-vaul-drawer-direction="bottom"] & {
+    text-align: var(--drawer-header-bottomDirection-textAlign);
+  }
+
+  // Center text for top direction
+  .drawer-content[data-vaul-drawer-direction="top"] & {
+    text-align: var(--drawer-header-topDirection-textAlign);
+  }
+
+  // Responsive adjustments
+  @media (min-width: 768px) {
+    gap: var(--drawer-header-responsive-gap);
+    text-align: var(--drawer-header-responsive-textAlign);
+
+    .drawer-content[data-vaul-drawer-direction="bottom"] &,
+    .drawer-content[data-vaul-drawer-direction="top"] & {
+      text-align: var(--drawer-header-responsive-textAlign);
+    }
+  }
+}
+
+// Drawer footer
+.drawer-footer {
+  margin-top: var(--drawer-footer-marginTop);
+  display: var(--drawer-footer-display);
+  flex-direction: var(--drawer-footer-flexDirection);
+  gap: var(--drawer-footer-gap);
+  padding: var(--drawer-footer-padding);
+}
+
+// Drawer title
+.drawer-title {
+  color: var(--drawer-title-color);
+  font-weight: var(--drawer-title-fontWeight);
+}
+
+// Drawer description
+.drawer-description {
+  color: var(--drawer-description-color);
+  font-size: var(--drawer-description-fontSize);
+}
+
+// Animation keyframes
+@keyframes drawer-overlay-show {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes drawer-overlay-hide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

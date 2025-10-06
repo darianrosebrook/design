@@ -2,7 +2,6 @@
 
 import type React from "react";
 import { useState, useRef, useEffect } from "react";
-import { cn } from "@/lib/utils";
 import styles from "./resizable-panel.module.scss";
 
 interface ResizablePanelProps {
@@ -66,12 +65,11 @@ export function ResizablePanel({
     >
       {children}
       <div
-        className={cn(
-          styles.resizablePanelHandle,
+        className={`${styles.resizablePanelHandle} ${
           side === "left"
             ? styles["resizablePanelHandle--left"]
             : styles["resizablePanelHandle--right"]
-        )}
+        }`}
         onMouseDown={() => setIsResizing(true)}
       >
         <div className={styles.resizablePanelHandleArea} />

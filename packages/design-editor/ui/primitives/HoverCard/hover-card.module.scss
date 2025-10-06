@@ -1,7 +1,122 @@
-// hover-card primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// HoverCard primitive component styles
+// Migrated from Tailwind to SCSS with semantic design tokens
 
-.hover-card {
-  // Placeholder for future SCSS implementation
-  // Will contain hover-card-specific styles when migrating from Tailwind
+.hoverCardContent {
+  // Main content container styles
+  background-color: var(--hoverCard-backgroundColor);
+  color: var(--hoverCard-foregroundColor);
+  border: var(--hoverCard-borderWidth) solid var(--hoverCard-borderColor);
+  border-radius: var(--hoverCard-borderRadius);
+  padding: var(--hoverCard-spacing-padding);
+  box-shadow: var(--hoverCard-shadow);
+  max-width: var(--hoverCard-layout-maxWidth);
+  z-index: var(--hoverCard-layout-zIndex);
+  outline: none;
+
+  // Typography
+  font-size: var(--hoverCard-typography-fontSize);
+  line-height: var(--hoverCard-typography-lineHeight);
+
+  // Animation states
+  &[data-state="open"] {
+    animation:
+      hoverCardFadeIn var(--hoverCard-animation-duration-in) var(--hoverCard-animation-easing),
+      hoverCardZoomIn var(--hoverCard-animation-duration-in) var(--hoverCard-animation-easing);
+  }
+
+  &[data-state="closed"] {
+    animation:
+      hoverCardFadeOut var(--hoverCard-animation-duration-out) var(--hoverCard-animation-easing),
+      hoverCardZoomOut var(--hoverCard-animation-duration-out) var(--hoverCard-animation-easing);
+  }
+
+  // Directional slide animations
+  &[data-side="bottom"] {
+    animation: hoverCardSlideInFromTop var(--hoverCard-animation-duration-in) var(--hoverCard-animation-easing);
+  }
+
+  &[data-side="left"] {
+    animation: hoverCardSlideInFromRight var(--hoverCard-animation-duration-in) var(--hoverCard-animation-easing);
+  }
+
+  &[data-side="right"] {
+    animation: hoverCardSlideInFromLeft var(--hoverCard-animation-duration-in) var(--hoverCard-animation-easing);
+  }
+
+  &[data-side="top"] {
+    animation: hoverCardSlideInFromBottom var(--hoverCard-animation-duration-in) var(--hoverCard-animation-easing);
+  }
+}
+
+// Animation keyframes
+@keyframes hoverCardFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hoverCardFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes hoverCardZoomIn {
+  from {
+    transform: scale(var(--hoverCard-animation-zoom-scale));
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes hoverCardZoomOut {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(var(--hoverCard-animation-zoom-scale));
+  }
+}
+
+@keyframes hoverCardSlideInFromTop {
+  from {
+    transform: translateY(calc(-1 * var(--hoverCard-animation-slide-distance)));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes hoverCardSlideInFromRight {
+  from {
+    transform: translateX(var(--hoverCard-animation-slide-distance));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes hoverCardSlideInFromLeft {
+  from {
+    transform: translateX(calc(-1 * var(--hoverCard-animation-slide-distance)));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes hoverCardSlideInFromBottom {
+  from {
+    transform: translateY(var(--hoverCard-animation-slide-distance));
+  }
+  to {
+    transform: translateY(0);
+  }
 }

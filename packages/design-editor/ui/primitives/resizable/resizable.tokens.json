@@ -1,3 +1,117 @@
 {
-  "resizable": {}
+  "prefix": "resizable",
+  "tokens": {
+    "panelGroup": {
+      "layout": {
+        "direction": {
+          "horizontal": {
+            "flexDirection": {
+              "value": "row",
+              "description": "Flex direction for horizontal panel groups"
+            }
+          },
+          "vertical": {
+            "flexDirection": {
+              "value": "column",
+              "description": "Flex direction for vertical panel groups"
+            }
+          }
+        }
+      }
+    },
+    "handle": {
+      "backgroundColor": {
+        "value": "{semantic.color.display.border.subtle}",
+        "description": "Background color for resize handle"
+      },
+      "focus": {
+        "ring": {
+          "color": {
+            "value": "{semantic.color.action.border.primary.focus}",
+            "description": "Focus ring color for resize handle"
+          },
+          "width": {
+            "value": "1px",
+            "description": "Focus ring width"
+          },
+          "offset": {
+            "value": "1px",
+            "description": "Focus ring offset"
+          }
+        }
+      },
+      "layout": {
+        "width": {
+          "value": "1px",
+          "description": "Width of horizontal resize handle"
+        },
+        "height": {
+          "value": "1px",
+          "description": "Height of vertical resize handle"
+        },
+        "indicator": {
+          "width": {
+            "value": "4px",
+            "description": "Width of the visual indicator line"
+          },
+          "height": {
+            "value": "4px",
+            "description": "Height of the visual indicator line"
+          },
+          "position": {
+            "horizontal": {
+              "left": {
+                "value": "50%",
+                "description": "Left position for horizontal indicator"
+              },
+              "translateX": {
+                "value": "-50%",
+                "description": "X translation for horizontal indicator"
+              }
+            },
+            "vertical": {
+              "top": {
+                "value": "50%",
+                "description": "Top position for vertical indicator"
+              },
+              "translateY": {
+                "value": "-50%",
+                "description": "Y translation for vertical indicator"
+              }
+            }
+          }
+        }
+      }
+    },
+    "handleGrip": {
+      "backgroundColor": {
+        "value": "{semantic.color.display.border.subtle}",
+        "description": "Background color for handle grip"
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.xsmall}",
+        "description": "Border radius for handle grip"
+      },
+      "layout": {
+        "width": {
+          "value": "12px",
+          "description": "Width of handle grip"
+        },
+        "height": {
+          "value": "16px",
+          "description": "Height of handle grip"
+        },
+        "zIndex": {
+          "value": "{semantic.zIndex.overlay}",
+          "description": "Z-index for handle grip"
+        }
+      },
+      "icon": {
+        "size": {
+          "value": "10px",
+          "description": "Size of grip icon"
+        }
+      }
+    }
+  }
 }

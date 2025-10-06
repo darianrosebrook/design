@@ -2,48 +2,50 @@
 // Migrated from Tailwind to SCSS with design tokens
 
 .alignmentGrid {
-  // Base container styles (equivalent to space-y-2)
+  // Base container styles
   display: flex;
   flex-direction: column;
-  gap: 8px; // equivalent to space-y-2
+  gap: var(--alignmentGrid-spacing-container);
 }
 
 .alignmentGridTitle {
-  // Title styles (equivalent to text-xs font-medium text-muted-foreground)
-  font-size: 12px; // equivalent to text-xs
-  font-weight: 500; // equivalent to font-medium
-  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  // Title styles
+  font-size: var(--alignmentGrid-typography-title-fontSize);
+  font-weight: var(--alignmentGrid-typography-title-fontWeight);
+  color: var(--alignmentGrid-typography-title-color);
 }
 
 .alignmentGridRow {
-  // Row container styles (equivalent to flex gap-1)
+  // Row container styles
   display: flex;
-  gap: 4px; // equivalent to gap-1
+  gap: var(--alignmentGrid-spacing-row);
 }
 
 .alignmentGridButton {
-  // Button styles (equivalent to flex-1 h-8 text-xs)
-  flex: 1; // equivalent to flex-1
-  height: 32px; // equivalent to h-8
-  font-size: 12px; // equivalent to text-xs
+  // Button styles
+  flex: 1;
+  min-width: var(--alignmentGrid-layout-button-minWidth);
+  height: var(--alignmentGrid-layout-button-height);
+  font-size: var(--alignmentGrid-typography-button-fontSize);
 }
 
 .alignmentGridIcon {
-  // Icon styles (equivalent to h-3 w-3)
-  width: 12px; // equivalent to w-3
-  height: 12px; // equivalent to h-3
+  // Icon styles
+  width: var(--alignmentGrid-layout-icon-size);
+  height: var(--alignmentGrid-layout-icon-size);
+  flex-shrink: 0;
 }
 
 .alignmentGridDistribution {
-  // Distribution section styles (equivalent to pt-2 border-t border-border)
-  padding-top: 8px; // equivalent to pt-2
-  border-top: 1px solid hsl(var(--border)); // equivalent to border-t border-border
+  // Distribution section styles
+  padding-top: var(--alignmentGrid-distribution-padding-top);
+  border-top: 1px solid var(--alignmentGrid-borderColor);
 }
 
 .alignmentGridDistributionTitle {
-  // Distribution title styles (equivalent to text-xs font-medium text-muted-foreground mb-2)
-  font-size: 12px; // equivalent to text-xs
-  font-weight: 500; // equivalent to font-medium
-  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
-  margin-bottom: 8px; // equivalent to mb-2
+  // Distribution title styles
+  font-size: var(--alignmentGrid-typography-title-fontSize);
+  font-weight: var(--alignmentGrid-typography-title-fontWeight);
+  color: var(--alignmentGrid-typography-title-color);
+  margin-bottom: var(--alignmentGrid-spacing-header);
 }

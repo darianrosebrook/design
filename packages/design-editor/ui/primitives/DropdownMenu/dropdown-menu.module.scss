@@ -1,7 +1,162 @@
 // dropdown-menu primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
-.dropdown-menu {
-  // Placeholder for future SCSS implementation
-  // Will contain dropdown-menu-specific styles when migrating from Tailwind
+// Import generated token variables
+@use './DropdownMenu.tokens.generated.scss' as dropdownMenuTokens;
+
+// Include the generated variables mixin
+@include dropdownMenuTokens.vars;
+
+// Content styles
+.dropdown-menu-content {
+  background-color: var(--dropdownMenu-content-backgroundColor);
+  color: var(--dropdownMenu-content-color);
+  z-index: var(--dropdownMenu-content-zIndex);
+  max-height: var(--dropdownMenu-content-maxHeight);
+  min-width: var(--dropdownMenu-content-minWidth);
+  border-radius: var(--dropdownMenu-content-borderRadius);
+  border: var(--dropdownMenu-content-border-width) var(--dropdownMenu-content-border-style) var(--dropdownMenu-content-border-color);
+  padding: var(--dropdownMenu-content-padding);
+  box-shadow: var(--dropdownMenu-content-boxShadow);
+  overflow-x: var(--dropdownMenu-content-overflow-x);
+  overflow-y: var(--dropdownMenu-content-overflow-y);
+}
+
+// Item styles
+.dropdown-menu-item {
+  display: var(--dropdownMenu-item-display);
+  position: var(--dropdownMenu-item-position);
+  cursor: var(--dropdownMenu-item-cursor);
+  align-items: var(--dropdownMenu-item-alignItems);
+  gap: var(--dropdownMenu-item-gap);
+  border-radius: var(--dropdownMenu-item-borderRadius);
+  padding: var(--dropdownMenu-item-padding-vertical) var(--dropdownMenu-item-padding-horizontal);
+  font-size: var(--dropdownMenu-item-fontSize);
+  outline: var(--dropdownMenu-item-outline);
+  user-select: var(--dropdownMenu-item-userSelect);
+
+  // Icon styles
+  svg {
+    pointer-events: var(--dropdownMenu-item-icon-pointerEvents);
+    flex-shrink: var(--dropdownMenu-item-icon-flexShrink);
+    width: var(--dropdownMenu-item-icon-size);
+    height: var(--dropdownMenu-item-icon-size);
+    color: var(--dropdownMenu-item-icon-color-default);
+  }
+
+  // Focus state
+  &:focus {
+    background-color: var(--dropdownMenu-item-states-focus-backgroundColor);
+    color: var(--dropdownMenu-item-states-focus-color);
+  }
+
+  // Disabled state
+  &:disabled {
+    pointer-events: var(--dropdownMenu-item-states-disabled-pointerEvents);
+    opacity: var(--dropdownMenu-item-states-disabled-opacity);
+  }
+
+  // Destructive variant
+  &[data-variant="destructive"] {
+    color: var(--dropdownMenu-item-variants-destructive-color);
+
+    svg {
+      color: var(--dropdownMenu-item-variants-destructive-iconColor);
+    }
+
+    &:focus {
+      background-color: var(--dropdownMenu-item-variants-destructive-focus-backgroundColor);
+      color: var(--dropdownMenu-item-variants-destructive-focus-color);
+    }
+  }
+
+  // Inset variant
+  &[data-inset] {
+    padding-left: var(--dropdownMenu-item-variants-inset-paddingLeft);
+  }
+}
+
+// Checkbox item styles
+.dropdown-menu-checkbox-item {
+  padding-left: var(--dropdownMenu-checkboxItem-paddingLeft);
+  padding-right: var(--dropdownMenu-checkboxItem-paddingRight);
+
+  .dropdown-menu-checkbox-item-indicator {
+    position: var(--dropdownMenu-checkboxItem-indicator-position);
+    pointer-events: var(--dropdownMenu-checkboxItem-indicator-pointerEvents);
+    left: var(--dropdownMenu-checkboxItem-indicator-left);
+    display: var(--dropdownMenu-checkboxItem-indicator-display);
+    align-items: var(--dropdownMenu-checkboxItem-indicator-alignItems);
+    justify-content: var(--dropdownMenu-checkboxItem-indicator-justifyContent);
+    width: var(--dropdownMenu-checkboxItem-indicator-size);
+    height: var(--dropdownMenu-checkboxItem-indicator-size);
+  }
+}
+
+// Radio item styles
+.dropdown-menu-radio-item {
+  padding-left: var(--dropdownMenu-radioItem-paddingLeft);
+  padding-right: var(--dropdownMenu-radioItem-paddingRight);
+
+  .dropdown-menu-radio-item-indicator {
+    position: var(--dropdownMenu-radioItem-indicator-position);
+    pointer-events: var(--dropdownMenu-radioItem-indicator-pointerEvents);
+    left: var(--dropdownMenu-radioItem-indicator-left);
+    display: var(--dropdownMenu-radioItem-indicator-display);
+    align-items: var(--dropdownMenu-radioItem-indicator-alignItems);
+    justify-content: var(--dropdownMenu-radioItem-indicator-justifyContent);
+    width: var(--dropdownMenu-radioItem-indicator-size);
+    height: var(--dropdownMenu-radioItem-indicator-size);
+    border-radius: var(--dropdownMenu-radioItem-indicator-borderRadius);
+  }
+}
+
+// Label styles
+.dropdown-menu-label {
+  padding: var(--dropdownMenu-label-padding-vertical) var(--dropdownMenu-label-padding-horizontal);
+  font-size: var(--dropdownMenu-label-fontSize);
+  font-weight: var(--dropdownMenu-label-fontWeight);
+  color: var(--dropdownMenu-label-color);
+}
+
+// Separator styles
+.dropdown-menu-separator {
+  background-color: var(--dropdownMenu-separator-backgroundColor);
+  margin: var(--dropdownMenu-separator-margin-vertical) var(--dropdownMenu-separator-margin-horizontal);
+  height: var(--dropdownMenu-separator-height);
+}
+
+// Shortcut styles
+.dropdown-menu-shortcut {
+  margin-left: var(--dropdownMenu-shortcut-marginLeft);
+  font-size: var(--dropdownMenu-shortcut-fontSize);
+  font-weight: var(--dropdownMenu-shortcut-fontWeight);
+  color: var(--dropdownMenu-shortcut-color);
+  opacity: var(--dropdownMenu-shortcut-opacity);
+}
+
+// Sub trigger styles
+.dropdown-menu-sub-trigger {
+  padding-right: var(--dropdownMenu-subTrigger-paddingRight);
+
+  .dropdown-menu-sub-trigger-chevron {
+    margin-left: var(--dropdownMenu-subTrigger-chevron-marginLeft);
+    width: var(--dropdownMenu-subTrigger-chevron-size);
+    height: var(--dropdownMenu-subTrigger-chevron-size);
+  }
+}
+
+// Sub content styles (extends content)
+.dropdown-menu-sub-content {
+  background-color: var(--dropdownMenu-content-backgroundColor);
+  color: var(--dropdownMenu-content-color);
+  z-index: var(--dropdownMenu-content-zIndex);
+  max-height: var(--dropdownMenu-content-maxHeight);
+  min-width: var(--dropdownMenu-content-minWidth);
+  border-radius: var(--dropdownMenu-content-borderRadius);
+  border: var(--dropdownMenu-content-border-width) var(--dropdownMenu-content-border-style) var(--dropdownMenu-content-border-color);
+  padding: var(--dropdownMenu-content-padding);
+  box-shadow: var(--dropdownMenu-content-boxShadow);
+  overflow-x: var(--dropdownMenu-content-overflow-x);
+  overflow-y: var(--dropdownMenu-content-overflow-y);
 }

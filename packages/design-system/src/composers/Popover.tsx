@@ -3,7 +3,6 @@
  * @author @darianrosebrook
  */
 
-import { defaultTokens as tokens } from "../tokens.js";
 import React, {
   useRef,
   useId,
@@ -16,6 +15,7 @@ import React, {
   forwardRef,
 } from "react";
 import { createPortal } from "react-dom";
+import { defaultTokens as tokens } from "../tokens.js";
 
 interface PopoverProps {
   children: React.ReactNode;
@@ -147,7 +147,7 @@ export const Popover: React.FC<PopoverProps> & {
           if (calculatedLeft + contentRect.width > window.innerWidth) {
             calculatedLeft = window.innerWidth - contentRect.width - 8;
           }
-          if (calculatedLeft < 8) calculatedLeft = 8;
+          if (calculatedLeft < 8) {calculatedLeft = 8;}
 
           top = calculatedTop;
           left = calculatedLeft;
@@ -160,28 +160,28 @@ export const Popover: React.FC<PopoverProps> & {
 
   // Open/Close side effects
   useLayoutEffect(() => {
-    if (isOpen) onOpen?.();
-    else onClose?.();
+    if (isOpen) {onOpen?.();}
+    else {onClose?.();}
   }, [isOpen, onOpen, onClose]);
 
   // Outside click and Escape handlers
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (!isOpen) return;
+      if (!isOpen) {return;}
       const targetNode = e.target as Node;
       const insideContent = contentRef.current?.contains(targetNode);
       const insideTrigger = triggerRef.current?.contains(targetNode);
       const isInside = Boolean(insideContent || insideTrigger);
-      if (!isInside) setIsOpen(false);
+      if (!isInside) {setIsOpen(false);}
     };
 
     const handleEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) setIsOpen(false);
+      if (e.key === "Escape" && isOpen) {setIsOpen(false);}
     };
 
     if (closeOnOutsideClick)
-      document.addEventListener("mousedown", handleClickOutside);
-    if (closeOnEscape) document.addEventListener("keydown", handleEscapeKey);
+      {document.addEventListener("mousedown", handleClickOutside);}
+    if (closeOnEscape) {document.addEventListener("keydown", handleEscapeKey);}
 
     return () => {
       if (closeOnOutsideClick) {
@@ -243,16 +243,16 @@ const Trigger = forwardRef<HTMLElement, TriggerProps>(
     };
 
     const handleClick = (e: React.MouseEvent) => {
-      if (triggerStrategy === "click") setIsOpen(!isOpen);
+      if (triggerStrategy === "click") {setIsOpen(!isOpen);}
       onClick?.(e);
     };
 
     const handleMouseEnter = () => {
-      if (triggerStrategy === "hover") setIsOpen(true);
+      if (triggerStrategy === "hover") {setIsOpen(true);}
     };
 
     const handleMouseLeave = () => {
-      if (triggerStrategy === "hover") setIsOpen(false);
+      if (triggerStrategy === "hover") {setIsOpen(false);}
     };
 
     return (
@@ -323,7 +323,7 @@ const Content: React.FC<ContentProps> = ({ children, className, style }) => {
     }
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {return null;}
 
   const node = (
     <div

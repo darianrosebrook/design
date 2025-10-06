@@ -1,3 +1,155 @@
 {
-  "layout-section": {}
+  "prefix": "layoutSection",
+  "tokens": {
+    "backgroundColor": {
+      "value": "{semantic.color.display.background.primary}",
+      "description": "Background color for layout section"
+    },
+    "borderColor": {
+      "value": "{semantic.color.display.border.subtle}",
+      "description": "Border color for layout sections"
+    },
+    "spacing": {
+      "container": {
+        "value": "{semantic.spacing.gap.grid.medium}",
+        "description": "Gap between main sections"
+      },
+      "section": {
+        "value": "{semantic.spacing.gap.grid.small}",
+        "description": "Gap within sections"
+      },
+      "controls": {
+        "value": "{semantic.spacing.gap.grid.xsmall}",
+        "description": "Gap between control elements"
+      }
+    },
+    "typography": {
+      "label": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for section labels"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.medium}",
+          "description": "Font weight for section labels"
+        },
+        "color": {
+          "value": "{semantic.color.display.foreground.primary}",
+          "description": "Text color for section labels"
+        }
+      },
+      "sublabel": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for sub-labels"
+        },
+        "color": {
+          "value": "{semantic.color.display.foreground.secondary}",
+          "description": "Text color for sub-labels"
+        }
+      },
+      "unit": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for unit indicators"
+        },
+        "color": {
+          "value": "{semantic.color.display.foreground.secondary}",
+          "description": "Text color for unit indicators"
+        }
+      }
+    },
+    "layout": {
+      "dimensions": {
+        "grid": {
+          "columns": {
+            "value": "1fr auto 1fr",
+            "description": "Grid layout for width/height controls"
+          },
+          "gap": {
+            "value": "{semantic.spacing.gap.grid.small}",
+            "description": "Gap in dimension grid"
+          }
+        }
+      },
+      "constraints": {
+        "grid": {
+          "columns": {
+            "value": "2",
+            "description": "Grid columns for constraints"
+          },
+          "gap": {
+            "value": "{semantic.spacing.gap.grid.small}",
+            "description": "Gap between constraint sections"
+          }
+        },
+        "button": {
+          "gap": {
+            "value": "{semantic.spacing.gap.grid.xsmall}",
+            "description": "Gap between constraint buttons"
+          }
+        }
+      },
+      "resize": {
+        "grid": {
+          "columns": {
+            "value": "2",
+            "description": "Grid columns for resize buttons"
+          },
+          "gap": {
+            "value": "{semantic.spacing.gap.grid.xsmall}",
+            "description": "Gap between resize buttons"
+          }
+        }
+      },
+      "toggle": {
+        "gap": {
+          "value": "{semantic.spacing.gap.grid.small}",
+          "description": "Gap between toggle elements"
+        }
+      }
+    },
+    "input": {
+      "height": {
+        "value": "{semantic.components.input.height.sm}",
+        "description": "Height for dimension inputs"
+      },
+      "fontSize": {
+        "value": "{semantic.typography.body.03}",
+        "description": "Font size for dimension inputs"
+      }
+    },
+    "button": {
+      "size": {
+        "value": "20px",
+        "description": "Size for small control buttons"
+      },
+      "iconSize": {
+        "value": "12px",
+        "description": "Icon size for small buttons"
+      },
+      "padding": {
+        "value": "0",
+        "description": "Padding for icon-only buttons"
+      }
+    },
+    "switch": {
+      "scale": {
+        "value": "0.75",
+        "description": "Scale factor for switches"
+      }
+    },
+    "interactive": {
+      "hover": {
+        "backgroundColor": {
+          "value": "{semantic.color.action.background.secondary.hover}",
+          "description": "Background color on hover"
+        }
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.default}",
+        "description": "Border radius for interactive elements"
+      }
+    }
+  }
 }

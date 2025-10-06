@@ -1,0 +1,25 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Switch/switch.tokens.json
+ */
+@mixin vars {
+  /* === Switch Tokens === */
+  --switch-Switch-height: 1.15rem;
+  --switch-Switch-width: var(--components-action-height-small);
+  --switch-Switch-borderRadius: 9999px;
+  --switch-Switch-border-width: 1px;
+  --switch-Switch-border-style: solid;
+  --switch-Switch-boxShadow: var(--elevation-level-1);
+  --switch-Switch-transition-duration: 150ms;
+  --switch-Switch-transition-easing: var(--motion-interaction-hover-easing);
+  --switch-Switch-thumb-size: 16px;
+  --switch-Switch-thumb-borderRadius: 9999px;
+  --switch-Switch-thumb-backgroundColor-default: var(--color-mode-white);
+  --switch-Switch-thumb-backgroundColor-uncheckedDark: var(--color-mode-dark);
+  --switch-Switch-thumb-backgroundColor-checkedDark: var(--color-action-foreground-primary-default);
+  --switch-Switch-thumb-transform-checked: translateX(calc(100% - 2px));
+  --switch-Switch-thumb-transform-unchecked: translateX(0);
+  --switch-Switch-states-checked-backgroundColor: var(--color-action-background-primary-default);
+  --switch-Switch-states-unchecked-backgroundColor: var(--color-palette-neutral-200);
+  --switch-Switch-states-unchecked-dark-backgroundColor: var(--color-palette-neutral-200);
+  --switch-Switch-states-disabled-opacity: 0.5;
+}

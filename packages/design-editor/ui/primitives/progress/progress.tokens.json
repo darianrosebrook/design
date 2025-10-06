@@ -1,3 +1,36 @@
 {
-  "progress": {}
+  "prefix": "progress",
+  "tokens": {
+    "Progress": {
+      "height": {
+        "value": "8px",
+        "description": "Height of the progress bar"
+      },
+      "borderRadius": {
+        "value": "9999px",
+        "description": "Border radius for progress bar (fully rounded)"
+      },
+      "backgroundColor": {
+        "value": "{color.action.background.primary.default}",
+        "opacity": 0.2,
+        "description": "Background color for the progress track"
+      },
+      "indicator": {
+        "backgroundColor": {
+          "value": "{color.action.background.primary.default}",
+          "description": "Background color for the progress indicator"
+        },
+        "transition": {
+          "duration": {
+            "value": "150ms",
+            "description": "Transition duration for progress indicator"
+          },
+          "easing": {
+            "value": "{motion.interaction.hover.easing}",
+            "description": "Transition easing for progress indicator"
+          }
+        }
+      }
+    }
+  }
 }

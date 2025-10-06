@@ -3,9 +3,8 @@
 import { ChevronUp, ChevronDown } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
-import { Button } from "@/ui/primitives/Button";
-import { cn } from "@/lib/utils";
 import styles from "./collapsible-panel.module.scss";
+import { Button } from "@/ui/primitives/Button";
 
 interface CollapsiblePanelProps {
   children: React.ReactNode;
@@ -33,36 +32,33 @@ export function CollapsiblePanel({
   };
 
   return (
-    <div className={cn(styles.collapsiblePanel, className)}>
+    <div className={`${styles.collapsiblePanel} ${className || ""}`}>
       {/* Panel Container */}
       <div
-        className={cn(
-          styles.collapsiblePanelContainer,
+        className={`${styles.collapsiblePanelContainer} ${
           isCollapsed
             ? styles["collapsiblePanelContainer--collapsed"]
             : styles["collapsiblePanelContainer--expanded"]
-        )}
+        }`}
       >
         {/* Main Content */}
         <div
-          className={cn(
-            styles.collapsiblePanelContent,
+          className={`${styles.collapsiblePanelContent} ${
             isCollapsed
               ? styles["collapsiblePanelContent--collapsed"]
               : styles["collapsiblePanelContent--expanded"]
-          )}
+          }`}
         >
           {children}
         </div>
 
         {/* Collapsed Content */}
         <div
-          className={cn(
-            styles.collapsiblePanelCollapsedContent,
+          className={`${styles.collapsiblePanelCollapsedContent} ${
             isCollapsed
               ? styles["collapsiblePanelCollapsedContent--visible"]
               : styles["collapsiblePanelCollapsedContent--hidden"]
-          )}
+          }`}
         >
           {collapsedContent}
         </div>

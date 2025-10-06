@@ -1,7 +1,13 @@
 // toaster primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
+
+// Import generated token variables
+@use './Toaster.tokens.generated.scss' as toasterTokens;
+
+// Include the generated variables mixin
+@include toasterTokens.vars;
 
 .toaster {
-  // Placeholder for future SCSS implementation
-  // Will contain toaster-specific styles when migrating from Tailwind
+  // Container styles
+  gap: var(--toaster-container-gap);
 }

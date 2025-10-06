@@ -7,6 +7,8 @@
 export { PropertiesPanel } from "./PropertiesPanel.js";
 export { PropertySectionComponent } from "./PropertySection.js";
 export { PropertyEditor } from "./PropertyEditor.js";
+export { TokenPill } from "./TokenPill.js";
+export { TokenSelector } from "./TokenSelector.js";
 
 // Services & Hooks
 export { PropertiesService } from "./properties-service.js";
@@ -27,6 +29,8 @@ export type {
   FontMetadata,
   FontVariant,
 } from "./types.js";
+export type { TokenPillProps } from "./TokenPill.js";
+export type { TokenSelectorProps } from "./TokenSelector.js";
 
 export type {
   PropertyChangeCallback,
@@ -47,3 +51,5 @@ export { PropertyRegistry } from "./property-registry.js";
 export { propertiesPanelStyles } from "./PropertiesPanel.js";
 export { propertySectionStyles } from "./PropertySection.js";
 export { propertyEditorStyles } from "./PropertyEditor.js";
+export { tokenPillStyles } from "./TokenPill.js";
+export { tokenSelectorStyles } from "./TokenSelector.js";

@@ -1,3 +1,11 @@
 {
-  "toaster": {}
+  "prefix": "toaster",
+  "tokens": {
+    "container": {
+      "gap": {
+        "value": "4px",
+        "description": "Gap between toast items"
+      }
+    }
+  }
 }

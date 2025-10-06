@@ -1,0 +1,39 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Badge/badge.tokens.json
+ */
+@mixin vars {
+  /* === Border Tokens === */
+  --badge-border-width: 1px;
+  --badge-border-style: solid;
+
+  /* === Padding Tokens === */
+  --badge-padding-horizontal: 8px;
+  --badge-padding-vertical: 2px;
+
+  /* === Icon Tokens === */
+  --badge-icon-size: 12px;
+
+  /* === Transition Tokens === */
+  --badge-transition-duration: 150ms;
+  --badge-transition-easing: var(--motion-interaction-hover-easing);
+
+  /* === Focus Tokens === */
+  --badge-focus-ring: 0 0 0 3px rgba(var(--color-action-border-primary-focus), 0.5);
+
+  /* === Variants Tokens === */
+  --badge-variants-default-borderColor: transparent;
+  --badge-variants-default-backgroundColor: var(--color-action-background-primary-default);
+  --badge-variants-default-color: var(--color-action-foreground-primary-default);
+  --badge-variants-default-hover-backgroundColor: var(--color-action-background-primary-default);
+  --badge-variants-secondary-borderColor: transparent;
+  --badge-variants-secondary-backgroundColor: var(--color-action-background-secondary-default);
+  --badge-variants-secondary-color: var(--color-action-foreground-secondary-default);
+  --badge-variants-secondary-hover-backgroundColor: var(--color-action-background-secondary-default);
+  --badge-variants-destructive-borderColor: transparent;
+  --badge-variants-destructive-backgroundColor: var(--color-action-background-danger-default);
+  --badge-variants-destructive-color: var(--color-action-foreground-danger-default);
+  --badge-variants-destructive-hover-backgroundColor: var(--color-action-background-danger-default);
+  --badge-variants-destructive-dark-backgroundColor: var(--color-action-background-danger-default);
+  --badge-variants-outline-color: var(--color-mode-dark);
+  --badge-variants-outline-hover-backgroundColor: var(--color-palette-neutral-100);
+}

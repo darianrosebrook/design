@@ -3,13 +3,6 @@
  * @author @darianrosebrook
  */
 
-import React, { useState, useCallback } from "react";
-import {
-  formatPropertyValue,
-  validatePropertyValue,
-} from "./property-utils.js";
-import { TokenPill } from "./TokenPill.js";
-import { TokenSelector } from "./TokenSelector.js";
 import {
   Input,
   Select,
@@ -18,6 +11,13 @@ import {
   NumberField,
   ColorField,
 } from "@paths-design/design-system";
+import React, { useState, useCallback } from "react";
+import {
+  formatPropertyValue,
+  validatePropertyValue,
+} from "./property-utils.js";
+import { TokenPill } from "./TokenPill.js";
+import { TokenSelector } from "./TokenSelector.js";
 import type { PropertyEditorProps, PropertyValue } from "./types.js";
 
 /**

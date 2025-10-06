@@ -1,7 +1,4 @@
 "use client"
-import { useState } from "react"
-import type React from "react"
-
 import {
   ChevronRight,
   Eye,
@@ -14,6 +11,8 @@ import {
   LayersIcon,
   Frame,
 } from "lucide-react"
+import { useState } from "react"
+import type React from "react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useCanvas } from "@/lib/canvas-context"
@@ -70,7 +69,7 @@ export function LayersPanel() {
   }
 
   const renderLayer = (layer: CanvasObject, depth = 0, index: number) => {
-    if (!layer) return null
+    if (!layer) {return null}
 
     const Icon = typeIcons[layer.type]
     const isSelected = layer.id === selectedId

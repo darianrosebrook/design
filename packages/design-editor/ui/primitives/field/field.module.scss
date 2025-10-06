@@ -8,61 +8,61 @@
 .field-set {
   // Include the generated variables mixin within the component scope
   @include fieldTokens.vars;
-  display: var(--field-fieldset-display-value);
-  flex-direction: var(--field-fieldset-flexDirection-value);
+  display: var(--field-fieldset-display);
+  flex-direction: var(--field-fieldset-flexDirection);
 
   // Gap adjustments for different group types
-  gap: var(--field-spacing-gap-default-value);
+  gap: var(--field-spacing-gap-default);
 
   &:has([data-slot="checkbox-group"]),
   &:has([data-slot="radio-group"]) {
-    gap: var(--field-spacing-gap-compact-value);
+    gap: var(--field-spacing-gap-compact);
   }
 }
 
 // Field legend
 .field-legend {
-  margin-bottom: var(--field-spacing-margin-legend-bottom-value);
-  font-weight: var(--field-typography-legend-fontWeight-value);
-  line-height: var(--field-typography-legend-lineHeight-value);
+  margin-bottom: var(--field-spacing-margin-legend-bottom);
+  font-weight: var(--field-typography-legend-fontWeight);
+  line-height: var(--field-typography-legend-lineHeight);
 
   // Legend variants
   &[data-variant="legend"] {
-    font-size: var(--field-typography-legend-fontSize-legend-value);
+    font-size: var(--field-typography-legend-fontSize-legend);
   }
 
   &[data-variant="label"] {
-    font-size: var(--field-typography-legend-fontSize-label-value);
+    font-size: var(--field-typography-legend-fontSize-label);
   }
 }
 
 // Field group container
 .field-group {
-  display: var(--field-layout-group-display-value);
-  width: var(--field-layout-group-width-value);
-  flex-direction: var(--field-layout-group-flexDirection-value);
-  gap: var(--field-spacing-gap-group-value);
+  display: var(--field-layout-group-display);
+  width: var(--field-layout-group-width);
+  flex-direction: var(--field-layout-group-flexDirection);
+  gap: var(--field-spacing-gap-group);
 
   // Nested group spacing
   [data-slot="field-group"] {
-    gap: calc(var(--field-spacing-gap-group-value) - var(--field-spacing-gap-default-value));
+    gap: calc(var(--field-spacing-gap-group) - var(--field-spacing-gap-default));
   }
 }
 
 // Main field container
 .field {
-  display: var(--field-layout-field-display-value);
-  width: var(--field-layout-field-width-value);
-  gap: var(--field-spacing-gap-default-value);
+  display: var(--field-layout-field-display);
+  width: var(--field-layout-field-width);
+  gap: var(--field-spacing-gap-default);
 
   // Invalid state
   &[data-invalid="true"] {
-    color: var(--field-colors-invalid-color-value);
+    color: var(--field-colors-invalid-color);
   }
 
   // Orientation variants
   &[data-orientation="vertical"] {
-    flex-direction: var(--field-layout-field-flexDirection-vertical-value);
+    flex-direction: var(--field-layout-field-flexDirection-vertical);
 
     // Make all children full width
     > * {
@@ -76,8 +76,8 @@
   }
 
   &[data-orientation="horizontal"] {
-    flex-direction: var(--field-layout-field-flexDirection-horizontal-value);
-    align-items: var(--field-layout-field-alignItems-horizontal-value);
+    flex-direction: var(--field-layout-field-flexDirection-horizontal);
+    align-items: var(--field-layout-field-alignItems-horizontal);
 
     // Label gets flex auto, content takes remaining space
     > [data-slot="field-label"] {
@@ -97,7 +97,7 @@
   }
 
   &[data-orientation="responsive"] {
-    flex-direction: var(--field-layout-field-flexDirection-vertical-value);
+    flex-direction: var(--field-layout-field-flexDirection-vertical);
 
     // All children full width in mobile
     > * {
@@ -111,8 +111,8 @@
 
     // Responsive breakpoint
     @container (min-width: 768px) {
-      flex-direction: var(--field-layout-field-flexDirection-horizontal-value);
-      align-items: var(--field-layout-field-alignItems-horizontal-value);
+      flex-direction: var(--field-layout-field-flexDirection-horizontal);
+      align-items: var(--field-layout-field-alignItems-horizontal);
 
       > * {
         width: auto;
@@ -136,32 +136,32 @@
   // Disabled state
   &[data-disabled="true"] {
     [data-slot="field-label"] {
-      opacity: var(--field-colors-disabled-opacity-value);
+      opacity: var(--field-colors-disabled-opacity);
     }
   }
 }
 
 // Field content wrapper
 .field-content {
-  display: var(--field-layout-content-display-value);
-  flex-direction: var(--field-layout-content-flexDirection-value);
-  flex: var(--field-layout-content-flex-value);
-  gap: var(--field-spacing-gap-content-value);
+  display: var(--field-layout-content-display);
+  flex-direction: var(--field-layout-content-flexDirection);
+  flex: var(--field-layout-content-flex);
+  gap: var(--field-spacing-gap-content);
   line-height: 1.375; // Equivalent to leading-snug
 }
 
 // Field label
 .field-label {
-  display: var(--field-layout-label-display-value);
-  width: var(--field-layout-label-width-value);
-  align-items: var(--field-layout-label-alignItems-value);
-  gap: var(--field-spacing-gap-compact-value);
+  display: var(--field-layout-label-display);
+  width: var(--field-layout-label-width);
+  align-items: var(--field-layout-label-alignItems);
+  gap: var(--field-spacing-gap-compact);
   line-height: 1.375; // Equivalent to leading-snug
   opacity: 1;
 
   // Disabled state
   .field[data-disabled="true"] & {
-    opacity: var(--field-colors-disabled-opacity-value);
+    opacity: var(--field-colors-disabled-opacity);
   }
 
   // Labels containing nested fields
@@ -172,18 +172,18 @@
     border: 1px solid transparent;
 
     > [data-slot="field"] {
-      padding: var(--field-spacing-padding-label-value);
+      padding: var(--field-spacing-padding-label);
     }
   }
 
   // Checked state styling
   [data-state="checked"] & {
-    background-color: var(--field-states-checked-backgroundColor-light-value);
-    border-color: var(--field-states-checked-borderColor-value);
+    background-color: var(--field-states-checked-backgroundColor-light);
+    border-color: var(--field-states-checked-borderColor);
 
     // Dark mode
     .dark & {
-      background-color: var(--field-states-checked-backgroundColor-dark-value);
+      background-color: var(--field-states-checked-backgroundColor-dark);
     }
   }
 }
@@ -192,23 +192,23 @@
 .field-title {
   display: flex;
   align-items: center;
-  gap: var(--field-spacing-gap-compact-value);
-  font-size: var(--field-typography-title-fontSize-value);
-  font-weight: var(--field-typography-title-fontWeight-value);
-  line-height: var(--field-typography-title-lineHeight-value);
+  gap: var(--field-spacing-gap-compact);
+  font-size: var(--field-typography-title-fontSize);
+  font-weight: var(--field-typography-title-fontWeight);
+  line-height: var(--field-typography-title-lineHeight);
 
   // Disabled state
   .field[data-disabled="true"] & {
-    opacity: var(--field-colors-disabled-opacity-value);
+    opacity: var(--field-colors-disabled-opacity);
   }
 }
 
 // Field description
 .field-description {
-  color: var(--field-typography-description-color-value);
-  font-size: var(--field-typography-description-fontSize-value);
-  font-weight: var(--field-typography-description-fontWeight-value);
-  line-height: var(--field-typography-description-lineHeight-value);
+  color: var(--field-typography-description-color);
+  font-size: var(--field-typography-description-fontSize);
+  font-weight: var(--field-typography-description-fontWeight);
+  line-height: var(--field-typography-description-lineHeight);
 
   // Links within descriptions
   a {
@@ -234,20 +234,20 @@
   }
 
   &:nth-last-child(2) {
-    margin-top: calc(var(--field-spacing-gap-content-value) * -1);
+    margin-top: calc(var(--field-spacing-gap-content) * -1);
   }
 
   // Adjust margin when following a legend
   [data-variant="legend"] + & {
-    margin-top: calc(var(--field-spacing-margin-legend-bottom-value) * -1.5);
+    margin-top: calc(var(--field-spacing-margin-legend-bottom) * -1.5);
   }
 }
 
 // Field error
 .field-error {
-  color: var(--field-typography-error-color-value);
-  font-size: var(--field-typography-error-fontSize-value);
-  font-weight: var(--field-typography-error-fontWeight-value);
+  color: var(--field-typography-error-color);
+  font-size: var(--field-typography-error-fontSize);
+  font-weight: var(--field-typography-error-fontWeight);
 
   // Error list styling
   ul {
@@ -263,29 +263,29 @@
 .field-separator {
   position: relative;
   height: 20px;
-  margin: var(--field-spacing-margin-separator-vertical-value) 0;
+  margin: var(--field-spacing-margin-separator-vertical) 0;
 
   // Content variant
   &[data-content] {
     span {
-      background-color: var(--field-colors-separator-content-backgroundColor-value);
-      color: var(--field-colors-separator-content-color-value);
+      background-color: var(--field-colors-separator-content-backgroundColor);
+      color: var(--field-colors-separator-content-color);
       position: relative;
       margin: 0 auto;
       display: block;
       width: fit-content;
-      padding: 0 var(--field-colors-separator-content-padding-horizontal-value);
+      padding: 0 var(--field-colors-separator-content-padding-horizontal);
     }
   }
 }
 
 // Separator content text
 .field-separator-content {
-  background-color: var(--field-colors-separator-content-backgroundColor-value);
-  color: var(--field-colors-separator-content-color-value);
+  background-color: var(--field-colors-separator-content-backgroundColor);
+  color: var(--field-colors-separator-content-color);
   position: relative;
   margin: 0 auto;
   display: block;
   width: fit-content;
-  padding: 0 var(--field-colors-separator-content-padding-horizontal-value);
+  padding: 0 var(--field-colors-separator-content-padding-horizontal);
 }

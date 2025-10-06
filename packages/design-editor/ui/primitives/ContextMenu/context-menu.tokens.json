@@ -1,3 +1,653 @@
 {
-  "context-menu": {}
+  "prefix": "contextMenu",
+  "tokens": {
+    "content": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.0}",
+        "description": "Background color for context menu content"
+      },
+      "color": {
+        "value": "{color.mode.dark}",
+        "description": "Text color for context menu content"
+      },
+      "zIndex": {
+        "value": "1050",
+        "description": "Z-index for context menu content"
+      },
+      "maxHeight": {
+        "value": "var(--radix-context-menu-content-available-height)",
+        "description": "Maximum height for context menu content"
+      },
+      "minWidth": {
+        "value": "128px",
+        "description": "Minimum width for context menu content"
+      },
+      "overflow": {
+        "x": {
+          "value": "hidden",
+          "description": "Horizontal overflow for context menu content"
+        },
+        "y": {
+          "value": "auto",
+          "description": "Vertical overflow for context menu content"
+        }
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for context menu content"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for context menu content"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for context menu content"
+        },
+        "color": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Border color for context menu content"
+        }
+      },
+      "padding": {
+        "value": "4px",
+        "description": "Padding for context menu content"
+      },
+      "boxShadow": {
+        "value": "{elevation.medium}",
+        "description": "Box shadow for context menu content"
+      },
+      "animation": {
+        "duration": {
+          "value": "200ms",
+          "description": "Animation duration for context menu"
+        },
+        "easing": {
+          "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+          "description": "Animation easing for context menu"
+        }
+      }
+    },
+    "subContent": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.0}",
+        "description": "Background color for submenu content"
+      },
+      "color": {
+        "value": "{color.mode.dark}",
+        "description": "Text color for submenu content"
+      },
+      "zIndex": {
+        "value": "1050",
+        "description": "Z-index for submenu content"
+      },
+      "minWidth": {
+        "value": "128px",
+        "description": "Minimum width for submenu content"
+      },
+      "overflow": {
+        "value": "hidden",
+        "description": "Overflow for submenu content"
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for submenu content"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for submenu content"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for submenu content"
+        },
+        "color": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Border color for submenu content"
+        }
+      },
+      "padding": {
+        "value": "4px",
+        "description": "Padding for submenu content"
+      },
+      "boxShadow": {
+        "value": "{elevation.large}",
+        "description": "Box shadow for submenu content"
+      }
+    },
+    "item": {
+      "position": {
+        "value": "relative",
+        "description": "Position for context menu items"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display for context menu items"
+      },
+      "cursor": {
+        "value": "default",
+        "description": "Cursor for context menu items"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for context menu items"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap between item elements"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for context menu items"
+      },
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for context menu items"
+        },
+        "vertical": {
+          "value": "6px",
+          "description": "Vertical padding for context menu items"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for context menu items"
+      },
+      "outline": {
+        "value": "none",
+        "description": "Outline for context menu items"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for context menu items"
+      },
+      "inset": {
+        "paddingLeft": {
+          "value": "32px",
+          "description": "Left padding when item is inset"
+        }
+      },
+      "states": {
+        "focus": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color on focus"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Text color on focus"
+          }
+        },
+        "disabled": {
+          "pointerEvents": {
+            "value": "none",
+            "description": "Pointer events when disabled"
+          },
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity when disabled"
+          }
+        }
+      },
+      "variants": {
+        "destructive": {
+          "color": {
+            "value": "{color.palette.red.600}",
+            "description": "Text color for destructive variant"
+          },
+          "focus": {
+            "backgroundColor": {
+              "value": "{color.palette.red.50}",
+              "description": "Background color on focus for destructive"
+            },
+            "color": {
+              "value": "{color.palette.red.700}",
+              "description": "Text color on focus for destructive"
+            }
+          },
+          "icon": {
+            "color": {
+              "value": "{color.palette.red.600}",
+              "description": "Icon color for destructive variant"
+            }
+          }
+        }
+      },
+      "icon": {
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for item icons"
+        },
+        "flexShrink": {
+          "value": "0",
+          "description": "Flex shrink for item icons"
+        },
+        "size": {
+          "value": "16px",
+          "description": "Size for item icons"
+        },
+        "color": {
+          "value": "{color.palette.neutral.500}",
+          "description": "Color for item icons"
+        }
+      }
+    },
+    "subTrigger": {
+      "display": {
+        "value": "flex",
+        "description": "Display for sub trigger"
+      },
+      "cursor": {
+        "value": "default",
+        "description": "Cursor for sub trigger"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for sub trigger"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for sub trigger"
+      },
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for sub trigger"
+        },
+        "vertical": {
+          "value": "6px",
+          "description": "Vertical padding for sub trigger"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for sub trigger"
+      },
+      "outline": {
+        "value": "none",
+        "description": "Outline for sub trigger"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for sub trigger"
+      },
+      "inset": {
+        "paddingLeft": {
+          "value": "32px",
+          "description": "Left padding when sub trigger is inset"
+        }
+      },
+      "states": {
+        "focus": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color on focus"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Text color on focus"
+          }
+        },
+        "open": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color when open"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Text color when open"
+          }
+        }
+      },
+      "icon": {
+        "marginLeft": {
+          "value": "auto",
+          "description": "Left margin for chevron icon"
+        },
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for chevron icon"
+        },
+        "flexShrink": {
+          "value": "0",
+          "description": "Flex shrink for chevron icon"
+        },
+        "size": {
+          "value": "16px",
+          "description": "Size for chevron icon"
+        }
+      }
+    },
+    "checkboxItem": {
+      "position": {
+        "value": "relative",
+        "description": "Position for checkbox item"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display for checkbox item"
+      },
+      "cursor": {
+        "value": "default",
+        "description": "Cursor for checkbox item"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for checkbox item"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for checkbox item"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for checkbox item"
+      },
+      "padding": {
+        "top": {
+          "value": "6px",
+          "description": "Top padding for checkbox item"
+        },
+        "bottom": {
+          "value": "6px",
+          "description": "Bottom padding for checkbox item"
+        },
+        "right": {
+          "value": "8px",
+          "description": "Right padding for checkbox item"
+        },
+        "left": {
+          "value": "32px",
+          "description": "Left padding for checkbox item"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for checkbox item"
+      },
+      "outline": {
+        "value": "none",
+        "description": "Outline for checkbox item"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for checkbox item"
+      },
+      "states": {
+        "focus": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color on focus"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Text color on focus"
+          }
+        },
+        "disabled": {
+          "pointerEvents": {
+            "value": "none",
+            "description": "Pointer events when disabled"
+          },
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity when disabled"
+          }
+        }
+      },
+      "indicator": {
+        "position": {
+          "value": "absolute",
+          "description": "Position for checkbox indicator"
+        },
+        "left": {
+          "value": "8px",
+          "description": "Left position for checkbox indicator"
+        },
+        "display": {
+          "value": "flex",
+          "description": "Display for checkbox indicator"
+        },
+        "alignItems": {
+          "value": "center",
+          "description": "Align items for checkbox indicator"
+        },
+        "justifyContent": {
+          "value": "center",
+          "description": "Justify content for checkbox indicator"
+        },
+        "size": {
+          "value": "14px",
+          "description": "Size for checkbox indicator"
+        },
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for checkbox indicator"
+        },
+        "icon": {
+          "size": {
+            "value": "16px",
+            "description": "Size for check icon"
+          }
+        }
+      },
+      "icon": {
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for icons"
+        },
+        "flexShrink": {
+          "value": "0",
+          "description": "Flex shrink for icons"
+        },
+        "size": {
+          "value": "16px",
+          "description": "Size for icons"
+        }
+      }
+    },
+    "radioItem": {
+      "position": {
+        "value": "relative",
+        "description": "Position for radio item"
+      },
+      "display": {
+        "value": "flex",
+        "description": "Display for radio item"
+      },
+      "cursor": {
+        "value": "default",
+        "description": "Cursor for radio item"
+      },
+      "alignItems": {
+        "value": "center",
+        "description": "Align items for radio item"
+      },
+      "gap": {
+        "value": "8px",
+        "description": "Gap for radio item"
+      },
+      "borderRadius": {
+        "value": "4px",
+        "description": "Border radius for radio item"
+      },
+      "padding": {
+        "top": {
+          "value": "6px",
+          "description": "Top padding for radio item"
+        },
+        "bottom": {
+          "value": "6px",
+          "description": "Bottom padding for radio item"
+        },
+        "right": {
+          "value": "8px",
+          "description": "Right padding for radio item"
+        },
+        "left": {
+          "value": "32px",
+          "description": "Left padding for radio item"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for radio item"
+      },
+      "outline": {
+        "value": "none",
+        "description": "Outline for radio item"
+      },
+      "userSelect": {
+        "value": "none",
+        "description": "User select for radio item"
+      },
+      "states": {
+        "focus": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color on focus"
+          },
+          "color": {
+            "value": "{color.mode.dark}",
+            "description": "Text color on focus"
+          }
+        },
+        "disabled": {
+          "pointerEvents": {
+            "value": "none",
+            "description": "Pointer events when disabled"
+          },
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity when disabled"
+          }
+        }
+      },
+      "indicator": {
+        "position": {
+          "value": "absolute",
+          "description": "Position for radio indicator"
+        },
+        "left": {
+          "value": "8px",
+          "description": "Left position for radio indicator"
+        },
+        "display": {
+          "value": "flex",
+          "description": "Display for radio indicator"
+        },
+        "alignItems": {
+          "value": "center",
+          "description": "Align items for radio indicator"
+        },
+        "justifyContent": {
+          "value": "center",
+          "description": "Justify content for radio indicator"
+        },
+        "size": {
+          "value": "14px",
+          "description": "Size for radio indicator"
+        },
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for radio indicator"
+        },
+        "icon": {
+          "size": {
+            "value": "8px",
+            "description": "Size for radio icon"
+          },
+          "fill": {
+            "value": "currentColor",
+            "description": "Fill for radio icon"
+          }
+        }
+      },
+      "icon": {
+        "pointerEvents": {
+          "value": "none",
+          "description": "Pointer events for icons"
+        },
+        "flexShrink": {
+          "value": "0",
+          "description": "Flex shrink for icons"
+        },
+        "size": {
+          "value": "16px",
+          "description": "Size for icons"
+        }
+      }
+    },
+    "label": {
+      "color": {
+        "value": "{color.mode.dark}",
+        "description": "Color for context menu labels"
+      },
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for labels"
+        },
+        "vertical": {
+          "value": "6px",
+          "description": "Vertical padding for labels"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for labels"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for labels"
+      },
+      "inset": {
+        "paddingLeft": {
+          "value": "32px",
+          "description": "Left padding when label is inset"
+        }
+      }
+    },
+    "separator": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.200}",
+        "description": "Background color for separator"
+      },
+      "margin": {
+        "horizontal": {
+          "value": "-4px",
+          "description": "Horizontal margin for separator"
+        },
+        "vertical": {
+          "value": "4px",
+          "description": "Vertical margin for separator"
+        }
+      },
+      "height": {
+        "value": "1px",
+        "description": "Height for separator"
+      }
+    },
+    "shortcut": {
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for keyboard shortcuts"
+      },
+      "marginLeft": {
+        "value": "auto",
+        "description": "Left margin for shortcuts (pushes to right)"
+      },
+      "fontSize": {
+        "value": "12px",
+        "description": "Font size for shortcuts"
+      },
+      "letterSpacing": {
+        "value": "0.05em",
+        "description": "Letter spacing for shortcuts"
+      }
+    }
+  }
 }

@@ -1,0 +1,34 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/Button/Button.tokens.json
+ */
+@mixin vars {
+  /* === Padding Tokens === */
+  --button-padding-horizontal-default: 16px;
+  --button-padding-horizontal-sm: 12px;
+  --button-padding-horizontal-lg: 24px;
+  --button-padding-vertical-default: 8px;
+  --button-padding-vertical-sm: 6px;
+  --button-padding-vertical-lg: 10px;
+
+  /* === Height Tokens === */
+  --button-height-default: 36px;
+  --button-height-sm: 32px;
+  --button-height-lg: 40px;
+  --button-height-icon-default: 36px;
+  --button-height-icon-sm: 32px;
+  --button-height-icon-lg: 40px;
+
+  /* === Variants Tokens === */
+  --button-variants-default-backgroundColor: var(--color-action-background-primary-default);
+  --button-variants-default-color: var(--color-action-foreground-primary-default);
+  --button-variants-default-hover-backgroundColor: var(--color-action-background-primary-default);
+  --button-variants-destructive-backgroundColor: var(--color-action-background-danger-default);
+  --button-variants-destructive-color: var(--color-action-foreground-danger-default);
+  --button-variants-outline-backgroundColor: var(--color-mode-light);
+  --button-variants-outline-borderColor: var(--color-action-border-secondary-default);
+  --button-variants-secondary-backgroundColor: var(--color-action-background-secondary-default);
+  --button-variants-secondary-color: var(--color-action-foreground-secondary-default);
+  --button-variants-ghost-hover-backgroundColor: var(--color-palette-neutral-100);
+  --button-variants-ghost-hover-color: var(--color-mode-dark);
+  --button-variants-link-color: var(--color-action-background-primary-default);
+}

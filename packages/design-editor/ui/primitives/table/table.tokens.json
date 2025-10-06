@@ -1,3 +1,225 @@
 {
-  "table": {}
+  "prefix": "table",
+  "tokens": {
+    "container": {
+      "position": {
+        "value": "relative",
+        "description": "Position for table container"
+      },
+      "width": {
+        "value": "100%",
+        "description": "Width for table container"
+      },
+      "overflowX": {
+        "value": "auto",
+        "description": "Horizontal overflow for table container"
+      }
+    },
+    "table": {
+      "width": {
+        "value": "100%",
+        "description": "Width for table element"
+      },
+      "captionSide": {
+        "value": "bottom",
+        "description": "Caption side for table"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for table"
+      }
+    },
+    "header": {
+      "row": {
+        "borderBottom": {
+          "width": {
+            "value": "1px",
+            "description": "Border bottom width for header rows"
+          },
+          "style": {
+            "value": "solid",
+            "description": "Border bottom style for header rows"
+          },
+          "color": {
+            "value": "{color.palette.neutral.200}",
+            "description": "Border bottom color for header rows"
+          }
+        }
+      }
+    },
+    "body": {
+      "row": {
+        "last": {
+          "borderBottom": {
+            "value": "none",
+            "description": "Border bottom for last body row"
+          }
+        }
+      }
+    },
+    "footer": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.100}",
+        "opacity": 0.5,
+        "description": "Background color for table footer"
+      },
+      "borderTop": {
+        "width": {
+          "value": "1px",
+          "description": "Border top width for footer"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border top style for footer"
+        },
+        "color": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Border top color for footer"
+        }
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for footer text"
+      },
+      "row": {
+        "last": {
+          "borderBottom": {
+            "value": "none",
+            "description": "Border bottom for last footer row"
+          }
+        }
+      }
+    },
+    "row": {
+      "borderBottom": {
+        "width": {
+          "value": "1px",
+          "description": "Border bottom width for table rows"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border bottom style for table rows"
+        },
+        "color": {
+          "value": "{color.palette.neutral.200}",
+          "description": "Border bottom color for table rows"
+        }
+      },
+      "transition": {
+        "property": {
+          "value": "background-color",
+          "description": "Transition property for table rows"
+        },
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for table rows"
+        },
+        "easing": {
+          "value": "{motion.interaction.hover.easing}",
+          "description": "Transition easing for table rows"
+        }
+      },
+      "states": {
+        "hover": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "opacity": 0.5,
+            "description": "Background color on hover for table rows"
+          }
+        },
+        "selected": {
+          "backgroundColor": {
+            "value": "{color.palette.neutral.100}",
+            "description": "Background color when selected for table rows"
+          }
+        }
+      }
+    },
+    "head": {
+      "color": {
+        "value": "{color.mode.dark}",
+        "description": "Color for table head cells"
+      },
+      "height": {
+        "value": "40px",
+        "description": "Height for table head cells"
+      },
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for table head cells"
+        }
+      },
+      "textAlign": {
+        "value": "left",
+        "description": "Text align for table head cells"
+      },
+      "verticalAlign": {
+        "value": "middle",
+        "description": "Vertical align for table head cells"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for table head cells"
+      },
+      "whiteSpace": {
+        "value": "nowrap",
+        "description": "White space for table head cells"
+      },
+      "checkbox": {
+        "paddingRight": {
+          "value": "0px",
+          "description": "Right padding when head cell has checkbox"
+        },
+        "translateY": {
+          "value": "2px",
+          "description": "Vertical translation for checkbox in head cell"
+        }
+      }
+    },
+    "cell": {
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for table cells"
+        }
+      },
+      "verticalAlign": {
+        "value": "middle",
+        "description": "Vertical align for table cells"
+      },
+      "whiteSpace": {
+        "value": "nowrap",
+        "description": "White space for table cells"
+      },
+      "checkbox": {
+        "paddingRight": {
+          "value": "0px",
+          "description": "Right padding when cell has checkbox"
+        },
+        "translateY": {
+          "value": "2px",
+          "description": "Vertical translation for checkbox in cell"
+        }
+      }
+    },
+    "caption": {
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Color for table caption"
+      },
+      "marginTop": {
+        "value": "16px",
+        "description": "Top margin for table caption"
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for table caption"
+      },
+      "textAlign": {
+        "value": "center",
+        "description": "Text align for table caption"
+      }
+    }
+  }
 }

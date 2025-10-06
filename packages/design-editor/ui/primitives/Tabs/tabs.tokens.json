@@ -1,3 +1,134 @@
 {
-  "tabs": {}
+  "prefix": "tabs",
+  "tokens": {
+    "container": {
+      "gap": {
+        "value": "8px",
+        "description": "Gap between tabs container elements"
+      }
+    },
+    "list": {
+      "backgroundColor": {
+        "value": "{color.palette.neutral.100}",
+        "description": "Background color for tabs list"
+      },
+      "color": {
+        "value": "{color.palette.neutral.500}",
+        "description": "Text color for tabs list"
+      },
+      "height": {
+        "value": "36px",
+        "description": "Height of the tabs list"
+      },
+      "borderRadius": {
+        "value": "8px",
+        "description": "Border radius for tabs list"
+      },
+      "padding": {
+        "value": "3px",
+        "description": "Padding for tabs list"
+      }
+    },
+    "trigger": {
+      "color": {
+        "default": {
+          "value": "{color.mode.dark}",
+          "description": "Default text color for tab triggers"
+        },
+        "dark": {
+          "value": "{color.palette.neutral.500}",
+          "description": "Dark mode text color for tab triggers"
+        }
+      },
+      "height": {
+        "value": "calc(100% - 1px)",
+        "description": "Height of tab triggers"
+      },
+      "borderRadius": {
+        "value": "6px",
+        "description": "Border radius for tab triggers"
+      },
+      "border": {
+        "width": {
+          "value": "1px",
+          "description": "Border width for tab triggers"
+        },
+        "style": {
+          "value": "solid",
+          "description": "Border style for tab triggers"
+        }
+      },
+      "padding": {
+        "horizontal": {
+          "value": "8px",
+          "description": "Horizontal padding for tab triggers"
+        },
+        "vertical": {
+          "value": "4px",
+          "description": "Vertical padding for tab triggers"
+        }
+      },
+      "fontSize": {
+        "value": "14px",
+        "description": "Font size for tab trigger text"
+      },
+      "fontWeight": {
+        "value": "500",
+        "description": "Font weight for tab trigger text"
+      },
+      "gap": {
+        "value": "6px",
+        "description": "Gap between tab trigger content"
+      },
+      "transition": {
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for tab trigger interactions"
+        },
+        "easing": {
+          "value": "ease-in-out",
+          "description": "Transition easing for tab trigger interactions"
+        }
+      },
+      "states": {
+        "active": {
+          "backgroundColor": {
+            "value": "{color.mode.white}",
+            "description": "Background color for active tab trigger"
+          },
+          "boxShadow": {
+            "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+            "description": "Box shadow for active tab trigger"
+          },
+          "dark": {
+            "color": {
+              "value": "{color.mode.dark}",
+              "description": "Dark mode text color for active tab trigger"
+            },
+            "borderColor": {
+              "value": "{color.palette.neutral.200}",
+              "description": "Dark mode border color for active tab trigger"
+            },
+            "backgroundColor": {
+              "value": "{color.palette.neutral.200}",
+              "opacity": 0.3,
+              "description": "Dark mode background color for active tab trigger"
+            }
+          }
+        },
+        "disabled": {
+          "opacity": {
+            "value": "0.5",
+            "description": "Opacity for disabled tab triggers"
+          }
+        }
+      }
+    },
+    "content": {
+      "flex": {
+        "value": "1",
+        "description": "Flex value for tab content"
+      }
+    }
+  }
 }

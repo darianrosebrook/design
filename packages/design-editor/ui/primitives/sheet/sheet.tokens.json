@@ -1,3 +1,213 @@
 {
-  "sheet": {}
+  "prefix": "sheet",
+  "tokens": {
+    "overlay": {
+      "backgroundColor": {
+        "value": "rgba(0, 0, 0, 0.5)",
+        "description": "Background color for sheet overlay"
+      },
+      "zIndex": {
+        "value": "{semantic.zIndex.modal}",
+        "description": "Z-index for sheet overlay"
+      },
+      "animation": {
+        "duration": {
+          "in": {
+            "value": "{semantic.animation.duration.fast}",
+            "description": "Animation duration for overlay fade in"
+          },
+          "out": {
+            "value": "{semantic.animation.duration.fast}",
+            "description": "Animation duration for overlay fade out"
+          }
+        },
+        "easing": {
+          "value": "{semantic.animation.easing.default}",
+          "description": "Animation easing for overlay"
+        }
+      }
+    },
+    "content": {
+      "backgroundColor": {
+        "value": "{semantic.color.display.background.primary}",
+        "description": "Background color for sheet content"
+      },
+      "borderColor": {
+        "value": "{semantic.color.display.border.subtle}",
+        "description": "Border color for sheet content"
+      },
+      "borderWidth": {
+        "value": "{semantic.shape.border.width.default}",
+        "description": "Border width for sheet content"
+      },
+      "shadow": {
+        "value": "{semantic.effect.shadow.large}",
+        "description": "Shadow effect for sheet content"
+      },
+      "zIndex": {
+        "value": "{semantic.zIndex.modal}",
+        "description": "Z-index for sheet content"
+      },
+      "layout": {
+        "gap": {
+          "value": "{semantic.spacing.gap.grid.medium}",
+          "description": "Gap between elements in sheet content"
+        },
+        "maxWidth": {
+          "mobile": {
+            "value": "75%",
+            "description": "Maximum width on mobile"
+          },
+          "desktop": {
+            "value": "24rem",
+            "description": "Maximum width on desktop"
+          }
+        },
+        "height": {
+          "full": {
+            "value": "100%",
+            "description": "Full height for side sheets"
+          },
+          "auto": {
+            "value": "auto",
+            "description": "Auto height for top/bottom sheets"
+          }
+        }
+      },
+      "animation": {
+        "duration": {
+          "in": {
+            "value": "{semantic.animation.duration.normal}",
+            "description": "Animation duration for content slide in"
+          },
+          "out": {
+            "value": "{semantic.animation.duration.fast}",
+            "description": "Animation duration for content slide out"
+          }
+        },
+        "easing": {
+          "value": "{semantic.animation.easing.default}",
+          "description": "Animation easing for content"
+        },
+        "slide": {
+          "distance": {
+            "value": "100%",
+            "description": "Slide distance for directional animations"
+          }
+        }
+      }
+    },
+    "close": {
+      "backgroundColor": {
+        "value": "transparent",
+        "description": "Background color for close button"
+      },
+      "backgroundColorHover": {
+        "value": "{semantic.color.action.background.secondary.hover}",
+        "description": "Background color for close button on hover"
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.xsmall}",
+        "description": "Border radius for close button"
+      },
+      "size": {
+        "value": "24px",
+        "description": "Size of close button"
+      },
+      "iconSize": {
+        "value": "16px",
+        "description": "Size of close icon"
+      },
+      "position": {
+        "top": {
+          "value": "{semantic.spacing.margin.grid.medium}",
+          "description": "Top position for close button"
+        },
+        "right": {
+          "value": "{semantic.spacing.margin.grid.medium}",
+          "description": "Right position for close button"
+        }
+      },
+      "opacity": {
+        "default": {
+          "value": "0.7",
+          "description": "Default opacity for close button"
+        },
+        "hover": {
+          "value": "1",
+          "description": "Opacity for close button on hover"
+        }
+      },
+      "focus": {
+        "ring": {
+          "color": {
+            "value": "{semantic.color.action.border.primary.focus}",
+            "description": "Focus ring color"
+          },
+          "width": {
+            "value": "2px",
+            "description": "Focus ring width"
+          },
+          "offset": {
+            "value": "2px",
+            "description": "Focus ring offset"
+          }
+        }
+      },
+      "transition": {
+        "duration": {
+          "value": "{semantic.animation.duration.fast}",
+          "description": "Transition duration for close button"
+        },
+        "property": {
+          "value": "opacity",
+          "description": "Transition property for close button"
+        }
+      }
+    },
+    "header": {
+      "padding": {
+        "value": "{semantic.spacing.padding.grid.medium}",
+        "description": "Padding for sheet header"
+      },
+      "gap": {
+        "value": "{semantic.spacing.gap.grid.xsmall}",
+        "description": "Gap between header elements"
+      }
+    },
+    "footer": {
+      "padding": {
+        "value": "{semantic.spacing.padding.grid.medium}",
+        "description": "Padding for sheet footer"
+      },
+      "gap": {
+        "value": "{semantic.spacing.gap.grid.small}",
+        "description": "Gap between footer elements"
+      },
+      "marginTop": {
+        "value": "auto",
+        "description": "Auto margin top to push footer to bottom"
+      }
+    },
+    "title": {
+      "color": {
+        "value": "{semantic.color.display.foreground.primary}",
+        "description": "Text color for sheet title"
+      },
+      "fontWeight": {
+        "value": "{semantic.typography.font.weight.semibold}",
+        "description": "Font weight for sheet title"
+      }
+    },
+    "description": {
+      "color": {
+        "value": "{semantic.color.display.foreground.secondary}",
+        "description": "Text color for sheet description"
+      },
+      "fontSize": {
+        "value": "{semantic.typography.body.03}",
+        "description": "Font size for sheet description"
+      }
+    }
+  }
 }

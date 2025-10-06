@@ -496,7 +496,7 @@ export function GlobalShortcutsProvider({
           t.tagName === "TEXTAREA" ||
           t.isContentEditable)
       )
-        return;
+        {return;}
 
       const isPrimary = navigator.platform.toUpperCase().includes("MAC")
         ? e.metaKey
@@ -532,8 +532,8 @@ export function GlobalShortcutsProvider({
       if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
         e.stopPropagation();
-        if (e.deltaY < 0) zoomIn();
-        else if (e.deltaY > 0) zoomOut();
+        if (e.deltaY < 0) {zoomIn();}
+        else if (e.deltaY > 0) {zoomOut();}
       }
     };
 

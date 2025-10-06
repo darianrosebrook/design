@@ -1,0 +1,34 @@
+/* AUTO-GENERATED: Do not edit directly.
+ * Source: ui/primitives/RadioGroup/radio-group.tokens.json
+ */
+@mixin vars {
+  /* === Container Tokens === */
+  --radioGroup-container-display: grid;
+  --radioGroup-container-gap: 12px;
+
+  /* === Item Tokens === */
+  --radioGroup-item-border-width: 1px;
+  --radioGroup-item-border-style: solid;
+  --radioGroup-item-border-color-default: var(--color-palette-neutral-200);
+  --radioGroup-item-size: 16px;
+  --radioGroup-item-borderRadius: 9999px;
+  --radioGroup-item-boxShadow: var(--elevation-level-1);
+  --radioGroup-item-transition-duration: 150ms;
+  --radioGroup-item-transition-easing: ease-in-out;
+  --radioGroup-item-backgroundColor-default: transparent;
+  --radioGroup-item-backgroundColor-dark: var(--color-palette-neutral-200);
+  --radioGroup-item-color: var(--color-action-background-primary-default);
+  --radioGroup-item-states-disabled-opacity: 0.5;
+
+  /* === Indicator Tokens === */
+  --radioGroup-indicator-position: relative;
+  --radioGroup-indicator-display: flex;
+  --radioGroup-indicator-alignItems: center;
+  --radioGroup-indicator-justifyContent: center;
+  --radioGroup-indicator-icon-fill: var(--color-action-background-primary-default);
+  --radioGroup-indicator-icon-position: absolute;
+  --radioGroup-indicator-icon-top: 50%;
+  --radioGroup-indicator-icon-left: 50%;
+  --radioGroup-indicator-icon-size: 8px;
+  --radioGroup-indicator-icon-transform: translate(-50%, -50%);
+}

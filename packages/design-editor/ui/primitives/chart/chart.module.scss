@@ -1,7 +1,212 @@
 // chart primitive component styles
-// TODO: Migrate from Tailwind classes to SCSS variables and mixins
+// Migrated from Tailwind to SCSS with design tokens
 
+// Import generated token variables
+@use './Chart.tokens.generated.scss' as chartTokens;
+
+// Include the generated variables mixin
+@include chartTokens.vars;
+
+// Chart container
 .chart {
-  // Placeholder for future SCSS implementation
-  // Will contain chart-specific styles when migrating from Tailwind
+  display: var(--chart-container-display);
+  aspect-ratio: var(--chart-container-aspectRatio);
+  justify-content: var(--chart-container-justifyContent);
+  font-size: var(--chart-container-fontSize);
+  padding: var(--chart-container-padding);
+
+  // Recharts element overrides
+  .recharts-cartesian-axis-tick_text {
+    fill: var(--chart-recharts-axis-tick-text-fill);
+  }
+
+  .recharts-cartesian-grid_line[stroke='#ccc'] {
+    stroke: var(--chart-recharts-grid-line-stroke);
+    opacity: var(--chart-recharts-grid-line-stroke-opacity);
+  }
+
+  .recharts-curve.recharts-tooltip-cursor {
+    stroke: var(--chart-recharts-tooltip-cursor-stroke);
+  }
+
+  .recharts-polar-grid_[stroke='#ccc'] {
+    stroke: var(--chart-recharts-polarGrid-stroke);
+  }
+
+  .recharts-radial-bar-background-sector {
+    fill: var(--chart-recharts-radialBar-backgroundSector-fill);
+  }
+
+  .recharts-rectangle.recharts-tooltip-cursor {
+    fill: var(--chart-recharts-rectangle-tooltipCursor-fill);
+  }
+
+  .recharts-reference-line_[stroke='#ccc'] {
+    stroke: var(--chart-recharts-referenceLine-stroke);
+  }
+
+  .recharts-dot[stroke='#fff'] {
+    stroke: var(--chart-recharts-dot-stroke);
+  }
+
+  .recharts-sector {
+    outline: var(--chart-recharts-sector-outline);
+  }
+
+  .recharts-sector[stroke='#fff'] {
+    stroke: var(--chart-recharts-sector-stroke);
+  }
+
+  .recharts-surface {
+    outline: var(--chart-recharts-surface-outline);
+  }
+
+  .recharts-layer {
+    outline: var(--chart-recharts-layer-outline);
+  }
+}
+
+// Chart tooltip content
+.chart-tooltip-content {
+  display: var(--chart-tooltip-content-display);
+  flex-direction: var(--chart-tooltip-content-flexDirection);
+  gap: var(--chart-tooltip-content-gap);
+  flex-wrap: var(--chart-tooltip-content-wrap-flexWrap);
+
+  // Icons in tooltip
+  svg {
+    color: var(--chart-tooltip-content-indicator-color-muted);
+    width: var(--chart-tooltip-content-indicator-size);
+    height: var(--chart-tooltip-content-indicator-size);
+  }
+
+  // Dot indicator variant
+  &[data-indicator="dot"] {
+    align-items: var(--chart-tooltip-content-default-alignItems);
+
+    svg {
+      width: var(--chart-tooltip-content-indicator-variants-dot-size);
+      height: var(--chart-tooltip-content-indicator-variants-dot-size);
+    }
+  }
+}
+
+// Chart tooltip item
+.chart-tooltip-item {
+  display: var(--chart-tooltip-content-item-display);
+  width: var(--chart-tooltip-content-item-width);
+  flex-wrap: var(--chart-tooltip-content-item-flexWrap);
+  gap: var(--chart-tooltip-content-item-gap);
+  align-items: var(--chart-tooltip-content-item-alignItems);
+
+  // Icons in tooltip items
+  svg {
+    color: var(--chart-tooltip-content-indicator-color-muted);
+    width: var(--chart-tooltip-content-indicator-size);
+    height: var(--chart-tooltip-content-indicator-size);
+    flex-shrink: 0;
+  }
+
+  // Dot indicator variant
+  &[data-indicator="dot"] {
+    align-items: var(--chart-tooltip-content-default-alignItems);
+
+    svg {
+      width: var(--chart-tooltip-content-indicator-variants-dot-size);
+      height: var(--chart-tooltip-content-indicator-variants-dot-size);
+    }
+  }
+
+  // Line indicator variant
+  &[data-indicator="line"] {
+    svg {
+      width: var(--chart-tooltip-content-indicator-variants-line-width);
+      height: var(--chart-tooltip-content-indicator-size);
+    }
+  }
+
+  // Dashed indicator variant
+  &[data-indicator="dashed"] {
+    svg {
+      width: var(--chart-tooltip-content-indicator-variants-dashed-width);
+      height: var(--chart-tooltip-content-indicator-size);
+      border: var(--chart-tooltip-content-indicator-variants-dashed-borderWidth) var(--chart-tooltip-content-indicator-variants-dashed-borderStyle) currentColor;
+      background-color: var(--chart-tooltip-content-indicator-variants-dashed-backgroundColor);
+      border-radius: var(--chart-tooltip-content-indicator-borderRadius);
+      margin: var(--chart-tooltip-content-indicator-variants-dashed-margin-vertical) 0;
+    }
+  }
+
+  // When nested label
+  &[data-nest-label="true"] {
+    align-items: var(--chart-tooltip-content-nestedLabel-alignItems);
+  }
+}
+
+// Chart tooltip label
+.chart-tooltip-label {
+  font-weight: var(--chart-tooltip-content-label-fontWeight);
+}
+
+// Chart tooltip text
+.chart-tooltip-text {
+  color: var(--chart-tooltip-content-text-color);
+}
+
+// Chart tooltip value
+.chart-tooltip-value {
+  color: var(--chart-tooltip-content-value-color);
+  font-family: var(--chart-tooltip-content-value-fontFamily);
+  font-weight: var(--chart-tooltip-content-value-fontWeight);
+  font-variant-numeric: var(--chart-tooltip-content-value-tabularNums);
+  justify-content: flex-end;
+}
+
+// Chart legend content
+.chart-legend-content {
+  display: var(--chart-legend-content-display);
+  align-items: var(--chart-legend-content-alignItems);
+  justify-content: var(--chart-legend-content-justifyContent);
+  gap: var(--chart-legend-content-gap);
+
+  // Vertical alignment variants
+  &[data-vertical-align="top"] {
+    padding-bottom: var(--chart-legend-content-verticalAlign-top-paddingBottom);
+  }
+
+  &[data-vertical-align="bottom"] {
+    padding-top: var(--chart-legend-content-verticalAlign-bottom-paddingTop);
+  }
+}
+
+// Chart legend item
+.chart-legend-item {
+  display: var(--chart-legend-content-item-display);
+  align-items: var(--chart-legend-content-item-alignItems);
+  gap: var(--chart-legend-content-item-gap);
+
+  // Icons in legend items
+  svg {
+    color: var(--chart-legend-content-item-icon-color);
+    width: var(--chart-legend-content-item-icon-size);
+    height: var(--chart-legend-content-item-icon-size);
+  }
+
+  // Indicators (when no icon)
+  &:not(:has(svg:first-child)) {
+    // Color indicator
+    &::before {
+      content: '';
+      width: var(--chart-legend-content-item-icon-indicator-size);
+      height: var(--chart-legend-content-item-icon-indicator-size);
+      border-radius: var(--chart-legend-content-item-icon-indicator-borderRadius);
+      background-color: currentColor;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Grid gap for tooltip layouts
+.chart-grid {
+  gap: var(--chart-grid-gap);
 }

@@ -1,3 +1,104 @@
 {
-  "component-renderer": {}
+  "prefix": "componentRenderer",
+  "tokens": {
+    "backgroundColor": {
+      "value": "{semantic.color.display.background.primary}",
+      "description": "Background color for component renderer"
+    },
+    "borderColor": {
+      "value": "{semantic.color.display.border.subtle}",
+      "description": "Border color for component containers"
+    },
+    "error": {
+      "backgroundColor": {
+        "value": "{semantic.color.palette.red.50}",
+        "description": "Background color for error states"
+      },
+      "borderColor": {
+        "value": "{semantic.color.palette.red.400}",
+        "description": "Border color for error states"
+      },
+      "textColor": {
+        "value": "{semantic.color.palette.red.600}",
+        "description": "Text color for error states"
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.small}",
+        "description": "Border radius for error containers"
+      }
+    },
+    "slot": {
+      "backgroundColor": {
+        "value": "{semantic.color.palette.orange.50}",
+        "opacity": 0.5,
+        "description": "Background color for slot areas"
+      },
+      "borderColor": {
+        "value": "{semantic.color.palette.orange.300}",
+        "description": "Border color for slot areas"
+      },
+      "textColor": {
+        "value": "{semantic.color.palette.orange.600}",
+        "description": "Text color for slot labels"
+      },
+      "hover": {
+        "backgroundColor": {
+          "value": "{semantic.color.palette.orange.100}",
+          "description": "Background color for slot on hover"
+        },
+        "borderColor": {
+          "value": "{semantic.color.palette.orange.400}",
+          "description": "Border color for slot on hover"
+        }
+      },
+      "minHeight": {
+        "value": "40px",
+        "description": "Minimum height for slot areas"
+      },
+      "borderRadius": {
+        "value": "{semantic.shape.control.radius.default}",
+        "description": "Border radius for slot areas"
+      }
+    },
+    "typography": {
+      "error": {
+        "fontSize": {
+          "value": "{semantic.typography.body.01}",
+          "description": "Font size for error text"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.semibold}",
+          "description": "Font weight for error text"
+        }
+      },
+      "slot": {
+        "fontSize": {
+          "value": "{semantic.typography.body.03}",
+          "description": "Font size for slot labels"
+        },
+        "fontWeight": {
+          "value": "{semantic.typography.font.weight.medium}",
+          "description": "Font weight for slot labels"
+        }
+      }
+    },
+    "layout": {
+      "positioning": {
+        "type": "absolute",
+        "description": "Positioning type for rendered components"
+      }
+    },
+    "animation": {
+      "transition": {
+        "duration": {
+          "value": "150ms",
+          "description": "Transition duration for hover effects"
+        },
+        "easing": {
+          "value": "ease-in-out",
+          "description": "Transition easing for hover effects"
+        }
+      }
+    }
+  }
 }

@@ -3,8 +3,8 @@
  * @author @darianrosebrook
  */
 
-import { defaultTokens as tokens } from "../tokens.js";
 import React from "react";
+import { defaultTokens as tokens } from "../tokens.js";
 import { Box } from "./Box";
 
 export interface StackProps {

@@ -409,11 +409,11 @@ export function repairDocument(doc: any): CanvasDocumentType {
         artboard.frame = { x: 0, y: 0, width: 1440, height: 1024 };
       }
       // Ensure frame has all required properties
-      if (typeof artboard.frame.x !== "number") artboard.frame.x = 0;
-      if (typeof artboard.frame.y !== "number") artboard.frame.y = 0;
-      if (typeof artboard.frame.width !== "number") artboard.frame.width = 1440;
+      if (typeof artboard.frame.x !== "number") {artboard.frame.x = 0;}
+      if (typeof artboard.frame.y !== "number") {artboard.frame.y = 0;}
+      if (typeof artboard.frame.width !== "number") {artboard.frame.width = 1440;}
       if (typeof artboard.frame.height !== "number")
-        artboard.frame.height = 1024;
+        {artboard.frame.height = 1024;}
 
       // Ensure children array exists
       if (!artboard.children) {

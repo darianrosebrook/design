@@ -1,0 +1,24 @@
+// PropertiesPanelHeader component styles
+// Migrated from Tailwind to SCSS with design tokens
+
+.propertiesPanelHeader {
+  // Header container styles (equivalent to flex items-center justify-between px-3 py-2 border-b border-border)
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px; // equivalent to px-3 py-2
+  border-bottom: 1px solid hsl(var(--border)); // equivalent to border-b border-border
+}
+
+.propertiesPanelHeaderTitle {
+  // Title styles (equivalent to text-sm font-semibold)
+  font-size: 14px; // equivalent to text-sm
+  font-weight: 600; // equivalent to font-semibold
+}
+
+.propertiesPanelHeaderType {
+  // Type indicator styles (equivalent to text-xs text-muted-foreground capitalize)
+  font-size: 12px; // equivalent to text-xs
+  color: hsl(var(--muted-foreground)); // equivalent to text-muted-foreground
+  text-transform: capitalize; // equivalent to capitalize
+}

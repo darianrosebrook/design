@@ -1,10 +1,10 @@
 "use client";
 
-import type React from "react";
-import { Input } from '@/ui/primitives/Input';
-import { Label } from '@/ui/primitives/label';
-import { Button } from '@/ui/primitives/Button';
+import { Label } from "@paths-design/design-system";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import type React from "react";
+import { Button } from "@/ui/primitives/Button";
+import { Input } from "@/ui/primitives/Input";
 
 interface NumberInputProps {
   label?: string;
