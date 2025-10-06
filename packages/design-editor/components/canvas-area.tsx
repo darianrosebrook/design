@@ -612,9 +612,12 @@ export function CanvasArea() {
                     position: "absolute",
                     width: "8px",
                     height: "8px",
+                    maxWidth: "8px",
+                    maxHeight: "8px",
+                    aspectRatio: "1/1",
                     backgroundColor: "#4a9eff",
                     border: "1px solid white",
-                    borderRadius: "2px",
+                    borderRadius: "1920px",
                     cursor: getResizeCursor(handle),
                     zIndex: 11, // Above the bounding box
                   };
@@ -635,10 +638,24 @@ export function CanvasArea() {
                   if (handle === "n" || handle === "s") {
                     handleStyle.left = "50%";
                     handleStyle.transform = "translateX(-50%)";
+                    // Force square dimensions for edge handles
+                    handleStyle.width = "8px";
+                    handleStyle.height = "8px";
+                    handleStyle.minWidth = "8px";
+                    handleStyle.minHeight = "8px";
+                    handleStyle.maxWidth = "8px";
+                    handleStyle.maxHeight = "8px";
                   }
                   if (handle === "e" || handle === "w") {
                     handleStyle.top = "50%";
                     handleStyle.transform = "translateY(-50%)";
+                    // Force square dimensions for edge handles
+                    handleStyle.width = "8px";
+                    handleStyle.height = "8px";
+                    handleStyle.minWidth = "8px";
+                    handleStyle.minHeight = "8px";
+                    handleStyle.maxWidth = "8px";
+                    handleStyle.maxHeight = "8px";
                   }
 
                   return (

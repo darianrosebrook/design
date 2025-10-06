@@ -285,17 +285,21 @@ export class ComponentCacheManager {
   }
 
   /**
-   * Cache component definition
+   * Cache component definition (disabled - components aren't serializable)
    */
   cacheComponent(id: string, component: ComponentType<any>): void {
-    this.componentCache.set(`component:${id}`, component);
+    // Don't cache the actual component function as it's not serializable
+    // Instead, just mark that this component exists in the registry
+    this.componentCache.set(`component_ref:${id}`, true);
   }
 
   /**
-   * Get cached component
+   * Get cached component (always returns undefined - components aren't cached)
    */
   getComponent(id: string): ComponentType<any> | undefined {
-    return this.componentCache.get(`component:${id}`);
+    // Components are not cached due to serialization issues
+    // They are always retrieved from the live registry
+    return undefined;
   }
 
   /**

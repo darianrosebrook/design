@@ -215,8 +215,8 @@ export function CanvasArea() {
     return handles.map((handle) => {
       const style: React.CSSProperties = {
         position: "absolute",
-        width: handle.length === 1 ? "100%" : "8px",
-        height: handle.length === 1 ? "100%" : "8px",
+        width: "8px",
+        height: "8px",
         backgroundColor: "#4a9eff",
         border: "1px solid white",
         borderRadius: "2px",

@@ -17,6 +17,17 @@
   user-select: none;
 }
 
+/* Force resize handles to maintain square dimensions */
+.resize-handle {
+  width: 8px !important;
+  height: 8px !important;
+  min-width: 8px !important;
+  min-height: 8px !important;
+  max-width: 8px !important;
+  max-height: 8px !important;
+  box-sizing: border-box !important;
+}
+
 /* Remove any blue lines or outlines from canvas */
 .canvas-area,
 .canvas-area *,

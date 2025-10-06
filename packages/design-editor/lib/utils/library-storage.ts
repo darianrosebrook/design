@@ -22,7 +22,8 @@ const STORAGE_VERSION = "1.0.0";
 
 interface StoredLibraryData {
   version: string;
-  components: Record<string, IngestedComponent>;
+  components: Record<string, SerializableComponent>;
+  packages: string[]; // Package names for re-ingestion
   lastUpdated: string;
 }
 
@@ -30,7 +31,8 @@ interface StoredLibraryData {
  * Save ingested components to localStorage
  */
 export function saveIngestedComponents(
-  components: Map<string, IngestedComponent>
+  components: Map<string, IngestedComponent>,
+  packageNames: string[] = []
 ): void {
   try {
     // Convert to serializable format (exclude component functions)
@@ -55,12 +57,64 @@ export function saveIngestedComponents(
     const storageData: StoredLibraryData = {
       version: STORAGE_VERSION,
       components: serializableComponents,
+      packages: packageNames,
       lastUpdated: new Date().toISOString(),
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(storageData));
   } catch (error) {
     console.error("Failed to save ingested components:", error);
+  }
+}
+
+/**
+ * Re-ingest packages from stored package names
+ * This function should be called by the component registry when needed
+ */
+export async function reingestStoredPackages(
+  onPackageLoaded?: (
+    packageName: string,
+    components: Map<string, IngestedComponent>
+  ) => void
+): Promise<Map<string, IngestedComponent>> {
+  try {
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    if (!storedData) {
+      return new Map();
+    }
+
+    const parsedData: StoredLibraryData = JSON.parse(storedData);
+
+    // Check version compatibility
+    if (parsedData.version !== STORAGE_VERSION) {
+      console.warn(
+        `Library storage version mismatch. Expected ${STORAGE_VERSION}, got ${parsedData.version}.`
+      );
+      return new Map();
+    }
+
+    const reingestedComponents = new Map<string, IngestedComponent>();
+
+    // Re-ingest each package
+    for (const packageName of parsedData.packages) {
+      try {
+        console.log(`Re-ingesting package: ${packageName}`);
+        // This would need to be implemented in the component registry
+        // For now, we'll just log that re-ingestion is needed
+        // The actual implementation would call the package ingestion logic
+        if (onPackageLoaded) {
+          // Placeholder - actual implementation would load and parse the package
+          onPackageLoaded(packageName, new Map());
+        }
+      } catch (error) {
+        console.error(`Failed to re-ingest package ${packageName}:`, error);
+      }
+    }
+
+    return reingestedComponents;
+  } catch (error) {
+    console.error("Failed to re-ingest stored packages:", error);
+    return new Map();
   }
 }
 
@@ -85,7 +139,18 @@ export function loadIngestedComponents(): Map<string, IngestedComponent> {
       return new Map();
     }
 
-    return new Map(Object.entries(parsedData.components));
+    // Return empty map - we store package names but need to re-ingest to get components
+    // This prevents serialization issues with React components
+    // Use reingestStoredPackages() to reload packages and get actual components
+    console.log(
+      `Found ${
+        Object.keys(parsedData.components).length
+      } stored component references and ${
+        parsedData.packages?.length || 0
+      } stored packages for re-ingestion`
+    );
+
+    return new Map();
   } catch (error) {
     console.error("Failed to load ingested components:", error);
     return new Map();
@@ -104,11 +169,36 @@ export function clearStoredComponents(): void {
 }
 
 /**
+ * Get stored package names for re-ingestion
+ */
+export function getStoredPackageNames(): string[] {
+  try {
+    const storedData = localStorage.getItem(STORAGE_KEY);
+    if (!storedData) {
+      return [];
+    }
+
+    const parsedData: StoredLibraryData = JSON.parse(storedData);
+
+    // Check version compatibility
+    if (parsedData.version !== STORAGE_VERSION) {
+      return [];
+    }
+
+    return parsedData.packages || [];
+  } catch (error) {
+    console.error("Failed to get stored package names:", error);
+    return [];
+  }
+}
+
+/**
  * Get storage statistics
  */
 export function getStorageStats(): {
   hasStoredData: boolean;
   storedComponentsCount: number;
+  storedPackagesCount: number;
   lastUpdated?: string;
   storageSize?: string;
 } {
@@ -118,6 +208,7 @@ export function getStorageStats(): {
       return {
         hasStoredData: false,
         storedComponentsCount: 0,
+        storedPackagesCount: 0,
       };
     }
 

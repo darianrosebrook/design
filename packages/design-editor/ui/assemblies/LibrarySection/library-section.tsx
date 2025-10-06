@@ -8,8 +8,9 @@ import {
   List,
   RefreshCw,
   Plus,
+  Package,
 } from "lucide-react";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import type React from "react";
 // No styles import needed - using Tailwind classes
 import { useCanvas } from "@/lib/canvas-context";
@@ -254,17 +255,12 @@ export function LibrarySection({
   return (
     <div className="flex flex-col h-full">
       {/* Search and controls */}
-      <div className="flex items-center gap-3 p-4 border-b border-border">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search components, snippets, pages..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9"
-          />
-        </div>
-        <div className="flex items-center gap-1">
+      <div className="p-4 border-b border-border space-y-3">
+        {/* First flexbox: Search (full width) + Insert button (content width) */}
+
+        {/* Second flexbox: List/Grid toggle + justify-between + Refresh and Import buttons */}
+        <div className="flex items-center justify-between">
+          {/* List/Grid toggle */}
           <div className="flex items-center border rounded-md">
             <Button
               variant="ghost"
@@ -283,27 +279,42 @@ export function LibrarySection({
               <Grid className="h-4 w-4" />
             </Button>
           </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => console.warn("Refresh library")}
-          >
-            <RefreshCw className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="h-8 mr-2"
-            onClick={() => setIsIngestionModalOpen(true)}
-          >
-            <Package className="h-4 w-4 mr-2" />
-            Import
-          </Button>
+
+          {/* Refresh and Import buttons */}
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => console.warn("Refresh library")}
+            >
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8"
+              onClick={() => setIsIngestionModalOpen(true)}
+            >
+              <Package className="h-4 w-4 mr-2" />
+              Import
+            </Button>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search components, snippets, pages..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9"
+            />
+          </div>
           <Button
             variant="default"
             size="sm"
-            className="h-8"
+            className="h-8 flex-shrink-0"
             onClick={onOpenDesignSystem}
           >
             <Plus className="h-4 w-4 mr-2" />

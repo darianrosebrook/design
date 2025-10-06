@@ -35,6 +35,10 @@ export function DesignSystemOverlay({
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState<string>("name");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [favoritedItems, setFavoritedItems] = useState<Set<string>>(new Set());
+  const [bookmarkedItems, setBookmarkedItems] = useState<Set<string>>(
+    new Set()
+  );
 
   const categories = useMemo(() => {
     const cats = new Set(mockDesignSystemItems.map((item) => item.category));
@@ -198,16 +202,36 @@ export function DesignSystemOverlay({
                 {filteredItems.map((item) => (
                   <DesignSystemItemComponent
                     key={item.id}
-                    item={item as any}
+                    item={
+                      {
+                        ...item,
+                        isFavorite: favoritedItems.has(item.id),
+                        isBookmarked: bookmarkedItems.has(item.id),
+                      } as any
+                    }
                     viewMode={viewMode}
                     onInsert={handleInsertItem as any}
-                    onToggleFavorite={() => {
-                      // TODO: Implement toggle favorite
-                      console.warn("Toggle favorite:", item.id);
+                    onToggleFavorite={(id: string) => {
+                      setFavoritedItems((prev) => {
+                        const newSet = new Set(prev);
+                        if (newSet.has(id)) {
+                          newSet.delete(id);
+                        } else {
+                          newSet.add(id);
+                        }
+                        return newSet;
+                      });
                     }}
-                    onToggleBookmark={() => {
-                      // TODO: Implement toggle bookmark
-                      console.warn("Toggle bookmark:", item.id);
+                    onToggleBookmark={(id: string) => {
+                      setBookmarkedItems((prev) => {
+                        const newSet = new Set(prev);
+                        if (newSet.has(id)) {
+                          newSet.delete(id);
+                        } else {
+                          newSet.add(id);
+                        }
+                        return newSet;
+                      });
                     }}
                   />
                 ))}

@@ -148,6 +148,29 @@ export function ContextMenu() {
         // TODO: Implement ungroup functionality
         console.log("Ungroup Selection - not implemented yet");
         break;
+      case "create-frame":
+        // Create a new frame at the context menu position
+        const frameObject = {
+          id: `frame-${Date.now()}`,
+          type: "frame" as const,
+          name: "Frame",
+          x: contextMenu.x,
+          y: contextMenu.y,
+          width: 300,
+          height: 200,
+          rotation: 0,
+          visible: true,
+          locked: false,
+          opacity: 100,
+          fill: "#1a1a1a",
+          stroke: "#3a3a3a",
+          strokeWidth: 2,
+          cornerRadius: 12,
+          expanded: true,
+          children: [],
+        };
+        addObject(frameObject);
+        break;
       default:
         console.log(`Unknown context menu action: ${action}`);
     }
@@ -165,11 +188,10 @@ export function ContextMenu() {
     },
     { type: "separator" },
     {
-      icon: Group,
+      icon: Frame,
       label: "Create Frame",
       shortcut: "⌘G",
       action: "create-frame",
-      disabled: true, // TODO: Implement frame creation
     },
   ];
 

@@ -15,13 +15,6 @@ import {
   parseDesignSystemPackage,
   convertToIngestedComponents,
 } from "./component-parser";
-import { getComponentCache } from "./component-cache";
-import { getErrorRecoveryManager, ErrorCategory } from "./error-recovery";
-import { getDesignSystemMonitor, ComponentOperation } from "./monitoring";
-import {
-  getDataIntegrityManager,
-  createAutomaticBackup,
-} from "./data-integrity";
 
 // Core design system components that are always available
 const CORE_COMPONENTS = {
@@ -74,7 +67,7 @@ export interface IngestedComponent {
 
 // Global registry for dynamically loaded components
 let DYNAMIC_REGISTRY: Map<string, IngestedComponent> = new Map();
-let COMPONENT_CACHE_MANAGER: ReturnType<typeof getComponentCache>;
+let COMPONENT_CACHE: Map<string, ComponentType<any>> = new Map();
 
 // Event system for registry updates
 type RegistryListener = (components: Map<string, IngestedComponent>) => void;
@@ -84,9 +77,6 @@ const REGISTRY_LISTENERS: RegistryListener[] = [];
  * Initialize the registry with core design system components and stored components
  */
 export async function initializeRegistry(): Promise<void> {
-  // Initialize cache manager
-  COMPONENT_CACHE_MANAGER = getComponentCache();
-
   // Migrate storage if needed
   migrateStorageIfNeeded();
 
@@ -97,7 +87,7 @@ export async function initializeRegistry(): Promise<void> {
   for (const [name, importFn] of Object.entries(CORE_COMPONENTS)) {
     try {
       const Component = await importFn();
-      COMPONENT_CACHE_MANAGER.cacheComponent(name.toLowerCase(), Component);
+      COMPONENT_CACHE.set(name, Component);
 
       const metadata = getCoreComponentMetadata(name);
       const ingestedComponent: IngestedComponent = {
@@ -122,14 +112,7 @@ export async function initializeRegistry(): Promise<void> {
   // Add stored components (these will override core components if they have the same ID)
   storedComponents.forEach((component) => {
     DYNAMIC_REGISTRY.set(component.id, component);
-    COMPONENT_CACHE_MANAGER.cacheComponent(
-      component.id.toLowerCase(),
-      component.component
-    );
-    COMPONENT_CACHE_MANAGER.cacheMetadata(
-      component.id.toLowerCase(),
-      component
-    );
+    COMPONENT_CACHE.set(component.name, component.component);
   });
 
   notifyListeners();
@@ -369,42 +352,8 @@ export function getComponentMetadata(
  * Get component by name
  */
 export function getComponent(componentName: string): ComponentType<any> | null {
-  const monitor = getDesignSystemMonitor();
-  const startTime = Date.now();
-
-  try {
-    // Get from registry (components are not cached due to serialization issues)
-    const ingested = DYNAMIC_REGISTRY.get(componentName.toLowerCase());
-    if (ingested?.component) {
-      monitor.recordComponentOperation(
-        ComponentOperation.CACHE_MISS,
-        componentName.toLowerCase(),
-        Date.now() - startTime
-      );
-      return ingested.component;
-    }
-
-    monitor.recordComponentOperation(
-      ComponentOperation.ERROR,
-      componentName.toLowerCase(),
-      Date.now() - startTime,
-      {
-        reason: "component_not_found",
-      }
-    );
-    return null;
-  } catch (error) {
-    monitor.recordComponentOperation(
-      ComponentOperation.ERROR,
-      componentName.toLowerCase(),
-      Date.now() - startTime,
-      {
-        reason: "component_retrieval_failed",
-        error: error instanceof Error ? error.message : String(error),
-      }
-    );
-    return null;
-  }
+  const ingested = DYNAMIC_REGISTRY.get(componentName.toLowerCase());
+  return ingested?.component || null;
 }
 
 /**
@@ -427,82 +376,29 @@ export function getComponentsByCategory(category: string): IngestedComponent[] {
  * Ingest a new component into the registry
  */
 export function ingestComponent(component: IngestedComponent): boolean {
-  const monitor = getDesignSystemMonitor();
-  const startTime = Date.now();
+  const id = component.id.toLowerCase();
 
-  try {
-    // Ensure registry is initialized
-    if (!COMPONENT_CACHE_MANAGER) {
-      COMPONENT_CACHE_MANAGER = getComponentCache();
-    }
-
-    const id = component.id.toLowerCase();
-
-    // Check if component already exists
-    if (DYNAMIC_REGISTRY.has(id)) {
-      console.warn(`Component "${component.name}" already exists in registry`);
-      monitor.recordComponentOperation(
-        ComponentOperation.ERROR,
-        id,
-        Date.now() - startTime,
-        {
-          reason: "component_already_exists",
-        }
-      );
-      return false;
-    }
-
-    DYNAMIC_REGISTRY.set(id, component);
-    COMPONENT_CACHE_MANAGER.cacheComponent(id, component.component);
-    COMPONENT_CACHE_MANAGER.cacheMetadata(id, component);
-
-    // Save to storage (only non-core components)
-    if (component.source !== "design-system") {
-      const nonCoreComponents = new Map(
-        Array.from(DYNAMIC_REGISTRY.entries()).filter(
-          ([, comp]) => comp.source !== "design-system"
-        )
-      );
-      saveIngestedComponents(nonCoreComponents);
-
-      // Create automatic backup after ingestion
-      createAutomaticBackup(nonCoreComponents, "component_ingestion").catch(
-        (error) => {
-          console.warn("Failed to create automatic backup:", error);
-        }
-      );
-    }
-
-    notifyListeners();
-
-    const duration = Date.now() - startTime;
-    monitor.recordComponentOperation(ComponentOperation.INGEST, id, duration, {
-      source: component.source,
-      category: component.category,
-    });
-
-    // Periodic integrity check
-    const integrityManager = getDataIntegrityManager();
-    integrityManager
-      .performPeriodicIntegrityCheck(DYNAMIC_REGISTRY)
-      .catch((error) => {
-        console.warn("Periodic integrity check failed:", error);
-      });
-
-    return true;
-  } catch (error) {
-    const duration = Date.now() - startTime;
-    monitor.recordComponentOperation(
-      ComponentOperation.ERROR,
-      component.id.toLowerCase(),
-      duration,
-      {
-        reason: "ingestion_failed",
-        error: error instanceof Error ? error.message : String(error),
-      }
-    );
-    throw error;
+  // Check if component already exists
+  if (DYNAMIC_REGISTRY.has(id)) {
+    console.warn(`Component "${component.name}" already exists in registry`);
+    return false;
   }
+
+  DYNAMIC_REGISTRY.set(id, component);
+  COMPONENT_CACHE.set(component.name, component.component);
+
+  // Save to storage (only non-core components)
+  if (component.source !== "design-system") {
+    const nonCoreComponents = new Map(
+      Array.from(DYNAMIC_REGISTRY.entries()).filter(
+        ([, comp]) => comp.source !== "design-system"
+      )
+    );
+    saveIngestedComponents(nonCoreComponents);
+  }
+
+  notifyListeners();
+  return true;
 }
 
 /**
@@ -535,6 +431,7 @@ export function updateComponent(
 ): boolean {
   const id = componentId.toLowerCase();
   const existing = DYNAMIC_REGISTRY.get(id);
+  s;
 
   if (!existing) return false;
 
@@ -618,7 +515,12 @@ function notifyListeners(): void {
 export async function loadFromDesignSystemPackage(
   packageName: string
 ): Promise<IngestedComponent[]> {
-  const errorRecovery = getErrorRecoveryManager();
+  // For now, just return mock data
+  // In a real implementation, this would:
+  // 1. Install the npm package
+  // 2. Parse its exports
+  // 3. Load components dynamically
+  // 4. Extract metadata
 
   try {
     // Parse the design system package
@@ -628,36 +530,8 @@ export async function loadFromDesignSystemPackage(
       console.warn("Package parsing warnings:", parsedPackage.errors);
     }
 
-    // Convert to ingested components with validation
-    const { components: ingestedComponents, validationResults } =
-      await convertToIngestedComponents(parsedPackage);
-
-    // Log validation results
-    if (validationResults.size > 0) {
-      console.log(
-        `Component validation completed for ${parsedPackage.info.name}:`
-      );
-      for (const [componentId, result] of validationResults) {
-        if (result.error) {
-          console.error(`  ${componentId}: Validation error - ${result.error}`);
-        } else if (result.quickCheck && !result.quickCheck.isSafe) {
-          console.warn(
-            `  ${componentId}: Security issues - ${result.quickCheck.issues.join(
-              ", "
-            )}`
-          );
-        } else if (
-          result.fullValidation &&
-          result.fullValidation.severity !== "safe"
-        ) {
-          console.warn(
-            `  ${componentId}: ${result.fullValidation.severity} severity issues (${result.fullValidation.issues.length} issues)`
-          );
-        } else {
-          console.log(`  ${componentId}: Passed validation`);
-        }
-      }
-    }
+    // Convert to ingested components
+    const ingestedComponents = convertToIngestedComponents(parsedPackage);
 
     // Ingest the components
     ingestedComponents.forEach((comp) => {
@@ -669,31 +543,9 @@ export async function loadFromDesignSystemPackage(
     );
     return ingestedComponents;
   } catch (error) {
-    const recoveryResult = await errorRecovery.handleError(
-      error instanceof Error ? error : new Error(String(error)),
-      ErrorCategory.LOADING,
-      "component_ingestion",
-      { packageName },
-      `${packageName}-ingestion`
-    );
+    console.error(`Failed to load components from ${packageName}:`, error);
 
-    if (recoveryResult.success && recoveryResult.result) {
-      // Recovery provided fallback components
-      const fallbackComponents = Array.isArray(recoveryResult.result)
-        ? recoveryResult.result
-        : [recoveryResult.result];
-
-      console.log(
-        `Using fallback components due to ingestion failure: ${fallbackComponents.length} components`
-      );
-      return fallbackComponents;
-    }
-
-    // Fallback to mock components if recovery also fails
-    console.error(
-      `Failed to load components from ${packageName}, using basic fallback`
-    );
-
+    // Fallback to mock components if parsing fails
     const fallbackComponents: IngestedComponent[] = [
       {
         id: `${packageName}-fallback-button`,
