@@ -2,7 +2,13 @@
 
 import type React from "react";
 import type { CanvasObject } from "@/lib/types";
-import { getComponentMetadata } from "@/ui/composers/ComponentRenderer";
+import {
+  getComponentMetadata,
+  getAllIngestedComponents,
+} from "@/lib/utils/dynamic-component-registry";
+import { Badge } from "@/ui/primitives/Badge";
+import { Separator } from "@/ui/primitives/Separator";
+import { Package, Code, Zap } from "lucide-react";
 import { Input } from "@/ui/primitives/Input";
 import { Label } from "@paths-design/design-system";
 import {
@@ -35,6 +41,13 @@ export function ComponentPropsPanel({
   const metadata = getComponentMetadata(object.componentType as any);
   const currentProps = object.componentProps || {};
 
+  // Get component source information
+  const allComponents = getAllIngestedComponents();
+  const componentInfo = allComponents.get(object.componentType.toLowerCase());
+
+  const isLocalComponent = componentInfo?.source === "design-system";
+  const isPackageComponent = componentInfo && componentInfo.source !== "design-system";
+
   const renderPropControl = (
     propName: string,
     propType: string,
@@ -50,44 +63,55 @@ export function ComponentPropsPanel({
             value={currentValue || ""}
             onChange={(e) => onUpdateProps({ [propName]: e.target.value })}
             placeholder={`Enter ${propName}...`}
-            className="w-full"
+            className="w-full text-sm"
           />
         );
 
       case "number":
+        const min = getNumberRange(propName).min;
+        const max = getNumberRange(propName).max;
+        const step = getNumberRange(propName).step;
+
         return (
           <div className="space-y-2">
             <Slider
               value={[currentValue || 0]}
               onValueChange={([value]) => onUpdateProps({ [propName]: value })}
-              min={0}
-              max={100}
-              step={1}
+              min={min}
+              max={max}
+              step={step}
               className="w-full"
             />
             <Input
               type="number"
               value={currentValue || 0}
               onChange={(e) =>
-                onUpdateProps({ [propName]: Number(e.target.value) })
+                onUpdateProps({ [propName]: Number(e.target.value) || 0 })
               }
-              className="w-full"
+              min={min}
+              max={max}
+              step={step}
+              className="w-full text-sm"
             />
           </div>
         );
 
       case "boolean":
         return (
-          <Switch
-            checked={currentValue || false}
-            onCheckedChange={(checked) =>
-              onUpdateProps({ [propName]: checked })
-            }
-          />
+          <div className="flex items-center justify-between">
+            <Switch
+              checked={Boolean(currentValue)}
+              onCheckedChange={(checked) =>
+                onUpdateProps({ [propName]: checked })
+              }
+            />
+            <span className="text-xs text-muted-foreground ml-2">
+              {currentValue ? "On" : "Off"}
+            </span>
+          </div>
         );
 
       case "variant":
-        // Handle variant props with predefined options
         const variantOptions = getVariantOptions(propName);
         return (
           <Select
@@ -100,11 +124,31 @@ export function ComponentPropsPanel({
             <SelectContent>
               {variantOptions.map((option) => (
                 <SelectItem key={option} value={option}>
-                  {option}
+                  <div className="flex items-center gap-2">
+                    <span className="capitalize">{option}</span>
+                  </div>
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+        );
+
+      case "color":
+        return (
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={currentValue || "#000000"}
+              onChange={(e) => onUpdateProps({ [propName]: e.target.value })}
+              className="w-8 h-8 rounded border border-border cursor-pointer"
+            />
+            <Input
+              value={currentValue || "#000000"}
+              onChange={(e) => onUpdateProps({ [propName]: e.target.value })}
+              className="flex-1 text-sm font-mono"
+              placeholder="#000000"
+            />
+          </div>
         );
 
       default:
@@ -113,7 +157,7 @@ export function ComponentPropsPanel({
             value={currentValue || ""}
             onChange={(e) => onUpdateProps({ [propName]: e.target.value })}
             placeholder={`Enter ${propName}...`}
-            className="w-full"
+            className="w-full text-sm"
           />
         );
     }
@@ -158,6 +202,9 @@ export function ComponentPropsPanel({
     if (propName === "variant" || propName === "size") {
       return "variant";
     }
+    if (propName.toLowerCase().includes("color")) {
+      return "color";
+    }
     if (
       [
         "padding",
@@ -173,6 +220,32 @@ export function ComponentPropsPanel({
     return "string";
   };
 
+  const getNumberRange = (propName: string) => {
+    switch (propName) {
+      case "width":
+      case "height":
+      case "maxWidth":
+      case "maxHeight":
+      case "minWidth":
+      case "minHeight":
+        return { min: 0, max: 2000, step: 1 };
+      case "opacity":
+        return { min: 0, max: 100, step: 1 };
+      case "rotation":
+        return { min: -360, max: 360, step: 1 };
+      case "borderRadius":
+        return { min: 0, max: 100, step: 1 };
+      case "fontSize":
+        return { min: 8, max: 120, step: 1 };
+      case "lineHeight":
+        return { min: 0.5, max: 3, step: 0.1 };
+      case "letterSpacing":
+        return { min: -10, max: 10, step: 0.1 };
+      default:
+        return { min: 0, max: 100, step: 1 };
+    }
+  };
+
   const getPropLabel = (propName: string): string => {
     return propName
       .replace(/([A-Z])/g, " $1")
@@ -182,16 +255,69 @@ export function ComponentPropsPanel({
 
   const componentProps = Object.entries(metadata?.defaultProps || {});
 
+  const renderComponentSource = () => {
+    if (isLocalComponent) {
+      return (
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Code className="h-3 w-3" />
+          <span>Local Component</span>
+          <Badge variant="outline" className="text-xs">
+            Design System
+          </Badge>
+        </div>
+      );
+    }
+
+    if (isPackageComponent) {
+      return (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Package className="h-3 w-3" />
+            <span>Package Component</span>
+            <Badge variant="outline" className="text-xs">
+              {componentInfo?.source}
+            </Badge>
+          </div>
+          {componentInfo?.version && (
+            <div className="text-xs text-muted-foreground">
+              Version: {componentInfo.version}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <Zap className="h-3 w-3" />
+        <span>Custom Component</span>
+      </div>
+    );
+  };
+
   if (componentProps.length === 0) {
     return (
-      <div className="p-3 text-sm text-muted-foreground">
-        No editable properties for this component.
+      <div className="space-y-4 p-3">
+        {/* Component Source Info */}
+        <div className="pb-3 border-b border-border">
+          {renderComponentSource()}
+        </div>
+
+        <div className="text-sm text-muted-foreground text-center py-4">
+          No editable properties for this component.
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-4 p-3">
+      {/* Component Source Info */}
+      <div className="pb-3 border-b border-border">
+        {renderComponentSource()}
+      </div>
+
+      {/* Component Properties */}
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-blue-500" />
@@ -212,6 +338,17 @@ export function ComponentPropsPanel({
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Reset to Defaults */}
+      <Separator />
+      <div className="pt-2">
+        <button
+          onClick={() => onUpdateProps(metadata?.defaultProps || {})}
+          className="text-xs text-muted-foreground hover:text-foreground transition-colors underline"
+        >
+          Reset to defaults
+        </button>
       </div>
     </div>
   );

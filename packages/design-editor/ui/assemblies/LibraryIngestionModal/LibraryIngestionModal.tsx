@@ -16,6 +16,7 @@ import {
   ingestComponent,
   type IngestedComponent,
 } from "@/lib/utils/dynamic-component-registry";
+import { validatePackageName } from "@/lib/utils/component-parser";
 import { Button } from "@/ui/primitives/Button";
 import { Input } from "@/ui/primitives/Input";
 import { Label } from "@/ui/primitives/Input";
@@ -97,26 +98,13 @@ export function LibraryIngestionModal({
     }));
   }, []);
 
-  const validatePackageName = (name: string): boolean => {
-    // Basic npm package name validation
-    const packageRegex = /^[a-zA-Z0-9][a-zA-Z0-9._-]*$/;
-    return packageRegex.test(name);
-  };
 
   const handleIngestPackage = useCallback(async () => {
-    if (!state.packageName.trim()) {
+    const validation = validatePackageName(state.packageName);
+    if (!validation.isValid) {
       setState((prev) => ({
         ...prev,
-        error: "Please enter a package name",
-      }));
-      return;
-    }
-
-    if (!validatePackageName(state.packageName)) {
-      setState((prev) => ({
-        ...prev,
-        error:
-          "Invalid package name. Package names should contain only letters, numbers, dots, hyphens, and underscores.",
+        error: validation.error || "Invalid package name",
       }));
       return;
     }
