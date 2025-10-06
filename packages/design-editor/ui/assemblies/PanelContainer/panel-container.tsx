@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useCanvas, findObject } from "@/lib/canvas-context";
 import { FileDetailsPanel } from "@/ui/assemblies/FileDetailsPanel";
 import { PropertiesPanel } from "@/ui/assemblies/PropertiesPanel";
@@ -17,7 +17,16 @@ export function PanelContainer({ onOpenDesignSystem }: PanelContainerProps) {
   const [leftPanelCollapsed, setLeftPanelCollapsed] = useState(false);
   const [rightPanelCollapsed, setRightPanelCollapsed] = useState(false);
 
-  const selectedObject = selectedId ? findObject(objects, selectedId) : null;
+  // Safely find the selected object with error handling
+  const selectedObject = React.useMemo(() => {
+    if (!selectedId || !objects) return null;
+    try {
+      return findObject(objects, selectedId);
+    } catch (error) {
+      console.warn("Error finding selected object:", error);
+      return null;
+    }
+  }, [selectedId, objects]);
 
   // Keyboard shortcuts for panel toggling
   useEffect(() => {

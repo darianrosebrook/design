@@ -71,10 +71,12 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
             height: object.height,
           }}
         >
-          <div className={styles.componentRendererButton}>
-            <Component {...componentProps}>
-              {componentProps.children || "Button"}
-            </Component>
+          <div className={styles.componentRendererContent}>
+            <div className={styles.componentRendererButton}>
+              <Component {...componentProps}>
+                {componentProps.children || "Button"}
+              </Component>
+            </div>
           </div>
         </div>
       );
@@ -90,32 +92,34 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
             height: object.height,
           }}
         >
-          <div className={styles.componentRendererStack}>
-            <Component {...componentProps}>
-              {object.children && object.children.length > 0 ? (
-                object.children.map((child) => {
-                  // Simple child rendering without recursion to avoid circular dependencies
-                  return (
-                    <div
-                      key={child.id}
-                      className={styles.componentRendererChild}
-                    >
-                      {child.type === "component" ? (
-                        <ComponentRenderer object={child} />
-                      ) : (
-                        <div>Child: {child.name}</div>
-                      )}
+          <div className={styles.componentRendererContent}>
+            <div className={styles.componentRendererStack}>
+              <Component {...componentProps}>
+                {object.children && object.children.length > 0 ? (
+                  object.children.map((child) => {
+                    // Simple child rendering without recursion to avoid circular dependencies
+                    return (
+                      <div
+                        key={child.id}
+                        className={styles.componentRendererChild}
+                      >
+                        {child.type === "component" ? (
+                          <ComponentRenderer object={child} />
+                        ) : (
+                          <div>Child: {child.name}</div>
+                        )}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className={styles.componentRendererSlot}>
+                    <div className={styles.componentRendererSlotLabel}>
+                      ◇ Slot
                     </div>
-                  );
-                })
-              ) : (
-                <div className={styles.componentRendererSlot}>
-                  <div className={styles.componentRendererSlotLabel}>
-                    ◇ Slot
                   </div>
-                </div>
-              )}
-            </Component>
+                )}
+              </Component>
+            </div>
           </div>
         </div>
       );
@@ -132,8 +136,10 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
             height: object.height,
           }}
         >
-          <div className={styles.componentRendererInput}>
-            <Component {...componentProps} />
+          <div className={styles.componentRendererContent}>
+            <div className={styles.componentRendererInput}>
+              <Component {...componentProps} />
+            </div>
           </div>
         </div>
       );
@@ -149,8 +155,10 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
             height: object.height,
           }}
         >
-          <div className={styles.componentRendererSelect}>
-            <Component {...componentProps} options={[]} />
+          <div className={styles.componentRendererContent}>
+            <div className={styles.componentRendererSelect}>
+              <Component {...componentProps} options={[]} />
+            </div>
           </div>
         </div>
       );
@@ -167,38 +175,40 @@ export function ComponentRenderer({ object }: ComponentRendererProps) {
             height: object.height,
           }}
         >
-          <div
-            className={`${
-              ComponentName === "Stack"
-                ? styles.componentRendererStack
-                : styles.componentRendererFlex
-            }`}
-          >
-            <Component {...componentProps}>
-              {object.children && object.children.length > 0 ? (
-                object.children.map((child) => {
-                  // Simple child rendering without recursion to avoid circular dependencies
-                  return (
-                    <div
-                      key={child.id}
-                      className={styles.componentRendererChild}
-                    >
-                      {child.type === "component" ? (
-                        <ComponentRenderer object={child} />
-                      ) : (
-                        <div>Child: {child.name}</div>
-                      )}
+          <div className={styles.componentRendererContent}>
+            <div
+              className={`${
+                ComponentName === "Stack"
+                  ? styles.componentRendererStack
+                  : styles.componentRendererFlex
+              }`}
+            >
+              <Component {...componentProps}>
+                {object.children && object.children.length > 0 ? (
+                  object.children.map((child) => {
+                    // Simple child rendering without recursion to avoid circular dependencies
+                    return (
+                      <div
+                        key={child.id}
+                        className={styles.componentRendererChild}
+                      >
+                        {child.type === "component" ? (
+                          <ComponentRenderer object={child} />
+                        ) : (
+                          <div>Child: {child.name}</div>
+                        )}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className={styles.componentRendererSlot}>
+                    <div className={styles.componentRendererSlotLabel}>
+                      ◇ Slot
                     </div>
-                  );
-                })
-              ) : (
-                <div className={styles.componentRendererSlot}>
-                  <div className={styles.componentRendererSlotLabel}>
-                    ◇ Slot
                   </div>
-                </div>
-              )}
-            </Component>
+                )}
+              </Component>
+            </div>
           </div>
         </div>
       );

@@ -5,6 +5,18 @@
 
 import type { IngestedComponent } from "./dynamic-component-registry";
 
+interface SerializableComponent {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  icon: string;
+  defaultProps: Record<string, any>;
+  source: string;
+  version?: string;
+  lastUpdated: string;
+}
+
 const STORAGE_KEY = "design-editor-ingested-components";
 const STORAGE_VERSION = "1.0.0";
 
@@ -21,22 +33,29 @@ export function saveIngestedComponents(
   components: Map<string, IngestedComponent>
 ): void {
   try {
-    const data: StoredLibraryData = {
-      version: STORAGE_VERSION,
-      components: Object.fromEntries(components),
-      lastUpdated: new Date().toISOString(),
-    };
+    // Convert to serializable format (exclude component functions)
+    const serializableComponents: Record<string, SerializableComponent> = {};
 
-    // Only store non-core components (those not from design-system)
-    const nonCoreComponents = Object.fromEntries(
-      Object.entries(data.components).filter(
-        ([, component]) => component.source !== "design-system"
-      )
-    );
+    for (const [id, component] of components) {
+      if (component.source !== "design-system") {
+        serializableComponents[id] = {
+          id: component.id,
+          name: component.name,
+          description: component.description,
+          category: component.category,
+          icon: component.icon,
+          defaultProps: component.defaultProps,
+          source: component.source,
+          version: component.version,
+          lastUpdated: component.lastUpdated,
+        };
+      }
+    }
 
     const storageData: StoredLibraryData = {
-      ...data,
-      components: nonCoreComponents,
+      version: STORAGE_VERSION,
+      components: serializableComponents,
+      lastUpdated: new Date().toISOString(),
     };
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(storageData));

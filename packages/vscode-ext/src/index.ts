@@ -24,6 +24,7 @@ import { registerSelectionCommands } from "./commands/selection-commands";
 import { DocumentStore } from "./document-store";
 import { PropertiesPanelWebviewProvider } from "./properties-panel-webview";
 import { WelcomeViewProvider } from "./welcome-view";
+import { createFileSystemService } from "./security/index.js";
 
 export * from "./protocol/index.js";
 export * from "./security/index.js";
@@ -45,6 +46,7 @@ class DesignerExtension {
   private welcomeViewProvider: WelcomeViewProvider;
   private propertiesService: PropertiesService;
   private documentStore: DocumentStore;
+  private fileSystemService: ReturnType<typeof createFileSystemService>;
   private componentIndex: ComponentIndex | null = null;
   private currentDocument: CanvasDocumentType | null = null;
   private currentSelection: SelectionState = {
@@ -57,6 +59,14 @@ class DesignerExtension {
     this.context = context;
     this.propertiesService = PropertiesService.getInstance();
     this.documentStore = DocumentStore.getInstance();
+
+    // Initialize file system service with workspace root
+    const workspaceRoot = vscode.workspace.workspaceFolders?.[0]?.uri.fsPath;
+    if (!workspaceRoot) {
+      throw new Error("No workspace folder available for file system service");
+    }
+    this.fileSystemService = createFileSystemService(workspaceRoot);
+
     this.canvasWebviewProvider = new CanvasWebviewProvider(context, this);
     this.propertiesPanelProvider = new PropertiesPanelWebviewProvider(context);
     this.achievementSystem = new AchievementSystem();
@@ -84,22 +94,11 @@ class DesignerExtension {
   private async loadComponentIndex(): Promise<void> {
     try {
       // Look for component index in the design directory
-      const workspaceFolders = vscode.workspace.workspaceFolders;
-      if (!workspaceFolders) {
-        return;
-      }
+      const componentIndexPath = "design/components.index.json";
 
-      const designDir = path.join(workspaceFolders[0].uri.fsPath, "design");
-      const componentIndexPath = path.join(designDir, "components.index.json");
-
-      if (fs.existsSync(componentIndexPath)) {
-        const componentIndexContent = fs.readFileSync(
-          componentIndexPath,
-          "utf-8"
-        );
-        const componentIndex = JSON.parse(
-          componentIndexContent
-        ) as ComponentIndex;
+      const result = await this.fileSystemService.readFile(componentIndexPath);
+      if (result.success) {
+        const componentIndex = JSON.parse(result.data!) as ComponentIndex;
 
         this.componentIndex = componentIndex;
         this.propertiesService.setComponentIndex(componentIndex);
@@ -195,8 +194,8 @@ class DesignerExtension {
         }
 
         // Check if file already exists and prompt for confirmation
-        try {
-          await vscode.workspace.fs.stat(fileUri);
+        const existsResult = await this.fileSystemService.fileExists(filename);
+        if (existsResult.success && existsResult.data) {
           const confirmOverwrite = await vscode.window.showWarningMessage(
             `File "${filename}" already exists. Do you want to overwrite it?`,
             "Overwrite",
@@ -209,17 +208,15 @@ class DesignerExtension {
             );
             return;
           }
-        } catch (_error) {
-          // File doesn't exist, proceed with creation
         }
 
         // Write file with error handling and cleanup
         let fileCreated = false;
-        try {
-          await vscode.workspace.fs.writeFile(
-            fileUri,
-            Buffer.from(jsonContent, "utf8")
-          );
+        const writeResult = await this.fileSystemService.writeFile(
+          filename,
+          jsonContent
+        );
+        if (writeResult.success) {
           fileCreated = true;
 
           // Ask user how they want to open the new document
@@ -240,20 +237,26 @@ class DesignerExtension {
 
           // Track milestone
           this.achievementSystem.trackMilestone("documents_created");
-        } catch (_error) {
+        } else {
           // Clean up partial file if write failed
-          if (fileCreated && _error instanceof Error) {
+          if (fileCreated) {
             try {
-              // Check if file exists and is empty/truncated
-              const stat = await vscode.workspace.fs.stat(fileUri);
-              if (stat.size < jsonContent.length) {
+              // Check if file exists and clean it up
+              const metadataResult =
+                await this.fileSystemService.getFileMetadata(filename);
+              if (
+                metadataResult.success &&
+                metadataResult.data!.size < jsonContent.length
+              ) {
                 // File appears truncated, attempt cleanup
-                try {
-                  await vscode.workspace.fs.delete(fileUri);
+                const deleteResult = await this.fileSystemService.delete(
+                  filename
+                );
+                if (deleteResult.success) {
                   vscode.window.showWarningMessage(
                     `File creation failed and partial file was cleaned up: ${filename}`
                   );
-                } catch (_cleanupError) {
+                } else {
                   vscode.window.showWarningMessage(
                     `File creation failed. Please manually delete: ${filename}`
                   );
@@ -264,25 +267,10 @@ class DesignerExtension {
             }
           }
 
-          // Show appropriate error message based on error type
-          const errorMessage =
-            _error instanceof Error ? _error.message : "Unknown error";
-          if (
-            errorMessage.includes("EPERM") ||
-            errorMessage.includes("EACCES")
-          ) {
-            vscode.window.showErrorMessage(
-              `Permission denied creating ${filename}. Check file permissions.`
-            );
-          } else if (errorMessage.includes("ENOSPC")) {
-            vscode.window.showErrorMessage(
-              `Insufficient disk space to create ${filename}.`
-            );
-          } else {
-            vscode.window.showErrorMessage(
-              `Failed to create canvas document ${filename}: ${errorMessage}`
-            );
-          }
+          // Show error message from FileSystemService
+          vscode.window.showErrorMessage(
+            `Failed to create canvas document ${filename}: ${writeResult.error}`
+          );
         }
       }
     );
@@ -314,27 +302,35 @@ class DesignerExtension {
           return;
         }
 
-        const designDir = vscode.Uri.joinPath(workspaceFolder.uri, "design");
-        const libraryUri = vscode.Uri.joinPath(
-          designDir,
-          `${libraryName}.components.json`
-        );
+        const libraryPath = `design/${libraryName}.components.json`;
 
         // Ensure design directory exists
-        try {
-          await vscode.workspace.fs.createDirectory(designDir);
-        } catch (_error) {
-          // Directory might already exist, continue
+        const createDirResult = await this.fileSystemService.createDirectory(
+          "design"
+        );
+        if (
+          !createDirResult.success &&
+          !createDirResult.error?.includes("already exists")
+        ) {
+          vscode.window.showErrorMessage(
+            `Failed to create design directory: ${createDirResult.error}`
+          );
+          return;
         }
 
-        await vscode.workspace.fs.writeFile(
-          libraryUri,
-          Buffer.from(jsonContent, "utf8")
+        const writeResult = await this.fileSystemService.writeFile(
+          libraryPath,
+          jsonContent
         );
-
-        vscode.window.showInformationMessage(
-          `Created component library: ${libraryName}.components.json`
-        );
+        if (writeResult.success) {
+          vscode.window.showInformationMessage(
+            `Created component library: ${libraryName}.components.json`
+          );
+        } else {
+          vscode.window.showErrorMessage(
+            `Failed to create component library: ${writeResult.error}`
+          );
+        }
       }
     );
 
@@ -418,22 +414,23 @@ class DesignerExtension {
           return;
         }
 
-        // Look for component library files
-        const designDir = vscode.Uri.joinPath(workspaceFolder.uri, "design");
-        const libraryPattern = new vscode.RelativePattern(
-          designDir,
-          "*.components.json"
-        );
-
         try {
-          const libraryFiles = await vscode.workspace.findFiles(libraryPattern);
+          // Look for component library files in design directory
+          const libraryFilesResult = await this.fileSystemService.findFiles(
+            "design/*.components.json"
+          );
 
-          if (libraryFiles.length === 0) {
+          if (
+            !libraryFilesResult.success ||
+            libraryFilesResult.data!.length === 0
+          ) {
             vscode.window.showInformationMessage(
               "No component libraries found. Create one first."
             );
             return;
           }
+
+          const libraryFiles = libraryFilesResult.data!;
 
           // Show quick pick of available libraries
           const selectedLibrary = await vscode.window.showQuickPick(
@@ -966,8 +963,17 @@ ${Object.entries(metrics.memoryUsage)
    */
   private async loadDocument(uri: vscode.Uri): Promise<void> {
     try {
-      const content = await vscode.workspace.fs.readFile(uri);
-      const document = JSON.parse(content.toString()) as CanvasDocumentType;
+      const relativePath = this.fileSystemService.relativePath(uri.fsPath);
+      const result = await this.fileSystemService.readFile(relativePath);
+
+      if (!result.success) {
+        vscode.window.showErrorMessage(
+          `Failed to load canvas document: ${result.error}`
+        );
+        return;
+      }
+
+      const document = JSON.parse(result.data!) as CanvasDocumentType;
 
       this.currentDocument = document;
       this.documentStore.setDocument(document, uri);
@@ -1302,37 +1308,37 @@ ${Object.entries(metrics.memoryUsage)
       mtime: string;
     }> = [];
 
-    const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (!workspaceFolders) {
-      return canvasFiles;
-    }
+    try {
+      // Use FileSystemService to find canvas files
+      const foundFiles = await this.fileSystemService.findFiles(
+        "**/*.canvas.json",
+        "**/node_modules/**"
+      );
 
-    // Search for canvas files in each workspace folder
-    for (const folder of workspaceFolders) {
-      try {
-        const pattern = new vscode.RelativePattern(folder, "**/*.canvas.json");
-        const files = await vscode.workspace.findFiles(
-          pattern,
-          "**/node_modules/**"
-        );
-
-        for (const file of files) {
+      if (foundFiles.success) {
+        for (const fileUri of foundFiles.data!) {
           try {
-            const stat = await vscode.workspace.fs.stat(file);
-            const relativePath = vscode.workspace.asRelativePath(file);
+            const metadataResult = await this.fileSystemService.getFileMetadata(
+              this.fileSystemService.relativePath(fileUri.fsPath)
+            );
 
-            canvasFiles.push({
-              uri: file,
-              relativePath,
-              mtime: new Date(stat.mtime).toLocaleDateString(),
-            });
+            if (metadataResult.success) {
+              const metadata = metadataResult.data!;
+              const relativePath = vscode.workspace.asRelativePath(fileUri);
+
+              canvasFiles.push({
+                uri: fileUri,
+                relativePath,
+                mtime: new Date(metadata.mtime).toLocaleDateString(),
+              });
+            }
           } catch (_error) {
             // Skip files that can't be accessed
           }
         }
-      } catch (_error) {
-        // Skip folders that can't be searched
       }
+    } catch (_error) {
+      // Skip if search fails
     }
 
     // Sort by modification time (newest first)

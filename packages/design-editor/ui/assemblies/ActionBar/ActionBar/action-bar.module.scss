@@ -9,6 +9,11 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 50;
+  
+  // Ensure perfect centering with additional properties
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 // Main action bar container
@@ -16,12 +21,17 @@
   // Direct equivalent of: flex items-center gap-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-2 py-2 shadow-2xl
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   background-color: #27272a; // zinc-800
   border: 1px solid #3f3f46; // zinc-700
   border-radius: 16px;
-  padding: 8px;
+  padding: 8px 12px; // Slightly more horizontal padding for better visual balance
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  // Ensure consistent button spacing and alignment
+  min-width: fit-content;
+  width: auto;
 }
 
 // Toggle button (shown when action bar is hidden)
@@ -47,10 +57,17 @@
   color: #d4d4d8; // zinc-300
   height: 32px;
   padding: 8px;
+  border-radius: 8px; // Slightly rounded corners for better visual consistency
+  transition: all 150ms ease-in-out; // Smooth transitions
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px; // Ensure consistent button width
 
   &:hover {
     background-color: #3f3f46; // zinc-700
     color: #f4f4f5; // zinc-100
+    transform: translateY(-1px); // Subtle lift effect on hover
   }
 }
 
@@ -59,6 +76,7 @@
   // Direct equivalent of: bg-zinc-700 text-zinc-100
   background-color: #3f3f46; // zinc-700
   color: #f4f4f5; // zinc-100
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); // Subtle inset shadow for pressed effect
 }
 
 // Icons (standard size - equivalent to h-4 w-4)
@@ -135,4 +153,33 @@
   margin-left: auto;
   font-size: 12px;
   color: #71717a; // zinc-500
+}
+
+// Responsive design considerations
+@media (max-width: 768px) {
+  .actionBarContainer {
+    // Adjust positioning for smaller screens
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .actionBar {
+    // Slightly smaller padding on mobile
+    padding: 6px 10px;
+    gap: 2px;
+  }
+  
+  .actionBarButton {
+    // Smaller buttons on mobile
+    height: 28px;
+    padding: 6px;
+    min-width: 28px;
+  }
+  
+  .actionBarIcon {
+    // Slightly smaller icons on mobile
+    width: 14px;
+    height: 14px;
+  }
 }

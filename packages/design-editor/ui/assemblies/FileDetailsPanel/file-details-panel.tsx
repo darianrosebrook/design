@@ -32,16 +32,27 @@ export function FileDetailsPanel({
   // If collapsed, show compact view
   if (isCollapsed) {
     return (
-      <div className="flex flex-col items-center gap-2 p-3 text-center">
-        <div className="text-sm font-medium truncate w-full">
-          {fileMetadata.name}
-        </div>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-          <LayersIcon className="h-3 w-3" />
-          <span>{fileMetadata.layers}</span>
-        </div>
-        <div className="text-xs text-muted-foreground">
-          {fileMetadata.lastModified}
+      <div className="w-full h-12 flex items-center gap-3 px-3 py-2 bg-card border border-border rounded-xl">
+        {/* File Icon */}
+        <LayersIcon className="h-4 w-4 text-muted-foreground shrink-0" />
+
+        {/* File Info */}
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          {/* File Name */}
+          <span className="text-xs font-medium text-foreground truncate">
+            {fileMetadata.name}
+          </span>
+
+          {/* Layer Count */}
+          <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
+            <LayersIcon className="h-3 w-3" />
+            <span>{fileMetadata.layers}</span>
+          </div>
+
+          {/* Last Modified */}
+          <span className="text-xs text-muted-foreground shrink-0">
+            {fileMetadata.lastModified}
+          </span>
         </div>
       </div>
     );

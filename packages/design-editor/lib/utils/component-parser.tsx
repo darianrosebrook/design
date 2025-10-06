@@ -6,6 +6,7 @@
 import React from "react";
 import type { ComponentType } from "react";
 import type { IngestedComponent } from "./dynamic-component-registry";
+import { validateComponent, quickSecurityCheck } from "./component-validator";
 
 export interface PackageInfo {
   name: string;
@@ -258,9 +259,7 @@ function createLayoutComponents(packageName: string): ComponentExport[] {
       component: React.forwardRef<
         HTMLDivElement,
         React.HTMLAttributes<HTMLDivElement>
-      >((props, ref) => (
-        <div ref={ref} className="flex" {...props} />
-      )),
+      >((props, ref) => <div ref={ref} className="flex" {...props} />),
       metadata: {
         description: "A flexible container component",
         category: "Layout",
@@ -353,21 +352,20 @@ function createIconComponents(packageName: string): ComponentExport[] {
   return [
     {
       name: "IconStar",
-      component: React.forwardRef<
-        SVGSVGElement,
-        React.SVGProps<SVGSVGElement>
-      >((props, ref) => (
-        <svg
-          ref={ref}
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          {...props}
-        >
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-        </svg>
-      )),
+      component: React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
+        (props, ref) => (
+          <svg
+            ref={ref}
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            {...props}
+          >
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        )
+      ),
       metadata: {
         description: "A star icon component",
         category: "Media",
@@ -376,21 +374,20 @@ function createIconComponents(packageName: string): ComponentExport[] {
     },
     {
       name: "IconHeart",
-      component: React.forwardRef<
-        SVGSVGElement,
-        React.SVGProps<SVGSVGElement>
-      >((props, ref) => (
-        <svg
-          ref={ref}
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          {...props}
-        >
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-        </svg>
-      )),
+      component: React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
+        (props, ref) => (
+          <svg
+            ref={ref}
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            {...props}
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+          </svg>
+        )
+      ),
       metadata: {
         description: "A heart icon component",
         category: "Media",
@@ -427,21 +424,65 @@ function createGenericComponents(packageName: string): ComponentExport[] {
 /**
  * Convert parsed components to ingested components
  */
-export function convertToIngestedComponents(
+export async function convertToIngestedComponents(
   parsedPackage: ParsedPackage
-): IngestedComponent[] {
-  return parsedPackage.components.map((comp, index) => ({
-    id: `${parsedPackage.info.name}-comp-${index}`,
-    name: comp.name,
-    description: comp.metadata?.description || `${comp.name} component`,
-    category: comp.metadata?.category || "Unknown",
-    icon: getIconForCategory(comp.metadata?.category || "Unknown"),
-    defaultProps: comp.metadata?.defaultProps || {},
-    component: comp.component,
-    source: parsedPackage.info.name,
-    version: parsedPackage.info.version,
-    lastUpdated: new Date().toISOString(),
-  }));
+): Promise<{
+  components: IngestedComponent[];
+  validationResults: Map<string, any>;
+}> {
+  const components: IngestedComponent[] = [];
+  const validationResults = new Map<string, any>();
+
+  for (const [index, comp] of parsedPackage.components.entries()) {
+    const ingestedComponent = {
+      id: `${parsedPackage.info.name}-comp-${index}`,
+      name: comp.name,
+      description: comp.metadata?.description || `${comp.name} component`,
+      category: comp.metadata?.category || "Unknown",
+      icon: getIconForCategory(comp.metadata?.category || "Unknown"),
+      defaultProps: comp.metadata?.defaultProps || {},
+      component: comp.component,
+      source: parsedPackage.info.name,
+      version: parsedPackage.info.version,
+      lastUpdated: new Date().toISOString(),
+    };
+
+    // Perform security validation
+    try {
+      const quickCheck = quickSecurityCheck(comp.component, ingestedComponent);
+      const fullValidation = await validateComponent(
+        comp.component,
+        ingestedComponent
+      );
+
+      validationResults.set(ingestedComponent.id, {
+        quickCheck,
+        fullValidation,
+        timestamp: new Date().toISOString(),
+      });
+
+      // Only include component if it passes basic security checks
+      if (quickCheck.isSafe && fullValidation.isValid) {
+        components.push(ingestedComponent);
+      } else {
+        console.warn(`Component ${comp.name} failed security validation:`, {
+          quickCheck: quickCheck.issues,
+          severity: fullValidation.severity,
+          issues: fullValidation.issues.length,
+        });
+      }
+    } catch (error) {
+      console.error(`Failed to validate component ${comp.name}:`, error);
+      // For validation failures, we still include the component but log the issue
+      components.push(ingestedComponent);
+      validationResults.set(ingestedComponent.id, {
+        error: error instanceof Error ? error.message : String(error),
+        timestamp: new Date().toISOString(),
+      });
+    }
+  }
+
+  return { components, validationResults };
 }
 
 /**
@@ -479,7 +520,8 @@ export function validatePackageName(name: string): {
   if (!packageRegex.test(name)) {
     return {
       isValid: false,
-      error: "Package name can only contain letters, numbers, dots, hyphens, and underscores",
+      error:
+        "Package name can only contain letters, numbers, dots, hyphens, and underscores",
     };
   }
 

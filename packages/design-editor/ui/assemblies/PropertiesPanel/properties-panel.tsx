@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { LayoutSection } from "./components/LayoutSection";
 import { PositionSection } from "./components/PositionSection";
 import { PropertiesPanelHeader } from "./components/PropertiesPanelHeader";
@@ -35,8 +35,16 @@ export function PropertiesPanel() {
 
   const [aspectLocked, setAspectLocked] = useState(true);
 
-  // Find selected object
-  const selectedObject = selectedId ? findObject(objects, selectedId) : null;
+  // Safely find the selected object with error handling
+  const selectedObject = useMemo(() => {
+    if (!selectedId || !objects) return null;
+    try {
+      return findObject(objects, selectedId);
+    } catch (error) {
+      console.warn("Error finding selected object in PropertiesPanel:", error);
+      return null;
+    }
+  }, [selectedId, objects]);
 
   const toggleSection = (id: string) => {
     setSections((prev) =>

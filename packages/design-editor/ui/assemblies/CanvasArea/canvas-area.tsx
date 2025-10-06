@@ -65,8 +65,9 @@ export function CanvasArea() {
   const handleCanvasMouseMove = (e: React.MouseEvent) => {
     const rect = canvasRef.current?.getBoundingClientRect();
     if (rect) {
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      // Account for zoom and viewport transforms
+      const x = (e.clientX - rect.left - viewportX) / (zoom / 100);
+      const y = (e.clientY - rect.top - viewportY) / (zoom / 100);
       setCursorPosition(x, y);
     }
   };
@@ -77,6 +78,7 @@ export function CanvasArea() {
     e.stopPropagation();
     setSelectedId(obj.id);
     setIsDragging(true);
+    // Store screen coordinates for drag calculations
     setDragStart({ x: e.clientX, y: e.clientY });
     setObjectStart({
       x: obj.x,
@@ -108,15 +110,17 @@ export function CanvasArea() {
       if (!selectedId) return;
 
       if (isDragging) {
-        const dx = e.clientX - dragStart.x;
-        const dy = e.clientY - dragStart.y;
+        // Convert screen delta to canvas coordinates accounting for zoom
+        const dx = (e.clientX - dragStart.x) / (zoom / 100);
+        const dy = (e.clientY - dragStart.y) / (zoom / 100);
         updateObject(selectedId, {
           x: objectStart.x + dx,
           y: objectStart.y + dy,
         });
       } else if (isResizing && resizeHandle) {
-        const dx = e.clientX - dragStart.x;
-        const dy = e.clientY - dragStart.y;
+        // Convert screen delta to canvas coordinates accounting for zoom
+        const dx = (e.clientX - dragStart.x) / (zoom / 100);
+        const dy = (e.clientY - dragStart.y) / (zoom / 100);
 
         let updates: Partial<CanvasObject> = {};
 
@@ -431,8 +435,16 @@ export function CanvasArea() {
       onMouseMove={handleCanvasMouseMove}
       style={getBackgroundStyle()}
     >
-      {/* Canvas content */}
-      <div className="relative w-full h-full">
+      {/* Canvas content with zoom and viewport transforms */}
+      <div
+        className="relative w-full h-full"
+        style={{
+          transform: `scale(${
+            zoom / 100
+          }) translate(${viewportX}px, ${viewportY}px)`,
+          transformOrigin: "0 0",
+        }}
+      >
         {objects.filter((obj) => obj && obj.id).map((obj) => renderObject(obj))}
       </div>
 

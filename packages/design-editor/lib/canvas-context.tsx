@@ -538,7 +538,7 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    const selectedObject = objects.find((obj) => obj.id === selectedId);
+    const selectedObject = findObject(objects, selectedId);
     if (!selectedObject) {
       zoomToFit();
       return;
@@ -699,14 +699,22 @@ export function useCanvas() {
 
 // Utility function to find objects in the canvas hierarchy
 export function findObject(
-  objs: CanvasObject[],
+  objs: CanvasObject[] | undefined | null,
   id: string
 ): CanvasObject | null {
+  if (!objs || !Array.isArray(objs)) {
+    return null;
+  }
+
   for (const obj of objs) {
+    if (!obj || typeof obj !== "object") {
+      continue;
+    }
+
     if (obj.id === id) {
       return obj;
     }
-    if (obj.children) {
+    if (obj.children && Array.isArray(obj.children)) {
       const found = findObject(obj.children, id);
       if (found) {
         return found;

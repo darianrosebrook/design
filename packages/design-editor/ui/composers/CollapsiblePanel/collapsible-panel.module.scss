@@ -14,10 +14,12 @@
   border-radius: 12px; // rounded-xl
   overflow: hidden;
   transition: 400ms ease-in-out;
+  width: 100%; // Ensure full width is maintained
 
-  // Collapsed state height
+  // Collapsed state height - collapsed to header height
   &.collapsiblePanelContainer--collapsed {
-    height: 36px; // input height default
+    height: 48px; // header height (h-12)
+    min-height: 48px;
   }
 
   &.collapsiblePanelContainer--expanded {
@@ -52,8 +54,11 @@
   left: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; // Align to left for better header display
+  padding-left: 12px; // Add some padding from the left
+  padding-right: 48px; // Make room for the toggle button
   transition: 400ms ease-in-out;
+  height: 48px; // Match the collapsed height
 
   // Collapsed state
   &.collapsiblePanelCollapsedContent--visible {
@@ -70,18 +75,21 @@
 }
 
 .collapsiblePanelToggle {
-  // Toggle button styles - equivalent to absolute top-2 right-2 h-6 w-6 z-20 bg-background border border-border shadow-md rounded-full
+  // Toggle button styles - positioned for vertical collapse
   position: absolute;
   top: 8px;
   right: 8px;
-  height: 24px;
-  width: 24px;
+  height: 32px; // h-8
+  width: 32px; // w-8
   z-index: 20;
   background-color: #27272a; // zinc-800 (background)
   border: 1px solid #3f3f46; // zinc-700 (border)
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); // shadow-md
-  border-radius: 9999px; // rounded-full
+  border-radius: 6px; // rounded-md for better integration
   transition: 200ms ease-in-out; // hover duration/easing
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: #3f3f46; // zinc-700 (hover background)

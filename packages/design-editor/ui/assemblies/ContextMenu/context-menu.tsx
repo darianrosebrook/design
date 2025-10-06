@@ -93,9 +93,13 @@ export function ContextMenu() {
     : null;
 
   const handleAction = (action: string) => {
-    if (!selectedId) return;
-
     switch (action) {
+      case "copy":
+        copyToClipboard(selectedId ? [selectedId] : Array.from(selectedIds));
+        break;
+      case "paste":
+        pasteFromClipboard();
+        break;
       case "duplicate":
         duplicateObject(selectedId);
         break;
@@ -158,7 +162,6 @@ export function ContextMenu() {
       label: "Paste",
       shortcut: "⌘V",
       action: "paste",
-      disabled: true, // TODO: Implement paste functionality
     },
     { type: "separator" },
     {
@@ -183,7 +186,6 @@ export function ContextMenu() {
       label: "Copy",
       shortcut: "⌘C",
       action: "copy",
-      disabled: true, // TODO: Implement copy functionality
     },
     { type: "separator" },
     {

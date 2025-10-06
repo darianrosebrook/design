@@ -35,7 +35,7 @@ export function CollapsiblePanel({
       {/* Panel Container */}
       <div
         className={`relative transition-all duration-300 ease-in-out ${
-          isCollapsed ? "w-16" : "w-full"
+          isCollapsed ? "h-12" : "h-full"
         }`}
       >
         {/* Main Content */}
@@ -63,9 +63,7 @@ export function CollapsiblePanel({
           variant="ghost"
           size="icon"
           onClick={toggleCollapsed}
-          className={`absolute top-2 transition-all duration-300 ease-in-out ${
-            isCollapsed ? "left-2" : "right-2"
-          } h-8 w-8`}
+          className={`absolute top-2 right-2 transition-all duration-300 ease-in-out h-8 w-8`}
           title={isCollapsed ? "Expand Panel" : "Collapse Panel"}
         >
           {isCollapsed ? (
