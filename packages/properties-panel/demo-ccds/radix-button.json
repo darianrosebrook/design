@@ -1,0 +1,104 @@
+{
+  "$schema": "https://localpencil.dev/schemas/ccd-0.1.json",
+  "component": "Button",
+  "package": "@radix-ui/react-slot",
+  "import": {
+    "specifier": "@/ui/Button",
+    "namedExport": "Button",
+    "default": true
+  },
+  "react": {
+    "min": "18.2.0"
+  },
+  "providers": [
+    {
+      "import": {
+        "specifier": "@radix-ui/themes",
+        "namedExport": "Theme"
+      },
+      "props": {
+        "appearance": "dark"
+      }
+    }
+  ],
+  "props": [
+    {
+      "name": "variant",
+      "type": "\"solid\" | \"ghost\" | \"outline\"",
+      "kind": "enum",
+      "values": ["solid", "ghost", "outline"],
+      "defaultValue": "solid",
+      "description": "Visual style variant"
+    },
+    {
+      "name": "size",
+      "type": "\"sm\" | \"md\" | \"lg\"",
+      "kind": "enum",
+      "values": ["sm", "md", "lg"],
+      "defaultValue": "md",
+      "description": "Size variant"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "kind": "boolean",
+      "defaultValue": false,
+      "description": "Whether the button is disabled"
+    },
+    {
+      "name": "onClick",
+      "type": "(event: MouseEvent) => void",
+      "kind": "event",
+      "controlled": false,
+      "description": "Click event handler"
+    },
+    {
+      "name": "children",
+      "type": "ReactNode",
+      "kind": "string",
+      "description": "Button content"
+    }
+  ],
+  "slots": [
+    {
+      "name": "children",
+      "multiple": false,
+      "accepts": ["text", "icon"],
+      "description": "Button content slot"
+    }
+  ],
+  "semantics": {
+    "role": "button",
+    "behavior": "button",
+    "stateMap": {
+      "pressed": "aria-pressed",
+      "disabled": "disabled"
+    }
+  },
+  "theming": {
+    "tokens": [
+      {
+        "token": "color.primary",
+        "bind": "--btn-bg"
+      },
+      {
+        "token": "color.text",
+        "bind": "--btn-fg"
+      },
+      {
+        "token": "radius.default",
+        "bind": "--btn-radius"
+      }
+    ]
+  },
+  "codegen": {
+    "emit": "instantiate",
+    "importStyle": "preserve",
+    "attributeOrder": "alphabetical"
+  },
+  "safety": {
+    "effects": "forbid-network",
+    "timers": "strip",
+    "portals": "allow-within-root"
+  }
+}
