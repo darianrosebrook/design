@@ -57,7 +57,7 @@ export function PropertiesPanelCollapsed({
             </span>
 
             {/* Type Label */}
-            <span className="text-xs text-muted-foreground capitalize shrink-0">
+            <span className="// text-xs text-muted-foreground capitalize shrink-0">
               {selectedObjectType}
             </span>
           </>
