@@ -1,10 +1,15 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
+import type {
+  SelectionState,
+  PropertyChangeEvent,
+} from "@paths-design/properties-panel";
 import { PropertiesPanel as IntegratedPropertiesPanel } from "@paths-design/properties-panel";
+import type React from "react";
+import { useMemo, useCallback } from "react";
 import { useCanvas } from "@/lib/canvas-context";
-import type { SelectionState } from "@paths-design/properties-panel";
-import type { PropertyChangeEvent } from "@paths-design/properties-panel";
+import { CanvasBackgroundControls } from "@/ui/composers/CanvasBackgroundControls";
+import { ScrollArea } from "@/ui/primitives/ScrollArea";
 
 export function PropertiesPanel() {
   const { document, selectedId, selectedIds, updateNode } = useCanvas();
@@ -45,6 +50,21 @@ export function PropertiesPanel() {
     return (
       <div className="w-80 h-full bg-card border-l border-border flex items-center justify-center">
         <div className="text-muted-foreground text-sm">No document loaded</div>
+      </div>
+    );
+  }
+
+  // Show canvas background controls when no object is selected
+  if (selectedIds.size === 0) {
+    return (
+      <div className="flex flex-col h-full">
+        <div className="flex items-center justify-between px-3 py-2 border-b border-border">
+          <h2 className="text-sm font-semibold">Properties</h2>
+          <span className="text-xs text-muted-foreground">Canvas</span>
+        </div>
+        <ScrollArea className="flex-1">
+          <CanvasBackgroundControls />
+        </ScrollArea>
       </div>
     );
   }

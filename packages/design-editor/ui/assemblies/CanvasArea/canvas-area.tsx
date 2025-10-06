@@ -14,7 +14,9 @@ export function CanvasArea() {
   const {
     document,
     selectedId,
+    selectedIds,
     setSelectedId,
+    setSelectedIds,
     setContextMenu,
     updateNode,
     activeTool,
@@ -58,6 +60,7 @@ export function CanvasArea() {
   const handleCanvasClick = () => {
     if (activeTool === "select") {
       setSelectedId(null);
+      setSelectedIds(new Set()); // Clear multi-selection
     }
     setContextMenu(null);
   };
@@ -77,6 +80,7 @@ export function CanvasArea() {
 
     e.stopPropagation();
     setSelectedId(obj.id);
+    setSelectedIds(new Set([obj.id])); // Update multi-selection to include this object
     setIsDragging(true);
     // Store screen coordinates for drag calculations
     setDragStart({ x: e.clientX, y: e.clientY });
@@ -256,6 +260,10 @@ export function CanvasArea() {
 
   const renderObject = (obj: CanvasObject) => {
     const isSelected = obj.id === selectedId;
+    // Ensure opacity is a valid number between 0 and 100
+    const safeOpacity = isNaN(obj.opacity)
+      ? 100
+      : Math.max(0, Math.min(100, obj.opacity));
     const commonStyles = {
       position: "absolute" as const,
       left: obj.x,
@@ -263,7 +271,7 @@ export function CanvasArea() {
       width: obj.width,
       height: obj.height,
       transform: `rotate(${obj.rotation}deg)`,
-      opacity: obj.opacity / 100,
+      opacity: safeOpacity / 100,
       cursor: activeTool === "select" && !obj.locked ? "move" : "default",
       border: isSelected ? "2px solid #4a9eff" : "none",
       outline: isSelected ? "none" : undefined,

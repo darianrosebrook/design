@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, X, Library } from "lucide-react";
+import { FileText, X, Library, Clock, Star } from "lucide-react";
 import { useState, useMemo } from "react";
 import type React from "react";
 // import styles from "./design-system-overlay.module.scss";
@@ -9,7 +9,11 @@ import { DesignSystemItem as DesignSystemItemComponent } from "@/lib/components/
 import { DesignSystemSearch } from "@/lib/components/design-system-search";
 import { Component, LayersIcon, Square } from "@/lib/components/icons";
 import type { DesignSystemItem } from "@/lib/data/design-system-items";
-import { getDesignSystemItems } from "@/lib/data/design-system-items";
+import {
+  getDesignSystemItems,
+  updateDesignSystemItemPreferences,
+  getDesignSystemStats,
+} from "@/lib/data/design-system-items";
 import { convertDesignSystemItemToCanvasObject } from "@/lib/utils/design-system-to-canvas";
 import { Button } from "@/ui/primitives/Button";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
@@ -28,19 +32,26 @@ export function DesignSystemOverlay({
 }: DesignSystemOverlayProps) {
   const { addObject } = useCanvas();
   const [activeTab, setActiveTab] = useState<
-    "components" | "snippets" | "pages" | "icons"
+    "components" | "snippets" | "pages" | "icons" | "recent" | "favorites"
   >("components");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState<string>("name");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [favoritedItems, setFavoritedItems] = useState<Set<string>>(new Set());
-  const [bookmarkedItems, setBookmarkedItems] = useState<Set<string>>(
-    new Set()
+
+  // Get fresh data when component mounts or when user interactions occur
+  const [designSystemItems, setDesignSystemItems] = useState(() =>
+    getDesignSystemItems()
   );
 
-  const designSystemItems = useMemo(() => getDesignSystemItems(), []);
+  // Get stats for recently used and most used items
+  const stats = getDesignSystemStats();
+
+  // Refresh data when needed
+  const refreshDesignSystemItems = () => {
+    setDesignSystemItems(getDesignSystemItems());
+  };
 
   const categories = useMemo(() => {
     const cats = new Set(designSystemItems.map((item) => item.category));
@@ -48,6 +59,9 @@ export function DesignSystemOverlay({
   }, [designSystemItems]);
 
   const handleInsertItem = (item: DesignSystemItem) => {
+    // Track usage
+    updateDesignSystemItemPreferences(item.id, { incrementUsage: true });
+
     // Convert design system item to canvas object
     const canvasObject = convertDesignSystemItemToCanvasObject(item, 300, 200);
 
@@ -61,67 +75,90 @@ export function DesignSystemOverlay({
   };
 
   const filteredItems = useMemo(() => {
-    const items = designSystemItems.filter((item) => {
-      // Filter by tab
-      if (activeTab === "components" && item.type !== "component") {
-        return false;
-      }
-      if (activeTab === "snippets" && item.type !== "snippet") {
-        return false;
-      }
-      if (activeTab === "pages" && item.type !== "page") {
-        return false;
-      }
-      if (activeTab === "icons" && item.type !== "icon") {
-        return false;
-      }
+    let items: DesignSystemItem[] = [];
 
-      // Filter by category
-      if (selectedCategory !== "all" && item.category !== selectedCategory) {
-        return false;
-      }
-
-      // Filter by favorites
-      if (showFavoritesOnly && !item.isFavorite) {
-        return false;
-      }
-
-      // Filter by search query
-      if (searchQuery) {
-        const query = searchQuery.toLowerCase();
-        const matchesSearch =
-          item.name.toLowerCase().includes(query) ||
-          item.description.toLowerCase().includes(query) ||
-          item.tags.some((tag) => tag.toLowerCase().includes(query)) ||
-          item.author.toLowerCase().includes(query);
-        if (!matchesSearch) {
+    // Handle special tabs first
+    if (activeTab === "recent") {
+      items = stats.recentlyUsed;
+    } else if (activeTab === "favorites") {
+      items = designSystemItems.filter((item) => item.isFavorite);
+    } else {
+      // Regular tabs - apply all filters
+      items = designSystemItems.filter((item) => {
+        // Filter by tab
+        if (activeTab === "components" && item.type !== "component") {
           return false;
         }
-      }
+        if (activeTab === "snippets" && item.type !== "snippet") {
+          return false;
+        }
+        if (activeTab === "pages" && item.type !== "page") {
+          return false;
+        }
+        if (activeTab === "icons" && item.type !== "icon") {
+          return false;
+        }
 
-      return true;
-    });
+        // Filter by category
+        if (selectedCategory !== "all" && item.category !== selectedCategory) {
+          return false;
+        }
 
-    // Sort items
-    items.sort((a, b) => {
-      switch (sortBy) {
-        case "name":
-          return a.name.localeCompare(b.name);
-        case "usage":
-          return b.usage - a.usage;
-        case "lastUsed":
-          // Simple comparison - in real app, parse dates
-          return a.lastUsed.localeCompare(b.lastUsed);
-        case "complexity":
-          const complexityOrder = { simple: 0, medium: 1, complex: 2 };
-          return complexityOrder[a.complexity] - complexityOrder[b.complexity];
-        default:
-          return 0;
-      }
-    });
+        // Filter by favorites (only applies to regular tabs)
+        if (showFavoritesOnly && !item.isFavorite) {
+          return false;
+        }
+
+        // Filter by search query
+        if (searchQuery) {
+          const query = searchQuery.toLowerCase();
+          const matchesSearch =
+            item.name.toLowerCase().includes(query) ||
+            item.description.toLowerCase().includes(query) ||
+            item.tags.some((tag) => tag.toLowerCase().includes(query)) ||
+            item.author.toLowerCase().includes(query);
+          if (!matchesSearch) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+    }
+
+    // Sort items (skip sorting for special tabs if they already have custom ordering)
+    if (activeTab !== "recent") {
+      items.sort((a, b) => {
+        switch (sortBy) {
+          case "name":
+            return a.name.localeCompare(b.name);
+          case "usage":
+            return b.usage - a.usage;
+          case "lastUsed":
+            return (
+              new Date(b.lastUsed).getTime() - new Date(a.lastUsed).getTime()
+            );
+          case "complexity":
+            const complexityOrder = { simple: 0, medium: 1, complex: 2 };
+            return (
+              complexityOrder[a.complexity] - complexityOrder[b.complexity]
+            );
+          default:
+            return 0;
+        }
+      });
+    }
 
     return items;
-  }, [activeTab, selectedCategory, showFavoritesOnly, searchQuery, sortBy]);
+  }, [
+    activeTab,
+    selectedCategory,
+    showFavoritesOnly,
+    searchQuery,
+    sortBy,
+    designSystemItems,
+    stats,
+  ]);
 
   if (!isOpen) {
     return null;
@@ -153,7 +190,7 @@ export function DesignSystemOverlay({
           onValueChange={(value) => setActiveTab(value as any)}
         >
           <div className="px-6 pt-4">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger
                 value="components"
                 className="flex items-center gap-2"
@@ -172,6 +209,17 @@ export function DesignSystemOverlay({
               <TabsTrigger value="icons" className="flex items-center gap-2">
                 <Square className="h-4 w-4" />
                 Icons
+              </TabsTrigger>
+              <TabsTrigger value="recent" className="flex items-center gap-2">
+                <Clock className="h-4 w-4" />
+                Recent
+              </TabsTrigger>
+              <TabsTrigger
+                value="favorites"
+                className="flex items-center gap-2"
+              >
+                <Star className="h-4 w-4" />
+                Favorites
               </TabsTrigger>
             </TabsList>
           </div>
@@ -204,36 +252,30 @@ export function DesignSystemOverlay({
                 {filteredItems.map((item) => (
                   <DesignSystemItemComponent
                     key={item.id}
-                    item={
-                      {
-                        ...item,
-                        isFavorite: favoritedItems.has(item.id),
-                        isBookmarked: bookmarkedItems.has(item.id),
-                      } as any
-                    }
+                    item={item as any}
                     viewMode={viewMode}
                     onInsert={handleInsertItem as any}
                     onToggleFavorite={(id: string) => {
-                      setFavoritedItems((prev) => {
-                        const newSet = new Set(prev);
-                        if (newSet.has(id)) {
-                          newSet.delete(id);
-                        } else {
-                          newSet.add(id);
-                        }
-                        return newSet;
-                      });
+                      const item = designSystemItems.find(
+                        (item) => item.id === id
+                      );
+                      if (item) {
+                        updateDesignSystemItemPreferences(id, {
+                          isFavorite: !item.isFavorite,
+                        });
+                        refreshDesignSystemItems();
+                      }
                     }}
                     onToggleBookmark={(id: string) => {
-                      setBookmarkedItems((prev) => {
-                        const newSet = new Set(prev);
-                        if (newSet.has(id)) {
-                          newSet.delete(id);
-                        } else {
-                          newSet.add(id);
-                        }
-                        return newSet;
-                      });
+                      const item = designSystemItems.find(
+                        (item) => item.id === id
+                      );
+                      if (item) {
+                        updateDesignSystemItemPreferences(id, {
+                          isBookmarked: !item.isBookmarked,
+                        });
+                        refreshDesignSystemItems();
+                      }
                     }}
                   />
                 ))}

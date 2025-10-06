@@ -23,7 +23,9 @@ export function ComponentLibrary({ className }: ComponentLibraryProps) {
   const availableComponents = getAvailableComponents();
 
   const addComponentToCanvas = async (componentType: string) => {
-    const metadata = getComponentMetadata(componentType as keyof typeof COMPONENT_REGISTRY);
+    const metadata = getComponentMetadata(
+      componentType as keyof typeof COMPONENT_REGISTRY
+    );
     const nodeData = {
       type: "component",
       name: `${componentType} Component`,
@@ -128,7 +130,9 @@ export function ComponentPreview({
     locked: false,
     opacity: 100,
     componentType,
-    componentProps: getComponentMetadata(componentType as keyof typeof COMPONENT_REGISTRY).defaultProps,
+    componentProps: getComponentMetadata(
+      componentType as keyof typeof COMPONENT_REGISTRY
+    ).defaultProps,
   };
 
   return (

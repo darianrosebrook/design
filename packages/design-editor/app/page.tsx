@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { CanvasProvider, useCanvas } from "@/lib/canvas-context";
 import { DevTools } from "@/lib/dev-tools";
 import { GlobalShortcutsProvider } from "@/lib/global-shortcuts-provider";
