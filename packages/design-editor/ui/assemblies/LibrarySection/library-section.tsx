@@ -9,7 +9,7 @@ import {
   RefreshCw,
   Plus,
 } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type React from "react";
 // No styles import needed - using Tailwind classes
 import { useCanvas } from "@/lib/canvas-context";
@@ -17,6 +17,7 @@ import { convertLibraryItemToCanvasObject } from "@/lib/utils/library-to-canvas"
 import {
   getAvailableComponents,
   getComponentMetadata,
+  addRegistryListener,
 } from "@/lib/utils/dynamic-component-registry";
 import type { DesignSystemItem } from "@/lib/data/design-system-items";
 import { Badge } from "@/ui/primitives/Badge";
@@ -81,6 +82,16 @@ export function LibrarySection({
     new Set(["in-folder", "repo-level"])
   );
   const [isIngestionModalOpen, setIsIngestionModalOpen] = useState(false);
+  const [registryVersion, setRegistryVersion] = useState(0);
+
+  // Listen for registry changes
+  useEffect(() => {
+    const unsubscribe = addRegistryListener(() => {
+      setRegistryVersion((prev) => prev + 1);
+    });
+
+    return unsubscribe;
+  }, []);
 
   // REAL DATA: Using actual design system components
   const designSystemItems = getDesignSystemLibraryItems();
@@ -146,7 +157,7 @@ export function LibrarySection({
           tag.toLowerCase().includes(searchQuery.toLowerCase())
         )
     );
-  }, [searchQuery, initialItems, designSystemItems]);
+  }, [searchQuery, initialItems, designSystemItems, registryVersion]);
 
   const renderLibraryItem = (item: LibraryItem) => {
     const Icon = item.icon;
@@ -281,6 +292,15 @@ export function LibrarySection({
             <RefreshCw className="h-4 w-4" />
           </Button>
           <Button
+            variant="outline"
+            size="sm"
+            className="h-8 mr-2"
+            onClick={() => setIsIngestionModalOpen(true)}
+          >
+            <Package className="h-4 w-4 mr-2" />
+            Import
+          </Button>
+          <Button
             variant="default"
             size="sm"
             className="h-8"
@@ -327,6 +347,13 @@ export function LibrarySection({
           )}
         </div>
       </ScrollArea>
+
+      {/* Library Ingestion Modal */}
+      <LibraryIngestionModal
+        isOpen={isIngestionModalOpen}
+        onClose={() => setIsIngestionModalOpen(false)}
+        onSuccess={handleIngestionSuccess}
+      />
     </div>
   );
 }

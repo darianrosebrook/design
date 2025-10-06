@@ -9,12 +9,7 @@ import {
   saveIngestedComponents,
   loadIngestedComponents,
   migrateStorageIfNeeded,
-  clearStoredComponents,
 } from "./library-storage";
-import {
-  parseDesignSystemPackage,
-  convertToIngestedComponents,
-} from "./component-parser";
 
 // Core design system components that are always available
 const CORE_COMPONENTS = {
@@ -472,9 +467,6 @@ export function clearIngestedComponents(): void {
     DYNAMIC_REGISTRY.set(comp.id, comp);
   });
 
-  // Clear storage
-  clearStoredComponents();
-
   notifyListeners();
 }
 
@@ -596,4 +588,3 @@ export function importRegistry(data: Record<string, IngestedComponent>): void {
 
   notifyListeners();
 }
-
