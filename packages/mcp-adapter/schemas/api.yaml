@@ -1,0 +1,616 @@
+openapi: 3.0.3
+info:
+  title: MCP Adapter API
+  description: API specification for the Model Context Protocol adapter used by the Designer application
+  version: 0.1.0
+  contact:
+    name: Designer Team
+    email: team@paths.design
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+  - url: https://api.designer.paths.design
+    description: Production server
+
+paths:
+  /canvas/documents:
+    post:
+      summary: Create a new canvas document
+      description: Creates a new canvas document with the provided specification
+      operationId: createCanvasDocument
+      tags:
+        - Canvas Documents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - schemaVersion
+                - id
+                - name
+                - artboards
+              properties:
+                schemaVersion:
+                  type: string
+                  const: "0.1.0"
+                  description: Canvas schema version
+                id:
+                  type: string
+                  pattern: "^[0-9A-HJKMNP-TV-Z]{26}$"
+                  description: ULID identifier for the document
+                name:
+                  type: string
+                  description: Human-readable document name
+                artboards:
+                  type: array
+                  minItems: 1
+                  items:
+                    $ref: "#/components/schemas/Artboard"
+      responses:
+        "201":
+          description: Document created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  data:
+                    type: object
+                    required:
+                      - document
+                    properties:
+                      document:
+                        $ref: "#/components/schemas/CanvasDocument"
+        "400":
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /canvas/documents/{documentId}:
+    get:
+      summary: Retrieve a canvas document
+      description: Retrieves a canvas document by its ID
+      operationId: getCanvasDocument
+      tags:
+        - Canvas Documents
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: "^[0-9A-HJKMNP-TV-Z]{26}$"
+          description: ULID identifier of the document
+      responses:
+        "200":
+          description: Document retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  data:
+                    type: object
+                    required:
+                      - document
+                    properties:
+                      document:
+                        $ref: "#/components/schemas/CanvasDocument"
+        "404":
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      summary: Update a canvas document
+      description: Updates an existing canvas document with new data
+      operationId: updateCanvasDocument
+      tags:
+        - Canvas Documents
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: "^[0-9A-HJKMNP-TV-Z]{26}$"
+          description: ULID identifier of the document
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CanvasDocument"
+      responses:
+        "200":
+          description: Document updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  data:
+                    type: object
+                    required:
+                      - document
+                    properties:
+                      document:
+                        $ref: "#/components/schemas/CanvasDocument"
+        "404":
+          description: Document not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /canvas/documents/{documentId}/nodes/{nodeId}:
+    post:
+      summary: Create or update a node in a canvas document
+      description: Creates a new node or updates an existing node in the specified canvas document
+      operationId: updateCanvasNode
+      tags:
+        - Canvas Nodes
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: "^[0-9A-HJKMNP-TV-Z]{26}$"
+          description: ULID identifier of the document
+        - name: nodeId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Identifier of the node to create or update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - operation
+              properties:
+                operation:
+                  type: string
+                  enum: [create, update, delete]
+                node:
+                  oneOf:
+                    - $ref: "#/components/schemas/FrameNode"
+                    - $ref: "#/components/schemas/TextNode"
+                    - $ref: "#/components/schemas/ComponentInstanceNode"
+      responses:
+        "200":
+          description: Node operation completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  data:
+                    type: object
+                    required:
+                      - document
+                    properties:
+                      document:
+                        $ref: "#/components/schemas/CanvasDocument"
+        "404":
+          description: Document or node not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /websocket/sessions/{sessionId}/subscribe:
+    post:
+      summary: Subscribe to WebSocket session events
+      description: Subscribes a client to real-time updates for a WebSocket session
+      operationId: subscribeToWebSocketSession
+      tags:
+        - WebSocket
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Identifier of the WebSocket session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - clientId
+                - subscriptions
+              properties:
+                clientId:
+                  type: string
+                  pattern: "^client-[a-z0-9-]+$"
+                subscriptions:
+                  type: array
+                  items:
+                    type: string
+                  example: ["canvas-updates", "selection-changes"]
+      responses:
+        "200":
+          description: Subscription created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - success
+                  - data
+                properties:
+                  success:
+                    type: boolean
+                    const: true
+                  data:
+                    type: object
+                    required:
+                      - sessionId
+                      - connectionStatus
+                      - subscribedTopics
+                    properties:
+                      sessionId:
+                        type: string
+                      connectionStatus:
+                        type: string
+                        enum: [connected, connecting, disconnected]
+                      subscribedTopics:
+                        type: array
+                        items:
+                          type: string
+        "404":
+          description: Session not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    CanvasDocument:
+      type: object
+      required:
+        - schemaVersion
+        - id
+        - name
+        - artboards
+      properties:
+        schemaVersion:
+          type: string
+          const: "0.1.0"
+        id:
+          type: string
+          pattern: "^[0-9A-HJKMNP-TV-Z]{26}$"
+        name:
+          type: string
+        meta:
+          type: object
+          additionalProperties: true
+        artboards:
+          type: array
+          items:
+            $ref: "#/components/schemas/Artboard"
+
+    Artboard:
+      type: object
+      required:
+        - id
+        - name
+        - frame
+        - children
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        frame:
+          $ref: "#/components/schemas/Rect"
+        background:
+          $ref: "#/components/schemas/Fill"
+        children:
+          type: array
+          items:
+            $ref: "#/components/schemas/Node"
+
+    Node:
+      oneOf:
+        - $ref: "#/components/schemas/FrameNode"
+        - $ref: "#/components/schemas/TextNode"
+        - $ref: "#/components/schemas/ComponentInstanceNode"
+
+    BaseNode:
+      type: object
+      required:
+        - id
+        - type
+        - name
+        - visible
+        - frame
+        - style
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        name:
+          type: string
+        visible:
+          type: boolean
+          default: true
+        frame:
+          $ref: "#/components/schemas/Rect"
+        style:
+          $ref: "#/components/schemas/Style"
+        data:
+          type: object
+          additionalProperties: true
+        bind:
+          $ref: "#/components/schemas/Binding"
+        semanticKey:
+          type: string
+          pattern: "^[a-z][a-z0-9]*(\\.[a-z0-9]+|\\[[0-9]+\\])*$"
+
+    FrameNode:
+      allOf:
+        - $ref: "#/components/schemas/BaseNode"
+        - type: object
+          properties:
+            type:
+              type: string
+              const: "frame"
+            layout:
+              $ref: "#/components/schemas/Layout"
+            children:
+              type: array
+              items:
+                $ref: "#/components/schemas/Node"
+
+    TextNode:
+      allOf:
+        - $ref: "#/components/schemas/BaseNode"
+        - type: object
+          properties:
+            type:
+              type: string
+              const: "text"
+            text:
+              type: string
+            textStyle:
+              $ref: "#/components/schemas/TextStyle"
+
+    ComponentInstanceNode:
+      allOf:
+        - $ref: "#/components/schemas/BaseNode"
+        - type: object
+          properties:
+            type:
+              type: string
+              const: "component"
+            componentKey:
+              type: string
+            props:
+              type: object
+              additionalProperties: true
+
+    Rect:
+      type: object
+      required:
+        - x
+        - y
+        - width
+        - height
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+        width:
+          type: number
+          minimum: 0
+        height:
+          type: number
+          minimum: 0
+
+    Style:
+      type: object
+      properties:
+        fills:
+          type: array
+          items:
+            $ref: "#/components/schemas/Fill"
+        strokes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Stroke"
+        radius:
+          type: number
+        opacity:
+          type: number
+          minimum: 0
+          maximum: 1
+        shadow:
+          $ref: "#/components/schemas/Shadow"
+      additionalProperties: false
+
+    Fill:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [solid, linearGradient, radialGradient]
+        color:
+          type: string
+        stops:
+          type: array
+          items:
+            $ref: "#/components/schemas/ColorStop"
+      required:
+        - type
+      additionalProperties: false
+
+    Stroke:
+      type: object
+      properties:
+        color:
+          type: string
+        thickness:
+          type: number
+          minimum: 0
+      required:
+        - color
+        - thickness
+      additionalProperties: false
+
+    Shadow:
+      type: object
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+        blur:
+          type: number
+        spread:
+          type: number
+        color:
+          type: string
+      additionalProperties: false
+
+    ColorStop:
+      type: object
+      properties:
+        offset:
+          type: number
+          minimum: 0
+          maximum: 1
+        color:
+          type: string
+      required:
+        - offset
+        - color
+
+    TextStyle:
+      type: object
+      properties:
+        family:
+          type: string
+        size:
+          type: number
+        lineHeight:
+          type: number
+        weight:
+          type: string
+        letterSpacing:
+          type: number
+        color:
+          type: string
+      additionalProperties: false
+
+    Layout:
+      type: object
+      properties:
+        mode:
+          type: string
+          enum: [absolute, flex, grid]
+          default: absolute
+        direction:
+          type: string
+          enum: [row, column]
+        gap:
+          type: number
+        padding:
+          type: number
+      additionalProperties: false
+
+    Binding:
+      type: object
+      properties:
+        token:
+          type: string
+        prop:
+          type: string
+        cssVar:
+          type: string
+      additionalProperties: false
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          const: false
+        error:
+          type: string
+        details:
+          type: object
+          additionalProperties: true

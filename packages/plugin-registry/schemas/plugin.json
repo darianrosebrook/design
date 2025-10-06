@@ -1,0 +1,258 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://paths.design/schemas/plugin-0.1.json",
+  "title": "Plugin Metadata Schema",
+  "description": "JSON Schema for Designer plugin metadata validation",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "version",
+    "description",
+    "category",
+    "author",
+    "compatibility"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the plugin",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "minLength": 3,
+      "maxLength": 50
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable plugin name",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the plugin",
+      "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.-]+)?(\\+[a-zA-Z0-9.-]+)?$"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the plugin's functionality",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "category": {
+      "type": "string",
+      "description": "Plugin category classification",
+      "enum": [
+        "design",
+        "development",
+        "analysis",
+        "automation",
+        "productivity",
+        "integration",
+        "visualization",
+        "utility"
+      ]
+    },
+    "author": {
+      "type": "object",
+      "description": "Plugin author information",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Author's name",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "description": "Author's email address",
+          "format": "email"
+        },
+        "website": {
+          "type": "string",
+          "description": "Author's website URL",
+          "format": "uri"
+        },
+        "organization": {
+          "type": "string",
+          "description": "Author's organization",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      },
+      "additionalProperties": false
+    },
+    "repository": {
+      "type": "object",
+      "description": "Plugin source repository information",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["git", "npm", "local"]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Repository URL"
+        },
+        "branch": {
+          "type": "string",
+          "description": "Git branch name"
+        },
+        "tag": {
+          "type": "string",
+          "description": "Git tag name"
+        },
+        "packageName": {
+          "type": "string",
+          "description": "NPM package name",
+          "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$|^[a-z0-9-]+$"
+        },
+        "localPath": {
+          "type": "string",
+          "description": "Local filesystem path"
+        }
+      },
+      "additionalProperties": false
+    },
+    "compatibility": {
+      "type": "object",
+      "description": "Plugin compatibility requirements",
+      "required": ["minDesignerVersion", "supportedPlatforms", "requiredPermissions"],
+      "properties": {
+        "minDesignerVersion": {
+          "type": "string",
+          "description": "Minimum Designer version required",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "maxDesignerVersion": {
+          "type": "string",
+          "description": "Maximum Designer version supported",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "supportedPlatforms": {
+          "type": "array",
+          "description": "Supported platforms/environments",
+          "items": {
+            "type": "string",
+            "enum": ["web", "desktop", "vscode-extension", "server"]
+          },
+          "minItems": 1
+        },
+        "requiredPermissions": {
+          "type": "array",
+          "description": "Required system permissions",
+          "items": {
+            "type": "string",
+            "enum": [
+              "read-files",
+              "write-files",
+              "network-access",
+              "canvas-access",
+              "plugin-install",
+              "system-info",
+              "clipboard-access"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "keywords": {
+      "type": "array",
+      "description": "Search keywords for plugin discovery",
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 30
+      },
+      "maxItems": 10
+    },
+    "homepage": {
+      "type": "string",
+      "description": "Plugin homepage URL",
+      "format": "uri"
+    },
+    "bugs": {
+      "type": "string",
+      "description": "Bug report URL",
+      "format": "uri"
+    },
+    "license": {
+      "type": "string",
+      "description": "Plugin license identifier",
+      "enum": [
+        "MIT",
+        "Apache-2.0",
+        "BSD-2-Clause",
+        "BSD-3-Clause",
+        "ISC",
+        "GPL-3.0",
+        "LGPL-3.0",
+        "MPL-2.0",
+        "Unlicense"
+      ]
+    },
+    "engines": {
+      "type": "object",
+      "description": "Required runtime engines",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^\\d+\\.\\d+\\.\\d+$"
+      }
+    },
+    "main": {
+      "type": "string",
+      "description": "Main entry point file",
+      "pattern": "\\.(js|ts|jsx|tsx)$"
+    },
+    "scripts": {
+      "type": "object",
+      "description": "NPM scripts defined by the plugin",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9:-]*$"
+      },
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "dependencies": {
+      "type": "object",
+      "description": "Runtime dependencies",
+      "propertyNames": {
+        "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$|^[a-z0-9-]+$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.-]+)?(\\+[a-zA-Z0-9.-]+)?$"
+      }
+    },
+    "devDependencies": {
+      "type": "object",
+      "description": "Development dependencies",
+      "propertyNames": {
+        "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$|^[a-z0-9-]+$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.-]+)?(\\+[a-zA-Z0-9.-]+)?$"
+      }
+    },
+    "peerDependencies": {
+      "type": "object",
+      "description": "Peer dependencies",
+      "propertyNames": {
+        "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$|^[a-z0-9-]+$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^\\d+\\.\\d+\\.\\d+(-[a-zA-Z0-9.-]+)?(\\+[a-zA-Z0-9.-]+)?$"
+      }
+    }
+  },
+  "additionalProperties": false
+}
