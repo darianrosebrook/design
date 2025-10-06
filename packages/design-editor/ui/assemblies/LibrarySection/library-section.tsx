@@ -23,6 +23,7 @@ import { Badge } from "@/ui/primitives/Badge";
 import { Button } from "@/ui/primitives/Button";
 import { Input } from "@/ui/primitives/Input";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
+import { LibraryIngestionModal } from "@/ui/assemblies/LibraryIngestionModal";
 import { cn } from "@/lib/utils";
 
 interface LibraryItem {
@@ -79,9 +80,16 @@ export function LibrarySection({
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(
     new Set(["in-folder", "repo-level"])
   );
+  const [isIngestionModalOpen, setIsIngestionModalOpen] = useState(false);
 
   // REAL DATA: Using actual design system components
   const designSystemItems = getDesignSystemLibraryItems();
+
+  const handleIngestionSuccess = useCallback(() => {
+    // Refresh the component list by triggering a re-render
+    // The components are dynamically added to the registry, so the library will update automatically
+    console.log("Library ingestion completed successfully");
+  }, []);
 
   const handleInsertItem = (item: LibraryItem) => {
     // Check if this is a design system component

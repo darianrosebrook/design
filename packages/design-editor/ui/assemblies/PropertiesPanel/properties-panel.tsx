@@ -48,7 +48,6 @@ export function PropertiesPanel() {
     );
   };
 
-
   if (!selectedObject) {
     return (
       <div className="h-full flex flex-col">
@@ -102,8 +101,12 @@ export function PropertiesPanel() {
             <PositionSection
               x={selectedObject.x}
               y={selectedObject.y}
-              onXChange={(value) => updateObject(selectedObject.id, { x: value })}
-              onYChange={(value) => updateObject(selectedObject.id, { y: value })}
+              onXChange={(value) =>
+                updateObject(selectedObject.id, { x: value })
+              }
+              onYChange={(value) =>
+                updateObject(selectedObject.id, { y: value })
+              }
             />
           </PropertiesPanelSection>
 
@@ -118,8 +121,12 @@ export function PropertiesPanel() {
               width={selectedObject.width}
               height={selectedObject.height}
               aspectLocked={aspectLocked}
-              onWidthChange={(value) => updateObject(selectedObject.id, { width: value })}
-              onHeightChange={(value) => updateObject(selectedObject.id, { height: value })}
+              onWidthChange={(value) =>
+                updateObject(selectedObject.id, { width: value })
+              }
+              onHeightChange={(value) =>
+                updateObject(selectedObject.id, { height: value })
+              }
               onAspectLockToggle={() => setAspectLocked(!aspectLocked)}
             />
           </PropertiesPanelSection>
@@ -153,7 +160,9 @@ export function PropertiesPanel() {
             >
               <PrimitivePropsPanel
                 object={selectedObject}
-                onUpdateProps={(props) => updateObject(selectedObject.id, props)}
+                onUpdateProps={(props) =>
+                  updateObject(selectedObject.id, props)
+                }
               />
             </PropertiesPanelSection>
           )}
