@@ -1,0 +1,50 @@
+/**
+ * @fileoverview Canvas Renderer DOM package exports
+ * @author @darianrosebrook
+ *
+ * DOM-based renderer for canvas documents. Renders CanvasDocument instances
+ * to interactive HTML elements for display in VS Code webviews.
+ */
+
+// Main renderer
+export { CanvasDOMRenderer, createCanvasRenderer } from "./renderer.js";
+
+// Types
+export type {
+  CanvasRenderer,
+  RendererOptions,
+  RenderedNode,
+  SelectionState,
+  RenderContext,
+  NodeRenderer,
+} from "./types.js";
+
+export { RENDERER_CLASSES, RENDERER_EVENTS } from "./types.js";
+
+// Individual node renderers (exported for testing and extensibility)
+export { renderFrame } from "./renderers/frame.js";
+export { renderText } from "./renderers/text.js";
+export { renderComponent } from "./renderers/component.js";
+
+// Observability (exported for monitoring and testing)
+export {
+  Observability,
+  Logger,
+  MetricsCollector,
+  PerformanceTracer,
+  createObservability,
+  LogLevel,
+  MetricType,
+} from "./observability.js";
+export type { LogEntry, Metric, TraceSpan } from "./observability.js";
+
+// Advanced selection modes
+export { SelectionModesCoordinator } from "./selection-modes.js";
+export type {
+  SelectionMode,
+  Point,
+  Rectangle,
+  SelectionResult,
+  HitTestResult,
+  SelectionModeConfig,
+} from "./selection-modes.js";

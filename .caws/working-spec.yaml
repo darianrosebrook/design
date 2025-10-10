@@ -1,107 +1,95 @@
-id: DESIGNER-008
-title: 'React Component Discovery & Indexing'
+id: DESIGNER-009
+title: 'SVG Import & Conversion to Canvas Nodes'
 risk_tier: 2
 mode: feature
 change_budget:
-  max_files: 25
-  max_loc: 1000
+  max_files: 20
+  max_loc: 900
 blast_radius:
   modules:
-    - packages/component-discovery
+    - packages/svg-import
   data_migration: false
 operational_rollback_slo: 15m
 threats:
-  - 'Component discovery misses valid components'
-  - 'Prop extraction fails for complex TypeScript types'
-  - 'Component index becomes stale'
-  - 'Performance degrades with large component libraries'
-  - 'Third-party components not discovered'
+  - 'SVG parsing fails for valid SVG files'
+  - 'Conversion loses fidelity for complex paths'
+  - 'Token matching produces incorrect results'
+  - 'Large SVG files cause performance issues'
+  - 'Malicious SVG causes security issues'
 scope:
   in:
-    - packages/component-discovery/
-    - packages/component-discovery/src/
-    - packages/component-discovery/tests/
+    - packages/svg-import/
+    - packages/svg-import/src/
+    - packages/svg-import/tests/
   out:
+    - packages/canvas-engine/
     - apps/vscode-ext/
-    - packages/codegen-react/
 invariants:
-  - 'Component index stays synchronized with filesystem'
-  - 'Prop schemas extracted match runtime prop types'
-  - 'Component discovery completes in <5s for 1000 components'
-  - 'Index format is versioned and backward compatible'
-  - 'Watcher detects component file changes within 100ms'
+  - 'SVG parsing validates against security policy'
+  - 'Converted nodes validate against canvas schema'
+  - 'Import completes in <2s for typical SVG files'
+  - 'Token matching is deterministic and reproducible'
+  - 'Unsupported SVG features reported to user'
 acceptance:
   - id: A1
-    given: 'Project with 50 React components'
-    when: 'Component scanner runs'
-    then: 'All components discovered and indexed'
-    status: completed
-    notes: 'ComponentDiscoveryEngine.analyzeDocument discovers components from canvas documents'
+    given: 'Simple SVG with paths and fills'
+    when: 'SVG import runs'
+    then: 'Creates VectorNode with correct path data and fills'
   - id: A2
-    given: 'Component with complex prop types (unions, generics)'
-    when: 'Prop extractor runs'
-    then: 'Prop schema accurately reflects TypeScript types'
-    status: completed
-    notes: 'analyzeComponentProps extracts props using ts-morph AST analysis'
+    given: 'SVG with fill color matching a design token'
+    when: 'Token matcher runs'
+    then: 'Suggests token binding with confidence score'
   - id: A3
-    given: 'Component file is modified'
-    when: 'File watcher detects change'
-    then: 'Index updates within 100ms'
-    status: completed
-    notes: 'File watching architecture supports 100ms update requirements'
+    given: 'SVG with unsupported features (filters, masks)'
+    when: 'Import runs'
+    then: 'Imports supported features, warns about unsupported'
   - id: A4
-    given: 'Third-party component library in node_modules'
-    when: 'Discovery runs with allowlist'
-    then: 'Third-party components included in index'
-    status: completed
-    notes: 'CCD (Component Capability Descriptor) supports third-party component integration'
+    given: 'SVG with nested groups'
+    when: 'Conversion runs'
+    then: 'Creates GroupNode hierarchy preserving structure'
   - id: A5
-    given: 'Component with JSDoc annotations'
-    when: 'Metadata extracted'
-    then: 'Annotations included in component index'
-    status: completed
-    notes: 'JSDoc extraction integrated with component metadata'
+    given: 'Large SVG file (5MB, 10000 paths)'
+    when: 'Import runs with progress tracking'
+    then: 'Completes successfully with user feedback'
   - id: A6
-    given: '1000 components in monorepo'
-    when: 'Full scan runs'
-    then: 'Completes in <5s, index generated correctly'
-    status: completed
-    notes: 'Parallelized scanning with performance optimizations meets <5s requirement'
+    given: 'Malicious SVG with billion laughs attack'
+    when: 'Parser validates'
+    then: 'Rejects SVG with security warning'
 non_functional:
   a11y: []
   perf:
-    component_discovery_ms: 5000
-    index_query_ms: 100
+    import_ms: 2000
+    token_match_ms: 100
     additional:
-      - 'Component scanning completes in <5s for 1000 components'
-      - 'Index queries return in <100ms'
-      - 'Memory usage scales linearly with component count'
+      - 'Memory usage <100MB for large SVG files'
+      - 'Parsing uses streaming for large files'
+      - 'Path optimization reduces node count by 30%'
   security:
-    - 'Component prop extraction validates TypeScript types'
-    - 'No code execution during component scanning'
-    - 'File system access restricted to project scope'
+    - 'SVG parser validates against XXE attacks'
+    - 'File size limits enforced (10MB max)'
+    - 'External resource loading disabled'
+    - 'Script elements rejected'
 contracts:
-  - type: typescript
-    path: packages/component-indexer/src/scanner.ts
-  - type: typescript
-    path: packages/component-indexer/src/types.ts
+  - type: graphql
+    path: packages/svg-import/src/types.ts
+  - type: graphql
+    path: packages/canvas-schema/schemas/canvas-0.1.json
 observability:
   logs:
-    - 'components.discover.complete with component count'
-    - 'components.scan.error with file path and error'
-    - 'components.index.update with change count'
-    - 'tokens.watch.update with changed tokens'
+    - 'svg.import.start with file size'
+    - 'svg.import.complete with nodes created'
+    - 'svg.import.warning with unsupported features'
+    - 'svg.import.error with parse failure'
   metrics:
-    - 'components_discover_duration_ms histogram'
-    - 'components_total gauge'
-    - 'components_scan_errors_total counter'
-    - 'tokens_references_resolved_total counter'
+    - 'svg_import_duration_ms histogram'
+    - 'svg_nodes_created_total counter'
+    - 'svg_unsupported_features_total counter by feature'
   traces:
-    - 'components.discover.pipeline from files to index'
-    - 'components.scan.file for individual file processing'
-    - 'components.extract.props for prop schema generation'
+    - 'svg.import.pipeline from file to nodes'
+    - 'svg.tokenMatch for color matching'
 migrations:
   - 'Initial release - no migrations required'
-  - 'Component index format versioned with backward compatibility'
 rollback:
-  - 'Can disable component discovery if causing issues'
+  - 'Can manually create vector nodes if import fails'
+  - 'Import can be disabled via feature flag'
+

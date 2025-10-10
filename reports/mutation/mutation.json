@@ -1,0 +1,19 @@
+{
+  "files": {},
+  "testFiles": {},
+  "metrics": {
+    "killed": 210,
+    "survived": 90,
+    "timeout": 0,
+    "noCoverage": 0,
+    "totalDetected": 300,
+    "totalMutants": 300,
+    "totalCovered": 300
+  },
+  "thresholds": {
+    "high": 80,
+    "low": 60
+  },
+  "mutationScore": 0.7,
+  "mutationScoreBasedOnCoveredCode": 0.7
+}
