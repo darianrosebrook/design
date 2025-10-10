@@ -35,26 +35,38 @@ acceptance:
     given: 'Simple SVG with paths and fills'
     when: 'SVG import runs'
     then: 'Creates VectorNode with correct path data and fills'
+    status: completed
+    notes: 'SVGConverter handles paths, rects, circles, and text elements'
   - id: A2
     given: 'SVG with fill color matching a design token'
     when: 'Token matcher runs'
     then: 'Suggests token binding with confidence score'
+    status: completed
+    notes: 'TokenMatcher performs color distance matching with configurable thresholds'
   - id: A3
     given: 'SVG with unsupported features (filters, masks)'
     when: 'Import runs'
     then: 'Imports supported features, warns about unsupported'
+    status: completed
+    notes: 'SVGConverter skips unsupported elements and generates warnings'
   - id: A4
     given: 'SVG with nested groups'
     when: 'Conversion runs'
     then: 'Creates GroupNode hierarchy preserving structure'
+    status: completed
+    notes: 'SVGConverter recursively processes group elements'
   - id: A5
     given: 'Large SVG file (5MB, 10000 paths)'
     when: 'Import runs with progress tracking'
     then: 'Completes successfully with user feedback'
+    status: completed
+    notes: 'SVGImportEngine supports progress callbacks and memory-efficient parsing'
   - id: A6
     given: 'Malicious SVG with billion laughs attack'
     when: 'Parser validates'
     then: 'Rejects SVG with security warning'
+    status: completed
+    notes: 'SVGParser validates against forbidden elements, attributes, and size limits'
 non_functional:
   a11y: []
   perf:
