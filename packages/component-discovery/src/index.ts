@@ -796,6 +796,14 @@ export class ComponentDiscoveryEngine {
     const tokenRefs = this.findTokenReferences(document);
 
     for (const tokenRef of tokenRefs) {
+      // Add to used tokens
+      usedTokens.push({
+        token: tokenRef.token,
+        locations: [tokenRef.location],
+        type: tokenRef.type,
+        value: this.isTokenDefined(tokenRef.token) ? this.suggestTokenValue(tokenRef.token, tokenRef.type) : undefined,
+      });
+
       // Check if token is defined (simplified - would check actual token files)
       const isDefined = this.isTokenDefined(tokenRef.token);
 

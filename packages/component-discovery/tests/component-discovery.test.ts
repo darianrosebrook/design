@@ -3,23 +3,21 @@
  * @author @darianrosebrook
  */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import type { CanvasDocumentType } from "@paths-design/canvas-schema";
+import * as fs from "node:fs";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
-  ComponentDiscoveryEngine,
   ComponentAutoDiscovery,
+  ComponentDiscoveryEngine,
   discoverComponents,
   runAutoDiscovery,
 } from "../src/index.js";
-import type { CanvasDocumentType } from "@paths-design/canvas-schema";
-import * as fs from "node:fs";
 
 // Mock file system operations
 vi.mock("node:fs", () => ({
-  default: {
-    readFileSync: vi.fn(),
-    writeFileSync: vi.fn(),
-    existsSync: vi.fn(),
-  },
+  readFileSync: vi.fn(),
+  writeFileSync: vi.fn(),
+  existsSync: vi.fn(),
 }));
 
 // Mock glob
@@ -35,44 +33,48 @@ vi.mock("ts-morph", () => ({
   })),
 }));
 
+const testDocument: CanvasDocumentType = {
+  schemaVersion: "0.1.0",
+  id: "01JF2PZV9G2WR5C3W7P0YHNX9D",
+  name: "Test Document",
+  artboards: [
+    {
+      id: "01JF2Q02Q3MZ3Q9J7HB3X6N9QB",
+      name: "Artboard 1",
+      frame: { x: 0, y: 0, width: 1440, height: 1024 },
+      children: [
+        {
+          id: "01JF2Q06GTS16EJ3A3F0KK9K3T",
+          type: "component",
+          name: "Button",
+          frame: { x: 32, y: 32, width: 200, height: 48 },
+          componentKey: "Button",
+          props: {
+            variant: "tokens.color.primary",
+            size: "large",
+            label: "Get Started",
+          },
+          semanticKey: "cta.primary",
+        },
+        {
+          id: "01JF2Q07GTS16EJ3A3F0KK9K3U",
+          type: "text",
+          name: "Title",
+          frame: { x: 32, y: 120, width: 600, height: 64 },
+          text: "Welcome to Our App",
+          props: {
+            color: "tokens.color.text",
+            fontSize: "tokens.typography.fontSize.h1",
+          },
+          semanticKey: "hero.title",
+        },
+      ],
+    },
+  ],
+};
+
 describe("ComponentDiscoveryEngine", () => {
   let engine: ComponentDiscoveryEngine;
-
-  const testDocument: CanvasDocumentType = {
-    schemaVersion: "0.1.0",
-    id: "01JF2PZV9G2WR5C3W7P0YHNX9D",
-    name: "Test Document",
-    artboards: [
-      {
-        id: "01JF2Q02Q3MZ3Q9J7HB3X6N9QB",
-        name: "Artboard 1",
-        frame: { x: 0, y: 0, width: 1440, height: 1024 },
-        children: [
-          {
-            id: "01JF2Q06GTS16EJ3A3F0KK9K3T",
-            type: "component",
-            name: "Button",
-            frame: { x: 32, y: 32, width: 200, height: 48 },
-            componentKey: "Button",
-            props: {
-              variant: "primary",
-              size: "large",
-              label: "Get Started",
-            },
-            semanticKey: "cta.primary",
-          },
-          {
-            id: "01JF2Q07GTS16EJ3A3F0KK9K3U",
-            type: "text",
-            name: "Title",
-            frame: { x: 32, y: 120, width: 600, height: 64 },
-            text: "Welcome to Our App",
-            semanticKey: "hero.title",
-          },
-        ],
-      },
-    ],
-  };
 
   beforeEach(() => {
     engine = new ComponentDiscoveryEngine();
