@@ -4,7 +4,7 @@
  */
 
 import type { DesignTokens } from "@paths-design/design-tokens";
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 export interface TokenSelectorProps {
   tokens: DesignTokens;
@@ -76,7 +76,9 @@ export const TokenSelector: React.FC<TokenSelectorProps> = ({
     } else if (propertyType === "spacing") {
       // Spacing tokens (assuming they exist in tokens)
       if ("spacing" in tokens) {
-        Object.entries((tokens as any).spacing).forEach(([name, value]) => {
+        Object.entries(
+          (tokens as Record<string, Record<string, unknown>>).spacing
+        ).forEach(([name, value]) => {
           options.push({
             path: `spacing.${name}`,
             value: typeof value === "string" ? value : String(value),

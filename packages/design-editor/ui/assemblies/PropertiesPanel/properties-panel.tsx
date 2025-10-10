@@ -10,9 +10,18 @@ import { useMemo, useCallback } from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import { CanvasBackgroundControls } from "@/ui/composers/CanvasBackgroundControls";
 import { ScrollArea } from "@/ui/primitives/ScrollArea";
+import { CustomPropertiesPanel } from "./CustomPropertiesPanel";
 
 export function PropertiesPanel() {
-  const { document, selectedId, selectedIds, updateNode } = useCanvas();
+  const {
+    document,
+    objects,
+    selectedId,
+    selectedIds,
+    updateNode,
+    setSelectedId,
+    setSelectedIds,
+  } = useCanvas();
 
   // Convert current selection to PropertiesPanel format
   const selection: SelectionState = useMemo(
@@ -26,10 +35,10 @@ export function PropertiesPanel() {
   // Handle property changes from the PropertiesPanel
   const handlePropertyChange = useCallback(
     async (event: PropertyChangeEvent) => {
-      const { nodeId, propertyKey, value } = event;
+      const { nodeId, propertyKey, newValue } = event;
 
       try {
-        await updateNode(nodeId, { [propertyKey]: value });
+        await updateNode(nodeId, { [propertyKey]: newValue });
       } catch (error) {
         console.error("Failed to update property:", error);
       }
@@ -38,45 +47,86 @@ export function PropertiesPanel() {
   );
 
   // Handle selection changes from the PropertiesPanel
-  const handleSelectionChange = useCallback((newSelection: SelectionState) => {
-    // Update canvas selection based on PropertiesPanel selection
-    if (newSelection.focusedNodeId && newSelection.selectedNodeIds.length > 0) {
-      // Set both primary and multi-selection
-      // This would need to be implemented in the canvas context
-    }
-  }, []);
+  const handleSelectionChange = useCallback(
+    (newSelection: SelectionState) => {
+      // Update canvas selection based on PropertiesPanel selection
+      if (newSelection.focusedNodeId) {
+        // Set the primary selection
+        setSelectedId(newSelection.focusedNodeId);
+      }
 
-  if (!document) {
-    return (
-      <div className="w-80 h-full bg-card border-l border-border flex items-center justify-center">
-        <div className="text-muted-foreground text-sm">No document loaded</div>
-      </div>
-    );
-  }
+      if (newSelection.selectedNodeIds.length > 0) {
+        // Set multi-selection
+        setSelectedIds(new Set(newSelection.selectedNodeIds));
+      } else {
+        // Clear selection if no nodes selected
+        setSelectedIds(new Set());
+        setSelectedId(null);
+      }
+    },
+    [setSelectedId, setSelectedIds]
+  );
 
-  // Show canvas background controls when no object is selected
-  if (selectedIds.size === 0) {
-    return (
-      <div className="flex flex-col h-full">
-        <div className="flex items-center justify-between px-3 py-2 border-b border-border">
-          <h2 className="text-sm font-semibold">Properties</h2>
-          <span className="text-xs text-muted-foreground">Canvas</span>
-        </div>
-        <ScrollArea className="flex-1">
-          <CanvasBackgroundControls />
-        </ScrollArea>
-      </div>
-    );
-  }
+  // Get actual property values from selected canvas objects
+  const getPropertyValue = useCallback(
+    (propertyKey: string) => {
+      if (!selectedId) return undefined;
+
+      // Find the selected object
+      const selectedObject = objects.find((obj) => obj.id === selectedId);
+      if (!selectedObject) return undefined;
+
+      // Handle nested property access (e.g., "frame.x", "padding.top")
+      const keys = propertyKey.split(".");
+      let value = selectedObject;
+
+      for (const key of keys) {
+        if (value && typeof value === "object" && key in value) {
+          value = (value as any)[key];
+        } else {
+          return undefined;
+        }
+      }
+
+      // Map some property keys to their actual canvas object properties
+      const propertyMap: Record<string, string> = {
+        x: "x",
+        y: "y",
+        "frame.x": "x",
+        "frame.y": "y",
+        width: "width",
+        height: "height",
+        "frame.width": "width",
+        "frame.height": "height",
+        rotation: "rotation",
+        opacity: "opacity",
+        backgroundColor: "backgroundColor",
+        fill: "backgroundColor",
+        borderColor: "borderColor",
+        borderWidth: "borderWidth",
+        borderStyle: "borderStyle",
+      };
+
+      const mappedKey = propertyMap[propertyKey] || propertyKey;
+
+      // Try to get the value from the mapped property
+      if (mappedKey in selectedObject) {
+        return (selectedObject as any)[mappedKey];
+      }
+
+      // Return the nested value if found
+      return value;
+    },
+    [selectedId, objects]
+  );
 
   return (
-    <div className="w-80 h-full bg-card border-l border-border">
-      <IntegratedPropertiesPanel
-        documentId={document.id}
-        selection={selection}
-        onPropertyChange={handlePropertyChange}
-        onSelectionChange={handleSelectionChange}
-      />
-    </div>
+    <CustomPropertiesPanel
+      documentId={document.id}
+      selection={selection}
+      onPropertyChange={handlePropertyChange}
+      onSelectionChange={handleSelectionChange}
+      getPropertyValue={getPropertyValue}
+    />
   );
 }

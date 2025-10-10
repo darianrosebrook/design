@@ -2,9 +2,19 @@
  * @fileoverview Plugin test runner implementation
  * @author @darianrosebrook
  */
-
 import { EventEmitter } from "node:events";
-
+import type {
+  PerformanceMetricsCollector,
+  PluginPerformanceMetrics,
+  PluginTestAssertions,
+  PluginTestConfig,
+  PluginTestContext,
+  PluginTestResult,
+  PluginTestRunner,
+  PluginTestSuiteResult,
+  PluginTestUtils,
+  PluginValidationResult,
+} from "./types.js";
 // Using any types to avoid import issues during build
 type Plugin = any;
 type _PluginMetadata = any;
@@ -26,19 +36,6 @@ function versionSatisfies(version: string, range: string): boolean {
   }
   return version === range;
 }
-import type {
-  PluginTestRunner,
-  PluginTestConfig,
-  PluginTestContext,
-  PluginTestSuiteResult,
-  PluginTestResult,
-  PluginValidationResult,
-  PluginPerformanceMetrics,
-  PluginTestUtils,
-  PluginTestAssertions,
-  PerformanceMetricsCollector,
-  TestResultStatus,
-} from "./types.js";
 
 /**
  * Default test configuration
@@ -394,15 +391,15 @@ export class PluginTestRunnerImpl
    */
   private createTestAssertions(): PluginTestAssertions {
     return {
-      hasMetadata: (key: string, value: any) => {
+      hasMetadata: (_key: string, _value: any) => {
         // Implementation would check plugin metadata
       },
 
-      hasHooks: (hookNames: string[]) => {
+      hasHooks: (_hookNames: string[]) => {
         // Implementation would check plugin hooks
       },
 
-      hasTools: (toolNames: string[]) => {
+      hasTools: (_toolNames: string[]) => {
         // Implementation would check plugin tools
       },
 
@@ -415,7 +412,7 @@ export class PluginTestRunnerImpl
       },
 
       meetsPerformanceCriteria: (
-        metrics: Partial<PluginPerformanceMetrics>
+        _metrics: Partial<PluginPerformanceMetrics>
       ) => {
         // Implementation would check performance metrics
       },

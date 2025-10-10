@@ -8,10 +8,10 @@ import * as path from "node:path";
 import * as ts from "typescript";
 import { ulid } from "ulidx";
 import type {
-  DiscoveryOptions,
-  DiscoveryResult,
   ComponentEntry,
   ComponentProp,
+  DiscoveryOptions,
+  DiscoveryResult,
   RawComponentMetadata,
 } from "./types.js";
 
@@ -209,58 +209,211 @@ export class ComponentScanner {
     const components: ComponentEntry[] = [];
 
     try {
-      const visit = (node: ts.Node) => {
-        if (!node) {
-          return;
-        }
-
-        try {
-          // Look for function declarations, arrow functions, and class declarations
-          const isReact = this.isReactComponent(node);
-          console.log(
-            `Node ${ts.SyntaxKind[node.kind]} is React component: ${isReact}`
-          );
-          if (isReact) {
-            console.log(
-              `Found React component in ${sourceFile.fileName}:`,
-              this.getComponentName(node)
-            );
-            console.log(`Extracting metadata...`);
-            const metadata = this.extractComponentMetadata(node, sourceFile);
-            console.log(`Metadata extracted:`, metadata ? "success" : "null");
-            if (metadata) {
-              console.log(`Creating component entry for ${metadata.name}`);
-              components.push(this.createComponentEntry(metadata));
-              console.log(`Component entry created successfully`);
-            } else {
-              console.log(`No metadata returned, skipping component`);
-            }
-          }
-        } catch (error) {
-          console.error(
-            `Error processing node ${ts.SyntaxKind[node.kind]} in ${
-              sourceFile.fileName
-            }:`,
-            error
-          );
-          console.error(
-            `Stack:`,
-            error instanceof Error ? error.stack : "No stack trace"
-          );
-          throw error;
-        }
-
-        if (node) {
-          ts.forEachChild(node, visit);
-        }
-      };
-
-      visit(sourceFile);
+      // Skip AST-based scanning for now - using string-based regex scanning instead
+      // const visit = (node: ts.Node) => {
+      //   // ... AST scanning logic disabled
+      // };
+      // visit(sourceFile);
 
       // Discover compound components (e.g., Card.Header, Menu.Item)
       const compoundComponents = this.discoverCompoundComponents(sourceFile);
       for (const compound of compoundComponents) {
         components.push(this.createComponentEntry(compound));
+      }
+
+      // Also scan for components using string-based regex (fallback for AST issues)
+      const fileText = sourceFile.getText();
+
+      // Simple regex to find exported function components
+      const exportFunctionRegex = /export\s+function\s+(\w+)\s*\(/g;
+      let match;
+      while ((match = exportFunctionRegex.exec(fileText)) !== null) {
+        const componentName = match[1];
+
+        // Check if the function has JSX (contains < and > or </>)
+        const functionStart = match.index;
+
+        // Find the function body start - skip parameter type annotations
+        let functionBodyStart = -1;
+        const returnTypePattern = /\)\s*:\s*[^;{]*\{/;
+        const returnTypeMatch = fileText
+          .substring(functionStart)
+          .match(returnTypePattern);
+        if (returnTypeMatch && returnTypeMatch.index !== undefined) {
+          functionBodyStart =
+            functionStart +
+            returnTypeMatch.index +
+            returnTypeMatch[0].length -
+            1;
+        } else {
+          const simplePattern = /\)\s*\{/;
+          const simpleMatch = fileText
+            .substring(functionStart)
+            .match(simplePattern);
+          if (simpleMatch && simpleMatch.index !== undefined) {
+            functionBodyStart =
+              functionStart + simpleMatch.index + simpleMatch[0].length - 1;
+          }
+        }
+
+        if (functionBodyStart === -1) {
+          // Fallback to old logic
+          functionBodyStart = fileText.indexOf("{", functionStart);
+        }
+
+        if (functionBodyStart === -1) {
+          continue;
+        }
+
+        // Find the matching closing brace (simplified - doesn't handle nested braces)
+        let braceCount = 0;
+        let functionEnd = functionBodyStart;
+        for (let i = functionBodyStart; i < fileText.length; i++) {
+          if (fileText[i] === "{") {
+            braceCount++;
+          } else if (fileText[i] === "}") {
+            braceCount--;
+            if (braceCount === 0) {
+              functionEnd = i;
+              break;
+            }
+          }
+        }
+
+        const functionBody = fileText.substring(
+          functionBodyStart,
+          functionEnd + 1
+        );
+        if (
+          functionBody.includes("<") &&
+          (functionBody.includes(">") || functionBody.includes("/>"))
+        ) {
+          // This looks like a React component
+          let props: RawComponentMetadata["props"] = [];
+
+          if (this.checker) {
+            const functionDecl = this.parseFunctionFromText(
+              fileText,
+              match.index
+            );
+            if (functionDecl) {
+              const firstParam = functionDecl.parameters?.[0];
+              if (firstParam?.type) {
+                props = this.extractPropsFromType(firstParam.type);
+              }
+            } else {
+              props = this.extractPropsFromFunctionSignature(
+                functionBody,
+                fileText,
+                match.index
+              );
+            }
+          } else {
+            props = this.extractPropsFromFunctionSignature(
+              functionBody,
+              fileText,
+              match.index
+            );
+          }
+
+          const metadata: RawComponentMetadata = {
+            name: componentName,
+            filePath: sourceFile.fileName,
+            exportName: componentName,
+            props,
+          };
+
+          components.push(this.createComponentEntry(metadata));
+        }
+      }
+
+      // Also check for arrow function components: export const Component = (props) => ...
+      const exportArrowRegex = /export\s+const\s+(\w+)\s*=\s*\(/g;
+      let arrowMatch;
+      while ((arrowMatch = exportArrowRegex.exec(fileText)) !== null) {
+        const componentName = arrowMatch[1];
+
+        // Find the arrow function body
+        const arrowIndex = fileText.indexOf("=>", arrowMatch.index);
+        if (arrowIndex === -1) {
+          continue;
+        }
+
+        let bodyStart = arrowIndex + 2;
+        // Skip whitespace
+        while (bodyStart < fileText.length && /\s/.test(fileText[bodyStart])) {
+          bodyStart++;
+        }
+
+        let functionBody = "";
+        if (fileText[bodyStart] === "{") {
+          // Block body - find matching brace
+          let braceCount = 0;
+          let bodyEnd = bodyStart;
+          for (let i = bodyStart; i < fileText.length; i++) {
+            if (fileText[i] === "{") {
+              braceCount++;
+            } else if (fileText[i] === "}") {
+              braceCount--;
+              if (braceCount === 0) {
+                bodyEnd = i;
+                break;
+              }
+            }
+          }
+          functionBody = fileText.substring(bodyStart, bodyEnd + 1);
+        } else {
+          // Expression body - find end of expression (simplified)
+          const semicolonIndex = fileText.indexOf(";", bodyStart);
+          const commaIndex = fileText.indexOf(",", bodyStart);
+          const endIndex = Math.min(
+            semicolonIndex !== -1 ? semicolonIndex : fileText.length,
+            commaIndex !== -1 ? commaIndex : fileText.length
+          );
+          functionBody = fileText.substring(bodyStart, endIndex);
+        }
+
+        if (
+          functionBody.includes("<") &&
+          (functionBody.includes(">") || functionBody.includes("/>"))
+        ) {
+          // This looks like a React component
+          let props: RawComponentMetadata["props"] = [];
+
+          if (this.checker) {
+            const arrowFunctionDecl = this.parseArrowFunctionFromText(
+              fileText,
+              arrowMatch.index
+            );
+            if (arrowFunctionDecl && arrowFunctionDecl.parameters) {
+              const firstParam = arrowFunctionDecl.parameters[0];
+              if (firstParam?.type) {
+                props = this.extractPropsFromType(firstParam.type);
+              }
+            } else {
+              props = this.extractPropsFromFunctionSignature(
+                functionBody,
+                fileText,
+                arrowMatch.index
+              );
+            }
+          } else {
+            props = this.extractPropsFromFunctionSignature(
+              functionBody,
+              fileText,
+              arrowMatch.index
+            );
+          }
+
+          const metadata: RawComponentMetadata = {
+            name: componentName,
+            filePath: sourceFile.fileName,
+            exportName: componentName,
+            props,
+          };
+
+          components.push(this.createComponentEntry(metadata));
+        }
       }
 
       return components;
@@ -1484,6 +1637,187 @@ export class ComponentScanner {
       const names = variantStr.split(",").map((v) => v.trim());
       return names.map((name) => ({ name }));
     }
+  }
+
+  /**
+   * Extract props from function signature when TypeScript checker fails
+   */
+  private extractPropsFromFunctionSignature(
+    functionBody: string,
+    fullText: string,
+    matchIndex: number
+  ): RawComponentMetadata["props"] {
+    const props: RawComponentMetadata["props"] = [];
+
+    try {
+      // Find the opening parenthesis after the match
+      const parenStart = fullText.indexOf("(", matchIndex);
+      if (parenStart === -1) {
+        return props;
+      }
+
+      // Find the closing parenthesis
+      let parenCount = 0;
+      let parenEnd = parenStart;
+      for (let i = parenStart; i < fullText.length; i++) {
+        if (fullText[i] === "(") {
+          parenCount++;
+        } else if (fullText[i] === ")") {
+          parenCount--;
+          if (parenCount === 0) {
+            parenEnd = i;
+            break;
+          }
+        }
+      }
+
+      const signature = fullText.substring(parenStart + 1, parenEnd);
+
+      // Parse simple prop types from signature
+      // Handle cases like: props: { value: string } or props: ButtonProps
+      if (signature.trim().includes(":")) {
+        const colonMatch = signature.match(/(\w+)\s*:\s*\{([^}]+)\}/);
+        if (colonMatch) {
+          // Inline object type: props: { value: string }
+          const paramName = colonMatch[1];
+          const interfaceBody = colonMatch[2];
+
+          if (paramName === "props") {
+            const propMatches = interfaceBody.matchAll(
+              /(\w+)(\?)?\s*:\s*([^;,\n]+)/g
+            );
+
+            for (const propMatch of propMatches) {
+              const propName = propMatch[1];
+              const isOptional = propMatch[2] === "?";
+              const propType = propMatch[3].trim();
+
+              props.push({
+                name: propName,
+                type: propType,
+                required: !isOptional,
+              });
+            }
+          }
+        } else {
+          // Interface reference type: props: ButtonProps
+          const typeRefMatch = signature.match(/(\w+)\s*:\s*(\w+)/);
+          if (typeRefMatch) {
+            const paramName = typeRefMatch[1];
+            const typeName = typeRefMatch[2];
+
+            if (paramName === "props") {
+              // Try to find the interface definition and extract its props
+              props.push(...this.extractPropsFromInterface(fullText, typeName));
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.warn("Error extracting props from function signature:", error);
+    }
+
+    return props;
+  }
+
+  /**
+   * Extract props from an interface definition in the file text
+   */
+  private extractPropsFromInterface(
+    fileText: string,
+    interfaceName: string
+  ): RawComponentMetadata["props"] {
+    const props: RawComponentMetadata["props"] = [];
+
+    try {
+      // Find the interface definition
+      const interfaceRegex = new RegExp(
+        `interface\\s+${interfaceName}\\s*\\{([^}]+)\\}`,
+        "s"
+      );
+      const match = fileText.match(interfaceRegex);
+
+      if (match && match[1]) {
+        const interfaceBody = match[1];
+
+        // Parse properties from the interface body
+        const propMatches = interfaceBody.matchAll(
+          /(\w+)(\?)?\s*:\s*([^;,\n]+)/g
+        );
+
+        for (const propMatch of propMatches) {
+          const propName = propMatch[1];
+          const isOptional = propMatch[2] === "?";
+          const propType = propMatch[3].trim();
+
+          props.push({
+            name: propName,
+            type: propType,
+            required: !isOptional,
+          });
+        }
+      }
+    } catch (error) {
+      console.warn("Error extracting props from interface:", error);
+    }
+
+    return props;
+  }
+
+  /**
+   * Parse a function declaration from text (simplified)
+   */
+  private parseFunctionFromText(
+    text: string,
+    matchIndex: number
+  ): ts.FunctionDeclaration | null {
+    try {
+      // This is a simplified implementation - in practice, we'd need a full parser
+      // For now, return null to trigger manual extraction
+      return null;
+    } catch (error) {
+      console.warn("Error parsing function from text:", error);
+      return null;
+    }
+  }
+
+  /**
+   * Parse an arrow function from text (simplified)
+   */
+  private parseArrowFunctionFromText(
+    text: string,
+    matchIndex: number
+  ): ts.ArrowFunction | null {
+    try {
+      // This is a simplified implementation - in practice, we'd need a full parser
+      // For now, return null to trigger manual extraction
+      return null;
+    } catch (error) {
+      console.warn("Error parsing arrow function from text:", error);
+      return null;
+    }
+  }
+
+  /**
+   * Check if a file should be scanned for components
+   */
+  private shouldScanFileByPath(filePath: string): boolean {
+    // Skip node_modules and .d.ts files
+    if (filePath.includes("node_modules") || filePath.endsWith(".d.ts")) {
+      return false;
+    }
+
+    // Skip temp directories
+    if (
+      filePath.includes("/tmp/") ||
+      filePath.includes("\\tmp\\") ||
+      filePath.includes("/temp/") ||
+      filePath.includes("\\temp\\")
+    ) {
+      return false;
+    }
+
+    return true;
   }
 }
 

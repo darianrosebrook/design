@@ -1,12 +1,19 @@
 {
+  "schemaVersion": "0.1.0",
+  "id": "01K6NA5BG3MBMJBVA0ZTDH7WMC",
+  "name": "default",
   "artboards": [
     {
       "id": "01K6NA5BG30J0JTH9WXWC6VW1X",
-      "name": "default Artboard"
+      "name": "Default Artboard",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 1024
+      },
+      "children": []
     }
-  ],
-  "id": "01K6NA5BG3MBMJBVA0ZTDH7WMC",
-  "name": "default",
-  "schemaVersion": "0.1.0"
+  ]
 }
 

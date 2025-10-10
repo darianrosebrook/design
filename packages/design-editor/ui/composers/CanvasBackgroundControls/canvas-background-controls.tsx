@@ -5,6 +5,7 @@ import { Palette, Grid3X3, Square, Circle } from "lucide-react";
 import type React from "react";
 import { useCanvas } from "@/lib/canvas-context";
 import { Input } from "@/ui/primitives/Input";
+import { ColorPicker } from "@/ui/assemblies/ColorPicker";
 
 export function CanvasBackgroundControls() {
   const {
@@ -42,32 +43,11 @@ export function CanvasBackgroundControls() {
         <Label className="text-sm font-medium text-muted-foreground">
           Background Color
         </Label>
-        <div className="flex items-center gap-3">
-          <div
-            className="w-8 h-8 rounded-lg border border-border cursor-pointer flex items-center justify-center"
-            style={{ backgroundColor: canvasBackgroundColor }}
-            onClick={() => {
-              // Create a color input and trigger it
-              const input = document.createElement("input");
-              input.type = "color";
-              input.value = canvasBackgroundColor;
-              input.onchange = (e) => {
-                const target = e.target as HTMLInputElement;
-                setCanvasBackgroundColor(target.value);
-              };
-              input.click();
-            }}
-          >
-            <Palette className="h-4 w-4 text-white" />
-          </div>
-          <Input
-            type="text"
-            value={canvasBackgroundColor}
-            onChange={(e) => setCanvasBackgroundColor(e.target.value)}
-            className="flex-1"
-            placeholder="#18181b"
-          />
-        </div>
+        <ColorPicker
+          color={canvasBackgroundColor}
+          onChange={setCanvasBackgroundColor}
+          label="Background Color"
+        />
       </div>
 
       {/* Background Type */}

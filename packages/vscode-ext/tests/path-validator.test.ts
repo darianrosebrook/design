@@ -28,7 +28,7 @@ describe("PathValidator", () => {
     });
 
     it("allows tokens.json", () => {
-      const result = validator.validate("design/tokens.json");
+      const result = validator.validate("docs/examples/tokens.json");
       expect(result.valid).toBe(true);
     });
 
@@ -143,7 +143,7 @@ describe("PathValidator", () => {
     });
 
     it("allows .json extension", () => {
-      const result = validator.validate("design/tokens.json");
+      const result = validator.validate("docs/examples/tokens.json");
       expect(result.valid).toBe(true);
     });
 
@@ -241,7 +241,7 @@ describe("PathValidator", () => {
     it("validates multiple paths at once", () => {
       const paths = [
         "design/home.canvas.json",
-        "design/tokens.json",
+        "docs/examples/tokens.json",
         "../etc/passwd",
       ];
 

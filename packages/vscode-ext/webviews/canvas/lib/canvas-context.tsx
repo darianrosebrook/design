@@ -28,6 +28,35 @@ export type CanvasTool =
   | "polygon";
 export type CanvasBackground = "dot-grid" | "square-grid" | "solid";
 
+/**
+ * Announce a message to screen readers using ARIA live region
+ */
+function announceToScreenReader(message: string): void {
+  // Create or reuse a live region for announcements
+  let liveRegion = document.getElementById("sr-announcements");
+  if (!liveRegion) {
+    liveRegion = document.createElement("div");
+    liveRegion.id = "sr-announcements";
+    liveRegion.setAttribute("aria-live", "polite");
+    liveRegion.setAttribute("aria-atomic", "true");
+    liveRegion.style.position = "absolute";
+    liveRegion.style.left = "-10000px";
+    liveRegion.style.width = "1px";
+    liveRegion.style.height = "1px";
+    liveRegion.style.overflow = "hidden";
+    document.body.appendChild(liveRegion);
+  }
+
+  // Clear and set the announcement
+  liveRegion.textContent = "";
+  // Use setTimeout to ensure screen readers pick up the change
+  setTimeout(() => {
+    if (liveRegion) {
+      liveRegion.textContent = message;
+    }
+  }, 100);
+}
+
 interface CanvasContextType {
   objects: CanvasObject[];
   setObjects: (objects: CanvasObject[]) => void;
@@ -204,6 +233,16 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
               })) || []
           );
           setObjects(canvasObjects);
+
+          // Accessibility announcement for canvas initialization
+          // Check if this is a newly created empty document (no objects)
+          const isEmptyDocument = canvasObjects.length === 0;
+          if (isEmptyDocument) {
+            // Use a timeout to ensure the announcement happens after render
+            setTimeout(() => {
+              announceToScreenReader("Blank canvas created; press R for rectangle mode");
+            }, 100);
+          }
         }
       }),
 

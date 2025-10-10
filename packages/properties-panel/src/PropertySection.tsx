@@ -74,7 +74,10 @@ export const PropertySectionComponent: React.FC<
                   disabled={selection.selectedNodeIds.length === 0}
                   className={isMixed ? "mixed-value" : undefined}
                   fonts={fonts}
-                  tokens={(globalThis as any).designTokens}
+                  tokens={
+                    (globalThis as unknown as { designTokens: unknown })
+                      .designTokens
+                  }
                   onChange={(value) => {
                     if (selection.selectedNodeIds.length === 0) {
                       return;

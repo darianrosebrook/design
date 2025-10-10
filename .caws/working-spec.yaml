@@ -1,116 +1,101 @@
-id: 'DESIGNER-022'
-title: 'Designer Canvas Engine - Complete Testing Suite Implementation'
+id: DESIGNER-008
+title: 'React Component Discovery & Indexing'
 risk_tier: 2
+mode: feature
+change_budget:
+  max_files: 25
+  max_loc: 1000
+blast_radius:
+  modules:
+    - packages/component-discovery
+  data_migration: false
+operational_rollback_slo: 15m
+threats:
+  - 'Component discovery misses valid components'
+  - 'Prop extraction fails for complex TypeScript types'
+  - 'Component index becomes stale'
+  - 'Performance degrades with large component libraries'
+  - 'Third-party components not discovered'
 scope:
   in:
-    - 'packages/canvas-engine/*'
-    - 'packages/canvas-renderer-dom/*'
-    - 'packages/canvas-schema/*'
-    - 'packages/codegen-react/*'
-    - 'packages/design-editor/*'
-    - 'packages/design-system/*'
-    - 'packages/design-tokens/*'
-    - 'packages/component-indexer/*'
-    - 'packages/properties-panel/*'
-    - 'packages/plugin-registry/*'
-    - 'packages/plugin-testing/*'
-    - 'packages/mcp-adapter/*'
-    - 'packages/websocket-server/*'
-    - 'packages/vscode-ext/*'
-    - 'packages/system-integration/*'
-    - 'apps/tools/caws/*'
+    - packages/component-discovery/
+    - packages/component-discovery/src/
+    - packages/component-discovery/tests/
   out:
-    - 'examples/*'
-    - 'docs/*'
-    - 'audit/*'
-    - 'prototypes/*'
+    - apps/vscode-ext/
+    - packages/codegen-react/
 invariants:
-  - 'Canvas operations must be immutable and return new document instances'
-  - 'All canvas documents must pass schema validation before and after operations'
-  - 'Component rendering must be deterministic given the same input state'
-  - 'Plugin system must maintain backward compatibility across versions'
-  - 'Design tokens must resolve consistently across all packages'
-  - 'WebSocket connections must be properly established before canvas operations'
+  - 'Component index stays synchronized with filesystem'
+  - 'Prop schemas extracted match runtime prop types'
+  - 'Component discovery completes in <5s for 1000 components'
+  - 'Index format is versioned and backward compatible'
+  - 'Watcher detects component file changes within 100ms'
 acceptance:
   - id: A1
-    given: 'A canvas document with nested components'
-    when: 'Applying transformation operations (move, resize, style changes)'
-    then: 'All operations succeed and return valid documents that pass schema validation'
+    given: 'Project with 50 React components'
+    when: 'Component scanner runs'
+    then: 'All components discovered and indexed'
+    status: in_progress
+    notes: '9 out of 11 component scanner tests passing, core functionality working'
   - id: A2
-    given: 'Multiple concurrent canvas sessions'
-    when: 'Applying conflicting operations simultaneously'
-    then: 'Operations are properly merged and conflicts are resolved deterministically'
+    given: 'Component with complex prop types (unions, generics)'
+    when: 'Prop extractor runs'
+    then: 'Prop schema accurately reflects TypeScript types'
+    status: in_progress
+    notes: 'Basic prop extraction working for interface types, inline types and complex types still need work'
   - id: A3
-    given: 'Component library with various component types'
-    when: 'Generating React code from canvas documents'
-    then: 'Generated code compiles without errors and matches design specifications'
+    given: 'Component file is modified'
+    when: 'File watcher detects change'
+    then: 'Index updates within 100ms'
+    status: pending
+    notes: 'File watcher not yet implemented'
   - id: A4
-    given: 'Design system with token dependencies'
-    when: 'Updating design tokens across packages'
-    then: 'All components update consistently and maintain visual coherence'
+    given: 'Third-party component library in node_modules'
+    when: 'Discovery runs with allowlist'
+    then: 'Third-party components included in index'
+    status: pending
+    notes: 'Third-party component discovery not yet implemented'
   - id: A5
-    given: 'VS Code extension with active canvas session'
-    when: 'User performs selection and manipulation operations'
-    then: 'Operations execute within performance budgets and maintain responsive UI'
-  - id: A6
-    given: 'Plugin ecosystem with third-party extensions'
-    when: 'Loading and executing plugin operations'
-    then: 'Plugins integrate seamlessly and maintain system stability'
-  - id: A7
-    given: 'MCP server with multiple connected clients'
-    when: 'Broadcasting canvas state changes'
-    then: 'All clients receive updates in real-time with proper error handling'
-  - id: A8
-    given: 'WebSocket server under load'
-    when: 'Handling multiple concurrent canvas sessions'
-    then: 'Server maintains performance within specified budgets'
+    given: 'Component index with 1000 components'
+    when: 'Query runs'
+    then: 'Results returned in <100ms'
+    status: pending
+    notes: 'Performance optimization not yet implemented'
 non_functional:
-  a11y:
-    - 'All interactive canvas elements must be keyboard accessible'
-    - 'Color contrast ratios must meet WCAG AA standards'
-    - 'Screen reader compatibility for all canvas operations'
+  a11y: []
   perf:
-    api_p95_ms: 100
-    lcp_ms: 2000
-    canvas_render_ms: 16
-    websocket_latency_ms: 50
+    component_discovery_ms: 5000
+    index_query_ms: 100
+    additional:
+      - 'Component scanning completes in <5s for 1000 components'
+      - 'Index queries return in <100ms'
+      - 'Memory usage scales linearly with component count'
   security:
-    - 'Canvas documents must not contain executable code'
-    - 'Plugin loading must validate against allowlist'
-    - 'WebSocket connections must use secure protocols'
-    - 'Design tokens must not expose sensitive information'
+    - 'Component prop extraction validates TypeScript types'
+    - 'No code execution during component scanning'
+    - 'File system access restricted to project scope'
 contracts:
-  - type: 'openapi'
-    path: 'packages/mcp-adapter/schemas/api.yaml'
-  - type: 'typescript'
-    path: 'packages/canvas-schema/schemas/canvas.json'
-  - type: 'component'
-    path: 'packages/design-system/src/**/*.tsx'
-  - type: 'plugin'
-    path: 'packages/plugin-registry/schemas/plugin.json'
+  - type: typescript
+    path: packages/component-indexer/src/scanner.ts
+  - type: typescript
+    path: packages/component-indexer/src/types.ts
 observability:
   logs:
-    - 'Canvas operation performance metrics'
-    - 'Plugin loading and execution events'
-    - 'WebSocket connection lifecycle events'
-    - 'Schema validation failures'
-    - 'Error boundaries and recovery actions'
+    - 'components.discover.complete with component count'
+    - 'components.scan.error with file path and error'
+    - 'components.index.update with change count'
+    - 'tokens.watch.update with changed tokens'
   metrics:
-    - 'canvas_operations_per_second'
-    - 'plugin_load_time_ms'
-    - 'websocket_message_latency_ms'
-    - 'schema_validation_rate'
-    - 'error_recovery_rate'
+    - 'components_discover_duration_ms histogram'
+    - 'components_total gauge'
+    - 'components_scan_errors_total counter'
+    - 'tokens_references_resolved_total counter'
   traces:
-    - 'canvas_operation_execution'
-    - 'plugin_lifecycle'
-    - 'websocket_message_flow'
-    - 'schema_validation_chain'
+    - 'components.discover.pipeline from files to index'
+    - 'components.scan.file for individual file processing'
+    - 'components.extract.props for prop schema generation'
 migrations:
-  - 'Legacy canvas format migration to current schema version'
-  - 'Component property mapping updates for new design system'
-  - 'Plugin API compatibility layer for existing extensions'
+  - 'Initial release - no migrations required'
+  - 'Component index format versioned with backward compatibility'
 rollback:
-  - 'Revert to previous schema version if validation fails'
-  - 'Plugin allowlist reset to safe defaults'
-  - 'Design token fallback to hardcoded values'
+  - 'Can disable component discovery if causing issues'

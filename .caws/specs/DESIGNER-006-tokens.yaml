@@ -7,7 +7,7 @@ change_budget:
   max_loc: 800
 blast_radius:
   modules:
-    - packages/tokens
+    - packages/design-tokens
   data_migration: false
 operational_rollback_slo: 15m
 threats:
@@ -69,10 +69,10 @@ non_functional:
     - 'No code injection via token names or values'
     - 'Token file parsing validates against schema'
 contracts:
-  - type: graphql
-    path: packages/tokens/src/types.ts
-  - type: graphql
-    path: packages/tokens/schemas/tokens-0.1.json
+  - type: typescript
+    path: packages/design-tokens/src/tokens.ts
+  - type: json
+    path: packages/design-tokens/schemas/tokens-0.1.json
 observability:
   logs:
     - 'tokens.parse.complete with token count'

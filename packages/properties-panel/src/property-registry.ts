@@ -4,9 +4,11 @@
  */
 
 import type {
-  PropertySection,
-  PropertyDefinition,
+  CCDRegistry,
+  ComponentCapabilityDescriptor,
   FontMetadata,
+  PropertyDefinition,
+  PropertySection,
 } from "./types.js";
 
 /**
@@ -448,3 +450,228 @@ export class PropertyRegistry {
 
 // Initialize default sections
 PropertyRegistry.initialize();
+
+/**
+ * BYODS CCD Registry Implementation
+ */
+export class CCDRegistryImpl implements CCDRegistry {
+  private ccds = new Map<string, ComponentCapabilityDescriptor>();
+
+  register(ccd: ComponentCapabilityDescriptor): void {
+    this.ccds.set(ccd.component, ccd);
+  }
+
+  get(componentName: string): ComponentCapabilityDescriptor | undefined {
+    return this.ccds.get(componentName);
+  }
+
+  getAll(): ComponentCapabilityDescriptor[] {
+    return Array.from(this.ccds.values());
+  }
+
+  async loadFromPackage(
+    packageName: string
+  ): Promise<ComponentCapabilityDescriptor[]> {
+    // In a real implementation, this would:
+    // 1. Resolve the package using a bundler (esbuild)
+    // 2. Extract component metadata using react-docgen-typescript or similar
+    // 3. Generate CCDs from the extracted metadata
+    // 4. Validate against CCD schema
+    // 5. Cache in the registry
+
+    console.info(`Loading CCDs from package: ${packageName}`);
+    // Placeholder implementation
+    return [];
+  }
+
+  async generateFromSource(
+    componentPath: string
+  ): Promise<ComponentCapabilityDescriptor> {
+    // Generate CCD from source code analysis
+    // This would use TypeScript compiler API or react-docgen-typescript
+    // to extract prop types, defaults, and generate the CCD structure
+
+    console.info(`Generating CCD from source: ${componentPath}`);
+    throw new Error("Not implemented yet");
+  }
+
+  generatePropertySections(
+    ccd: ComponentCapabilityDescriptor
+  ): PropertySection[] {
+    const sections: PropertySection[] = [];
+
+    // Generate primary properties section
+    const primaryProps = ccd.props.filter(
+      (prop: ComponentCapabilityDescriptor["props"][0]) =>
+        !prop.name.startsWith("on") && // Exclude event handlers from primary
+        prop.kind !== "event"
+    );
+
+    if (primaryProps.length > 0) {
+      sections.push({
+        id: `${ccd.component}.primary`,
+        label: "Properties",
+        icon: "⚙️",
+        properties: this.generatePropertyDefinitionsFromCCDProps(primaryProps),
+        collapsible: false,
+      });
+    }
+
+    // Generate slots section if the component has slots
+    if (ccd.slots && ccd.slots.length > 0) {
+      sections.push({
+        id: `${ccd.component}.slots`,
+        label: "Slots",
+        icon: "🔗",
+        properties: ccd.slots.map(
+          (slot: NonNullable<ComponentCapabilityDescriptor["slots"]>[0]) => ({
+            key: `slot.${slot.name}`,
+            label: slot.name,
+            type: "string" as const,
+            category: "slots",
+            description: `Slot for ${slot.name}`,
+            disclosure: "primary" as const,
+          })
+        ),
+        collapsible: true,
+        defaultCollapsed: false,
+      });
+    }
+
+    // Generate events section
+    const eventProps = ccd.props.filter(
+      (prop: ComponentCapabilityDescriptor["props"][0]) =>
+        prop.name.startsWith("on") || prop.kind === "event"
+    );
+
+    if (eventProps.length > 0) {
+      sections.push({
+        id: `${ccd.component}.events`,
+        label: "Events",
+        icon: "⚡",
+        properties: this.generatePropertyDefinitionsFromCCDProps(eventProps),
+        collapsible: true,
+        defaultCollapsed: true,
+      });
+    }
+
+    // Generate theming section if component has theme bindings
+    if (ccd.theming?.tokens && ccd.theming.tokens.length > 0) {
+      sections.push({
+        id: `${ccd.component}.theming`,
+        label: "Theming",
+        icon: "🎨",
+        properties: ccd.theming.tokens.map(
+          (
+            token: NonNullable<
+              NonNullable<ComponentCapabilityDescriptor["theming"]>["tokens"]
+            >[0]
+          ) => ({
+            key: `theme.${token.token}`,
+            label: token.token.split(".").pop() || token.token,
+            type: "string" as const,
+            category: "theming",
+            description: `Theme token: ${token.token}`,
+            disclosure: "advanced" as const,
+          })
+        ),
+        collapsible: true,
+        defaultCollapsed: true,
+      });
+    }
+
+    return sections;
+  }
+
+  generatePropertyDefinitions(
+    ccd: ComponentCapabilityDescriptor
+  ): PropertyDefinition[] {
+    return this.generatePropertyDefinitionsFromCCDProps(ccd.props);
+  }
+
+  private generatePropertyDefinitionsFromCCDProps(
+    props: ComponentCapabilityDescriptor["props"]
+  ): PropertyDefinition[] {
+    return props.map((prop: ComponentCapabilityDescriptor["props"][0]) => {
+      const definition: PropertyDefinition = {
+        key: prop.name,
+        label:
+          prop.name.charAt(0).toUpperCase() +
+          prop.name.slice(1).replace(/([A-Z])/g, " $1"),
+        type: "string", // Default, will be overridden below
+        category: "component",
+        description: prop.description,
+        disclosure: prop.required ? "primary" : "advanced",
+        componentContract: {
+          componentKey: prop.name, // This would be the component name
+          propName: prop.name,
+          propType: prop.type,
+          propDefaults: { [prop.name]: prop.defaultValue },
+          ccd: {
+            kind: (prop.kind || this.inferPropKind(prop)) as
+              | "enum"
+              | "boolean"
+              | "string"
+              | "number"
+              | "event"
+              | "union",
+            values: prop.values,
+            controlled: prop.controlled,
+            slotBinding: prop.slotBinding,
+          },
+        },
+      };
+
+      // Map CCD kind to property type
+      switch (prop.kind || this.inferPropKind(prop)) {
+        case "boolean":
+          definition.type = "boolean";
+          break;
+        case "number":
+          definition.type = "number";
+          if (prop.type.includes("number")) {
+            definition.min = 0;
+            definition.max = 1000;
+            definition.step = 1;
+          }
+          break;
+        case "enum":
+        case "union":
+          definition.type = "select";
+          definition.options =
+            prop.values?.map((value) => ({
+              label: value,
+              value: value,
+            })) || [];
+          break;
+        case "event":
+          definition.type = "string";
+          definition.placeholder = "Event handler";
+          break;
+        default:
+          definition.type = "string";
+      }
+
+      return definition;
+    });
+  }
+
+  private inferPropKind(
+    prop: ComponentCapabilityDescriptor["props"][0]
+  ): string {
+    const type = prop.type.toLowerCase();
+    if (type.includes("boolean")) {
+      return "boolean";
+    }
+    if (type.includes("number")) {
+      return "number";
+    }
+    if (type.includes("string") && prop.values) {
+      return "enum";
+    }
+    if (prop.name.startsWith("on")) {
+      return "event";
+    }
+    return "string";
+  }
+}

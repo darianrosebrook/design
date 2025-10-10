@@ -25,6 +25,53 @@ export interface ComponentDiscoveryResult {
 }
 
 /**
+ * Component Capability Descriptor (CCD) - BYODS compatible
+ */
+export interface ComponentCapabilityDescriptor {
+  id: string;
+  component: string;
+  package?: string;
+  import: {
+    specifier: string;
+    namedExport?: string;
+    default?: boolean;
+  };
+  react?: {
+    min: string;
+  };
+  providers?: Array<{
+    import: {
+      specifier: string;
+      namedExport?: string;
+    };
+    props?: Record<string, unknown>;
+  }>;
+  props: ComponentProp[];
+  slots?: Array<{
+    name: string;
+    accepts?: string[];
+    propBinding?: string;
+    multiple?: boolean;
+  }>;
+  semantics?: {
+    role?: string;
+    behavior?: string;
+    stateMap?: Record<string, string>;
+  };
+  theming?: {
+    tokens?: Array<{
+      token: string;
+      bind: string;
+    }>;
+  };
+  safety?: {
+    effects?: "forbid-network" | "allow";
+    timers?: "strip" | "allow";
+    portals?: "allow-within-root" | "forbid";
+  };
+}
+
+/**
  * Discovered component information
  */
 export interface DiscoveredComponent {
@@ -37,6 +84,8 @@ export interface DiscoveredComponent {
   usage: ComponentUsage;
   confidence: number;
   suggestions: string[];
+  // BYODS/CCD integration
+  ccd?: ComponentCapabilityDescriptor;
 }
 
 /**
@@ -50,6 +99,11 @@ export interface ComponentProp {
   description?: string;
   usedInDesign: boolean;
   suggestedSemanticKey?: string;
+  // BYODS/CCD extensions
+  kind?: "enum" | "boolean" | "string" | "number" | "event" | "union";
+  values?: string[]; // For enum/union types
+  controlled?: boolean; // For controlled/uncontrolled patterns
+  slotBinding?: string; // For slot-based props
 }
 
 /**

@@ -85,7 +85,7 @@ coverage
 .DS_Store
 ```
 
-**design/home.canvas.json** (from data-model.md) and **design/tokens.json** (from tokens.md)
+**design/home.canvas.json** (from data-model.md) and **docs/examples/tokens.json** (from tokens.md)
 
 **.caws/working-spec.yaml**
 
@@ -325,7 +325,7 @@ for (const f of files){
 import fs from 'node:fs';
 import chokidar from 'chokidar';
 import { tokensToCssVars } from '@paths-design/designer/tokens';
-const [,, tokens='design/tokens.json', out='src/ui/tokens.css'] = process.argv;
+const [,, tokens='docs/examples/tokens.json', out='src/ui/tokens.css'] = process.argv;
 function run(){ fs.writeFileSync(out, tokensToCssVars(tokens)); console.log('updated', out); }
 run();
 chokidar.watch(tokens).on('change', run);
@@ -435,4 +435,4 @@ pnpm watch:tokens
 
 * The extension webview loads and renders the Hero frame + Title text using the example doc.
 * `pnpm generate` emits `src/ui/Hero.tsx` and `src/ui/Hero.module.css` deterministically.
-* Token watcher writes `src/ui/tokens.css` and updates on edits to `design/tokens.json`.
+* Token watcher writes `src/ui/tokens.css` and updates on edits to `docs/examples/tokens.json`.

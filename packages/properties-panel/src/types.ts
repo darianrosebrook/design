@@ -6,6 +6,62 @@
 import type { SemanticKeyType } from "@paths-design/canvas-schema";
 import type { DesignTokens } from "@paths-design/design-tokens";
 
+// CCD types (inline to avoid circular dependencies)
+export interface ComponentCapabilityDescriptor {
+  id: string;
+  component: string;
+  package?: string;
+  import: {
+    specifier: string;
+    namedExport?: string;
+    default?: boolean;
+  };
+  react?: {
+    min: string;
+  };
+  providers?: Array<{
+    import: {
+      specifier: string;
+      namedExport?: string;
+    };
+    props?: Record<string, unknown>;
+  }>;
+  props: Array<{
+    name: string;
+    type: string;
+    kind?: "enum" | "boolean" | "string" | "number" | "event" | "union";
+    values?: string[];
+    controlled?: boolean;
+    slotBinding?: string;
+    required?: boolean;
+    defaultValue?: unknown;
+    description?: string;
+  }>;
+  slots?: Array<{
+    name: string;
+    accepts?: string[];
+    propBinding?: string;
+    multiple?: boolean;
+    description?: string;
+  }>;
+  semantics?: {
+    role?: string;
+    behavior?: string;
+    stateMap?: Record<string, string>;
+  };
+  theming?: {
+    tokens?: Array<{
+      token: string;
+      bind: string;
+    }>;
+  };
+  safety?: {
+    effects?: "forbid-network" | "allow";
+    timers?: "strip" | "allow";
+    portals?: "allow-within-root" | "forbid";
+  };
+}
+
 /**
  * Font metadata for typography controls
  */
@@ -89,6 +145,13 @@ export interface ComponentContractProperty {
     children?: boolean;
     ariaLabel?: boolean;
   };
+  // BYODS/CCD extensions
+  ccd?: {
+    kind: "enum" | "boolean" | "string" | "number" | "event" | "union";
+    values?: string[]; // For enum/union types
+    controlled?: boolean;
+    slotBinding?: string;
+  };
 }
 
 /**
@@ -135,6 +198,27 @@ export interface PanelEventHandlers {
 }
 
 /**
+ * BYODS/CCD Registry interface
+ */
+export interface CCDRegistry {
+  register(ccd: ComponentCapabilityDescriptor): void;
+  get(componentName: string): ComponentCapabilityDescriptor | undefined;
+  getAll(): ComponentCapabilityDescriptor[];
+  generatePropertySections(
+    ccd: ComponentCapabilityDescriptor
+  ): PropertySection[];
+  generatePropertyDefinitions(
+    ccd: ComponentCapabilityDescriptor
+  ): PropertyDefinition[];
+  loadFromPackage(
+    packageName: string
+  ): Promise<ComponentCapabilityDescriptor[]>;
+  generateFromSource(
+    componentPath: string
+  ): Promise<ComponentCapabilityDescriptor>;
+}
+
+/**
  * Properties panel props
  */
 export interface PropertiesPanelProps {
@@ -150,6 +234,8 @@ export interface PropertiesPanelProps {
     error: string;
   } | null;
   onDismissError?: () => void;
+  // BYODS extensions
+  ccdRegistry?: CCDRegistry;
 }
 
 /**

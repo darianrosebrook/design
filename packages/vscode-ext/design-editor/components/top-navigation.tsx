@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { ChevronDown } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 export function TopNavigation() {
-  const [activeMenu, setActiveMenu] = useState<string | null>(null)
+  const [_activeMenu, _setActiveMenu] = useState<string | null>(null);
 
   const menuItems = [
     {
@@ -87,7 +87,7 @@ export function TopNavigation() {
         { label: "About" },
       ],
     },
-  ]
+  ];
 
   return (
     <div className="flex h-12 items-center gap-1 border-b border-border bg-card px-3">
@@ -102,7 +102,11 @@ export function TopNavigation() {
         {menuItems.map((menu) => (
           <DropdownMenu key={menu.label}>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="h-8 px-3 text-sm font-normal hover:bg-accent">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 px-3 text-sm font-normal hover:bg-accent"
+              >
                 {menu.label}
                 <ChevronDown className="ml-1 h-3 w-3 opacity-50" />
               </Button>
@@ -112,11 +116,18 @@ export function TopNavigation() {
                 item.separator ? (
                   <DropdownMenuSeparator key={`separator-${index}`} />
                 ) : (
-                  <DropdownMenuItem key={item.label} className="flex items-center justify-between">
+                  <DropdownMenuItem
+                    key={item.label}
+                    className="flex items-center justify-between"
+                  >
                     <span>{item.label}</span>
-                    {item.shortcut && <span className="text-xs text-muted-foreground">{item.shortcut}</span>}
+                    {item.shortcut && (
+                      <span className="text-xs text-muted-foreground">
+                        {item.shortcut}
+                      </span>
+                    )}
                   </DropdownMenuItem>
-                ),
+                )
               )}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -129,5 +140,5 @@ export function TopNavigation() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

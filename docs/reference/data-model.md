@@ -229,7 +229,7 @@
 
 ## Notes
 
-* `bind.token` points at `design/tokens.json` (e.g., `"tokens.color.primary"`).
+* `bind.token` points at `docs/examples/tokens.json` (e.g., `"tokens.color.primary"`).
 * `bind.prop` allows component instance to map a node attribute to a React prop.
 * Canonicalization rule (formatter): order object keys as `[id,type,name,visible,frame,style,...]` and array children by `z`.
 

@@ -60,7 +60,7 @@ export default defineConfig({
     // Test timeout for CI/CD environments
     testTimeout: 10000,
     // Setup files for consistent test environment
-    setupFiles: ["./test-setup.ts"],
+    setupFiles: ["./scripts/test-setup.ts"],
     // Bail out after first test failure in CI
     bail: process.env.CI ? 1 : 0,
   },

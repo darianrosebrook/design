@@ -43,14 +43,7 @@ import {
   parseCssColorToRgb,
   formatOklch,
 } from "@/lib/utils/helpers/colorFormat";
-
-// Types for contrast checking
-interface ContrastResult {
-  ratio: number;
-  meetsAA: boolean;
-  meetsAAA: boolean;
-  description: string;
-}
+import { checkContrast, type ContrastResult } from "./ContrastChecker";
 
 // Utility functions
 function findNearestCompliantColor(
@@ -160,10 +153,12 @@ export function ColorPicker({
   // Initialize color values
   useEffect(() => {
     const rgb = hexToRgb(currentColor);
-    const hsb = rgbToHsb(rgb.r, rgb.g, rgb.b);
-    setHue(hsb.h);
-    setSaturation(hsb.s);
-    setBrightness(hsb.b);
+    if (rgb) {
+      const hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
+      setHue(hsv.h);
+      setSaturation(hsv.s);
+      setBrightness(hsv.v);
+    }
   }, [currentColor]);
 
   // Draw color picker canvas

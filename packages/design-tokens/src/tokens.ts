@@ -89,10 +89,10 @@ export const DesignTokensSchema = z.object({
       "3xl": numericValue,
     }),
     weight: z.object({
-      normal: z.union([z.string(), tokenReference]),
-      medium: z.union([z.string(), tokenReference]),
-      semibold: z.union([z.string(), tokenReference]),
-      bold: z.union([z.string(), tokenReference]),
+      normal: z.union([z.string(), z.number(), tokenReference]),
+      medium: z.union([z.string(), z.number(), tokenReference]),
+      semibold: z.union([z.string(), z.number(), tokenReference]),
+      bold: z.union([z.string(), z.number(), tokenReference]),
     }),
     lineHeight: z.object({
       tight: numericValue,

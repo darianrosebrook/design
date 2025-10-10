@@ -42,7 +42,10 @@ export function isTokenReference(value: unknown): value is string {
  * Extract reference path from token reference string
  * Example: "{color.brand.primary}" → "color.brand.primary"
  */
-export function extractReferencePath(reference: string): string {
+export function extractReferencePath(reference: string): string | null {
+  if (!isTokenReference(reference)) {
+    return null;
+  }
   return reference.slice(1, -1);
 }
 
@@ -69,10 +72,12 @@ export function buildDependencyGraph(
 
       if (isTokenReference(value)) {
         const refPath = extractReferencePath(value);
-        if (!graph.has(currentPath)) {
+        if (refPath && !graph.has(currentPath)) {
           graph.set(currentPath, new Set());
         }
-        graph.get(currentPath)!.add(refPath);
+        if (refPath) {
+          graph.get(currentPath)!.add(refPath);
+        }
       } else if (
         typeof value === "object" &&
         value !== null &&
@@ -191,7 +196,9 @@ export function validateTokenReferences(
 
     if (isTokenReference(value)) {
       const refPath = extractReferencePath(value);
-      validatePath(refPath, depth + 1, visited);
+      if (refPath) {
+        validatePath(refPath, depth + 1, visited);
+      }
     }
   }
 
@@ -246,6 +253,10 @@ export function resolveTokenReferences(
 
     if (isTokenReference(value)) {
       const refPath = extractReferencePath(value);
+
+      if (!refPath) {
+        return value; // Invalid reference format
+      }
 
       if (visited.has(refPath)) {
         if (strict) {

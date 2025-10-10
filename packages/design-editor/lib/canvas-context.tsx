@@ -2,7 +2,7 @@
 
 import type { CanvasDocumentType } from "@paths-design/canvas-schema";
 import type { NodePath } from "@paths-design/canvas-engine";
-import { DesignTokensSchema } from "@paths-design/design-tokens/dist/tokens.js";
+import { DesignTokensSchema } from "@paths-design/design-tokens";
 
 import {
   createContext,
@@ -18,16 +18,19 @@ import {
   findNodeById,
 } from "@paths-design/canvas-engine";
 // Import specific functions to avoid bundling Node.js dependencies
-import { flattenTokens } from "@paths-design/design-tokens/dist/utils.js";
-import { resolveTokenReferences } from "@paths-design/design-tokens/dist/resolver.js";
+import { flattenTokens } from "@paths-design/design-tokens";
+import { resolveTokenReferences } from "@paths-design/design-tokens";
 import type { CanvasObject } from "./types";
-import type { DesignTokens } from "@paths-design/design-tokens/dist/tokens.js";
+import type { DesignTokens } from "@paths-design/design-tokens";
 
 export type CanvasTool =
   | "select"
   | "hand"
   | "scale"
   | "frame"
+  | "group"
+  | "section"
+  | "page"
   | "text"
   | "image"
   | "rectangle"
@@ -102,6 +105,14 @@ interface CanvasContextType {
   setCursorPosition: (x: number, y: number) => void;
   // Clipboard functions
   clipboard: CanvasObject[];
+  copyToClipboard: (objectIds?: string[]) => void;
+  pasteFromClipboard: () => void;
+  cutToClipboard: (objectIds?: string[]) => void;
+  duplicateObject: (objectId?: string) => void;
+  deleteObject: (objectId?: string) => void;
+  bringForward: (objectId: string) => void;
+  sendBackward: (objectId: string) => void;
+  selectAll: () => void;
 }
 
 const CanvasContext = createContext<CanvasContextType | undefined>(undefined);
@@ -128,13 +139,300 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
   const [cursorY, setCursorY] = useState<number>(0);
 
   // Clipboard state
-  const [clipboard, _setClipboard] = useState<CanvasObject[]>([]);
+  const [clipboard, setClipboard] = useState<CanvasObject[]>([]);
 
   // Design tokens state
   const [designTokens, setDesignTokens] = useState<DesignTokens | null>(null);
   const [flattenedTokens, setFlattenedTokens] = useState<
     Record<string, string | number>
   >({});
+  const [isDesignTokensManagerOpen, setIsDesignTokensManagerOpen] =
+    useState(false);
+
+  /**
+   * Transform the loaded design tokens from the JSON file format to the expected DesignTokens schema
+   */
+  const transformTokensToSchema = (loadedTokens: any): DesignTokens => {
+    const core = loadedTokens.core || {};
+
+    // Extract color tokens - map from the nested structure
+    const extractColorValue = (path: string): string => {
+      const parts = path.split(".");
+      let current: any = core.color;
+      for (const part of parts) {
+        if (current && typeof current === "object" && part in current) {
+          current = current[part];
+          // Handle W3C token format with $value
+          if (current && typeof current === "object" && "$value" in current) {
+            current = current.$value;
+          }
+        } else {
+          return "#000000"; // fallback
+        }
+      }
+      return typeof current === "string" ? current : "#000000";
+    };
+
+    // Extract spacing tokens - map numbered keys to semantic names
+    const extractSpacingValue = (key: string): number => {
+      const spacing = core.spacing?.size;
+      if (!spacing || typeof spacing !== "object") return 0;
+
+      // Map semantic keys to numbered keys
+      const keyMap: Record<string, string> = {
+        xs: "00",
+        sm: "01",
+        md: "02",
+        lg: "03",
+        xl: "04",
+        "2xl": "05",
+        "3xl": "06",
+      };
+
+      const numberedKey = keyMap[key] || key;
+      if (numberedKey in spacing) {
+        const value = spacing[numberedKey];
+        if (value && typeof value === "object" && "$value" in value) {
+          const rawValue = value.$value;
+          if (typeof rawValue === "string") {
+            // Parse CSS values like "1px" to numbers
+            const match = rawValue.match(/^(\d+(?:\.\d+)?)px?$/);
+            return match ? parseFloat(match[1]) : 0;
+          }
+          return typeof rawValue === "number" ? rawValue : 0;
+        }
+        return typeof value === "number" ? value : 0;
+      }
+      return 0;
+    };
+
+    // Extract typography tokens
+    const extractTypographyValue = (
+      category: string,
+      key: string
+    ): string | number => {
+      const typography = core.typography?.[category];
+      if (!typography || typeof typography !== "object") {
+        return category === "fontFamily" ? "sans-serif" : 16;
+      }
+
+      if (category === "ramp") {
+        // Map semantic keys to numbered keys for font sizes
+        const keyMap: Record<string, string> = {
+          xs: "1",
+          sm: "2",
+          md: "3",
+          lg: "4",
+          xl: "5",
+          "2xl": "6",
+          "3xl": "7",
+        };
+        const numberedKey = keyMap[key] || key;
+        if (numberedKey in typography) {
+          const value = typography[numberedKey];
+          if (value && typeof value === "object" && "$value" in value) {
+            return typeof value.$value === "number" ? value.$value : 16;
+          }
+          return typeof value === "number" ? value : 16;
+        }
+      } else if (category === "weight") {
+        // Weight keys should map directly
+        const weightMap: Record<string, string> = {
+          normal: "regular",
+          medium: "medium",
+          semibold: "semibold",
+          bold: "bold",
+        };
+        const weightKey = weightMap[key] || key;
+        if (weightKey in typography) {
+          const value = typography[weightKey];
+          if (value && typeof value === "object" && "$value" in value) {
+            // Convert to string since schema expects string values for weights
+            const rawValue = value.$value;
+            return String(rawValue);
+          }
+          // Convert to string since schema expects string values for weights
+          return String(value);
+        }
+      } else if (category === "lineHeight") {
+        // Line height keys
+        if (key in typography) {
+          const value = typography[key];
+          if (value && typeof value === "object" && "$value" in value) {
+            return typeof value.$value === "number" ? value.$value : 1.5;
+          }
+          return typeof value === "number" ? value : 1.5;
+        }
+      } else {
+        // fontFamily and other direct keys
+        if (key in typography) {
+          const value = typography[key];
+          if (value && typeof value === "object" && "$value" in value) {
+            return String(value.$value);
+          }
+          return String(value);
+        }
+      }
+      return category === "fontFamily" ? "sans-serif" : 16;
+    };
+
+    // Extract shape tokens (radius and borderWidth)
+    const extractShapeValue = (category: string, key: string): number => {
+      const shape = core.shape?.[category];
+      if (shape && typeof shape === "object" && key in shape) {
+        const value = shape[key];
+        if (value && typeof value === "object" && "$value" in value) {
+          return typeof value.$value === "number" ? value.$value : 0;
+        }
+        return typeof value === "number" ? value : 0;
+      }
+      return 0;
+    };
+
+    // Extract elevation tokens (shadow)
+    const extractShadowValue = (key: string): string => {
+      const elevation = core.elevation;
+      if (!elevation) return "none";
+
+      // Build shadow from level components
+      const level = elevation.level?.[key];
+      const offset = elevation.offset?.[key];
+      const blur = elevation.blur?.[key];
+      const spread = elevation.spread?.[key];
+
+      if (level && typeof level === "object" && "$value" in level) {
+        const levelValue = level.$value;
+        const offsetValue =
+          offset && typeof offset === "object" && "$value" in offset
+            ? offset.$value
+            : 0;
+        const blurValue =
+          blur && typeof blur === "object" && "$value" in blur
+            ? blur.$value
+            : 0;
+        const spreadValue =
+          spread && typeof spread === "object" && "$value" in spread
+            ? spread.$value
+            : 0;
+
+        return `${offsetValue}px ${offsetValue}px ${blurValue}px ${spreadValue}px rgba(0, 0, 0, ${levelValue})`;
+      }
+
+      return "none";
+    };
+
+    // Extract layer tokens (zIndex)
+    const extractZIndexValue = (key: string): number => {
+      const layer = core.layer?.[key];
+      if (layer && typeof layer === "object" && "$value" in layer) {
+        return typeof layer.$value === "number" ? layer.$value : 0;
+      }
+      return 0;
+    };
+
+    return {
+      color: {
+        background: {
+          primary: extractColorValue("mode.black"),
+          secondary: extractColorValue("mode.light"),
+          tertiary: extractColorValue("palette.neutral.200"),
+          surface: extractColorValue("palette.neutral.100"),
+          elevated: extractColorValue("palette.neutral.50"),
+        },
+        text: {
+          primary: extractColorValue("mode.black"),
+          secondary: extractColorValue("palette.neutral.600"),
+          tertiary: extractColorValue("palette.neutral.400"),
+          inverse: extractColorValue("mode.white"),
+        },
+        border: {
+          subtle: extractColorValue("palette.neutral.300"),
+          default: extractColorValue("palette.neutral.400"),
+          strong: extractColorValue("palette.neutral.500"),
+        },
+        interactive: {
+          primary: extractColorValue("palette.primary.500"),
+          primaryHover: extractColorValue("palette.primary.600"),
+          primaryPressed: extractColorValue("palette.primary.700"),
+          secondary: extractColorValue("palette.neutral.500"),
+          secondaryHover: extractColorValue("palette.neutral.600"),
+          secondaryPressed: extractColorValue("palette.neutral.700"),
+          destructive: extractColorValue("palette.error.500"),
+          destructiveHover: extractColorValue("palette.error.600"),
+          destructivePressed: extractColorValue("palette.error.700"),
+        },
+        semantic: {
+          success: extractColorValue("palette.success.500"),
+          warning: extractColorValue("palette.warning.500"),
+          error: extractColorValue("palette.error.500"),
+          info: extractColorValue("palette.info.500"),
+        },
+      },
+      space: {
+        xs: extractSpacingValue("xs"),
+        sm: extractSpacingValue("sm"),
+        md: extractSpacingValue("md"),
+        lg: extractSpacingValue("lg"),
+        xl: extractSpacingValue("xl"),
+        "2xl": extractSpacingValue("2xl") || extractSpacingValue("xl") * 2,
+        "3xl": extractSpacingValue("3xl") || extractSpacingValue("xl") * 3,
+      },
+      type: {
+        family: {
+          sans: extractTypographyValue("fontFamily", "sans") as string,
+          mono: extractTypographyValue("fontFamily", "mono") as string,
+        },
+        size: {
+          xs: extractTypographyValue("ramp", "xs") as number,
+          sm: extractTypographyValue("ramp", "sm") as number,
+          md: extractTypographyValue("ramp", "md") as number,
+          lg: extractTypographyValue("ramp", "lg") as number,
+          xl: extractTypographyValue("ramp", "xl") as number,
+          "2xl": extractTypographyValue("ramp", "2xl") as number,
+          "3xl": extractTypographyValue("ramp", "3xl") as number,
+        },
+        weight: {
+          normal: extractTypographyValue("weight", "normal") as string,
+          medium: extractTypographyValue("weight", "medium") as string,
+          semibold: extractTypographyValue("weight", "semibold") as string,
+          bold: extractTypographyValue("weight", "bold") as string,
+        },
+        lineHeight: {
+          tight: extractTypographyValue("lineHeight", "tight") as number,
+          normal: extractTypographyValue("lineHeight", "normal") as number,
+          loose: extractTypographyValue("lineHeight", "loose") as number,
+        },
+      },
+      radius: {
+        none: extractShapeValue("radius", "none"),
+        sm: extractShapeValue("radius", "sm"),
+        md: extractShapeValue("radius", "md"),
+        lg: extractShapeValue("radius", "lg"),
+        xl: extractShapeValue("radius", "xl"),
+        full: extractShapeValue("radius", "full"),
+      },
+      shadow: {
+        sm: extractShadowValue("sm"),
+        md: extractShadowValue("md"),
+        lg: extractShadowValue("lg"),
+        xl: extractShadowValue("xl"),
+      },
+      borderWidth: {
+        none: extractShapeValue("border", "none"),
+        sm: extractShapeValue("border", "sm"),
+        md: extractShapeValue("border", "md"),
+        lg: extractShapeValue("border", "lg"),
+      },
+      zIndex: {
+        dropdown: extractZIndexValue("dropdown"),
+        sticky: extractZIndexValue("overlay"),
+        fixed: extractZIndexValue("overlay"),
+        modal: extractZIndexValue("modal"),
+        popover: extractZIndexValue("overlay"),
+        tooltip: extractZIndexValue("tooltip"),
+      },
+    };
+  };
 
   // Load design tokens on mount
   useEffect(() => {
@@ -147,8 +445,9 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         }
         const tokens = await response.json();
 
-        // Validate and set tokens
-        const validatedTokens = DesignTokensSchema.parse(tokens);
+        // Transform and validate tokens
+        const transformedTokens = transformTokensToSchema(tokens);
+        const validatedTokens = DesignTokensSchema.parse(transformedTokens);
         setDesignTokens(validatedTokens);
 
         // Flatten tokens for easy access and resolve references
@@ -456,12 +755,186 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
 
   // Clipboard functions
 
+  // Copy selected objects to clipboard
+  const copyToClipboard = (objectIds?: string[]) => {
+    const idsToCopy = objectIds || Array.from(selectedIds);
+    if (idsToCopy.length === 0) return;
+
+    const objectsToCopy = objects.filter((obj) => idsToCopy.includes(obj.id));
+    setClipboard(objectsToCopy);
+  };
+
+  // Cut selected objects to clipboard (removes them from canvas)
+  const cutToClipboard = (objectIds?: string[]) => {
+    const idsToCut = objectIds || Array.from(selectedIds);
+    if (idsToCut.length === 0) return;
+
+    copyToClipboard(idsToCut);
+    // Remove objects from canvas
+    const newObjects = objects.filter((obj) => !idsToCut.includes(obj.id));
+    setDocument((prev) => ({
+      ...prev,
+      artboards: [
+        {
+          ...prev.artboards[0],
+          children: newObjects,
+        },
+      ],
+    }));
+
+    // Clear selection
+    setSelectedId(null);
+    setSelectedIds(new Set());
+  };
+
+  // Paste objects from clipboard
+  const pasteFromClipboard = () => {
+    if (clipboard.length === 0) return;
+
+    const pastedObjects = clipboard.map((obj, index) => ({
+      ...obj,
+      id: `${obj.id}-paste-${Date.now()}-${index}`,
+      x: obj.x + 20, // Offset slightly to make paste visible
+      y: obj.y + 20,
+      visible: true,
+    }));
+
+    // Add objects to canvas
+    setDocument((prev) => ({
+      ...prev,
+      artboards: [
+        {
+          ...prev.artboards[0],
+          children: [...prev.artboards[0].children, ...pastedObjects],
+        },
+      ],
+    }));
+
+    // Select the pasted objects
+    const newSelectedIds = new Set(pastedObjects.map((obj) => obj.id));
+    setSelectedIds(newSelectedIds);
+    setSelectedId(pastedObjects[0].id);
+  };
+
+  // Duplicate selected objects
+  const duplicateObject = (objectId?: string) => {
+    const idToDuplicate = objectId || selectedId;
+    if (!idToDuplicate) return;
+
+    const objectToDuplicate = objects.find((obj) => obj.id === idToDuplicate);
+    if (!objectToDuplicate) return;
+
+    const duplicatedObject = {
+      ...objectToDuplicate,
+      id: `${objectToDuplicate.id}-duplicate-${Date.now()}`,
+      x: objectToDuplicate.x + 20,
+      y: objectToDuplicate.y + 20,
+    };
+
+    // Add to document
+    setDocument((prev) => ({
+      ...prev,
+      artboards: [
+        {
+          ...prev.artboards[0],
+          children: [...prev.artboards[0].children, duplicatedObject],
+        },
+      ],
+    }));
+
+    setSelectedId(duplicatedObject.id);
+    setSelectedIds(new Set([duplicatedObject.id]));
+  };
+
+  // Delete selected objects
+  const deleteObject = (objectId?: string) => {
+    const idToDelete = objectId || selectedId;
+    if (!idToDelete) return;
+
+    const newObjects = objects.filter((obj) => obj.id !== idToDelete);
+    setDocument((prev) => ({
+      ...prev,
+      artboards: [
+        {
+          ...prev.artboards[0],
+          children: newObjects,
+        },
+      ],
+    }));
+
+    setSelectedId(null);
+    setSelectedIds(new Set());
+  };
+
+  // Bring object forward in layer order
+  const bringForward = (objectId: string) => {
+    const objectIndex = objects.findIndex((obj) => obj.id === objectId);
+    if (objectIndex === -1 || objectIndex >= objects.length - 1) return;
+
+    const newObjects = [...objects];
+    [newObjects[objectIndex], newObjects[objectIndex + 1]] = [
+      newObjects[objectIndex + 1],
+      newObjects[objectIndex],
+    ];
+
+    setDocument((prev) => ({
+      ...prev,
+      artboards: [
+        {
+          ...prev.artboards[0],
+          children: newObjects,
+        },
+      ],
+    }));
+  };
+
+  // Send object backward in layer order
+  const sendBackward = (objectId: string) => {
+    const objectIndex = objects.findIndex((obj) => obj.id === objectId);
+    if (objectIndex <= 0) return;
+
+    const newObjects = [...objects];
+    [newObjects[objectIndex], newObjects[objectIndex - 1]] = [
+      newObjects[objectIndex - 1],
+      newObjects[objectIndex],
+    ];
+
+    setDocument((prev) => ({
+      ...prev,
+      artboards: [
+        {
+          ...prev.artboards[0],
+          children: newObjects,
+        },
+      ],
+    }));
+  };
+
+  // Select all objects
+  const selectAll = () => {
+    const allIds = objects.map((obj) => obj.id);
+    setSelectedIds(new Set(allIds));
+    if (allIds.length > 0) {
+      setSelectedId(allIds[0]);
+    }
+  };
+
   return (
     <CanvasContext.Provider
       value={{
         // Legacy compatibility
         objects,
-        setObjects: () => {}, // TODO: Implement legacy setObjects
+        setObjects: (newObjects: CanvasObject[]) => {
+          setDocument((prev) => ({
+            ...prev,
+            artboards: [
+              {
+                ...prev.artboards[0],
+                children: newObjects,
+              },
+            ],
+          }));
+        },
         updateObject,
         addObject,
 
@@ -515,11 +988,26 @@ export function CanvasProvider({ children }: { children: ReactNode }) {
         setCursorPosition,
         // Clipboard functions
         clipboard,
+        copyToClipboard,
+        pasteFromClipboard,
+        cutToClipboard,
+        duplicateObject,
+        deleteObject,
+        bringForward,
+        sendBackward,
+        selectAll,
         // Alignment functions
         alignObjects: (alignment: string) => {
-          setObjects((currentObjects) =>
-            alignObjects(currentObjects, selectedIds, alignment)
-          );
+          const alignedObjects = alignObjects(objects, selectedIds, alignment);
+          setDocument((prev) => ({
+            ...prev,
+            artboards: [
+              {
+                ...prev.artboards[0],
+                children: alignedObjects,
+              },
+            ],
+          }));
         },
       }}
     >

@@ -355,7 +355,7 @@ RQ-012:
 ### Gap: Token System Implementation Details
 
 **What We Know:**
-- Tokens defined in `design/tokens.json`
+- Tokens defined in `docs/examples/tokens.json`
 - Reflect to CSS `:root` variables
 - Token references in design resolve to `var(--token-name)`
 

@@ -16,6 +16,9 @@ import {
   ChevronDown,
   Eye,
   EyeOff,
+  Group,
+  Section,
+  FileBoxIcon,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import type React from "react";
@@ -158,6 +161,37 @@ export function ActionBar({ onViewModeChange }: ActionBarProps) {
       name: "Wrap",
       defaultIcon: Frame,
       shortcut: ["F"],
+      overflowOptions: [
+        {
+          name: "Frame",
+          icon: Frame,
+          shortcut: ["F"],
+          onClick: () => handleToolChange("frame"),
+          isActive: activeTool === "frame",
+        },
+        {
+          name: "Group",
+          icon: Group,
+          shortcut: ["G"],
+          onClick: () => handleToolChange("group"),
+          isActive: activeTool === "group",
+        },
+        {
+          name: "Section",
+          icon: Section,
+          shortcut: ["S"],
+          onClick: () => handleToolChange("section"),
+          isActive: activeTool === "section",
+        },
+        {
+          name: "Page",
+          icon: FileBoxIcon,
+          shortcut: ["P"],
+          onClick: () => handleToolChange("page"),
+          isActive: activeTool === "page",
+        },
+      ],
+
       onClick: () => handleToolChange("frame"),
       isActive: activeTool === "frame",
     },
@@ -240,7 +274,7 @@ export function ActionBar({ onViewModeChange }: ActionBarProps) {
             variant="ghost"
             size="sm"
             onClick={toggleActionBar}
-            className="h-8 w-8 p-0 bg-zinc-800 border border-zinc-700 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100"
+            className="h-8 w-8 p-0 bg-zinc-800 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 hover:text-zinc-100"
             title="Show Action Bar (`)"
           >
             <Eye className="h-4 w-4" />
@@ -250,7 +284,7 @@ export function ActionBar({ onViewModeChange }: ActionBarProps) {
 
       {/* Main Action Bar */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
-        <div className="flex items-center gap-1 bg-card border border-border rounded-2xl px-2 py-2 shadow-2xl">
+        <div className="flex items-center gap-1 bg-card border border-zinc-800 rounded-2xl px-2 py-2 shadow-2xl">
           {actionBarLayout.map((button) => {
             const ActiveIcon = getActiveIcon(button);
             const isActive = button.isActive;

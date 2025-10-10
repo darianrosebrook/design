@@ -17,9 +17,9 @@
     ".caws/working-spec.yaml"
   ],
   "results": {
-    "project_id": "DESIGNER-001",
-    "project_title": "Designer",
-    "risk_tier": 2,
+    "project_id": "DES-0001",
+    "project_title": "designer",
+    "risk_tier": 1,
     "mode": "feature",
     "change_budget": {
       "max_files": 25,
@@ -27,15 +27,15 @@
     },
     "blast_radius": {
       "modules": [
-        "core",
-        "ui"
+        "src",
+        "tests"
       ],
       "data_migration": false
     },
     "operational_rollback_slo": "5m"
   },
   "approvals": [],
-  "timestamp": "2025-10-02T00:11:46.540Z",
+  "timestamp": "2025-10-09T13:12:53.323Z",
   "version": "1.0.0",
-  "hash": "ef76c9fa1a537a8021db0a21f240ef78892fbe88f6fd15d145f2d0cfa4023808"
+  "hash": "4c50da4c60f7fe3ebbaf948c53e83fd527f739dd92eedc96cdc3e9583a5db496"
 }

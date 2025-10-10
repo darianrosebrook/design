@@ -562,6 +562,44 @@ export function updateComponent(
 }
 
 /**
+ * Update an ingested component's properties
+ */
+export function updateIngestedComponent(
+  componentId: string,
+  updates: Partial<IngestedComponent>
+): boolean {
+  const id = componentId.toLowerCase();
+  const existing = DYNAMIC_REGISTRY.get(id);
+
+  if (!existing) {
+    console.warn(`Component ${id} not found for update`);
+    return false;
+  }
+
+  try {
+    const updated: IngestedComponent = {
+      ...existing,
+      ...updates,
+      lastUpdated: new Date().toISOString(),
+    };
+
+    DYNAMIC_REGISTRY.set(id, updated);
+
+    // Save to storage (non-core components only)
+    const nonCoreComponents = Array.from(DYNAMIC_REGISTRY.values()).filter(
+      (comp) => comp.source !== "design-system"
+    );
+    saveIngestedComponents(nonCoreComponents);
+
+    notifyListeners();
+    return true;
+  } catch (error) {
+    console.error(`Failed to update component ${id}:`, error);
+    return false;
+  }
+}
+
+/**
  * Clear all dynamically ingested components (keep core ones)
  */
 export function clearIngestedComponents(): void {

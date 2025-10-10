@@ -12,7 +12,7 @@ import type { Observability } from "./observability.js";
 /**
  * Selection mode types
  */
-export type SelectionMode = "rectangle" | "lasso" | "single";
+export type SelectionMode = "single" | "move" | "scale" | "rectangle" | "lasso";
 
 /**
  * Point in document coordinates
@@ -304,10 +304,7 @@ export class SelectionModesCoordinator {
 
     // Traverse all artboards
     for (const artboard of this.document.artboards) {
-      // Include artboard itself as selectable (artboards are always visible and unlocked)
-      nodes.push(artboard);
-
-      // Include artboard children
+      // Only include artboard children, not the artboard itself
       if (artboard.children) {
         traverse(artboard.children);
       }

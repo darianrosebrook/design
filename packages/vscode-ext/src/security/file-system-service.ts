@@ -8,6 +8,7 @@
  */
 
 import * as fs from "node:fs/promises";
+import * as fsSync from "node:fs";
 import * as path from "node:path";
 import * as vscode from "vscode";
 import { PathValidator, createPathValidator } from "./path-validator";
@@ -317,7 +318,7 @@ export class FileSystemService {
       const resolvedPath = validation.resolvedPath!;
 
       // Use VS Code's workspace.fs if within workspace, otherwise Node.js fs
-      let stat: vscode.FileStat | fs.Stats;
+      let stat: vscode.FileStat | fsSync.Stats;
       if (
         this.workspaceFolder &&
         this.isWithinWorkspace(vscode.Uri.file(resolvedPath))
@@ -330,8 +331,8 @@ export class FileSystemService {
 
       const metadata: FileMetadata = {
         size: stat.size,
-        mtime: stat.mtime,
-        ctime: stat.ctime,
+        mtime: stat.mtime instanceof Date ? stat.mtime.getTime() : stat.mtime,
+        ctime: stat.ctime instanceof Date ? stat.ctime.getTime() : stat.ctime,
         isDirectory: (stat as any).isDirectory?.() ?? false,
         isFile: (stat as any).isFile?.() ?? true,
       };

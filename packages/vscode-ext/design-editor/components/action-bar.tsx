@@ -1,133 +1,155 @@
-"use client"
+"use client";
 
+import { Button } from "@/components/ui/button";
 import {
-  MousePointer2,
-  Frame,
-  Type,
-  ImageIcon,
-  Shapes,
-  View,
-  Hand,
-  Scaling,
-  Spline,
-  Square,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useCanvas, type CanvasTool } from "@/lib/canvas-context";
+import {
+  ChevronDown,
   Circle,
   Code,
-  ChevronDown,
-} from "lucide-react"
-import { useState, useEffect } from "react"
-import type React from "react"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useCanvas, type CanvasTool } from "@/lib/canvas-context"
+  Frame,
+  Hand,
+  ImageIcon,
+  MousePointer2,
+  Scaling,
+  Shapes,
+  Spline,
+  Square,
+  Type,
+  View,
+} from "lucide-react";
+import type React from "react";
+import { useEffect, useState } from "react";
 
 interface ActionBarOverflowOption {
-  name: string
-  icon: React.FunctionComponent<any>
-  shortcut?: string[]
-  onClick: () => void
-  isActive: boolean
+  name: string;
+  icon: React.FunctionComponent<any>;
+  shortcut?: string[];
+  onClick: () => void;
+  isActive: boolean;
 }
 
 interface ActionBarButton {
-  name: string
-  defaultIcon: React.FunctionComponent<any>
-  shortcut?: string[]
-  overflowOptions?: ActionBarOverflowOption[]
-  isActive?: boolean
-  onClick?: () => void
+  name: string;
+  defaultIcon: React.FunctionComponent<any>;
+  shortcut?: string[];
+  overflowOptions?: ActionBarOverflowOption[];
+  isActive?: boolean;
+  onClick?: () => void;
 }
 
 interface ActionBarProps {
-  onViewModeChange?: (mode: "canvas" | "code") => void
+  onViewModeChange?: (mode: "canvas" | "code") => void;
 }
 
-type SelectionMode = "single" | "move" | "scale"
-type WrapMode = "group" | "frame" | "section" | "page"
-type TypeMode = "text"
-type ImageMode = "image" | "video"
-type ShapeMode = "line" | "rectangle" | "ellipse" | "polygon"
-type ViewMode = "canvas" | "code"
+type _SelectionMode = "single" | "move" | "scale";
+type _WrapMode = "group" | "frame" | "section" | "page";
+type _TypeMode = "text";
+type _ImageMode = "image" | "video";
+type _ShapeMode = "line" | "rectangle" | "ellipse" | "polygon";
+type _ViewMode = "canvas" | "code";
 
 export const ActionBar: React.FC<ActionBarProps> = ({ onViewModeChange }) => {
-  const { activeTool, setActiveTool } = useCanvas()
-  const [viewMode, setViewMode] = useState<"canvas" | "code">("canvas")
+  const { activeTool, setActiveTool } = useCanvas();
+  const [viewMode, setViewMode] = useState<"canvas" | "code">("canvas");
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {return}
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      ) {
+        return;
+      }
 
       switch (e.key.toLowerCase()) {
         case "v":
-          setActiveTool("select")
-          break
+          setActiveTool("select");
+          break;
         case "h":
-          setActiveTool("hand")
-          break
+          setActiveTool("hand");
+          break;
         case "k":
-          setActiveTool("scale")
-          break
+          setActiveTool("scale");
+          break;
         case "f":
-          setActiveTool("frame")
-          break
+          setActiveTool("frame");
+          break;
         case "t":
-          setActiveTool("text")
-          break
+          setActiveTool("text");
+          break;
         case "i":
-          setActiveTool("image")
-          break
+          setActiveTool("image");
+          break;
         case "r":
-          setActiveTool("rectangle")
-          break
+          setActiveTool("rectangle");
+          break;
         case "e":
-          setActiveTool("ellipse")
-          break
+          setActiveTool("ellipse");
+          break;
         case "l":
         case "p":
-          setActiveTool("line")
-          break
+          setActiveTool("line");
+          break;
       }
-    }
+    };
 
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [setActiveTool])
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [setActiveTool]);
 
   const handleToolChange = (tool: CanvasTool) => {
-    setActiveTool(tool)
-  }
+    setActiveTool(tool);
+  };
 
   const handleViewModeChange = (mode: "canvas" | "code") => {
-    setViewMode(mode)
-    onViewModeChange?.(mode)
-  }
+    setViewMode(mode);
+    onViewModeChange?.(mode);
+  };
 
   const getActiveIcon = (button: ActionBarButton) => {
     if (button.name === "Selection") {
-      if (activeTool === "select") {return MousePointer2}
-      if (activeTool === "hand") {return Hand}
-      if (activeTool === "scale") {return Scaling}
+      if (activeTool === "select") {
+        return MousePointer2;
+      }
+      if (activeTool === "hand") {
+        return Hand;
+      }
+      if (activeTool === "scale") {
+        return Scaling;
+      }
     }
     if (button.name === "Wrap") {
-      return activeTool === "frame" ? Frame : button.defaultIcon
+      return activeTool === "frame" ? Frame : button.defaultIcon;
     }
     if (button.name === "Shape") {
-      if (activeTool === "rectangle") {return Square}
-      if (activeTool === "ellipse") {return Circle}
-      if (activeTool === "line") {return Spline}
+      if (activeTool === "rectangle") {
+        return Square;
+      }
+      if (activeTool === "ellipse") {
+        return Circle;
+      }
+      if (activeTool === "line") {
+        return Spline;
+      }
     }
     if (button.name === "Image") {
-      return activeTool === "image" ? ImageIcon : button.defaultIcon
+      return activeTool === "image" ? ImageIcon : button.defaultIcon;
     }
     if (button.name === "Type") {
-      return activeTool === "text" ? Type : button.defaultIcon
+      return activeTool === "text" ? Type : button.defaultIcon;
     }
     if (button.name === "View mode") {
-      const activeOption = button.overflowOptions?.find((opt) => opt.isActive)
-      return activeOption?.icon || button.defaultIcon
+      const activeOption = button.overflowOptions?.find((opt) => opt.isActive);
+      return activeOption?.icon || button.defaultIcon;
     }
-    return button.defaultIcon
-  }
+    return button.defaultIcon;
+  };
 
   const actionBarLayout: ActionBarButton[] = [
     {
@@ -233,14 +255,14 @@ export const ActionBar: React.FC<ActionBarProps> = ({ onViewModeChange }) => {
         },
       ],
     },
-  ]
+  ];
 
   return (
     <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
       <div className="flex items-center gap-1 bg-zinc-800 border border-zinc-700 rounded-2xl px-2 py-2 shadow-2xl">
         {actionBarLayout.map((button) => {
-          const ActiveIcon = getActiveIcon(button)
-          const isActive = button.isActive
+          const ActiveIcon = getActiveIcon(button);
+          const isActive = button.isActive;
 
           if (button.overflowOptions && button.overflowOptions.length > 1) {
             return (
@@ -250,33 +272,43 @@ export const ActionBar: React.FC<ActionBarProps> = ({ onViewModeChange }) => {
                     variant="ghost"
                     size="sm"
                     className={`h-8 px-2 hover:bg-zinc-700 text-zinc-300 hover:text-zinc-100 gap-1 ${
-                      button.overflowOptions.some((opt) => opt.isActive) ? "bg-zinc-700 text-zinc-100" : ""
+                      button.overflowOptions.some((opt) => opt.isActive)
+                        ? "bg-zinc-700 text-zinc-100"
+                        : ""
                     }`}
                   >
                     <ActiveIcon className="h-4 w-4" />
                     <ChevronDown className="h-3 w-3" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" side="top" className="bg-zinc-800 border-zinc-700 text-zinc-100">
+                <DropdownMenuContent
+                  align="center"
+                  side="top"
+                  className="bg-zinc-800 border-zinc-700 text-zinc-100"
+                >
                   {button.overflowOptions.map((option) => {
-                    const OptionIcon = option.icon
+                    const OptionIcon = option.icon;
                     return (
                       <DropdownMenuItem
                         key={option.name}
                         onClick={option.onClick}
-                        className={`gap-2 hover:bg-zinc-700 cursor-pointer ${option.isActive ? "bg-zinc-700" : ""}`}
+                        className={`gap-2 hover:bg-zinc-700 cursor-pointer ${
+                          option.isActive ? "bg-zinc-700" : ""
+                        }`}
                       >
                         <OptionIcon className="h-4 w-4" />
                         <span>{option.name}</span>
                         {option.shortcut && (
-                          <span className="ml-auto text-xs text-zinc-500">{option.shortcut.join("+")}</span>
+                          <span className="ml-auto text-xs text-zinc-500">
+                            {option.shortcut.join("+")}
+                          </span>
                         )}
                       </DropdownMenuItem>
-                    )
+                    );
                   })}
                 </DropdownMenuContent>
               </DropdownMenu>
-            )
+            );
           }
 
           return (
@@ -291,9 +323,9 @@ export const ActionBar: React.FC<ActionBarProps> = ({ onViewModeChange }) => {
             >
               <ActiveIcon className="h-4 w-4" />
             </Button>
-          )
+          );
         })}
       </div>
     </div>
-  )
-}
+  );
+};

@@ -1,6 +1,6 @@
 # Design Tokens & Token Reflection
 
-## Tokens (design/tokens.json)
+## Tokens (docs/examples/tokens.json)
 
 ```json
 {
@@ -37,8 +37,8 @@ function writeCssVars(tokensPath: string, outCss: string) {
   fs.writeFileSync(outCss, lines.join(';'));
 }
 
-writeCssVars('design/tokens.json', 'src/ui/tokens.css');
-chokidar.watch('design/tokens.json').on('change',()=>writeCssVars('design/tokens.json','src/ui/tokens.css'));
+writeCssVars('docs/examples/tokens.json', 'src/ui/tokens.css');
+chokidar.watch('docs/examples/tokens.json').on('change',()=>writeCssVars('docs/examples/tokens.json','src/ui/tokens.css'));
 ```
 
 ## Failure-Mode Cards

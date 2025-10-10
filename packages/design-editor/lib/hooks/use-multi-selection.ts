@@ -79,5 +79,7 @@ export function useMultiSelection() {
     clearSelection,
     addToSelection,
     removeFromSelection,
+    // Helper to check if an object is selected (for multi-selection)
+    isSelected: (id: string) => selectedIds.has(id),
   };
 }

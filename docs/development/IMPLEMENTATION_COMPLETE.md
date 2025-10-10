@@ -271,7 +271,7 @@ docs/implementation/
    - `docs/implementation/IMPLEMENTATION_STATUS.md` (updated)
 
 3. **Examples**:
-   - `design/component-index.example.json`
+   - `docs/examples/component-index.example.json`
 
 ---
 

@@ -3,20 +3,20 @@
 import type React from "react";
 import { useState, useRef, useEffect } from "react";
 import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/ui/primitives/Button";
+import { Input } from "@/ui/primitives/Input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/ui/primitives/Popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/ui/primitives/Select";
 import { ColorCanvas } from "./ColorCanvas";
 import { HueSlider } from "./HueSlider";
 import { OpacitySlider } from "./OpacitySlider";

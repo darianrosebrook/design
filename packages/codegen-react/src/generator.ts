@@ -6,22 +6,13 @@
 import { traverseDocument } from "@paths-design/canvas-engine";
 import type {
   CanvasDocumentType,
-  NodeType,
-  FrameNodeType,
-  TextNodeType,
   ComponentInstanceNodeType,
-} from "@paths-design/canvas-schema";
-import {
-  CanvasDocument as _CanvasDocument,
-  ULIDType as _ULIDType,
+  FrameNodeType,
+  NodeType,
+  TextNodeType,
 } from "@paths-design/canvas-schema";
 import type { CodeGenOptions } from "./determinism.js";
-import {
-  Clock as _Clock,
-  CanonicalSorter as _CanonicalSorter,
-  PrecisionNormalizer as _PrecisionNormalizer,
-  mergeCodeGenOptions,
-} from "./determinism.js";
+import { mergeCodeGenOptions } from "./determinism.js";
 
 /**
  * Generated file information
@@ -260,8 +251,13 @@ export class ReactGenerator {
     }
 
     // Filter patterns that are worth extracting (appear multiple times or have meaningful structure)
+    // But skip nodes that have semantic keys (they should be inlined for semantic component generation)
     for (const [key, pattern] of patterns) {
-      if (pattern.count >= 2 || this.isWorthExtracting(pattern.nodes)) {
+      const hasSemanticKey = pattern.nodes.some((node) => node.semanticKey);
+      if (
+        !hasSemanticKey &&
+        (pattern.count >= 2 || this.isWorthExtracting(pattern.nodes))
+      ) {
         const componentName = this.generateComponentName(pattern.nodes[0]);
         this.componentPatterns.set(key, {
           id: key,
@@ -698,9 +694,17 @@ export class ReactGenerator {
     const { sorter: _sorter, normalizer: _normalizer } = this.options;
     const indent = "  ".repeat(depth);
 
-    const className = `${semanticInfo.className} ${
+    // Include semantic key in class name if present
+    const semanticKeyClass = node.semanticKey
+      ? node.semanticKey.replace(/\./g, "-")
+      : "";
+    const cssModuleClassName = `${semanticInfo.className} ${
       semanticInfo.className
     }-${node.name.toLowerCase().replace(/\s+/g, "-")}`;
+    const _fullClassName = semanticKeyClass
+      ? `${cssModuleClassName} ${semanticKeyClass}`
+      : cssModuleClassName;
+
     const style = this.generateStyleObject(node);
     const attributes = this.generateAttributes(semanticInfo, node);
 
@@ -713,7 +717,9 @@ export class ReactGenerator {
       attributes ? ` ${attributes}` : ""
     }${
       style ? ` style={${JSON.stringify(style)}}` : ""
-    } className={s.${className.replace(/-/g, "_")}}`;
+    } className={s.${cssModuleClassName.replace(/-/g, "_")}${
+      semanticKeyClass ? ` ${semanticKeyClass}` : ""
+    }}`;
 
     return `${indent}${jsxTag}>${childrenJSX}${indent}</${semanticInfo.tagName}>`;
   }

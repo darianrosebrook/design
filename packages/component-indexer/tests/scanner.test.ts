@@ -3,10 +3,10 @@
  * @author @darianrosebrook
  */
 
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import * as fs from "node:fs/promises";
-import * as path from "node:path";
 import * as os from "node:os";
+import * as path from "node:path";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ComponentScanner, discoverComponents } from "../dist/scanner.js";
 
 describe("ComponentScanner", () => {
@@ -76,8 +76,21 @@ export const Card = (props: CardProps): JSX.Element => {
       `.trim()
       );
 
+      // Debug: check what files are created
+      const files = await fs.readdir(tempDir);
+      console.log("Files in temp dir:", files);
+
+      for (const file of files) {
+        if (file.endsWith(".tsx")) {
+          const content = await fs.readFile(path.join(tempDir, file), "utf8");
+          console.log(`Content of ${file}:\n${content}`);
+        }
+      }
+
       const scanner = new ComponentScanner();
       const result = await scanner.discover({ rootDir: tempDir });
+
+      console.log("Test result:", JSON.stringify(result, null, 2));
 
       expect(result.components).toHaveLength(1);
       expect(result.components[0].name).toBe("Card");

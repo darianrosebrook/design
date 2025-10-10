@@ -325,7 +325,7 @@ The component index integrates with the canvas system via:
 
 ## Golden File Example
 
-Committed example at: `design/component-index.example.json`
+Committed example at: `docs/examples/component-index.example.json`
 
 This file demonstrates:
 - Standard component structure (Button, Input, Card)

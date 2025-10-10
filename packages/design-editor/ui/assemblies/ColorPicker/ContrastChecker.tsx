@@ -2,15 +2,15 @@
 
 import type React from "react";
 import { Check, X, AlertCircle, Type } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/ui/primitives/Button";
+import { Label } from "@/ui/primitives/Label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/ui/primitives/Select";
 import {
   contrastRatio,
   meetsContrastRequirement,
@@ -18,14 +18,14 @@ import {
 } from "@/lib/utils/helpers/color";
 
 // Types for contrast checking
-interface ContrastResult {
+export interface ContrastResult {
   ratio: number;
   meetsAA: boolean;
   meetsAAA: boolean;
   description: string;
 }
 
-function checkContrast(
+export function checkContrast(
   foregroundHex: string,
   backgroundHex: string
 ): ContrastResult {

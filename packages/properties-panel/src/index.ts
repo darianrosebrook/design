@@ -28,6 +28,7 @@ export type {
   PropertySectionProps,
   FontMetadata,
   FontVariant,
+  CCDRegistry,
 } from "./types.js";
 export type { TokenPillProps } from "./TokenPill.js";
 export type { TokenSelectorProps } from "./TokenSelector.js";
@@ -45,7 +46,7 @@ export {
   validatePropertyValue,
   formatPropertyValue,
 } from "./property-utils.js";
-export { PropertyRegistry } from "./property-registry.js";
+export { PropertyRegistry, CCDRegistryImpl } from "./property-registry.js";
 
 // Styles
 export { propertiesPanelStyles } from "./PropertiesPanel.js";

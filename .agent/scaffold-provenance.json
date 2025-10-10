@@ -1,7 +1,7 @@
 {
   "agent": "caws-cli",
   "model": "cli-scaffold",
-  "modelHash": "3.0.0",
+  "modelHash": "3.3.1",
   "toolAllowlist": [
     "node",
     "fs-extra"
@@ -12,19 +12,19 @@
   ],
   "commit": null,
   "artifacts": [
-    "apps/tools/caws",
-    "codemod",
     "COMMIT_CONVENTIONS.md",
+    "agents.md",
     "OIDC_SETUP.md"
   ],
   "results": {
     "operation": "scaffold",
-    "target_directory": "/Users/darianrosebrook/Desktop/Projects/designer",
-    "files_added": 4,
-    "files_skipped": 0
+    "force_mode": false,
+    "target_directory": "/Users/darianrosebrook/Desktop/Projects/paths-design-suite/apps/designer",
+    "files_added": 3,
+    "files_skipped": 13
   },
   "approvals": [],
-  "timestamp": "2025-10-02T00:12:11.653Z",
-  "version": "3.0.0",
-  "hash": "f9e9ab39f669fa0fdf07f531629c18cfb5387ed939d0d8dce9077f0a917c3365"
+  "timestamp": "2025-10-09T13:12:58.627Z",
+  "version": "3.3.1",
+  "hash": "1cd8ee6672f1f02d7b9ffa52ecbd8fffb21ae76312c1b1202cc21e1126664aba"
 }

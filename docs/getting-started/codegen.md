@@ -79,7 +79,7 @@ generate(canvas, out);
 2. Save → schema validated, canonicalized.
 3. Run `ts-node tools/designer-generate.ts design/home.canvas.json src/ui`.
 4. Import `src/ui/Hero.tsx` in app, include `src/ui/tokens.css`.
-5. Change `design/tokens.json` → watcher updates CSS vars → live style change.
+5. Change `docs/examples/tokens.json` → watcher updates CSS vars → live style change.
 
 ## Tests & CI Gates
 

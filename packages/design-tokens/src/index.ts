@@ -36,13 +36,8 @@ export {
   type ValidationResult,
 } from "./resolver.js";
 
-// Export watcher
-export {
-  watchTokens,
-  watchTokensSimple,
-  type WatcherOptions,
-  type WatcherInstance,
-} from "./watcher.js";
+// Note: watcher functions are server-side only and not exported in client bundles
+// Use dynamic imports if needed: import { watchTokens } from "./watcher.js";
 
 // Export migrations
 export {
@@ -59,5 +54,21 @@ export {
   type MigrationResult,
   type CompatibilityReport,
 } from "./migrations.js";
+
+// Export validator
+export {
+  validateW3CDesignTokens,
+  validateW3CTokensStructure,
+  validateToken,
+  extractTokenPaths,
+  getTokenValue,
+  flattenW3CTokens,
+  W3CDesignTokensSchema,
+  W3CTokenSchema,
+  W3CTokenValueSchema,
+  SUPPORTED_TOKEN_TYPES,
+  type TokenValidationResult,
+  type TokenType,
+} from "./validator.js";
 
 // Note: generate-css.js is a CLI script, not exported as library code

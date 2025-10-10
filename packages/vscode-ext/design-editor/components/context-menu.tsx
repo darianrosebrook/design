@@ -1,27 +1,34 @@
-"use client"
+"use client";
 
-import { Copy, Trash2, Lock, Eye, MoveUp, MoveDown, Group } from "lucide-react"
-import { useEffect } from "react"
-import { useCanvas } from "@/lib/canvas-context"
+import { useCanvas } from "@/lib/canvas-context";
+import { Copy, Eye, Group, Lock, MoveDown, MoveUp, Trash2 } from "lucide-react";
+import { useEffect } from "react";
 
 export function ContextMenu() {
-  const { contextMenu, setContextMenu, objects, selectedId } = useCanvas()
+  const {
+    contextMenu,
+    setContextMenu,
+    objects: _objects,
+    selectedId: _selectedId,
+  } = useCanvas();
 
   useEffect(() => {
-    const handleClick = () => setContextMenu(null)
-    const handleScroll = () => setContextMenu(null)
+    const handleClick = () => setContextMenu(null);
+    const handleScroll = () => setContextMenu(null);
 
     if (contextMenu) {
-      document.addEventListener("click", handleClick)
-      document.addEventListener("scroll", handleScroll, true)
+      document.addEventListener("click", handleClick);
+      document.addEventListener("scroll", handleScroll, true);
       return () => {
-        document.removeEventListener("click", handleClick)
-        document.removeEventListener("scroll", handleScroll, true)
-      }
+        document.removeEventListener("click", handleClick);
+        document.removeEventListener("scroll", handleScroll, true);
+      };
     }
-  }, [contextMenu, setContextMenu])
+  }, [contextMenu, setContextMenu]);
 
-  if (!contextMenu) {return null}
+  if (!contextMenu) {
+    return null;
+  }
 
   const menuItems = [
     { icon: Copy, label: "Duplicate", shortcut: "⌘D" },
@@ -34,7 +41,7 @@ export function ContextMenu() {
     { icon: MoveDown, label: "Send Backward", shortcut: "⌘[" },
     { type: "separator" },
     { icon: Group, label: "Group Selection", shortcut: "⌘G" },
-  ]
+  ];
 
   return (
     <div
@@ -47,10 +54,10 @@ export function ContextMenu() {
     >
       {menuItems.map((item, index) => {
         if (item.type === "separator") {
-          return <div key={index} className="h-px bg-border my-1" />
+          return <div key={index} className="h-px bg-border my-1" />;
         }
 
-        const Icon = item.icon!
+        const Icon = item.icon!;
         return (
           <button
             key={index}
@@ -58,16 +65,20 @@ export function ContextMenu() {
               item.danger ? "text-red-500 hover:text-red-600" : ""
             }`}
             onClick={() => {
-              console.log("[v0] Context menu action:", item.label)
-              setContextMenu(null)
+              console.info("[v0] Context menu action:", item.label);
+              setContextMenu(null);
             }}
           >
             <Icon className="h-4 w-4" />
             <span className="flex-1 text-left">{item.label}</span>
-            {item.shortcut && <span className="text-xs text-muted-foreground">{item.shortcut}</span>}
+            {item.shortcut && (
+              <span className="text-xs text-muted-foreground">
+                {item.shortcut}
+              </span>
+            )}
           </button>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

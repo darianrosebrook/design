@@ -6,21 +6,20 @@
 import type { NodeType, SemanticKeyType } from "@paths-design/canvas-schema";
 import type { ComponentIndex } from "@paths-design/component-indexer";
 import {
+  getApplicablePropertiesForNode,
   getNodeProperty,
   setNodeProperty,
-  getApplicablePropertiesForNode,
 } from "./property-utils.js";
 import type {
   PropertyChangeEvent,
-  SelectionState,
-  PropertyValue,
   PropertyDefinition,
-  // ComponentContractProperty, // TODO: Remove if not needed
+  PropertyValue,
+  SelectionState,
 } from "./types.js";
 
 // Type for component from component index
 interface ComponentIndexComponent {
-  semanticKeys?: Record<string, any>;
+  semanticKeys?: Record<string, unknown>;
   [key: string]: unknown;
 }
 
@@ -47,7 +46,7 @@ export class PropertiesService {
   };
   private propertyChangeCallbacks: Set<PropertyChangeCallback> = new Set();
   private selectionChangeCallbacks: Set<SelectionChangeCallback> = new Set();
-  private uiState: Map<string, any> = new Map();
+  private uiState: Map<string, unknown> = new Map();
 
   /**
    * Get singleton instance
@@ -509,14 +508,14 @@ export class PropertiesService {
   /**
    * Get UI state value
    */
-  getUIState<T = any>(key: string): T | undefined {
-    return this.uiState.get(key);
+  getUIState<T = unknown>(key: string): T | undefined {
+    return this.uiState.get(key) as T | undefined;
   }
 
   /**
    * Set UI state value
    */
-  setUIState<T = any>(key: string, value: T): void {
+  setUIState<T = unknown>(key: string, value: T): void {
     this.uiState.set(key, value);
   }
 
