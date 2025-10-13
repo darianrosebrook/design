@@ -1,6 +1,8 @@
+import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
+  plugins: [react()],
   test: {
     globals: true,
     environment: "node",
@@ -13,6 +15,10 @@ export default defineConfig({
       "**/dist/**",
       "**/build/**",
       "**/.{idea,git,cache,output,temp}/**",
+    ],
+    environmentMatchGlobs: [
+      ["packages/design-system/**", "jsdom"],
+      ["packages/design-editor/**", "jsdom"],
     ],
     coverage: {
       provider: "v8",
@@ -66,7 +72,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      ws: "/Users/darianrosebrook/Desktop/Projects/designer/packages/websocket-server/__mocks__/ws.js",
+      "@": "/Users/darianrosebrook/Desktop/Projects/paths-design-suite/apps/designer/packages/design-editor",
+      ws: "/Users/darianrosebrook/Desktop/Projects/paths-design-suite/apps/designer/packages/websocket-server/__mocks__/ws.js",
     },
   },
 });

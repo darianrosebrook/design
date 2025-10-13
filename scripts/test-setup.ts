@@ -3,7 +3,12 @@
  * @author @darianrosebrook
  */
 
-import { beforeAll, afterAll, beforeEach } from "vitest";
+import "@testing-library/jest-dom";
+import React from "react";
+import { afterAll, beforeAll, beforeEach } from "vitest";
+
+// Make React available globally for tests (needed for React 18 compatibility)
+global.React = React;
 
 // Global test environment setup
 beforeAll(async () => {

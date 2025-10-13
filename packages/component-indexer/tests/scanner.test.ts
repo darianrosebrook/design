@@ -292,7 +292,7 @@ export function Button(): JSX.Element { return <button />; }
       const scanner = new ComponentScanner();
       const result = await scanner.discover({ rootDir: tempDir });
 
-      expect(result.components[0].id).toMatch(/^[a-z0-9\-]{10,}$/);
+      expect(result.components[0].id).toMatch(/^[a-zA-Z0-9\-]{10,}$/);
     });
 
     it("includes stats in discovery result", async () => {

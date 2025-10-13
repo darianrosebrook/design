@@ -2,7 +2,7 @@
  * @fileoverview Component index types for Designer
  * @author @darianrosebrook
  */
-import { z } from "zod";
+import type { z } from "zod";
 /**
  * Component property definition
  */

@@ -56,7 +56,7 @@ export const SemanticKeyMappingSchema = z.object({
  * Component metadata entry
  */
 export const ComponentEntrySchema = z.object({
-  id: z.string().regex(/^[a-z0-9\-]{10,}$/),
+  id: z.string().regex(/^[a-zA-Z0-9\-]{10,}$/),
   name: z.string(),
   modulePath: z.string(),
   export: z.string(),

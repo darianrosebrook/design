@@ -3,12 +3,11 @@
  * @author @darianrosebrook
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
-import { ComponentScanner } from "../src/scanner.js";
-import * as ts from "typescript";
-import * as path from "path";
 import * as fs from "fs";
 import * as os from "os";
+import * as path from "path";
+import { beforeEach, describe, expect, it } from "vitest";
+import { ComponentScanner } from "../src/scanner.ts";
 
 describe("Compound Component Detection", () => {
   let scanner: ComponentScanner;
@@ -49,11 +48,6 @@ describe("Compound Component Detection", () => {
       tsconfigPath: tsconfigPath,
       include: ["**/*.tsx"],
     });
-
-    // Log errors for debugging
-    if (result.errors.length > 0) {
-      console.log("Scanner errors:", result.errors);
-    }
 
     return result;
   }
